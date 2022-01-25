@@ -6,7 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static GameManager Instance;
+    public List<HealthController> ActiveHealthControllers;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         Cursor.visible = false;
