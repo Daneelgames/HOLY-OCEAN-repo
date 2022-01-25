@@ -6,51 +6,50 @@ using UnityEngine.AI;
 
 public class CommanderControls : MonoBehaviour
 {
-    [Header("1: FollowLeader; 2: MoveToPoint")]
-    [Range(1,2)]
-    public int currentOrder = 1; 
     public Camera commanderPlayerCamera;
     public LayerMask layersToRaycastOrders;
     public List<HealthController> unitsInParty;
 
     public GameObject moveOrderVisualFeedback;
     private Vector3 moveOrderCurrentPos;
+
+    private float cooldownForRunOrder = 0.5f;
     
     private void Update()
     {
-        OrderControls();
+        if (cooldownForRunOrder > 0)
+            cooldownForRunOrder -= Time.deltaTime;
         
+        OrderControls();
     }
 
     void OrderControls()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Z)) // FOLLOW
         {
-            currentOrder = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            currentOrder = 2;
-        }
-        
-        
-        if (Input.GetMouseButtonDown(1))
-        {
-            switch (currentOrder)
+            if (cooldownForRunOrder > 0)
             {
-                case 1:
-                    FollowLeader();
-                    ToggleMoveOrderFeedback(false, transform, transform.position);
-                    break;
-                case 2:
+                RunOrder();
+                return;   
+            }
                     
-                    if (MoveOrder()) // feedback on positive order
-                    {
-                        ToggleMoveOrderFeedback(true, null, moveOrderCurrentPos);
-                    }
-                    else // feedback on negative order
-                        return;
-                    break;
+            cooldownForRunOrder = 0.5f;
+            FollowLeader();
+            ToggleMoveOrderFeedback(false, transform, transform.position);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.X)) // MOVE TO POINT
+        {
+            if (cooldownForRunOrder > 0)
+            {
+                RunOrder();
+                return;   
+            }
+                    
+            if (MoveOrder()) // feedback on positive order
+            {
+                cooldownForRunOrder = 0.5f;
+                ToggleMoveOrderFeedback(true, null, moveOrderCurrentPos);
             }
         }
     }
@@ -106,5 +105,14 @@ public class CommanderControls : MonoBehaviour
 
         moveOrderCurrentPos = closestNavPoint;
         return true;
+    }
+
+    void RunOrder()
+    {
+        for (int i = 0; i < unitsInParty.Count; i++)
+        {
+            if (unitsInParty[i].AiMovement)
+                unitsInParty[i].AiMovement.RunOrder();
+        }
     }
 }

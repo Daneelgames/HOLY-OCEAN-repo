@@ -13,6 +13,9 @@ public class AiMovement : MonoBehaviour
 
     public Order currentOrder = Order.FollowLeader;
     public NavMeshAgent agent;
+    public float moveSpeed = 2;
+    public float runSpeed = 4;
+    
     public float stopDistanceFollow = 1.5f;
     public float stopDistanceMove = 0;
 
@@ -47,6 +50,7 @@ public class AiMovement : MonoBehaviour
         while (true)
         {
             NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+            agent.speed = moveSpeed;
             agent.SetPath(path);
             yield return new WaitForSeconds(0.5f);
         }
@@ -59,7 +63,14 @@ public class AiMovement : MonoBehaviour
         
         NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
+        
+        agent.speed = moveSpeed;
         agent.stoppingDistance = stopDistanceMove;
         agent.SetPath(path);
+    }
+
+    public void RunOrder()
+    {
+        agent.speed = runSpeed;
     }
 }
