@@ -6,31 +6,60 @@ using UnityEngine.AI;
 
 public class AiMovement : MonoBehaviour
 {
-    public Transform targetToFollow;
-    public NavMeshAgent agent;
-    
-    private void Start()
+    public enum Order
     {
-        FollowTarget(targetToFollow);
+        FollowLeader, MoveToPosition
     }
 
-    void FollowTarget(Transform target)
+    public Order currentOrder = Order.FollowLeader;
+    public NavMeshAgent agent;
+    public float stopDistanceFollow = 1.5f;
+    public float stopDistanceMove = 0;
+
+    float updateDelayCurrent = 0.1f;
+    private Vector3 currentVelocity;
+
+    public HumanVisualController humanVisualController;
+
+    private void Update()
+    {
+        currentVelocity = agent.velocity;
+        humanVisualController.SetMovementVelocity(currentVelocity);
+    }
+
+    void StopAllBehaviorCoroutines()
     {
         if (followTargetCoroutine != null)
             StopCoroutine(followTargetCoroutine);
-
+    }
+    public void FollowLeaderOrder(Transform target)
+    {
+        StopAllBehaviorCoroutines();
+        currentOrder = Order.FollowLeader;
         followTargetCoroutine = StartCoroutine(FollowTargetCoroutine(target));
     }
 
     private Coroutine followTargetCoroutine;
     IEnumerator FollowTargetCoroutine(Transform target)
     {
+        agent.stoppingDistance = stopDistanceFollow;
         NavMeshPath path = new NavMeshPath();
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
             NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
             agent.SetPath(path);
+            yield return new WaitForSeconds(0.5f);
         }
+    }
+
+    public void MoveOrder(Vector3 targetPos)
+    {
+        StopAllBehaviorCoroutines();
+        currentOrder = Order.MoveToPosition;
+        
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
+        agent.stoppingDistance = stopDistanceMove;
+        agent.SetPath(path);
     }
 }
