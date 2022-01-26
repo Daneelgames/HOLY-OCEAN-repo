@@ -12,6 +12,12 @@ public class UnitVision : MonoBehaviour
     public LayerMask raycastsLayerMask;
     public Transform raycastOrigin;
 
+    private List<HealthController> visibleEnemies = new List<HealthController>();
+
+    public List<HealthController> VisibleEnemies
+    {
+        get { return visibleEnemies; }
+    }
     private void Start()
     {
         hc = GetComponent<HealthController>();
@@ -27,11 +33,19 @@ public class UnitVision : MonoBehaviour
                 if (GameManager.Instance.ActiveHealthControllers[i].team == hc.team)
                     continue;
 
-                if (LineOfSight(GameManager.Instance.ActiveHealthControllers[i].visibilityTrigger.transform))
+                var enemy = GameManager.Instance.ActiveHealthControllers[i];
+                if (LineOfSight(enemy.visibilityTrigger.transform))
                 {
-                    Debug.Log(gameObject.name + " sees " + GameManager.Instance.ActiveHealthControllers[i].name);
+                    if (!visibleEnemies.Contains(enemy))
+                    {
+                        visibleEnemies.Add(enemy);
+                    }
                 }
-                yield return null;   
+                else if (visibleEnemies.Contains(enemy))
+                {
+                    visibleEnemies.Remove(enemy);
+                }
+                yield return new WaitForSeconds(0.1f);   
             }
             
             yield return null;
