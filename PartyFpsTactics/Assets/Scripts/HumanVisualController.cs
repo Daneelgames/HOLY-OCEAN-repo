@@ -9,7 +9,7 @@ public class HumanVisualController : MonoBehaviour
     public List<Transform> animatedTransforms;
     public List<ConfigurableJoint> joints;
     public Transform pelvisBone;
-    private List<Quaternion> jointsLocalRotations;
+    private List<Quaternion> jointsLocalRotations = new List<Quaternion>();
 
     public void SetMovementVelocity(Vector3 velocity)
     {

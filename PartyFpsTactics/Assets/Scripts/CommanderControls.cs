@@ -25,6 +25,7 @@ public class CommanderControls : MonoBehaviour
 
     void OrderControls()
     {
+        
         if (Input.GetKeyDown(KeyCode.Z)) // FOLLOW
         {
             if (cooldownForRunOrder > 0)

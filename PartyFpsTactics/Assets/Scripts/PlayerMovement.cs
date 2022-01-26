@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -30,9 +29,6 @@ public class PlayerMovement : MonoBehaviour
     private float _playerHeadHeight;
     private float _vertRotation = 0.0f;
     private float _horRotation = 0.0f;
-
-    
-    
 
     private void Start()
     {
