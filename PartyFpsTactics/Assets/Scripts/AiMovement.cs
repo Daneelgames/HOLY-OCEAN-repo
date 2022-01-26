@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,8 +14,12 @@ public class AiMovement : MonoBehaviour
 
     public Order currentOrder = Order.FollowLeader;
     public NavMeshAgent agent;
+    [Range(1,5)]
     public float moveSpeed = 2;
+    [Range(1,10)]
     public float runSpeed = 4;
+    [Range(1,10)]
+    public float turnSpeed = 4;
     
     public float stopDistanceFollow = 1.5f;
     public float stopDistanceMove = 0;
@@ -32,6 +37,8 @@ public class AiMovement : MonoBehaviour
 
     private Vector3 currentTargetPosition;
     List<CoverSpot> goodCoverPoints = new List<CoverSpot>();
+    private HealthController enemyToLookAt;
+    private Transform lookTransform;
     private void Awake()
     {
         hc = GetComponent<HealthController>();
@@ -39,6 +46,7 @@ public class AiMovement : MonoBehaviour
 
     private void Start()
     {
+        lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
         StartCoroutine(Awareness());
     }
 
@@ -46,6 +54,12 @@ public class AiMovement : MonoBehaviour
     {
         currentVelocity = agent.velocity;
         humanVisualController.SetMovementVelocity(currentVelocity);
+        lookTransform.transform.position = transform.position;
+        if (enemyToLookAt)
+        {
+            lookTransform.LookAt(enemyToLookAt.transform.position, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookTransform.rotation, Time.deltaTime * turnSpeed);   
+        }
         if (takeCoverCooldown > 0)
             takeCoverCooldown -= Time.deltaTime;
     }
@@ -54,8 +68,17 @@ public class AiMovement : MonoBehaviour
     {
         while (true)
         {
+            float distance = 1000;
+            HealthController closestVisibleEnemy = null;
             for (int i = 0; i < unitVision.VisibleEnemies.Count; i++)
             {
+                float newDistance =
+                    Vector3.Distance(transform.position, unitVision.VisibleEnemies[i].transform.position);
+                if (newDistance < distance)
+                {
+                    distance = newDistance;
+                    closestVisibleEnemy = unitVision.VisibleEnemies[i];
+                }
                 if (CoverSystem.IsCoveredFrom(hc, unitVision.VisibleEnemies[i]))
                 {
                     
@@ -66,6 +89,8 @@ public class AiMovement : MonoBehaviour
                 }
                 yield return null;   
             }
+
+            enemyToLookAt = closestVisibleEnemy;
             yield return null;   
         }
     }
