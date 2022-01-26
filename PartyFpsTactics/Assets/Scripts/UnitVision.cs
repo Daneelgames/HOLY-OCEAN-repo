@@ -7,7 +7,7 @@ using UnityEngine;
 public class UnitVision : MonoBehaviour
 {
     private HealthController hc;
-    float fov = 70.0f;
+    public float fov = 70.0f;
     private RaycastHit hit;
     public LayerMask raycastsLayerMask;
     public Transform raycastOrigin;

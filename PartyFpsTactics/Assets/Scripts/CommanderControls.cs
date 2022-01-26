@@ -67,7 +67,7 @@ public class CommanderControls : MonoBehaviour
         for (int i = 0; i < unitsInParty.Count; i++)
         {
             if (unitsInParty[i].AiMovement)
-                unitsInParty[i].AiMovement.FollowLeaderOrder(transform);
+                unitsInParty[i].AiMovement.FollowTargetOrder(transform);
         }
     }
     
@@ -100,7 +100,7 @@ public class CommanderControls : MonoBehaviour
         for (int i = 0; i < unitsInParty.Count; i++)
         {
             if (unitsInParty[i].AiMovement)
-                unitsInParty[i].AiMovement.MoveOrder(closestNavPoint);
+                unitsInParty[i].AiMovement.MoveToPositionOrder(closestNavPoint);
         }
 
         moveOrderCurrentPos = closestNavPoint;

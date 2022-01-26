@@ -28,6 +28,10 @@ public class AiMovement : MonoBehaviour
     private HealthController hc;
     private float takeCoverCooldown = 0;
 
+    private CoverSpot occupiedCoverSpot;
+
+    private Vector3 currentTargetPosition;
+    List<CoverSpot> goodCoverPoints = new List<CoverSpot>();
     private void Awake()
     {
         hc = GetComponent<HealthController>();
@@ -56,7 +60,7 @@ public class AiMovement : MonoBehaviour
                 {
                     
                 }
-                else if (takeCoverCooldown <= 0)
+                else if (takeCoverCooldown <= 0 && currentOrder != Order.FollowLeader && currentOrder != Order.MoveToPosition)
                 {
                     TakeCoverOrder();
                 }
@@ -68,6 +72,10 @@ public class AiMovement : MonoBehaviour
 
     void StopAllBehaviorCoroutines()
     {
+        SetOccupiedSpot(occupiedCoverSpot, null);
+        
+        if (moveToPositionCoroutine != null)
+            StopCoroutine(moveToPositionCoroutine);
         if (followTargetCoroutine != null)
             StopCoroutine(followTargetCoroutine);
         if (takeCoverCoroutine != null)
@@ -87,26 +95,31 @@ public class AiMovement : MonoBehaviour
     IEnumerator TakeCover()
     {
         // FIND GOOD COVERS TO HIDE FROM EVERY VISIBLE ENEMY
-        List<Transform> goodCoverPoints = new List<Transform>();
+        goodCoverPoints = CoverSystem.Instance.FindCover(transform, unitVision.VisibleEnemies);
+
+        /*
         for (int i = 0; i < unitVision.VisibleEnemies.Count; i++)
         {
-            var covers = CoverSystem.Instance.GetAvailableCoverPoints(unitVision.VisibleEnemies[i].transform);
+            var covers = CoverSystem.Instance.GetAvailableCoverPoints(transform, unitVision.VisibleEnemies[i].transform);
             for (int j = 0; j < covers.Count; j++)
             {
-                goodCoverPoints.Add(covers[i]);
+                if (goodCoverPoints.Contains(covers[j]))
+                    continue;
+                
+                goodCoverPoints.Add(covers[j]);
             }
             yield return null;
         }
+        */
         
         // PICK CLOSEST COVER
-        Transform closestCoverPoint = null;
+        CoverSpot closestCoverPoint = null;
         float distance = 1000;
         for (int i = 0; i < goodCoverPoints.Count; i++)
         {
-            float newDistance = Vector3.Distance(goodCoverPoints[i].position, transform.position);
+            float newDistance = Vector3.Distance(goodCoverPoints[i].transform.position, transform.position);
             if (newDistance < distance)
             {
-                Debug.Log(newDistance);
                 distance = newDistance;
                 closestCoverPoint = goodCoverPoints[i];
             }
@@ -117,15 +130,97 @@ public class AiMovement : MonoBehaviour
             yield break;
         }
         
+        //Spot occupied!
+        SetOccupiedSpot(closestCoverPoint, hc);
+        
         //SET PATH
         NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, closestCoverPoint.position, NavMesh.AllAreas, path);
+        NavMesh.CalculatePath(transform.position, closestCoverPoint.transform.position, NavMesh.AllAreas, path);
         
         agent.speed = moveSpeed;
         agent.stoppingDistance = stopDistanceMove;
         agent.SetPath(path);
+        currentTargetPosition = closestCoverPoint.transform.position;
 
-        while (Vector3.Distance(transform.position, closestCoverPoint.position) > 1)
+        while (Vector3.Distance(transform.position, closestCoverPoint.transform.position) > 0.33f)
+        {
+            if (closestCoverPoint.Occupator != hc)
+            {
+                FireWatchOrder();
+                yield break;
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        FireWatchOrder();
+    }
+
+    public void SetOccupiedSpot(CoverSpot spot, HealthController occupied)
+    {
+        //Spot occupied!
+        occupiedCoverSpot = occupied ? spot : null;
+
+        if (spot)
+        {
+            if (occupied == null && spot.Occupator != hc)
+                return;
+            
+            spot.Occupator = occupied;
+        }
+    }
+    
+    public void FireWatchOrder()
+    {
+        StopAllBehaviorCoroutines();
+        currentTargetPosition = transform.position;
+        currentOrder = Order.FireWatch;
+    }
+    public void FollowTargetOrder(Transform target)
+    {
+        StopAllBehaviorCoroutines();
+        currentOrder = Order.FollowLeader;
+        followTargetCoroutine = StartCoroutine(FollowTarget(target.position));
+    }
+
+    private Coroutine followTargetCoroutine;
+    IEnumerator FollowTarget(Vector3 target)
+    {
+        agent.stoppingDistance = stopDistanceFollow;
+        NavMeshPath path = new NavMeshPath();
+        while (true)
+        {
+            if (NavMesh.SamplePosition(target, out var hit, 10f, NavMesh.AllAreas))
+            {
+                target = hit.position;
+            }
+            NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+            agent.speed = moveSpeed;
+            agent.SetPath(path);
+            currentTargetPosition = target;
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    public void MoveToPositionOrder(Vector3 targetPos)
+    {
+        StopAllBehaviorCoroutines();
+        currentOrder = Order.MoveToPosition;
+        moveToPositionCoroutine = StartCoroutine(MoveToPosition(targetPos));
+    }
+    
+    private Coroutine moveToPositionCoroutine;
+
+    IEnumerator MoveToPosition(Vector3 target)
+    {
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+        
+        agent.speed = moveSpeed;
+        agent.stoppingDistance = stopDistanceMove;
+        agent.SetPath(path);
+        currentTargetPosition = target;
+        
+        while (Vector3.Distance(transform.position, target) > 1)
         {
             yield return new WaitForSeconds(0.5f);
         }
@@ -133,44 +228,10 @@ public class AiMovement : MonoBehaviour
         FireWatchOrder();
     }
 
-
-    public void FireWatchOrder()
+    private void OnDrawGizmosSelected()
     {
-        StopAllBehaviorCoroutines();
-        currentOrder = Order.FireWatch;
-    }
-    public void FollowLeaderOrder(Transform target)
-    {
-        StopAllBehaviorCoroutines();
-        currentOrder = Order.FollowLeader;
-        followTargetCoroutine = StartCoroutine(FollowTargetCoroutine(target));
-    }
-
-    private Coroutine followTargetCoroutine;
-    IEnumerator FollowTargetCoroutine(Transform target)
-    {
-        agent.stoppingDistance = stopDistanceFollow;
-        NavMeshPath path = new NavMeshPath();
-        while (true)
-        {
-            NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-            agent.speed = moveSpeed;
-            agent.SetPath(path);
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
-    public void MoveOrder(Vector3 targetPos)
-    {
-        StopAllBehaviorCoroutines();
-        currentOrder = Order.MoveToPosition;
-        
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
-        
-        agent.speed = moveSpeed;
-        agent.stoppingDistance = stopDistanceMove;
-        agent.SetPath(path);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(currentTargetPosition , Vector3.one);
     }
 
     public void RunOrder()
