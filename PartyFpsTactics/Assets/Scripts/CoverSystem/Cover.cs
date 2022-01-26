@@ -62,6 +62,7 @@ public class Cover : MonoBehaviour
         {
             if (coverSpotsActive[i].Occupator != null)
                 continue;
+            
             if (Application.isPlaying)
             {
                 if (Vector3.Distance(targetToCoverFrom.position, coverSpotsActive[i].transform.position) <
