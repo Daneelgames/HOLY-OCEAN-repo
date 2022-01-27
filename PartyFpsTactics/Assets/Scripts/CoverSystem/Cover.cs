@@ -72,6 +72,9 @@ public class Cover : MonoBehaviour
                 if (Vector3.Distance(requester.position, coverSpotsActive[i].transform.position) >
                     CoverSystem.Instance.maxDistanceFromRequester)
                     continue;
+                if (Vector3.Distance(requester.position, coverSpotsActive[i].transform.position) <
+                    CoverSystem.Instance.minDistanceFromRequester)
+                    continue;
             }
             else
             {
@@ -79,6 +82,8 @@ public class Cover : MonoBehaviour
                     continue;
 
                 if (Vector3.Distance(requester.position, coverSpotsActive[i].transform.position) > 30)
+                    continue;
+                if (Vector3.Distance(requester.position, coverSpotsActive[i].transform.position) < 5)
                     continue;
             }
             

@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
+    public float projectileSpeed = 100;
     public int damage = 100;
+    public float lifeTime = 2;
     public Rigidbody rb;
     private float gravity = 13;
-    public float projectileSpeed = 100;
 
     private Vector3 lastPosition;
     private void Start()
@@ -19,6 +20,7 @@ public class ProjectileController : MonoBehaviour
 
     IEnumerator MoveProjectile()
     {
+        float currentLifeTime = 0;
         while (true)
         {
             rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
@@ -42,6 +44,12 @@ public class ProjectileController : MonoBehaviour
                 }
             }
             yield return null;
+            currentLifeTime += Time.deltaTime;
+            if (currentLifeTime > lifeTime)
+            {
+                Destroy(gameObject);
+                yield break;
+            }
             lastPosition = transform.position;
         }
     }

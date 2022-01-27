@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -34,10 +35,11 @@ public class AiMovement : MonoBehaviour
     private float takeCoverCooldown = 0;
 
     private CoverSpot occupiedCoverSpot;
+    private bool inCover = false;
 
     private Vector3 currentTargetPosition;
     List<CoverSpot> goodCoverPoints = new List<CoverSpot>();
-    private HealthController enemyToLookAt;
+    public HealthController enemyToLookAt;
     private Transform lookTransform;
     private void Awake()
     {
@@ -52,10 +54,13 @@ public class AiMovement : MonoBehaviour
 
     private void Update()
     {
+        if (hc.health <= 0)
+            return;
+        
         currentVelocity = agent.velocity;
         humanVisualController.SetMovementVelocity(currentVelocity);
         lookTransform.transform.position = transform.position;
-        if (enemyToLookAt)
+        if (enemyToLookAt && !inCover)
         {
             lookTransform.LookAt(enemyToLookAt.transform.position, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookTransform.rotation, Time.deltaTime * turnSpeed);   
@@ -66,7 +71,7 @@ public class AiMovement : MonoBehaviour
 
     IEnumerator Awareness()
     {
-        while (true)
+        while (hc.health > 0)
         {
             float distance = 1000;
             HealthController closestVisibleEnemy = null;
@@ -93,12 +98,12 @@ public class AiMovement : MonoBehaviour
             enemyToLookAt = closestVisibleEnemy;
             yield return null;   
         }
+
+        StopAllBehaviorCoroutines();
     }
 
     void StopAllBehaviorCoroutines()
     {
-        SetOccupiedSpot(occupiedCoverSpot, null);
-        
         if (moveToPositionCoroutine != null)
             StopCoroutine(moveToPositionCoroutine);
         if (followTargetCoroutine != null)
@@ -109,9 +114,10 @@ public class AiMovement : MonoBehaviour
 
     public void TakeCoverOrder()
     {
-        currentOrder = Order.TakeCover;
+        SetOccupiedSpot(occupiedCoverSpot, null);
         StopAllBehaviorCoroutines();
-        takeCoverCooldown = 1;
+        currentOrder = Order.TakeCover;
+        takeCoverCooldown = CoverSystem.Instance.TakeCoverCooldown;
         takeCoverCoroutine = StartCoroutine(TakeCover());
     }
 
@@ -165,11 +171,11 @@ public class AiMovement : MonoBehaviour
         agent.speed = moveSpeed;
         agent.stoppingDistance = stopDistanceMove;
         agent.SetPath(path);
-        currentTargetPosition = closestCoverPoint.transform.position;
+        currentTargetPosition = occupiedCoverSpot.transform.position;
 
-        while (Vector3.Distance(transform.position, closestCoverPoint.transform.position) > 0.33f)
+        while (Vector3.Distance(transform.position, currentTargetPosition) > 0.33f)
         {
-            if (closestCoverPoint.Occupator != hc)
+            if (occupiedCoverSpot.Occupator != hc)
             {
                 FireWatchOrder();
                 yield break;
@@ -180,17 +186,55 @@ public class AiMovement : MonoBehaviour
         FireWatchOrder();
     }
 
-    public void SetOccupiedSpot(CoverSpot spot, HealthController occupied)
+    public void SetOccupiedSpot(CoverSpot spot, HealthController occupator)
     {
         //Spot occupied!
-        occupiedCoverSpot = occupied ? spot : null;
+        occupiedCoverSpot = occupator ? spot : null;
 
+        if (!spot || !occupator)
+        {
+            if (getInCoverCoroutine!= null)
+                StopCoroutine(getInCoverCoroutine);
+            
+            SetInCover(false);
+        }
+        
         if (spot)
         {
-            if (occupied == null && spot.Occupator != hc)
+            if (occupator == null && spot.Occupator != hc)
                 return;
+
+            if (occupator == hc)
+            {
+                getInCoverCoroutine = StartCoroutine(CheckIfCloseToCover());
+            }
             
-            spot.Occupator = occupied;
+            spot.Occupator = occupator;
+        }
+    }
+
+    void SetInCover(bool _inCover)
+    {
+        inCover = _inCover;
+        hc.HumanVisualController.SetInCover(_inCover);
+    }
+
+    private Coroutine getInCoverCoroutine;
+    IEnumerator CheckIfCloseToCover()
+    {
+        while (occupiedCoverSpot)
+        {
+            if (Vector3.Distance(transform.position, occupiedCoverSpot.transform.position) < 1)
+            {
+                SetInCover(true);
+                transform.rotation = Quaternion.Slerp(transform.rotation, occupiedCoverSpot.transform.rotation, Time.deltaTime * 3);
+            }
+            else
+            {
+                SetInCover(false);
+            }
+            yield return null;
+
         }
     }
     
@@ -202,6 +246,7 @@ public class AiMovement : MonoBehaviour
     }
     public void FollowTargetOrder(Transform target)
     {
+        SetOccupiedSpot(occupiedCoverSpot, null);
         StopAllBehaviorCoroutines();
         currentOrder = Order.FollowLeader;
         followTargetCoroutine = StartCoroutine(FollowTarget(target.position));
@@ -227,7 +272,8 @@ public class AiMovement : MonoBehaviour
     }
 
     public void MoveToPositionOrder(Vector3 targetPos)
-    {
+    { 
+        SetOccupiedSpot(occupiedCoverSpot, null);
         StopAllBehaviorCoroutines();
         currentOrder = Order.MoveToPosition;
         moveToPositionCoroutine = StartCoroutine(MoveToPosition(targetPos));

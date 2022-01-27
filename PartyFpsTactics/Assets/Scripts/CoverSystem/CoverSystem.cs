@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class CoverSystem : MonoBehaviour
 {
+    [Range(1,10)]
+    public float TakeCoverCooldown = 5;
     [Range(1,20)]
     public float minDistanceToEnemy = 5;
+    [Range(1,20)]
+    public float minDistanceFromRequester = 5;
     [Range(5,100)]
     public float maxDistanceFromRequester = 30;
     public static CoverSystem Instance;
@@ -40,12 +44,10 @@ public class CoverSystem : MonoBehaviour
                 {
                     if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position + Vector3.up * 0.5f, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, 1 << 6))
                     {
-                        Debug.Log("obstacle on cover point");
                         covers[i].ToggleSpot(j, false);
                     }
                     else if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position , new Vector3(0.1f, 0.5f, 0.1f), Quaternion.identity, 1 << 6))
                     {
-                        Debug.Log("this is cover point");
                         covers[i].ToggleSpot(j, true);
                     }
                     yield return null;   

@@ -26,7 +26,7 @@ public class UnitVision : MonoBehaviour
 
     IEnumerator CheckEnemies()
     {
-        while (true)
+        while (hc.health > 0)
         {
             for (int i = 0; i < GameManager.Instance.ActiveHealthControllers.Count; i++)
             {
@@ -50,6 +50,7 @@ public class UnitVision : MonoBehaviour
             
             yield return null;
         }
+        visibleEnemies.Clear();
     }
 
     bool LineOfSight (Transform target) 

@@ -12,6 +12,15 @@ public class HumanVisualController : MonoBehaviour
     public List<Transform> animatedBones;
     public List<ConfigurableJoint> joints;
     List<Quaternion> initRotations = new List<Quaternion>();
+
+    [Header("IK")] 
+    public Transform ikAimBone;
+    public Transform ikTarget;
+    public Transform ikAimTransform;
+    public int aimIkIterations = 10;
+    public Vector3 rotationOffset;
+    private static readonly int InCover = Animator.StringToHash("InCover");
+
     private void Start()
     {
         for (int i = 0; i < joints.Count; i++)
@@ -34,11 +43,36 @@ public class HumanVisualController : MonoBehaviour
         for (int i = 0; i < joints.Count; i++)
         {
             joints[i].targetRotation = CopyRotation(i);
+            //joints[i].targetPosition = animatedBones[i].position;
+            joints[i].transform.position = animatedBones[i].position;
         }
     }
+
+    /*
+    private void LateUpdate()
+    {
+        for (int i = 0; i < aimIkIterations; i++)
+        {
+            AimAtTarget(ikAimBone, ikTarget.position);
+        }
+    }
+
+    void AimAtTarget(Transform bone, Vector3 pos)
+    {
+        Vector3 aimDirection = ikAimTransform.forward;
+        Vector3 targetDirection = pos - ikAimTransform.position;
+        Quaternion aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
+        bone.rotation = aimTowards * bone.rotation;
+    }
+    */
 
     Quaternion CopyRotation(int index)
     {
         return Quaternion.Inverse(animatedBones[index].localRotation) * initRotations[index];
+    }
+
+    public void SetInCover(bool inCover)
+    {
+        anim.SetBool(InCover, inCover);
     }
 }

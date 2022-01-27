@@ -12,6 +12,7 @@ public class HealthController : MonoBehaviour
     [Header("AI")]
     public AiMovement AiMovement;
     public AiWeaponControls AiWeaponControls;
+    public HumanVisualController HumanVisualController;
 
     public enum Team
     {
