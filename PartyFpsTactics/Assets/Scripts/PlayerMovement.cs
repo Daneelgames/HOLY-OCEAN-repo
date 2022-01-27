@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance;
     [Header("Movement")]
     public LayerMask WalkableLayerMask;
 
@@ -29,6 +29,11 @@ public class PlayerMovement : MonoBehaviour
     private float _playerHeadHeight;
     private float _vertRotation = 0.0f;
     private float _horRotation = 0.0f;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {

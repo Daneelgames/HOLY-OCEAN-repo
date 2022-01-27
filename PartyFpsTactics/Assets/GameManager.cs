@@ -3,15 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public List<HealthController> ActiveHealthControllers;
 
+    public PhysicMaterial corpsesMaterial;
+    public HealthController redTeamUnitPrefab;
+    public HealthController blueTeamUnitPrefab;
+    
     private void Awake()
     {
         Instance = this;
+        Random.InitState((int)DateTime.Now.Ticks);
     }
 
     void Start()
@@ -23,6 +29,23 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(0);
+            Restart();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void SpawnBlueUnit(Vector3 pos)
+    {
+        var newUnit = Instantiate(blueTeamUnitPrefab, pos, Quaternion.identity);
+        newUnit.AiMovement.TakeCoverOrder(true, false);
+        CommanderControls.Instance.unitsInParty.Add(newUnit);
+    }
+    public void SpawnRedUnit(Vector3 pos)
+    {
+        var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
+        newUnit.AiMovement.TakeCoverOrder(true, false);
     }
 }

@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class AiMovement : MonoBehaviour
 {
@@ -75,22 +74,26 @@ public class AiMovement : MonoBehaviour
         {
             float distance = 1000;
             HealthController closestVisibleEnemy = null;
-            for (int i = 0; i < unitVision.VisibleEnemies.Count; i++)
+            for (int i = unitVision.VisibleEnemies.Count - 1; i >= 0; i--)
             {
-                float newDistance =
-                    Vector3.Distance(transform.position, unitVision.VisibleEnemies[i].transform.position);
-                if (newDistance < distance)
+                if (unitVision.VisibleEnemies[i])
                 {
-                    distance = newDistance;
-                    closestVisibleEnemy = unitVision.VisibleEnemies[i];
-                }
-                if (CoverSystem.IsCoveredFrom(hc, unitVision.VisibleEnemies[i]))
-                {
-                    
-                }
-                else if (takeCoverCooldown <= 0 && currentOrder != Order.FollowLeader && currentOrder != Order.MoveToPosition)
-                {
-                    TakeCoverOrder();
+                  float newDistance = Vector3.Distance(transform.position, unitVision.VisibleEnemies[i].transform.position);
+                  if (newDistance < distance)
+                  {
+                      distance = newDistance;
+                      closestVisibleEnemy = unitVision.VisibleEnemies[i];
+                  }
+
+                  if (CoverSystem.IsCoveredFrom(hc, unitVision.VisibleEnemies[i]))
+                  {
+
+                  }
+                  else if (takeCoverCooldown <= 0 && currentOrder != Order.FollowLeader &&
+                           currentOrder != Order.MoveToPosition)
+                  {
+                      TakeCoverOrder();
+                  }
                 }
                 yield return null;   
             }
@@ -102,7 +105,7 @@ public class AiMovement : MonoBehaviour
         StopAllBehaviorCoroutines();
     }
 
-    void StopAllBehaviorCoroutines()
+    public void StopAllBehaviorCoroutines()
     {
         if (moveToPositionCoroutine != null)
             StopCoroutine(moveToPositionCoroutine);
@@ -112,61 +115,64 @@ public class AiMovement : MonoBehaviour
             StopCoroutine(takeCoverCoroutine);
     }
 
-    public void TakeCoverOrder()
+
+    public void TakeCoverOrder(bool random = false, bool closest = true)
     {
         SetOccupiedSpot(occupiedCoverSpot, null);
         StopAllBehaviorCoroutines();
         currentOrder = Order.TakeCover;
         takeCoverCooldown = CoverSystem.Instance.TakeCoverCooldown;
-        takeCoverCoroutine = StartCoroutine(TakeCover());
+        takeCoverCoroutine = StartCoroutine(TakeCover(random, closest));
     }
 
+    
+    
     private Coroutine takeCoverCoroutine;
 
-    IEnumerator TakeCover()
+    IEnumerator TakeCover(bool randomCover, bool closest)
     {
-        // FIND GOOD COVERS TO HIDE FROM EVERY VISIBLE ENEMY
-        goodCoverPoints = CoverSystem.Instance.FindCover(transform, unitVision.VisibleEnemies);
-
-        /*
-        for (int i = 0; i < unitVision.VisibleEnemies.Count; i++)
+        if (randomCover)
         {
-            var covers = CoverSystem.Instance.GetAvailableCoverPoints(transform, unitVision.VisibleEnemies[i].transform);
-            for (int j = 0; j < covers.Count; j++)
-            {
-                if (goodCoverPoints.Contains(covers[j]))
-                    continue;
-                
-                goodCoverPoints.Add(covers[j]);
-            }
-            yield return null;
+            goodCoverPoints = CoverSystem.Instance.GetAllCovers();
         }
-        */
-        
-        // PICK CLOSEST COVER
-        CoverSpot closestCoverPoint = null;
-        float distance = 1000;
-        for (int i = 0; i < goodCoverPoints.Count; i++)
+        else
         {
-            float newDistance = Vector3.Distance(goodCoverPoints[i].transform.position, transform.position);
-            if (newDistance < distance)
-            {
-                distance = newDistance;
-                closestCoverPoint = goodCoverPoints[i];
-            }
+            // FIND GOOD COVERS TO HIDE FROM EVERY VISIBLE ENEMY
+            goodCoverPoints = CoverSystem.Instance.FindCover(transform, unitVision.VisibleEnemies);   
         }
 
-        if (closestCoverPoint == null)
+
+        CoverSpot chosenCover = null;
+        if (closest)
+        {
+            // PICK CLOSEST COVER
+            float distance = 1000;
+            for (int i = 0; i < goodCoverPoints.Count; i++)
+            {
+                float newDistance = Vector3.Distance(goodCoverPoints[i].transform.position, transform.position);
+                if (newDistance < distance)
+                {
+                    distance = newDistance;
+                    chosenCover = goodCoverPoints[i];
+                }
+            }   
+        }
+        else
+        {
+            chosenCover = goodCoverPoints[Random.Range(0, goodCoverPoints.Count)];
+        }
+
+        if (chosenCover == null)
         {
             yield break;
         }
         
         //Spot occupied!
-        SetOccupiedSpot(closestCoverPoint, hc);
+        SetOccupiedSpot(chosenCover, hc);
         
         //SET PATH
         NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, closestCoverPoint.transform.position, NavMesh.AllAreas, path);
+        NavMesh.CalculatePath(transform.position, chosenCover.transform.position, NavMesh.AllAreas, path);
         
         agent.speed = moveSpeed;
         agent.stoppingDistance = stopDistanceMove;
@@ -259,6 +265,9 @@ public class AiMovement : MonoBehaviour
         NavMeshPath path = new NavMeshPath();
         while (true)
         {
+            if (!agent || !agent.enabled)
+                yield break;
+            
             if (NavMesh.SamplePosition(target, out var hit, 10f, NavMesh.AllAreas))
             {
                 target = hit.position;
@@ -299,14 +308,26 @@ public class AiMovement : MonoBehaviour
         FireWatchOrder();
     }
 
+    public void RunOrder()
+    {
+        agent.speed = runSpeed;
+    }
+    
+    public void Death()
+    {
+        agent.enabled = false;
+        StopAllBehaviorCoroutines();
+    }
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(currentTargetPosition , Vector3.one);
     }
 
-    public void RunOrder()
+    private void OnDestroy()
     {
-        agent.speed = runSpeed;
+        if (lookTransform)
+            Destroy(lookTransform.gameObject);
     }
 }

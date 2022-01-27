@@ -572,8 +572,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AiMovement: {fileID: 0}
+  health: 100
   visibilityTrigger: {fileID: 4808991198195853861}
+  AiMovement: {fileID: 0}
+  AiWeaponControls: {fileID: 0}
+  HumanVisualController: {fileID: 0}
   team: 1
   bodyParts: []
 --- !u!114 &4081011892120011791
@@ -616,8 +619,8 @@ MonoBehaviour:
   layersToRaycastOrders:
     serializedVersion: 2
     m_Bits: 64
-  unitsInParty:
-  - {fileID: 0}
+  unitToGiveOrder: 0
+  unitsInParty: []
   moveOrderVisualFeedback: {fileID: 7867435647168612690}
 --- !u!54 &4081011892120011790
 Rigidbody:

@@ -27,7 +27,10 @@ public class AiWeaponControls : MonoBehaviour
             yield return null;
             
             if (activeWeapon.OnCooldown)
+            {
+                Debug.Log("WEAPON ON COOLDOWN");
                 continue;
+            }
             
             if (hc.AiMovement.enemyToLookAt != null)
             {
@@ -39,7 +42,8 @@ public class AiWeaponControls : MonoBehaviour
                 }
                 if (angle < minAngleToShoot)
                 {
-                    activeWeapon.Shot();
+                    Debug.Log("WEAPON SHOT");
+                    activeWeapon.Shot(hc);
                 }
             }
         }

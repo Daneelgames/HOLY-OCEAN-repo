@@ -6,14 +6,21 @@ using UnityEngine.AI;
 
 public class CommanderControls : MonoBehaviour
 {
+    public static CommanderControls Instance;
     public Camera commanderPlayerCamera;
     public LayerMask layersToRaycastOrders;
+    public int unitToGiveOrder = 0;
     public List<HealthController> unitsInParty;
 
     public GameObject moveOrderVisualFeedback;
     private Vector3 moveOrderCurrentPos;
 
     private float cooldownForRunOrder = 0.5f;
+
+    void Awake()
+    {
+        Instance = this;
+    }
     
     private void Update()
     {
@@ -25,6 +32,17 @@ public class CommanderControls : MonoBehaviour
 
     void OrderControls()
     {
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            unitToGiveOrder = 0;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            unitToGiveOrder = 1;
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            unitToGiveOrder = 2;
+        
+        
+        if (unitsInParty.Count <= unitToGiveOrder || unitsInParty[unitToGiveOrder].health < 0)
+            return;
         
         if (Input.GetKeyDown(KeyCode.Z)) // FOLLOW
         {
@@ -65,6 +83,10 @@ public class CommanderControls : MonoBehaviour
     void FollowLeader()
     {
         
+        if (unitsInParty[unitToGiveOrder].AiMovement)
+            unitsInParty[unitToGiveOrder].AiMovement.FollowTargetOrder(transform);
+        return;
+        
         for (int i = 0; i < unitsInParty.Count; i++)
         {
             if (unitsInParty[i].AiMovement)
@@ -98,6 +120,11 @@ public class CommanderControls : MonoBehaviour
             return false;
         }
         
+        if (unitsInParty[unitToGiveOrder].AiMovement)
+            unitsInParty[unitToGiveOrder].AiMovement.MoveToPositionOrder(closestNavPoint);
+        
+        moveOrderCurrentPos = closestNavPoint;
+        return true;
         for (int i = 0; i < unitsInParty.Count; i++)
         {
             if (unitsInParty[i].AiMovement)
@@ -110,6 +137,14 @@ public class CommanderControls : MonoBehaviour
 
     void RunOrder()
     {
+        if (unitsInParty.Count <= unitToGiveOrder)
+            return;
+        
+        if (unitsInParty[unitToGiveOrder].AiMovement)
+            unitsInParty[unitToGiveOrder].AiMovement.RunOrder();
+        
+        return;
+        
         for (int i = 0; i < unitsInParty.Count; i++)
         {
             if (unitsInParty[i].AiMovement)

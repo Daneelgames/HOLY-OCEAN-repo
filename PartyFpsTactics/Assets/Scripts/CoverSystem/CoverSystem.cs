@@ -15,7 +15,7 @@ public class CoverSystem : MonoBehaviour
     public float maxDistanceFromRequester = 30;
     public static CoverSystem Instance;
     public List<Cover> covers = new List<Cover>();
-    
+    List<CoverSpot> allCovers = new List<CoverSpot>();
     private void Awake()
     {
         Instance = this;
@@ -26,10 +26,6 @@ public class CoverSystem : MonoBehaviour
         StartCoroutine(InitializeCoverSpots());
     }
 
-    private void OnDrawGizmos()
-    {
-        
-    }
 
     IEnumerator InitializeCoverSpots()
     {
@@ -49,6 +45,7 @@ public class CoverSystem : MonoBehaviour
                     else if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position , new Vector3(0.1f, 0.5f, 0.1f), Quaternion.identity, 1 << 6))
                     {
                         covers[i].ToggleSpot(j, true);
+                        allCovers.Add(covers[i].coverSpotsList[j]);
                     }
                     yield return null;   
                 }
@@ -57,6 +54,11 @@ public class CoverSystem : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    public List<CoverSpot> GetAllCovers()
+    {
+        return allCovers;
     }
 
     public List<CoverSpot> FindCover(Transform requester, List<HealthController> enemiesToHideFrom)

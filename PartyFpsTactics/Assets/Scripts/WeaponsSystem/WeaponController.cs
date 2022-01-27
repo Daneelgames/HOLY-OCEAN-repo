@@ -15,15 +15,15 @@ public class WeaponController : MonoBehaviour
         set { onCooldown = value; }
     }
     
-    public void Shot()
+    public void Shot(HealthController ownerHc)
     {
-        Shot(shotHolder.forward);
+        Shot(shotHolder.forward, ownerHc);
     }
 
-    public void Shot(Vector3 direction)
+    public void Shot(Vector3 direction, HealthController ownerHc)
     {
         var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
-        
+        newProjectile.Init(ownerHc);
         StartCoroutine(Cooldown());
     }
 

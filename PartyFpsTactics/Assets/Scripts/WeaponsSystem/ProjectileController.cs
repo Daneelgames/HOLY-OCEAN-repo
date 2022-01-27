@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ProjectileController : MonoBehaviour
 {
@@ -12,10 +14,40 @@ public class ProjectileController : MonoBehaviour
     private float gravity = 13;
 
     private Vector3 lastPosition;
-    private void Start()
+    private HealthController ownerHc;
+    public AudioSource shotAu;
+    public AudioSource flyAu;
+    
+    public void Init(HealthController _ownerHc)
     {
+        ownerHc = _ownerHc;
         lastPosition = transform.position;
+        shotAu.pitch = Random.Range(0.75f, 1.25f);
+        shotAu.Play();
+        flyAu.pitch = Random.Range(0.75f, 1.25f);
+        flyAu.Play();
         StartCoroutine(MoveProjectile());
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.layer == 6)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        if (other.gameObject.layer == 7)
+        {
+            var bodyPart = other.collider.gameObject.GetComponent<BodyPart>();
+            if (bodyPart)
+            {
+                if (bodyPart.hc == ownerHc)
+                    return;
+                
+                bodyPart.hc.Damage(damage);
+            }
+            Destroy(gameObject);
+        }
     }
 
     IEnumerator MoveProjectile()
@@ -37,9 +69,11 @@ public class ProjectileController : MonoBehaviour
                 if (hit.collider.gameObject.layer == 7)
                 {
                     var bodyPart = hit.collider.gameObject.GetComponent<BodyPart>();
-                    if (bodyPart)
+                    if (bodyPart && bodyPart.hc != ownerHc)
                     {
                         bodyPart.hc.Damage(damage);
+                        Destroy(gameObject);
+                        yield break;
                     }
                 }
             }

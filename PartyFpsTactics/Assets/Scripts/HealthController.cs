@@ -51,5 +51,24 @@ public class HealthController : MonoBehaviour
     public void Damage(int damage)
     {
         health -= damage;
+
+        if (health <= 0)
+            Death();
+    }
+
+    void Death()
+    {
+        if (AiMovement)
+            AiMovement.Death();
+
+        HumanVisualController.DeathRagdoll();
+    }
+
+    void OnDestroy()
+    {
+        if (GameManager.Instance.ActiveHealthControllers.Contains(this))
+            GameManager.Instance.ActiveHealthControllers.Remove(this);
+        if (CommanderControls.Instance.unitsInParty.Contains(this))
+            CommanderControls.Instance.unitsInParty.Remove(this);
     }
 }

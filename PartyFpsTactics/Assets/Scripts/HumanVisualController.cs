@@ -9,6 +9,8 @@ public class HumanVisualController : MonoBehaviour
     public Animator anim;
 
     [Header("Ragdoll")] 
+    public List<Collider> colliders;
+    public List<Rigidbody> rigidbodies;
     public List<Transform> animatedBones;
     public List<ConfigurableJoint> joints;
     List<Quaternion> initRotations = new List<Quaternion>();
@@ -21,8 +23,10 @@ public class HumanVisualController : MonoBehaviour
     public Vector3 rotationOffset;
     private static readonly int InCover = Animator.StringToHash("InCover");
 
+    private HealthController hc;
     private void Start()
     {
+        hc = gameObject.GetComponent<HealthController>();
         for (int i = 0; i < joints.Count; i++)
         {
             initRotations.Add(animatedBones[i].localRotation);
@@ -40,6 +44,14 @@ public class HumanVisualController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Input.GetKeyDown("k"))
+        {
+            var hc = gameObject.GetComponent<HealthController>();
+            hc.Damage(hc.health);
+        }
+        if (hc.health <= 0)
+            return;
+        
         for (int i = 0; i < joints.Count; i++)
         {
             joints[i].targetRotation = CopyRotation(i);
@@ -74,5 +86,53 @@ public class HumanVisualController : MonoBehaviour
     public void SetInCover(bool inCover)
     {
         anim.SetBool(InCover, inCover);
+    }
+
+    [ContextMenu("GetCollidersFromRigidbodies")]
+    public void GetCollidersFromRigidbodies()
+    {
+        for (int i = 0; i < rigidbodies.Count; i++)
+        {
+            colliders.Add(rigidbodies[i].gameObject.GetComponent<Collider>());
+        }
+    }
+
+    public void DeathRagdoll()
+    {
+        anim.enabled = false;
+        
+        for (int i = 0; i < joints.Count; i++)
+        {
+            /*
+            joints[i].xMotion = ConfigurableJointMotion.Free;
+            joints[i].yMotion = ConfigurableJointMotion.Free;
+            joints[i].zMotion = ConfigurableJointMotion.Free;*/
+            joints[i].angularXMotion = ConfigurableJointMotion.Free;
+            joints[i].angularYMotion = ConfigurableJointMotion.Free;
+            joints[i].angularZMotion = ConfigurableJointMotion.Free;
+            
+            var angularXDrive = joints[i].angularXDrive;
+            angularXDrive.positionSpring = 0;
+            angularXDrive.positionDamper = 0;
+            joints[i].angularXDrive = angularXDrive;
+            
+            var angularYZDrive = joints[i].angularYZDrive;
+            angularYZDrive.positionSpring = 0;
+            angularYZDrive.positionDamper = 0;
+            joints[i].angularYZDrive = angularYZDrive;
+        }
+        
+        for (int i = 0; i < rigidbodies.Count; i++)
+        {
+            rigidbodies[i].drag = 0.5f;
+            rigidbodies[i].angularDrag = 0.5f;
+            rigidbodies[i].isKinematic = false;
+            rigidbodies[i].useGravity = true;
+            rigidbodies[i].gameObject.layer = 6;
+        }
+        for (int i = 0; i < colliders.Count; i++)
+        {
+            colliders[i].material = GameManager.Instance.corpsesMaterial;
+        }
     }
 }
