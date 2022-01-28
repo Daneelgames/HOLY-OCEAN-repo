@@ -54,6 +54,7 @@ public class PlayerWeaponControls : MonoBehaviour
         {
             activeWeapon.transform.position = Vector3.Lerp(activeWeapon.transform.position, reloadTransform.position,gunMoveSpeed * Time.smoothDeltaTime);
             activeWeapon.transform.rotation = Quaternion.Slerp(activeWeapon.transform.rotation, reloadTransform.rotation, gunRotationSpeed * Time.smoothDeltaTime);
+            PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, camFovIdle, idleFovChangeSpeed * Time.smoothDeltaTime);
             return;
         }
 

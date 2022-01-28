@@ -22,6 +22,9 @@ public class ProjectileController : MonoBehaviour
     public AudioClip hitUnitFx;
     public AudioSource hitAu;
     private bool dead = false;
+
+    public Transform debrisParticles;
+    public Transform bloodParticles;
     
     public void Init(HealthController _ownerHc)
     {
@@ -133,12 +136,16 @@ public class ProjectileController : MonoBehaviour
         hitAu.clip = hitSolidFx;
         hitAu.pitch = Random.Range(0.75f, 1.25f);
         hitAu.Play();
+        debrisParticles.parent = null;
+        debrisParticles.gameObject.SetActive(true);
     }
     void HitUnit()
     {
         hitAu.clip = hitUnitFx;
         hitAu.pitch = Random.Range(0.75f, 1.25f);
         hitAu.Play();
+        bloodParticles.parent = null;
+        bloodParticles.gameObject.SetActive(true);
     }
 
     void Death()
