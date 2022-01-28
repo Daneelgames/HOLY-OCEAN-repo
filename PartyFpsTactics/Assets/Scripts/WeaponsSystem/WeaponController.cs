@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,6 +10,21 @@ public class WeaponController : MonoBehaviour
     public ProjectileController projectilePrefab;
     public float cooldown = 1;
     bool onCooldown = false;
+
+    public Transform raycastStartPoint;
+    public Transform raycastEndPoint;
+
+    private Quaternion _initLocalRotation;
+    public Quaternion InitLocalRotation
+    {
+        get { return _initLocalRotation; }
+    }
+
+    private void Awake()
+    {
+        _initLocalRotation = transform.localRotation;
+    }
+
     public bool OnCooldown
     {
         get { return onCooldown; }

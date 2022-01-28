@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,8 +21,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _moveVector;
     private Vector3 _currentVelocity;
     private Vector3 _resultVelocity;
-    
-    [Header("Camera")]
+
+    [Header("Camera")] 
+    public Camera MainCam;
     public Transform headTransform;
     public float mouseSensitivity = 5;
     public float vertLookAngleClamp = 85;
@@ -29,7 +31,10 @@ public class PlayerMovement : MonoBehaviour
     private float _playerHeadHeight;
     private float _vertRotation = 0.0f;
     private float _horRotation = 0.0f;
-
+    private bool goingUpHill = false;
+    public Transform rotator;
+    public float rotatorSpeed = 10;
+    public float minMaxRotatorAngle = 90;
     private void Awake()
     {
         Instance = this;
@@ -43,31 +48,72 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        Movement();
-        MouseLook();
-        GroundCheck();
+        GetMovement();
     }
 
-    void GroundCheck()
+    void GetMovement()
     {
-        if (Physics.CheckSphere(transform.position, 0.5f, WalkableLayerMask))
-            _grounded = true;
-        else 
-            _grounded = false;
-    }
-    
-    void Movement()
-    {
+        if (Input.GetKey(KeyCode.E))
+        {
+            rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, -minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
+        }
+        else if (Input.GetKey(KeyCode.Q))
+        {
+            rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
+        }
+        else
+        {
+            rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
+        }
+        
         _movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         _moveVector = (transform.right * _movementInput.x + transform.forward * _movementInput.y).normalized;
+        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(Vector3.up * 100, ForceMode.Impulse);
+        }
         
         if (Input.GetKey(KeyCode.LeftShift))
             _targetVelocity = _moveVector * runSpeed;
         else
-            _targetVelocity = _moveVector * walkSpeed;
+            _targetVelocity = _moveVector * walkSpeed;    
+        
+        if (goingUpHill)
+            _targetVelocity += Vector3.up * 2;
+        
         _resultVelocity = Vector3.Lerp(_currentVelocity, _targetVelocity, Time.deltaTime * acceleration);
         _currentVelocity = _resultVelocity;
+    }
 
+    private void FixedUpdate()
+    {
+        ApplyMovement();
+        GroundCheck();
+    }
+
+    private void LateUpdate()
+    {
+        MouseLook();
+    }
+
+    void GroundCheck()
+    {
+        if (Physics.Raycast(transform.position,Vector3.down, out var hit, 0.1f, WalkableLayerMask))
+        {
+            _grounded = true;
+
+            /*
+            if (Vector3.Angle(rb.velocity, hit.normal) > 5)
+                goingUpHill = true;
+                */
+        }
+        else 
+            _grounded = false;
+    }
+    
+    void ApplyMovement()
+    {
         float resultGravity = 1;
         if (!_grounded)
             resultGravity = gravity;

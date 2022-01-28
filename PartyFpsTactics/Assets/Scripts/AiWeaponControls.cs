@@ -10,6 +10,7 @@ public class AiWeaponControls : MonoBehaviour
     public float minAngleToRotateGun = 30;
     public float minAngleToShoot = 15;
     
+    
     private void Awake()
     {
         hc = GetComponent<HealthController>();
@@ -28,7 +29,6 @@ public class AiWeaponControls : MonoBehaviour
             
             if (activeWeapon.OnCooldown)
             {
-                Debug.Log("WEAPON ON COOLDOWN");
                 continue;
             }
             
@@ -40,9 +40,12 @@ public class AiWeaponControls : MonoBehaviour
                 {
                     activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position);   
                 }
+                else
+                {
+                    activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
+                }
                 if (angle < minAngleToShoot)
                 {
-                    Debug.Log("WEAPON SHOT");
                     activeWeapon.Shot(hc);
                 }
             }

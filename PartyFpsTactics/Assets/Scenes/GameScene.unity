@@ -1984,105 +1984,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291818398}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &312462731 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4081011892120011776, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-  m_PrefabInstance: {fileID: 4081011893651433414}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &312462732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 312462731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 82cc05cf483f7074bbc3496bcad756c2, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 312462731}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: d4cdca6c-275f-4131-b3db-02e1ae20bbaf
-    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5ab1f2ba-ff06-44be-842f-e1273a08c650
-    m_ActionName: Player/Look[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 15e8dcee-9a95-4a52-9f1a-40188bca0526
-    m_ActionName: Player/Fire[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e7e172b6-e738-4404-a38e-26e2cc237da2
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e7f42176-3c87-4afc-997c-eb1590e96eb0
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: fe6eddc4-d1b1-4879-81d2-f172d6f5854b
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 76a6cff5-eb46-4129-bc45-ecd4a94c1732
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b223871c-ebc2-4849-8694-03825ea33b2c
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2265ee8e-6e05-4b2a-853e-02f5974090ac
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4ed8ca56-ab83-4a73-b66c-3b2900c2fb67
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f63978e2-253c-46be-8188-b53d40f4aec2
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b8a94bab-29cc-4d9a-9e13-9b2c37f2a99e
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2a3f39d8-5eeb-479b-bd3a-958cd0d7d615
-    m_ActionName: UI/TrackedDeviceOrientation
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 962416267}
 --- !u!1 &321935601
 GameObject:
   m_ObjectHideFlags: 0
@@ -2304,7 +2205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12d02099807e9234e91f9420b0f1e53e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  corpseShredderY: -100
+  corpseShredderY: -50
   redRespawns:
   - {fileID: 972603406}
   - {fileID: 1868145236}
@@ -5549,11 +5450,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 939783792}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!20 &962416267 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 4081011893066873263, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-  m_PrefabInstance: {fileID: 4081011893651433414}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &972603405
 GameObject:
   m_ObjectHideFlags: 0
@@ -10727,7 +10623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &2092189510
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10735,7 +10631,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2092189509}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 765701d15d0d9e54aa73c6ddc2bbdbdf, type: 3}
@@ -10976,14 +10872,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1825153995, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-      propertyPath: unitsInParty.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825153995, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-      propertyPath: unitsInParty.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011776, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: m_Name
       value: Player
@@ -11030,18 +10918,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011788, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4081011892120011791, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-      propertyPath: runSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4081011892120011791, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-      propertyPath: walkSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982941804574727475, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

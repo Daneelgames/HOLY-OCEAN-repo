@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Cover : MonoBehaviour
@@ -98,21 +97,6 @@ public class Cover : MonoBehaviour
     }
 
     
-    void ToggleSpot(int index)
-    {
-        var cover = Selection.activeTransform.GetComponent<Cover>();
-        if (cover)
-        {
-            if (cover.coverSpotsActive.Contains(cover.coverSpotsList[index]))
-            {
-                cover.coverSpotsActive.Remove(cover.coverSpotsList[index]);
-            }
-            else
-            {
-                cover.coverSpotsActive.Add(cover.coverSpotsList[index]);
-            }
-        }
-    }
     public void ToggleSpot(int index, bool add)
     {
         if (add && coverSpotsActive.Contains(coverSpotsList[index]) == false)
@@ -121,76 +105,4 @@ public class Cover : MonoBehaviour
             coverSpotsActive.Remove(coverSpotsList[index]);
         
     }
-}
-[CustomEditor(typeof(CoverEditorHelper))]
-class CoverCustomEditor : Editor {
-    public override void OnInspectorGUI() {
-        if(GUILayout.Button("All On"))
-        {
-            var cover = Selection.activeTransform.GetComponent<Cover>();
-            if (cover)
-            {
-                cover.ToggleSpot(0, true);
-                cover.ToggleSpot(1, true);
-                cover.ToggleSpot(2, true);
-                cover.ToggleSpot(3, true);
-                SceneView.RepaintAll();
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            }
-        }
-        if(GUILayout.Button("All Off"))
-        {
-            var cover = Selection.activeTransform.GetComponent<Cover>();
-            if (cover)
-            {
-                cover.ToggleSpot(0, false);
-                cover.ToggleSpot(1, false);
-                cover.ToggleSpot(2, false);
-                cover.ToggleSpot(3, false);
-                SceneView.RepaintAll();
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            }
-        }
-        if(GUILayout.Button("Spot 0"))
-        {
-            var cover = Selection.activeTransform.GetComponent<Cover>();
-            if (cover)
-            {
-                cover.ToggleSpot(0, false);
-                SceneView.RepaintAll();
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            }
-        }
-        if(GUILayout.Button("Spot 1"))
-        {
-            var cover = Selection.activeTransform.GetComponent<Cover>();
-            if (cover)
-            {
-                cover.ToggleSpot(1, false);
-                SceneView.RepaintAll();
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            }
-        }
-        if(GUILayout.Button("Spot 2"))
-        {
-            var cover = Selection.activeTransform.GetComponent<Cover>();
-            if (cover)
-            {
-                cover.ToggleSpot(2, false);
-                SceneView.RepaintAll();
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            }
-        }
-        if(GUILayout.Button("Spot 3"))
-        {
-            var cover = Selection.activeTransform.GetComponent<Cover>();
-            if (cover)
-            {
-                cover.ToggleSpot(3, false);
-                SceneView.RepaintAll();
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            }
-        }
-    }
-
 }

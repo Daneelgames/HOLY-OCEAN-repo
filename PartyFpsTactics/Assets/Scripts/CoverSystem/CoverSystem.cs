@@ -56,8 +56,17 @@ public class CoverSystem : MonoBehaviour
         }
     }
 
-    public List<CoverSpot> GetAllCovers()
+    public List<CoverSpot> GetAllCovers(bool onlyEmpty = true)
     {
+        var tempCovers = new List<CoverSpot>(allCovers);
+        if (onlyEmpty)
+        {
+            for (int i = tempCovers.Count - 1; i >= 0; i--)
+            {
+                if (tempCovers[i].Occupator != null)
+                    tempCovers.RemoveAt(i);
+            }
+        }
         return allCovers;
     }
 

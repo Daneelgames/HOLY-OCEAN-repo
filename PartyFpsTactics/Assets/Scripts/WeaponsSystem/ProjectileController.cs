@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
 using Random = UnityEngine.Random;
 
 public class ProjectileController : MonoBehaviour
@@ -17,6 +18,10 @@ public class ProjectileController : MonoBehaviour
     private HealthController ownerHc;
     public AudioSource shotAu;
     public AudioSource flyAu;
+    public AudioClip hitSolidFx;
+    public AudioClip hitUnitFx;
+    public AudioSource hitAu;
+    private bool dead = false;
     
     public void Init(HealthController _ownerHc)
     {
@@ -31,9 +36,24 @@ public class ProjectileController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        if (dead)
+            return;
+        
+        if (other.gameObject == PlayerMovement.Instance.gameObject)
+        {
+            if (PlayerMovement.Instance.gameObject == ownerHc.gameObject)
+                return;
+            
+            HitUnit();
+            GameManager.Instance.Restart();
+            Death();
+            return;
+        }
+        
         if (other.gameObject.layer == 6)
         {
-            Destroy(gameObject);
+            Death();
+            HitSolid();
             return;
         }
         if (other.gameObject.layer == 7)
@@ -46,7 +66,9 @@ public class ProjectileController : MonoBehaviour
                 
                 bodyPart.hc.Damage(damage);
             }
-            Destroy(gameObject);
+    
+            HitUnit();
+            Death();
         }
     }
 
@@ -55,14 +77,27 @@ public class ProjectileController : MonoBehaviour
         float currentLifeTime = 0;
         while (true)
         {
+            if (dead)
+                yield break;
+
             rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
             Vector3 currentPosition = transform.position;
             if (Physics.Raycast(currentPosition, lastPosition - currentPosition, out var hit,
                 Vector3.Distance(currentPosition, lastPosition)))
             {
+
+                if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
+                {
+                    HitUnit();
+                    Death();
+                    GameManager.Instance.Restart();
+                    yield break;
+                }
+                
                 if (hit.collider.gameObject.layer == 6)
                 {
-                    Destroy(gameObject);
+                    HitSolid();
+                    Death();
                     yield break;
                 }
 
@@ -72,7 +107,9 @@ public class ProjectileController : MonoBehaviour
                     if (bodyPart && bodyPart.hc != ownerHc)
                     {
                         bodyPart.hc.Damage(damage);
-                        Destroy(gameObject);
+                        
+                        HitUnit();
+                        Death();
                         yield break;
                     }
                 }
@@ -87,5 +124,37 @@ public class ProjectileController : MonoBehaviour
             lastPosition = transform.position;
         }
     }
-    
+
+    void HitSolid()
+    {
+        hitAu.clip = hitSolidFx;
+        hitAu.pitch = Random.Range(0.75f, 1.25f);
+        hitAu.Play();
+    }
+    void HitUnit()
+    {
+        hitAu.clip = hitUnitFx;
+        hitAu.pitch = Random.Range(0.75f, 1.25f);
+        hitAu.Play();
+    }
+
+    void Death()
+    {
+        
+        dead = true;
+        rb.isKinematic = true;
+        transform.GetChild(0).gameObject.SetActive(false);
+        StartCoroutine(DeathCoroutine());
+        Destroy(gameObject, 3);
+    }
+
+    IEnumerator DeathCoroutine()
+    {
+        float t = 0;
+        while (t < 0.5f)
+        {
+            flyAu.volume -= Time.deltaTime * 50;
+            yield return null;
+        }
+    }
 }
