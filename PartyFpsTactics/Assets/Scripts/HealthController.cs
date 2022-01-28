@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -24,6 +25,9 @@ public class HealthController : MonoBehaviour
     public AiWeaponControls AiWeaponControls;
     public HumanVisualController HumanVisualController;
 
+
+    [Header("Mis")] 
+    public NavMeshSurface navmeshToRebuildOnDeath;
     public enum Team
     {
         Red, Blue, NULL
@@ -121,6 +125,12 @@ public class HealthController : MonoBehaviour
 
         if (HumanVisualController)
             HumanVisualController.DeathRagdoll();
+        
+        if (navmeshToRebuildOnDeath)
+        {
+            navmeshToRebuildOnDeath.BuildNavMesh();
+            //navmeshToRebuildOnDeath.UpdateNavMesh(navmeshToRebuildOnDeath.navMeshData);
+        }
         
         if (destroyOnDeath)
             Destroy(gameObject);
