@@ -52,23 +52,30 @@ public class ProjectileController : MonoBehaviour
         
         if (other.gameObject.layer == 6)
         {
-            Death();
+            TryToDamage(other.collider);
             HitSolid();
+            Death();
             return;
         }
+        
         if (other.gameObject.layer == 7)
         {
-            var bodyPart = other.collider.gameObject.GetComponent<BodyPart>();
-            if (bodyPart)
-            {
-                if (bodyPart.hc == ownerHc)
-                    return;
-                
-                bodyPart.hc.Damage(damage);
-            }
+            TryToDamage(other.collider);
     
             HitUnit();
             Death();
+        }
+    }
+
+    void TryToDamage(Collider coll)
+    {
+        var bodyPart = coll.gameObject.GetComponent<BodyPart>();
+        if (bodyPart)
+        {
+            if (bodyPart.hc == ownerHc)
+                return;
+                
+            bodyPart.hc.Damage(damage);
         }
     }
 
@@ -96,6 +103,7 @@ public class ProjectileController : MonoBehaviour
                 
                 if (hit.collider.gameObject.layer == 6)
                 {
+                    TryToDamage(hit.collider);
                     HitSolid();
                     Death();
                     yield break;
@@ -103,15 +111,10 @@ public class ProjectileController : MonoBehaviour
 
                 if (hit.collider.gameObject.layer == 7)
                 {
-                    var bodyPart = hit.collider.gameObject.GetComponent<BodyPart>();
-                    if (bodyPart && bodyPart.hc != ownerHc)
-                    {
-                        bodyPart.hc.Damage(damage);
-                        
-                        HitUnit();
-                        Death();
-                        yield break;
-                    }
+                    TryToDamage(hit.collider);
+                    HitUnit();
+                    Death();
+                    yield break;
                 }
             }
             yield return null;

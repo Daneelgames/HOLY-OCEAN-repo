@@ -30,7 +30,8 @@ public class UnitVision : MonoBehaviour
         {
             for (int i = 0; i < GameManager.Instance.ActiveHealthControllers.Count; i++)
             {
-                if (GameManager.Instance.ActiveHealthControllers[i].team == hc.team)
+                if (GameManager.Instance.ActiveHealthControllers[i].team == hc.team || 
+                    GameManager.Instance.ActiveHealthControllers[i].team == HealthController.Team.NULL)
                     continue;
 
                 var enemy = GameManager.Instance.ActiveHealthControllers[i];
