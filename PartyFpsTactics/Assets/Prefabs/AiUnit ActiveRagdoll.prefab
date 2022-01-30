@@ -5890,10 +5890,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  destroyOnDeath: 0
   visibilityTrigger: {fileID: 6123762874684251812}
+  proceduralDamageShake: 0
+  shakeX: 1
+  shakeY: 0
+  shakeZ: 1
+  maxShakeOffset: 0.1
+  transformToShake: {fileID: 0}
   AiMovement: {fileID: 7977950126143452709}
   AiWeaponControls: {fileID: 4522917420441185350}
   HumanVisualController: {fileID: 1538236959322778139}
+  navmeshToRebuildOnDeath: {fileID: 0}
   team: 1
   bodyParts:
   - {fileID: 4325278906123177980}
@@ -5916,6 +5924,7 @@ MonoBehaviour:
   - {fileID: 1339774130189114282}
   - {fileID: 8240790924279723563}
   - {fileID: 4900128747871936231}
+  damageStates: []
 --- !u!114 &-5916321303883280000
 MonoBehaviour:
   m_ObjectHideFlags: 0

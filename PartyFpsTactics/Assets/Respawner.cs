@@ -43,14 +43,26 @@ public class Respawner : MonoBehaviour
                         GameManager.Instance.SpawnBlueUnit(blueRespawns[Random.Range(0, blueRespawns.Count)].position);
                         break;
                     case HealthController.Team.Red:
-                        GameManager.Instance.SpawnRedUnit(redRespawns[Random.Range(0, redRespawns.Count)].position);
+                        var spawners = GetSpawnersInRange(redRespawns, PlayerMovement.Instance.transform.position, 10, 100);
+                        GameManager.Instance.SpawnRedUnit(spawners[Random.Range(0, spawners.Count)].position);
                         break;
                 }
 
                 Destroy(corpse.gameObject);
             }
         }
+    }
 
-        
+    public List<Transform> GetSpawnersInRange(List<Transform> spawners, Vector3 origin, float minRange, float maxRange)
+    {
+        List<Transform> temp = new List<Transform>(spawners);
+        for (int i = temp.Count - 1; i >= 0; i--)
+        {
+            float dst = Vector3.Distance(origin, temp[i].position);
+            if (dst < minRange || dst > maxRange)
+                temp.RemoveAt(i);
+        }
+
+        return temp;
     }
 }

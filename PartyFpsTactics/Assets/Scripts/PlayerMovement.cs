@@ -19,8 +19,16 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _targetVelocity;
     private Vector2 _movementInput;
     private Vector3 _moveVector;
-    private Vector3 _currentVelocity;
+    private Vector3 _prevVelocity;
     private Vector3 _resultVelocity;
+
+    [Header("Slopes")] 
+    bool onSlope = false;
+    private Vector3 slopeMoveDirection;
+    private Vector3 slopeNormal;
+    public float slopeRayHeight = 0.25f;
+    public float slopeRayDistance = 0.5f;
+    public float slopeRayRadius = 0.25f;
 
     [Header("Camera")] 
     public Camera MainCam;
@@ -65,9 +73,16 @@ public class PlayerMovement : MonoBehaviour
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
         }
+
+        int hor = (int)Input.GetAxisRaw("Horizontal");
+        int vert = (int)Input.GetAxisRaw("Vertical");
         
-        _movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        _moveVector = (transform.right * _movementInput.x + transform.forward * _movementInput.y).normalized;
+        _movementInput = new Vector2(hor, vert);
+        _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
+        _moveVector.Normalize();
+        
+        if (onSlope)
+            _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -82,14 +97,15 @@ public class PlayerMovement : MonoBehaviour
         if (goingUpHill)
             _targetVelocity += Vector3.up * 2;
         
-        _resultVelocity = Vector3.Lerp(_currentVelocity, _targetVelocity, Time.deltaTime * acceleration);
-        _currentVelocity = _resultVelocity;
+        _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
+        _prevVelocity = _resultVelocity;
     }
 
     private void FixedUpdate()
     {
-        ApplyMovement();
         GroundCheck();
+        SlopeCheck();
+        ApplyMovement();
     }
 
     private void LateUpdate()
@@ -97,27 +113,56 @@ public class PlayerMovement : MonoBehaviour
         MouseLook();
     }
 
+    void SlopeCheck()
+    {
+        if (!_grounded)
+        {
+            onSlope = false;
+            return;
+        }
+        
+        if (Physics.SphereCast(transform.position + Vector3.up * slopeRayHeight, slopeRayRadius, Vector3.down, out var hit, slopeRayDistance,
+            WalkableLayerMask, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.normal != Vector3.up)
+            {
+                Debug.Log(hit.point);
+                onSlope = true;
+                slopeNormal = hit.normal;
+            }
+            else
+            {
+                Debug.Log(hit.point);
+                onSlope = false;
+            }
+        }
+        else
+        {
+            onSlope = false;
+        }
+    }
+
     void GroundCheck()
     {
-        if (Physics.Raycast(transform.position,Vector3.down, out var hit, 0.1f, WalkableLayerMask))
+        if (Physics.CheckSphere(transform.position, 0.25f, WalkableLayerMask, QueryTriggerInteraction.Ignore))
         {
             _grounded = true;
 
-            /*
-            if (Vector3.Angle(rb.velocity, hit.normal) > 5)
-                goingUpHill = true;
-                */
         }
-        else 
+        else
+        {
             _grounded = false;
+        }
     }
     
     void ApplyMovement()
     {
-        float resultGravity = 1;
+        float resultGravity = 0;
         if (!_grounded)
             resultGravity = gravity;
-        
+        else if (!onSlope)
+            resultGravity = 1;
+
         rb.velocity = _resultVelocity + Vector3.down * resultGravity;
     }
     
@@ -130,9 +175,11 @@ public class PlayerMovement : MonoBehaviour
         
         _vertRotation -= Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
         _vertRotation = Mathf.Clamp(_vertRotation, -vertLookAngleClamp, vertLookAngleClamp);
-        
-        newRotation = new Vector3(_vertRotation, 0, 0) + transform.localEulerAngles;
-        headTransform.localRotation = Quaternion.Euler(newRotation);
+
+        //newRotation = new Vector3(_vertRotation, 0, 0) + transform.localEulerAngles;
+        //headTransform.localRotation = Quaternion.Euler(newRotation);
+        newRotation = new Vector3(_vertRotation, 0, 0) + transform.eulerAngles;
+        headTransform.rotation = Quaternion.Euler(newRotation);
 
         headTransform.transform.position = Vector3.Lerp(headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeight, cameraFollowBodySmooth * Time.deltaTime);
     }
