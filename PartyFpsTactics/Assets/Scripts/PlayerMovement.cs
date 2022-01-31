@@ -126,13 +126,11 @@ public class PlayerMovement : MonoBehaviour
         {
             if (hit.normal != Vector3.up)
             {
-                Debug.Log(hit.point);
                 onSlope = true;
                 slopeNormal = hit.normal;
             }
             else
             {
-                Debug.Log(hit.point);
                 onSlope = false;
             }
         }
