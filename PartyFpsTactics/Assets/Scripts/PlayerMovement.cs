@@ -84,9 +84,9 @@ public class PlayerMovement : MonoBehaviour
         if (onSlope)
             _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _grounded)
         {
-            rb.AddForce(Vector3.up * 100, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * 100, ForceMode.VelocityChange);
         }
         
         if (Input.GetKey(KeyCode.LeftShift))
@@ -121,8 +121,8 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         
-        if (Physics.SphereCast(transform.position + Vector3.up * slopeRayHeight, slopeRayRadius, Vector3.down, out var hit, slopeRayDistance,
-            WalkableLayerMask, QueryTriggerInteraction.Ignore))
+        //if (Physics.SphereCast(transform.position + Vector3.up * slopeRayHeight, slopeRayRadius, Vector3.down, out var hit, slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position + Vector3.up * slopeRayHeight, Vector3.down, out var hit, slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
         {
             if (hit.normal != Vector3.up)
             {

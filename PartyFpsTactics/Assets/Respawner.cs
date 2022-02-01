@@ -8,20 +8,37 @@ public class Respawner : MonoBehaviour
 {
     public float corpseShredderY = -50;
     public List<Transform> redRespawns;
-    public int enemiesAmount = 10;
+    public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
     public List<Transform> blueRespawns;
     public int alliesAmount = 3;
 
-    private IEnumerator Start()
+    public static Respawner Instance;
+
+    private void Awake()
     {
-        yield return new WaitForSeconds(1);
-        for (int i = 0; i < alliesAmount; i++)
+        Instance = this;
+    }
+
+    public void Init()
+    {
+        // create enemy spawns
+        List<GameObject> tilesForSpawns = new List<GameObject>();
+
+        for (int i = 1; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
         {
-            GameManager.Instance.SpawnBlueUnit(blueRespawns[Random.Range(0, blueRespawns.Count)].position);
-        }
-        for (int i = 0; i < enemiesAmount; i++)
-        {
-            GameManager.Instance.SpawnRedUnit(redRespawns[Random.Range(0, redRespawns.Count)].position);
+            tilesForSpawns.Clear();
+            foreach (var tile in LevelGenerator.Instance.spawnedLevels[i].tilesInside)
+            {
+                tilesForSpawns.Add(tile);
+            }
+
+            for (int j = 0; j < Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y); j++)
+            {
+                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                
+                GameManager.Instance.SpawnRedUnit(randomTile.transform.position);
+                tilesForSpawns.Remove(randomTile);
+            }
         }
     }
 

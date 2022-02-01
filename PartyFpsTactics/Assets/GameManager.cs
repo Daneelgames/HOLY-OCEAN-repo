@@ -46,9 +46,9 @@ public class GameManager : MonoBehaviour
     public void SpawnRedUnit(Vector3 pos)
     {
         var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
-        if (Random.value > 0.5f)
+        if (Random.value > 0.9f)
             newUnit.AiMovement.MoveToPositionOrder(PlayerMovement.Instance.transform.position);
         else 
-            newUnit.AiMovement.TakeCoverOrder(true, false);
+            newUnit.AiMovement.TakeCoverOrder(true, true);
     }
 }
