@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class AiWeaponControls : MonoBehaviour
@@ -9,7 +10,6 @@ public class AiWeaponControls : MonoBehaviour
     private HealthController hc;
     public float minAngleToRotateGun = 30;
     public float minAngleToShoot = 15;
-    
     
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class AiWeaponControls : MonoBehaviour
                 float angle = Vector3.Angle(targetDir, transform.forward);
                 if (angle < minAngleToRotateGun)
                 {
-                    activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position);   
+                    activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position);
                 }
                 else
                 {

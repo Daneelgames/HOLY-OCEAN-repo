@@ -102,6 +102,10 @@ public class PlayerWeaponControls : MonoBehaviour
             {
                 leftWeapon.Shot(hc);
             }
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                leftWeapon.Shot(hc);
+            }
         }
         
         if (rightWeapon.OnCooldown || weaponCollidesWithWallRight)

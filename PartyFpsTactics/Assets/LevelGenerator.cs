@@ -55,11 +55,18 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < levelsHeights.Count; i++)
         {
-            Debug.Log("Spawn New Level " + i);
             yield return StartCoroutine(SpawnNewLevel(i));
         }
-        
-        yield return StartCoroutine(MakeStairs());
+
+        for (int i = 0; i < spawnedLevels.Count - 1; i++)
+        {
+            if (Random.value > 0.66f)
+            {
+                yield return StartCoroutine(MakeStairs(i));
+            }   
+            
+            yield return StartCoroutine(MakeStairs(i));
+        }
         yield return StartCoroutine(SpawnCovers());
         
         PlayerMovement.Instance.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
@@ -149,10 +156,8 @@ public class LevelGenerator : MonoBehaviour
         spawnedLevels.Add(newLevel);
     }
     
-    IEnumerator MakeStairs()
+    IEnumerator MakeStairs(int i)
     {
-
-        for (int i = 0; i < spawnedLevels.Count - 1; i++)
         {
             Level levelFrom = spawnedLevels[i];
             Level levelTo = spawnedLevels[i + 1];

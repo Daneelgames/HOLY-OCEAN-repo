@@ -11,6 +11,7 @@ public class Respawner : MonoBehaviour
     public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
     public List<Transform> blueRespawns;
     public int alliesAmount = 3;
+    List<GameObject> tilesForSpawns = new List<GameObject>();
 
     public static Respawner Instance;
 
@@ -22,7 +23,7 @@ public class Respawner : MonoBehaviour
     public void Init()
     {
         // create enemy spawns
-        List<GameObject> tilesForSpawns = new List<GameObject>();
+        tilesForSpawns = new List<GameObject>();
 
         for (int i = 1; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
         {
@@ -35,9 +36,11 @@ public class Respawner : MonoBehaviour
             for (int j = 0; j < Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y); j++)
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                var newSpawnPoint = new GameObject("RedSpawnPoint");
+                newSpawnPoint.transform.parent = transform;
+                redRespawns.Add(newSpawnPoint.transform);
                 
                 GameManager.Instance.SpawnRedUnit(randomTile.transform.position);
-                tilesForSpawns.Remove(randomTile);
             }
         }
     }
