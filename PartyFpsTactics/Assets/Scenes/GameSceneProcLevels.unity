@@ -2743,7 +2743,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &321935601
 GameObject:
@@ -2921,7 +2921,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &348180487
 GameObject:
@@ -5363,36 +5363,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1727706261719315467, guid: 17dc5fc41ba3b824da97f6718f28cbbd, type: 3}
   m_PrefabInstance: {fileID: 2114995510}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &641054707
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 641054708}
-  m_Layer: 0
-  m_Name: ProceduralLevel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &641054708
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 641054707}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15602183, y: -0.32805097, z: -9.841334}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &647272205 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1727706261719315467, guid: 17dc5fc41ba3b824da97f6718f28cbbd, type: 3}
@@ -6214,7 +6184,7 @@ Transform:
   - {fileID: 598163148}
   - {fileID: 1558095370}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &755501356
 GameObject:
@@ -6994,14 +6964,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 8943623579927757030, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   spawnedRooms: []
-  levelFolder: {fileID: 641054708}
-  roomsScaleMinMaxX: {x: 3, y: 10}
-  roomsScaleMinMaxY: {x: 2, y: 6}
+  generatedBuildingFolder: {fileID: 0}
+  levelsHeights: 
+  roomsPerLevelMinMax: {x: 1, y: 10}
+  randomLevelRotation: 0
+  levelsScaleMinMaxX: {x: 3, y: 10}
+  roomsScaleMinMaxY: {x: 2, y: 2}
   roomsScaleMinMaxZ: {x: 3, y: 10}
-  roomsPositionsMinMaxX: {x: -20, y: 20}
-  roomsPositionsMinMaxY: {x: -10, y: 10}
-  roomsPositionsMinMaxZ: {x: -20, y: 20}
-  roomsAmount: 20
 --- !u!4 &861729377
 Transform:
   m_ObjectHideFlags: 0
@@ -15459,7 +15428,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2096762774 stripped
 Transform:
@@ -15869,7 +15838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011788, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011788, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: m_LocalPosition.x
