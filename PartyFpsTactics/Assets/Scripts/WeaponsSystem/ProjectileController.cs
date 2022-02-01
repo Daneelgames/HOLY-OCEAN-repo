@@ -67,6 +67,9 @@ public class ProjectileController : MonoBehaviour
         }
         if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
         {
+            if (hit.collider.gameObject == ownerHc.gameObject)
+                return;
+
             if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
             {
                 HitUnit(hit.point);

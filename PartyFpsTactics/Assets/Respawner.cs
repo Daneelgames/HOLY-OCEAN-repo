@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -52,8 +53,11 @@ public class Respawner : MonoBehaviour
             GameManager.Instance.Restart();
             return;
         }
-        for (int i = 0; i < GameManager.Instance.ActiveHealthControllers.Count; i++)
+        for (int i = GameManager.Instance.ActiveHealthControllers.Count - 1; i >= 0; i--)
         {
+            if (i >= GameManager.Instance.ActiveHealthControllers.Count)
+                continue;
+            
             var corpse = GameManager.Instance.ActiveHealthControllers[i];
             if (corpse.HumanVisualController && corpse.HumanVisualController.rigidbodies[0].transform.position.y < corpseShredderY)
             {

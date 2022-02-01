@@ -41,47 +41,6 @@ public class PlayerWeaponControls : MonoBehaviour
         rightWeapon.transform.parent = null;
     }
 
-    private void FixedUpdate()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            currentTransformToRaycastL = aimTransformLeft;
-        }
-        else
-        {
-            currentTransformToRaycastL = idleTransformLeft;
-        }
-        if (Input.GetMouseButton(1))
-        {
-            currentTransformToRaycastR = aimTransformRight;
-        }
-        else
-        {
-            currentTransformToRaycastR = idleTransformRight;
-        }
-        
-        if (Physics.Raycast(currentTransformToRaycastL.position,
-            currentTransformToRaycastL.forward, out var hit,
-            Vector3.Distance(currentTransformToRaycastL.position, currentTransformToRaycastL.position + currentTransformToRaycastL.forward * 0.5f), 1 << 6))
-        {
-            weaponCollidesWithWallLeft = true;
-        }
-        else
-        {
-            weaponCollidesWithWallLeft = false;
-        }
-        if (Physics.Raycast(currentTransformToRaycastR.position,
-            currentTransformToRaycastR.forward, out var hitR,
-            Vector3.Distance(currentTransformToRaycastR.position, currentTransformToRaycastR.position + currentTransformToRaycastR.forward * 0.5f), 1 << 6))
-        {
-            weaponCollidesWithWallRight = true;
-        }
-        else
-        {
-            weaponCollidesWithWallRight = false;
-        }
-    }
-
     void Update()
     {
         bool aiming = false;
@@ -127,14 +86,58 @@ public class PlayerWeaponControls : MonoBehaviour
         }
 
         targetFov = aiming ? 60 : 90;
+        
+        leftWeapon.transform.position = Vector3.Lerp(leftWeapon.transform.position, targetLeftTransform.position, gunMoveSpeed * Time.fixedDeltaTime);
+        leftWeapon.transform.rotation = Quaternion.Slerp(leftWeapon.transform.rotation, targetLeftTransform.rotation, gunRotationSpeed * Time.fixedDeltaTime);
+        rightWeapon.transform.position = Vector3.Lerp(rightWeapon.transform.position, targetRightTransform.position, gunMoveSpeed * Time.fixedDeltaTime);
+        rightWeapon.transform.rotation = Quaternion.Slerp(rightWeapon.transform.rotation, targetRightTransform.rotation, gunRotationSpeed * Time.fixedDeltaTime);
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            currentTransformToRaycastL = aimTransformLeft;
+        }
+        else
+        {
+            currentTransformToRaycastL = idleTransformLeft;
+        }
+        if (Input.GetMouseButton(1))
+        {
+            currentTransformToRaycastR = aimTransformRight;
+        }
+        else
+        {
+            currentTransformToRaycastR = idleTransformRight;
+        }
+        
+        if (Physics.Raycast(currentTransformToRaycastL.position,
+            currentTransformToRaycastL.forward, out var hit,
+            Vector3.Distance(currentTransformToRaycastL.position, currentTransformToRaycastL.position + currentTransformToRaycastL.forward * 0.5f), 1 << 6))
+        {
+            weaponCollidesWithWallLeft = true;
+        }
+        else
+        {
+            weaponCollidesWithWallLeft = false;
+        }
+        if (Physics.Raycast(currentTransformToRaycastR.position,
+            currentTransformToRaycastR.forward, out var hitR,
+            Vector3.Distance(currentTransformToRaycastR.position, currentTransformToRaycastR.position + currentTransformToRaycastR.forward * 0.5f), 1 << 6))
+        {
+            weaponCollidesWithWallRight = true;
+        }
+        else
+        {
+            weaponCollidesWithWallRight = false;
+        }
     }
 
     private void LateUpdate()
     {
         PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, targetFov, idleFovChangeSpeed * Time.smoothDeltaTime);
-        leftWeapon.transform.position = Vector3.Lerp(leftWeapon.transform.position, targetLeftTransform.position, gunMoveSpeed * Time.smoothDeltaTime);
-        leftWeapon.transform.rotation = Quaternion.Slerp(leftWeapon.transform.rotation, targetLeftTransform.rotation, gunRotationSpeed * Time.smoothDeltaTime);
-        rightWeapon.transform.position = Vector3.Lerp(rightWeapon.transform.position, targetRightTransform.position, gunMoveSpeed * Time.smoothDeltaTime);
-        rightWeapon.transform.rotation = Quaternion.Slerp(rightWeapon.transform.rotation, targetRightTransform.rotation, gunRotationSpeed * Time.smoothDeltaTime);
+       
     }
+
 }

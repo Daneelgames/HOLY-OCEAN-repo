@@ -149,6 +149,9 @@ public class AiMovement : MonoBehaviour
             float distance = 1000;
             for (int i = 0; i < goodCoverPoints.Count; i++)
             {
+                if (goodCoverPoints[i] == null)
+                    continue;
+                
                 float newDistance = Vector3.Distance(goodCoverPoints[i].transform.position, transform.position);
                 if (newDistance < distance)
                 {

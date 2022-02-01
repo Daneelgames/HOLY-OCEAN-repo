@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AiWeaponControls : MonoBehaviour
 {
@@ -34,6 +35,14 @@ public class AiWeaponControls : MonoBehaviour
             
             if (hc.AiMovement.enemyToLookAt != null)
             {
+                if (hc.AiMovement.enemyToLookAt.gameObject == PlayerMovement.Instance.gameObject)
+                {
+                    if (!GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position) && Random.value > 0.5f)
+                    {
+                        continue;   
+                    }
+                }
+                
                 Vector3 targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
                 float angle = Vector3.Angle(targetDir, transform.forward);
                 if (angle < minAngleToRotateGun)

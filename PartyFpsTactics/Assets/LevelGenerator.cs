@@ -206,20 +206,24 @@ public class LevelGenerator : MonoBehaviour
                 rot = Quaternion.LookRotation(levelToClosestTile.position - levelFromClosestTile.position);
 
                 Vector3 pos = (levelFromClosestTile.position + (levelToClosestTile.position - levelFromClosestTile.position).normalized * j);
-                //pos = new Vector3(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(pos.z));
-                var newTile = Instantiate(tilePrefab, pos, rot);
-                newTile.transform.parent = generatedBuildingFolder;
-                stairsTiles.Add(newTile.transform);
+                var newStairsTile = Instantiate(tilePrefab, pos, rot);
+                
+                var transformLocalScale = newStairsTile.transform.localScale;
+                transformLocalScale.x = 1.5f;
+                newStairsTile.transform.localScale = transformLocalScale;
+                
+                newStairsTile.transform.parent = generatedBuildingFolder;
+                stairsTiles.Add(newStairsTile.transform);
                 yield return null;
             }
 
             // remove top floor tiles
-            for (int j = 0; j < stairsTiles.Count; j++)
+            for (int j = 0; j < stairsTiles.Count-1; j++)
             {
                 Vector3 pos1 = new Vector3(stairsTiles[j].position.x, levelTo.tilesInside[0].transform.position.y, stairsTiles[j].position.z);
                 for (int k = levelTo.tilesInside.Count - 1; k >= 0; k--)
                 {
-                    if (levelTo.tilesInside[k] == levelToClosestTile)
+                    if (levelTo.tilesInside[k].transform == levelToClosestTile)
                         continue;
                     Vector3 pos2 = levelTo.tilesInside[k].transform.position;
                     if (Vector3.Distance(pos1, pos2) < distanceToCutCeilingUnderStairs)
@@ -231,7 +235,7 @@ public class LevelGenerator : MonoBehaviour
                 
                 for (int k = levelTo.tilesWallsAround.Count - 1; k >= 0; k--)
                 {
-                    if (levelTo.tilesWallsAround[k] == levelToClosestTile)
+                    if (levelTo.tilesWallsAround[k].transform == levelToClosestTile)
                         continue;
                     
                     pos1 = new Vector3(pos1.x, levelTo.tilesWallsAround[k].transform.position.y, pos1.z);
@@ -266,7 +270,7 @@ public class LevelGenerator : MonoBehaviour
             for (int j = 0; j < Random.Range(coversPerLevelMinMax.x, coversPerLevelMinMax.y); j++)
             {
                 var tileForCover = availableTiles[Random.Range(0, availableTiles.Count)];
-                Instantiate(coverPrefab, tileForCover.transform.position, Quaternion.identity);
+                Instantiate(coverPrefab, tileForCover.transform.position + Vector3.up * 0.5f, Quaternion.identity);
                 availableTiles.Remove(tileForCover);
             }
             yield return null;

@@ -51,4 +51,13 @@ public class GameManager : MonoBehaviour
         else 
             newUnit.AiMovement.TakeCoverOrder(true, true);
     }
+
+    public bool IsPositionInPlayerFov(Vector3 pos)
+    {
+        bool inFov = false;
+        var viewportPoint = PlayerMovement.Instance.MainCam.WorldToViewportPoint(pos);
+        if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1)
+            inFov = true;
+        return inFov;
+    }
 }
