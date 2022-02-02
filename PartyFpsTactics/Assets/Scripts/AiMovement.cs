@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -40,6 +41,7 @@ public class AiMovement : MonoBehaviour
     List<CoverSpot> goodCoverPoints = new List<CoverSpot>();
     public HealthController enemyToLookAt;
     private Transform lookTransform;
+    public NavMeshSurface navMeshBubble;
     private void Awake()
     {
         hc = GetComponent<HealthController>();
@@ -48,6 +50,12 @@ public class AiMovement : MonoBehaviour
     private void Start()
     {
         lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
+
+        if (navMeshBubble)
+        {
+            navMeshBubble.BuildNavMesh();
+            LevelGenerator.Instance.AddNavMeshBubble(navMeshBubble);
+        }
         StartCoroutine(Awareness());
     }
 
@@ -319,6 +327,8 @@ public class AiMovement : MonoBehaviour
     public void Death()
     {
         agent.enabled = false;
+        if (navMeshBubble)
+            LevelGenerator.Instance.RemoveNavMeshBubble(navMeshBubble);
         StopAllBehaviorCoroutines();
     }
     

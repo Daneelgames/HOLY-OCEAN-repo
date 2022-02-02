@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         if (Random.value > 0.9f)
             newUnit.AiMovement.MoveToPositionOrder(PlayerMovement.Instance.transform.position);
         else 
-            newUnit.AiMovement.TakeCoverOrder(true, true);
+            newUnit.AiMovement.TakeCoverOrder();
     }
 
     public bool IsPositionInPlayerFov(Vector3 pos)

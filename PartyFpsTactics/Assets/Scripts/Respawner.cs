@@ -15,7 +15,7 @@ public class Respawner : MonoBehaviour
     List<GameObject> tilesForSpawns = new List<GameObject>();
 
     public static Respawner Instance;
-
+    public bool spawn = false;
     private void Awake()
     {
         Instance = this;
@@ -23,6 +23,9 @@ public class Respawner : MonoBehaviour
 
     public void Init()
     {
+        if (!spawn)
+            return;
+        
         // create enemy spawns
         tilesForSpawns = new List<GameObject>();
 
@@ -68,6 +71,10 @@ public class Respawner : MonoBehaviour
                         break;
                     case HealthController.Team.Red:
                         var spawners = GetSpawnersInRange(redRespawns, PlayerMovement.Instance.transform.position, 10, 100);
+                        if (spawners.Count == 0)
+                        {
+                            spawners = new List<Transform>(redRespawns);
+                        }
                         GameManager.Instance.SpawnRedUnit(spawners[Random.Range(0, spawners.Count)].position);
                         break;
                 }

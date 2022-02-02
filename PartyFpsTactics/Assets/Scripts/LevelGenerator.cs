@@ -28,9 +28,11 @@ public class LevelGenerator : MonoBehaviour
     [Header("SCALE IS SCALED BY 2 IN CODE")]
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
-
-    public NavMeshSurface navMeshSurface;
-
+    [Space]
+    public List<NavMeshSurface> navMeshSurfaces;
+    public GameObject tileDestroyedParticles;
+    private List<Vector3> navMeshChangedPositionQuere = new List<Vector3>();
+    
     private void Awake()
     {
         Instance = this;
@@ -70,7 +72,13 @@ public class LevelGenerator : MonoBehaviour
         yield return StartCoroutine(SpawnCovers());
         
         PlayerMovement.Instance.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
-        navMeshSurface.BuildNavMesh();
+        
+        for (int i = 0; i < navMeshSurfaces.Count; i++)
+        {
+            navMeshSurfaces[i].BuildNavMesh();
+        }
+
+        yield return null;
         Respawner.Instance.Init();
     }
 
@@ -275,6 +283,72 @@ public class LevelGenerator : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    public void TileDamaged(BodyPart tile)
+    {
+        if (tilesToDamage.Contains(tile.transform))
+            return;
+        
+        StartCoroutine(TileDamagedCoroutine(tile.transform));
+    }
+
+    private List<Transform> tilesToDamage = new List<Transform>();
+
+    IEnumerator TileDamagedCoroutine(Transform tile)
+    {
+        float t = 0;
+        tilesToDamage.Add(tile);
+        Vector3 originalPosition = tile.position;
+        while (t < 0.5f)
+        {
+            if (tile == null)
+                yield break;
+            
+            t += Time.deltaTime;
+            tile.position = originalPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f),
+                Random.Range(-0.1f, 0.1f));
+            yield return null;
+        }
+
+        tilesToDamage.Remove(tile);
+        tile.position = originalPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f),
+            Random.Range(-0.1f, 0.1f));;
+    }
+    public void TileDestroyed(BodyPart tile)
+    {
+        navMeshChangedPositionQuere.Add(tile.transform.position);
+        Instantiate(tileDestroyedParticles, tile.transform.position, Quaternion.identity);
+        
+        StartCoroutine(UpdateNavMesh(tile.transform.position));
+    }
+
+    IEnumerator UpdateNavMesh(Vector3 pos)
+    {
+        yield return null;
+
+        float distance = 10000;
+        NavMeshSurface closestSurface = null;
+        for (int i = 0; i < navMeshSurfaces.Count; i++)
+        {
+            float newDistance = Vector3.Distance(navMeshSurfaces[i].transform.position, pos);
+            if (newDistance < distance)
+            {
+                distance = newDistance;
+                closestSurface = navMeshSurfaces[i];
+            }
+        }   
+        closestSurface.UpdateNavMesh(closestSurface.navMeshData);
+    }
+    
+    public void AddNavMeshBubble(NavMeshSurface bubble)
+    {
+        navMeshSurfaces.Add(bubble);
+    }
+    public void RemoveNavMeshBubble(NavMeshSurface bubble)
+    {
+        bubble.RemoveData();
+        navMeshSurfaces.Remove(bubble);
     }
 }
 

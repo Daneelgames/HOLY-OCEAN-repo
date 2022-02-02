@@ -47,39 +47,47 @@ public class ProjectileController : MonoBehaviour
 
     private void Update()
     {
+        if (dead)
+            return;
+        
         rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
         currentPosition  = transform.position;
         distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
         if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out var hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
         {
+            if (hit.transform == null)
+                return;
             if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
             {
-                HitUnit(hit.point);
+                HitUnitFeedback(hit.point);
                 Death();
                 GameManager.Instance.Restart();
                 return;
             }
                 
             TryToDamage(hit.collider);
-            HitSolid();
+            HitSolidFeedback();
             Death();
             return;
         }
         if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
         {
+            if (hit.transform == null)
+                return;
+            
             if (hit.collider.gameObject == ownerHc.gameObject)
                 return;
 
             if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
             {
-                HitUnit(hit.point);
+                HitUnitFeedback(hit.point);
                 Death();
                 GameManager.Instance.Restart();
                 return;
             }
                 
             TryToDamage(hit.collider);
-            HitUnit(hit.point);
+            HitUnitFeedback(hit.point);
             Death();
         }
     }
@@ -89,6 +97,11 @@ public class ProjectileController : MonoBehaviour
         var bodyPart = coll.gameObject.GetComponent<BodyPart>();
         if (bodyPart)
         {
+            if (bodyPart.hc == null && bodyPart.localHealth > 0)
+            {
+                bodyPart.DamageTile(damage);
+                return;
+            }
             if (bodyPart.hc == ownerHc)
                 return;
                 
@@ -115,7 +128,7 @@ public class ProjectileController : MonoBehaviour
         }
     }
 
-    void HitSolid()
+    void HitSolidFeedback()
     {
         hitAu.clip = hitSolidFx;
         hitAu.pitch = Random.Range(0.75f, 1.25f);
@@ -123,7 +136,7 @@ public class ProjectileController : MonoBehaviour
         debrisParticles.parent = null;
         debrisParticles.gameObject.SetActive(true);
     }
-    void HitUnit(Vector3 contactPoint)
+    void HitUnitFeedback(Vector3 contactPoint)
     {
         hitAu.clip = hitUnitFx;
         hitAu.pitch = Random.Range(0.75f, 1.25f);
@@ -135,7 +148,6 @@ public class ProjectileController : MonoBehaviour
 
     void Death()
     {
-        
         dead = true;
         rb.isKinematic = true;
         transform.GetChild(0).gameObject.SetActive(false);

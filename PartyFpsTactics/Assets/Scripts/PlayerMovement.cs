@@ -56,6 +56,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            walkSpeed--;
+            runSpeed--;
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            walkSpeed++;
+            runSpeed++;
+        }
+
+        if (walkSpeed < 1)
+        {
+            walkSpeed = 1;
+            runSpeed = 1;
+        }
         GetMovement();
     }
 
