@@ -57,16 +57,12 @@ public class ProjectileController : MonoBehaviour
         {
             if (hit.transform == null)
                 return;
-            if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
-            {
-                HitUnitFeedback(hit.point);
-                Death();
-                GameManager.Instance.Restart();
-                return;
-            }
                 
-            TryToDamage(hit.collider);
-            HitSolidFeedback();
+            var type = TryToDamage(hit.collider); // 0 solid, 1 unit
+            
+            if (type == 0) HitSolidFeedback();
+            else HitUnitFeedback(hit.point);
+            
             Death();
             return;
         }
@@ -81,8 +77,8 @@ public class ProjectileController : MonoBehaviour
             if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
             {
                 HitUnitFeedback(hit.point);
+                PlayerMovement.Instance.Death(ownerHc);
                 Death();
-                GameManager.Instance.Restart();
                 return;
             }
                 
@@ -92,21 +88,29 @@ public class ProjectileController : MonoBehaviour
         }
     }
 
-    void TryToDamage(Collider coll)
+    int TryToDamage(Collider coll)
     {
+        int damagedObjectType = 0;// 0 - solid, 1 - unit
         var bodyPart = coll.gameObject.GetComponent<BodyPart>();
         if (bodyPart)
         {
             if (bodyPart.hc == null && bodyPart.localHealth > 0)
             {
+                UnitsManager.Instance.RagdollTileExplosion(transform.position);
                 bodyPart.DamageTile(damage);
-                return;
+                damagedObjectType = 0;
             }
             if (bodyPart.hc == ownerHc)
-                return;
+                return -1;
                 
-            bodyPart.hc.Damage(damage);
+            if (bodyPart && bodyPart.hc)
+            {
+                UnitsManager.Instance.RagdollTileExplosion(transform.position);
+                bodyPart.hc.Damage(damage);
+            }
         }
+
+        return damagedObjectType;
     }
 
     IEnumerator MoveProjectile()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody rb;
     public float gravity = 5;
+    public float jumpForce = 300;
     public float walkSpeed = 5;
     public float runSpeed = 5;
     public float acceleration = 1;
@@ -43,6 +45,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform rotator;
     public float rotatorSpeed = 10;
     public float minMaxRotatorAngle = 90;
+
+    private bool dead = false;
+    private HealthController killerToLookAt;
     private void Awake()
     {
         Instance = this;
@@ -56,6 +61,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (dead)
+            return;
+        
+        if (!LevelGenerator.Instance.levelIsReady)
+            return;
+        
+        /*
         if (Input.GetKeyDown(KeyCode.Z))
         {
             walkSpeed--;
@@ -66,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
             walkSpeed++;
             runSpeed++;
         }
+        */
 
         if (walkSpeed < 1)
         {
@@ -74,14 +87,30 @@ public class PlayerMovement : MonoBehaviour
         }
         GetMovement();
     }
+    private void FixedUpdate()
+    {
+        if (dead)
+            return;
+        if (!LevelGenerator.Instance.levelIsReady)
+            return;
+
+        GroundCheck();
+        SlopeCheck();
+        ApplyMovement();
+    }
+
+    private void LateUpdate()
+    {
+        MouseLook();
+    }
 
     void GetMovement()
     {
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.5f, 1<<6))
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, -minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
         }
-        else if (Input.GetKey(KeyCode.Q))
+        else if (Input.GetKey(KeyCode.Q) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.5f, 1<<6))
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
         }
@@ -102,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Space) && _grounded)
         {
-            rb.AddForce(Vector3.up * 100, ForceMode.VelocityChange);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         }
         
         if (Input.GetKey(KeyCode.LeftShift))
@@ -117,17 +146,6 @@ public class PlayerMovement : MonoBehaviour
         _prevVelocity = _resultVelocity;
     }
 
-    private void FixedUpdate()
-    {
-        GroundCheck();
-        SlopeCheck();
-        ApplyMovement();
-    }
-
-    private void LateUpdate()
-    {
-        MouseLook();
-    }
 
     void SlopeCheck()
     {
@@ -182,6 +200,12 @@ public class PlayerMovement : MonoBehaviour
     
     void MouseLook()
     {
+        if (dead)
+        {
+            headTransform.rotation = Quaternion.Lerp(headTransform.rotation, Quaternion.LookRotation(killerToLookAt.visibilityTrigger.transform.position - headTransform.position), Time.deltaTime );
+            return;
+        }
+        
         Vector3 newRotation = new Vector3(0, _horRotation, 0);
         _horRotation += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         newRotation = new Vector3(0, _horRotation, 0);
@@ -196,5 +220,12 @@ public class PlayerMovement : MonoBehaviour
         headTransform.rotation = Quaternion.Euler(newRotation);
 
         headTransform.transform.position = Vector3.Lerp(headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeight, cameraFollowBodySmooth * Time.deltaTime);
+    }
+
+    public void Death(HealthController killer = null)
+    {
+        killerToLookAt = killer;
+        PlayerWeaponControls.Instance.Death();
+        dead = true;
     }
 }

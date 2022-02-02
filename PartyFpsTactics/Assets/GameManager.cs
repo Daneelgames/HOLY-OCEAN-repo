@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public List<HealthController> ActiveHealthControllers;
 
     public PhysicMaterial corpsesMaterial;
     public HealthController redTeamUnitPrefab;

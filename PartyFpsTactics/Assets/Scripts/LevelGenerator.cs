@@ -23,6 +23,7 @@ public class LevelGenerator : MonoBehaviour
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     [Range(1, 3)] public float distanceToCutCeilingUnderStairs = 1;
     public Vector2Int roomsPerLevelMinMax = new Vector2Int(1, 10);
+    public LayerMask solidsUnitsLayerMask;
     public bool randomLevelRotation = false;
 
     [Header("SCALE IS SCALED BY 2 IN CODE")]
@@ -32,7 +33,8 @@ public class LevelGenerator : MonoBehaviour
     public List<NavMeshSurface> navMeshSurfaces;
     public GameObject tileDestroyedParticles;
     private List<Vector3> navMeshChangedPositionQuere = new List<Vector3>();
-    
+
+    public bool levelIsReady = false;
     private void Awake()
     {
         Instance = this;
@@ -62,7 +64,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < spawnedLevels.Count - 1; i++)
         {
-            if (Random.value > 0.66f)
+            if (i != 0 && Random.value > 0.66f)
             {
                 yield return StartCoroutine(MakeStairs(i));
             }   
@@ -71,15 +73,17 @@ public class LevelGenerator : MonoBehaviour
         }
         yield return StartCoroutine(SpawnCovers());
         
-        PlayerMovement.Instance.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         
         for (int i = 0; i < navMeshSurfaces.Count; i++)
         {
             navMeshSurfaces[i].BuildNavMesh();
         }
 
+        StartCoroutine(UpdateNavMesh());
         yield return null;
         Respawner.Instance.Init();
+        PlayerMovement.Instance.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
+        levelIsReady = true;
     }
 
     
@@ -207,6 +211,7 @@ public class LevelGenerator : MonoBehaviour
 
             List<Transform> stairsTiles = new List<Transform>();
 
+            // SPAWN BRIDGE
             float bridgeTilesAmount = Vector3.Distance(levelFromClosestTile.position, levelToClosestTile.position);
             for (int j = 0; j <= bridgeTilesAmount; j++)
             {
@@ -219,13 +224,23 @@ public class LevelGenerator : MonoBehaviour
                 var transformLocalScale = newStairsTile.transform.localScale;
                 transformLocalScale.x = 1.5f;
                 newStairsTile.transform.localScale = transformLocalScale;
-                
                 newStairsTile.transform.parent = generatedBuildingFolder;
+                for (int k = 0; k < 2; k++)
+                {
+                    var newStairsTileHandle = Instantiate(tilePrefab, newStairsTile.transform.position, newStairsTile.transform.rotation);
+                    newStairsTileHandle.transform.parent = newStairsTile.transform;
+                    float x = 0.546f;
+                    if (k == 1)
+                        x *= -1;
+                    
+                    newStairsTileHandle.transform.localPosition = new Vector3(x, 0.898f, 0);
+                    newStairsTileHandle.transform.localScale = new Vector3(0.1f, 1f, 1);
+                }
                 stairsTiles.Add(newStairsTile.transform);
                 yield return null;
             }
 
-            // remove top floor tiles
+            // REMOVE TOP TILES AROUND
             for (int j = 0; j < stairsTiles.Count-1; j++)
             {
                 Vector3 pos1 = new Vector3(stairsTiles[j].position.x, levelTo.tilesInside[0].transform.position.y, stairsTiles[j].position.z);
@@ -275,13 +290,28 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < spawnedLevels.Count; i++)
         {
             List<GameObject> availableTiles = new List<GameObject>(spawnedLevels[i].tilesInside);
+            for (int j = availableTiles.Count - 1; j >= 0; j--)
+            {
+                if (j >= availableTiles.Count)
+                {
+                    continue;
+                }
+                
+                if (availableTiles[i] == null)
+                    availableTiles.RemoveAt(i);
+            }
+            
             for (int j = 0; j < Random.Range(coversPerLevelMinMax.x, coversPerLevelMinMax.y); j++)
             {
+                yield return null;
                 var tileForCover = availableTiles[Random.Range(0, availableTiles.Count)];
+                
+                if (Physics.Raycast(tileForCover.transform.position + Vector3.up * 0.25f, Vector3.up, 4, solidsUnitsLayerMask))
+                    continue;
+                
                 Instantiate(coverPrefab, tileForCover.transform.position + Vector3.up * 0.5f, Quaternion.identity);
                 availableTiles.Remove(tileForCover);
             }
-            yield return null;
         }
     }
 
@@ -319,26 +349,53 @@ public class LevelGenerator : MonoBehaviour
     {
         navMeshChangedPositionQuere.Add(tile.transform.position);
         Instantiate(tileDestroyedParticles, tile.transform.position, Quaternion.identity);
-        
-        StartCoroutine(UpdateNavMesh(tile.transform.position));
+        //AddNavMeshSurfaceToQueue(tile.transform.position);
     }
 
-    IEnumerator UpdateNavMesh(Vector3 pos)
+    void AddNavMeshSurfaceToQueue(Vector3 pos)
     {
-        yield return null;
-
-        float distance = 10000;
-        NavMeshSurface closestSurface = null;
+        float distance = 1000;
+        NavMeshSurface closestNavMeshSurface = null;
         for (int i = 0; i < navMeshSurfaces.Count; i++)
         {
-            float newDistance = Vector3.Distance(navMeshSurfaces[i].transform.position, pos);
+            float newDistance = Vector3.Distance(pos, navMeshSurfaces[i].transform.position);
             if (newDistance < distance)
             {
                 distance = newDistance;
-                closestSurface = navMeshSurfaces[i];
+                closestNavMeshSurface = navMeshSurfaces[i];
             }
-        }   
-        closestSurface.UpdateNavMesh(closestSurface.navMeshData);
+        }
+        // add closest navmesh to navmesh queue
+    }
+    
+    IEnumerator UpdateNavMesh()
+    {
+        while (true)
+        {
+            yield return null;
+            
+            for (int i = 0; i < navMeshSurfaces.Count; i++)
+            {
+                navMeshSurfaces[i].UpdateNavMesh(navMeshSurfaces[i].navMeshData);
+                yield return new WaitForSecondsRealtime(0.5f);
+            }
+            
+            continue;
+            /*
+            float distance = 10000;
+            NavMeshSurface closestSurface = null;
+            for (int i = 0; i < navMeshSurfaces.Count; i++)
+            {
+                float newDistance = Vector3.Distance(navMeshSurfaces[i].transform.position, pos);
+                if (newDistance < distance)
+                {
+                    distance = newDistance;
+                    closestSurface = navMeshSurfaces[i];
+                }
+            }   
+            closestSurface.UpdateNavMesh(closestSurface.navMeshData);
+            */   
+        }
     }
     
     public void AddNavMeshBubble(NavMeshSurface bubble)

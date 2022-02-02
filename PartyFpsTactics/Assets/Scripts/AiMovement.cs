@@ -185,9 +185,12 @@ public class AiMovement : MonoBehaviour
         NavMeshPath path = new NavMeshPath();
         NavMesh.CalculatePath(transform.position, chosenCover.transform.position, NavMesh.AllAreas, path);
         
-        agent.speed = moveSpeed;
-        agent.stoppingDistance = stopDistanceMove;
-        agent.SetPath(path);
+        if (agent && agent.enabled)
+        {
+            agent.speed = moveSpeed;
+            agent.stoppingDistance = stopDistanceMove;
+            agent.SetPath(path);
+        }
         currentTargetPosition = occupiedCoverSpot.transform.position;
 
         while (Vector3.Distance(transform.position, currentTargetPosition) > 0.33f)

@@ -5916,7 +5916,7 @@ MonoBehaviour:
   AiMovement: {fileID: 7977950126143452709}
   AiWeaponControls: {fileID: 4522917420441185350}
   HumanVisualController: {fileID: 1538236959322778139}
-  navmeshToRebuildOnDeath: {fileID: 0}
+  playerMovement: {fileID: 0}
   team: 1
   bodyParts:
   - {fileID: 4325278906123177980}
@@ -6008,6 +6008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 6517382817868780064}
+  ragdollOrigin: {fileID: 8870581367528078675}
   colliders:
   - {fileID: 5262237649152290107}
   - {fileID: 449717902094748731}
@@ -6097,6 +6098,8 @@ MonoBehaviour:
   ikAimTransform: {fileID: 9004609948449696128}
   aimIkIterations: 3
   rotationOffset: {x: 0, y: 0, z: 0}
+  deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
+  meshRenderer: {fileID: 5347387126667789938}
 --- !u!195 &7977950126143452706
 NavMeshAgent:
   m_ObjectHideFlags: 0

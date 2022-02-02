@@ -56,14 +56,15 @@ public class Respawner : MonoBehaviour
             GameManager.Instance.Restart();
             return;
         }
-        for (int i = GameManager.Instance.ActiveHealthControllers.Count - 1; i >= 0; i--)
+        for (int i = UnitsManager.Instance.unitsInGame.Count - 1; i >= 0; i--)
         {
-            if (i >= GameManager.Instance.ActiveHealthControllers.Count)
+            if (i >= UnitsManager.Instance.unitsInGame.Count)
                 continue;
             
-            var corpse = GameManager.Instance.ActiveHealthControllers[i];
+            var corpse = UnitsManager.Instance.unitsInGame[i];
             if (corpse.HumanVisualController && corpse.HumanVisualController.rigidbodies[0].transform.position.y < corpseShredderY)
             {
+                /*
                 switch (corpse.team)
                 {
                     case HealthController.Team.Blue:
@@ -78,6 +79,7 @@ public class Respawner : MonoBehaviour
                         GameManager.Instance.SpawnRedUnit(spawners[Random.Range(0, spawners.Count)].position);
                         break;
                 }
+                */
 
                 Destroy(corpse.gameObject);
             }

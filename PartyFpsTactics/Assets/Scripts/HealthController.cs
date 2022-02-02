@@ -27,7 +27,8 @@ public class HealthController : MonoBehaviour
 
 
     [Header("Mis")] 
-    public NavMeshSurface navmeshToRebuildOnDeath;
+    public PlayerMovement playerMovement;
+    
     public enum Team
     {
         Red, Blue, NULL
@@ -43,7 +44,7 @@ public class HealthController : MonoBehaviour
     private void Start()
     {
         healthMax = health;
-        GameManager.Instance.ActiveHealthControllers.Add(this);
+        UnitsManager.Instance.unitsInGame.Add(this);
     }
 
     [ContextMenu("GetBodyParts")]
@@ -124,13 +125,7 @@ public class HealthController : MonoBehaviour
             AiMovement.Death();
 
         if (HumanVisualController)
-            HumanVisualController.DeathRagdoll();
-        
-        if (navmeshToRebuildOnDeath)
-        {
-            navmeshToRebuildOnDeath.BuildNavMesh();
-            //navmeshToRebuildOnDeath.UpdateNavMesh(navmeshToRebuildOnDeath.navMeshData);
-        }
+            HumanVisualController.Death();
         
         if (destroyOnDeath)
             Destroy(gameObject);
@@ -138,8 +133,8 @@ public class HealthController : MonoBehaviour
 
     void OnDestroy()
     {
-        if (GameManager.Instance.ActiveHealthControllers.Contains(this))
-            GameManager.Instance.ActiveHealthControllers.Remove(this);
+        if (UnitsManager.Instance.unitsInGame.Contains(this))
+            UnitsManager.Instance.unitsInGame.Remove(this);
         if (CommanderControls.Instance.unitsInParty.Contains(this))
             CommanderControls.Instance.unitsInParty.Remove(this);
     }

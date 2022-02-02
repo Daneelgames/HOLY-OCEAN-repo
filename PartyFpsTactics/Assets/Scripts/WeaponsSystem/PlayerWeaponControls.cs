@@ -8,19 +8,20 @@ public class PlayerWeaponControls : MonoBehaviour
 {
     [Header("LEFT")]
     public WeaponController leftWeapon;
+    public Transform deathTransformLeft;
     public Transform idleTransformLeft;
     public Transform aimTransformLeft;
     public Transform reloadTransformLeft;
     [Header("RIGHT")]
     public WeaponController rightWeapon;
+    public Transform deathTransformRight;
     public Transform idleTransformRight;
     public Transform aimTransformRight;
     public Transform reloadTransformRight;
     [Header("CAMERA")]
     public float camFovIdle = 90;
     public float camFovAim = 90;
-    public float aimFovChangeSpeed = 1;
-    public float idleFovChangeSpeed = 90;
+    public float fovChangeSpeed = 90;
     public float gunMoveSpeed = 100;
     public float gunRotationSpeed = 100;
     private Transform currentTransformToRaycastL;
@@ -34,6 +35,14 @@ public class PlayerWeaponControls : MonoBehaviour
     Transform targetLeftTransform;
     Transform targetRightTransform;
     float targetFov = 90;
+
+    public static PlayerWeaponControls Instance;
+    private bool dead = false;
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         hc = gameObject.GetComponent<HealthController>();
@@ -43,6 +52,7 @@ public class PlayerWeaponControls : MonoBehaviour
 
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             gunMoveSpeed--;
@@ -51,6 +61,7 @@ public class PlayerWeaponControls : MonoBehaviour
         {
             gunMoveSpeed++;
         }
+        */
         
 
         if (gunMoveSpeed < 1) gunMoveSpeed = 1;
@@ -58,51 +69,66 @@ public class PlayerWeaponControls : MonoBehaviour
         bool aiming = false;
         targetLeftTransform = idleTransformLeft;
         targetRightTransform = idleTransformRight;
-        if (leftWeapon.OnCooldown || weaponCollidesWithWallLeft)
+        if (dead)
         {
-            targetLeftTransform = reloadTransformLeft;
+            aiming = true;
+            targetLeftTransform = deathTransformLeft;
+            targetRightTransform = deathTransformRight;
         }
         else
         {
-            if (Input.GetMouseButton(0))
+            if (leftWeapon.OnCooldown || weaponCollidesWithWallLeft)
             {
-                aiming = true;
-                targetLeftTransform = aimTransformLeft;
+                targetLeftTransform = reloadTransformLeft;
             }
-            if (Input.GetMouseButtonUp(0))
+            else if (LevelGenerator.Instance.levelIsReady)
             {
-                leftWeapon.Shot(hc);
-            }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                leftWeapon.Shot(hc);
-            }
-        }
-        
-        if (rightWeapon.OnCooldown || weaponCollidesWithWallRight)
-        {
-            targetRightTransform = reloadTransformRight;
-        }
-        else
-        {
-            if (Input.GetMouseButton(1))
-            {
-                aiming = true;
-                targetRightTransform = aimTransformRight;
-            }
-        
-            if (Input.GetMouseButtonUp(1))
-            {
-                rightWeapon.Shot(hc);
-            }
-        }
+                if (Input.GetMouseButton(0))
+                {
+                    aiming = true;
+                    targetLeftTransform = aimTransformLeft;
+                }
 
+                if (Input.GetMouseButtonUp(0))
+                {
+                    leftWeapon.Shot(hc);
+                }
+
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    leftWeapon.Shot(hc);
+                }
+            }
+
+            if (rightWeapon.OnCooldown || weaponCollidesWithWallRight)
+            {
+                targetRightTransform = reloadTransformRight;
+            }
+            else if (LevelGenerator.Instance.levelIsReady)
+            {
+                if (Input.GetMouseButton(1))
+                {
+                    aiming = true;
+                    targetRightTransform = aimTransformRight;
+                }
+
+                if (Input.GetMouseButtonUp(1))
+                {
+                    rightWeapon.Shot(hc);
+                }
+            }
+        }
         targetFov = aiming ? camFovAim : camFovIdle;
-        
     }
 
     private void FixedUpdate()
     {
+        if (dead)
+            return;
+        
+        if (!LevelGenerator.Instance.levelIsReady)
+            return;
+        
         if (Input.GetMouseButton(0))
         {
             currentTransformToRaycastL = aimTransformLeft;
@@ -149,6 +175,11 @@ public class PlayerWeaponControls : MonoBehaviour
         rightWeapon.transform.position = Vector3.Lerp(rightWeapon.transform.position, targetRightTransform.position, gunMoveSpeed * Time.deltaTime);
         rightWeapon.transform.rotation = Quaternion.Slerp(rightWeapon.transform.rotation, targetRightTransform.rotation, gunRotationSpeed * Time.deltaTime);
         
-        PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, targetFov, idleFovChangeSpeed * Time.deltaTime);
+        PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
+    }
+
+    public void Death()
+    {
+        dead = true;
     }
 }
