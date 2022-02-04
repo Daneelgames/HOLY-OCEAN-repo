@@ -334,6 +334,12 @@ public class AiMovement : MonoBehaviour
             LevelGenerator.Instance.RemoveNavMeshBubble(navMeshBubble);
         StopAllBehaviorCoroutines();
     }
+
+    public void Resurrect()
+    {
+        agent.enabled = true;
+        TakeCoverOrder();
+    }
     
     private void OnDrawGizmosSelected()
     {

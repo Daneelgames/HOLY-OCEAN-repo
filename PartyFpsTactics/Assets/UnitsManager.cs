@@ -32,7 +32,7 @@ public class UnitsManager : MonoBehaviour
 
                 if (unitsInGame[i].HumanVisualController)
                 {
-                    unitsInGame[i].HumanVisualController.DeathRagdoll();
+                    unitsInGame[i].HumanVisualController.ActivateRagdoll();
                     unitsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, tileExplosionForce, tileExplosionDistance);
                 }
                 if (unitsInGame[i].AiMovement)

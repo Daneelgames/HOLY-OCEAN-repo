@@ -109,13 +109,18 @@ public class HumanVisualController : MonoBehaviour
     {
         meshRenderer.material = deadMaterial;
         if (!ragdoll)
-            DeathRagdoll();
+            ActivateRagdoll();
     }
-    public void DeathRagdoll()
+
+    private Coroutine followRagdollCoroutine;
+    public void ActivateRagdoll()
     {
+        if (ragdoll)
+            return;
+        
         anim.enabled = false;
         ragdoll = true;
-        StartCoroutine(FollowTheRagdoll());
+        followRagdollCoroutine = StartCoroutine(FollowTheRagdoll());
         
         for (int i = 0; i < joints.Count; i++)
         {
@@ -148,16 +153,83 @@ public class HumanVisualController : MonoBehaviour
         }
     }
 
+    void DeactivateRagdoll()
+    {
+        anim.enabled = true;
+        ragdoll = false;
+        
+        for (int i = 0; i < joints.Count; i++)
+        {
+            var angularXDrive = joints[i].angularXDrive;
+            var angularYZDrive = joints[i].angularYZDrive;
+            if (i == 0)
+            {
+                joints[i].angularXMotion = ConfigurableJointMotion.Limited;
+                joints[i].angularYMotion = ConfigurableJointMotion.Limited;
+                joints[i].angularZMotion = ConfigurableJointMotion.Limited;
+                
+                angularXDrive.positionSpring = 1500;
+                angularXDrive.positionDamper = 200;
+                joints[i].angularXDrive = angularXDrive;
+            
+                angularYZDrive.positionSpring = 1500;
+                angularYZDrive.positionDamper = 200;
+                joints[i].angularYZDrive = angularYZDrive;
+                continue;
+            }
+            
+            joints[i].angularXMotion = ConfigurableJointMotion.Free;
+            joints[i].angularYMotion = ConfigurableJointMotion.Free;
+            joints[i].angularZMotion = ConfigurableJointMotion.Free;
+            
+            angularXDrive.positionSpring = 0;
+            angularXDrive.positionDamper = 0;
+            joints[i].angularXDrive = angularXDrive;
+            
+            angularYZDrive.positionSpring = 0;
+            angularYZDrive.positionDamper = 0;
+            joints[i].angularYZDrive = angularYZDrive;
+        }
+        
+        for (int i = 0; i < rigidbodies.Count; i++)
+        {
+            rigidbodies[i].drag = 0f;
+            rigidbodies[i].angularDrag = 0.05f;
+            
+            if (i == 0)
+            {
+                rigidbodies[i].isKinematic = true;
+                rigidbodies[i].useGravity = false;
+                continue;
+            }
+            rigidbodies[i].isKinematic = false;
+            rigidbodies[i].useGravity = true;
+            //rigidbodies[i].gameObject.layer = 6;
+        }
+        for (int i = 0; i < colliders.Count; i++)
+        {
+            colliders[i].material = null;
+        }
+    }
+
     IEnumerator FollowTheRagdoll()
     {
         ragdollOriginParent = ragdollOrigin.parent;
         ragdollOrigin.parent = null;
         while (true)
         {
+            yield return new WaitForSeconds(3f);
             transform.position = ragdollOrigin.transform.position;
-            yield return null;
+            
+            if (Physics.CheckSphere(transform.position, 0.5f, 1<<6, QueryTriggerInteraction.Ignore))
+            {
+                break;
+            }
         }
         ragdollOrigin.parent = ragdollOriginParent;
+        DeactivateRagdoll();
+        hc.AiMovement.Resurrect();
+
     }
 
     public void ExplosionRagdoll(Vector3 pos, float force, float distance)
