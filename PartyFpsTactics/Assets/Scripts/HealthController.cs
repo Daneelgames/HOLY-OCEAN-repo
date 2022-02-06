@@ -25,9 +25,13 @@ public class HealthController : MonoBehaviour
     public AiWeaponControls AiWeaponControls;
     public HumanVisualController HumanVisualController;
 
-
     [Header("Mis")] 
     public PlayerMovement playerMovement;
+    public List<GameObject> objectsToSpawnOnDeath;
+    public DeathOnHit deathOnHit;
+
+    [Header("This RB will be affected by explosions")]
+    public Rigidbody rb;
     
     public enum Team
     {
@@ -69,14 +73,21 @@ public class HealthController : MonoBehaviour
 
     public void Damage(int damage)
     {
+        if (health <= 0)
+            return;
+        
         health -= damage;
+        
 
         if (health <= 0)
         {
-            Death();
+            StartCoroutine(Death());
             return;
         }
-
+        
+        if (deathOnHit)
+            deathOnHit.Hit(this);
+        
         if (proceduralDamageShake)
             StartCoroutine(DamageShake());
         SetDamageState();
@@ -119,16 +130,26 @@ public class HealthController : MonoBehaviour
         }
     }
 
-    void Death()
+    IEnumerator Death()
     {
+        Debug.Log("Death " + gameObject.name);
+        
         if (AiMovement)
             AiMovement.Death();
 
         if (HumanVisualController)
             HumanVisualController.Death();
         
+        for (int i = 0; i < objectsToSpawnOnDeath.Count; i++)
+        {
+            Instantiate(objectsToSpawnOnDeath[i], visibilityTrigger.transform.position, transform.rotation);
+            yield return null;
+        }
+        
         if (destroyOnDeath)
+        {
             Destroy(gameObject);
+        }
     }
 
     void OnDestroy()

@@ -49,11 +49,12 @@ public class HumanVisualController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        /*
         if (Input.GetKeyDown("k"))
         {
             var hc = gameObject.GetComponent<HealthController>();
             hc.Damage(hc.health);
-        }
+        }*/
         if (hc.health <= 0)
             return;
         

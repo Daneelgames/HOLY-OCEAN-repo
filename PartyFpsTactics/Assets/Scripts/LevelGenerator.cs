@@ -15,6 +15,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject tileWallPrefab;
     public GameObject tileWallThinPrefab;
+    public GameObject explosiveBarrelPrefab;
     public Cover coverPrefab;
     public List<Level> spawnedLevels = new List<Level>();
 
@@ -28,6 +29,7 @@ public class LevelGenerator : MonoBehaviour
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     public LayerMask solidsUnitsLayerMask;
     public bool randomLevelRotation = false;
+    public int explosiveBarrelsAmount = 2;
 
     [Header("SCALE IS SCALED BY 2 IN CODE")]
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
@@ -35,7 +37,6 @@ public class LevelGenerator : MonoBehaviour
     [Space]
     public List<NavMeshSurface> navMeshSurfaces;
     public GameObject tileDestroyedParticles;
-    private List<Vector3> navMeshChangedPositionQuere = new List<Vector3>();
 
     public bool levelIsReady = false;
     private void Awake()
@@ -87,6 +88,7 @@ public class LevelGenerator : MonoBehaviour
         Respawner.Instance.Init();
         PlayerMovement.Instance.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         levelIsReady = true;
+        StartCoroutine(SpawnExplosiveBarrels());
     }
 
     
@@ -464,6 +466,20 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    public IEnumerator SpawnExplosiveBarrels()
+    {
+        for (int i = 0; i < explosiveBarrelsAmount; i++)
+        {
+            var randomLevel = spawnedLevels[Random.Range(1, spawnedLevels.Count)];
+            var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
+
+            Vector3 pos = randomTile.transform.position + Vector3.up;
+            randomLevel.tilesInside.Remove(randomTile);
+            Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+            yield return null;
+        }
+    }
+    
     public void TileDamaged(BodyPart tile)
     {
         if (tilesToDamage.Contains(tile.transform))
@@ -494,11 +510,9 @@ public class LevelGenerator : MonoBehaviour
         tile.position = originalPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f),
             Random.Range(-0.1f, 0.1f));;
     }
-    public void TileDestroyed(BodyPart tile)
+    public void DebrisParticles(Vector3 pos)
     {
-        navMeshChangedPositionQuere.Add(tile.transform.position);
-        Instantiate(tileDestroyedParticles, tile.transform.position, Quaternion.identity);
-        //AddNavMeshSurfaceToQueue(tile.transform.position);
+        Instantiate(tileDestroyedParticles, pos, Quaternion.identity);
     }
 
     void AddNavMeshSurfaceToQueue(Vector3 pos)
