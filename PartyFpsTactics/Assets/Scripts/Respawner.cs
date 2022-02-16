@@ -37,6 +37,15 @@ public class Respawner : MonoBehaviour
                 tilesForSpawns.Add(tile);
             }
 
+            for (int j = 0; j < alliesAmount; j++)
+            {
+                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                var newSpawnPoint = new GameObject("BlueSpawnPoint");
+                newSpawnPoint.transform.parent = transform;
+                blueRespawns.Add(newSpawnPoint.transform);
+                
+                GameManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
+            }
             for (int j = 0; j < Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y); j++)
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];

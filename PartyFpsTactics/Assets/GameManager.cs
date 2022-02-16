@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour
     public void SpawnBlueUnit(Vector3 pos)
     {
         var newUnit = Instantiate(blueTeamUnitPrefab, pos, Quaternion.identity);
-        newUnit.AiMovement.TakeCoverOrder(true, false);
-        CommanderControls.Instance.unitsInParty.Add(newUnit);
+        newUnit.AiMovement.TakeCoverOrder();
+        //CommanderControls.Instance.unitsInParty.Add(newUnit);
     }
     public void SpawnRedUnit(Vector3 pos)
     {

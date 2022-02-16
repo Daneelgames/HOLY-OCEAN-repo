@@ -39,6 +39,12 @@ public class ExplosionController : MonoBehaviour
         
         collidedGameObjects.Add(other.gameObject);
         
+        if (other.gameObject == PlayerMovement.Instance.gameObject)
+        {
+            PlayerMovement.Instance.hc.Damage(damage);
+            return;
+        }
+        
         var bodyPart = other.gameObject.GetComponent<BodyPart>();
         if (bodyPart)
         {

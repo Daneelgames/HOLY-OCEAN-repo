@@ -15,7 +15,6 @@ public class BodyPart : MonoBehaviour
         localHealth -= dmg;
         if (localHealth <= 0)
         {
-            Debug.Log("Death " + gameObject.name);
             LevelGenerator.Instance.DebrisParticles(transform.position);
             Destroy(gameObject); 
             return;

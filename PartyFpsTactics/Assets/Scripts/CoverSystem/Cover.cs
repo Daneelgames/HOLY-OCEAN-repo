@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class Cover : MonoBehaviour
 {
-    public List<CoverSpot> coverSpotsActive;
-    public List<CoverSpot> coverSpotsList;
+    public List<CoverSpot> coverSpotsActive = new List<CoverSpot>();
+    public List<CoverSpot> coverSpotsList = new List<CoverSpot>();
     public bool Initialized = false;
     
     [Header("Test")]
@@ -15,6 +15,43 @@ public class Cover : MonoBehaviour
     private void Start()
     {
         CoverSystem.Instance.covers.Add(this);
+    }
+
+    public void ConstructSpots()
+    {
+        GameObject spotsParent = new GameObject("Spots");
+        spotsParent.transform.parent = transform;
+        spotsParent.transform.localPosition = Vector3.zero;
+        spotsParent.transform.localRotation = Quaternion.identity;
+        
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject newSpot = new GameObject(i.ToString());
+            newSpot.transform.parent = spotsParent.transform.parent;
+            switch (i)
+            {
+                case 0:
+                    newSpot.transform.localPosition = new Vector3(0,0,-0.75f);       
+                    newSpot.transform.localRotation = Quaternion.Euler(0,180,0);       
+                    break;
+                case 1:
+                    newSpot.transform.localPosition = new Vector3(0,0,0.75f);       
+                    newSpot.transform.localRotation = Quaternion.Euler(0,0,0);       
+                    break;
+                case 2:
+                    newSpot.transform.localPosition = new Vector3(-0.75f,0,0);       
+                    newSpot.transform.localRotation = Quaternion.Euler(0,270,0);       
+                    break;
+                case 3:
+                    newSpot.transform.localPosition = new Vector3(0.75f,0,0);       
+                    newSpot.transform.localRotation = Quaternion.Euler(0,90,0);       
+                    break;
+            }
+
+            var spotComponent = newSpot.AddComponent<CoverSpot>();
+            spotComponent.parentCover = transform;
+            coverSpotsList.Add(spotComponent);
+        }
     }
 
     private void OnDestroy()

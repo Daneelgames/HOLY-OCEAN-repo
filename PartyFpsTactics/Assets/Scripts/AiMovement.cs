@@ -84,6 +84,11 @@ public class AiMovement : MonoBehaviour
             HealthController closestVisibleEnemy = null;
             for (int i = unitVision.VisibleEnemies.Count - 1; i >= 0; i--)
             {
+                yield return null;
+                
+                if (i >= unitVision.VisibleEnemies.Count)
+                    continue;
+                
                 if (unitVision.VisibleEnemies[i])
                 {
                   float newDistance = Vector3.Distance(transform.position, unitVision.VisibleEnemies[i].transform.position);
@@ -102,8 +107,7 @@ public class AiMovement : MonoBehaviour
                   {
                       TakeCoverOrder();
                   }
-                }
-                yield return null;   
+                }   
             }
 
             enemyToLookAt = closestVisibleEnemy;

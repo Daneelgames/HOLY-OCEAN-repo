@@ -132,8 +132,6 @@ public class HealthController : MonoBehaviour
 
     IEnumerator Death()
     {
-        Debug.Log("Death " + gameObject.name);
-        
         if (AiMovement)
             AiMovement.Death();
 

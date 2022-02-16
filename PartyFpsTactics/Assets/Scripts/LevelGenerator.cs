@@ -75,8 +75,8 @@ public class LevelGenerator : MonoBehaviour
             
             yield return StartCoroutine(MakeStairs(i));
         }
-        yield return StartCoroutine(SpawnCovers());
         
+        //yield return StartCoroutine(SpawnCovers());
         
         for (int i = 0; i < navMeshSurfaces.Count; i++)
         {
@@ -156,10 +156,15 @@ public class LevelGenerator : MonoBehaviour
                     
                     if (Random.value > 0.95f)
                     { //ADDITIONAL TILES
-                        int r = Random.Range(1, 3);
+                        int r = Random.Range(1, 4);
+                        
                         for (int i = 1; i <= r; i++)
                         {
                             var newAdditionalTile = Instantiate(tileWallPrefab, newLevel.spawnedTransform);
+                            
+                            if (r == 1)
+                                ConstructCover(newAdditionalTile.gameObject);
+                            
                             newAdditionalTile.transform.localRotation = newTile.transform.localRotation;
                             newAdditionalTile.transform.localPosition = newTile.transform.localPosition + Vector3.up * i;
                             newLevel.tilesWalls.Add(newAdditionalTile);
@@ -456,8 +461,12 @@ public class LevelGenerator : MonoBehaviour
                 yield return null;
                 var tileForCover = availableTiles[Random.Range(0, availableTiles.Count)];
                 
-                if (Physics.CheckBox(tileForCover.transform.position + Vector3.up * 2.5f, new Vector3(0.9f,4.75f,0.9f), Quaternion.identity , solidsUnitsLayerMask))
+                if (Physics.CheckBox(tileForCover.transform.position + Vector3.up * 3f, new Vector3(0.75f,2.5f,0.75f), Quaternion.identity , solidsUnitsLayerMask))
+                {
+                    Debug.Log("Skip cover");
+                    availableTiles.Remove(tileForCover);
                     continue;
+                }
                 
                 var newCover = Instantiate(coverPrefab, tileForCover.transform.position + Vector3.up * 0.5f, Quaternion.identity);
                 newCover.transform.parent = generatedBuildingFolder;
@@ -466,6 +475,12 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    void SpawnCover(Vector3 pos)
+    {
+        var newCover = Instantiate(coverPrefab, pos + Vector3.up * 0.5f, Quaternion.identity);
+        newCover.transform.parent = generatedBuildingFolder;
+    }
+    
     public IEnumerator SpawnExplosiveBarrels()
     {
         for (int i = 0; i < explosiveBarrelsAmount; i++)
@@ -569,6 +584,12 @@ public class LevelGenerator : MonoBehaviour
     {
         bubble.RemoveData();
         navMeshSurfaces.Remove(bubble);
+    }
+
+    public void ConstructCover(GameObject newCoverGo)
+    {
+        var newCover = newCoverGo.gameObject.AddComponent<Cover>();
+        newCover.ConstructSpots();
     }
 }
 

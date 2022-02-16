@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance;
+    public HealthController hc;
     [Header("Movement")]
     public LayerMask WalkableLayerMask;
 
@@ -48,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool dead = false;
     private HealthController killerToLookAt;
+    
     private void Awake()
     {
         Instance = this;

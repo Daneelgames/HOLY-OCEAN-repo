@@ -30,11 +30,21 @@ public class UnitVision : MonoBehaviour
         {
             for (int i = 0; i < UnitsManager.Instance.unitsInGame.Count; i++)
             {
-                if (UnitsManager.Instance.unitsInGame[i].team == hc.team || 
-                    UnitsManager.Instance.unitsInGame[i].team == HealthController.Team.NULL)
+                var enemy = UnitsManager.Instance.unitsInGame[i];
+                
+                if (enemy.health <= 0)
+                {
+                    if (visibleEnemies.Contains(enemy))
+                    {
+                        visibleEnemies.Remove(enemy);
+                    }
+                    continue;
+                }
+                
+                if (enemy.team == hc.team || 
+                    enemy.team == HealthController.Team.NULL)
                     continue;
 
-                var enemy = UnitsManager.Instance.unitsInGame[i];
                 if (LineOfSight(enemy.visibilityTrigger.transform))
                 {
                     if (!visibleEnemies.Contains(enemy))
