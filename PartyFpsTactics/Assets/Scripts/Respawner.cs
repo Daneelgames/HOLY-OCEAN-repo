@@ -29,14 +29,14 @@ public class Respawner : MonoBehaviour
         // create enemy spawns
         tilesForSpawns = new List<GameObject>();
 
-        for (int i = 1; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
+        for (int i = 0; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
         {
             tilesForSpawns.Clear();
             foreach (var tile in LevelGenerator.Instance.spawnedLevels[i].tilesInside)
             {
                 tilesForSpawns.Add(tile);
             }
-
+            
             for (int j = 0; j < alliesAmount; j++)
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
@@ -46,6 +46,10 @@ public class Respawner : MonoBehaviour
                 
                 GameManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
             }
+            
+            if (i < 1)
+                continue;
+
             for (int j = 0; j < Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y); j++)
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
