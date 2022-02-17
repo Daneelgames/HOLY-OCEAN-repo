@@ -71,7 +71,7 @@ public class HealthController : MonoBehaviour
         }
     }
 
-    public void Damage(int damage)
+    public void Damage(int damage, ScoringSystem.ActionType action = ScoringSystem.ActionType.NULL)
     {
         if (health <= 0)
             return;
@@ -82,6 +82,10 @@ public class HealthController : MonoBehaviour
         if (health <= 0)
         {
             StartCoroutine(Death());
+            
+            if (action != ScoringSystem.ActionType.NULL)
+                ScoringSystem.Instance.RegisterAction(action);
+                
             return;
         }
         

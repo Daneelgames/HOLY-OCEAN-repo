@@ -24,7 +24,11 @@ public class UnitsManager : MonoBehaviour
         StartCoroutine(BodyPartsKillQueue());
     }
 
-    public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1)
+    public void RagdollTileExplosion(Vector3 explosionPosition, ScoringSystem.ActionType action)
+    {
+        RagdollTileExplosion(explosionPosition, -1, -1, -1, action);
+    }
+    public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1, ScoringSystem.ActionType action = ScoringSystem.ActionType.NULL)
     {
         if (distance < 0)
             distance = tileExplosionDistance;
@@ -44,11 +48,18 @@ public class UnitsManager : MonoBehaviour
                     continue;
                 }
                 if (unitsInGame[i].rb)
-                    unitsInGame[i].rb
-                        .AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized * tileExplosionForceBarrels, ForceMode.VelocityChange);
+                {
+                    unitsInGame[i].rb.AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
+                                               tileExplosionForceBarrels, ForceMode.VelocityChange);
+                    
+                    if (action != ScoringSystem.ActionType.NULL)
+                        ScoringSystem.Instance.RegisterAction(ScoringSystem.ActionType.BarrelBumped);
+                }
 
                 if (unitsInGame[i].HumanVisualController)
                 {
+                    if (action != ScoringSystem.ActionType.NULL)
+                        ScoringSystem.Instance.RegisterAction(ScoringSystem.ActionType.EnemyBumped);
                     unitsInGame[i].HumanVisualController.ActivateRagdoll();
                     unitsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
                 }

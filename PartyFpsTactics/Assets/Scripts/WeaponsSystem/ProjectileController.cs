@@ -28,9 +28,15 @@ public class ProjectileController : MonoBehaviour
 
     public Transform debrisParticles;
     public Transform bloodParticles;
-    public void Init(HealthController _ownerHc)
+
+    private ScoringSystem.ActionType actionOnHit = ScoringSystem.ActionType.NULL;
+    
+    public void Init(HealthController _ownerHc, ScoringSystem.ActionType action = ScoringSystem.ActionType.NULL)
     {
         ownerHc = _ownerHc;
+
+        actionOnHit = action;
+        
         lastPosition = transform.position;
         shotAu.pitch = Random.Range(0.75f, 1.25f);
         shotAu.Play();
@@ -96,7 +102,7 @@ public class ProjectileController : MonoBehaviour
         {
             if (bodyPart.hc == null && bodyPart.localHealth > 0)
             {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
                 bodyPart.DamageTile(damage);
                 damagedObjectType = 0;
             }
@@ -105,8 +111,8 @@ public class ProjectileController : MonoBehaviour
                 
             if (bodyPart && bodyPart.hc)
             {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position);
-                bodyPart.hc.Damage(damage);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
+                bodyPart.hc.Damage(damage, actionOnHit);
             }
         }
 
