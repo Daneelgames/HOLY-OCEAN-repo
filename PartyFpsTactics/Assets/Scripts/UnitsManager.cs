@@ -14,6 +14,7 @@ public class UnitsManager : MonoBehaviour
     public float tileExplosionForcePlayer = 100;
 
     public List<BodyPart> bodyPartsQueueToKill = new List<BodyPart>();
+    public List<BodyPart> bodyPartsQueueToKillCombo = new List<BodyPart>();
     private void Awake()
     {
         Instance = this;
@@ -24,11 +25,11 @@ public class UnitsManager : MonoBehaviour
         StartCoroutine(BodyPartsKillQueue());
     }
 
-    public void RagdollTileExplosion(Vector3 explosionPosition, ScoringSystem.ActionType action)
+    public void RagdollTileExplosion(Vector3 explosionPosition, ScoringActionType action)
     {
         RagdollTileExplosion(explosionPosition, -1, -1, -1, action);
     }
-    public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1, ScoringSystem.ActionType action = ScoringSystem.ActionType.NULL)
+    public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1, ScoringActionType action = ScoringActionType.NULL)
     {
         if (distance < 0)
             distance = tileExplosionDistance;
@@ -52,14 +53,14 @@ public class UnitsManager : MonoBehaviour
                     unitsInGame[i].rb.AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                tileExplosionForceBarrels, ForceMode.VelocityChange);
                     
-                    if (action != ScoringSystem.ActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringSystem.ActionType.BarrelBumped);
+                    if (action != ScoringActionType.NULL)
+                        ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped);
                 }
 
                 if (unitsInGame[i].HumanVisualController)
                 {
-                    if (action != ScoringSystem.ActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringSystem.ActionType.EnemyBumped);
+                    if (unitsInGame[i].health > 0 && action != ScoringActionType.NULL)
+                        ScoringSystem.Instance.RegisterAction(ScoringActionType.EnemyBumped);
                     unitsInGame[i].HumanVisualController.ActivateRagdoll();
                     unitsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
                 }
@@ -71,9 +72,12 @@ public class UnitsManager : MonoBehaviour
         }
     }
 
-    public void AddBodyPartToQueue(BodyPart part)
+    public void AddBodyPartToQueue(BodyPart part, ScoringActionType action)
     {
-        bodyPartsQueueToKill.Add(part);
+        if (action != ScoringActionType.NULL)
+            bodyPartsQueueToKillCombo.Add(part);
+        else
+            bodyPartsQueueToKill.Add(part);
     }
     IEnumerator BodyPartsKillQueue()
     {
@@ -81,14 +85,33 @@ public class UnitsManager : MonoBehaviour
         while (true)
         {
             yield return null;
+            
+            if (bodyPartsQueueToKillCombo.Count > 0)
+            {
+                for (int i = bodyPartsQueueToKillCombo.Count - 1; i >= 0; i--)
+                {
+                    if (bodyPartsQueueToKillCombo[i] != null)
+                        bodyPartsQueueToKillCombo[i].Kill(true);
+
+                    bodyPartsQueueToKillCombo.RemoveAt(i);
+
+                    j++;
+                    if (j > 3)
+                    {
+                        j = 0;
+                        yield return null;
+                    }
+                }
+            }
+            
             if (bodyPartsQueueToKill.Count <= 0)
                 continue;
-            
+
             for (int i = bodyPartsQueueToKill.Count - 1; i >= 0; i--)
             {
                 if (bodyPartsQueueToKill[i] != null)
-                    bodyPartsQueueToKill[i].Kill();
-                
+                    bodyPartsQueueToKill[i].Kill(false);
+
                 bodyPartsQueueToKill.RemoveAt(i);
                 
                 j++;

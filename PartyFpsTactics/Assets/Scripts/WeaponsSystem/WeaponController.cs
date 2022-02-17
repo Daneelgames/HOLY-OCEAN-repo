@@ -39,7 +39,11 @@ public class WeaponController : MonoBehaviour
     public void Shot(Vector3 direction, HealthController ownerHc)
     {
         var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
-        newProjectile.Init(ownerHc);
+        ScoringActionType action = ScoringActionType.NULL;
+        if (ownerHc == PlayerMovement.Instance.hc)
+            action = PlayerMovement.Instance.GetCurrentScoringAction();
+        
+        newProjectile.Init(ownerHc, action);
         StartCoroutine(Cooldown());
     }
 

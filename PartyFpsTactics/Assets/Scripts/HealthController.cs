@@ -27,6 +27,7 @@ public class HealthController : MonoBehaviour
 
     [Header("Mis")] 
     public PlayerMovement playerMovement;
+    public ExplosionController explosionOnDeath;
     public List<GameObject> objectsToSpawnOnDeath;
     public DeathOnHit deathOnHit;
 
@@ -71,7 +72,7 @@ public class HealthController : MonoBehaviour
         }
     }
 
-    public void Damage(int damage, ScoringSystem.ActionType action = ScoringSystem.ActionType.NULL)
+    public void Damage(int damage, ScoringActionType action = ScoringActionType.NULL)
     {
         if (health <= 0)
             return;
@@ -81,9 +82,9 @@ public class HealthController : MonoBehaviour
 
         if (health <= 0)
         {
-            StartCoroutine(Death());
+            StartCoroutine(Death(action));
             
-            if (action != ScoringSystem.ActionType.NULL)
+            if (action != ScoringActionType.NULL)
                 ScoringSystem.Instance.RegisterAction(action);
                 
             return;
@@ -134,19 +135,27 @@ public class HealthController : MonoBehaviour
         }
     }
 
-    IEnumerator Death()
+    IEnumerator Death(ScoringActionType action)
     {
         if (AiMovement)
             AiMovement.Death();
 
         if (HumanVisualController)
             HumanVisualController.Death();
+        if (explosionOnDeath)
+        {
+            var explosion = Instantiate(explosionOnDeath, visibilityTrigger.transform.position, transform.rotation);
+            explosion.Init(action);
+        }
         
         for (int i = 0; i < objectsToSpawnOnDeath.Count; i++)
         {
             Instantiate(objectsToSpawnOnDeath[i], visibilityTrigger.transform.position, transform.rotation);
             yield return null;
         }
+        
+        if (PlayerMovement.Instance.hc == this)
+            ScoringSystem.Instance.CooldownToZero();
         
         if (destroyOnDeath)
         {

@@ -24,6 +24,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _moveVector;
     private Vector3 _prevVelocity;
     private Vector3 _resultVelocity;
+    
+    bool leaning = false;
+    bool moving = false;
+    bool running = false;
 
     [Header("Slopes")] 
     bool onSlope = false;
@@ -108,24 +112,30 @@ public class PlayerMovement : MonoBehaviour
 
     void GetMovement()
     {
-        if (Input.GetKey(KeyCode.E) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.5f, 1<<6))
+        if (Input.GetKey(KeyCode.E) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, -minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
+            leaning = true;
         }
-        else if (Input.GetKey(KeyCode.Q) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.5f, 1<<6))
+        else if (Input.GetKey(KeyCode.Q) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
+            leaning = true;
         }
         else
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
+            leaning = false;
         }
 
         int hor = (int)Input.GetAxisRaw("Horizontal");
         int vert = (int)Input.GetAxisRaw("Vertical");
         
+        bool moveInFrame = hor != 0 || vert != 0;
+
         _movementInput = new Vector2(hor, vert);
         _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
+        
         _moveVector.Normalize();
         
         if (onSlope)
@@ -137,9 +147,19 @@ public class PlayerMovement : MonoBehaviour
         }
         
         if (Input.GetKey(KeyCode.LeftShift))
+        {
+            running = moveInFrame;
+            moving = false;
+
             _targetVelocity = _moveVector * runSpeed;
+        }
         else
-            _targetVelocity = _moveVector * walkSpeed;    
+        {
+            moving = moveInFrame;
+            running = false;
+            
+            _targetVelocity = _moveVector * walkSpeed;
+        }    
         
         if (goingUpHill)
             _targetVelocity += Vector3.up * 2;
@@ -222,6 +242,34 @@ public class PlayerMovement : MonoBehaviour
         headTransform.rotation = Quaternion.Euler(newRotation);
 
         headTransform.transform.position = Vector3.Lerp(headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeight, cameraFollowBodySmooth * Time.deltaTime);
+    }
+
+    public ScoringActionType GetCurrentScoringAction()
+    {
+        ScoringActionType currentAction = ScoringActionType.NULL;
+        
+        if (!_grounded)
+            currentAction = ScoringActionType.KillRangedOnJump;
+        else if (running)
+            currentAction = ScoringActionType.KillRangedOnRun;
+        else if (moving)
+            currentAction = ScoringActionType.KillRangedOnMove;
+        else
+            currentAction = ScoringActionType.KillRangedIdle;
+        
+        if (leaning)
+        {
+            if (!_grounded)
+                currentAction = ScoringActionType.KillLeaningRangedOnJump;
+            else if (running)
+                currentAction = ScoringActionType.KillLeaningRangedOnRun;
+            else if (moving)
+                currentAction = ScoringActionType.KillLeaningRangedOnMove;
+            else
+                currentAction = ScoringActionType.KillLeaningRangedIdle;
+        }
+        
+        return currentAction;
     }
 
     public void Death(HealthController killer = null)

@@ -13,8 +13,11 @@ public class ExplosionController : MonoBehaviour
     public float explosionForcePlayer = 100;
     public AudioSource au;
     private List<GameObject> collidedGameObjects = new List<GameObject>();
-    void Start()
+    private ScoringActionType scoringAction = ScoringActionType.NULL;
+    
+    public void Init(ScoringActionType action)
     {
+        scoringAction = action;
         au.pitch = Random.Range(0.75f, 1.25f);
         au.Play();
         UnitsManager.Instance.RagdollTileExplosion(transform.position, explosionDistance, explosionForce, explosionForcePlayer);
@@ -39,8 +42,9 @@ public class ExplosionController : MonoBehaviour
         
         collidedGameObjects.Add(other.gameObject);
         
-        if (other.gameObject == PlayerMovement.Instance.gameObject)
+        if (Vector3.Distance(transform.position,PlayerMovement.Instance.transform.position) <= explosionDistance)
         {
+            collidedGameObjects.Add(PlayerMovement.Instance.gameObject);
             PlayerMovement.Instance.hc.Damage(damage);
             return;
         }
@@ -53,14 +57,14 @@ public class ExplosionController : MonoBehaviour
                 if (bodyPart.hc.health - damage > 0)
                     bodyPart.hc.Damage(damage);
                 else
-                    UnitsManager.Instance.AddBodyPartToQueue(bodyPart);
+                    UnitsManager.Instance.AddBodyPartToQueue(bodyPart, scoringAction);
             }
             else if  (bodyPart.localHealth > 0)
             {
                 if (bodyPart.localHealth - damage > 0)
                     bodyPart.DamageTile(damage);
                 else
-                    UnitsManager.Instance.AddBodyPartToQueue(bodyPart);
+                    UnitsManager.Instance.AddBodyPartToQueue(bodyPart, scoringAction);
             }
                 
         }

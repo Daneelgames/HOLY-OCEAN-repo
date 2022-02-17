@@ -91,6 +91,9 @@ public class CoverSystem : MonoBehaviour
         
         for (int i = 0; i < enemiesToHideFrom.Count; i++)
         {
+            if (enemiesToHideFrom[i] == null)
+                continue;
+            
             for (int j = allGoodSpots.Count - 1; j >= 0; j--)
             {
                 Vector3 targetDirection = enemiesToHideFrom[i].transform.position - allGoodSpots[j].transform.position;
