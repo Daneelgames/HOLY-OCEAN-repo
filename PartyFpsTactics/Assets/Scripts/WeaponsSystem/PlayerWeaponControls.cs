@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PlayerWeaponControls : MonoBehaviour
 {
+    public Transform weaponsTargetsParent;
     [Header("LEFT")]
     public WeaponController leftWeapon;
     public Transform deathTransformLeft;
@@ -46,23 +47,18 @@ public class PlayerWeaponControls : MonoBehaviour
     void Start()
     {
         hc = gameObject.GetComponent<HealthController>();
+        weaponsTargetsParent.parent = null;
+        /*
         leftWeapon.transform.parent = null;
         rightWeapon.transform.parent = null;
+        */
     }
 
     void Update()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            gunMoveSpeed--;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            gunMoveSpeed++;
-        }
-        */
-
+        if (Shop.Instance.IsActive)
+            return;
+        
         if (gunMoveSpeed < 1) gunMoveSpeed = 1;
         
         bool aiming = false;
@@ -118,6 +114,9 @@ public class PlayerWeaponControls : MonoBehaviour
             }
         }
         targetFov = aiming ? camFovAim : camFovIdle;
+        
+        weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position, PlayerMovement.Instance.MainCam.transform.position, gunMoveSpeed * Time.deltaTime);
+        weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, PlayerMovement.Instance.MainCam.transform.rotation, gunRotationSpeed * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -167,12 +166,25 @@ public class PlayerWeaponControls : MonoBehaviour
         }
     }
 
-    public void CamUpdate()
+    void LateUpdate()
     {
-        leftWeapon.transform.position = Vector3.Lerp(leftWeapon.transform.position, targetLeftTransform.position, gunMoveSpeed * Time.deltaTime);
-        leftWeapon.transform.rotation = Quaternion.Slerp(leftWeapon.transform.rotation, targetLeftTransform.rotation, gunRotationSpeed * Time.deltaTime);
-        rightWeapon.transform.position = Vector3.Lerp(rightWeapon.transform.position, targetRightTransform.position, gunMoveSpeed * Time.deltaTime);
-        rightWeapon.transform.rotation = Quaternion.Slerp(rightWeapon.transform.rotation, targetRightTransform.rotation, gunRotationSpeed * Time.deltaTime);
+        if (Shop.Instance.IsActive)
+            return;
+        
+        if (leftWeapon)
+        {
+            leftWeapon.transform.position = Vector3.Lerp(leftWeapon.transform.position, targetLeftTransform.position,
+                gunMoveSpeed * Time.deltaTime);
+            leftWeapon.transform.rotation = Quaternion.Slerp(leftWeapon.transform.rotation,
+                targetLeftTransform.rotation, gunRotationSpeed * Time.deltaTime);
+        }
+        if (rightWeapon)
+        {
+             rightWeapon.transform.position = Vector3.Lerp(rightWeapon.transform.position, targetRightTransform.position,
+                gunMoveSpeed * Time.deltaTime);
+            rightWeapon.transform.rotation = Quaternion.Slerp(rightWeapon.transform.rotation,
+                targetRightTransform.rotation, gunRotationSpeed * Time.deltaTime);
+        }
         
         PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
     }

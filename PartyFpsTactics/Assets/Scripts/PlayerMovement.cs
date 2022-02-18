@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -111,8 +109,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Shop.Instance.IsActive)
+            return;
+        
         MouseLook();
-        PlayerWeaponControls.Instance.CamUpdate();
     }
 
     void GetMovement()
@@ -229,7 +229,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (dead && killerToLookAt != null)
         {
-            headTransform.rotation = Quaternion.Lerp(headTransform.rotation, Quaternion.LookRotation(killerToLookAt.position - headTransform.position), Time.deltaTime );
+            headTransform.rotation = Quaternion.Lerp(headTransform.rotation, Quaternion.LookRotation(killerToLookAt.position - headTransform.position), Time.deltaTime);
             return;
         }
         
