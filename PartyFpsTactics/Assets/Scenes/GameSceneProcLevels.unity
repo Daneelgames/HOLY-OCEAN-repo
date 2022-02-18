@@ -370,6 +370,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1576452319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1576452320}
+  - component: {fileID: 1576452321}
+  m_Layer: 0
+  m_Name: PlayerInventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1576452320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576452319}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1663981897}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1576452321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576452319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e546ceffbb04a44492925b7ceab5ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1633123621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6679397917854322153, guid: 9ab57e03ae917804a8aaa39113ebce59, type: 3}
@@ -408,6 +451,7 @@ Transform:
   - {fileID: 571755308}
   - {fileID: 1839315966}
   - {fileID: 315564334}
+  - {fileID: 1576452320}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -550,42 +594,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1663981897}
     m_Modifications:
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_PressedColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_PressedColor.g
-      value: 0.29354292
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_PressedColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_SelectedColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_SelectedColor.g
-      value: 0.5668886
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_SelectedColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.g
-      value: 0.7322526
-      objectReference: {fileID: 0}
-    - target: {fileID: 1871754304487154817, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
-      propertyPath: m_Colors.m_HighlightedColor.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2469997914297601208, guid: 20b244a49cc102a47b55e02906fa04ce, type: 3}
       propertyPath: m_Name
       value: ShopSystem
@@ -643,6 +651,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3117021502554673402, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
+      propertyPath: selectedTool
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011776, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: m_Name
       value: Player

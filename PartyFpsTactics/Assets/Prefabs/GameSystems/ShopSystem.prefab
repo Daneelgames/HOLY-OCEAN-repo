@@ -168,13 +168,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolsList:
   - tool: 0
-    scoreCost: 2000
+    scoreCost: 4000
     maxAmount: 1
     activeTool: 0
     toolName: 2 guns
     toolDescription: Extra pistol
   - tool: 1
-    scoreCost: 2000
+    scoreCost: 5000
     maxAmount: 1
     activeTool: 0
     toolName: Shield
@@ -468,10 +468,10 @@ RectTransform:
   m_Father: {fileID: 2915234139490099528}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -49.999863, y: -49.999947}
-  m_SizeDelta: {x: 75, y: 75}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 2.5650787, y: 0.00005340576}
+  m_SizeDelta: {x: 113.8702, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5052023416480854941
 CanvasRenderer:
@@ -625,10 +625,10 @@ RectTransform:
   m_Father: {fileID: 2469997915410088566}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 50, y: -52}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: -20}
+  m_SizeDelta: {x: 143.00671, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6586535956748511823
 CanvasRenderer:
@@ -651,7 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6792453, g: 0, b: 0, a: 0.78431374}
+  m_Color: {r: 0, g: 0.6784314, b: 0.044484988, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -691,7 +691,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 0.80092657, b: 0, a: 1}
-    m_PressedColor: {r: 1, g: 0, b: 0.056383133, a: 1}
+    m_PressedColor: {r: 0.20714569, g: 1, b: 0, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -880,7 +880,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: X
+  m_Text: GO
 --- !u!1 &6470362573185431076
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,9 +980,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.7322526, b: 0, a: 1}
+    m_PressedColor: {r: 1, g: 0.29354292, b: 0, a: 1}
+    m_SelectedColor: {r: 1, g: 0.5668886, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1001,7 +1001,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5071435089427056008}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2469997914297601210}
+        m_TargetAssemblyTypeName: Shop, Assembly-CSharp
+        m_MethodName: BuyItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6928614903711025692
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,7 +1281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1414,7 +1426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1563,7 +1575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1708,7 +1720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1853,7 +1865,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1998,7 +2010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2147,7 +2159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
+      value: SelectItem
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2289,10 +2301,6 @@ PrefabInstance:
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShopItemClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5944536062282255745, guid: fce8d25076c28f84dbcf866c799273cb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

@@ -7,13 +7,13 @@ using UnityEngine;
 public class PlayerWeaponControls : MonoBehaviour
 {
     public Transform weaponsTargetsParent;
-    [Header("LEFT")]
+    [Header("LEFT GUN")]
     public WeaponController leftWeapon;
     public Transform deathTransformLeft;
     public Transform idleTransformLeft;
     public Transform aimTransformLeft;
     public Transform reloadTransformLeft;
-    [Header("RIGHT")]
+    [Header("RIGHT GUN")]
     public WeaponController rightWeapon;
     public Transform deathTransformRight;
     public Transform idleTransformRight;
@@ -25,6 +25,7 @@ public class PlayerWeaponControls : MonoBehaviour
     public float fovChangeSpeed = 90;
     public float gunMoveSpeed = 100;
     public float gunRotationSpeed = 100;
+    
     private Transform currentTransformToRaycastL;
     private Transform currentTransformToRaycastR;
     private HealthController hc;
@@ -85,11 +86,6 @@ public class PlayerWeaponControls : MonoBehaviour
                 }
 
                 if (Input.GetMouseButtonUp(0))
-                {
-                    leftWeapon.Shot(hc);
-                }
-
-                if (Input.GetKeyDown(KeyCode.F))
                 {
                     leftWeapon.Shot(hc);
                 }

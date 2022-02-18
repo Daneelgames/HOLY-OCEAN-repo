@@ -36,6 +36,9 @@ public class ScoringSystem : MonoBehaviour
             currentScore = PlayerPrefs.GetInt("currentScore");
             currentScoreText.text = "SCORE: " + currentScore;
         }
+
+        if (currentScore < 0)
+            currentScore = 0;
     }
 
     public void RegisterAction(ScoringActionType scoringAction)
@@ -119,6 +122,11 @@ public class ScoringSystem : MonoBehaviour
     public void CooldownToZero()
     {
         scoreCooldownCurrent = 0;
+    }
+    public void UpdateScore()
+    {
+        scoreCooldownCurrent = 0;
+        currentScoreText.text = "SCORE: " + currentScore;
     }
 
     bool MultiplyAction(ScoringActionType action)

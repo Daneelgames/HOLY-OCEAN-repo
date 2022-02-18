@@ -7,11 +7,18 @@ using Random = UnityEngine.Random;
 
 public class ProjectileController : MonoBehaviour
 {
+    public bool addVelocityEveryFrame = true;
     public float projectileSpeed = 100;
     public int damage = 100;
+    [Header("If lifetime < 0, this object will not die on timer")]
     public float lifeTime = 2;
+
+    public bool dieOnContact = true;
+    public bool ricochetOnContact = false;
+    public float ricochetCooldownMax = 0.5f;
+    float ricochetCooldown = 0;
     public Rigidbody rb;
-    private float gravity = 13;
+    public float gravity = 13;
     public LayerMask solidsMask;
     public LayerMask unitsMask;
     private Vector3 currentPosition;
@@ -41,6 +48,10 @@ public class ProjectileController : MonoBehaviour
         shotAu.Play();
         flyAu.pitch = Random.Range(0.75f, 1.25f);
         flyAu.Play();
+        
+        if (!addVelocityEveryFrame)
+            rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
+        
         StartCoroutine(MoveProjectile());
     }
 
@@ -54,8 +65,11 @@ public class ProjectileController : MonoBehaviour
     {
         if (dead)
             return;
+        if (ricochetCooldown > 0)
+            ricochetCooldown -= Time.deltaTime;
         
-        rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
+        if (addVelocityEveryFrame)
+            rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
         currentPosition  = transform.position;
         distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
         if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out var hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
@@ -68,7 +82,12 @@ public class ProjectileController : MonoBehaviour
             if (type == 0) HitSolidFeedback();
             else HitUnitFeedback(hit.point);
             
-            Death();
+            if (dieOnContact)
+                Death();
+            else if (ricochetOnContact)
+            {
+                Ricochet(hit.normal);
+            }
             return;
         }
         if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
@@ -81,7 +100,12 @@ public class ProjectileController : MonoBehaviour
                 
             TryToDamage(hit.collider);
             HitUnitFeedback(hit.point);
-            Death();
+            if (dieOnContact)
+                Death();
+            else if (ricochetOnContact)
+            {
+                Ricochet(hit.normal);
+            }
         }
     }
 
@@ -124,12 +148,17 @@ public class ProjectileController : MonoBehaviour
                 yield break;
 
             yield return null;
-            currentLifeTime += Time.deltaTime;
-            if (currentLifeTime > lifeTime)
+            if (lifeTime > 0)
             {
-                Destroy(gameObject);
-                yield break;
+                currentLifeTime += Time.deltaTime;
+
+                if (currentLifeTime > lifeTime)
+                {
+                    Destroy(gameObject);
+                    yield break;
+                }
             }
+            
             lastPosition = transform.position;
         }
     }
@@ -159,6 +188,16 @@ public class ProjectileController : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         StartCoroutine(DeathCoroutine());
         Destroy(gameObject, 3);
+    }
+
+    void Ricochet(Vector3 hitNormal)
+    {
+        if (ricochetCooldown > 0)
+            return;
+        
+        ricochetCooldown = ricochetCooldownMax;
+        Vector3 reflectDir = Vector3.Reflect(transform.forward, hitNormal);
+        transform.rotation = Quaternion.LookRotation(reflectDir);
     }
 
     IEnumerator DeathCoroutine()

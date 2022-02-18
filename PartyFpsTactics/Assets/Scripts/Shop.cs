@@ -16,6 +16,7 @@ public class Shop : MonoBehaviour
     public Image buyButtonImage;
 
     private bool isActive = false;
+    private int selectedItemIndex = 0;
 
     public bool IsActive
     {
@@ -29,11 +30,12 @@ public class Shop : MonoBehaviour
 
     void Start()
     {
-        OpenShop();
+        OpenShop(0);
     }
 
-    void OpenShop()
+    void OpenShop(int newSelectedItem)
     {
+        ScoringSystem.Instance.UpdateScore();
         canvasAnim.gameObject.SetActive(true);
         IsActive = true;
         Cursor.visible = true;
@@ -53,6 +55,7 @@ public class Shop : MonoBehaviour
             else
                 shopItemsIcons[i].raycastedSprite.color = Color.white;
         }
+        SelectItem(newSelectedItem);
     }
 
     public void CloseShop()
@@ -64,16 +67,27 @@ public class Shop : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
     
-    public void ShopItemClicked(int index)
+    public void SelectItem(int index)
     {
         // select tool
-        selectedInfoNameText.text = toolsList[index].toolName;
-        selectedInfoDescriptionText.text = toolsList[index].toolDescription;
+        selectedItemIndex = index;
+        selectedInfoNameText.text = toolsList[selectedItemIndex].toolName;
+        selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription + ". Buy for " + toolsList[selectedItemIndex].scoreCost;
         
-        if (toolsList[index].scoreCost > ScoringSystem.Instance.currentScore)
+        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore)
             buyButtonImage.color = Color.red;
         else
-            buyButtonImage.color = Color.white;
+            buyButtonImage.color = Color.green;
+    }
+
+    public void BuyItem()
+    {
+        // buy selectedItemIndex item
+        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore)
+            return;
+        
+        ScoringSystem.Instance.currentScore -= toolsList[selectedItemIndex].scoreCost;
+        OpenShop(selectedItemIndex);
     }
 }
 
