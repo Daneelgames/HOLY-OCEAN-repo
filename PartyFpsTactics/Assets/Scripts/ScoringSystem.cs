@@ -30,6 +30,11 @@ public class ScoringSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        if (PlayerPrefs.HasKey(currentScore.ToString()))
+        {
+            currentScore = PlayerPrefs.GetInt(currentScore.ToString());
+        }
     }
 
     public void RegisterAction(ScoringActionType scoringAction)
@@ -100,6 +105,8 @@ public class ScoringSystem : MonoBehaviour
 
         scoreCooldownFeedback.fillAmount = 0;
         currentScore += currentScoreInCombo * currentMultiplier;
+        PlayerPrefs.SetInt(currentScore.ToString(), currentScore);
+        PlayerPrefs.Save();
         currentScoreText.text = "SCORE: " + currentScore;
         actionNameText.text = String.Empty;
         comboText.text = String.Empty;

@@ -112,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
     private void LateUpdate()
     {
         MouseLook();
+        PlayerWeaponControls.Instance.CamUpdate();
     }
 
     void GetMovement()

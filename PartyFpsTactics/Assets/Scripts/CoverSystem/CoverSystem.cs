@@ -41,6 +41,9 @@ public class CoverSystem : MonoBehaviour
                 
                 for (int j = 0; j < covers[i].coverSpotsList.Count; j++)
                 {
+                    if (j >= covers[i].coverSpotsList.Count)
+                        continue;
+
                     if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position + Vector3.up * 0.5f, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, 1 << 6))
                     {
                         covers[i].ToggleSpot(j, false);
@@ -54,7 +57,8 @@ public class CoverSystem : MonoBehaviour
                     yield return null;   
                 }
 
-                covers[i].Initialized = true;
+                if (i < covers.Count)
+                    covers[i].Initialized = true;
             }
             yield return null;
         }

@@ -62,7 +62,6 @@ public class PlayerWeaponControls : MonoBehaviour
             gunMoveSpeed++;
         }
         */
-        
 
         if (gunMoveSpeed < 1) gunMoveSpeed = 1;
         
@@ -168,7 +167,7 @@ public class PlayerWeaponControls : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    public void CamUpdate()
     {
         leftWeapon.transform.position = Vector3.Lerp(leftWeapon.transform.position, targetLeftTransform.position, gunMoveSpeed * Time.deltaTime);
         leftWeapon.transform.rotation = Quaternion.Slerp(leftWeapon.transform.rotation, targetLeftTransform.rotation, gunRotationSpeed * Time.deltaTime);
