@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class Shop : MonoBehaviour
     public List<Tool> toolsList;
     public List<ShopItem> shopItemsIcons;
     public Animator canvasAnim;
+    public Text selectedInfoNameText;
+    public Text selectedInfoDescriptionText;
+    public Image buyButtonImage;
 
     private bool isActive = false;
 
@@ -44,6 +48,10 @@ public class Shop : MonoBehaviour
             }
             
             shopItemsIcons[i].ShowItem(toolsList[i].toolName);
+            if (toolsList[i].scoreCost > ScoringSystem.Instance.currentScore)
+                shopItemsIcons[i].raycastedSprite.color = Color.red;
+            else
+                shopItemsIcons[i].raycastedSprite.color = Color.white;
         }
     }
 
@@ -58,8 +66,14 @@ public class Shop : MonoBehaviour
     
     public void ShopItemClicked(int index)
     {
-        Debug.Log("ShopItemClicked " + index);
+        // select tool
+        selectedInfoNameText.text = toolsList[index].toolName;
+        selectedInfoDescriptionText.text = toolsList[index].toolDescription;
         
+        if (toolsList[index].scoreCost > ScoringSystem.Instance.currentScore)
+            buyButtonImage.color = Color.red;
+        else
+            buyButtonImage.color = Color.white;
     }
 }
 
@@ -68,10 +82,12 @@ public class Tool
 {
     public enum ToolType
     {
-        DualWeilder, OneTimeShield, SpyCam, CustomLadder 
+        DualWeilder, OneTimeShield, SpyCam, CustomLadder,
+        FragGrenade
     }
 
     public ToolType tool;
+    public int scoreCost = 1000;
     [Range(1, 99)]
     public int maxAmount = 1;
 

@@ -168,22 +168,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolsList:
   - tool: 0
+    scoreCost: 2000
     maxAmount: 1
     activeTool: 0
     toolName: 2 guns
     toolDescription: Extra pistol
   - tool: 1
+    scoreCost: 2000
     maxAmount: 1
     activeTool: 0
     toolName: Shield
     toolDescription: Will save you from a bullet once
   - tool: 2
+    scoreCost: 1500
     maxAmount: 5
     activeTool: 1
     toolName: Cam
     toolDescription: Spy camera will mark your enemies
   - tool: 3
+    scoreCost: 1000
     maxAmount: 5
+    activeTool: 1
+    toolName: Ladder
+    toolDescription: Don't abuse it
+  - tool: 4
+    scoreCost: 3000
+    maxAmount: 3
     activeTool: 1
     toolName: Ladder
     toolDescription: Don't abuse it
@@ -198,6 +208,9 @@ MonoBehaviour:
   - {fileID: 3406214991274096578}
   - {fileID: 4798044846599530441}
   canvasAnim: {fileID: 642087458}
+  selectedInfoNameText: {fileID: 8109555446325660843}
+  selectedInfoDescriptionText: {fileID: 8390147483545947731}
+  buyButtonImage: {fileID: 5071435089427056008}
 --- !u!1 &2469997914574696246
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,8 +690,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 1, g: 0.80092657, b: 0, a: 1}
+    m_PressedColor: {r: 1, g: 0, b: 0.056383133, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
