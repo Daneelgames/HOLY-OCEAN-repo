@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Configuration;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,9 +73,15 @@ public class Shop : MonoBehaviour
         // select tool
         selectedItemIndex = index;
         selectedInfoNameText.text = toolsList[selectedItemIndex].toolName;
-        selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription + ". Buy for " + toolsList[selectedItemIndex].scoreCost;
+        selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription;
+        int amount = PlayerInventory.Instance.GetAmount(toolsList[selectedItemIndex].tool);
+        selectedInfoDescriptionText.text += ". " + amount + " / " + toolsList[selectedItemIndex].maxAmount;
+        if (PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]))
+            selectedInfoDescriptionText.text += ". Buy for " + toolsList[selectedItemIndex].scoreCost + ".";
+        else
+            selectedInfoDescriptionText.text += ". Max Amount.";
         
-        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore)
+        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore || PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]) == false)
             buyButtonImage.color = Color.red;
         else
             buyButtonImage.color = Color.green;
@@ -85,6 +92,9 @@ public class Shop : MonoBehaviour
         // buy selectedItemIndex item
         if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore)
             return;
+        if (!PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]))
+            return;
+        PlayerInventory.Instance.AddTool(toolsList[selectedItemIndex]);
         
         ScoringSystem.Instance.currentScore -= toolsList[selectedItemIndex].scoreCost;
         OpenShop(selectedItemIndex);
@@ -96,7 +106,7 @@ public class Tool
 {
     public enum ToolType
     {
-        DualWeilder, OneTimeShield, SpyCam, CustomLadder,
+        Null, DualWeilder, OneTimeShield, SpyCam, CustomLadder,
         FragGrenade
     }
 
