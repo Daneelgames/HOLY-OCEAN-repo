@@ -125,9 +125,10 @@ public class HumanVisualController : MonoBehaviour
         
         for (int i = 0; i < joints.Count; i++)
         {
+            /*
             joints[i].angularXMotion = ConfigurableJointMotion.Free;
             joints[i].angularYMotion = ConfigurableJointMotion.Free;
-            joints[i].angularZMotion = ConfigurableJointMotion.Free;
+            joints[i].angularZMotion = ConfigurableJointMotion.Free;*/
             
             var angularXDrive = joints[i].angularXDrive;
             angularXDrive.positionSpring = 0;
@@ -179,16 +180,21 @@ public class HumanVisualController : MonoBehaviour
                 continue;
             }
             
+            /*
             joints[i].angularXMotion = ConfigurableJointMotion.Free;
             joints[i].angularYMotion = ConfigurableJointMotion.Free;
             joints[i].angularZMotion = ConfigurableJointMotion.Free;
-            
             angularXDrive.positionSpring = 0;
             angularXDrive.positionDamper = 0;
+            angularYZDrive.positionSpring = 0;
+            angularYZDrive.positionDamper = 0;*/
+            
+            angularXDrive.positionSpring = 1500;
+            angularXDrive.positionDamper = 200;
             joints[i].angularXDrive = angularXDrive;
             
-            angularYZDrive.positionSpring = 0;
-            angularYZDrive.positionDamper = 0;
+            angularYZDrive.positionSpring = 1500;
+            angularYZDrive.positionDamper = 200;
             joints[i].angularYZDrive = angularYZDrive;
         }
         

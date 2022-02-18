@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
     public float minMaxRotatorAngle = 90;
 
     private bool dead = false;
-    private HealthController killerToLookAt;
+    private Transform killerToLookAt;
     
     private void Awake()
     {
@@ -68,7 +68,11 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (dead)
+        {
+            rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
+            leaning = false;
             return;
+        }
         
         if (!LevelGenerator.Instance.levelIsReady)
             return;
@@ -112,12 +116,12 @@ public class PlayerMovement : MonoBehaviour
 
     void GetMovement()
     {
-        if (Input.GetKey(KeyCode.E) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
+        if ((Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.D)) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, -minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
             leaning = true;
         }
-        else if (Input.GetKey(KeyCode.Q) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
+        else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.A)) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
         {
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
             leaning = true;
@@ -222,9 +226,9 @@ public class PlayerMovement : MonoBehaviour
     
     void MouseLook()
     {
-        if (dead)
+        if (dead && killerToLookAt != null)
         {
-            headTransform.rotation = Quaternion.Lerp(headTransform.rotation, Quaternion.LookRotation(killerToLookAt.visibilityTrigger.transform.position - headTransform.position), Time.deltaTime );
+            headTransform.rotation = Quaternion.Lerp(headTransform.rotation, Quaternion.LookRotation(killerToLookAt.position - headTransform.position), Time.deltaTime );
             return;
         }
         
@@ -272,9 +276,13 @@ public class PlayerMovement : MonoBehaviour
         return currentAction;
     }
 
-    public void Death(HealthController killer = null)
+    public void Death(Transform killer = null)
     {
         killerToLookAt = killer;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.drag = 1;
+        rb.angularDrag = 10;
         PlayerWeaponControls.Instance.Death();
         dead = true;
     }

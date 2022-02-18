@@ -79,14 +79,6 @@ public class ProjectileController : MonoBehaviour
             
             if (hit.collider.gameObject == ownerHc.gameObject)
                 return;
-
-            if (hit.collider.gameObject == PlayerMovement.Instance.gameObject)
-            {
-                HitUnitFeedback(hit.point);
-                PlayerMovement.Instance.Death(ownerHc);
-                Death();
-                return;
-            }
                 
             TryToDamage(hit.collider);
             HitUnitFeedback(hit.point);
@@ -97,6 +89,11 @@ public class ProjectileController : MonoBehaviour
     int TryToDamage(Collider coll)
     {
         int damagedObjectType = 0;// 0 - solid, 1 - unit
+        if (coll.gameObject == PlayerMovement.Instance.gameObject)
+        {
+            PlayerMovement.Instance.hc.Damage(damage, actionOnHit);
+            return 1;
+        }
         var bodyPart = coll.gameObject.GetComponent<BodyPart>();
         if (bodyPart)
         {
@@ -112,7 +109,7 @@ public class ProjectileController : MonoBehaviour
             if (bodyPart && bodyPart.hc)
             {
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.hc.Damage(damage, actionOnHit);
+                bodyPart.hc.Damage(damage, actionOnHit, ownerHc.transform);
             }
         }
 

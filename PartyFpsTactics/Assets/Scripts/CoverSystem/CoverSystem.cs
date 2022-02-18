@@ -33,6 +33,9 @@ public class CoverSystem : MonoBehaviour
         {
             for (int i = 0; i < covers.Count; i++)
             {
+                if (i >= covers.Count)
+                    continue;
+                
                 if (covers[i].Initialized)
                     continue;
                 

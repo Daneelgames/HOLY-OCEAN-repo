@@ -53,6 +53,7 @@ public class UnitsManager : MonoBehaviour
                     unitsInGame[i].rb.AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                tileExplosionForceBarrels, ForceMode.VelocityChange);
                     
+                    unitsInGame[i].Damage(1);
                     if (action != ScoringActionType.NULL)
                         ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped);
                 }

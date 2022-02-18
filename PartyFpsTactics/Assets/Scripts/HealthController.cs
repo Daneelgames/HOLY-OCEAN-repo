@@ -72,7 +72,7 @@ public class HealthController : MonoBehaviour
         }
     }
 
-    public void Damage(int damage, ScoringActionType action = ScoringActionType.NULL)
+    public void Damage(int damage, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
     {
         if (health <= 0)
             return;
@@ -82,7 +82,7 @@ public class HealthController : MonoBehaviour
 
         if (health <= 0)
         {
-            StartCoroutine(Death(action));
+            StartCoroutine(Death(action, killer));
             
             if (action != ScoringActionType.NULL)
                 ScoringSystem.Instance.RegisterAction(action);
@@ -135,7 +135,7 @@ public class HealthController : MonoBehaviour
         }
     }
 
-    IEnumerator Death(ScoringActionType action)
+    IEnumerator Death(ScoringActionType action, Transform killer = null)
     {
         if (AiMovement)
             AiMovement.Death();
@@ -155,7 +155,10 @@ public class HealthController : MonoBehaviour
         }
         
         if (PlayerMovement.Instance.hc == this)
+        {
+            PlayerMovement.Instance.Death(killer);
             ScoringSystem.Instance.CooldownToZero();
+        }
         
         if (destroyOnDeath)
         {

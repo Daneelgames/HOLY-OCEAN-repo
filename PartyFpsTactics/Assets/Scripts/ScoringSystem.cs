@@ -24,11 +24,8 @@ public class ScoringSystem : MonoBehaviour
     [Header("UI")] 
     public Text currentScoreText;
     public Text comboText;
+    public Text actionNameText;
     public Image scoreCooldownFeedback;
-    public Text actionNameFeedbackPrefab;
-    public Transform actionNameFeedbacksFolder;
-    public Vector2 actionNameFeedbackMinMaxX = new Vector2(-500, 500);
-    public Vector2 actionNameFeedbackMinMaxY = new Vector2(-500, 500);
 
     private void Awake()
     {
@@ -37,16 +34,17 @@ public class ScoringSystem : MonoBehaviour
 
     public void RegisterAction(ScoringActionType scoringAction)
     {
+        if (PlayerMovement.Instance.hc.health <= 0)
+            return;
+        
         for (int i = 0; i < Scores.Count; i++)
         {
             var actionScore = Scores[i];
             if (actionScore.scoringActionType == scoringAction)
             {
                 // ACTION FEEDBACK
-                var newActionName = Instantiate(actionNameFeedbackPrefab, actionNameFeedbacksFolder);
-                newActionName.text = scoringAction.ToString();
-                newActionName.rectTransform.anchoredPosition = new Vector2(Random.Range(actionNameFeedbackMinMaxY.x, actionNameFeedbackMinMaxY.y), Random.Range(actionNameFeedbackMinMaxY.x, actionNameFeedbackMinMaxY.y));
-                Destroy(newActionName.gameObject,3);
+                actionNameText.text = scoringAction.ToString();
+                StartCoroutine(AnimateActionNameFeedback());
                 
                 if (scoreCooldownCoroutine == null)
                     scoreCooldownCoroutine = StartCoroutine(ScoreCooldown());
@@ -70,6 +68,25 @@ public class ScoringSystem : MonoBehaviour
         }
     }
 
+    IEnumerator AnimateActionNameFeedback()
+    {
+        float t = 0;
+        while (t < 0.1f)
+        {
+            actionNameText.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 1.5f, t/0.1f);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        t = 0;
+        while (t < 0.2f)
+        {
+            actionNameText.transform.localScale = Vector3.Lerp(Vector3.one * 1.5f, Vector3.one, t/0.2f);
+            t += Time.deltaTime;
+            yield return null;
+        }
+    }
+    
     private Coroutine scoreCooldownCoroutine;
     IEnumerator ScoreCooldown()
     {
@@ -84,6 +101,7 @@ public class ScoringSystem : MonoBehaviour
         scoreCooldownFeedback.fillAmount = 0;
         currentScore += currentScoreInCombo * currentMultiplier;
         currentScoreText.text = "SCORE: " + currentScore;
+        actionNameText.text = String.Empty;
         comboText.text = String.Empty;
         currentScoreInCombo = 0;
         currentMultiplier = 1;
