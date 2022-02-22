@@ -113,6 +113,10 @@ public class ProjectileController : MonoBehaviour
             {
                 Ricochet(hit.normal);
             }
+            else if (stickOnContact)
+            {
+                StickToObject(hit.collider);
+            }
         }
     }
 
