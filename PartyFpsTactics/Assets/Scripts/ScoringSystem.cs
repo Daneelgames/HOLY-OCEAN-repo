@@ -15,7 +15,14 @@ public class ScoringSystem : MonoBehaviour
    
 
     public List<ActionScore> Scores;
-    public int currentScore = 0;
+    int currentScore = 0;
+
+    public int CurrentScore
+    {
+        get => currentScore;
+        set => currentScore = value;
+    }
+
     public int currentScoreInCombo = 0;
     public int currentMultiplier = 1;
     [Range(1, 10)] public float scoreCooldownMax = 5;
@@ -33,15 +40,15 @@ public class ScoringSystem : MonoBehaviour
         
         if (PlayerPrefs.HasKey("currentScore"))
         {
-            currentScore = PlayerPrefs.GetInt("currentScore");
-            currentScoreText.text = "SCORE: " + currentScore;
+            CurrentScore = PlayerPrefs.GetInt("currentScore");
+            currentScoreText.text = "SCORE: " + CurrentScore;
         }
 
-        if (currentScore < 0)
-            currentScore = 0;
+        if (CurrentScore < 0)
+            CurrentScore = 0;
     }
 
-    public void RegisterAction(ScoringActionType scoringAction)
+    public void RegisterAction(ScoringActionType scoringAction, float addToCooldown = 5)
     {
         if (PlayerMovement.Instance.hc.health <= 0)
             return;
@@ -58,7 +65,7 @@ public class ScoringSystem : MonoBehaviour
                 if (scoreCooldownCoroutine == null)
                     scoreCooldownCoroutine = StartCoroutine(ScoreCooldown());
                 else
-                    scoreCooldownCurrent = scoreCooldownMax;
+                    scoreCooldownCurrent = Mathf.Clamp(scoreCooldownCurrent + addToCooldown, 0, scoreCooldownMax);
                 
                 currentScoreInCombo += actionScore.score;
                 
@@ -108,10 +115,10 @@ public class ScoringSystem : MonoBehaviour
         }
 
         scoreCooldownFeedback.fillAmount = 0;
-        currentScore += currentScoreInCombo * currentMultiplier;
-        PlayerPrefs.SetInt("currentScore", currentScore);
+        CurrentScore += currentScoreInCombo * currentMultiplier;
+        PlayerPrefs.SetInt("currentScore", CurrentScore);
         PlayerPrefs.Save();
-        currentScoreText.text = "SCORE: " + currentScore;
+        currentScoreText.text = "SCORE: " + CurrentScore;
         actionNameText.text = String.Empty;
         comboText.text = String.Empty;
         currentScoreInCombo = 0;
@@ -119,6 +126,13 @@ public class ScoringSystem : MonoBehaviour
         scoreCooldownCoroutine = null;
     }
 
+    public void RemoveScore(int amount)
+    {
+        CurrentScore -= amount;
+        
+        PlayerPrefs.SetInt("currentScore", CurrentScore);
+        PlayerPrefs.Save();
+    }
     public void CooldownToZero()
     {
         scoreCooldownCurrent = 0;
@@ -126,7 +140,7 @@ public class ScoringSystem : MonoBehaviour
     public void UpdateScore()
     {
         scoreCooldownCurrent = 0;
-        currentScoreText.text = "SCORE: " + currentScore;
+        currentScoreText.text = "SCORE: " + CurrentScore;
     }
 
     bool MultiplyAction(ScoringActionType action)

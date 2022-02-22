@@ -8,13 +8,34 @@ public class PlayerInventory : MonoBehaviour
     
     public Dictionary<Tool.ToolType, int> amountOfEachTool = new Dictionary<Tool.ToolType, int>();
 
+    public WeaponController startingPistolWeapon;
     void Awake()
     {
         Instance = this;
     }
+    void Start()
+    {
+        SpawnPlayerWeapon(startingPistolWeapon, 0);
+    }
 
+    void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
+    {
+        var wpn = Instantiate(weaponPrefab, PlayerMovement.Instance.transform.position, Quaternion.identity);
+        switch (side)
+        {
+            case 0:
+                PlayerWeaponControls.Instance.SetLeftWeapon(wpn);
+                break;
+            case 1:
+                PlayerWeaponControls.Instance.SetRightWeapon(wpn);
+                break;
+        }
+    }
     public void AddTool(Tool tool)
     {
+        if (tool.tool == Tool.ToolType.DualWeilder)
+            SpawnPlayerWeapon(startingPistolWeapon, 1);
+            
         if (amountOfEachTool.ContainsKey(tool.tool))
         {
             amountOfEachTool[tool.tool]++;
@@ -51,4 +72,5 @@ public class PlayerInventory : MonoBehaviour
 
         return 0;
     }
+
 }

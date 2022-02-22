@@ -18,7 +18,7 @@ public class BodyPart : MonoBehaviour
         {
             if (action != ScoringActionType.NULL)
             {
-                ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed);
+                ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
             }
             
             LevelGenerator.Instance.DebrisParticles(transform.position);

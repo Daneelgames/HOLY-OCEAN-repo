@@ -17,6 +17,7 @@ public class ProjectileController : MonoBehaviour
     
     public bool dieOnContact = true;
     public bool ricochetOnContact = false;
+    public bool stickOnContact = false;
     public float ricochetCooldownMax = 0.5f;
     float ricochetCooldown = 0;
     public Rigidbody rb;
@@ -89,6 +90,10 @@ public class ProjectileController : MonoBehaviour
             else if (ricochetOnContact)
             {
                 Ricochet(hit.normal);
+            }
+            else if (stickOnContact)
+            {
+                StickToObject(hit.collider);
             }
             return;
         }
@@ -200,6 +205,15 @@ public class ProjectileController : MonoBehaviour
         ricochetCooldown = ricochetCooldownMax;
         Vector3 reflectDir = Vector3.Reflect(transform.forward, hitNormal);
         transform.rotation = Quaternion.LookRotation(reflectDir);
+    }
+
+    public void StickToObject(Collider coll)
+    {
+        transform.parent = coll.transform;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        dead = true;
     }
 
     IEnumerator DeathCoroutine()

@@ -41,6 +41,8 @@ public class CoverSystem : MonoBehaviour
                 
                 for (int j = 0; j < covers[i].coverSpotsList.Count; j++)
                 {
+                    if (i >= covers.Count)
+                        break;
                     if (j >= covers[i].coverSpotsList.Count)
                         continue;
 

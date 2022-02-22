@@ -55,13 +55,13 @@ public class UnitsManager : MonoBehaviour
                     
                     unitsInGame[i].Damage(1);
                     if (action != ScoringActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped);
+                        ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped, 2);
                 }
 
                 if (unitsInGame[i].HumanVisualController)
                 {
                     if (unitsInGame[i].health > 0 && action != ScoringActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringActionType.EnemyBumped);
+                        ScoringSystem.Instance.RegisterAction(ScoringActionType.EnemyBumped, 2);
                     unitsInGame[i].HumanVisualController.ActivateRagdoll();
                     unitsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
                 }

@@ -51,7 +51,7 @@ public class Shop : MonoBehaviour
             }
             
             shopItemsIcons[i].ShowItem(toolsList[i].toolName);
-            if (toolsList[i].scoreCost > ScoringSystem.Instance.currentScore)
+            if (toolsList[i].scoreCost > ScoringSystem.Instance.CurrentScore)
                 shopItemsIcons[i].raycastedSprite.color = Color.red;
             else
                 shopItemsIcons[i].raycastedSprite.color = Color.white;
@@ -81,7 +81,7 @@ public class Shop : MonoBehaviour
         else
             selectedInfoDescriptionText.text += ". Max Amount.";
         
-        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore || PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]) == false)
+        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore || PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]) == false)
             buyButtonImage.color = Color.red;
         else
             buyButtonImage.color = Color.green;
@@ -90,13 +90,13 @@ public class Shop : MonoBehaviour
     public void BuyItem()
     {
         // buy selectedItemIndex item
-        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.currentScore)
+        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore)
             return;
         if (!PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]))
             return;
         PlayerInventory.Instance.AddTool(toolsList[selectedItemIndex]);
         
-        ScoringSystem.Instance.currentScore -= toolsList[selectedItemIndex].scoreCost;
+        ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].scoreCost);
         OpenShop(selectedItemIndex);
     }
 }

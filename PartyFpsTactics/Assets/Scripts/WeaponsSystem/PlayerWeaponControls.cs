@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerWeaponControls : MonoBehaviour
 {
     public Transform weaponsTargetsParent;
+    public Transform weaponsParent;
     [Header("LEFT GUN")]
     public WeaponController leftWeapon;
     public Transform deathTransformLeft;
@@ -32,7 +33,6 @@ public class PlayerWeaponControls : MonoBehaviour
 
     private bool weaponCollidesWithWallLeft = false;
     private bool weaponCollidesWithWallRight = false;
-    
     
     Transform targetLeftTransform;
     Transform targetRightTransform;
@@ -73,47 +73,54 @@ public class PlayerWeaponControls : MonoBehaviour
         }
         else
         {
-            if (leftWeapon.OnCooldown || weaponCollidesWithWallLeft)
+            if (leftWeapon)
             {
-                targetLeftTransform = reloadTransformLeft;
-            }
-            else if (LevelGenerator.Instance.levelIsReady)
-            {
-                if (Input.GetMouseButton(0))
+                if (leftWeapon.OnCooldown || weaponCollidesWithWallLeft)
                 {
-                    aiming = true;
-                    targetLeftTransform = aimTransformLeft;
+                    targetLeftTransform = reloadTransformLeft;
                 }
-
-                if (Input.GetMouseButtonUp(0))
+                else if (LevelGenerator.Instance.levelIsReady)
                 {
-                    leftWeapon.Shot(hc);
+                    if (Input.GetMouseButton(0))
+                    {
+                        aiming = true;
+                        targetLeftTransform = aimTransformLeft;
+                    }
+
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        leftWeapon.Shot(hc);
+                    }
                 }
             }
 
-            if (rightWeapon.OnCooldown || weaponCollidesWithWallRight)
+            if (rightWeapon)
             {
-                targetRightTransform = reloadTransformRight;
-            }
-            else if (LevelGenerator.Instance.levelIsReady)
-            {
-                if (Input.GetMouseButton(1))
+                if (rightWeapon.OnCooldown || weaponCollidesWithWallRight)
                 {
-                    aiming = true;
-                    targetRightTransform = aimTransformRight;
+                    targetRightTransform = reloadTransformRight;
                 }
-
-                if (Input.GetMouseButtonUp(1))
+                else if (LevelGenerator.Instance.levelIsReady)
                 {
-                    rightWeapon.Shot(hc);
+                    if (Input.GetMouseButton(1))
+                    {
+                        aiming = true;
+                        targetRightTransform = aimTransformRight;
+                    }
+
+                    if (Input.GetMouseButtonUp(1))
+                    {
+                        rightWeapon.Shot(hc);
+                    }
                 }
             }
         }
         targetFov = aiming ? camFovAim : camFovIdle;
-        
+
         weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position, PlayerMovement.Instance.MainCam.transform.position, gunMoveSpeed * Time.deltaTime);
         weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, PlayerMovement.Instance.MainCam.transform.rotation, gunRotationSpeed * Time.deltaTime);
     }
+
 
     private void FixedUpdate()
     {
@@ -185,6 +192,17 @@ public class PlayerWeaponControls : MonoBehaviour
         PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
     }
 
+    public void SetLeftWeapon(WeaponController weapon)
+    {
+        leftWeapon = weapon;
+        weapon.transform.parent = weaponsParent;
+    }
+    public void SetRightWeapon(WeaponController weapon)
+    {
+        rightWeapon = weapon;
+        weapon.transform.parent = weaponsParent;
+    }
+    
     public void Death()
     {
         dead = true;

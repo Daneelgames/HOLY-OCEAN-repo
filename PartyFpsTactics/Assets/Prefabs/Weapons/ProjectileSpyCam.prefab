@@ -9787,7 +9787,8 @@ MonoBehaviour:
   lifeTime: -1
   toolType: 3
   dieOnContact: 0
-  ricochetOnContact: 1
+  ricochetOnContact: 0
+  stickOnContact: 1
   ricochetCooldownMax: 0.5
   rb: {fileID: 1439973966273775659}
   gravity: 5
@@ -9811,11 +9812,11 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3044484379556785917}
-  m_Material: {fileID: 13400000, guid: d6ba6f66e3275da47a5412320824a69b, type: 2}
+  m_Material: {fileID: 13400000, guid: ce9bd38cd1586c64391a94f4b8e75274, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1439973966273775659
 Rigidbody:
@@ -9943,7 +9944,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -10135,6 +10136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scanDelay: 0.5
   teamToScan: 0
+  scanDistance: 30
   scanLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -19894,7 +19896,7 @@ Transform:
   m_GameObject: {fileID: 7610261081426840073}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 7706236279808264294}
   m_RootOrder: 0

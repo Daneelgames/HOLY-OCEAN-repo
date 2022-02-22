@@ -33,12 +33,18 @@ public class SpyCam : MonoBehaviour
                 
                 if (PlayerUi.Instance.markedEnemies.ContainsKey(unit))
                     continue;
-                
-                //if (!Physics.Raycast(transform.position, unit.visibilityTrigger.transform.position - transform.position, Vector3.Distance(transform.position, unit.visibilityTrigger.transform.position), scanLayerMask))
-                if (Vector3.Distance(transform.position, unit.visibilityTrigger.transform.position) < scanDistance)
+
+                float dist = Vector3.Distance(transform.position, unit.visibilityTrigger.transform.position);
+                if (dist < scanDistance)
                 {
-                    PlayerUi.Instance.MarkEnemy(unit);
+                    if (!Physics.Raycast(transform.position, unit.visibilityTrigger.transform.position - transform.position, dist, scanLayerMask))
+                        PlayerUi.Instance.MarkEnemy(unit);
+                    else
+                        PlayerUi.Instance.UnmarkEnemy(unit);
                 }
+                else
+                    PlayerUi.Instance.UnmarkEnemy(unit);
+                
                 yield return new WaitForSeconds(scanDelay);
             }
         }
