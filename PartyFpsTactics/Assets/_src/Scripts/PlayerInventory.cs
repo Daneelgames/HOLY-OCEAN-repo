@@ -9,25 +9,29 @@ public class PlayerInventory : MonoBehaviour
     public Dictionary<Tool.ToolType, int> amountOfEachTool = new Dictionary<Tool.ToolType, int>();
 
     public WeaponController startingPistolWeapon;
-    void Awake()
+   
+    private void Awake()
     {
         Instance = this;
     }
-    void Start()
+    
+    private void Start()
     {
         SpawnPlayerWeapon(startingPistolWeapon, 0);
     }
-
-    void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
+    
+    
+    // TODO стороны - через enum
+    private void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
     {
         var wpn = Instantiate(weaponPrefab, Player.GameObject.transform.position, Quaternion.identity);
         switch (side)
         {
             case 0:
-                PlayerWeaponControls.Instance.SetLeftWeapon(wpn);
+                Player.Weapon.SetLeftWeapon(wpn);
                 break;
             case 1:
-                PlayerWeaponControls.Instance.SetRightWeapon(wpn);
+                Player.Weapon.SetRightWeapon(wpn);
                 break;
         }
     }
@@ -43,6 +47,7 @@ public class PlayerInventory : MonoBehaviour
         }   
         amountOfEachTool.Add(tool.tool, 1);
     }
+    
     public void RemoveTool(Tool.ToolType tool)
     {
         if (amountOfEachTool.ContainsKey(tool))
@@ -63,6 +68,7 @@ public class PlayerInventory : MonoBehaviour
 
         return true;
     }
+    
     public int GetAmount(Tool.ToolType toolType)
     {
         if (amountOfEachTool.ContainsKey(toolType))

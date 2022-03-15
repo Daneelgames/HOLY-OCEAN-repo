@@ -13,6 +13,12 @@ namespace MrPink.PlayerSystem
         private PlayerMovement _movement;
 
         [SerializeField, ChildGameObjectsOnly, Required]
+        private CommanderControls _commanderControls;
+
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private PlayerWeaponControls _weapon;
+
+        [SerializeField, ChildGameObjectsOnly, Required]
         private HealthController _health;
         
         [SerializeField, ChildGameObjectsOnly, Required]
@@ -25,6 +31,12 @@ namespace MrPink.PlayerSystem
         public static HealthController Health
             => _instance._health;
 
+        public static CommanderControls CommanderControls
+            => _instance._commanderControls;
+
+        public static PlayerWeaponControls Weapon
+            => _instance._weapon;
+        
         public static GameObject GameObject
             => _instance.gameObject;
         

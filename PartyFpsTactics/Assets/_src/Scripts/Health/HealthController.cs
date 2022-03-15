@@ -166,10 +166,12 @@ namespace MrPink.Health
 
         private void OnDestroy()
         {
+            // TODO инкапсулировать логику в сами классы
+            
             if (UnitsManager.Instance.unitsInGame.Contains(this))
                 UnitsManager.Instance.unitsInGame.Remove(this);
-            if (CommanderControls.Instance.unitsInParty.Contains(this))
-                CommanderControls.Instance.unitsInParty.Remove(this);
+            if (Player.CommanderControls.unitsInParty.Contains(this))
+                Player.CommanderControls.unitsInParty.Remove(this);
         }
     }
 }

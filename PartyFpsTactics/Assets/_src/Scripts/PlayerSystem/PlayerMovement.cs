@@ -268,6 +268,7 @@ namespace MrPink.PlayerSystem
             return currentAction;
         }
 
+        // TODO роутить смерть сверху-вниз, возможно компонентам добавить интерфейс
         public void Death(Transform killer = null)
         {
             killerToLookAt = killer;
@@ -275,7 +276,7 @@ namespace MrPink.PlayerSystem
             rb.useGravity = true;
             rb.drag = 1;
             rb.angularDrag = 10;
-            PlayerWeaponControls.Instance.Death();
+            Player.Weapon.Death();
             dead = true;
         }
     }
