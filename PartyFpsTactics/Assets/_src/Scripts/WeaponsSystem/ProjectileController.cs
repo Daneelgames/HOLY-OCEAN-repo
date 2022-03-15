@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -19,7 +21,7 @@ public class ProjectileController : MonoBehaviour
     public bool ricochetOnContact = false;
     public bool stickOnContact = false;
     public float ricochetCooldownMax = 0.5f;
-    float ricochetCooldown = 0;
+    private float ricochetCooldown = 0;
     public Rigidbody rb;
     public float gravity = 13;
     public LayerMask solidsMask;
@@ -123,9 +125,9 @@ public class ProjectileController : MonoBehaviour
     int TryToDamage(Collider coll)
     {
         int damagedObjectType = 0;// 0 - solid, 1 - unit
-        if (coll.gameObject == PlayerMovement.Instance.gameObject)
+        if (coll.gameObject == Player.GameObject)
         {
-            PlayerMovement.Instance.hc.Damage(damage, actionOnHit);
+            Player.Health.Damage(damage, actionOnHit);
             return 1;
         }
         var bodyPart = coll.gameObject.GetComponent<BodyPart>();

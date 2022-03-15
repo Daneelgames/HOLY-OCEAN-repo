@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using MrPink.PlayerSystem;
 using UnityEngine;
 
 public class PlayerThrowablesControls : MonoBehaviour
@@ -17,7 +16,7 @@ public class PlayerThrowablesControls : MonoBehaviour
         if (!LevelGenerator.Instance.levelIsReady)
             return;
         
-        if (PlayerMovement.Instance.hc.health <= 0)
+        if (Player.Health.health <= 0)
             return;
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -68,9 +67,9 @@ public class PlayerThrowablesControls : MonoBehaviour
             
             // throw selected
             var newTool = Instantiate(toolsPrefabs[selectedTool]);
-            newTool.transform.position = PlayerMovement.Instance.headTransform.position;
-            newTool.transform.rotation = PlayerMovement.Instance.MainCam.transform.rotation;
-            newTool.Init(PlayerMovement.Instance.hc);
+            newTool.transform.position = Player.Movement.headTransform.position;
+            newTool.transform.rotation = Player.MainCamera.transform.rotation;
+            newTool.Init(Player.Health);
             PlayerInventory.Instance.RemoveTool(toolsPrefabs[selectedTool].toolType);
         }
     }

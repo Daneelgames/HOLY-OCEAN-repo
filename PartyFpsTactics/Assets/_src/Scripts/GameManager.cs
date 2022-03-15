@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     {
         var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
         if (Random.value > 0.9f)
-            newUnit.AiMovement.MoveToPositionOrder(PlayerMovement.Instance.transform.position);
+            newUnit.AiMovement.MoveToPositionOrder(Player.Movement.transform.position);
         else 
             newUnit.AiMovement.TakeCoverOrder();
     }
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     public bool IsPositionInPlayerFov(Vector3 pos)
     {
         bool inFov = false;
-        var viewportPoint = PlayerMovement.Instance.MainCam.WorldToViewportPoint(pos);
+        var viewportPoint = Player.MainCamera.WorldToViewportPoint(pos);
         if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1)
             inFov = true;
         return inFov;

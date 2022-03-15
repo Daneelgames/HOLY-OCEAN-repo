@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class SpyCam : MonoBehaviour
     [Range(0.01f, 5f)]
     public float scanDelay = 0.5f;
 
-    public HealthController.Team teamToScan;
+    public Team teamToScan;
     public float scanDistance = 15; 
     public LayerMask scanLayerMask;
     

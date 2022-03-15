@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using MrPink.PlayerSystem;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -20,7 +20,7 @@ public class PlayerInventory : MonoBehaviour
 
     void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
     {
-        var wpn = Instantiate(weaponPrefab, PlayerMovement.Instance.transform.position, Quaternion.identity);
+        var wpn = Instantiate(weaponPrefab, Player.GameObject.transform.position, Quaternion.identity);
         switch (side)
         {
             case 0:

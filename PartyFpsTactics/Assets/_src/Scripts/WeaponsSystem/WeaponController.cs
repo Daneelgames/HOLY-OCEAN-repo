@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -40,8 +42,8 @@ public class WeaponController : MonoBehaviour
     {
         var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
         ScoringActionType action = ScoringActionType.NULL;
-        if (ownerHc == PlayerMovement.Instance.hc)
-            action = PlayerMovement.Instance.GetCurrentScoringAction();
+        if (ownerHc == Player.Health)
+            action = Player.Movement.GetCurrentScoringAction();
         
         newProjectile.Init(ownerHc, action);
         StartCoroutine(Cooldown());

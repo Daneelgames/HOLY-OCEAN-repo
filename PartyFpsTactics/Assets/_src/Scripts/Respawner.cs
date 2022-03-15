@@ -1,7 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -64,7 +62,7 @@ public class Respawner : MonoBehaviour
 
     void Update()
     {
-        if (PlayerMovement.Instance.transform.position.y < corpseShredderY)
+        if (Player.GameObject.transform.position.y < corpseShredderY)
         {
             GameManager.Instance.Restart();
             return;

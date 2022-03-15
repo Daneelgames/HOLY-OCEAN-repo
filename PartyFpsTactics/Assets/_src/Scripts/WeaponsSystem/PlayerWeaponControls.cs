@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 
 public class PlayerWeaponControls : MonoBehaviour
@@ -117,8 +119,8 @@ public class PlayerWeaponControls : MonoBehaviour
         }
         targetFov = aiming ? camFovAim : camFovIdle;
 
-        weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position, PlayerMovement.Instance.MainCam.transform.position, gunMoveSpeed * Time.deltaTime);
-        weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, PlayerMovement.Instance.MainCam.transform.rotation, gunRotationSpeed * Time.deltaTime);
+        weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
+        weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
     }
 
 
@@ -189,7 +191,7 @@ public class PlayerWeaponControls : MonoBehaviour
                 targetRightTransform.rotation, gunRotationSpeed * Time.deltaTime);
         }
         
-        PlayerMovement.Instance.MainCam.fieldOfView = Mathf.Lerp(PlayerMovement.Instance.MainCam.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
+        Player.MainCamera.fieldOfView = Mathf.Lerp(Player.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
     }
 
     public void SetLeftWeapon(WeaponController weapon)

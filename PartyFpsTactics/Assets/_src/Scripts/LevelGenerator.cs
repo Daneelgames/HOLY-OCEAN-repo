@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
 using Unity.Mathematics;
 using Unity.VisualScripting;
@@ -86,7 +87,7 @@ public class LevelGenerator : MonoBehaviour
         StartCoroutine(UpdateNavMesh());
         yield return null;
         Respawner.Instance.Init();
-        PlayerMovement.Instance.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
+        Player.Movement.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         levelIsReady = true;
         StartCoroutine(SpawnExplosiveBarrels());
     }
@@ -114,7 +115,7 @@ public class LevelGenerator : MonoBehaviour
         yield return StartCoroutine(SpawnLevelRooms());
         if (levelIndex == 0)
         {
-            PlayerMovement.Instance.rb.MovePosition(levelPosition);
+            Player.Movement.rb.MovePosition(levelPosition);
         }
     }
 
