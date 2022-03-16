@@ -1,7 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Configuration;
+using MrPink.PlayerSystem;
+using MrPink.Tools;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -74,14 +75,17 @@ public class Shop : MonoBehaviour
         selectedItemIndex = index;
         selectedInfoNameText.text = toolsList[selectedItemIndex].toolName;
         selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription;
-        int amount = PlayerInventory.Instance.GetAmount(toolsList[selectedItemIndex].tool);
+        int amount = Player.Inventory.GetAmount(toolsList[selectedItemIndex].tool);
         selectedInfoDescriptionText.text += ". " + amount + " / " + toolsList[selectedItemIndex].maxAmount;
-        if (PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]))
+        
+        // TODO перенести текстовые штуки в систему локализации
+        
+        if (Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
             selectedInfoDescriptionText.text += ". Buy for " + toolsList[selectedItemIndex].scoreCost + ".";
         else
             selectedInfoDescriptionText.text += ". Max Amount.";
         
-        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore || PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]) == false)
+        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore || Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
             buyButtonImage.color = Color.red;
         else
             buyButtonImage.color = Color.green;
@@ -92,31 +96,11 @@ public class Shop : MonoBehaviour
         // buy selectedItemIndex item
         if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore)
             return;
-        if (!PlayerInventory.Instance.CanFitTool(toolsList[selectedItemIndex]))
+        if (!Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
             return;
-        PlayerInventory.Instance.AddTool(toolsList[selectedItemIndex]);
+        Player.Inventory.AddTool(toolsList[selectedItemIndex]);
         
         ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].scoreCost);
         OpenShop(selectedItemIndex);
     }
-}
-
-[Serializable]
-public class Tool
-{
-    public enum ToolType
-    {
-        Null, DualWeilder, OneTimeShield, SpyCam, CustomLadder,
-        FragGrenade
-    }
-
-    public ToolType tool;
-    public int scoreCost = 1000;
-    [Range(1, 99)]
-    public int maxAmount = 1;
-
-    public bool activeTool = false;
-    
-    public string toolName = "Name";
-    public string toolDescription = "Description";
 }

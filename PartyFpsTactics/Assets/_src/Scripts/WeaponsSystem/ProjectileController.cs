@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,7 +16,7 @@ public class ProjectileController : MonoBehaviour
     [Header("If lifetime < 0, this object will not die on timer")]
     public float lifeTime = 2;
 
-    public Tool.ToolType toolType = Tool.ToolType.Null;
+    public ToolType toolType = ToolType.Null;
     
     public bool dieOnContact = true;
     public bool ricochetOnContact = false;

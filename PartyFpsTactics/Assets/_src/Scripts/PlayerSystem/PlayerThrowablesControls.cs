@@ -31,7 +31,7 @@ namespace MrPink.PlayerSystem
                     if (i >= toolsPrefabs.Count)
                         i = 0;
                 
-                    if (PlayerInventory.Instance.GetAmount(toolsPrefabs[i].toolType) > 0)
+                    if (Player.Inventory.GetAmount(toolsPrefabs[i].toolType) > 0)
                     {
                         selectedTool = i;
                         break;
@@ -51,7 +51,7 @@ namespace MrPink.PlayerSystem
                     if (i < 0)
                         i = toolsPrefabs.Count - 1;
                 
-                    if (PlayerInventory.Instance.GetAmount(toolsPrefabs[i].toolType) > 0)
+                    if (Player.Inventory.GetAmount(toolsPrefabs[i].toolType) > 0)
                     {
                         selectedTool = i;
                         break;
@@ -65,7 +65,7 @@ namespace MrPink.PlayerSystem
         
             if (Input.GetKeyDown(KeyCode.F))
             { 
-                if (PlayerInventory.Instance.GetAmount(toolsPrefabs[selectedTool].toolType) <= 0)
+                if (Player.Inventory.GetAmount(toolsPrefabs[selectedTool].toolType) <= 0)
                 {
                     return;
                 }
@@ -75,7 +75,7 @@ namespace MrPink.PlayerSystem
                 newTool.transform.position = Player.Movement.headTransform.position;
                 newTool.transform.rotation = Player.MainCamera.transform.rotation;
                 newTool.Init(Player.Health);
-                PlayerInventory.Instance.RemoveTool(toolsPrefabs[selectedTool].toolType);
+                Player.Inventory.RemoveTool(toolsPrefabs[selectedTool].toolType);
             }
         }
     }

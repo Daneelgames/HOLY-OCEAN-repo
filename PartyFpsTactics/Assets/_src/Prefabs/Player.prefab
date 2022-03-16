@@ -622,6 +622,50 @@ Transform:
   m_Father: {fileID: 7726002239220614177}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 9.871, y: 21.513, z: 0.828}
+--- !u!1 &2215963341758027398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3317097459454385456}
+  - component: {fileID: 2039522459841344384}
+  m_Layer: 7
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3317097459454385456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215963341758027398}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4081011892120011788}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2039522459841344384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215963341758027398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e546ceffbb04a44492925b7ceab5ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingPistolWeapon: {fileID: 4860745060149239904, guid: 9ff008ca9d8baed41b67b76d2aca903b, type: 3}
 --- !u!1 &2939542812848086468
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,6 +951,7 @@ Transform:
   - {fileID: 8985093501114848860}
   - {fileID: 4402585684862016930}
   - {fileID: 8132932542127472186}
+  - {fileID: 3317097459454385456}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -922,11 +967,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f9f4a6006d4379ae2159dad8fbc0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 4081011893066873263}
+  _health: {fileID: 638340676281069531}
   _movement: {fileID: 4081011892120011791}
   _commanderControls: {fileID: 1825153995}
   _weapon: {fileID: 2874826800946776180}
-  _health: {fileID: 638340676281069531}
-  _mainCamera: {fileID: 4081011893066873263}
+  _inventory: {fileID: 2039522459841344384}
 --- !u!114 &638340676281069531
 MonoBehaviour:
   m_ObjectHideFlags: 0

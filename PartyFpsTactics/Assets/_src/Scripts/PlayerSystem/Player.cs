@@ -10,6 +10,12 @@ namespace MrPink.PlayerSystem
         
         
         [SerializeField, ChildGameObjectsOnly, Required]
+        public Camera _mainCamera;
+        
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private HealthController _health;
+        
+        [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerMovement _movement;
 
         [SerializeField, ChildGameObjectsOnly, Required]
@@ -19,11 +25,14 @@ namespace MrPink.PlayerSystem
         private PlayerWeaponControls _weapon;
 
         [SerializeField, ChildGameObjectsOnly, Required]
-        private HealthController _health;
+        private PlayerInventory _inventory;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
-        public Camera _mainCamera;
-
+        
+        public static GameObject GameObject
+            => _instance.gameObject;
+        
+        public static Camera MainCamera
+            => _instance._mainCamera;
 
         public static PlayerMovement Movement
             => _instance._movement;
@@ -36,12 +45,10 @@ namespace MrPink.PlayerSystem
 
         public static PlayerWeaponControls Weapon
             => _instance._weapon;
+
+        public static PlayerInventory Inventory
+            => _instance._inventory;
         
-        public static GameObject GameObject
-            => _instance.gameObject;
-        
-        public static Camera MainCamera
-            => _instance._mainCamera;
         
         private void Awake()
         {
