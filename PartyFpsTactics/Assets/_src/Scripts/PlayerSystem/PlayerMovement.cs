@@ -37,7 +37,7 @@ namespace MrPink.PlayerSystem
         public float mouseSensitivity = 5;
         public float vertLookAngleClamp = 85;
         public float cameraFollowBodySmooth = 3;
-        private float _playerHeadHeight;
+        float _playerHeadHeight;
         private float _vertRotation = 0.0f;
         private float _horRotation = 0.0f;
         private bool goingUpHill = false;
@@ -50,7 +50,7 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            _playerHeadHeight = headTransform.localPosition.y;
+            _playerHeadHeight = headTransform.localPosition.y * transform.localScale.x;
             headTransform.parent = null;
         }
 
@@ -100,7 +100,7 @@ namespace MrPink.PlayerSystem
 
         private void LateUpdate()
         {
-            if (Shop.Instance.IsActive)
+            if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
             MouseLook();

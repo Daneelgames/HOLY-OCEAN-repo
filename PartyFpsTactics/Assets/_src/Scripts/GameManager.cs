@@ -3,6 +3,7 @@ using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -28,13 +29,27 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
             Restart();
     }
 
     public void Restart()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void LevelCompleted()
+    {
+        /*
+        // save screenshot 
+        var texture = ScreenCapture.CaptureScreenshotAsTexture();
+        // do something with texture
+
+        // cleanup
+        Destroy(texture);
+        */
+        
+        SceneManager.LoadScene(1);
     }
 
     public void SpawnBlueUnit(Vector3 pos)

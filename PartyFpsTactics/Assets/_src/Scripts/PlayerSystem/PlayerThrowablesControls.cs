@@ -12,7 +12,7 @@ namespace MrPink.PlayerSystem
 
         private void Update()
         {
-            if (Shop.Instance.IsActive)
+            if (Shop.Instance && Shop.Instance.IsActive)
                 return;
 
             if (!LevelGenerator.Instance.levelIsReady)

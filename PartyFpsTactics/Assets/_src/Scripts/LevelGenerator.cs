@@ -6,6 +6,7 @@ using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
@@ -13,6 +14,10 @@ using Random = UnityEngine.Random;
 public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator Instance;
+    public enum LevelType{Game,Narrative}
+
+    public LevelType levelType = LevelType.Game;
+    public GameObject levelGoalPrefab;
     public GameObject tilePrefab;
     public GameObject tileWallPrefab;
     public GameObject tileWallThinPrefab;
@@ -26,7 +31,7 @@ public class LevelGenerator : MonoBehaviour
     [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
     public Vector2Int coversPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
-    [Range(1, 3)] public float distanceToCutCeilingUnderStairs = 1;
+    public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     public LayerMask solidsUnitsLayerMask;
     public bool randomLevelRotation = false;
@@ -45,14 +50,29 @@ public class LevelGenerator : MonoBehaviour
         Instance = this;
     }
 
-    IEnumerator Start()
+    void Start()
     {
         if (generatedBuildingFolder == null)
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
             generatedBuildingFolder.position = Vector3.zero;
         }
-        
+
+        switch (levelType)
+        {
+            case LevelType.Game:
+                StartCoroutine(GenerateLevel());
+                break;
+            case LevelType.Narrative:
+                // choose here what narrative sequence to load?
+                // and then set level ready
+                levelIsReady = true;
+                break;
+        }
+    }
+
+    IEnumerator GenerateLevel()
+    {
         if (levelsHeights.Count == 0) // default 5 floors building
         {
             levelsHeights = new List<int>();
@@ -90,9 +110,10 @@ public class LevelGenerator : MonoBehaviour
         Player.Movement.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         levelIsReady = true;
         StartCoroutine(SpawnExplosiveBarrels());
+        SpawnGoalOnTop();
     }
 
-    
+
     IEnumerator SpawnNewLevel(int levelIndex)
     {
         float levelY = 0;
@@ -407,7 +428,7 @@ public class LevelGenerator : MonoBehaviour
                 if (levelTo.tilesInside[k].transform == levelToClosestTile)
                     continue;
                 Vector3 pos2 = levelTo.tilesInside[k].transform.position;
-                if (Vector3.Distance(pos1, pos2) < distanceToCutCeilingUnderStairs)
+                if (Vector3.Distance(pos1, pos2) < Random.Range(distanceToCutCeilingUnderStairsMinMax.x,distanceToCutCeilingUnderStairsMinMax.y))
                 {
                     Destroy(levelTo.tilesInside[k]);
                     levelTo.tilesInside.RemoveAt(k);
@@ -421,7 +442,7 @@ public class LevelGenerator : MonoBehaviour
                 
                 pos1 = new Vector3(pos1.x, levelTo.tilesWalls[k].transform.position.y, pos1.z);
                 Vector3 pos2 = levelTo.tilesWalls[k].transform.position;
-                if (Vector3.Distance(pos1, pos2) < distanceToCutCeilingUnderStairs)
+                if (Vector3.Distance(pos1, pos2) < Random.Range(distanceToCutCeilingUnderStairsMinMax.x,distanceToCutCeilingUnderStairsMinMax.y))
                 {
                     Destroy(levelTo.tilesWalls[k]);
                     levelTo.tilesWalls.RemoveAt(k);
@@ -431,7 +452,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 pos1 = new Vector3(pos1.x, levelFrom.tilesWalls[k].transform.position.y, pos1.z);
                 Vector3 pos2 = levelFrom.tilesWalls[k].transform.position;
-                if (Vector3.Distance(pos1, pos2) < distanceToCutCeilingUnderStairs)
+                if (Vector3.Distance(pos1, pos2) < Random.Range(distanceToCutCeilingUnderStairsMinMax.x,distanceToCutCeilingUnderStairsMinMax.y))
                 {
                     Destroy(levelFrom.tilesWalls[k]);
                     levelFrom.tilesWalls.RemoveAt(k);
@@ -482,7 +503,7 @@ public class LevelGenerator : MonoBehaviour
         newCover.transform.parent = generatedBuildingFolder;
     }
     
-    public IEnumerator SpawnExplosiveBarrels()
+    IEnumerator SpawnExplosiveBarrels()
     {
         for (int i = 0; i < explosiveBarrelsAmount; i++)
         {
@@ -495,7 +516,13 @@ public class LevelGenerator : MonoBehaviour
             yield return null;
         }
     }
-    
+
+    void SpawnGoalOnTop()
+    {
+        Vector3 spawnPosition = spawnedLevels[spawnedLevels.Count - 1].position + Vector3.up * 2;
+        var levelGoal = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
+    }
+
     public void TileDamaged(BodyPart tile)
     {
         if (tilesToDamage.Contains(tile.transform))

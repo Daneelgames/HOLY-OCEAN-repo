@@ -53,7 +53,7 @@ namespace MrPink.PlayerSystem
 
         private void Update()
         {
-            if (Shop.Instance.IsActive)
+            if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
             if (gunMoveSpeed < 1) 
@@ -164,7 +164,7 @@ namespace MrPink.PlayerSystem
 
         private void LateUpdate()
         {
-            if (Shop.Instance.IsActive)
+            if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
             if (leftWeapon)

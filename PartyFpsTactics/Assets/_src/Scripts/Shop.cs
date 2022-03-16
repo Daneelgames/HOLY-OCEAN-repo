@@ -32,7 +32,15 @@ public class Shop : MonoBehaviour
 
     void Start()
     {
-        OpenShop(0);
+        switch (LevelGenerator.Instance.levelType)
+        {
+            case LevelGenerator.LevelType.Game:
+                OpenShop(0);
+                break;
+            case LevelGenerator.LevelType.Narrative:
+                CloseShop();
+                break;
+        }
     }
 
     void OpenShop(int newSelectedItem)
