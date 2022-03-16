@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -35,7 +34,7 @@ public class AiWeaponControls : MonoBehaviour
             
             if (hc.AiMovement.enemyToLookAt != null)
             {
-                if (hc.AiMovement.enemyToLookAt.gameObject == PlayerMovement.Instance.gameObject)
+                if (hc.AiMovement.enemyToLookAt.gameObject == Player.GameObject)
                 {
                     if (!GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position) && Random.value > 0.5f)
                     {

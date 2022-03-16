@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -42,10 +41,10 @@ public class ExplosionController : MonoBehaviour
         
         collidedGameObjects.Add(other.gameObject);
         
-        if (Vector3.Distance(transform.position,PlayerMovement.Instance.transform.position) <= explosionDistance)
+        if (Vector3.Distance(transform.position,Player.GameObject.transform.position) <= explosionDistance)
         {
-            collidedGameObjects.Add(PlayerMovement.Instance.gameObject);
-            PlayerMovement.Instance.hc.Damage(damage);
+            collidedGameObjects.Add(Player.Movement.gameObject);
+            Player.Health.Damage(damage);
             return;
         }
         

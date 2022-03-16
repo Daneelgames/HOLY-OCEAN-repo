@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class ScoringSystem : MonoBehaviour
 {
@@ -50,7 +49,7 @@ public class ScoringSystem : MonoBehaviour
 
     public void RegisterAction(ScoringActionType scoringAction, float addToCooldown = 5)
     {
-        if (PlayerMovement.Instance.hc.health <= 0)
+        if (Player.Health.health <= 0)
             return;
         
         for (int i = 0; i < Scores.Count; i++)

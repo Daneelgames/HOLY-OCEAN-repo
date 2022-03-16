@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using MrPink.Health;
 using UnityEngine;
 
 public class HumanVisualController : MonoBehaviour

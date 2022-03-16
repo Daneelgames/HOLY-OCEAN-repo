@@ -1,8 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -28,13 +29,27 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
             Restart();
     }
 
     public void Restart()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void LevelCompleted()
+    {
+        /*
+        // save screenshot 
+        var texture = ScreenCapture.CaptureScreenshotAsTexture();
+        // do something with texture
+
+        // cleanup
+        Destroy(texture);
+        */
+        
+        SceneManager.LoadScene(1);
     }
 
     public void SpawnBlueUnit(Vector3 pos)
@@ -47,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
         var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
         if (Random.value > 0.9f)
-            newUnit.AiMovement.MoveToPositionOrder(PlayerMovement.Instance.transform.position);
+            newUnit.AiMovement.MoveToPositionOrder(Player.GameObject.transform.position);
         else 
             newUnit.AiMovement.TakeCoverOrder();
     }
@@ -55,7 +70,7 @@ public class GameManager : MonoBehaviour
     public bool IsPositionInPlayerFov(Vector3 pos)
     {
         bool inFov = false;
-        var viewportPoint = PlayerMovement.Instance.MainCam.WorldToViewportPoint(pos);
+        var viewportPoint = Player.MainCamera.WorldToViewportPoint(pos);
         if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1)
             inFov = true;
         return inFov;

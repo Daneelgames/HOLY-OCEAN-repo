@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using MrPink.Health;
 using UnityEngine;
 
 public class UnitVision : MonoBehaviour
@@ -35,27 +36,22 @@ public class UnitVision : MonoBehaviour
                 if (enemy.health <= 0)
                 {
                     if (visibleEnemies.Contains(enemy))
-                    {
                         visibleEnemies.Remove(enemy);
-                    }
+                    
                     continue;
                 }
                 
-                if (enemy.team == hc.team || 
-                    enemy.team == HealthController.Team.NULL)
+                if (enemy.team == hc.team || enemy.team == Team.NULL)
                     continue;
 
                 if (LineOfSight(enemy.visibilityTrigger.transform))
                 {
                     if (!visibleEnemies.Contains(enemy))
-                    {
                         visibleEnemies.Add(enemy);
-                    }
                 }
                 else if (visibleEnemies.Contains(enemy))
-                {
                     visibleEnemies.Remove(enemy);
-                }
+                
                 yield return new WaitForSeconds(0.1f);   
             }
             
