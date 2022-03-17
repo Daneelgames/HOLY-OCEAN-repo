@@ -50,7 +50,7 @@ public class LevelGenerator : MonoBehaviour
         Instance = this;
     }
 
-    void Start()
+    IEnumerator Start()
     {
         if (generatedBuildingFolder == null)
         {
@@ -64,8 +64,11 @@ public class LevelGenerator : MonoBehaviour
                 StartCoroutine(GenerateLevel());
                 break;
             case LevelType.Narrative:
+                
                 // choose here what narrative sequence to load?
                 // and then set level ready
+                
+                yield return new WaitForSecondsRealtime(1);
                 levelIsReady = true;
                 break;
         }

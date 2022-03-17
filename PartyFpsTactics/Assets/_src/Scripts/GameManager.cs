@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
         Destroy(texture);
         */
         
+        ScreenshotSaver.Instance.SaveScreenshot();
         SceneManager.LoadScene(1);
     }
 

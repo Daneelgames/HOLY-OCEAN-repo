@@ -166,6 +166,8 @@ namespace MrPink.PlayerSystem
         {
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
+            if (LevelGenerator.Instance.levelIsReady == false)
+                return;
         
             if (leftWeapon)
             {

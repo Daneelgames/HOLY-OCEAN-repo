@@ -100,6 +100,9 @@ namespace MrPink.PlayerSystem
 
         private void LateUpdate()
         {
+            if (LevelGenerator.Instance.levelIsReady == false)
+                return;
+            
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         

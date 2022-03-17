@@ -18,6 +18,7 @@ public class SpyCam : MonoBehaviour
     {
         while (true)
         {
+            yield return null;
             for (int i = 0; i < UnitsManager.Instance.unitsInGame.Count; i++)
             {
                 if (i >= UnitsManager.Instance.unitsInGame.Count)
