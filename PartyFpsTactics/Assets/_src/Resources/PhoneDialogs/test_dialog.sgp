@@ -1,0 +1,149 @@
+﻿{
+  "$type": "ScriptGraphPro.DTO.ScriptGraphDTO, ScriptGraphPro",
+  "Nodes": {
+    "$type": "System.Collections.Generic.List`1[[ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro]], mscorlib",
+    "$values": [
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 1852,
+          "y": 20
+        },
+        "CommandData": {
+          "$type": "MrPink.PhoneScripting.ScriptCommands.MessageCommand, Assembly-CSharp",
+          "UUID": "34bc8c1c-8c89-4240-8cb5-42f19db82243",
+          "Text": "Слушают хардбас бас",
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib",
+            "out": "e1ae5a8c-dda4-43cd-a73c-005922c221ea"
+          }
+        }
+      },
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 0,
+          "y": 0
+        },
+        "CommandData": {
+          "$type": "ScriptGraphPro.Commands.ScriptStartCommand, ScriptGraphPro",
+          "UUID": "370aa4a3-284d-4cba-bf37-c5ebbb81ba5f",
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib",
+            "out": "5426478b-c81d-49dc-8990-e809128bd7ee"
+          }
+        }
+      },
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 154,
+          "y": -4
+        },
+        "CommandData": {
+          "$type": "MrPink.PhoneScripting.ScriptCommands.MessageCommand, Assembly-CSharp",
+          "UUID": "5426478b-c81d-49dc-8990-e809128bd7ee",
+          "Text": "Раз раз раз это хардбас",
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib",
+            "out": "d1bae95c-9c2d-4821-ba3d-953b2cdddfed"
+          }
+        }
+      },
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 1379,
+          "y": 204
+        },
+        "CommandData": {
+          "$type": "MrPink.PhoneScripting.ScriptCommands.MessageCommand, Assembly-CSharp",
+          "UUID": "84b7a83a-b1fa-43a6-8790-34d4d9f1a9ce",
+          "Text": "Ты чего наделал...",
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib",
+            "out": "e1ae5a8c-dda4-43cd-a73c-005922c221ea"
+          }
+        }
+      },
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 1378,
+          "y": 18
+        },
+        "CommandData": {
+          "$type": "MrPink.PhoneScripting.ScriptCommands.MessageCommand, Assembly-CSharp",
+          "UUID": "b14676ea-cf5b-4bd4-b519-be13965fea30",
+          "Text": "И на найках пацаны",
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib",
+            "out": "34bc8c1c-8c89-4240-8cb5-42f19db82243"
+          }
+        }
+      },
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 639,
+          "y": -2
+        },
+        "CommandData": {
+          "$type": "MrPink.PhoneScripting.ScriptCommands.ChoiceCommand, Assembly-CSharp",
+          "UUID": "d1bae95c-9c2d-4821-ba3d-953b2cdddfed",
+          "Choices": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib",
+            "right": "Все в спортивках адидас",
+            "wrong": "Скучный вариант ответа"
+          },
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib",
+            "right": "b14676ea-cf5b-4bd4-b519-be13965fea30",
+            "wrong": "84b7a83a-b1fa-43a6-8790-34d4d9f1a9ce"
+          }
+        }
+      },
+      {
+        "$type": "ScriptGraphPro.DTO.ScriptCommandNodeDTO, ScriptGraphPro",
+        "Position": {
+          "x": 2332,
+          "y": 148
+        },
+        "CommandData": {
+          "$type": "MrPink.PhoneScripting.ScriptCommands.EndDialogue, Assembly-CSharp",
+          "UUID": "e1ae5a8c-dda4-43cd-a73c-005922c221ea",
+          "OutputConnections": {
+            "$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Nullable`1[[System.Guid, mscorlib]], mscorlib]], mscorlib"
+          }
+        }
+      }
+    ]
+  },
+  "Meta": {
+    "$type": "ScriptGraphPro.DTO.ScriptMetaDTO, ScriptGraphPro",
+    "Bookmarks": {
+      "$type": "System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[ScriptGraphPro.DTO.BookmarkDTO, ScriptGraphPro]], mscorlib",
+      "370aa4a3-284d-4cba-bf37-c5ebbb81ba5f": {
+        "$type": "ScriptGraphPro.DTO.BookmarkDTO, ScriptGraphPro",
+        "IsForced": true,
+        "Title": "Script Start"
+      }
+    },
+    "Offset": {
+      "x": 640,
+      "y": 422
+    },
+    "ReturnValues": {
+      "$type": "System.Collections.Generic.List`1[[ReturnValueDTO, ScriptGraphPro]], mscorlib",
+      "$values": [
+        {
+          "$type": "ReturnValueDTO, ScriptGraphPro",
+          "ID": "e636e69b-5bd4-49e9-9631-8459460a919e",
+          "IsError": true,
+          "Title": "Error",
+          "IsDeprecated": false
+        }
+      ]
+    }
+  }
+}
