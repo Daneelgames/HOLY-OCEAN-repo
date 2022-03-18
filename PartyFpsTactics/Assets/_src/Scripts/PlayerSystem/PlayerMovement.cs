@@ -111,12 +111,12 @@ namespace MrPink.PlayerSystem
 
         void GetMovement()
         {
-            if ((Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.D)) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
+            if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, -minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
                 leaning = true;
             }
-            else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.A)) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
+            else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
                 leaning = true;
