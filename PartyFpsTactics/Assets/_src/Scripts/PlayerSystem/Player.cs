@@ -26,6 +26,8 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerInventory _inventory;
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private PlayerInteractor _interactor;
         
         
         public static GameObject GameObject
@@ -48,6 +50,8 @@ namespace MrPink.PlayerSystem
 
         public static PlayerInventory Inventory
             => _instance._inventory;
+        public static PlayerInteractor Interactor
+            => _instance._interactor;
         
         
         private void Awake()

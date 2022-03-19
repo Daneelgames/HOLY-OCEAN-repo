@@ -29,6 +29,11 @@ public class PlayerInteractor : MonoBehaviour
     {
         if (selectedIOTransform)
             uiItemNameFeedback.transform.position = cam.WorldToScreenPoint(selectedIOTransform.position);
+
+        if (Input.GetKeyDown(KeyCode.E) && selectedIO != null)
+        {
+            InteractableManager.Instance.InteractWithIO(selectedIO);
+        }
     }
 
     IEnumerator RaycastInteractables()

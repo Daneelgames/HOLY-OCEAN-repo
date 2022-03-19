@@ -17,17 +17,27 @@ namespace _src.Scripts.Data
     {
         public ScriptedEventType scriptedEventType = ScriptedEventType.SpawnObject;
 
-        public float delayIn = 1;
-        public float delayOut = 1;
         [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
         public GameObject prefabToSpawn;
 
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public PhoneDialogue dialogueToStart;
+        
+        [ShowIf("scriptedEventType", ScriptedEventType.SetCurrentLevel)]
+        public int currentLevelToSet;
+        
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
+        [Tooltip("Spawns object inside player's camera at zero local coordinates")]
+        public bool spawnInsideCamera = false;
+        
+        
+        [Header("Time")]
+        public float delayIn = 1;
+        public float delayOut = 1;
     }
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel
     }
 }

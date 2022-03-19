@@ -26,6 +26,7 @@ public class Respawner : MonoBehaviour
         
         // create enemy spawns
         tilesForSpawns = new List<GameObject>();
+        enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevel].enemiesPerRoomMinMax;
 
         for (int i = 0; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
         {
@@ -64,7 +65,7 @@ public class Respawner : MonoBehaviour
     {
         if (Player.GameObject.transform.position.y < corpseShredderY)
         {
-            GameManager.Instance.Restart();
+            GameManager.Instance.StartProcScene();
             return;
         }
         for (int i = UnitsManager.Instance.unitsInGame.Count - 1; i >= 0; i--)

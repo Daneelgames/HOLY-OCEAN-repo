@@ -29,10 +29,12 @@ public class LevelGenerator : MonoBehaviour
     [Header("SETTINGS")]
     public List<int> levelsHeights = new List<int>();
     [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
+    
     public Vector2Int coversPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
+    
     public LayerMask solidsUnitsLayerMask;
     public bool randomLevelRotation = false;
     public int explosiveBarrelsAmount = 2;
@@ -52,6 +54,7 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator Start()
     {
+        Init();
         if (generatedBuildingFolder == null)
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
@@ -72,6 +75,23 @@ public class LevelGenerator : MonoBehaviour
                 levelIsReady = true;
                 break;
         }
+    }
+
+    void Init()
+    {
+        var currentLevel = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevel];
+        levelsScaleMinMaxX = currentLevel.levelsScaleMinMaxX;
+        levelsScaleMinMaxZ = currentLevel.levelsScaleMinMaxZ;
+        levelGoalPrefab = currentLevel.levelGoalPrefab;
+        tilePrefab = currentLevel.tilePrefab;
+        tileWallPrefab = currentLevel.tileWallPrefab;
+        tileWallThinPrefab = currentLevel.tileWallThinPrefab;
+        levelsHeights = currentLevel.levelsHeights;
+        explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
+        coversPerLevelMinMax = currentLevel.coversPerLevelMinMax;
+        stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
+        thinWallsPerLevelMinMax = currentLevel.thinWallsPerLevelMinMax;
+        distanceToCutCeilingUnderStairsMinMax = currentLevel.distanceToCutCeilingUnderStairsMinMax;
     }
 
     IEnumerator GenerateLevel()
