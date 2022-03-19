@@ -9,7 +9,9 @@ public class PhoneInterface : MonoBehaviour
     public static PhoneInterface Instance;
     public GameObject phoneVisual;
     public GameObject logoEye;
-
+    public GameObject playerAnswerButtons;
+    
+    
     public Text nameText;
     public Text messageText;
     public Text playerAnswerText;
@@ -26,6 +28,7 @@ public class PhoneInterface : MonoBehaviour
     private void Start()
     {
         Instance = this;
+        TogglePlayerAnswerButtons(false);
     }
     
     private void Update()
@@ -39,6 +42,10 @@ public class PhoneInterface : MonoBehaviour
             PlayerAnswered(false);
     }
 
+    public void TogglePlayerAnswerButtons(bool active)
+    {
+        playerAnswerButtons.SetActive(active);
+    }
     public void NewMessage(string _nameText, string _messageText, bool clearPlayerAnswer)
     {
         nameText.text = _nameText;
@@ -55,6 +62,9 @@ public class PhoneInterface : MonoBehaviour
 
     private void PlayerAnswered(bool positiveAnswer)
     {
+        if (!FlatEventManager.Instance.CanAnswer)
+            return;
+        
         if (positiveAnswer)
         {
             playerAnswerText.text = ":-)";

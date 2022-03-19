@@ -14,7 +14,10 @@ public class FlatEventManager : MonoBehaviour
     public static FlatEventManager Instance;
     private bool playerAnswered = false;
 
-    enum LastPlayerAnswer
+    public bool CanAnswer => !playerAnswered;
+
+
+enum LastPlayerAnswer
     {
         Negative, Positive
     }
@@ -61,10 +64,12 @@ public class FlatEventManager : MonoBehaviour
                 continue;
             
             playerAnswered = false;
+            PhoneInterface.Instance.TogglePlayerAnswerButtons(true);
             while (!playerAnswered)
             {
                 yield return null;
             }
+            PhoneInterface.Instance.TogglePlayerAnswerButtons(false);
             
             if (_lastPlayerAnswer == LastPlayerAnswer.Positive && phrase.answerOnPositive)
             {
@@ -87,6 +92,10 @@ public class FlatEventManager : MonoBehaviour
     public void PlayerAnswered(bool positiveAnswer)
     {
         playerAnswered = true;
+        if (positiveAnswer)
+            _lastPlayerAnswer = LastPlayerAnswer.Positive;
+        else
+            _lastPlayerAnswer = LastPlayerAnswer.Negative;
     }
 
     IEnumerator RunSpawn(ScriptedEvent _event)

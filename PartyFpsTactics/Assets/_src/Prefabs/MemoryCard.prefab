@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 224648239025133037}
   - component: {fileID: 1657009938278364103}
   - component: {fileID: 3254787945633520403}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: MemoryStick001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6570110405909264936}
   m_LocalRotation: {x: -0.6981651, y: -0.11207399, z: -0.11207385, w: 0.6981722}
-  m_LocalPosition: {x: 0.00000053225085, y: 0, z: -0.012939857}
-  m_LocalScale: {x: 0.019841027, y: 0.019841027, z: 0.019841027}
+  m_LocalPosition: {x: 0.00000053386, y: -0, z: -0.01294}
+  m_LocalScale: {x: 0.029622653, y: 0.029622653, z: 0.029622653}
   m_Children: []
   m_Father: {fileID: 9170167033861476189}
   m_RootOrder: 0
@@ -91,7 +91,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9170167033861476189}
-  m_Layer: 0
+  - component: {fileID: 2750620269132520170}
+  - component: {fileID: -2958212832291290666}
+  m_Layer: 11
   m_Name: MemoryCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,3 +115,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2750620269132520170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8361261429759661543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df8d2efc063dfab4fa0b6fad62228406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveObjectName: Memory Card
+--- !u!135 &-2958212832291290666
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8361261429759661543}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
