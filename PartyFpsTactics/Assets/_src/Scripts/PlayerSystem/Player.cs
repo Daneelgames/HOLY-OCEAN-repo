@@ -23,6 +23,8 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerWeaponControls _weapon;
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private PlayerThrowablesControls _throwableControls;
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerInventory _inventory;
@@ -47,6 +49,8 @@ namespace MrPink.PlayerSystem
 
         public static PlayerWeaponControls Weapon
             => _instance._weapon;
+        public static PlayerThrowablesControls ThrowableControls
+            => _instance._throwableControls;
 
         public static PlayerInventory Inventory
             => _instance._inventory;

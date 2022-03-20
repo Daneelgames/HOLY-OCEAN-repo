@@ -40,6 +40,8 @@ public class LevelGenerator : MonoBehaviour
     public int explosiveBarrelsAmount = 2;
 
     [Header("SCALE IS SCALED BY 2 IN CODE")]
+    public Vector2Int levelsPosMinMaxX = new Vector2Int(-10, 10);
+    public Vector2Int levelsPosMinMaxZ = new Vector2Int(-10, 10);
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
     [Space]
@@ -79,7 +81,9 @@ public class LevelGenerator : MonoBehaviour
 
     void Init()
     {
-        var currentLevel = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevel];
+        var currentLevel = ProgressionManager.Instance.CurrentLevel;
+        levelsPosMinMaxX = currentLevel.levelsPosMinMaxX;
+        levelsPosMinMaxZ = currentLevel.levelsPosMinMaxZ;
         levelsScaleMinMaxX = currentLevel.levelsScaleMinMaxX;
         levelsScaleMinMaxZ = currentLevel.levelsScaleMinMaxZ;
         levelGoalPrefab = currentLevel.levelGoalPrefab;
@@ -88,6 +92,7 @@ public class LevelGenerator : MonoBehaviour
         tileWallThinPrefab = currentLevel.tileWallThinPrefab;
         levelsHeights = currentLevel.levelsHeights;
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
+        explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
         coversPerLevelMinMax = currentLevel.coversPerLevelMinMax;
         stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
         thinWallsPerLevelMinMax = currentLevel.thinWallsPerLevelMinMax;
@@ -114,10 +119,10 @@ public class LevelGenerator : MonoBehaviour
         {
             if (i != 0 && Random.value > 0.66f)
             {
-                yield return StartCoroutine(MakeStairs(i));
+                yield return StartCoroutine(MakeLadders(i));
             }   
             
-            yield return StartCoroutine(MakeStairs(i));
+            yield return StartCoroutine(MakeLadders(i));
         }
         
         //yield return StartCoroutine(SpawnCovers());
@@ -146,7 +151,7 @@ public class LevelGenerator : MonoBehaviour
             levelY = levelIndex * 5;
         }
         
-        Vector3 levelPosition = new Vector3(0, levelY, 0);
+        Vector3 levelPosition = new Vector3(Random.Range(levelsPosMinMaxX.x, levelsPosMinMaxX.y), levelY, Random.Range(levelsPosMinMaxZ.x, levelsPosMinMaxZ.y));
         
         Vector3Int levelSize = new Vector3Int(Random.Range(levelsScaleMinMaxX.x, levelsScaleMinMaxX.y) * 2,
             levelsHeights[levelIndex],Random.Range(levelsScaleMinMaxZ.x, levelsScaleMinMaxZ.y) * 2);
@@ -371,10 +376,21 @@ public class LevelGenerator : MonoBehaviour
         }
     }
     
-    IEnumerator MakeStairs(int i)
+    IEnumerator MakeLadders(int i)
     {
         Level levelFrom = spawnedLevels[i];
         Level levelTo = spawnedLevels[i + 1];
+
+        for (int j = levelFrom.tilesInside.Count - 1; j >= 0; j--)
+        {
+            if (levelFrom.tilesInside[j] == null)
+                levelFrom.tilesInside.RemoveAt(j);
+        }
+        for (int j = levelTo.tilesInside.Count - 1; j >= 0; j--)
+        {
+            if (levelTo.tilesInside[j] == null)
+                levelTo.tilesInside.RemoveAt(j);
+        }
         
         Transform levelFromClosestTile = levelFrom.tilesInside[Random.Range(0, levelFrom.tilesInside.Count)].transform;
         Transform levelToClosestTile = levelTo.tilesInside[levelTo.tilesInside.Count/2].transform;
@@ -411,16 +427,25 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        List<Transform> stairsTiles = new List<Transform>();
+        yield return null;
+        StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true));
+    }
 
+    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, int maxBridgeTiles = -1)
+    {
+        List<Transform> stairsTiles = new List<Transform>();
+        
         // SPAWN BRIDGE
-        float bridgeTilesAmount = Vector3.Distance(levelFromClosestTile.position, levelToClosestTile.position);
+        float bridgeTilesAmount = Vector3.Distance(fromPosition, toPosition);
+
+        if (maxBridgeTiles > 0)
+            bridgeTilesAmount = Mathf.Clamp(bridgeTilesAmount, 1, maxBridgeTiles);
         for (int j = 0; j <= bridgeTilesAmount; j++)
         {
             Quaternion rot = Quaternion.identity;
-            rot = Quaternion.LookRotation(levelToClosestTile.position - levelFromClosestTile.position);
+            rot = Quaternion.LookRotation(toPosition - fromPosition);
 
-            Vector3 pos = (levelFromClosestTile.position + (levelToClosestTile.position - levelFromClosestTile.position).normalized * j);
+            Vector3 pos = (fromPosition + (toPosition-fromPosition).normalized * j);
             var newStairsTile = Instantiate(tilePrefab, pos, rot);
             
             var transformLocalScale = newStairsTile.transform.localScale;
@@ -437,51 +462,30 @@ public class LevelGenerator : MonoBehaviour
                 
                 newStairsTileHandle.transform.localPosition = new Vector3(x, 0.898f, 0);
                 newStairsTileHandle.transform.localScale = new Vector3(0.1f, 1f, 1);
+                stairsTiles.Add(newStairsTileHandle.transform);
             }
             stairsTiles.Add(newStairsTile.transform);
-            yield return null;
-        }
-
-        // REMOVE TOP TILES AROUND
-        for (int j = 0; j < stairsTiles.Count-1; j++)
-        {
-            Vector3 pos1 = new Vector3(stairsTiles[j].position.x, levelTo.tilesInside[0].transform.position.y, stairsTiles[j].position.z);
-            for (int k = levelTo.tilesInside.Count - 1; k >= 0; k--)
-            {
-                if (levelTo.tilesInside[k].transform == levelToClosestTile)
-                    continue;
-                Vector3 pos2 = levelTo.tilesInside[k].transform.position;
-                if (Vector3.Distance(pos1, pos2) < Random.Range(distanceToCutCeilingUnderStairsMinMax.x,distanceToCutCeilingUnderStairsMinMax.y))
-                {
-                    Destroy(levelTo.tilesInside[k]);
-                    levelTo.tilesInside.RemoveAt(k);
-                }
-            } 
             
-            for (int k = levelTo.tilesWalls.Count - 1; k >= 0; k--)
+            if (destroyTilesAround)
             {
-                if (levelTo.tilesWalls[k].transform == levelToClosestTile)
-                    continue;
+                var hit = Physics.OverlapSphere(newStairsTile.transform.position, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), 1 << 6);
                 
-                pos1 = new Vector3(pos1.x, levelTo.tilesWalls[k].transform.position.y, pos1.z);
-                Vector3 pos2 = levelTo.tilesWalls[k].transform.position;
-                if (Vector3.Distance(pos1, pos2) < Random.Range(distanceToCutCeilingUnderStairsMinMax.x,distanceToCutCeilingUnderStairsMinMax.y))
+                for (int i = 0; i < hit.Length; i++)
                 {
-                    Destroy(levelTo.tilesWalls[k]);
-                    levelTo.tilesWalls.RemoveAt(k);
+                    if (hit[i].transform == null)
+                        continue;
+
+                    if (newStairsTile == null || stairsTiles.Contains(hit[i].transform) ||
+                        hit[i].transform.position.y < newStairsTile.transform.position.y + 1)
+                    {
+                        continue;
+                    }
+
+                    var bodyPart = hit[i].transform.gameObject.GetComponent<BodyPart>();
+                    bodyPart.DamageTile(bodyPart.localHealth);
                 }
             }
-            for (int k = levelFrom.tilesWalls.Count - 1; k >= 0; k--)
-            {
-                pos1 = new Vector3(pos1.x, levelFrom.tilesWalls[k].transform.position.y, pos1.z);
-                Vector3 pos2 = levelFrom.tilesWalls[k].transform.position;
-                if (Vector3.Distance(pos1, pos2) < Random.Range(distanceToCutCeilingUnderStairsMinMax.x,distanceToCutCeilingUnderStairsMinMax.y))
-                {
-                    Destroy(levelFrom.tilesWalls[k]);
-                    levelFrom.tilesWalls.RemoveAt(k);
-                }
-            }
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -553,6 +557,13 @@ public class LevelGenerator : MonoBehaviour
         
         StartCoroutine(TileDamagedCoroutine(tile.transform));
     }
+    public void TileDamaged(Transform tile)
+    {
+        if (tilesToDamage.Contains(tile))
+            return;
+        
+        StartCoroutine(TileDamagedCoroutine(tile));
+    }
 
     private List<Transform> tilesToDamage = new List<Transform>();
 
@@ -573,8 +584,8 @@ public class LevelGenerator : MonoBehaviour
         }
 
         tilesToDamage.Remove(tile);
-        tile.position = originalPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f),
-            Random.Range(-0.1f, 0.1f));;
+        if (tile)
+            tile.position = originalPosition;
     }
     public void DebrisParticles(Vector3 pos)
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MrPink.Health;
 using UnityEngine;
 
@@ -23,6 +24,14 @@ public class BodyPart : MonoBehaviour
             }
             
             LevelGenerator.Instance.DebrisParticles(transform.position);
+            var hit = Physics.OverlapSphere(transform.position, 1, 1 << 6);
+            for (int i = 0; i < hit.Length; i++)
+            {
+                if (hit[i].transform == transform)
+                    continue;
+                
+                LevelGenerator.Instance.TileDamaged(hit[i].transform);
+            }
             Destroy(gameObject); 
             return;
         }

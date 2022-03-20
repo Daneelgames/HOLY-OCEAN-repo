@@ -8,7 +8,9 @@ public class ProgressionManager : MonoBehaviour
     public static ProgressionManager Instance;
     public List<ProcLevelData> levelDatas;
     
-    public int currentLevel = 0;
+    public int currentLevelIndex = 0;
+    
+    public ProcLevelData CurrentLevel => levelDatas[currentLevelIndex];
     void Awake()
     {
         if (Instance != null)
@@ -19,8 +21,9 @@ public class ProgressionManager : MonoBehaviour
 
     public void SetCurrentLevel(int index)
     {
-        currentLevel = index;
+        currentLevelIndex = index;
     }
+
 }
 
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace _src.Scripts.Data
     [CreateAssetMenu(fileName = "ProcLevelData", menuName = "ScriptableObjects/ProcLevelData", order = 1)]
     public class ProcLevelData : ScriptableObject
     {
+        public Vector2Int levelsPosMinMaxX = new Vector2Int(-10, 10);
+        public Vector2Int levelsPosMinMaxZ = new Vector2Int(-10, 10);
         public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
         public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
         
@@ -27,5 +30,7 @@ namespace _src.Scripts.Data
         public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
         public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
         public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
+
+        public List<Tool> toolsInShop;
     }
 }

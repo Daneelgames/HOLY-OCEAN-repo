@@ -47,6 +47,9 @@ public class CoverSystem : MonoBehaviour
                     if (j >= covers[i].coverSpotsList.Count)
                         continue;
 
+                    if (i >= covers.Count)
+                        continue;
+                    
                     if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position + Vector3.up * 0.5f, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, 1 << 6))
                     {
                         covers[i].ToggleSpot(j, false);

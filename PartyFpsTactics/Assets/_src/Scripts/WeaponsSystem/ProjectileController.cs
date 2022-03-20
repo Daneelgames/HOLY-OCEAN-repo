@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Tools;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,6 +18,9 @@ public class ProjectileController : MonoBehaviour
     public float lifeTime = 2;
 
     public ToolType toolType = ToolType.Null;
+
+    [ShowIf("toolType", ToolType.CustomLadder)]
+    public CustomLadder customLadder;
     
     public bool dieOnContact = true;
     public bool ricochetOnContact = false;
@@ -67,6 +71,17 @@ public class ProjectileController : MonoBehaviour
         Gizmos.DrawRay(lastPosition, currentPosition - lastPosition);
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (dead)
+            return;
+        
+        if (other.gameObject.layer == 6 && stickOnContact)
+        {
+            StickToObject(other.collider);
+        }
+    }
+
     private void Update()
     {
         if (dead)
@@ -105,7 +120,7 @@ public class ProjectileController : MonoBehaviour
             if (hit.transform == null)
                 return;
             
-            if (hit.collider.gameObject == ownerHc.gameObject)
+            if (ownerHc != null && hit.collider.gameObject == ownerHc.gameObject)
                 return;
                 
             TryToDamage(hit.collider);
@@ -221,6 +236,7 @@ public class ProjectileController : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = true;
         dead = true;
+        customLadder.ConstructLadder(ownerHc.transform.position);
     }
 
     IEnumerator DeathCoroutine()

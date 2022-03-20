@@ -26,16 +26,22 @@ public class Respawner : MonoBehaviour
         
         // create enemy spawns
         tilesForSpawns = new List<GameObject>();
-        enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevel].enemiesPerRoomMinMax;
+        enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].enemiesPerRoomMinMax;
 
         for (int i = 0; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
         {
             tilesForSpawns.Clear();
-            foreach (var tile in LevelGenerator.Instance.spawnedLevels[i].tilesInside)
+            for (var index = LevelGenerator.Instance.spawnedLevels[i].tilesInside.Count - 1; index >= 0; index--)
             {
+                var tile = LevelGenerator.Instance.spawnedLevels[i].tilesInside[index];
+                if (tile == null)
+                {
+                    LevelGenerator.Instance.spawnedLevels[i].tilesInside.RemoveAt(index);
+                    continue;
+                }
                 tilesForSpawns.Add(tile);
             }
-            
+
             for (int j = 0; j < alliesAmount; j++)
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];

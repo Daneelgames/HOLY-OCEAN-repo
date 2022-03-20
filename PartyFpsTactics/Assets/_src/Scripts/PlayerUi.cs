@@ -18,11 +18,6 @@ public class PlayerUi : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
-    {
-        
-    }
-
     public void MarkEnemy(HealthController enemy)
     {
         // store his position
