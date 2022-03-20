@@ -13,6 +13,8 @@ public class PlayerUi : MonoBehaviour
 
     public Dictionary<HealthController, Image> markedEnemies = new Dictionary<HealthController, Image>();
     public Vector3 enemyMarkerOffset;
+
+    public Animator shieldFeedbackAnim;
     private void Awake()
     {
         Instance = this;
@@ -77,6 +79,15 @@ public class PlayerUi : MonoBehaviour
         }
     }
 
+    public void AddShieldFeedback()
+    {
+        shieldFeedbackAnim.SetBool("Active", true);
+    }
+    public void RemoveShieldFeedback()
+    {
+        shieldFeedbackAnim.SetBool("Active", false);
+    }
+    
     Vector3 OnScreenPosition(Image marker, Vector3 targetPos)
     {
         // Giving limits to the icon so it sticks on the screen

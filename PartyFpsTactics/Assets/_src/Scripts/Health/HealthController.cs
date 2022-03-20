@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.PlayerSystem;
+using MrPink.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -72,8 +73,14 @@ namespace MrPink.Health
         {
             if (health <= 0)
                 return;
-        
-            health -= damage;
+            
+            if (Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
+            {
+                PlayerUi.Instance.RemoveShieldFeedback();
+                PlayerInventory.Instance.RemoveTool(ToolType.OneTimeShield);
+            }
+            else
+                health -= damage;
         
 
             if (health <= 0)

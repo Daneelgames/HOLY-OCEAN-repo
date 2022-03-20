@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MrPink.Tools;
 using UnityEngine;
@@ -6,9 +7,16 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerInventory : MonoBehaviour
     {
+        public static PlayerInventory Instance;
+        
         public Dictionary<ToolType, int> amountOfEachTool = new Dictionary<ToolType, int>();
 
         public WeaponController startingPistolWeapon;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Start()
         {
@@ -31,10 +39,23 @@ namespace MrPink.PlayerSystem
                     break;
             }
         }
+
+        public bool HasTool(ToolType toolType)
+        {
+            if (amountOfEachTool.ContainsKey(toolType) && amountOfEachTool[toolType] > 0)
+                return true;
+
+            return false;
+        }
+        
         public void AddTool(Tool tool)
         {
             if (tool.tool == ToolType.DualWeilder)
                 SpawnPlayerWeapon(startingPistolWeapon, 1);
+            
+            if (tool.tool == ToolType.OneTimeShield)
+                
+                PlayerUi.Instance.AddShieldFeedback();
             
             if (amountOfEachTool.ContainsKey(tool.tool))
             {
