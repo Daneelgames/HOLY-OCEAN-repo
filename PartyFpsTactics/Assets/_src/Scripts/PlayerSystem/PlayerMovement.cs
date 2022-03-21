@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using MrPink.Health;
 using UnityEngine;
 
@@ -330,7 +331,14 @@ namespace MrPink.PlayerSystem
 
         void ApplyGrindRailMovement()
         {
+            var targetTransform = activeGrindRail.GetTargetNode();
+            if (targetTransform == null)
+            {
+                SetGrindRail(null);
+                return;
+            }
             
+            rb.velocity = (targetTransform.position - transform.position).normalized * 10;
         }
 
         public void SetGrindRail(GrindRail rail)

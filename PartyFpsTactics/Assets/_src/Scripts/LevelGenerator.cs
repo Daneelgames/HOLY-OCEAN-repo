@@ -17,26 +17,30 @@ public class LevelGenerator : MonoBehaviour
     public enum LevelType{Game,Narrative}
 
     public LevelType levelType = LevelType.Game;
-    public GameObject levelGoalPrefab;
-    public GameObject tilePrefab;
-    public GameObject tileWallPrefab;
-    public GameObject tileWallThinPrefab;
-    public GameObject explosiveBarrelPrefab;
-    public Cover coverPrefab;
     public List<Level> spawnedLevels = new List<Level>();
 
     public Transform generatedBuildingFolder;
     [Header("SETTINGS")]
     public List<int> levelsHeights = new List<int>();
-    [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
     
     public bool spawnWalls = true;
     public bool spawnLadders = true;
     public bool spawnAdditionalTiles = true;
 
+    [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
+    
+    public GameObject levelGoalPrefab;
+    public GameObject tilePrefab;
+    public GameObject tileWallPrefab;
+    public GameObject tileWallThinPrefab;
+    public GameObject explosiveBarrelPrefab;
+    public GameObject grindRailsPrefab;
+    public Cover coverPrefab;
+    
+    public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
+    public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
     public Vector2Int coversPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
-    public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
     public LayerMask solidsUnitsLayerMask;
@@ -98,6 +102,8 @@ public class LevelGenerator : MonoBehaviour
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
         explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
         coversPerLevelMinMax = currentLevel.coversPerLevelMinMax;
+        grindRailsMinMax = currentLevel.grindRailsPerLevelMinMax;
+        grindRailsPrefab = currentLevel.grindRailsPrefab;
         stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
         thinWallsPerLevelMinMax = currentLevel.thinWallsPerLevelMinMax;
         distanceToCutCeilingUnderStairsMinMax = currentLevel.distanceToCutCeilingUnderStairsMinMax;
@@ -148,8 +154,11 @@ public class LevelGenerator : MonoBehaviour
         Respawner.Instance.Init();
         Player.Movement.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         levelIsReady = true;
-        StartCoroutine(SpawnExplosiveBarrels());
+        
         SpawnGoalOnTop();
+        
+        yield return StartCoroutine(SpawnExplosiveBarrels());
+        yield return StartCoroutine(SpawnGrindRails());
     }
 
 
@@ -561,6 +570,20 @@ public class LevelGenerator : MonoBehaviour
             Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
             yield return null;
         }
+    }
+    
+    IEnumerator SpawnGrindRails()
+    {
+            for (int j = 0; j < Random.Range(grindRailsMinMax.x, grindRailsMinMax.y); j++)
+            {
+                var randomLevel = spawnedLevels[Random.Range(0,spawnedLevels.Count)];
+                var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
+
+                Vector3 pos = randomTile.transform.position + Vector3.up;
+                randomLevel.tilesInside.Remove(randomTile);
+                Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+                yield return null;
+            }
     }
 
     void SpawnGoalOnTop()
