@@ -69,6 +69,9 @@ namespace MrPink.PlayerSystem
         private bool dead = false;
         private Transform killerToLookAt;
         private bool canUseCoyoteTime = true;
+        private float additinalFallForce;
+
+        private GrindRail activeGrindRail;
 
         private void Start()
         {
@@ -107,7 +110,13 @@ namespace MrPink.PlayerSystem
 
             GroundCheck();
             SlopeCheck();
-            ApplyMovement();
+            
+            if (activeGrindRail == null)
+                ApplyFreeMovement();
+            else
+            {
+                ApplyGrindRailMovement();
+            }
         }
 
         private void LateUpdate()
@@ -218,6 +227,7 @@ namespace MrPink.PlayerSystem
             // jump
             if (Input.GetKeyDown(KeyCode.Space) && (_grounded || coyoteTime > 0))
             {
+                SetGrindRail(null);
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 StartCoroutine(CoyoteTimeCooldown());
                 coyoteTime = 0;
@@ -286,7 +296,7 @@ namespace MrPink.PlayerSystem
             if (Physics.CheckSphere(transform.position, 0.25f, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 _grounded = true;
-                
+                additinalFallForce = 0;
                 if (canUseCoyoteTime)
                     coyoteTime = 0;
             }
@@ -296,7 +306,8 @@ namespace MrPink.PlayerSystem
                 {
                     coyoteTime = coyoteTimeMax;   
                 }
-                
+
+                additinalFallForce += Time.deltaTime;
                 _grounded = false;
                 
                 if (canUseCoyoteTime && coyoteTime > 0)
@@ -306,15 +317,25 @@ namespace MrPink.PlayerSystem
             }
         }
     
-        void ApplyMovement()
+        void ApplyFreeMovement()
         {
             float resultGravity = 0;
             if (!_grounded)
-                resultGravity = gravity;
+                resultGravity = gravity + additinalFallForce;
             else if (!onSlope)
                 resultGravity = 1;
 
             rb.velocity = _resultVelocity + Vector3.down * resultGravity;
+        }
+
+        void ApplyGrindRailMovement()
+        {
+            
+        }
+
+        public void SetGrindRail(GrindRail rail)
+        {
+            activeGrindRail = rail;
         }
     
         void MouseLook()

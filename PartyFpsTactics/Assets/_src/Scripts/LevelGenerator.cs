@@ -30,6 +30,10 @@ public class LevelGenerator : MonoBehaviour
     public List<int> levelsHeights = new List<int>();
     [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
     
+    public bool spawnWalls = true;
+    public bool spawnLadders = true;
+    public bool spawnAdditionalTiles = true;
+
     public Vector2Int coversPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
@@ -97,6 +101,10 @@ public class LevelGenerator : MonoBehaviour
         stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
         thinWallsPerLevelMinMax = currentLevel.thinWallsPerLevelMinMax;
         distanceToCutCeilingUnderStairsMinMax = currentLevel.distanceToCutCeilingUnderStairsMinMax;
+        spawnWalls = currentLevel.spawnWalls;
+        spawnLadders = currentLevel.spawnLadders;
+        spawnAdditionalTiles = currentLevel.spawnAdditionalTiles;
+
     }
 
     IEnumerator GenerateLevel()
@@ -115,17 +123,20 @@ public class LevelGenerator : MonoBehaviour
             yield return StartCoroutine(SpawnNewLevel(i));
         }
 
-        for (int i = 0; i < spawnedLevels.Count - 1; i++)
+        if (spawnLadders)
         {
-            if (i != 0 && Random.value > 0.66f)
+            for (int i = 0; i < spawnedLevels.Count - 1; i++)
             {
+                if (i != 0 && Random.value > 0.66f)
+                {
+                    yield return StartCoroutine(MakeLadders(i));
+                }
+
                 yield return StartCoroutine(MakeLadders(i));
-            }   
-            
-            yield return StartCoroutine(MakeLadders(i));
+            }
         }
-        
-        //yield return StartCoroutine(SpawnCovers());
+        if (spawnAdditionalTiles)
+            yield return StartCoroutine(SpawnCovers());
         
         for (int i = 0; i < navMeshSurfaces.Count; i++)
         {
@@ -189,6 +200,9 @@ public class LevelGenerator : MonoBehaviour
 
                 if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) 
                 {
+                    if (!spawnWalls)
+                        continue;
+                    
                     // SPAWN WALLS AROUND
                     newLevel.tilesWalls.Add(newTile);
                     for (int y = 1; y < levelsHeights[index]; y++)
@@ -212,7 +226,7 @@ public class LevelGenerator : MonoBehaviour
                         {
                             var newAdditionalTile = Instantiate(tileWallPrefab, newLevel.spawnedTransform);
                             
-                            if (r == 1)
+                            if (i == 1 && r > 1)
                                 ConstructCover(newAdditionalTile.gameObject);
                             
                             newAdditionalTile.transform.localRotation = newTile.transform.localRotation;
@@ -508,8 +522,13 @@ public class LevelGenerator : MonoBehaviour
             for (int j = 0; j < Random.Range(coversPerLevelMinMax.x, coversPerLevelMinMax.y); j++)
             {
                 yield return null;
+                for (int k = availableTiles.Count - 1; k >= 0; k--)
+                {
+                     if (availableTiles[k] == null)
+                         availableTiles.RemoveAt(k);
+                }
                 var tileForCover = availableTiles[Random.Range(0, availableTiles.Count)];
-                
+                    
                 if (Physics.CheckBox(tileForCover.transform.position + Vector3.up * 3f, new Vector3(0.75f,2.5f,0.75f), Quaternion.identity , solidsUnitsLayerMask))
                 {
                     Debug.Log("Skip cover");
