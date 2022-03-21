@@ -60,30 +60,6 @@ Transform:
   m_Father: {fileID: 2002595534898641037}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 66.143, y: 0, z: 0}
---- !u!114 &1576280870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7659957898263041756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3bc8343da6cac645b039d4abd09857d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  phoneVisual: {fileID: 7109443618587849679}
-  logoEye: {fileID: 5870062397827255068}
-  playerAnswerButtons: {fileID: 586830725749078860}
-  nameText: {fileID: 4212532702791189256}
-  messageText: {fileID: 6792514017694782618}
-  playerAnswerText: {fileID: 2355677564264720761}
-  phoneInactiveTransform: {fileID: 9196757826087654254}
-  phoneActiveTransform: {fileID: 842382849760416428}
-  phoneActive: 0
-  phoneAu: {fileID: 1560040822}
-  messageNotificationClip: {fileID: 8300000, guid: ad29548250d07eb4990d065c36d488f9, type: 3}
-  playerAnswerClip: {fileID: 8300000, guid: 4b9b957d0bb7b7c4c89d388b5badd705, type: 3}
 --- !u!1 &6445884476644153795
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,6 +189,30 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1576280870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7659957898263041756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3bc8343da6cac645b039d4abd09857d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  phoneVisual: {fileID: 7109443618587849679}
+  logoEye: {fileID: 5870062397827255068}
+  playerAnswerButtons: {fileID: 586830725749078860}
+  nameText: {fileID: 4212532702791189256}
+  messageText: {fileID: 6792514017694782618}
+  playerAnswerText: {fileID: 2355677564264720761}
+  phoneInactiveTransform: {fileID: 9196757826087654254}
+  phoneActiveTransform: {fileID: 842382849760416428}
+  phoneActive: 0
+  phoneAu: {fileID: 1560040822}
+  messageNotificationClip: {fileID: 8300000, guid: ad29548250d07eb4990d065c36d488f9, type: 3}
+  playerAnswerClip: {fileID: 8300000, guid: 4b9b957d0bb7b7c4c89d388b5badd705, type: 3}
 --- !u!1001 &5976005874708107996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -343,6 +343,10 @@ PrefabInstance:
     - target: {fileID: 4081011892120011791, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: rotatorSpeed
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081011892120011791, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
+      propertyPath: narrativePlayer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011791, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: _playerHeadHeight

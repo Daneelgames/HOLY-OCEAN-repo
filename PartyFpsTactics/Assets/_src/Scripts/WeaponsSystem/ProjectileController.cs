@@ -21,6 +21,9 @@ public class ProjectileController : MonoBehaviour
 
     [ShowIf("toolType", ToolType.CustomLadder)]
     public CustomLadder customLadder;
+
+    [ShowIf("toolType", ToolType.FragGrenade)]
+    public FragGrenade fragGrenade;
     
     public bool dieOnContact = true;
     public bool ricochetOnContact = false;
@@ -76,9 +79,15 @@ public class ProjectileController : MonoBehaviour
         if (dead)
             return;
         
-        if (other.gameObject.layer == 6 && stickOnContact)
+        if (other.gameObject.layer == 6)
         {
-            StickToObject(other.collider);
+            if (stickOnContact)
+                StickToObject(other.collider);
+
+            if (dieOnContact)
+            {
+                Death();
+            }
         }
     }
 
@@ -212,6 +221,9 @@ public class ProjectileController : MonoBehaviour
 
     void Death()
     {
+        if (toolType == ToolType.FragGrenade)
+            fragGrenade.Explode();
+        
         dead = true;
         rb.isKinematic = true;
         transform.GetChild(0).gameObject.SetActive(false);

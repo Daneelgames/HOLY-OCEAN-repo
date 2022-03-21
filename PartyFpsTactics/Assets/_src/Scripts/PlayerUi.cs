@@ -15,6 +15,9 @@ public class PlayerUi : MonoBehaviour
     public Vector3 enemyMarkerOffset;
 
     public Animator shieldFeedbackAnim;
+
+    public GameObject controlsHintsUi;
+    private bool controlsHints = true;
     private void Awake()
     {
         Instance = this;
@@ -77,6 +80,21 @@ public class PlayerUi : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleControlsHints(!controlsHints);
+        }
+    }
+
+    void ToggleControlsHints(bool active)
+    {
+        controlsHints = active;
+
+        controlsHintsUi.SetActive(controlsHints);
     }
 
     public void AddShieldFeedback()
