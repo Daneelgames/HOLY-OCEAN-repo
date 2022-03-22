@@ -1,4 +1,3 @@
-using System;
 using Brezg.Serialization;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
@@ -15,10 +14,18 @@ namespace MrPink.PlayerSystem
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnityDictionary<WeaponPosition, Transform> _positions = new UnityDictionary<WeaponPosition, Transform>();
 
+        [SerializeField, Range(0, 2)] 
+        private int _mouseButtonIndex;
+
+        [ShowInInspector, ReadOnly]
+        private bool _isCollidingWithWall;
         
-        [ShowInInspector, ReadOnly] 
+        [ShowInInspector, ReadOnly]
         public WeaponPosition CurrentPosition { get; set; } = WeaponPosition.Idle;
 
+        [ShowInInspector, ReadOnly]
+        public bool IsAiming { get; private set; }
+        
         public Transform CurrentTransform
             => this[CurrentPosition];
 
@@ -35,5 +42,65 @@ namespace MrPink.PlayerSystem
             set => _weapon = value;
         }
 
+
+        public void UpdateState(bool isDead)
+        {
+            CurrentPosition = WeaponPosition.Idle;
+            IsAiming = false;
+            
+            if (isDead)
+            {
+                IsAiming = true;
+                CurrentPosition = WeaponPosition.Death;
+                return;
+            }
+            
+            if (!IsWeaponEquipped)
+                return;
+
+            if (Weapon.OnCooldown || _isCollidingWithWall)
+            {
+                CurrentPosition = WeaponPosition.Reload;
+                return;
+            }
+            
+            if (!LevelGenerator.Instance.levelIsReady)
+                return;
+
+            if (Input.GetMouseButton(_mouseButtonIndex))
+            {
+                IsAiming = true;
+                CurrentPosition = WeaponPosition.Aim;
+            }
+            
+            if (Input.GetMouseButtonUp(_mouseButtonIndex))
+                Weapon.Shot(Player.Health);
+        }
+
+        public void UpdateWeaponPosition(float gunMoveSpeed, float gunRotationSpeed)
+        {
+            if (!IsWeaponEquipped)
+                return;
+            
+            Weapon.transform.position = Vector3.Lerp(Weapon.transform.position,  CurrentTransform.position, gunMoveSpeed * Time.deltaTime);
+            Weapon.transform.rotation = Quaternion.Slerp(Weapon.transform.rotation, CurrentTransform.rotation, gunRotationSpeed * Time.deltaTime);
+        }
+
+        public void UpdateCollision()
+        {
+            Transform raycastTransform = 
+                CurrentPosition == WeaponPosition.Aim ? 
+                    this[WeaponPosition.Aim] : 
+                    this[WeaponPosition.Idle];
+            
+            if (Physics.Raycast(raycastTransform.position,
+                    raycastTransform.forward, out var hit,
+                    Vector3.Distance(raycastTransform.position, raycastTransform.position + raycastTransform.forward * 0.5f), 1 << 6))
+            {
+                _isCollidingWithWall = true;
+            }
+            else
+                _isCollidingWithWall = false;
+        }
     }
 }

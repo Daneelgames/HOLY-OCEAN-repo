@@ -24,10 +24,10 @@ namespace MrPink.PlayerSystem
             switch (side)
             {
                 case 0:
-                    Player.Weapon.SetLeftWeapon(wpn);
+                    Player.Weapon.SetWeapon(wpn, Hand.Left);
                     break;
                 case 1:
-                    Player.Weapon.SetRightWeapon(wpn);
+                    Player.Weapon.SetWeapon(wpn, Hand.Right);
                     break;
             }
         }
