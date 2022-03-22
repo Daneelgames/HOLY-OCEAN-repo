@@ -15,8 +15,11 @@ namespace MrPink.PlayerSystem
         public float gravity = 5;
         public float jumpForce = 300;
         public float walkSpeed = 5;
-        public float runSpeed = 5;
+        public float runSpeed = 8;
+        public float crouchSpeed = 2;
+        public float crouchRunSpeed = 3.5f;
         public float acceleration = 1;
+        public float groundCheckRadius = 0.25f;
         private bool _grounded;
         private Vector3 _targetVelocity;
         private Vector2 _movementInput;
@@ -35,14 +38,13 @@ namespace MrPink.PlayerSystem
         private Vector3 slopeNormal;
         public float slopeRayHeight = 0.25f;
         public float slopeRayDistance = 0.5f;
-        public float slopeRayRadius = 0.25f;
 
         [Header("Crouching")] 
         public bool crouching = false;
         public CapsuleCollider topCollider;
         public CapsuleCollider bottomCollider;
 
-        private Vector3 topColliderCenterStanding = new Vector3(0, 1.273521f, 0);
+        private Vector3 topColliderCenterStanding = new Vector3(0, 1.15f, 0);
         private float topColliderHeightStanding = 1.55731f;
         private Vector3 topColliderCenterCrouching = new Vector3(0, 0.3424235f, 0);
         private float topColliderHeightCrouching = 0.6848469f;
@@ -92,12 +94,6 @@ namespace MrPink.PlayerSystem
         
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
-
-            if (walkSpeed < 1)
-            {
-                walkSpeed = 1;
-                runSpeed = 1;
-            }
 
             GetCrouch();
             GetMovement();
@@ -149,9 +145,12 @@ namespace MrPink.PlayerSystem
 
             if (!crouch)
             {
-                if (Physics.CheckBox(transform.position + Vector3.up * 1.25f, new Vector3(0.3f, 1f, 0.3f), transform.rotation , 1 << 6))
+                //if (Physics.CheckBox(transform.position + Vector3.up * 1.25f, new Vector3(0.15f, 1f, 0.15f), transform.rotation , 1 << 6))
+                //if (Physics.CheckCapsule(transform.position + Vector3.up * 1.25f, transform.position + Vector3.one * 0.5f, 0.1f, out var hit, 1 << 6))
+                if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.up, out var hit, 1f, 1 << 6))
                 {
                     // found obstacle, can't stand
+                    Debug.Log(hit.collider.name);
                     return;
                 }
             }
@@ -239,14 +238,20 @@ namespace MrPink.PlayerSystem
                 running = moveInFrame;
                 moving = false;
 
-                _targetVelocity = _moveVector * runSpeed;
+                if (!crouching)
+                    _targetVelocity = _moveVector * runSpeed;
+                else
+                    _targetVelocity = _moveVector * crouchRunSpeed;
             }
             else
             {
                 moving = moveInFrame;
                 running = false;
             
-                _targetVelocity = _moveVector * walkSpeed;
+                if (!crouching)
+                    _targetVelocity = _moveVector * walkSpeed;
+                else
+                    _targetVelocity = _moveVector * crouchSpeed;
             }    
         
             if (goingUpHill)
@@ -294,7 +299,7 @@ namespace MrPink.PlayerSystem
 
         void GroundCheck()
         {
-            if (Physics.CheckSphere(transform.position, 0.25f, WalkableLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 _grounded = true;
                 additinalFallForce = 0;

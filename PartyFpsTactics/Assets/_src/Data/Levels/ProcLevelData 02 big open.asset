@@ -10,22 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66d135c2c067af24980ba7ad6d4f7a0c, type: 3}
-  m_Name: ProcLevelData 00
+  m_Name: ProcLevelData 02 big open
   m_EditorClassIdentifier: 
-  levelsPosMinMaxX: {x: -10, y: 10}
-  levelsPosMinMaxZ: {x: -10, y: 10}
-  levelsScaleMinMaxX: {x: 3, y: 10}
-  levelsScaleMinMaxZ: {x: 3, y: 10}
+  spawnWalls: 0
+  spawnLadders: 1
+  spawnAdditionalTiles: 1
+  levelsPosMinMaxX: {x: -20, y: 20}
+  levelsPosMinMaxZ: {x: -20, y: 20}
+  levelsScaleMinMaxX: {x: 3, y: 20}
+  levelsScaleMinMaxZ: {x: 3, y: 20}
   levelGoalPrefab: {fileID: 3443701919470677471, guid: de73763fdd3804f41841451627e2e135, type: 3}
   tilePrefab: {fileID: 8943623579927757030, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   tileWallPrefab: {fileID: 8943623579927757030, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
   tileWallThinPrefab: {fileID: 8943623579927757030, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
   explosiveBarrelPrefab: {fileID: 8943623579927757030, guid: 5d2c0bd65a1f3534493166ecddb50a1f, type: 3}
-  levelsHeights: 0500000005000000050000000500000005000000
+  grindRailsPrefab: {fileID: 5147939674104939985, guid: fa6ec44f4708b9941b1df4c96f1f2139, type: 3}
+  levelsHeights: 0500000005000000050000000700000008000000090000000a0000000a0000000a0000000a000000
   explosiveBarrelsAmount: 0
-  enemiesPerRoomMinMax: {x: 2, y: 4}
+  enemiesPerRoomMinMax: {x: 0, y: 0}
+  grindRailsPerLevelMinMax: {x: 1, y: 2}
   coversPerLevelMinMax: {x: 1, y: 10}
-  stairsDistanceMinMax: {x: 5, y: 10}
+  stairsDistanceMinMax: {x: 5, y: 50}
   thinWallsPerLevelMinMax: {x: 1, y: 10}
   distanceToCutCeilingUnderStairsMinMax: {x: 3, y: 3}
   toolsInShop:

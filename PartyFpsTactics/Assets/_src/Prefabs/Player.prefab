@@ -1279,6 +1279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675e7dbad8eb8144db59d3923eac2dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  narrativePlayer: 0
   WalkableLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -1287,11 +1288,13 @@ MonoBehaviour:
   jumpForce: 150
   walkSpeed: 5
   runSpeed: 8
+  crouchSpeed: 2
+  crouchRunSpeed: 3.5
   acceleration: 20
+  groundCheckRadius: 0.15
   coyoteTimeMax: 0.5
   slopeRayHeight: 0.25
   slopeRayDistance: 0.5
-  slopeRayRadius: 0.25
   crouching: 0
   topCollider: {fileID: 4081011892120011777}
   bottomCollider: {fileID: 3930242700713982133}
@@ -1397,9 +1400,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.2
-  m_Height: 1.5573101
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 1.2735214, z: 0}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!208 &3022590264530239763
 NavMeshObstacle:
   m_ObjectHideFlags: 0

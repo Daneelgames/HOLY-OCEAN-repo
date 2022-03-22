@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityDebug;
 using MrPink.PlayerSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GrindRail : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GrindRail : MonoBehaviour
 
     private List<Transform> nodesInOrderOfRide = new List<Transform>();
     private int currentTargetNode = 0;
+    [Range(2,10)]
     public int nodesAmount = 5;
     private void OnDrawGizmos()
     {
@@ -29,8 +31,10 @@ public class GrindRail : MonoBehaviour
         GenerateNodes();
     }
 
-    public void GenerateNodes()
+    public void GenerateNodes(bool constructRail = false)
     {
+        return;
+        
         for (int i = 0; i < nodesAmount; i++)
         {
             var t = new GameObject("Node " + i);
@@ -38,6 +42,24 @@ public class GrindRail : MonoBehaviour
             t.transform.localPosition = Vector3.zero;
             nodes.Add(t.transform);
         }
+
+        var firstNode = nodes[0];
+        var lastNode = nodes[nodes.Count - 1];
+        lastNode.transform.position = LevelGenerator.Instance.levelGoalSpawned.transform.position + Random.insideUnitSphere * 100f;
+        Vector3 direction = (lastNode.position - firstNode.position).normalized;
+        float distance = Vector3.Distance(firstNode.position, lastNode.position);
+        for (int i = 1; i < nodes.Count-1; i++)
+        {
+            var _node = nodes[i];
+            _node.position = firstNode.position + direction * (distance / nodesAmount) * i;
+            _node.position += Random.onUnitSphere * Random.Range(10f,50f);
+        }
+        // place the first node
+        // then place the final node at random pos
+        // then try to connect nodes with raycasts
+        
+        if (constructRail)
+            ConstructRail();
     }
     
     [ContextMenu("ConstructRail")]
@@ -49,6 +71,8 @@ public class GrindRail : MonoBehaviour
             newRail.transform.position = (nodes[i].position +nodes[i+1].position) / 2;
             newRail.transform.LookAt(nodes[i+1]);
             newRail.transform.localScale = new Vector3(0.3f, 0.1f, Vector3.Distance(nodes[i].position, nodes[i + 1].position));
+            
+            // also destroy interconnected tiles ? 
         }
     }
 

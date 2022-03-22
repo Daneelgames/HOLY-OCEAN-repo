@@ -21,9 +21,6 @@ public class ProgressionManager : MonoBehaviour
 
     public void SetCurrentLevel(int index)
     {
-        currentLevelIndex = index;
+        currentLevelIndex = Mathf.Clamp(index, 0, levelDatas.Count - 1);
     }
-
 }
-
-

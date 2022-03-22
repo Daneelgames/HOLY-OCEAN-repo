@@ -18,6 +18,7 @@ public class LevelGenerator : MonoBehaviour
 
     public LevelType levelType = LevelType.Game;
     public List<Level> spawnedLevels = new List<Level>();
+    public GameObject levelGoalSpawned;
 
     public Transform generatedBuildingFolder;
     [Header("SETTINGS")]
@@ -34,7 +35,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject tileWallPrefab;
     public GameObject tileWallThinPrefab;
     public GameObject explosiveBarrelPrefab;
-    public GameObject grindRailsPrefab;
+    public GrindRail grindRailsPrefab;
     public Cover coverPrefab;
     
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
@@ -52,8 +53,10 @@ public class LevelGenerator : MonoBehaviour
     public Vector2Int levelsPosMinMaxZ = new Vector2Int(-10, 10);
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
-    [Space]
-    public List<NavMeshSurface> navMeshSurfaces;
+    [Space] [Header("NAVIGATION")] 
+    public Transform navMeshesParent;
+    public NavMeshSurface navMeshSurfacePrefab;
+    public List<NavMeshSurface> navMeshSurfacesSpawned;
     public GameObject tileDestroyedParticles;
 
     public bool levelIsReady = false;
@@ -144,9 +147,14 @@ public class LevelGenerator : MonoBehaviour
         if (spawnAdditionalTiles)
             yield return StartCoroutine(SpawnCovers());
         
-        for (int i = 0; i < navMeshSurfaces.Count; i++)
+        for (int i = 0; i < spawnedLevels.Count; i++)
         {
-            navMeshSurfaces[i].BuildNavMesh();
+            SpawnNavmesh(spawnedLevels[i]);
+        }
+        
+        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
+        {
+            navMeshSurfacesSpawned[i].BuildNavMesh();
         }
 
         StartCoroutine(UpdateNavMesh());
@@ -192,6 +200,7 @@ public class LevelGenerator : MonoBehaviour
     {
         Level newLevel = new Level();
         newLevel.position = pos;
+        newLevel.size = size;
 
         GameObject newGameObject = new GameObject("Level " + index);
         newGameObject.transform.parent = generatedBuildingFolder;
@@ -557,6 +566,16 @@ public class LevelGenerator : MonoBehaviour
         var newCover = Instantiate(coverPrefab, pos + Vector3.up * 0.5f, Quaternion.identity);
         newCover.transform.parent = generatedBuildingFolder;
     }
+
+    void SpawnNavmesh(Level spawnedLevel)
+    {
+        var newNavMesh = Instantiate(navMeshSurfacePrefab, navMeshesParent);
+        newNavMesh.transform.position = spawnedLevel.position;
+        newNavMesh.transform.localScale = spawnedLevel.size;
+        newNavMesh.size = spawnedLevel.size;
+        newNavMesh.center = new Vector3(0, newNavMesh.size.y/ 2, 0);
+        navMeshSurfacesSpawned.Add(newNavMesh);
+    }
     
     IEnumerator SpawnExplosiveBarrels()
     {
@@ -581,7 +600,8 @@ public class LevelGenerator : MonoBehaviour
 
                 Vector3 pos = randomTile.transform.position + Vector3.up;
                 randomLevel.tilesInside.Remove(randomTile);
-                Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+                var grindRails = Instantiate(grindRailsPrefab, pos, Quaternion.identity);
+                grindRails.GenerateNodes(true);
                 yield return null;
             }
     }
@@ -589,7 +609,7 @@ public class LevelGenerator : MonoBehaviour
     void SpawnGoalOnTop()
     {
         Vector3 spawnPosition = spawnedLevels[spawnedLevels.Count - 1].position + Vector3.up * 2;
-        var levelGoal = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
+        levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
     }
 
     public void TileDamaged(BodyPart tile)
@@ -638,13 +658,13 @@ public class LevelGenerator : MonoBehaviour
     {
         float distance = 1000;
         NavMeshSurface closestNavMeshSurface = null;
-        for (int i = 0; i < navMeshSurfaces.Count; i++)
+        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
         {
-            float newDistance = Vector3.Distance(pos, navMeshSurfaces[i].transform.position);
+            float newDistance = Vector3.Distance(pos, navMeshSurfacesSpawned[i].transform.position);
             if (newDistance < distance)
             {
                 distance = newDistance;
-                closestNavMeshSurface = navMeshSurfaces[i];
+                closestNavMeshSurface = navMeshSurfacesSpawned[i];
             }
         }
         // add closest navmesh to navmesh queue
@@ -656,9 +676,9 @@ public class LevelGenerator : MonoBehaviour
         {
             yield return null;
             
-            for (int i = 0; i < navMeshSurfaces.Count; i++)
+            for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
             {
-                navMeshSurfaces[i].UpdateNavMesh(navMeshSurfaces[i].navMeshData);
+                navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
                 yield return new WaitForSecondsRealtime(0.5f);
             }
             
@@ -682,12 +702,12 @@ public class LevelGenerator : MonoBehaviour
     
     public void AddNavMeshBubble(NavMeshSurface bubble)
     {
-        navMeshSurfaces.Add(bubble);
+        navMeshSurfacesSpawned.Add(bubble);
     }
     public void RemoveNavMeshBubble(NavMeshSurface bubble)
     {
         bubble.RemoveData();
-        navMeshSurfaces.Remove(bubble);
+        navMeshSurfacesSpawned.Remove(bubble);
     }
 
     public void ConstructCover(GameObject newCoverGo)
@@ -705,6 +725,7 @@ public class Level
     public List<GameObject> tilesWalls = new List<GameObject>();
     public Transform spawnedTransform;
     public Vector3 position;
+    public Vector3Int size;
 }
 
 [Serializable]

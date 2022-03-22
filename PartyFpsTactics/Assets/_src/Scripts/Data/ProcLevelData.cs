@@ -10,7 +10,7 @@ namespace _src.Scripts.Data
     [CreateAssetMenu(fileName = "ProcLevelData", menuName = "ScriptableObjects/ProcLevelData", order = 1)]
     public class ProcLevelData : ScriptableObject
     {
-
+        [Header("Settings used in game")]
         public bool spawnWalls = true;
         public bool spawnLadders = true;
         public bool spawnAdditionalTiles = true;
@@ -25,7 +25,7 @@ namespace _src.Scripts.Data
         public GameObject tileWallPrefab;
         public GameObject tileWallThinPrefab;
         public GameObject explosiveBarrelPrefab;
-        public GameObject grindRailsPrefab;
+        public GrindRail grindRailsPrefab;
         
         public List<int> levelsHeights = new List<int>();
         
