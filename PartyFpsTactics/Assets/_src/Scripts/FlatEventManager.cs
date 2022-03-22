@@ -27,7 +27,7 @@ enum LastPlayerAnswer
     void Start()
     {
         Instance = this;
-        StartCoroutine(RunEvents(LevelEventsList[currentLevel]));
+        StartCoroutine(RunEvents(LevelEventsList[Mathf.Clamp(currentLevel, 0,LevelEventsList.Count-1)]));
         // test version
     }
 
