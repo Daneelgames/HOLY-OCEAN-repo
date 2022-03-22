@@ -819,6 +819,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7726002239220614177}
+  - component: {fileID: 9134250700409668465}
   m_Layer: 7
   m_Name: WeaponParentR
   m_TagString: Untagged
@@ -844,6 +845,30 @@ Transform:
   m_Father: {fileID: 369864347146224225}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9134250700409668465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693788916305649102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ec0f9dd61047c5ac5fdbc5864fc1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapon: {fileID: 0}
+  _positions:
+    _keyData: 00000000010000000200000003000000
+    _valueData:
+    - {fileID: 3662836889026602953}
+    - {fileID: 6657022865663137196}
+    - {fileID: 6495879218115689766}
+    - {fileID: 203198190963057994}
+  _deathTransform: {fileID: 203198190963057994}
+  _idleTransform: {fileID: 3662836889026602953}
+  _aimTransform: {fileID: 6657022865663137196}
+  _reloadTransform: {fileID: 6495879218115689766}
 --- !u!1 &3820065088636773223
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,6 +878,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 28064608572480494}
+  - component: {fileID: 3613160933741030116}
   m_Layer: 7
   m_Name: WeaponParentL
   m_TagString: Untagged
@@ -878,6 +904,30 @@ Transform:
   m_Father: {fileID: 369864347146224225}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3613160933741030116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3820065088636773223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ec0f9dd61047c5ac5fdbc5864fc1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapon: {fileID: 0}
+  _positions:
+    _keyData: 00000000010000000200000003000000
+    _valueData:
+    - {fileID: 3522286416970102604}
+    - {fileID: 4552263343525344794}
+    - {fileID: 2476280237651529078}
+    - {fileID: 5515058949708685451}
+  _deathTransform: {fileID: 5515058949708685451}
+  _idleTransform: {fileID: 3522286416970102604}
+  _aimTransform: {fileID: 4552263343525344794}
+  _reloadTransform: {fileID: 2476280237651529078}
 --- !u!1 &4019429258642545523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,16 +1118,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponsTargetsParent: {fileID: 369864347146224225}
   weaponsParent: {fileID: 2205026912588922412}
-  leftWeapon: {fileID: 0}
-  deathTransformLeft: {fileID: 5515058949708685451}
-  idleTransformLeft: {fileID: 3522286416970102604}
-  aimTransformLeft: {fileID: 4552263343525344794}
-  reloadTransformLeft: {fileID: 2476280237651529078}
-  rightWeapon: {fileID: 0}
-  deathTransformRight: {fileID: 203198190963057994}
-  idleTransformRight: {fileID: 3662836889026602953}
-  aimTransformRight: {fileID: 6657022865663137196}
-  reloadTransformRight: {fileID: 6495879218115689766}
+  _hands:
+    _keyData: 0000000001000000
+    _valueData:
+    - {fileID: 3613160933741030116}
+    - {fileID: 9134250700409668465}
   camFovIdle: 100
   camFovAim: 90
   fovChangeSpeed: 3

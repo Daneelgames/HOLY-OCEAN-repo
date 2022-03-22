@@ -1,4 +1,5 @@
-using MrPink.Health;
+using Brezg.Serialization;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
@@ -7,20 +8,10 @@ namespace MrPink.PlayerSystem
     {
         public Transform weaponsTargetsParent;
         public Transform weaponsParent;
+
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private UnityDictionary<Hand, WeaponHand> _hands = new UnityDictionary<Hand, WeaponHand>();
         
-        [Header("LEFT GUN")]
-        public WeaponController leftWeapon;
-        public Transform deathTransformLeft;
-        public Transform idleTransformLeft;
-        public Transform aimTransformLeft;
-        public Transform reloadTransformLeft;
-        
-        [Header("RIGHT GUN")]
-        public WeaponController rightWeapon;
-        public Transform deathTransformRight;
-        public Transform idleTransformRight;
-        public Transform aimTransformRight;
-        public Transform reloadTransformRight;
         
         [Header("CAMERA")]
         public float camFovIdle = 90;
@@ -34,9 +25,7 @@ namespace MrPink.PlayerSystem
 
         private bool weaponCollidesWithWallLeft = false;
         private bool weaponCollidesWithWallRight = false;
-    
-        Transform targetLeftTransform;
-        Transform targetRightTransform;
+        
         float targetFov = 90;
         
         private bool _isDead = false;
@@ -60,50 +49,51 @@ namespace MrPink.PlayerSystem
                 gunMoveSpeed = 1;
         
             bool aiming = false;
-            targetLeftTransform = idleTransformLeft;
-            targetRightTransform = idleTransformRight;
-            
+
+            _hands[Hand.Left].CurrentPosition = WeaponPosition.Idle;
+            _hands[Hand.Right].CurrentPosition = WeaponPosition.Idle;
+
             if (_isDead)
             {
                 aiming = true;
-                targetLeftTransform = deathTransformLeft;
-                targetRightTransform = deathTransformRight;
+                _hands[Hand.Left].CurrentPosition = WeaponPosition.Death;
+                _hands[Hand.Right].CurrentPosition = WeaponPosition.Death;
             }
             else
             {
-                if (leftWeapon)
+                if (_hands[Hand.Left].IsWeaponEquipped)
                 {
-                    if (leftWeapon.OnCooldown || weaponCollidesWithWallLeft)
-                        targetLeftTransform = reloadTransformLeft;
+                    if (_hands[Hand.Left].Weapon.OnCooldown || weaponCollidesWithWallLeft)
+                        _hands[Hand.Left].CurrentPosition = WeaponPosition.Reload;
                     
                     else if (LevelGenerator.Instance.levelIsReady)
                     {
                         if (Input.GetMouseButton(0))
                         {
                             aiming = true;
-                            targetLeftTransform = aimTransformLeft;
+                            _hands[Hand.Left].CurrentPosition = WeaponPosition.Aim;
                         }
 
                         if (Input.GetMouseButtonUp(0))
-                            leftWeapon.Shot(Player.Health);
+                            _hands[Hand.Left].Weapon.Shot(Player.Health);
                     }
                 }
 
-                if (rightWeapon)
+                if (_hands[Hand.Right].IsWeaponEquipped)
                 {
-                    if (rightWeapon.OnCooldown || weaponCollidesWithWallRight)
-                        targetRightTransform = reloadTransformRight;
+                    if (_hands[Hand.Right].Weapon.OnCooldown || weaponCollidesWithWallRight)
+                        _hands[Hand.Right].CurrentPosition = WeaponPosition.Reload;
                     
                     else if (LevelGenerator.Instance.levelIsReady)
                     {
                         if (Input.GetMouseButton(1))
                         {
                             aiming = true;
-                            targetRightTransform = aimTransformRight;
+                            _hands[Hand.Right].CurrentPosition = WeaponPosition.Aim;
                         }
 
                         if (Input.GetMouseButtonUp(1))
-                            rightWeapon.Shot(Player.Health);
+                            _hands[Hand.Right].Weapon.Shot(Player.Health);
                         
                     }
                 }
@@ -123,22 +113,17 @@ namespace MrPink.PlayerSystem
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
         
-            if (Input.GetMouseButton(0))
-            {
-                currentTransformToRaycastL = aimTransformLeft;
-            }
+            
+            if (_hands[Hand.Left].CurrentPosition == WeaponPosition.Aim)
+                currentTransformToRaycastL = _hands[Hand.Left][WeaponPosition.Aim];
             else
-            {
-                currentTransformToRaycastL = idleTransformLeft;
-            }
-            if (Input.GetMouseButton(1))
-            {
-                currentTransformToRaycastR = aimTransformRight;
-            }
+                currentTransformToRaycastL = _hands[Hand.Left][WeaponPosition.Idle];
+            
+            if (_hands[Hand.Right].CurrentPosition == WeaponPosition.Aim)
+                currentTransformToRaycastL = _hands[Hand.Right][WeaponPosition.Aim];
             else
-            {
-                currentTransformToRaycastR = idleTransformRight;
-            }
+                currentTransformToRaycastR = _hands[Hand.Right][WeaponPosition.Idle];
+            
         
             if (Physics.Raycast(currentTransformToRaycastL.position,
                     currentTransformToRaycastL.forward, out var hit,
@@ -150,6 +135,7 @@ namespace MrPink.PlayerSystem
             {
                 weaponCollidesWithWallLeft = false;
             }
+            
             if (Physics.Raycast(currentTransformToRaycastR.position,
                     currentTransformToRaycastR.forward, out var hitR,
                     Vector3.Distance(currentTransformToRaycastR.position, currentTransformToRaycastR.position + currentTransformToRaycastR.forward * 0.5f), 1 << 6))
@@ -167,19 +153,19 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
-            if (leftWeapon)
+            if (_hands[Hand.Left].IsWeaponEquipped)
             {
-                leftWeapon.transform.position = Vector3.Lerp(leftWeapon.transform.position, targetLeftTransform.position,
+                _hands[Hand.Left].Weapon.transform.position = Vector3.Lerp(_hands[Hand.Left].Weapon.transform.position,  _hands[Hand.Left].CurrentTransform.position,
                     gunMoveSpeed * Time.deltaTime);
-                leftWeapon.transform.rotation = Quaternion.Slerp(leftWeapon.transform.rotation,
-                    targetLeftTransform.rotation, gunRotationSpeed * Time.deltaTime);
+                _hands[Hand.Left].Weapon.transform.rotation = Quaternion.Slerp(_hands[Hand.Left].Weapon.transform.rotation,
+                    _hands[Hand.Left].CurrentTransform.rotation, gunRotationSpeed * Time.deltaTime);
             }
-            if (rightWeapon)
+            if (_hands[Hand.Right].IsWeaponEquipped)
             {
-                rightWeapon.transform.position = Vector3.Lerp(rightWeapon.transform.position, targetRightTransform.position,
+                _hands[Hand.Right].Weapon.transform.position = Vector3.Lerp(_hands[Hand.Right].Weapon.transform.position, _hands[Hand.Right].CurrentTransform.position,
                     gunMoveSpeed * Time.deltaTime);
-                rightWeapon.transform.rotation = Quaternion.Slerp(rightWeapon.transform.rotation,
-                    targetRightTransform.rotation, gunRotationSpeed * Time.deltaTime);
+                _hands[Hand.Right].Weapon.transform.rotation = Quaternion.Slerp(_hands[Hand.Right].Weapon.transform.rotation,
+                    _hands[Hand.Right].CurrentTransform.rotation, gunRotationSpeed * Time.deltaTime);
             }
         
             Player.MainCamera.fieldOfView = Mathf.Lerp(Player.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
@@ -187,13 +173,13 @@ namespace MrPink.PlayerSystem
 
         public void SetLeftWeapon(WeaponController weapon)
         {
-            leftWeapon = weapon;
+            _hands[Hand.Left].Weapon = weapon;
             weapon.transform.parent = weaponsParent;
         }
     
         public void SetRightWeapon(WeaponController weapon)
         {
-            rightWeapon = weapon;
+            _hands[Hand.Right].Weapon = weapon;
             weapon.transform.parent = weaponsParent;
         }
     
