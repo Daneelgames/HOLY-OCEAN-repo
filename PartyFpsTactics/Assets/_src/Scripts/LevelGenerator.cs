@@ -1,14 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
@@ -227,6 +222,15 @@ public class LevelGenerator : MonoBehaviour
                     {
                         var newWallTile = Instantiate(tileWallPrefab, newLevel.spawnedTransform);
                         newWallTile.transform.localRotation = Quaternion.identity;
+                        
+                        // ROTATE
+                        if (x == size.x - 1)
+                            newWallTile.transform.localEulerAngles = new Vector3(0, 180, 0);
+                        if (z == 0)
+                            newWallTile.transform.localEulerAngles = new Vector3(0, 270, 0);
+                        if (z == size.z - 1)
+                            newWallTile.transform.localEulerAngles = new Vector3(0, 90, 0);
+                            
                         newWallTile.transform.position = newTile.transform.position + Vector3.up * y;
                         newLevel.tilesWalls.Add(newWallTile);
                     }
