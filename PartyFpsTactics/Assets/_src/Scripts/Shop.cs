@@ -31,7 +31,7 @@ public class Shop : MonoBehaviour
         Instance = this;
     }
 
-    void Start()
+    IEnumerator Start()
     {
         toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
         switch (LevelGenerator.Instance.levelType)
@@ -42,6 +42,14 @@ public class Shop : MonoBehaviour
             case LevelGenerator.LevelType.Narrative:
                 CloseShop();
                 break;
+        }
+
+        while (isActive)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+                CloseShop();
+            
+            yield return null;
         }
     }
 

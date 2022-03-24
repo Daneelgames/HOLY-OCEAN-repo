@@ -19,7 +19,7 @@ RenderSettings:
   m_FogMode: 1
   m_FogDensity: 0.03
   m_LinearFogStart: 0
-  m_LinearFogEnd: 10
+  m_LinearFogEnd: 20
   m_AmbientSkyColor: {r: 0.6693218, g: 0.8288668, b: 0.8396226, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
@@ -338,6 +338,7 @@ MonoBehaviour:
   prototypeList:
   - {fileID: 11400000, guid: 60e44ffe5944ffe428272281aa09baf1, type: 2}
   - {fileID: 11400000, guid: e3f111173114b3c47863cecaa2279caa, type: 2}
+  - {fileID: 11400000, guid: 089b4852726d3ed438f2846c48db9fdb, type: 2}
   autoSelectCamera: 1
   cameraData:
     mainCamera: {fileID: 4081011893651433415}
@@ -345,12 +346,11 @@ MonoBehaviour:
   useFloatingOriginHandler: 0
   applyFloatingOriginRotationAndScale: 0
   floatingOriginTransform: {fileID: 0}
-  isFrustumCulling: 1
-  isOcclusionCulling: 1
+  isFrustumCulling: 0
+  isOcclusionCulling: 0
   minCullingDistance: 3
   selectedPrototypeList:
   - {fileID: 11400000, guid: 60e44ffe5944ffe428272281aa09baf1, type: 2}
-  - {fileID: 11400000, guid: e3f111173114b3c47863cecaa2279caa, type: 2}
   isPrototypeTextMode: 0
   showSceneSettingsBox: 1
   showPrototypeBox: 1
@@ -371,9 +371,12 @@ MonoBehaviour:
     registeredPrefabs: []
   - prefabPrototype: {fileID: 11400000, guid: e3f111173114b3c47863cecaa2279caa, type: 2}
     registeredPrefabs: []
+  - prefabPrototype: {fileID: 11400000, guid: 089b4852726d3ed438f2846c48db9fdb, type: 2}
+    registeredPrefabs: []
   prefabList:
   - {fileID: 8943623579927757030, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
   - {fileID: 8943623579927757030, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
+  - {fileID: 8943623579927757030, guid: 0b2f22b3f2e6df147bc2b1197ac73c16, type: 3}
   enableMROnManagerDisable: 1
   enableMROnRemoveInstance: 1
 --- !u!4 &1619678738
@@ -1178,10 +1181,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1663981897}
     m_Modifications:
-    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
-      propertyPath: distanceToCutCeilingUnderStairsMinMax.y
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1229,10 +1228,6 @@ PrefabInstance:
     - target: {fileID: 6538700427162571445, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_Name
       value: LevelGenerator
-      objectReference: {fileID: 0}
-    - target: {fileID: 6538700427721659763, guid: 8da4667c6541cc047af245d102688646, type: 3}
-      propertyPath: m_Name
-      value: DynamicNavMesh
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8da4667c6541cc047af245d102688646, type: 3}

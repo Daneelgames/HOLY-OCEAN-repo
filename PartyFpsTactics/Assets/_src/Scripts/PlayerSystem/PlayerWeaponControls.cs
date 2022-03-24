@@ -45,6 +45,8 @@ namespace MrPink.PlayerSystem
         private void Start()
         {
             weaponsTargetsParent.parent = null;
+            targetLeftTransform = idleTransformLeft;
+            targetRightTransform = idleTransformRight;
             /*
         leftWeapon.transform.parent = null;
         rightWeapon.transform.parent = null;

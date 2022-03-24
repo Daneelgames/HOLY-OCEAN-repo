@@ -21,9 +21,9 @@ namespace _src.Scripts.Data
         public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
         
         public GameObject levelGoalPrefab;
-        public GameObject tilePrefab;
-        public GameObject tileWallPrefab;
-        public GameObject tileWallThinPrefab;
+        public BodyPart tilePrefab;
+        public BodyPart tileWallPrefab;
+        public BodyPart tileWallThinPrefab;
         public GameObject explosiveBarrelPrefab;
         public GrindRail grindRailsPrefab;
         

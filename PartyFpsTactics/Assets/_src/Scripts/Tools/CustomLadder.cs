@@ -13,6 +13,6 @@ public class CustomLadder : MonoBehaviour
             targetPos = hit.point;
         }
         
-        StartCoroutine(LevelGenerator.Instance.SpawnLadder(targetPos, transform.position, false, maxLadderLength));
+        StartCoroutine(LevelGenerator.Instance.SpawnLadder(targetPos, transform.position, false, LevelGenerator.Instance.generatedBuildingFolder, maxLadderLength));
     }
 }
