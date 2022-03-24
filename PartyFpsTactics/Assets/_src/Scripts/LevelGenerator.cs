@@ -289,7 +289,7 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator SpawnThinWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level)
     {
-        bool[,,] invisibleBlockers = new bool[level.size.x,level.size.y,level.size.z];
+        //bool[,,] invisibleBlockers = new bool[level.size.x,level.size.y,level.size.z];
         
         int wallsAmount = Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y);
         for (int i = 0; i < wallsAmount; i++)
@@ -362,7 +362,10 @@ public class LevelGenerator : MonoBehaviour
                     newWallTile.transform.localRotation = Quaternion.identity;
                     newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
                     level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
-                    newWallTile.SetTileRoomCoordinates(new Vector3Int(nextPos.x,y,nextPos.x), level);
+                    
+                    Debug.Log("thin walls. level.roomTilesMatrix[" + nextPos.x +", " + y +", " + nextPos.z +"]; " + level.roomTilesMatrix[nextPos.x, y, nextPos.z].name +"; newWallTile is " + newWallTile);
+                    var coords = new Vector3Int(nextPos.x, y, nextPos.z);
+                    newWallTile.SetTileRoomCoordinates(coords, level);
                 }
                 yield return null;
             }
@@ -435,69 +438,7 @@ public class LevelGenerator : MonoBehaviour
             room.tilesInside[i].gameObject.SetActive(!room.tilesInside[i].gameObject.activeInHierarchy);
         }
     }
-    
-    IEnumerator SpawnInsideWallsTiles()
-    {
-        // RANDOM WALLS METHOD 
-        for (int i = 0; i < spawnedLevels.Count; i++)
-        {
-            for (int j = 0; j < Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y); j++)
-            {
-                var randomWallTile = spawnedLevels[i].tilesWalls[Random.Range(0, spawnedLevels[i].tilesWalls.Count)];
-                Vector3 raycastDirection = Vector3.forward;
-                Vector3 origin = new Vector3(randomWallTile.transform.position.x, spawnedLevels[i].position.y, randomWallTile.transform.position.z);
 
-                Vector3 dir = Vector3.forward;
-                float r = Random.value;
-                if (r < 0.25f)
-                    dir = Vector3.right;
-                else if ( r < 0.5)
-                    dir = Vector3.left;
-                else if (r < 0.75f)
-                    dir = Vector3.back;
-                raycastDirection = (origin + dir + new Vector3(Random.Range(-offsetToThinWallsTargetDirection,offsetToThinWallsTargetDirection), 0, Random.Range(-offsetToThinWallsTargetDirection,offsetToThinWallsTargetDirection))) - origin;
-                raycastDirection.Normalize();
-                
-                // origin + raycastDirection will prevent from raycasting itself
-                if (Physics.Raycast(origin + Vector3.up + raycastDirection, 
-                    raycastDirection, out var hit, 1000, 1 << 6))
-                {
-                    if (hit.distance < 5)
-                        continue;
-                    
-                    Transform newWall = new GameObject("Thin Wall").transform;
-                    newWall.parent = spawnedLevels[i].spawnedTransform;
-                    newWall.transform.localPosition = Vector3.zero;
-                    
-                    float doorPos = Random.Range(1, hit.distance - 2);
-                    bool spawned = false;
-                    for (float k = 0.5f; k < hit.distance + 1f; k++)
-                    {
-                        for (int l = 0; l < levelsHeights[i]-1; l++)
-                        {
-                            if (!spawned && k >= doorPos && l <= 2)
-                                continue;
-                            
-                            var pos = origin + Vector3.up + raycastDirection * k + Vector3.up * l;
-                            var rot = Quaternion.LookRotation(raycastDirection, Vector3.up);
-                            var newTileWallThin = Instantiate(tileWallThinPrefab, pos, rot);
-                            newTileWallThin.transform.localScale = new Vector3(0.25f, 1, 1);
-                            newTileWallThin.transform.parent = newWall;
-                            newTileWallThin.SetTileRoomCoordinates(spawnedLevels[i]);
-                            spawnedLevels[i].tilesWalls.Add(newTileWallThin);
-                        }
-                        if (!spawned && k >= doorPos)
-                        {
-                            spawned = true;
-                        }
-                    }
-
-                    yield return null;
-                }
-            }
-        }
-    }
-    
     IEnumerator MakeLadders(int i)
     {
         Level levelFrom = spawnedLevels[i];
@@ -677,12 +618,13 @@ public class LevelGenerator : MonoBehaviour
         int y = destroyedTileCoords.y;
         int z = destroyedTileCoords.z;
         
+        Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);
         room.roomTilesMatrix[x, y, z] = null;
         
         Debug.Log("Tile Destroyed, destroyedTileCoords: " + destroyedTileCoords);
         for (int YYY = 1; YYY < room.size.y; YYY++)
         {
-            Debug.Log("0");
+            Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
             if (room.roomTilesMatrix[x, YYY, z] != null)
             {
                 Debug.Log("1");
