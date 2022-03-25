@@ -28,10 +28,11 @@ namespace _src.Scripts
             _parentRoom = _parentRoom;
         }
 
-        public void AddRigidbody(PhysicMaterial mat = null)
+        public void AddRigidbody(int newHealth, PhysicMaterial mat = null)
         {
             if (rb) return;
-            
+
+            localHealth = newHealth;
             Debug.Log("Add Rigidbody");
             
             rb = gameObject.AddComponent<Rigidbody>();
@@ -39,6 +40,7 @@ namespace _src.Scripts
             coll.material = mat;
             rb.isKinematic = false;
             rb.mass = 50;
+            transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
         }
         
         public void DamageTile(int dmg, ScoringActionType action = ScoringActionType.NULL)

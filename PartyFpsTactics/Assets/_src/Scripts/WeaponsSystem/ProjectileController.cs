@@ -249,7 +249,9 @@ public class ProjectileController : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = true;
         dead = true;
-        customLadder.ConstructLadder(ownerHc.transform.position);
+        
+        if (toolType == ToolType.CustomLadder)
+            customLadder.ConstructLadder(ownerHc.transform.position);
     }
 
     IEnumerator DeathCoroutine()

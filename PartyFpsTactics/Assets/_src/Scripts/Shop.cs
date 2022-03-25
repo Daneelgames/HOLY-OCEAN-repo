@@ -49,6 +49,9 @@ public class Shop : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
                 CloseShop();
             
+            if (Input.GetKeyDown(KeyCode.F))
+                BuyItem();
+            
             yield return null;
         }
     }
@@ -114,7 +117,7 @@ public class Shop : MonoBehaviour
             }
             else
             {
-                buyForText.text = "Buy for " + toolsList[selectedItemIndex].scoreCost + " dollars";
+                buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].scoreCost + " dollars";
                 buyButtonImage.color = Color.green;
             }
         }
