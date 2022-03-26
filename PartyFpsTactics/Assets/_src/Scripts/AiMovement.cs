@@ -338,6 +338,7 @@ public class AiMovement : MonoBehaviour
         if (navMeshBubble)
             LevelGenerator.Instance.RemoveNavMeshBubble(navMeshBubble);
         StopAllBehaviorCoroutines();
+        humanVisualController.SetMovementVelocity(Vector3.zero);
     }
 
     public void Resurrect()

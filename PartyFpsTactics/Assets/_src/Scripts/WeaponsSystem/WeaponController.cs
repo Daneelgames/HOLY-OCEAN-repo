@@ -37,12 +37,12 @@ public class WeaponController : MonoBehaviour
         set { onCooldown = value; }
     }
     
-    public void Shot(HealthController ownerHc)
+    public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
     {
-        StartCoroutine(Shot(shotHolder.forward, ownerHc));
+        StartCoroutine(Shot(shotHolder.forward, ownerHc, aiAimTransform));
     }
 
-    public IEnumerator Shot(Vector3 direction, HealthController ownerHc)
+    public IEnumerator Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
     {
         OnCooldown = true;
         if (attackSignalAu)
@@ -50,16 +50,23 @@ public class WeaponController : MonoBehaviour
             attackSignalAu.pitch = Random.Range(0.75f, 1.25f);
             attackSignalAu.Play();
         }
+
         yield return new WaitForSeconds(delay);
-        
+
         if (ownerHc.health <= 0)
             yield break;
+
+        if (aiAimTransform != null)
+        {
+            transform.LookAt(aiAimTransform.position);
+            direction = (aiAimTransform.position - shotHolder.position).normalized;
+        }
         
         var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
         ScoringActionType action = ScoringActionType.NULL;
         if (ownerHc == Player.Health)
             action = Player.Movement.GetCurrentScoringAction();
-        
+
         newProjectile.Init(ownerHc, action);
         yield return new WaitForSeconds(cooldown);
         OnCooldown = false;

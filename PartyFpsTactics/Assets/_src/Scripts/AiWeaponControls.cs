@@ -52,9 +52,11 @@ public class AiWeaponControls : MonoBehaviour
                 {
                     activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
                 }
+                targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
+                angle = Vector3.Angle(targetDir, transform.forward);
                 if (angle < minAngleToShoot)
                 {
-                    activeWeapon.Shot(hc);
+                    activeWeapon.Shot(hc, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform);
                 }
             }
         }

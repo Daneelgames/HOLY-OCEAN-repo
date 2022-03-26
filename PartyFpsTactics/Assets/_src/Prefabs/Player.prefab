@@ -154,6 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 783230254}
   - component: {fileID: 783230255}
+  - component: {fileID: 4081803567017885296}
   m_Layer: 7
   m_Name: Point Light
   m_TagString: Untagged
@@ -168,12 +169,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783230253}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4081011893266459431}
-  m_RootOrder: 1
+  m_Father: {fileID: 4081011893066873260}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &783230255
 Light:
@@ -184,21 +185,21 @@ Light:
   m_GameObject: {fileID: 783230253}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 2
+  m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
-  m_Intensity: 0.1
-  m_Range: 1
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 150
+  m_InnerSpotAngle: 90
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
-    m_Resolution: -1
+    m_Resolution: 128
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
+    m_Bias: 1
+    m_NormalBias: 1
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
       e00: 1
@@ -237,6 +238,20 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &4081803567017885296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783230253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 1
 --- !u!1 &1691523763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1367,7 @@ MonoBehaviour:
   camFovIdle: 100
   camFovAim: 90
   fovChangeSpeed: 3
-  gunMoveSpeed: 30
+  gunMoveSpeed: 100
   gunRotationSpeed: 5
 --- !u!114 &3117021502554673402
 MonoBehaviour:
@@ -1487,6 +1502,7 @@ Transform:
   - {fileID: 3235524484921543768}
   - {fileID: 369864347146224225}
   - {fileID: 4223736183445010004}
+  - {fileID: 783230254}
   m_Father: {fileID: 2205026912588922412}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1500,7 +1516,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.74509805, g: 0.77254903, b: 0.8, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1601,7 +1617,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2205026912588922412}
-  - {fileID: 783230254}
   m_Father: {fileID: 4081011892120011788}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -32,11 +32,11 @@ public class LevelGenerator : MonoBehaviour
     public BodyPart tileWallThinPrefab;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
-    public Cover coverPrefab;
+    public List<BodyPart> propsPrefabs;
     
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
-    public Vector2Int coversPerLevelMinMax = new Vector2Int(1, 10);
+    public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
@@ -100,7 +100,7 @@ public class LevelGenerator : MonoBehaviour
         levelsHeights = currentLevel.levelsHeights;
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
         explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
-        coversPerLevelMinMax = currentLevel.coversPerLevelMinMax;
+        propsPerLevelMinMax = currentLevel.propsPerLevelMinMax;
         grindRailsMinMax = currentLevel.grindRailsPerLevelMinMax;
         grindRailsPrefab = currentLevel.grindRailsPrefab;
         stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
@@ -212,6 +212,8 @@ public class LevelGenerator : MonoBehaviour
         newLevelGameObject.transform.rotation = rot;
 
         newLevel.roomTilesMatrix = new BodyPart[size.x,size.y,size.z];
+        bool hasRoof = index == levelsHeights.Count - 1;
+        
 
         List<Vector3Int> availableStarPositionsForThinWalls = new List<Vector3Int>();
         
@@ -226,13 +228,17 @@ public class LevelGenerator : MonoBehaviour
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
                 
-                // CEILING
-                var newCeilingTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
-                newCeilingTile.gameObject.name = "CeilingTile coords: " + x +", " + (size.y - 1) + ", " + z;
-                newCeilingTile.transform.localRotation = Quaternion.identity;
-                newCeilingTile.transform.localPosition = new Vector3(x - size.x / 2, size.y-1, z - size.z / 2);
-                newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x,size.y-1,z), newLevel);
-                newLevel.roomTilesMatrix[x, size.y-1, z] = newCeilingTile;
+                if (hasRoof)
+                {
+                    // CEILING ON TOP LEVEL
+                    var newCeilingTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
+                    newCeilingTile.gameObject.name = "CeilingTile coords: " + x + ", " + (size.y - 1) + ", " + z;
+                    newCeilingTile.transform.localRotation = Quaternion.identity;
+                    newCeilingTile.transform.localPosition = new Vector3(x - size.x / 2, size.y - 1, z - size.z / 2);
+                    newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x, size.y - 1, z), newLevel);
+                    newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
+                }
+                
                 
                 // SPAWN BUILDING'S OUTSIDE WALLS 
                 if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) 
@@ -275,13 +281,13 @@ public class LevelGenerator : MonoBehaviour
                         // SPAWN PROPS TILES
                         
                         int r = Random.Range(1, 4);
-                        
+                        r = 1;
                         for (int i = 1; i <= r; i++)
                         {
                             if (newLevel.roomTilesMatrix[x, i, z] != null)
                                 continue;
                             
-                            var newAdditionalTile = Instantiate(tileWallThinPrefab, newLevel.spawnedTransform);
+                            var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
                             
                             if (i == 1 && r > 1)
                                 ConstructCover(newAdditionalTile.gameObject);
@@ -298,12 +304,12 @@ public class LevelGenerator : MonoBehaviour
             yield return null;   
         }
 
-        yield return StartCoroutine(SpawnThinWallsOnLevel(availableStarPositionsForThinWalls, newLevel));
+        yield return StartCoroutine(SpawnThinWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
         
         spawnedLevels.Add(newLevel);
     }
 
-    IEnumerator SpawnThinWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level)
+    IEnumerator SpawnThinWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
     {
         // SPAWN INVISIBLE BLOCKERS FOR EMPTY SPACES
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
@@ -397,7 +403,12 @@ public class LevelGenerator : MonoBehaviour
                 var nextPos = nextAvailablePositions[Random.Range(0, nextAvailablePositions.Count)];
                 prevWallCoord = currentWallCoord;
                 currentWallCoord = nextPos;
-                for (int y = 1; y < level.size.y - 1;  y++) // except ceiling
+
+                int buildWallUntillY = level.size.y;
+                if (hasRoof)
+                    buildWallUntillY = level.size.y - 1;
+                
+                for (int y = 1; y < buildWallUntillY;  y++)
                 {
                     var newWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
                     newWallTile.transform.localRotation = Quaternion.identity;
@@ -410,7 +421,6 @@ public class LevelGenerator : MonoBehaviour
                 }
                 yield return null;
             }
-            
         }
     }
 
