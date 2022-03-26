@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MrPink.Health;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace _src.Scripts
         public int localHealth = 100;
 
         private Vector3Int tileRoomCoordinates = Vector3Int.zero;
-        public Collider coll;
+        public List<Collider> colliders;
         private Level _parentRoom;
         private Rigidbody rb;
 
@@ -37,7 +38,11 @@ namespace _src.Scripts
             
             rb = gameObject.AddComponent<Rigidbody>();
             rb.useGravity = true;
-            coll.material = mat;
+            foreach (var coll in colliders)
+            {
+                coll.material = mat;   
+            }
+            
             rb.isKinematic = false;
             rb.mass = 50;
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);

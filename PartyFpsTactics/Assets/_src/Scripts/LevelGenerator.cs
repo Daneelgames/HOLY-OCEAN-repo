@@ -278,8 +278,19 @@ public class LevelGenerator : MonoBehaviour
                     
                     if (Random.value > 0.95f)
                     {
-                        // SPAWN PROPS TILES
+                        // SPAWN PROPS TILES ON FLOOR
                         
+                        var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
+                            
+                        ConstructCover(newAdditionalTile.gameObject);
+                            
+                        newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
+                        newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
+                        newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
+                        newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
+                        newLevel.tilesWalls.Add(newAdditionalTile);
+                        
+                        /*
                         int r = Random.Range(1, 4);
                         r = 1;
                         for (int i = 1; i <= r; i++)
@@ -298,6 +309,7 @@ public class LevelGenerator : MonoBehaviour
                             newLevel.roomTilesMatrix[x, i, z] = newAdditionalTile;
                             newLevel.tilesWalls.Add(newAdditionalTile);
                         }
+                        */
                     }
                 }
             }
