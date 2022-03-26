@@ -1,4 +1,5 @@
 using Brezg.Serialization;
+using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

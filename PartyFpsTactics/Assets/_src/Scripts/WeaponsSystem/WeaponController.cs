@@ -1,58 +1,62 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using Brezg.Extensions.UniTaskExtensions;
+using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
-using Unity.VisualScripting;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+namespace MrPink.WeaponsSystem
 {
-    public Transform shotHolder;
-    public ProjectileController projectilePrefab;
-    public float cooldown = 1;
-    bool onCooldown = false;
-
-    public Transform raycastStartPoint;
-    public Transform raycastEndPoint;
-
-    private Quaternion _initLocalRotation;
-    public Quaternion InitLocalRotation
+    public class WeaponController : MonoBehaviour
     {
-        get { return _initLocalRotation; }
-    }
-
-    private void Awake()
-    {
-        _initLocalRotation = transform.localRotation;
-    }
-
-    public bool OnCooldown
-    {
-        get { return onCooldown; }
-        set { onCooldown = value; }
-    }
-    
-    public void Shot(HealthController ownerHc)
-    {
-        Shot(shotHolder.forward, ownerHc);
-    }
-
-    public void Shot(Vector3 direction, HealthController ownerHc)
-    {
-        var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
-        ScoringActionType action = ScoringActionType.NULL;
-        if (ownerHc == Player.Health)
-            action = Player.Movement.GetCurrentScoringAction();
+        public Transform shotHolder;
         
-        newProjectile.Init(ownerHc, action);
-        StartCoroutine(Cooldown());
-    }
+        public float cooldown = 1;
 
-    IEnumerator Cooldown()
-    {
-        OnCooldown = true;
-        yield return new WaitForSeconds(cooldown);
-        OnCooldown = false;
+        [SerializeField, AssetsOnly, Required]
+        public ProjectileController projectilePrefab;
+
+        [SerializeField, ChildGameObjectsOnly, CanBeNull]
+        private BaseWeaponAnimation _animation;
+
+        public Quaternion InitLocalRotation { get; private set; }
+    
+        public bool OnCooldown { get; set; } = false;
+
+    
+        private void Awake()
+        {
+            InitLocalRotation = transform.localRotation;
+        }
+    
+    
+        public void Shot(HealthController ownerHc)
+        {
+            Shot(shotHolder.forward, ownerHc);
+        }
+
+    
+        public void Shot(Vector3 direction, HealthController ownerHc)
+        {
+            var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
+            ScoringActionType action = ScoringActionType.NULL;
+            if (ownerHc == Player.Health)
+                action = Player.Movement.GetCurrentScoringAction();
+        
+            newProjectile.Init(ownerHc, action);
+            StartCoroutine(Cooldown());
+            
+            if (_animation != null)
+                _animation.Play().ForgetWithHandler();
+        }
+    
+
+        private IEnumerator Cooldown()
+        {
+            OnCooldown = true;
+            yield return new WaitForSeconds(cooldown);
+            OnCooldown = false;
+        }
     }
 }
