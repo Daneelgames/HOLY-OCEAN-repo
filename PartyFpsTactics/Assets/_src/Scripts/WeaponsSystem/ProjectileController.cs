@@ -51,12 +51,20 @@ public class ProjectileController : MonoBehaviour
         actionOnHit = action;
         
         lastPosition = transform.position;
-        shotAu.pitch = Random.Range(0.75f, 1.25f);
-        shotAu.Play();
-        flyAu.pitch = Random.Range(0.75f, 1.25f);
-        flyAu.Play();
         
-        if (!addVelocityEveryFrame)
+        if (shotAu != null)
+        {
+            shotAu.pitch = Random.Range(0.75f, 1.25f);
+            shotAu.Play();
+        }
+        
+        if (flyAu != null)
+        {
+            flyAu.pitch = Random.Range(0.75f, 1.25f);
+            flyAu.Play();
+        }
+        
+        if (rb != null && !addVelocityEveryFrame)
             rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
         
         StartCoroutine(MoveProjectile());
