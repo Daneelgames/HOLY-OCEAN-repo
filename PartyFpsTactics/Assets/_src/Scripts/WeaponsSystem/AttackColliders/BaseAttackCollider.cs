@@ -52,23 +52,20 @@ namespace MrPink.WeaponsSystem
             ownerHealth = owner;
             actionOnHit = action;
         }
-
-        // 0 - solid, 1 - unit
-        protected CollisionTarget TryDoDamage(Collider coll)
+        
+        
+        protected CollisionTarget TryDoDamage(Collider targetCollider)
         {
-            if (!_isSelfCollisionAvailable && ownerHealth.gameObject == coll.gameObject)
+            if (!_isSelfCollisionAvailable && ownerHealth.gameObject == targetCollider.gameObject)
                 return CollisionTarget.Self;
 
-            Debug.Log($"Colliding with {coll.name}");
-
-            
-            if (coll.gameObject == Player.GameObject)
+            if (targetCollider.gameObject == Player.GameObject)
             {
                 Player.Health.Damage(damage, actionOnHit);
                 return CollisionTarget.Creature;
             }
 
-            var bodyPart = coll.gameObject.GetComponent<BodyPart>();
+            var bodyPart = targetCollider.gameObject.GetComponent<BodyPart>();
 
             if (bodyPart == null)
                 return CollisionTarget.Solid;

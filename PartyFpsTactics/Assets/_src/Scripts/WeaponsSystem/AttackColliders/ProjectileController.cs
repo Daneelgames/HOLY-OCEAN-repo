@@ -74,9 +74,9 @@ public class ProjectileController : BaseAttackCollider
             if (hit.transform == null)
                 return;
                 
-            var type = TryDoDamage(hit.collider); // 0 solid, 1 unit
+            var target = TryDoDamage(hit.collider);
             
-            switch (type)
+            switch (target)
             {
                 case CollisionTarget.Solid:
                     PlayHitSolidFeedback();

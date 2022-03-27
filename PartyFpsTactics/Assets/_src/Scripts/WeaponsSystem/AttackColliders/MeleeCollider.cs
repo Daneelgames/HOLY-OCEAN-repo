@@ -7,9 +7,18 @@ namespace MrPink.WeaponsSystem
     {
         private void OnTriggerEnter(Collider other)
         {
-            // TODO implement feedback
-
-            TryDoDamage(other);
+            var target = TryDoDamage(other);
+            
+            switch (target)
+            {
+                case CollisionTarget.Solid:
+                    PlayHitSolidFeedback();
+                    break;
+                
+                case CollisionTarget.Creature:
+                    Debug.LogWarning("Can't find point");
+                    break;
+            }
         }
     }
 }
