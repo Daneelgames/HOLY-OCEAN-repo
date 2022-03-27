@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink.Health;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace MrPink.PlayerSystem
         
         [Header("LEFT GUN")]
         public WeaponController leftWeapon;
+        public Transform leftWeaponHolder;
         public Transform deathTransformLeft;
         public Transform idleTransformLeft;
         public Transform aimTransformLeft;
@@ -17,6 +19,7 @@ namespace MrPink.PlayerSystem
         
         [Header("RIGHT GUN")]
         public WeaponController rightWeapon;
+        public Transform rightWeaponHolder;
         public Transform deathTransformRight;
         public Transform idleTransformRight;
         public Transform aimTransformRight;
@@ -27,6 +30,7 @@ namespace MrPink.PlayerSystem
         public float camFovAim = 90;
         public float fovChangeSpeed = 90;
         public float gunMoveSpeed = 100;
+        public float gunsMoveDistanceScaler = 3;
         public float gunRotationSpeed = 100;
     
         private Transform currentTransformToRaycastL;
@@ -44,13 +48,14 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            weaponsTargetsParent.parent = null;
+            //weaponsTargetsParent.parent = null;
             targetLeftTransform = idleTransformLeft;
             targetRightTransform = idleTransformRight;
+            
             /*
-        leftWeapon.transform.parent = null;
-        rightWeapon.transform.parent = null;
-        */
+            leftWeapon.transform.parent = null;
+            rightWeapon.transform.parent = null;
+            */
         }
 
         private void Update()
@@ -114,6 +119,9 @@ namespace MrPink.PlayerSystem
 
             weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
             weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
+            
+            leftWeaponHolder.localPosition = Vector3.Lerp(leftWeaponHolder.localPosition, new Vector3(Player.Movement.MoveVector.x, Player.Movement.MoveVector.y + Player.Movement.rb.velocity.y * 0.3f, 0) * gunsMoveDistanceScaler,  gunMoveSpeed * Time.deltaTime);
+            rightWeaponHolder.localPosition = Vector3.Lerp(rightWeaponHolder.localPosition, new Vector3(Player.Movement.MoveVector.x, Player.Movement.MoveVector.y + Player.Movement.rb.velocity.y * 0.3f, 0) * gunsMoveDistanceScaler,  gunMoveSpeed * Time.deltaTime);
         }
 
 

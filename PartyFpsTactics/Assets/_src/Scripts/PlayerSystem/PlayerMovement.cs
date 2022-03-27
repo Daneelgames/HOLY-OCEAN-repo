@@ -24,6 +24,7 @@ namespace MrPink.PlayerSystem
         private Vector3 _targetVelocity;
         private Vector2 _movementInput;
         private Vector3 _moveVector;
+        public Vector3 MoveVector => _moveVector;
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
         public float coyoteTimeMax = 0.5f;
