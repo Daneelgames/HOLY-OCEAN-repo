@@ -33,14 +33,8 @@ public class ProjectileController : BaseAttackCollider
     
     public AudioSource shotAu;
     public AudioSource flyAu;
-    public AudioClip hitSolidFx;
-    public AudioClip hitUnitFx;
-    public AudioSource hitAu;
     private bool dead = false;
-
-    public Transform debrisParticles;
-    public Transform bloodParticles;
-
+    
     
     public override void Init(HealthController ownerHealth, ScoringActionType action = ScoringActionType.NULL)
     {
@@ -82,10 +76,16 @@ public class ProjectileController : BaseAttackCollider
                 
             var type = TryDoDamage(hit.collider); // 0 solid, 1 unit
             
-            if (type == 0) 
-                HitSolidFeedback();
-            else 
-                HitUnitFeedback(hit.point);
+            switch (type)
+            {
+                case CollisionTarget.Solid:
+                    PlayHitSolidFeedback();
+                    break;
+                
+                case CollisionTarget.Creature:
+                    PlayHitUnitFeedback(hit.point);
+                    break;
+            }
         }
         else if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
         {
@@ -96,7 +96,7 @@ public class ProjectileController : BaseAttackCollider
                 return;
                 
             TryDoDamage(hit.collider);
-            HitUnitFeedback(hit.point);
+            PlayHitUnitFeedback(hit.point);
         }
         else
             return;
@@ -137,25 +137,7 @@ public class ProjectileController : BaseAttackCollider
             lastPosition = transform.position;
         }
     }
-
-    void HitSolidFeedback()
-    {
-        hitAu.clip = hitSolidFx;
-        hitAu.pitch = Random.Range(0.75f, 1.25f);
-        hitAu.Play();
-        debrisParticles.parent = null;
-        debrisParticles.gameObject.SetActive(true);
-    }
     
-    void HitUnitFeedback(Vector3 contactPoint)
-    {
-        hitAu.clip = hitUnitFx;
-        hitAu.pitch = Random.Range(0.75f, 1.25f);
-        hitAu.Play();
-        bloodParticles.parent = null;
-        bloodParticles.position = contactPoint;
-        bloodParticles.gameObject.SetActive(true);
-    }
 
     void Death()
     {

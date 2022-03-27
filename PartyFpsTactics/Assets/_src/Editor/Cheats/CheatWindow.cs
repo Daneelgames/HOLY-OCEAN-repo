@@ -20,7 +20,7 @@ namespace MrPink.Editor.Cheats
             window._config = AssetDatabase.LoadAssetAtPath<CheatConfig>("Assets/_src/Configs/Cheat Config.asset");
         }
 
-        [SerializeField, InlineEditor(Expanded = true)]
+        [SerializeField, InlineEditor(Expanded = true, DrawHeader = false)]
         private CheatConfig _config;
 
 
