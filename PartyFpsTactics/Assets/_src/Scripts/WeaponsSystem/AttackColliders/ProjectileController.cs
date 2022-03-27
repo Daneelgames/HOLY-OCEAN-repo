@@ -9,11 +9,10 @@ using MrPink.WeaponsSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ProjectileController : MonoBehaviour
+public class ProjectileController : BaseAttackCollider
 {
     public bool addVelocityEveryFrame = true;
     public float projectileSpeed = 100;
-    public int damage = 100;
     [Header("If lifetime < 0, this object will not die on timer")]
     public float lifeTime = 2;
 
@@ -31,7 +30,7 @@ public class ProjectileController : MonoBehaviour
     private Vector3 currentPosition;
     private Vector3 lastPosition;
     private float distanceBetweenPositions;
-    private HealthController ownerHc;
+    
     public AudioSource shotAu;
     public AudioSource flyAu;
     public AudioClip hitSolidFx;
@@ -42,27 +41,15 @@ public class ProjectileController : MonoBehaviour
     public Transform debrisParticles;
     public Transform bloodParticles;
 
-    private ScoringActionType actionOnHit = ScoringActionType.NULL;
     
-    public void Init(HealthController _ownerHc, ScoringActionType action = ScoringActionType.NULL)
+    public override void Init(HealthController ownerHealth, ScoringActionType action = ScoringActionType.NULL)
     {
-        ownerHc = _ownerHc;
+        base.Init(ownerHealth, action);
 
-        actionOnHit = action;
-        
         lastPosition = transform.position;
         
-        if (shotAu != null)
-        {
-            shotAu.pitch = Random.Range(0.75f, 1.25f);
-            shotAu.Play();
-        }
-        
-        if (flyAu != null)
-        {
-            flyAu.pitch = Random.Range(0.75f, 1.25f);
-            flyAu.Play();
-        }
+        PlaySound(shotAu);
+        PlaySound(flyAu);
         
         if (rb != null && !addVelocityEveryFrame)
             rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
@@ -87,82 +74,47 @@ public class ProjectileController : MonoBehaviour
             rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
         currentPosition  = transform.position;
         distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
+        
         if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out var hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
         {
             if (hit.transform == null)
                 return;
                 
-            var type = TryToDamage(hit.collider); // 0 solid, 1 unit
+            var type = TryDoDamage(hit.collider); // 0 solid, 1 unit
             
-            if (type == 0) HitSolidFeedback();
-            else HitUnitFeedback(hit.point);
-            
-            if (dieOnContact)
-                Death();
-            else if (ricochetOnContact)
-            {
-                Ricochet(hit.normal);
-            }
-            else if (stickOnContact)
-            {
-                StickToObject(hit.collider);
-            }
-            return;
+            if (type == 0) 
+                HitSolidFeedback();
+            else 
+                HitUnitFeedback(hit.point);
         }
-        if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
+        else if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
         {
             if (hit.transform == null)
                 return;
             
-            if (hit.collider.gameObject == ownerHc.gameObject)
+            if (hit.collider.gameObject == ownerHealth.gameObject)
                 return;
                 
-            TryToDamage(hit.collider);
+            TryDoDamage(hit.collider);
             HitUnitFeedback(hit.point);
-            if (dieOnContact)
-                Death();
-            else if (ricochetOnContact)
-            {
-                Ricochet(hit.normal);
-            }
-            else if (stickOnContact)
-            {
-                StickToObject(hit.collider);
-            }
         }
+        else
+            return;
+        
+        HandleEndOfCollision(hit);
     }
 
-    int TryToDamage(Collider coll)
+    private void HandleEndOfCollision(RaycastHit hit)
     {
-        int damagedObjectType = 0;// 0 - solid, 1 - unit
-        if (coll.gameObject == Player.GameObject)
-        {
-            Player.Health.Damage(damage, actionOnHit);
-            return 1;
-        }
-        var bodyPart = coll.gameObject.GetComponent<BodyPart>();
-        if (bodyPart)
-        {
-            if (bodyPart.hc == null && bodyPart.localHealth > 0)
-            {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.DamageTile(damage, actionOnHit);
-                damagedObjectType = 0;
-            }
-            if (bodyPart.hc == ownerHc)
-                return -1;
-                
-            if (bodyPart && bodyPart.hc)
-            {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.hc.Damage(damage, actionOnHit, ownerHc.transform);
-            }
-        }
-
-        return damagedObjectType;
+        if (dieOnContact)
+            Death();
+        else if (ricochetOnContact)
+            Ricochet(hit.normal);
+        else if (stickOnContact)
+            StickToObject(hit.collider);
     }
-
-    IEnumerator MoveProjectile()
+    
+    private IEnumerator MoveProjectile()
     {
         float currentLifeTime = 0;
         while (true)
@@ -194,6 +146,7 @@ public class ProjectileController : MonoBehaviour
         debrisParticles.parent = null;
         debrisParticles.gameObject.SetActive(true);
     }
+    
     void HitUnitFeedback(Vector3 contactPoint)
     {
         hitAu.clip = hitUnitFx;
@@ -206,6 +159,8 @@ public class ProjectileController : MonoBehaviour
 
     void Death()
     {
+        Debug.Log("Destroy projectile");
+        
         dead = true;
         rb.isKinematic = true;
         transform.GetChild(0).gameObject.SetActive(false);

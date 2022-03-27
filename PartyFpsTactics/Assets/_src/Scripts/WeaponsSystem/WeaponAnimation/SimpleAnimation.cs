@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MrPink.WeaponsSystem
 {
-    public class BasicAnimation : BaseWeaponAnimation
+    public class SimpleAnimation : BaseWeaponAnimation
     {
         [SerializeField, ChildGameObjectsOnly, Required]
         private Animator _animator;

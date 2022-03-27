@@ -15,7 +15,7 @@ namespace MrPink.WeaponsSystem
         public float cooldown = 1;
 
         [SerializeField, AssetsOnly, Required]
-        public ProjectileController projectilePrefab;
+        private BaseAttackCollider _attackColliderPrefab;
 
         [SerializeField, ChildGameObjectsOnly, CanBeNull]
         private BaseWeaponAnimation _animation;
@@ -31,6 +31,7 @@ namespace MrPink.WeaponsSystem
         }
     
     
+        [Button]
         public void Shot(HealthController ownerHc)
         {
             Shot(shotHolder.forward, ownerHc);
@@ -39,7 +40,7 @@ namespace MrPink.WeaponsSystem
     
         public void Shot(Vector3 direction, HealthController ownerHc)
         {
-            var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
+            var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
             ScoringActionType action = ScoringActionType.NULL;
             if (ownerHc == Player.Health)
                 action = Player.Movement.GetCurrentScoringAction();
