@@ -6,7 +6,9 @@ using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Tools;
 using MrPink.WeaponsSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class ProjectileController : BaseAttackCollider
@@ -35,6 +37,15 @@ public class ProjectileController : BaseAttackCollider
     public AudioSource flyAu;
     private bool dead = false;
     
+    [ShowIf("toolType", ToolType.FragGrenade)]
+    [FormerlySerializedAs("fragGrenade")]
+    private FragGrenade _fragGrenade;
+    
+    [ShowIf("toolType", ToolType.CustomLadder)]
+    [FormerlySerializedAs("customLadder")]
+    private CustomLadder _customLadder;
+    
+    
     
     public override void Init(HealthController ownerHealth, ScoringActionType action = ScoringActionType.NULL)
     {
@@ -57,6 +68,22 @@ public class ProjectileController : BaseAttackCollider
         Gizmos.DrawRay(lastPosition, currentPosition - lastPosition);
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (dead)
+            return;
+
+        if (other.gameObject.layer != 6) 
+            return;
+        
+        
+        if (stickOnContact)
+            StickToObject(other.collider);
+
+        if (dieOnContact)
+            Death();
+    }
+    
     private void Update()
     {
         if (dead)
@@ -92,7 +119,7 @@ public class ProjectileController : BaseAttackCollider
             if (hit.transform == null)
                 return;
             
-            if (hit.collider.gameObject == ownerHealth.gameObject)
+            if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
                 return;
                 
             TryDoDamage(hit.collider);
@@ -143,6 +170,9 @@ public class ProjectileController : BaseAttackCollider
     {
         Debug.Log("Destroy projectile");
         
+        if (toolType == ToolType.FragGrenade)
+            _fragGrenade.Explode();
+        
         dead = true;
         rb.isKinematic = true;
         transform.GetChild(0).gameObject.SetActive(false);
@@ -167,6 +197,9 @@ public class ProjectileController : BaseAttackCollider
         rb.angularVelocity = Vector3.zero;
         rb.isKinematic = true;
         dead = true;
+        
+        if (toolType == ToolType.CustomLadder)
+            _customLadder.ConstructLadder(ownerHealth.transform.position);
     }
 
     IEnumerator DeathCoroutine()

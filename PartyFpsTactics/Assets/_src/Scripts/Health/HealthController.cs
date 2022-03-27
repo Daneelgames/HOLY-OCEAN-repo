@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using _src.Scripts;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
+using MrPink.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -79,7 +81,14 @@ namespace MrPink.Health
             if (IsImmortal)
                 damage = 0;
             
-            health -= damage;
+            
+            if (Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
+            {
+                PlayerUi.Instance.RemoveShieldFeedback();
+                PlayerInventory.Instance.RemoveTool(ToolType.OneTimeShield);
+            }
+            else
+                health -= damage;
         
 
             if (health <= 0)

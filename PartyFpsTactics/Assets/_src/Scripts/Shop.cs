@@ -15,6 +15,7 @@ public class Shop : MonoBehaviour
     public Animator canvasAnim;
     public Text selectedInfoNameText;
     public Text selectedInfoDescriptionText;
+    public Text buyForText;
     public Image buyButtonImage;
 
     private bool isActive = false;
@@ -30,8 +31,9 @@ public class Shop : MonoBehaviour
         Instance = this;
     }
 
-    void Start()
+    IEnumerator Start()
     {
+        toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
         switch (LevelGenerator.Instance.levelType)
         {
             case LevelGenerator.LevelType.Game:
@@ -40,6 +42,17 @@ public class Shop : MonoBehaviour
             case LevelGenerator.LevelType.Narrative:
                 CloseShop();
                 break;
+        }
+
+        while (isActive)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+                CloseShop();
+            
+            if (Input.GetKeyDown(KeyCode.F))
+                BuyItem();
+            
+            yield return null;
         }
     }
 
@@ -75,6 +88,7 @@ public class Shop : MonoBehaviour
         IsActive = false;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Player.ThrowableControls.Init();    
     }
     
     public void SelectItem(int index)
@@ -88,15 +102,30 @@ public class Shop : MonoBehaviour
         
         // TODO перенести текстовые штуки в систему локализации
         
-        if (Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
-            selectedInfoDescriptionText.text += ". Buy for " + toolsList[selectedItemIndex].scoreCost + ".";
-        else
-            selectedInfoDescriptionText.text += ". Max Amount.";
-        
-        if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore || Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
+        if (!Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
+        {
+            buyForText.text = "Max Amount";
             buyButtonImage.color = Color.red;
+        }
         else
-            buyButtonImage.color = Color.green;
+        {
+            if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore ||
+                Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
+            {
+                buyForText.text = "Not enough dollars";   
+                buyButtonImage.color = Color.red;
+            }
+            else
+            {
+                buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].scoreCost + " dollars";
+                buyButtonImage.color = Color.green;
+            }
+        }
+
+        buyForText.text = buyForText.text.ToUpper();
+        selectedInfoNameText.text = selectedInfoNameText.text.ToUpper();
+        selectedInfoDescriptionText.text = selectedInfoDescriptionText.text.ToUpper(); 
+
     }
 
     public void BuyItem()

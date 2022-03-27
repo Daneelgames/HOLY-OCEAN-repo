@@ -14,10 +14,18 @@ public class GameManager : MonoBehaviour
     public HealthController redTeamUnitPrefab;
     public HealthController blueTeamUnitPrefab;
     
+    
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         Instance = this;
         Random.InitState((int)DateTime.Now.Ticks);
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -30,25 +38,17 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
-            Restart();
+            StartProcScene();
     }
 
-    public void Restart()
+    public void StartProcScene()
     {
         SceneManager.LoadScene(0);
     }
-
-    public void LevelCompleted()
+    
+    public void StartFlatScene()
     {
-        /*
-        // save screenshot 
-        var texture = ScreenCapture.CaptureScreenshotAsTexture();
-        // do something with texture
-
-        // cleanup
-        Destroy(texture);
-        */
-        
+        ScreenshotSaver.Instance.SaveScreenshot();
         SceneManager.LoadScene(1);
     }
 

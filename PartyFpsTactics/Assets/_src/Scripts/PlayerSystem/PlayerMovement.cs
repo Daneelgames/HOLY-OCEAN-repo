@@ -1,9 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using MrPink.Health;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
 {
     public class PlayerMovement : MonoBehaviour
     {
+        public bool narrativePlayer = false;
         [Header("Movement")]
         public LayerMask WalkableLayerMask;
 
@@ -11,15 +15,19 @@ namespace MrPink.PlayerSystem
         public float gravity = 5;
         public float jumpForce = 300;
         public float walkSpeed = 5;
-        public float runSpeed = 5;
+        public float runSpeed = 8;
+        public float crouchSpeed = 2;
+        public float crouchRunSpeed = 3.5f;
         public float acceleration = 1;
+        public float groundCheckRadius = 0.25f;
         private bool _grounded;
         private Vector3 _targetVelocity;
         private Vector2 _movementInput;
         private Vector3 _moveVector;
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
-    
+        public float coyoteTimeMax = 0.5f;
+        private float coyoteTime = 0;
         bool leaning = false;
         bool moving = false;
         bool running = false;
@@ -30,13 +38,30 @@ namespace MrPink.PlayerSystem
         private Vector3 slopeNormal;
         public float slopeRayHeight = 0.25f;
         public float slopeRayDistance = 0.5f;
-        public float slopeRayRadius = 0.25f;
+
+        [Header("Crouching")] 
+        public bool crouching = false;
+        public CapsuleCollider topCollider;
+        public CapsuleCollider bottomCollider;
+
+        private Vector3 topColliderCenterStanding = new Vector3(0, 1.15f, 0);
+        private float topColliderHeightStanding = 1.55731f;
+        private Vector3 topColliderCenterCrouching = new Vector3(0, 0.3424235f, 0);
+        private float topColliderHeightCrouching = 0.6848469f;
+        
+        private Vector3 bottomColliderCenterStanding = new Vector3(0, 0.5f, 0);
+        private float bottomColliderHeightStanding = 1;
+        private Vector3 bottomColliderCenterCrouching = new Vector3(0, 0.25f, 0);
+        private float bottomColliderHeightCrouching = 0.5f;
         
         public Transform headTransform;
+        public float _playerHeadHeight = 1.8f;
+        public float _playerHeadHeightCrouch = 0.5f;
+        float _playerHeadHeightTarget;
+        
         public float mouseSensitivity = 5;
         public float vertLookAngleClamp = 85;
         public float cameraFollowBodySmooth = 3;
-        float _playerHeadHeight;
         private float _vertRotation = 0.0f;
         private float _horRotation = 0.0f;
         private bool goingUpHill = false;
@@ -46,11 +71,16 @@ namespace MrPink.PlayerSystem
 
         private bool dead = false;
         private Transform killerToLookAt;
+        private bool canUseCoyoteTime = true;
+        private float additinalFallForce;
+
+        private GrindRail activeGrindRail;
 
         private void Start()
         {
-            _playerHeadHeight = headTransform.localPosition.y * transform.localScale.x;
+            _playerHeadHeightTarget = _playerHeadHeight;
             headTransform.parent = null;
+            SetCrouch(false);
         }
 
         private void Update()
@@ -64,25 +94,8 @@ namespace MrPink.PlayerSystem
         
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
-        
-            /*
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            walkSpeed--;
-            runSpeed--;
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            walkSpeed++;
-            runSpeed++;
-        }
-        */
 
-            if (walkSpeed < 1)
-            {
-                walkSpeed = 1;
-                runSpeed = 1;
-            }
+            GetCrouch();
             GetMovement();
         }
         private void FixedUpdate()
@@ -94,25 +107,100 @@ namespace MrPink.PlayerSystem
 
             GroundCheck();
             SlopeCheck();
-            ApplyMovement();
+            
+            if (activeGrindRail == null)
+                ApplyFreeMovement();
+            else
+            {
+                ApplyGrindRailMovement();
+            }
         }
 
         private void LateUpdate()
         {
+            if (LevelGenerator.Instance.levelIsReady == false)
+                return;
+            
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
             MouseLook();
         }
 
+        void GetCrouch()
+        {
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                SetCrouch(!crouching);
+            }
+        }
+        
+        void SetCrouch(bool crouch)
+        {
+            if (narrativePlayer)
+                return;
+            
+            if (crouching == crouch)
+                return;
+
+            if (!crouch)
+            {
+                //if (Physics.CheckBox(transform.position + Vector3.up * 1.25f, new Vector3(0.15f, 1f, 0.15f), transform.rotation , 1 << 6))
+                //if (Physics.CheckCapsule(transform.position + Vector3.up * 1.25f, transform.position + Vector3.one * 0.5f, 0.1f, out var hit, 1 << 6))
+                if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.up, out var hit, 1f, 1 << 6))
+                {
+                    // found obstacle, can't stand
+                    Debug.Log(hit.collider.name);
+                    return;
+                }
+            }
+            
+            crouching = crouch;
+
+            if (crouching)
+            {
+                _playerHeadHeightTarget = _playerHeadHeightCrouch;
+                
+                /*
+                print("topColliderCenterCrouching " + topColliderCenterCrouching);
+                print("topColliderHeightCrouching " + topColliderHeightCrouching);
+                
+                print("topCollider.center crouch " + topCollider.center);
+                print("topCollider.height crouch " + topCollider.height);
+                */
+                
+                topCollider.center =  topColliderCenterCrouching;
+                topCollider.height = topColliderHeightCrouching;
+                bottomCollider.center = bottomColliderCenterCrouching;
+                bottomCollider.height = bottomColliderHeightCrouching;
+            }
+            else
+            {
+                _playerHeadHeightTarget = _playerHeadHeight;
+                
+                /*
+                print("topColliderCenterStanding " + topColliderCenterStanding);
+                print("topColliderHeightStanding " + topColliderHeightStanding);
+                
+                print("topCollider.center stand " + topCollider.center);
+                print("topCollider.height stand " + topCollider.height);
+                */
+                
+                topCollider.center =  topColliderCenterStanding;
+                topCollider.height = topColliderHeightStanding;
+                bottomCollider.center = bottomColliderCenterStanding;
+                bottomCollider.height = bottomColliderHeightStanding;
+            }
+        }
+        
         void GetMovement()
         {
-            if ((Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.D)) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
+            if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, -minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
                 leaning = true;
             }
-            else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.A)) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
+            else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, minMaxRotatorAngle, rotatorSpeed * Time.deltaTime));
                 leaning = true;
@@ -136,9 +224,13 @@ namespace MrPink.PlayerSystem
             if (onSlope)
                 _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
-            if (Input.GetKeyDown(KeyCode.Space) && _grounded)
+            // jump
+            if (Input.GetKeyDown(KeyCode.Space) && (_grounded || coyoteTime > 0))
             {
+                SetGrindRail(null);
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                StartCoroutine(CoyoteTimeCooldown());
+                coyoteTime = 0;
             }
         
             if (Input.GetKey(KeyCode.LeftShift))
@@ -146,14 +238,20 @@ namespace MrPink.PlayerSystem
                 running = moveInFrame;
                 moving = false;
 
-                _targetVelocity = _moveVector * runSpeed;
+                if (!crouching)
+                    _targetVelocity = _moveVector * runSpeed;
+                else
+                    _targetVelocity = _moveVector * crouchRunSpeed;
             }
             else
             {
                 moving = moveInFrame;
                 running = false;
             
-                _targetVelocity = _moveVector * walkSpeed;
+                if (!crouching)
+                    _targetVelocity = _moveVector * walkSpeed;
+                else
+                    _targetVelocity = _moveVector * crouchSpeed;
             }    
         
             if (goingUpHill)
@@ -191,28 +289,66 @@ namespace MrPink.PlayerSystem
             }
         }
 
+        IEnumerator CoyoteTimeCooldown()
+        {
+            canUseCoyoteTime = false;
+            yield return new WaitForSeconds(coyoteTimeMax);
+            
+            canUseCoyoteTime = true;
+        }
+
         void GroundCheck()
         {
-            if (Physics.CheckSphere(transform.position, 0.25f, WalkableLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 _grounded = true;
-
+                additinalFallForce = 0;
+                if (canUseCoyoteTime)
+                    coyoteTime = 0;
             }
             else
             {
+                if (_grounded && canUseCoyoteTime)
+                {
+                    coyoteTime = coyoteTimeMax;   
+                }
+
+                additinalFallForce += Time.deltaTime;
                 _grounded = false;
+                
+                if (canUseCoyoteTime && coyoteTime > 0)
+                {
+                    coyoteTime -= Time.deltaTime;
+                }
             }
         }
     
-        void ApplyMovement()
+        void ApplyFreeMovement()
         {
             float resultGravity = 0;
             if (!_grounded)
-                resultGravity = gravity;
+                resultGravity = gravity + additinalFallForce;
             else if (!onSlope)
                 resultGravity = 1;
 
             rb.velocity = _resultVelocity + Vector3.down * resultGravity;
+        }
+
+        void ApplyGrindRailMovement()
+        {
+            var targetTransform = activeGrindRail.GetTargetNode();
+            if (targetTransform == null)
+            {
+                SetGrindRail(null);
+                return;
+            }
+            
+            rb.velocity = (targetTransform.position - transform.position).normalized * 10;
+        }
+
+        public void SetGrindRail(GrindRail rail)
+        {
+            activeGrindRail = rail;
         }
     
         void MouseLook()
@@ -236,7 +372,9 @@ namespace MrPink.PlayerSystem
             newRotation = new Vector3(_vertRotation, 0, 0) + transform.eulerAngles;
             headTransform.rotation = Quaternion.Euler(newRotation);
 
-            headTransform.transform.position = Vector3.Lerp(headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeight, cameraFollowBodySmooth * Time.deltaTime);
+            headTransform.transform.position = 
+                Vector3.Lerp(headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeightTarget, 
+                    cameraFollowBodySmooth * Time.deltaTime);
         }
 
         public ScoringActionType GetCurrentScoringAction()

@@ -13,14 +13,14 @@ public class PlayerUi : MonoBehaviour
 
     public Dictionary<HealthController, Image> markedEnemies = new Dictionary<HealthController, Image>();
     public Vector3 enemyMarkerOffset;
+
+    public Animator shieldFeedbackAnim;
+
+    public GameObject controlsHintsUi;
+    private bool controlsHints = true;
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Update()
-    {
-        
     }
 
     public void MarkEnemy(HealthController enemy)
@@ -82,6 +82,30 @@ public class PlayerUi : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleControlsHints(!controlsHints);
+        }
+    }
+
+    void ToggleControlsHints(bool active)
+    {
+        controlsHints = active;
+
+        controlsHintsUi.SetActive(controlsHints);
+    }
+
+    public void AddShieldFeedback()
+    {
+        shieldFeedbackAnim.SetBool("Active", true);
+    }
+    public void RemoveShieldFeedback()
+    {
+        shieldFeedbackAnim.SetBool("Active", false);
+    }
+    
     Vector3 OnScreenPosition(Image marker, Vector3 targetPos)
     {
         // Giving limits to the icon so it sticks on the screen

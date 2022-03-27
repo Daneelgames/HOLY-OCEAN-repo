@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace MrPink.Tools
 {
-    [Serializable]
-    public partial class Tool
+    [CreateAssetMenu(fileName = "ToolData", menuName = "ScriptableObjects/ToolData", order = 1)]
+    public class Tool : ScriptableObject
     {
         public ToolType tool;
         public int scoreCost = 1000;

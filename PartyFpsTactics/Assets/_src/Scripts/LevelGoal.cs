@@ -26,7 +26,7 @@ public class LevelGoal : MonoBehaviour
         if (coll.gameObject == Player.GameObject)
         {
             collected = true;
-            GameManager.Instance.LevelCompleted();
+            GameManager.Instance.StartFlatScene();
         }
     }
 }

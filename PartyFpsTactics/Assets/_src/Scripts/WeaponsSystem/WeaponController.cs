@@ -1,10 +1,12 @@
-using System.Collections;
 using Brezg.Extensions.UniTaskExtensions;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace MrPink.WeaponsSystem
 {
@@ -13,6 +15,14 @@ namespace MrPink.WeaponsSystem
         public Transform shotHolder;
         
         public float cooldown = 1;
+
+        [SerializeField]
+        [FormerlySerializedAs("delay")]
+        private float _delay = 0f;
+        
+        [SerializeField]
+        [FormerlySerializedAs("attackSignalAu")]
+        private AudioSource _attackSignalAudioSource;
 
         [SerializeField, AssetsOnly, Required]
         private BaseAttackCollider _attackColliderPrefab;
@@ -32,31 +42,49 @@ namespace MrPink.WeaponsSystem
     
     
         [Button]
-        public void Shot(HealthController ownerHc)
+        public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
         {
-            Shot(shotHolder.forward, ownerHc);
+            Shot(shotHolder.forward, ownerHc, aiAimTransform).ForgetWithHandler();
         }
 
     
-        public void Shot(Vector3 direction, HealthController ownerHc)
+        public async UniTask Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
         {
+            OnCooldown = true;
+            if (_attackSignalAudioSource != null)
+            {
+                _attackSignalAudioSource.pitch = Random.Range(0.75f, 1.25f);
+                _attackSignalAudioSource.Play();
+            }
+
+            await UniTask.Delay((int)(_delay * 1000));
+        
+            if (ownerHc.health <= 0)
+                return;
+            
+            if (aiAimTransform != null)
+            {
+                transform.LookAt(aiAimTransform.position);
+                direction = (aiAimTransform.position - shotHolder.position).normalized;
+            }
+            
             var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
             ScoringActionType action = ScoringActionType.NULL;
             if (ownerHc == Player.Health)
                 action = Player.Movement.GetCurrentScoringAction();
         
             newProjectile.Init(ownerHc, action);
-            StartCoroutine(Cooldown());
+            Cooldown().ForgetWithHandler();
             
             if (_animation != null)
                 _animation.Play().ForgetWithHandler();
         }
     
 
-        private IEnumerator Cooldown()
+        private async UniTask Cooldown()
         {
             OnCooldown = true;
-            yield return new WaitForSeconds(cooldown);
+            await UniTask.Delay((int) (cooldown * 1000));
             OnCooldown = false;
         }
     }
