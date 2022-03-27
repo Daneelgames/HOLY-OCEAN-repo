@@ -133,6 +133,9 @@ public class ProjectileController : MonoBehaviour
             if (ownerHc != null && hit.collider.gameObject == ownerHc.gameObject)
                 return;
                 
+            if (hit.collider == null)
+                return;
+            
             TryToDamage(hit.collider);
             HitUnitFeedback(hit.point);
             if (dieOnContact)
@@ -159,6 +162,7 @@ public class ProjectileController : MonoBehaviour
         var bodyPart = coll.gameObject.GetComponent<BodyPart>();
         if (bodyPart)
         {
+            InteractableManager.Instance.ExplosionNearInteractables(transform.position);
             if (bodyPart.hc == null && bodyPart.localHealth > 0)
             {
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);

@@ -33,10 +33,13 @@ public class LevelGenerator : MonoBehaviour
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
     public List<BodyPart> propsPrefabs;
+    public List<InteractiveObject> lootToSpawnAround;
     
+
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
     public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
+    public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
@@ -101,6 +104,7 @@ public class LevelGenerator : MonoBehaviour
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
         explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
         propsPerLevelMinMax = currentLevel.propsPerLevelMinMax;
+        lootPerLevelMinMax = currentLevel.lootPerLevelMinMax;
         grindRailsMinMax = currentLevel.grindRailsPerLevelMinMax;
         grindRailsPrefab = currentLevel.grindRailsPrefab;
         stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
@@ -163,6 +167,7 @@ public class LevelGenerator : MonoBehaviour
         SpawnGoalOnTop();
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
+        yield return SpawnLoot();
         yield return StartCoroutine(SpawnGrindRails());
     }
 
@@ -635,6 +640,74 @@ public class LevelGenerator : MonoBehaviour
             Vector3 pos = randomTile.transform.position + Vector3.up;
             randomLevel.tilesInside.Remove(randomTile);
             Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+            yield return null;
+        }
+    }
+
+    IEnumerator SpawnLoot()
+    {
+        for (int i = 0; i < spawnedLevels.Count; i++)
+        {
+            int amount = Random.Range(lootPerLevelMinMax.x, lootPerLevelMinMax.y);
+            
+            // get all available tiles
+            List<BodyPart> tilesForSpawn = new List<BodyPart>();
+            for (int x = 0; x < spawnedLevels[i].size.x; x++)
+            {
+                for (int y = 0; y < spawnedLevels[i].size.y; y++)
+                {
+                    for (int z = 0; z < spawnedLevels[i].size.z; z++)
+                    {
+                        if (spawnedLevels[i].roomTilesMatrix[x, y, z] != null)
+                        {
+                            tilesForSpawn.Add(spawnedLevels[i].roomTilesMatrix[x, y, z]);
+                        }
+                    }
+                }
+            }
+            
+            for (int j = 0; j < amount; j++)
+            {
+                // choose tile to spawn on
+                var randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
+                while (randomTile == null)
+                {
+                    for (int k = tilesForSpawn.Count - 1; k >= 0; k--)
+                    {
+                        if (k >= tilesForSpawn.Count)
+                            continue;
+
+                        if (tilesForSpawn[k] == null)
+                            tilesForSpawn.RemoveAt(k);
+                    }
+
+                    if (tilesForSpawn.Count <= 0)
+                        break;
+                    
+                    randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
+                    yield return null;
+                }
+
+                if (randomTile == null)
+                    break;
+                
+                Vector3 randomOffset = Vector3.forward * 0.5f;
+                float r = Random.value;
+                if (r < 0.1)
+                    randomOffset = Vector3.down * 0.5f;
+                else if (r < 0.2f)
+                    randomOffset = Vector3.left * 0.5f;
+                else if (r < 0.3f)
+                    randomOffset = Vector3.right * 0.5f;
+                else if (r < 0.4f)
+                    randomOffset = Vector3.forward * 0.5f;
+                else if (r < 0.5f)
+                    randomOffset = Vector3.back * 0.5f;
+                else
+                    randomOffset = Vector3.up * 0.5f;
+                Vector3 spawnPos = randomTile.transform.position + randomOffset; 
+                var newLoot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], spawnPos, Quaternion.Euler(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360)));
+            }
             yield return null;
         }
     }
