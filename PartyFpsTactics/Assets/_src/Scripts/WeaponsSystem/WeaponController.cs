@@ -18,6 +18,12 @@ public class WeaponController : MonoBehaviour
     public Transform raycastStartPoint;
     public Transform raycastEndPoint;
 
+    [Header("FOR PLAYER")] 
+    public AudioSource reloadAu;
+    public AudioClip reloadingClip;
+    public AudioClip reloadEndClip;
+    
+    [Header("FOR AI")]
     public AudioSource attackSignalAu;
     
     private Quaternion _initLocalRotation;
@@ -50,6 +56,15 @@ public class WeaponController : MonoBehaviour
             attackSignalAu.pitch = Random.Range(0.75f, 1.25f);
             attackSignalAu.Play();
         }
+        
+        if (reloadAu)
+        {
+            // start playing reloading sfx
+            reloadAu.clip = reloadingClip;
+            reloadAu.pitch = Random.Range(0.8f, 1.2f);
+            reloadAu.loop = true;
+            reloadAu.Play();
+        }
 
         yield return new WaitForSeconds(delay);
 
@@ -69,6 +84,16 @@ public class WeaponController : MonoBehaviour
 
         newProjectile.Init(ownerHc, action);
         yield return new WaitForSeconds(cooldown);
+        
+        if (reloadAu)
+        {
+            // stop playing reloading sfx
+            // play reload end sfx
+            reloadAu.pitch = Random.Range(0.8f, 1.2f);
+            reloadAu.clip = reloadEndClip;
+            reloadAu.loop = false;
+            reloadAu.Play();
+        }
         OnCooldown = false;
     }
 }
