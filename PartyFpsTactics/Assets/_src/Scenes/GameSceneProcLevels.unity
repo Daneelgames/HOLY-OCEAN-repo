@@ -15,17 +15,17 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-  m_FogColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+  m_FogColor: {r: 0.41960785, g: 0.38431373, b: 0.5294118, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.03
   m_LinearFogStart: 0
   m_LinearFogEnd: 30
-  m_AmbientSkyColor: {r: 0.6693218, g: 0.8288668, b: 0.8396226, a: 1}
+  m_AmbientSkyColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 3
-  m_SubtractiveShadowColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
+  m_SubtractiveShadowColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -339,6 +339,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 60e44ffe5944ffe428272281aa09baf1, type: 2}
   - {fileID: 11400000, guid: e3f111173114b3c47863cecaa2279caa, type: 2}
   - {fileID: 11400000, guid: 089b4852726d3ed438f2846c48db9fdb, type: 2}
+  - {fileID: 11400000, guid: 365e6fea442d08e438d766658c080df6, type: 2}
+  - {fileID: 11400000, guid: 3417505b72764f84a949471f6bd8c320, type: 2}
+  - {fileID: 11400000, guid: 9b96cdcd7ed76f54e95028da5dc0e9be, type: 2}
   autoSelectCamera: 1
   cameraData:
     mainCamera: {fileID: 4081011893651433415}
@@ -350,7 +353,8 @@ MonoBehaviour:
   isOcclusionCulling: 1
   minCullingDistance: 3
   selectedPrototypeList:
-  - {fileID: 11400000, guid: 60e44ffe5944ffe428272281aa09baf1, type: 2}
+  - {fileID: 11400000, guid: 3417505b72764f84a949471f6bd8c320, type: 2}
+  - {fileID: 11400000, guid: 9b96cdcd7ed76f54e95028da5dc0e9be, type: 2}
   isPrototypeTextMode: 0
   showSceneSettingsBox: 1
   showPrototypeBox: 1
@@ -373,10 +377,19 @@ MonoBehaviour:
     registeredPrefabs: []
   - prefabPrototype: {fileID: 11400000, guid: 089b4852726d3ed438f2846c48db9fdb, type: 2}
     registeredPrefabs: []
+  - prefabPrototype: {fileID: 11400000, guid: 365e6fea442d08e438d766658c080df6, type: 2}
+    registeredPrefabs: []
+  - prefabPrototype: {fileID: 11400000, guid: 3417505b72764f84a949471f6bd8c320, type: 2}
+    registeredPrefabs: []
+  - prefabPrototype: {fileID: 11400000, guid: 9b96cdcd7ed76f54e95028da5dc0e9be, type: 2}
+    registeredPrefabs: []
   prefabList:
   - {fileID: 8943623579927757030, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
   - {fileID: 8943623579927757030, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   - {fileID: 8943623579927757030, guid: 0b2f22b3f2e6df147bc2b1197ac73c16, type: 3}
+  - {fileID: 4694376958820584944, guid: ad1261b2e513a454393ff3aee29fca35, type: 3}
+  - {fileID: 9159615970426592225, guid: 4236dc55a03c34f4caf7814cf58b9ef3, type: 3}
+  - {fileID: 1743293280166790513, guid: 617fae7eb04de0d4395d58097591cc5e, type: 3}
   enableMROnManagerDisable: 1
   enableMROnRemoveInstance: 1
 --- !u!4 &1619678738
@@ -1177,6 +1190,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1663981897}
     m_Modifications:
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: propsPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: propsPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 7422235489244223048, guid: 4236dc55a03c34f4caf7814cf58b9ef3, type: 3}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: propsPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 1877505377624061809, guid: 617fae7eb04de0d4395d58097591cc5e, type: 3}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -257,7 +257,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3c0073c3cabae01459e18d4f3844453a, type: 2}
+  - {fileID: 2100000, guid: 32f066e2d0cf5c14492c5c4d39c4a6db, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -291,8 +291,10 @@ GameObject:
   - component: {fileID: -6444434528068832751}
   - component: {fileID: 3868437479379071588}
   - component: {fileID: 1616192913251846936}
+  - component: {fileID: 8479649807028026866}
+  - component: {fileID: 6317402387976731221}
   m_Layer: 6
-  m_Name: floorLampProp
+  m_Name: FloorLampProp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,3 +359,29 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.47631836, y: 0.4751768, z: 0.46665835}
   m_Center: {x: 0, y: 2.0436873, z: -0.0031205043}
+--- !u!114 &8479649807028026866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943844518363093458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabPrototype: {fileID: 11400000, guid: 012437b3d6005e642963b9a9ba4ec4e7, type: 2}
+--- !u!114 &6317402387976731221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943844518363093458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af364fdba3900e7439da4d2db3e16fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gpuiPrefab: {fileID: 0}
