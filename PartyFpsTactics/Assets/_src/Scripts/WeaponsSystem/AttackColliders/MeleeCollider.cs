@@ -5,11 +5,11 @@ namespace MrPink.WeaponsSystem
 {
     public class MeleeCollider : BaseAttackCollider
     {
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
             // TODO implement feedback
 
-            TryDoDamage(collision.collider);
+            TryDoDamage(other);
         }
     }
 }
