@@ -204,6 +204,8 @@ public class ProjectileController : BaseAttackCollider
         float t = 0;
         while (t < 0.5f)
         {
+            if (flyAu == null)
+                return;
             flyAu.volume -= Time.deltaTime * 50;
             t -= Time.deltaTime;
             await UniTask.DelayFrame(1);

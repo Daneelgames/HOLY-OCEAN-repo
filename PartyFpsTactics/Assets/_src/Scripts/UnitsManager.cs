@@ -16,8 +16,8 @@ public class UnitsManager : MonoBehaviour
     public float tileExplosionForceBarrels = 50;
     public float tileExplosionForcePlayer = 100;
 
-    public List<BasicHealth> bodyPartsQueueToKill = new List<BasicHealth>();
-    public List<BasicHealth> bodyPartsQueueToKillCombo = new List<BasicHealth>();
+    private List<BasicHealth> _bodyPartsQueueToKill = new List<BasicHealth>();
+    private List<BasicHealth> _bodyPartsQueueToKillCombo = new List<BasicHealth>();
     private void Awake()
     {
         Instance = this;
@@ -32,6 +32,7 @@ public class UnitsManager : MonoBehaviour
     {
         RagdollTileExplosion(explosionPosition, -1, -1, -1, action);
     }
+    
     public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1, ScoringActionType action = ScoringActionType.NULL)
     {
         if (distance < 0)
@@ -79,25 +80,26 @@ public class UnitsManager : MonoBehaviour
     public void AddHealthEntityToQueue(BasicHealth part, ScoringActionType action)
     {
         if (action != ScoringActionType.NULL)
-            bodyPartsQueueToKillCombo.Add(part);
+            _bodyPartsQueueToKillCombo.Add(part);
         else
-            bodyPartsQueueToKill.Add(part);
+            _bodyPartsQueueToKill.Add(part);
     }
-    IEnumerator BodyPartsKillQueue()
+    
+    private IEnumerator BodyPartsKillQueue()
     {
         int j = 0;
         while (true)
         {
             yield return null;
             
-            if (bodyPartsQueueToKillCombo.Count > 0)
+            if (_bodyPartsQueueToKillCombo.Count > 0)
             {
-                for (int i = bodyPartsQueueToKillCombo.Count - 1; i >= 0; i--)
+                for (int i = _bodyPartsQueueToKillCombo.Count - 1; i >= 0; i--)
                 {
-                    if (bodyPartsQueueToKillCombo[i] != null)
-                        bodyPartsQueueToKillCombo[i].Kill(true);
+                    if (_bodyPartsQueueToKillCombo[i] != null)
+                        _bodyPartsQueueToKillCombo[i].Kill(true);
 
-                    bodyPartsQueueToKillCombo.RemoveAt(i);
+                    _bodyPartsQueueToKillCombo.RemoveAt(i);
 
                     j++;
                     if (j > 3)
@@ -108,15 +110,15 @@ public class UnitsManager : MonoBehaviour
                 }
             }
             
-            if (bodyPartsQueueToKill.Count <= 0)
+            if (_bodyPartsQueueToKill.Count <= 0)
                 continue;
 
-            for (int i = bodyPartsQueueToKill.Count - 1; i >= 0; i--)
+            for (int i = _bodyPartsQueueToKill.Count - 1; i >= 0; i--)
             {
-                if (bodyPartsQueueToKill[i] != null)
-                    bodyPartsQueueToKill[i].Kill(false);
+                if (_bodyPartsQueueToKill[i] != null)
+                    _bodyPartsQueueToKill[i].Kill(false);
 
-                bodyPartsQueueToKill.RemoveAt(i);
+                _bodyPartsQueueToKill.RemoveAt(i);
                 
                 j++;
                 if (j > 3)
