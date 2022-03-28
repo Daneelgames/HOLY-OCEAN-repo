@@ -670,7 +670,7 @@ public class LevelGenerator : MonoBehaviour
             
             if (destroyTilesAround)
             {
-                var hit = Physics.OverlapSphere(newStairsTile.transform.position, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), 1 << 6);
+                var hit = Physics.OverlapSphere(newStairsTile.transform.position + Vector3.up, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), 1 << 6);
                 
                 for (int i = 0; i < hit.Length; i++)
                 {
