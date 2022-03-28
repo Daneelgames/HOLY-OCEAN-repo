@@ -353,7 +353,7 @@ public class LevelGenerator : MonoBehaviour
                 {
                     var newRoomWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
                     newRoomWallTile.transform.localRotation = Quaternion.identity;
-                    newRoomWallTile.transform.localPosition =  new Vector3(x, y, z);
+                    newRoomWallTile.transform.localPosition =  new Vector3(x, y, z)  - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                     level.roomTilesMatrix[x, y, z] = newRoomWallTile;
                     
                     Debug.Log("Room walls. level.roomTilesMatrix[" + x +", " + y +", " + z +"]; " + level.roomTilesMatrix[x, y, z].name +"; newWallTile is " + newRoomWallTile);

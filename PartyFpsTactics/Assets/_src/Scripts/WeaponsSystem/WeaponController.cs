@@ -30,6 +30,8 @@ namespace MrPink.WeaponsSystem
         [SerializeField, ChildGameObjectsOnly, CanBeNull]
         private BaseWeaponAnimation _animation;
 
+        public float gunsMoveDistanceScaler = 0.2f;
+
         public Quaternion InitLocalRotation { get; private set; }
     
         public bool OnCooldown { get; set; } = false;
