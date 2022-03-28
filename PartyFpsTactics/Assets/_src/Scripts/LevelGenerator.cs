@@ -31,6 +31,7 @@ public class LevelGenerator : MonoBehaviour
     public BodyPart tilePrefab;
     public BodyPart tileWallPrefab;
     public BodyPart tileWallThinPrefab;
+    public List<BodyPart> tileWallThinColorPrefabs;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
     public List<BodyPart> propsPrefabs;
@@ -366,6 +367,7 @@ public class LevelGenerator : MonoBehaviour
             backSidePosition = Mathf.Clamp(backSidePosition, 1, level.size.y - 1);
             */
 
+            var roomPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
             for (int x = leftSidePosition; x <= rightSidePosition; x++)
             {
                 for (int z = backSidePosition; z <= frontSidePosition; z++)
@@ -384,7 +386,7 @@ public class LevelGenerator : MonoBehaviour
 
                     for (int y = 1; y < buildWallUntillY; y++)
                     {
-                        var newRoomWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
+                        var newRoomWallTile = Instantiate(roomPrefab, level.spawnedTransform);
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
                         newRoomWallTile.transform.localPosition =
                             new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
