@@ -1,17 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using Brezg.Extensions.UniTaskExtensions;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
-using MrPink.PlayerSystem;
 using MrPink.Tools;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 public class ProjectileController : BaseAttackCollider
 {
@@ -49,9 +44,9 @@ public class ProjectileController : BaseAttackCollider
     
     
     
-    public override void Init(HealthController ownerHealth, ScoringActionType action = ScoringActionType.NULL)
+    public override void Init(HealthController owner, DamageSource source, ScoringActionType action = ScoringActionType.NULL)
     {
-        base.Init(ownerHealth, action);
+        base.Init(owner, source, action);
 
         lastPosition = transform.position;
         
@@ -209,8 +204,9 @@ public class ProjectileController : BaseAttackCollider
         float t = 0;
         while (t < 0.5f)
         {
-            if (flyAu)
-                flyAu.volume -= Time.deltaTime * 50;
+            if (flyAu == null)
+                return;
+            flyAu.volume -= Time.deltaTime * 50;
             t -= Time.deltaTime;
             await UniTask.DelayFrame(1);
         }

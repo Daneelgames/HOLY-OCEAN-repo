@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using _src.Scripts;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MrPink.Health
 {
@@ -52,28 +55,45 @@ namespace MrPink.Health
             healthMax = health;
             UnitsManager.Instance.unitsInGame.Add(this);
         }
+        
+        #if UNITY_EDITOR
 
-        [ContextMenu("GetBodyParts")]
-        public void GetBodyParts()
+        [ContextMenu("Link Body Parts")]
+        private void LinkBodyParts()
+        {
+            ConvertDeprecatedTileHealth();
+            SetupBodyParts();
+            AssetDatabase.SaveAssets();
+        }
+
+        private void ConvertDeprecatedTileHealth()
+        {
+            foreach (var deprecated in transform.GetComponentsInChildren<TileHealth>())
+            {
+                var obj = deprecated.gameObject;
+                DestroyImmediate(deprecated);
+                var bodyPart = obj.AddComponent<BodyPart>();
+                EditorUtility.SetDirty(bodyPart);
+            }
+        }
+        
+        private void SetupBodyParts()
         {
             bodyParts = new List<BodyPart>();
             var parts = transform.GetComponentsInChildren<BodyPart>();
             for (int i = 0; i < parts.Length; i++)
             {
                 bodyParts.Add(parts[i]);
-                parts[i].hc = this;
+                parts[i].HealthController = this;
+                
+                EditorUtility.SetDirty(parts[i]);
             }
+            EditorUtility.SetDirty(this);
         }
-        [ContextMenu("SetHcToParts")]
-        public void SetHcToParts()
-        {
-            for (int i = 0; i < bodyParts.Count; i++)
-            {
-                bodyParts[i].hc = this;
-            }
-        }
+        
+        #endif
 
-        public void Damage(int damage, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
+        public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {
             if (health <= 0)
                 return;
@@ -95,7 +115,7 @@ namespace MrPink.Health
             {
                 StartCoroutine(Death(action, killer));
             
-                if (action != ScoringActionType.NULL)
+                if (source == DamageSource.Player && action != ScoringActionType.NULL)
                     ScoringSystem.Instance.RegisterAction(action);
                 
                 return;

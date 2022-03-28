@@ -11,10 +11,15 @@ namespace MrPink.Cheats
         [OnValueChanged(nameof(SetImmortalState))]
         private bool _isImmortal;
         
+        [ShowInInspector]
+        [OnValueChanged(nameof(SetMuteState))]
+        private bool _isMuted;
+        
         
         public void ApplyAll()
         {
             SetImmortalState(_isImmortal);
+            SetMuteState(_isMuted);
         }
         
         private static void SetImmortalState(bool value)
@@ -26,6 +31,16 @@ namespace MrPink.Cheats
             Debug.Log($"Immortality cheat {status}");
 
             Player.Health.IsImmortal = value;
+        }
+
+        private static void SetMuteState(bool value)
+        {
+            if (!Application.isPlaying)
+                return;
+            
+            Debug.Log(value ? "Muted" : "Unmuted");
+
+            AudioListener.volume = value ? 0 : 1;
         }
     }
 }

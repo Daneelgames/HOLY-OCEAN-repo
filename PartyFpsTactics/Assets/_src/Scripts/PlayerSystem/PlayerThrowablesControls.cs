@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MrPink.Health;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,7 +73,7 @@ namespace MrPink.PlayerSystem
                 var newTool = Instantiate(toolsPrefabs[selectedTool]);
                 newTool.transform.position = Player.Movement.headTransform.position;
                 newTool.transform.rotation = Player.MainCamera.transform.rotation;
-                newTool.Init(Player.Health);
+                newTool.Init(Player.Health, DamageSource.Player);
                 Player.Inventory.RemoveTool(toolsPrefabs[selectedTool].toolType);
                 UpdateSelectedToolFeedback();
             }

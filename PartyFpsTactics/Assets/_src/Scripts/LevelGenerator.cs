@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using MrPink;
+using MrPink.Health;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -28,13 +29,13 @@ public class LevelGenerator : MonoBehaviour
     [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
     
     public GameObject levelGoalPrefab;
-    public BodyPart tilePrefab;
-    public BodyPart tileWallPrefab;
-    public BodyPart tileWallThinPrefab;
-    public List<BodyPart> tileWallThinColorPrefabs;
+    public TileHealth tilePrefab;
+    public TileHealth tileWallPrefab;
+    public TileHealth tileWallThinPrefab;
+    public List<TileHealth> tileWallThinColorPrefabs;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
-    public List<BodyPart> propsPrefabs;
+    public List<TileHealth> propsPrefabs;
     public List<InteractiveObject> lootToSpawnAround;
     
 
@@ -218,7 +219,7 @@ public class LevelGenerator : MonoBehaviour
         newLevelGameObject.transform.position = pos;
         newLevelGameObject.transform.rotation = rot;
 
-        newLevel.roomTilesMatrix = new BodyPart[size.x,size.y,size.z];
+        newLevel.roomTilesMatrix = new TileHealth[size.x,size.y,size.z];
         bool hasRoof = index == levelsHeights.Count - 1;
         
 
@@ -375,8 +376,6 @@ public class LevelGenerator : MonoBehaviour
                     if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition &&
                         z != frontSidePosition)
                     {
-                        Debug.Log(
-                            "if (x != leftSidePosition || x != rightSidePosition || z != backSidePosition || z != frontSidePosition)");
                         continue;
                     }
 
@@ -392,8 +391,6 @@ public class LevelGenerator : MonoBehaviour
                             new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
 
-                        Debug.Log("Room walls. level.roomTilesMatrix[" + x + ", " + y + ", " + z + "]; " +
-                                  level.roomTilesMatrix[x, y, z].name + "; newWallTile is " + newRoomWallTile);
                         var coords = new Vector3Int(x, y, z);
                         newRoomWallTile.SetTileRoomCoordinates(coords, level);
                     }
@@ -689,7 +686,7 @@ public class LevelGenerator : MonoBehaviour
                         continue;
                     }
 
-                    var bodyPart = hit[i].transform.gameObject.GetComponent<BodyPart>();
+                    var bodyPart = hit[i].transform.gameObject.GetComponent<TileHealth>();
                     bodyPart.DestroyTileFromGenerator();
                 }
             }
@@ -728,7 +725,7 @@ public class LevelGenerator : MonoBehaviour
             int amount = Random.Range(lootPerLevelMinMax.x, lootPerLevelMinMax.y);
             
             // get all available tiles
-            List<BodyPart> tilesForSpawn = new List<BodyPart>();
+            List<TileHealth> tilesForSpawn = new List<TileHealth>();
             for (int x = 0; x < spawnedLevels[i].size.x; x++)
             {
                 for (int y = 0; y < spawnedLevels[i].size.y; y++)
@@ -810,7 +807,7 @@ public class LevelGenerator : MonoBehaviour
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
     }
 
-    public void TileDamaged(BodyPart tile)
+    public void TileDamaged(TileHealth tile)
     {
         if (tilesToDamage.Contains(tile.transform))
             return;
@@ -955,9 +952,9 @@ public class LevelGenerator : MonoBehaviour
 public class Level
 {
     public List<Room> spawnedRooms = new List<Room>();
-    public BodyPart[,,] roomTilesMatrix;
-    public List<BodyPart> tilesInside = new List<BodyPart>();
-    public List<BodyPart> tilesWalls = new List<BodyPart>();
+    public TileHealth[,,] roomTilesMatrix;
+    public List<TileHealth> tilesInside = new List<TileHealth>();
+    public List<TileHealth> tilesWalls = new List<TileHealth>();
     public Transform spawnedTransform;
     public Vector3 position;
     public Vector3Int size;

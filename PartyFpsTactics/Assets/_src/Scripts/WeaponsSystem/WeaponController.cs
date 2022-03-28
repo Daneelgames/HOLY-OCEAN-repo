@@ -74,11 +74,13 @@ namespace MrPink.WeaponsSystem
             }
             
             var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
-            ScoringActionType action = ScoringActionType.NULL;
-            if (ownerHc == Player.Health)
-                action = Player.Movement.GetCurrentScoringAction();
-        
-            newProjectile.Init(ownerHc, action);
+
+            bool isPlayer = ownerHc == Player.Health;
+            
+            ScoringActionType action = isPlayer ? Player.Movement.GetCurrentScoringAction() : ScoringActionType.NULL;
+            DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
+            
+            newProjectile.Init(ownerHc, source, action);
             Cooldown().ForgetWithHandler();
             
             if (_animation != null)
