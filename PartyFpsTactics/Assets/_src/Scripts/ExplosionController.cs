@@ -44,7 +44,7 @@ public class ExplosionController : MonoBehaviour
         
         collidedGameObjects.Add(other.gameObject);
         
-        if (Vector3.Distance(transform.position,Player.GameObject.transform.position) <= explosionDistance)
+        if (Vector3.Distance(transform.position,Player.Position) <= explosionDistance)
         {
             collidedGameObjects.Add(Player.Movement.gameObject);
             Player.Health.Damage(damage, DamageSource.Environment);

@@ -23,13 +23,18 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerWeaponControls _weapon;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerThrowablesControls _throwableControls;
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerInventory _inventory;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerInteractor _interactor;
+        
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private Transform _positionableObject;
         
         
         public static GameObject GameObject
@@ -54,8 +59,15 @@ namespace MrPink.PlayerSystem
 
         public static PlayerInventory Inventory
             => _instance._inventory;
+        
         public static PlayerInteractor Interactor
             => _instance._interactor;
+
+        public static Vector3 Position
+        {
+            get => _instance._positionableObject.position;
+            set => _instance._positionableObject.position = value;
+        }
         
         
         private void Awake()
