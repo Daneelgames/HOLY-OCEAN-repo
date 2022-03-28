@@ -330,7 +330,7 @@ public class LevelGenerator : MonoBehaviour
     {
         // SPAWN INVISIBLE BLOCKERS FOR EMPTY SPACES
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
-        Vector3Int roomSize = new Vector3Int(level.size.x / 2, level.size.y, level.size.z / 2);
+        Vector3Int roomSize = new Vector3Int(level.size.x / 5, level.size.y, level.size.z / 5);
         Vector3Int roomLocalCoords = new Vector3Int(Random.Range(0, level.size.x / 2), 0, Random.Range(0, level.size.z / 2));
         for (int x = 0; x < roomSize.x; x++)
         {
@@ -339,6 +339,7 @@ public class LevelGenerator : MonoBehaviour
                 for (int y = 0; y < roomSize.y; y++)
                 {
                     invisibleWallBlockers[roomLocalCoords.x + x, y, roomLocalCoords.z + z] = 1;
+                    //Debug.Log("invisibleWallBlockers[roomLocalCoords.x + x, y, roomLocalCoords.z + z] = 1;");
                 }
             }
         }
