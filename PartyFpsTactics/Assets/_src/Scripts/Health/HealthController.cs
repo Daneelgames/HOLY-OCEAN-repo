@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using MrPink.PlayerSystem;
+using Sirenix.OdinInspector;
 using MrPink.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -25,7 +26,6 @@ namespace MrPink.Health
     
         [Header("AI")]
         public AiMovement AiMovement;
-        public AiWeaponControls AiWeaponControls;
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
@@ -43,6 +43,9 @@ namespace MrPink.Health
 
 
         public List<DamageState> damageStates;
+
+        [ShowInInspector, ReadOnly] 
+        public bool IsImmortal { get; set; } = false;
 
         private void Start()
         {
@@ -74,6 +77,10 @@ namespace MrPink.Health
         {
             if (health <= 0)
                 return;
+
+            if (IsImmortal)
+                damage = 0;
+            
             
             if (Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
             {

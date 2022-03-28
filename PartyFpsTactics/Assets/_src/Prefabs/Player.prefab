@@ -861,6 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingPistolWeapon: {fileID: 4860745060149239904, guid: 9ff008ca9d8baed41b67b76d2aca903b, type: 3}
+  _startingSwordWeapon: {fileID: 2642470501878746763, guid: e1bbc1d70dfae460fa94dc1bf7fd267f, type: 3}
 --- !u!1 &2831983243391083355
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,7 +920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8867924, g: 0.75711995, b: 0.8236186, a: 1}
+  m_Color: {r: 0.3301887, g: 0.1759968, b: 0.25529546, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1093,6 +1094,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7726002239220614177}
+  - component: {fileID: 9134250700409668465}
   m_Layer: 7
   m_Name: WeaponParentR
   m_TagString: Untagged
@@ -1118,6 +1120,27 @@ Transform:
   m_Father: {fileID: 369864347146224225}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9134250700409668465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693788916305649102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ec0f9dd61047c5ac5fdbc5864fc1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapon: {fileID: 0}
+  _positions:
+    _keyData: 00000000010000000200000003000000
+    _valueData:
+    - {fileID: 3662836889026602953}
+    - {fileID: 6657022865663137196}
+    - {fileID: 6495879218115689766}
+    - {fileID: 203198190963057994}
+  _mouseButtonIndex: 1
 --- !u!1 &3820065088636773223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,6 +1150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 28064608572480494}
+  - component: {fileID: 3613160933741030116}
   m_Layer: 7
   m_Name: WeaponParentL
   m_TagString: Untagged
@@ -1152,6 +1176,27 @@ Transform:
   m_Father: {fileID: 369864347146224225}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3613160933741030116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3820065088636773223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ec0f9dd61047c5ac5fdbc5864fc1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapon: {fileID: 0}
+  _positions:
+    _keyData: 00000000010000000200000003000000
+    _valueData:
+    - {fileID: 3522286416970102604}
+    - {fileID: 4552263343525344794}
+    - {fileID: 2476280237651529078}
+    - {fileID: 5515058949708685451}
+  _mouseButtonIndex: 0
 --- !u!1 &4019429258642545523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,23 +1399,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponsTargetsParent: {fileID: 369864347146224225}
   weaponsParent: {fileID: 2205026912588922412}
-  leftWeapon: {fileID: 0}
-  leftWeaponHolder: {fileID: 28064608572480494}
-  deathTransformLeft: {fileID: 5515058949708685451}
-  idleTransformLeft: {fileID: 3522286416970102604}
-  aimTransformLeft: {fileID: 4552263343525344794}
-  reloadTransformLeft: {fileID: 2476280237651529078}
-  rightWeapon: {fileID: 0}
-  rightWeaponHolder: {fileID: 7726002239220614177}
-  deathTransformRight: {fileID: 203198190963057994}
-  idleTransformRight: {fileID: 3662836889026602953}
-  aimTransformRight: {fileID: 6657022865663137196}
-  reloadTransformRight: {fileID: 6495879218115689766}
+  _hands:
+    _keyData: 0000000001000000
+    _valueData:
+    - {fileID: 3613160933741030116}
+    - {fileID: 9134250700409668465}
   camFovIdle: 100
   camFovAim: 90
   fovChangeSpeed: 3
-  gunMoveSpeed: 2
-  gunsMoveDistanceScaler: 0.5
+  gunMoveSpeed: 50
   gunRotationSpeed: 5
 --- !u!114 &3117021502554673402
 MonoBehaviour:
@@ -1582,7 +1619,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using MrPink.Health;
 using UnityEngine;
 
-namespace _src.Scripts
+namespace MrPink
 {
     public class BodyPart : MonoBehaviour
     {

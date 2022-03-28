@@ -1,99 +1,91 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Brezg.Extensions.UniTaskExtensions;
+using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
-using Unity.VisualScripting;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class WeaponController : MonoBehaviour
+namespace MrPink.WeaponsSystem
 {
-    public Transform shotHolder;
-    public ProjectileController projectilePrefab;
-    public float delay = 0;
-    public float cooldown = 1;
-    bool onCooldown = false;
-
-    public Transform raycastStartPoint;
-    public Transform raycastEndPoint;
-
-    [Header("FOR PLAYER")] 
-    public AudioSource reloadAu;
-    public AudioClip reloadingClip;
-    public AudioClip reloadEndClip;
-    
-    [Header("FOR AI")]
-    public AudioSource attackSignalAu;
-    
-    private Quaternion _initLocalRotation;
-    public Quaternion InitLocalRotation
+    public class WeaponController : MonoBehaviour
     {
-        get { return _initLocalRotation; }
-    }
-
-    private void Awake()
-    {
-        _initLocalRotation = transform.localRotation;
-    }
-
-    public bool OnCooldown
-    {
-        get { return onCooldown; }
-        set { onCooldown = value; }
-    }
-    
-    public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
-    {
-        StartCoroutine(Shot(shotHolder.forward, ownerHc, aiAimTransform));
-    }
-
-    public IEnumerator Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
-    {
-        OnCooldown = true;
-        if (attackSignalAu)
-        {
-            attackSignalAu.pitch = Random.Range(0.75f, 1.25f);
-            attackSignalAu.Play();
-        }
+        public Transform shotHolder;
         
-        if (reloadAu)
-        {
-            // start playing reloading sfx
-            reloadAu.clip = reloadingClip;
-            reloadAu.pitch = Random.Range(0.8f, 1.2f);
-            reloadAu.loop = true;
-            reloadAu.Play();
-        }
+        public float cooldown = 1;
 
-        yield return new WaitForSeconds(delay);
-
-        if (ownerHc.health <= 0)
-            yield break;
-
-        if (aiAimTransform != null)
-        {
-            transform.LookAt(aiAimTransform.position);
-            direction = (aiAimTransform.position - shotHolder.position).normalized;
-        }
+        [SerializeField]
+        [FormerlySerializedAs("delay")]
+        private float _delay = 0f;
         
-        var newProjectile = Instantiate(projectilePrefab, shotHolder.position, Quaternion.LookRotation(direction));
-        ScoringActionType action = ScoringActionType.NULL;
-        if (ownerHc == Player.Health)
-            action = Player.Movement.GetCurrentScoringAction();
+        [SerializeField]
+        [FormerlySerializedAs("attackSignalAu")]
+        private AudioSource _attackSignalAudioSource;
 
-        newProjectile.Init(ownerHc, action);
-        yield return new WaitForSeconds(cooldown);
-        
-        if (reloadAu)
+        [SerializeField, AssetsOnly, Required]
+        private BaseAttackCollider _attackColliderPrefab;
+
+        [SerializeField, ChildGameObjectsOnly, CanBeNull]
+        private BaseWeaponAnimation _animation;
+
+        public Quaternion InitLocalRotation { get; private set; }
+    
+        public bool OnCooldown { get; set; } = false;
+
+    
+        private void Awake()
         {
-            // stop playing reloading sfx
-            // play reload end sfx
-            reloadAu.pitch = Random.Range(0.8f, 1.2f);
-            reloadAu.clip = reloadEndClip;
-            reloadAu.loop = false;
-            reloadAu.Play();
+            InitLocalRotation = transform.localRotation;
         }
-        OnCooldown = false;
+    
+    
+        [Button]
+        public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
+        {
+            Shot(shotHolder.forward, ownerHc, aiAimTransform).ForgetWithHandler();
+        }
+
+    
+        public async UniTask Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
+        {
+            OnCooldown = true;
+            if (_attackSignalAudioSource != null)
+            {
+                _attackSignalAudioSource.pitch = Random.Range(0.75f, 1.25f);
+                _attackSignalAudioSource.Play();
+            }
+
+            await UniTask.Delay((int)(_delay * 1000));
+        
+            if (ownerHc.health <= 0)
+                return;
+            
+            if (aiAimTransform != null)
+            {
+                transform.LookAt(aiAimTransform.position);
+                direction = (aiAimTransform.position - shotHolder.position).normalized;
+            }
+            
+            var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
+            ScoringActionType action = ScoringActionType.NULL;
+            if (ownerHc == Player.Health)
+                action = Player.Movement.GetCurrentScoringAction();
+        
+            newProjectile.Init(ownerHc, action);
+            Cooldown().ForgetWithHandler();
+            
+            if (_animation != null)
+                _animation.Play().ForgetWithHandler();
+        }
+    
+
+        private async UniTask Cooldown()
+        {
+            OnCooldown = true;
+            await UniTask.Delay((int) (cooldown * 1000));
+            OnCooldown = false;
+        }
     }
 }

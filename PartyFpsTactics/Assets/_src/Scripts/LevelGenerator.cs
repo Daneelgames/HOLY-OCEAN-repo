@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
+using MrPink;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
 using UnityEngine;

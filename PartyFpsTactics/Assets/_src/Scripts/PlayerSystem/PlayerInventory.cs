@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using MrPink.Tools;
+using MrPink.WeaponsSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
@@ -11,7 +13,11 @@ namespace MrPink.PlayerSystem
         
         public Dictionary<ToolType, int> amountOfEachTool = new Dictionary<ToolType, int>();
 
-        public WeaponController startingPistolWeapon;
+        [SerializeField, AssetsOnly, Required]
+        private WeaponController startingPistolWeapon;
+
+        [SerializeField, AssetsOnly, Required] 
+        private WeaponController _startingSwordWeapon;
 
         private void Awake()
         {
@@ -21,7 +27,10 @@ namespace MrPink.PlayerSystem
         private void Start()
         {
             if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game)
+            {
                 SpawnPlayerWeapon(startingPistolWeapon, 0);
+                SpawnPlayerWeapon(_startingSwordWeapon, 1);
+            }
         }
     
     
@@ -32,10 +41,10 @@ namespace MrPink.PlayerSystem
             switch (side)
             {
                 case 0:
-                    Player.Weapon.SetLeftWeapon(wpn);
+                    Player.Weapon.SetWeapon(wpn, Hand.Left);
                     break;
                 case 1:
-                    Player.Weapon.SetRightWeapon(wpn);
+                    Player.Weapon.SetWeapon(wpn, Hand.Right);
                     break;
             }
         }

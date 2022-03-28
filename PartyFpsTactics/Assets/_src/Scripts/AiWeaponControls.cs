@@ -1,6 +1,7 @@
 using System.Collections;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.WeaponsSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
