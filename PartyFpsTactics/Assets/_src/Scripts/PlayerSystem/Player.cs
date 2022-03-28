@@ -37,8 +37,9 @@ namespace MrPink.PlayerSystem
         private Transform _positionableObject;
         
         
+        // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
         public static GameObject GameObject
-            => _instance.gameObject;
+            => _instance._positionableObject.gameObject;
         
         public static Camera MainCamera
             => _instance._mainCamera;

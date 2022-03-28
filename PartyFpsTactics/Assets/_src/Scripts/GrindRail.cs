@@ -88,7 +88,7 @@ public class GrindRail : MonoBehaviour
 
     public Transform GetTargetNode()
     {
-        if (Vector3.Distance(Player.Movement.transform.position, nodesInOrderOfRide[currentTargetNode].position) < 0.5f)
+        if (Vector3.Distance(Player.Position, nodesInOrderOfRide[currentTargetNode].position) < 0.5f)
             currentTargetNode++;
         
         if (currentTargetNode < nodesInOrderOfRide.Count)
