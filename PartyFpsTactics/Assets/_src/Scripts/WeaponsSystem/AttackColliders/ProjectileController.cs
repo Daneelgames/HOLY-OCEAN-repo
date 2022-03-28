@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Brezg.Extensions.UniTaskExtensions;
+using Cysharp.Threading.Tasks;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Tools;
@@ -166,7 +168,7 @@ public class ProjectileController : BaseAttackCollider
     }
     
 
-    void Death()
+    private void Death()
     {
         Debug.Log("Destroy projectile");
         
@@ -176,11 +178,11 @@ public class ProjectileController : BaseAttackCollider
         dead = true;
         rb.isKinematic = true;
         transform.GetChild(0).gameObject.SetActive(false);
-        StartCoroutine(DeathCoroutine());
+        DeathCoroutine().ForgetWithHandler();
         Destroy(gameObject, 3);
     }
 
-    void Ricochet(Vector3 hitNormal)
+    private void Ricochet(Vector3 hitNormal)
     {
         if (ricochetCooldown > 0)
             return;
@@ -190,7 +192,7 @@ public class ProjectileController : BaseAttackCollider
         transform.rotation = Quaternion.LookRotation(reflectDir);
     }
 
-    public void StickToObject(Collider coll)
+    private void StickToObject(Collider coll)
     {
         transform.parent = coll.transform;
         rb.velocity = Vector3.zero;
@@ -202,13 +204,14 @@ public class ProjectileController : BaseAttackCollider
             _customLadder.ConstructLadder(ownerHealth.transform.position);
     }
 
-    IEnumerator DeathCoroutine()
+    private async UniTask DeathCoroutine()
     {
         float t = 0;
         while (t < 0.5f)
         {
             flyAu.volume -= Time.deltaTime * 50;
-            yield return null;
+            t -= Time.deltaTime;
+            await UniTask.DelayFrame(1);
         }
     }
 }
