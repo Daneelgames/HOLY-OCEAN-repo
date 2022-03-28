@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MrPink;
+using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,7 +14,7 @@ namespace _src.Scripts
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
         public List<Transform> blueRespawns;
         public int alliesAmount = 3;
-        List<BodyPart> tilesForSpawns = new List<BodyPart>();
+        List<TileHealth> tilesForSpawns = new List<TileHealth>();
 
         public static Respawner Instance;
         public bool spawn = false;
@@ -28,7 +29,7 @@ namespace _src.Scripts
                 return;
         
             // create enemy spawns
-            tilesForSpawns = new List<BodyPart>();
+            tilesForSpawns = new List<TileHealth>();
             enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].enemiesPerRoomMinMax;
 
             for (int i = 0; i < LevelGenerator.Instance.spawnedLevels.Count; i++)

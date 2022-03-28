@@ -59,7 +59,25 @@ namespace MrPink.Health
         #if UNITY_EDITOR
 
         [ContextMenu("Link Body Parts")]
-        public void GetBodyParts()
+        private void LinkBodyParts()
+        {
+            ConvertDeprecatedTileHealth();
+            SetupBodyParts();
+            AssetDatabase.SaveAssets();
+        }
+
+        private void ConvertDeprecatedTileHealth()
+        {
+            foreach (var deprecated in transform.GetComponentsInChildren<TileHealth>())
+            {
+                var obj = deprecated.gameObject;
+                DestroyImmediate(deprecated);
+                var bodyPart = obj.AddComponent<BodyPart>();
+                EditorUtility.SetDirty(bodyPart);
+            }
+        }
+        
+        private void SetupBodyParts()
         {
             bodyParts = new List<BodyPart>();
             var parts = transform.GetComponentsInChildren<BodyPart>();
@@ -70,8 +88,7 @@ namespace MrPink.Health
                 
                 EditorUtility.SetDirty(parts[i]);
             }
-            
-            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
         }
         
         #endif

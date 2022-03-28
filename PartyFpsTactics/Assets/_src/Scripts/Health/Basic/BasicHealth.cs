@@ -1,11 +1,10 @@
 using JetBrains.Annotations;
-using MrPink.Health;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace MrPink
+namespace MrPink.Health
 {
     public abstract class BasicHealth : MonoBehaviour
     {
