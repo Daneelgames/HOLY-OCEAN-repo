@@ -38,6 +38,7 @@ namespace MrPink
             Debug.Log("Add Rigidbody");
             
             rb = gameObject.AddComponent<Rigidbody>();
+            if (rb == null) return;
             rb.useGravity = true;
             foreach (var coll in colliders)
             {
@@ -47,6 +48,11 @@ namespace MrPink
             rb.isKinematic = false;
             rb.mass = 5;
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
+        }
+
+        public void DestroyTileFromGenerator()
+        {
+            Death(false); 
         }
         
         public void DamageTile(int dmg, ScoringActionType action = ScoringActionType.NULL)
@@ -90,9 +96,9 @@ namespace MrPink
             }
         }
 
-        void Death()
+        void Death(bool sendToLevelgen = true)
         {
-            if (_parentRoom != null)
+            if (sendToLevelgen && _parentRoom != null)
             {
                 LevelGenerator.Instance.TileDestroyed(_parentRoom, tileRoomCoordinates);
             }

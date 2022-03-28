@@ -329,42 +329,75 @@ public class LevelGenerator : MonoBehaviour
     
     IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
     {
-        // SPAWN ROOM
-        int leftSidePosition = Random.Range(1, level.size.x / 2 - 1);
-        int rightSidePosition = Random.Range(level.size.x / 2, level.size.x - 1);
-        int frontSidePosition = Random.Range(level.size.z / 2, level.size.z - 1);
-        int backSidePosition = Random.Range(1, level.size.z / 2 - 1);
-        
-        for (int x = leftSidePosition; x <= rightSidePosition; x++)
+        for (int i = 0; i < Random.Range(1, 4); i++)
         {
-            for (int z = backSidePosition; z <= frontSidePosition; z++)
+            // SPAWN ROOM
+            int leftSidePosition = Random.Range(1, level.size.x - 1);
+            int rightSidePosition = 0;
+            int backSidePosition = Random.Range(1, level.size.z - 1);
+            int frontSidePosition = 0;
+
+            if (leftSidePosition < level.size.x / 2)
             {
-                if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition && z != frontSidePosition)
+                rightSidePosition = leftSidePosition + Random.Range(2, level.size.x / 2);
+            }
+            else
+            {
+                var tempPos = leftSidePosition - Random.Range(2, level.size.x / 2);
+                rightSidePosition = leftSidePosition;
+                leftSidePosition = tempPos;
+            }
+
+            if (backSidePosition < level.size.z / 2)
+            {
+                frontSidePosition = backSidePosition + Random.Range(2, level.size.z / 2);
+            }
+            else
+            {
+                var tempPos = backSidePosition - Random.Range(2, level.size.z / 2);
+                frontSidePosition = backSidePosition;
+                backSidePosition = tempPos;
+            }
+
+            /*
+            leftSidePosition = Mathf.Clamp(leftSidePosition, 1, level.size.x - 1);
+            frontSidePosition = Mathf.Clamp(frontSidePosition, 1, level.size.y - 1);
+            rightSidePosition = Mathf.Clamp(rightSidePosition, 1, level.size.x - 1);
+            backSidePosition = Mathf.Clamp(backSidePosition, 1, level.size.y - 1);
+            */
+
+            for (int x = leftSidePosition; x <= rightSidePosition; x++)
+            {
+                for (int z = backSidePosition; z <= frontSidePosition; z++)
                 {
-                    Debug.Log("if (x != leftSidePosition || x != rightSidePosition || z != backSidePosition || z != frontSidePosition)");
-                    continue;
+                    if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition &&
+                        z != frontSidePosition)
+                    {
+                        Debug.Log(
+                            "if (x != leftSidePosition || x != rightSidePosition || z != backSidePosition || z != frontSidePosition)");
+                        continue;
+                    }
+
+                    int buildWallUntillY = level.size.y;
+                    if (hasRoof)
+                        buildWallUntillY = level.size.y - 1;
+
+                    for (int y = 1; y < buildWallUntillY; y++)
+                    {
+                        var newRoomWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
+                        newRoomWallTile.transform.localRotation = Quaternion.identity;
+                        newRoomWallTile.transform.localPosition =
+                            new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
+                        level.roomTilesMatrix[x, y, z] = newRoomWallTile;
+
+                        Debug.Log("Room walls. level.roomTilesMatrix[" + x + ", " + y + ", " + z + "]; " +
+                                  level.roomTilesMatrix[x, y, z].name + "; newWallTile is " + newRoomWallTile);
+                        var coords = new Vector3Int(x, y, z);
+                        newRoomWallTile.SetTileRoomCoordinates(coords, level);
+                    }
                 }
-                
-                int buildWallUntillY = level.size.y;
-                if (hasRoof)
-                    buildWallUntillY = level.size.y - 1;
-                
-                for (int y = 1; y < buildWallUntillY;  y++)
-                {
-                    var newRoomWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
-                    newRoomWallTile.transform.localRotation = Quaternion.identity;
-                    newRoomWallTile.transform.localPosition =  new Vector3(x, y, z)  - new Vector3(level.size.x / 2, 0, level.size.z / 2);
-                    level.roomTilesMatrix[x, y, z] = newRoomWallTile;
-                    
-                    Debug.Log("Room walls. level.roomTilesMatrix[" + x +", " + y +", " + z +"]; " + level.roomTilesMatrix[x, y, z].name +"; newWallTile is " + newRoomWallTile);
-                    var coords = new Vector3Int(x, y, z);
-                    newRoomWallTile.SetTileRoomCoordinates(coords, level);
-                }
-            }   
+            }
         }
-        
-        yield break;
-        
         // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
         Vector3Int roomSize = new Vector3Int(level.size.x / 5, level.size.y, level.size.z / 5);
@@ -562,7 +595,6 @@ public class LevelGenerator : MonoBehaviour
         
         Transform levelFromClosestTile = levelFrom.tilesInside[Random.Range(0, levelFrom.tilesInside.Count)].transform;
         Transform levelToClosestTile = levelTo.tilesInside[levelTo.tilesInside.Count/2].transform;
-
         float distance = 10000;
         for (int j = 0; j < levelTo.tilesInside.Count; j++)
         {
@@ -581,7 +613,8 @@ public class LevelGenerator : MonoBehaviour
             if (tile == levelToClosestTile)
                 continue;
 
-            if (!Mathf.Approximately(tile.transform.position.x, levelToClosestTile.position.x) && !Mathf.Approximately(tile.transform.position.z, levelToClosestTile.position.z))
+            if (!Mathf.Approximately(tile.transform.position.x, levelFromClosestTile.position.x) && 
+                !Mathf.Approximately(tile.transform.position.z, levelFromClosestTile.position.z))
             {
                 continue;
             }
@@ -595,19 +628,20 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        yield return null;
-        StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform));
+        yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 20, levelFromClosestTile, levelToClosestTile));
     }
 
-    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, Transform parent, int maxBridgeTiles = -1)
+    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, Transform parent, int maxBridgeTiles = -1, Transform startTile = null, Transform targetTile = null)
     {
         List<Transform> stairsTiles = new List<Transform>();
         
         // SPAWN BRIDGE
         float bridgeTilesAmount = Vector3.Distance(fromPosition, toPosition);
+        bridgeTilesAmount = Mathf.CeilToInt(bridgeTilesAmount);
 
         if (maxBridgeTiles > 0)
             bridgeTilesAmount = Mathf.Clamp(bridgeTilesAmount, 1, maxBridgeTiles);
+        
         for (int j = 0; j <= bridgeTilesAmount; j++)
         {
             Quaternion rot = Quaternion.identity;
@@ -642,6 +676,10 @@ public class LevelGenerator : MonoBehaviour
                 {
                     if (hit[i].transform == null)
                         continue;
+                    if (hit[i].transform == targetTile)
+                        continue;
+                    if (hit[i].transform == startTile)
+                        continue;
 
                     if (newStairsTile == null || stairsTiles.Contains(hit[i].transform) ||
                         hit[i].transform.position.y < newStairsTile.transform.position.y + 1)
@@ -650,11 +688,11 @@ public class LevelGenerator : MonoBehaviour
                     }
 
                     var bodyPart = hit[i].transform.gameObject.GetComponent<BodyPart>();
-                    bodyPart.DamageTile(bodyPart.localHealth);
+                    bodyPart.DestroyTileFromGenerator();
                 }
             }
-            yield return new WaitForSeconds(0.1f);
         }
+        yield return null;
     }
 
     void SpawnNavmesh(Level spawnedLevel)
