@@ -168,7 +168,7 @@ public class LevelGenerator : MonoBehaviour
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
-        yield return StartCoroutine(SpawnGrindRails());
+        //yield return StartCoroutine(SpawnGrindRails());
     }
 
 

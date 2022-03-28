@@ -12,6 +12,7 @@ namespace _src.Scripts
         private Vector3Int tileRoomCoordinates = Vector3Int.zero;
         public List<Collider> colliders;
         private Level _parentRoom;
+        [SerializeField]
         private Rigidbody rb;
 
         public void SetTileRoomCoordinates(Vector3Int coords, Level parentRoom)
@@ -44,7 +45,7 @@ namespace _src.Scripts
             }
             
             rb.isKinematic = false;
-            rb.mass = 50;
+            rb.mass = 5;
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
         }
         
