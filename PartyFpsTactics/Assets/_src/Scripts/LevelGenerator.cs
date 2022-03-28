@@ -321,14 +321,50 @@ public class LevelGenerator : MonoBehaviour
             yield return null;   
         }
 
-        yield return StartCoroutine(SpawnThinWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
+        yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
         
         spawnedLevels.Add(newLevel);
     }
-
-    IEnumerator SpawnThinWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
+    
+    IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
     {
-        // SPAWN INVISIBLE BLOCKERS FOR EMPTY SPACES
+        // SPAWN ROOM
+        int leftSidePosition = Random.Range(1, level.size.x / 2 - 1);
+        int rightSidePosition = Random.Range(level.size.x / 2, level.size.x - 1);
+        int frontSidePosition = Random.Range(level.size.z / 2, level.size.z - 1);
+        int backSidePosition = Random.Range(1, level.size.z / 2 - 1);
+        
+        for (int x = leftSidePosition; x <= rightSidePosition; x++)
+        {
+            for (int z = backSidePosition; z <= frontSidePosition; z++)
+            {
+                if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition && z != frontSidePosition)
+                {
+                    Debug.Log("if (x != leftSidePosition || x != rightSidePosition || z != backSidePosition || z != frontSidePosition)");
+                    continue;
+                }
+                
+                int buildWallUntillY = level.size.y;
+                if (hasRoof)
+                    buildWallUntillY = level.size.y - 1;
+                
+                for (int y = 1; y < buildWallUntillY;  y++)
+                {
+                    var newRoomWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
+                    newRoomWallTile.transform.localRotation = Quaternion.identity;
+                    newRoomWallTile.transform.localPosition =  new Vector3(x, y, z);
+                    level.roomTilesMatrix[x, y, z] = newRoomWallTile;
+                    
+                    Debug.Log("Room walls. level.roomTilesMatrix[" + x +", " + y +", " + z +"]; " + level.roomTilesMatrix[x, y, z].name +"; newWallTile is " + newRoomWallTile);
+                    var coords = new Vector3Int(x, y, z);
+                    newRoomWallTile.SetTileRoomCoordinates(coords, level);
+                }
+            }   
+        }
+        
+        yield break;
+        
+        // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
         Vector3Int roomSize = new Vector3Int(level.size.x / 5, level.size.y, level.size.z / 5);
         Vector3Int roomLocalCoords = new Vector3Int(Random.Range(0, level.size.x / 2), 0, Random.Range(0, level.size.z / 2));
@@ -339,11 +375,10 @@ public class LevelGenerator : MonoBehaviour
                 for (int y = 0; y < roomSize.y; y++)
                 {
                     invisibleWallBlockers[roomLocalCoords.x + x, y, roomLocalCoords.z + z] = 1;
-                    //Debug.Log("invisibleWallBlockers[roomLocalCoords.x + x, y, roomLocalCoords.z + z] = 1;");
                 }
             }
         }
-        
+        // RANDOM WALLS
         int wallsAmount = Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y);
         for (int i = 0; i < wallsAmount; i++)
         {
@@ -755,30 +790,31 @@ public class LevelGenerator : MonoBehaviour
         int y = destroyedTileCoords.y;
         int z = destroyedTileCoords.z;
         
+        /*
         Debug.Log("Tile Destroyed, destroyedTileCoords: " + destroyedTileCoords);
-        Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);
+        Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);*/
         room.roomTilesMatrix[x, y, z] = null;
         
         for (int YYY = 1; YYY < room.size.y; YYY++)
         {
-            Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
+            //Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
             if (room.roomTilesMatrix[x, YYY, z] != null)
             {
-                Debug.Log("1");
+                //Debug.Log("1");
                 if (room.roomTilesMatrix[x, YYY - 1, z] != null)
                 {
-                    Debug.Log("2");
+                    //Debug.Log("2");
                     if (YYY-2 >= 0 && room.roomTilesMatrix[x,YYY-2,z] != null)
                         continue;
                 }
                 if (YYY + 1 < room.size.y && room.roomTilesMatrix[x, YYY + 1, z] != null)
                 {
-                    Debug.Log("3");
+                    //Debug.Log("3");
                     if (YYY + 2 < room.size.y && room.roomTilesMatrix[x,YYY+2,z] != null)
                         continue;
                 }
 
-                Debug.Log("Tile Destroyed AddRigidbody");
+                //Debug.Log("Tile Destroyed AddRigidbody");
                 room.roomTilesMatrix[x, YYY, z].AddRigidbody(100, tilePhysicsMaterial);
             }
         }
