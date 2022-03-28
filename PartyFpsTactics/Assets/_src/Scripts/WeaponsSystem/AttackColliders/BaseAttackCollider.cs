@@ -66,29 +66,22 @@ namespace MrPink.WeaponsSystem
                 return CollisionTarget.Creature;
             }
 
-            var bodyPart = targetCollider.gameObject.GetComponent<BodyPart>();
+            var targetHealth = targetCollider.gameObject.GetComponent<BasicHealth>();
 
-            if (bodyPart == null)
+            if (targetHealth == null)
                 return CollisionTarget.Solid;
             
-            if (bodyPart.hc == ownerHealth)
+            if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;
-            
-            if (bodyPart.hc == null)
-            {
-                if (bodyPart.localHealth <= 0) 
-                    return CollisionTarget.Solid;
-                
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.DamageTile(damage, actionOnHit);
-            }
+
+            return targetHealth.HandleDamageCollision(transform.position, damage, actionOnHit);
+
+            /* REAL BODY PART
             else
             {
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.hc.Damage(damage, actionOnHit, ownerHealth.transform);
-            }
-
-            return CollisionTarget.Solid;
+                bodyPart.HealthController.Damage(damage, actionOnHit, ownerHealth.transform);
+            }*/
         }
 
         protected void PlaySound([CanBeNull] AudioSource source)

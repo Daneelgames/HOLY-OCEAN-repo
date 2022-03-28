@@ -16,8 +16,8 @@ public class UnitsManager : MonoBehaviour
     public float tileExplosionForceBarrels = 50;
     public float tileExplosionForcePlayer = 100;
 
-    public List<BodyPart> bodyPartsQueueToKill = new List<BodyPart>();
-    public List<BodyPart> bodyPartsQueueToKillCombo = new List<BodyPart>();
+    public List<BasicHealth> bodyPartsQueueToKill = new List<BasicHealth>();
+    public List<BasicHealth> bodyPartsQueueToKillCombo = new List<BasicHealth>();
     private void Awake()
     {
         Instance = this;
@@ -76,7 +76,7 @@ public class UnitsManager : MonoBehaviour
         }
     }
 
-    public void AddBodyPartToQueue(BodyPart part, ScoringActionType action)
+    public void AddHealthEntityToQueue(BasicHealth part, ScoringActionType action)
     {
         if (action != ScoringActionType.NULL)
             bodyPartsQueueToKillCombo.Add(part);

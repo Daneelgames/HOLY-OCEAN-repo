@@ -50,24 +50,15 @@ public class ExplosionController : MonoBehaviour
             return;
         }
         
-        var bodyPart = other.gameObject.GetComponent<BodyPart>();
-        if (bodyPart)
-        {
-            if (bodyPart.hc)
-            {
-                if (bodyPart.hc.health - damage > 0)
-                    bodyPart.hc.Damage(damage);
-                else
-                    UnitsManager.Instance.AddBodyPartToQueue(bodyPart, scoringAction);
-            }
-            else if  (bodyPart.localHealth > 0)
-            {
-                if (bodyPart.localHealth - damage > 0)
-                    bodyPart.DamageTile(damage);
-                else
-                    UnitsManager.Instance.AddBodyPartToQueue(bodyPart, scoringAction);
-            }
-                
-        }
+        var health = other.gameObject.GetComponent<BasicHealth>();
+        if (health == null || health.IsDead) 
+            return;
+        
+        var remainingDamage = health.Health - damage;
+        
+        if (remainingDamage > 0)
+            health.Damage(damage);
+        else
+            UnitsManager.Instance.AddHealthEntityToQueue(health, scoringAction);
     }
 }

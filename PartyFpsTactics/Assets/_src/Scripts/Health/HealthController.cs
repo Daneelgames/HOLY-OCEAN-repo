@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using _src.Scripts;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MrPink.Health
 {
@@ -52,8 +55,10 @@ namespace MrPink.Health
             healthMax = health;
             UnitsManager.Instance.unitsInGame.Add(this);
         }
+        
+        #if UNITY_EDITOR
 
-        [ContextMenu("GetBodyParts")]
+        [ContextMenu("Link Body Parts")]
         public void GetBodyParts()
         {
             bodyParts = new List<BodyPart>();
@@ -61,17 +66,15 @@ namespace MrPink.Health
             for (int i = 0; i < parts.Length; i++)
             {
                 bodyParts.Add(parts[i]);
-                parts[i].hc = this;
+                parts[i].HealthController = this;
+                
+                EditorUtility.SetDirty(parts[i]);
             }
+            
+            AssetDatabase.SaveAssets();
         }
-        [ContextMenu("SetHcToParts")]
-        public void SetHcToParts()
-        {
-            for (int i = 0; i < bodyParts.Count; i++)
-            {
-                bodyParts[i].hc = this;
-            }
-        }
+        
+        #endif
 
         public void Damage(int damage, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {

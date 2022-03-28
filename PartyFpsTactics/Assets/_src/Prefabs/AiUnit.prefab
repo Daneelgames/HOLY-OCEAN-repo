@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &1822121243985937500
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -104,7 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &346268820194967470
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -163,7 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &4158906602141011882
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -366,7 +372,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &449717902094748731
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -516,7 +524,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &8216177875819141959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -609,7 +619,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &3205295407581258384
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -820,7 +832,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &9143419261515043045
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -909,7 +923,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &1906229563990391834
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1030,7 +1046,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &7728242105690964505
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1348,7 +1366,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 9004609948449696128}
-  projectilePrefab: {fileID: 0}
+  cooldown: 1
+  _delay: 0
+  _attackSignalAudioSource: {fileID: 0}
+  _attackColliderPrefab: {fileID: 0}
+  _animation: {fileID: 0}
 --- !u!1 &3780898087766706026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,7 +1447,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &3738307984123576993
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1655,7 +1679,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &5012744666296267298
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1714,7 +1740,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &8339610609972486016
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1778,7 +1806,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &7497729177440900690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2157,7 +2187,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &5262237649152290107
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2290,7 +2322,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!1 &7783815551648235697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2436,9 +2470,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  destroyOnDeath: 0
   visibilityTrigger: {fileID: 6123762874684251812}
+  proceduralDamageShake: 0
+  shakeX: 1
+  shakeY: 0
+  shakeZ: 1
+  maxShakeOffset: 0.1
+  transformToShake: {fileID: 0}
   AiMovement: {fileID: 7977950126143452709}
-  AiWeaponControls: {fileID: 4522917420441185350}
+  HumanVisualController: {fileID: 0}
+  playerMovement: {fileID: 0}
+  explosionOnDeath: {fileID: 0}
+  objectsToSpawnOnDeath: []
+  deathOnHit: {fileID: 0}
+  rb: {fileID: 0}
   team: 0
   bodyParts:
   - {fileID: 4325278906123177980}
@@ -2461,6 +2507,7 @@ MonoBehaviour:
   - {fileID: 1339774130189114282}
   - {fileID: 8240790924279723563}
   - {fileID: 4900128747871936231}
+  damageStates: []
 --- !u!114 &-5916321303883280000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2499,6 +2546,8 @@ MonoBehaviour:
   stopDistanceMove: 0
   humanVisualController: {fileID: 1538236959322778139}
   unitVision: {fileID: -5916321303883280000}
+  enemyToLookAt: {fileID: 0}
+  navMeshBubble: {fileID: 0}
 --- !u!114 &4522917420441185350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2512,6 +2561,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeWeapon: {fileID: 2085819484726172565}
+  minAngleToRotateGun: 30
+  minAngleToShoot: 15
 --- !u!114 &1538236959322778139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2525,6 +2576,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 6276938897327206156}
+  ragdollOrigin: {fileID: 0}
+  colliders: []
+  rigidbodies: []
+  animatedBones: []
+  joints: []
+  ikAimBone: {fileID: 0}
+  ikTarget: {fileID: 0}
+  ikAimTransform: {fileID: 0}
+  aimIkIterations: 10
+  rotationOffset: {x: 0, y: 0, z: 0}
+  deadMaterial: {fileID: 0}
+  meshRenderer: {fileID: 0}
 --- !u!195 &7977950126143452706
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2592,7 +2655,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &7585254433958188514
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2651,7 +2716,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &5190763111095193422
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2710,7 +2777,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &2807114505331219886
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2769,7 +2838,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &5261743863718246302
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2859,7 +2930,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 7393423923570106077}
+  _health: 100
+  _healthController: {fileID: 7393423923570106077}
+  colliders: []
 --- !u!65 &8073169501115373410
 BoxCollider:
   m_ObjectHideFlags: 0
