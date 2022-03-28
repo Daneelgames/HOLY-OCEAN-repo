@@ -47,7 +47,7 @@ public class ExplosionController : MonoBehaviour
         if (Vector3.Distance(transform.position,Player.GameObject.transform.position) <= explosionDistance)
         {
             collidedGameObjects.Add(Player.Movement.gameObject);
-            Player.Health.Damage(damage);
+            Player.Health.Damage(damage, DamageSource.Environment);
             return;
         }
         
@@ -58,7 +58,7 @@ public class ExplosionController : MonoBehaviour
         var remainingDamage = health.Health - damage;
         
         if (remainingDamage > 0)
-            health.Damage(damage);
+            health.Damage(damage, DamageSource.Environment);
         else
             UnitsManager.Instance.AddHealthEntityToQueue(health, scoringAction);
     }

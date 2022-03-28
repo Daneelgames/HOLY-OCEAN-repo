@@ -93,7 +93,7 @@ namespace MrPink.Health
         
         #endif
 
-        public void Damage(int damage, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
+        public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {
             if (health <= 0)
                 return;
@@ -115,7 +115,7 @@ namespace MrPink.Health
             {
                 StartCoroutine(Death(action, killer));
             
-                if (action != ScoringActionType.NULL)
+                if (source == DamageSource.Player && action != ScoringActionType.NULL)
                     ScoringSystem.Instance.RegisterAction(action);
                 
                 return;

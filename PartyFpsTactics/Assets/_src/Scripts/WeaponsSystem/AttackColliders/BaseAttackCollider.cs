@@ -1,4 +1,3 @@
-using _src.Scripts;
 using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -47,11 +46,14 @@ namespace MrPink.WeaponsSystem
         
         protected ScoringActionType actionOnHit;
 
+        private DamageSource _damageSource;
+
         
-        public virtual void Init(HealthController owner, ScoringActionType action = ScoringActionType.NULL)
+        public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
         {
             ownerHealth = owner;
             actionOnHit = action;
+            _damageSource = source;
         }
         
         
@@ -62,7 +64,7 @@ namespace MrPink.WeaponsSystem
 
             if (targetCollider.gameObject == Player.GameObject)
             {
-                Player.Health.Damage(damage, actionOnHit);
+                Player.Health.Damage(damage, _damageSource, actionOnHit);
                 return CollisionTarget.Creature;
             }
 
@@ -74,7 +76,7 @@ namespace MrPink.WeaponsSystem
             if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;
 
-            return targetHealth.HandleDamageCollision(transform.position, damage, actionOnHit);
+            return targetHealth.HandleDamageCollision(transform.position, _damageSource, damage, actionOnHit);
         }
 
         protected void PlaySound([CanBeNull] AudioSource source)

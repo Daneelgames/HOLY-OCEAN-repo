@@ -57,7 +57,7 @@ public class UnitsManager : MonoBehaviour
                     unitsInGame[i].rb.AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                tileExplosionForceBarrels, ForceMode.VelocityChange);
                     
-                    unitsInGame[i].Damage(1);
+                    unitsInGame[i].Damage(1, DamageSource.Player);
                     if (action != ScoringActionType.NULL)
                         ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped, 2);
                 }
@@ -97,7 +97,7 @@ public class UnitsManager : MonoBehaviour
                 for (int i = _bodyPartsQueueToKillCombo.Count - 1; i >= 0; i--)
                 {
                     if (_bodyPartsQueueToKillCombo[i] != null)
-                        _bodyPartsQueueToKillCombo[i].Kill(true);
+                        _bodyPartsQueueToKillCombo[i].Kill(DamageSource.Player);
 
                     _bodyPartsQueueToKillCombo.RemoveAt(i);
 
@@ -116,7 +116,7 @@ public class UnitsManager : MonoBehaviour
             for (int i = _bodyPartsQueueToKill.Count - 1; i >= 0; i--)
             {
                 if (_bodyPartsQueueToKill[i] != null)
-                    _bodyPartsQueueToKill[i].Kill(false);
+                    _bodyPartsQueueToKill[i].Kill(DamageSource.Environment);
 
                 _bodyPartsQueueToKill.RemoveAt(i);
                 

@@ -44,9 +44,9 @@ public class ProjectileController : BaseAttackCollider
     
     
     
-    public override void Init(HealthController owner, ScoringActionType action = ScoringActionType.NULL)
+    public override void Init(HealthController owner, DamageSource source, ScoringActionType action = ScoringActionType.NULL)
     {
-        base.Init(owner, action);
+        base.Init(owner, source, action);
 
         lastPosition = transform.position;
         

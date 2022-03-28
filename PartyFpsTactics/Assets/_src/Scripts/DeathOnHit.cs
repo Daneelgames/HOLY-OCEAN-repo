@@ -28,6 +28,6 @@ public class DeathOnHit : MonoBehaviour
             if (hc == null || hc.health <= 0)
                 yield break;
         }
-        hc.Damage(hc.health);
+        hc.Damage(hc.health, DamageSource.Environment);
     }
 }

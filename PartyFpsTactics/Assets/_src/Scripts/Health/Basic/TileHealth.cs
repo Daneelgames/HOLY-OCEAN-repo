@@ -29,9 +29,11 @@ namespace MrPink.Health
 
         public void AddRigidbody(int newHealth, PhysicMaterial mat = null)
         {
-            if (rb) return;
+            if (rb) 
+                return;
 
-            Health = newHealth;
+            // TODO нарушаем инкапсуляцию
+            _health = newHealth;
             Debug.Log("Add Rigidbody");
             
             rb = gameObject.AddComponent<Rigidbody>();
@@ -46,11 +48,8 @@ namespace MrPink.Health
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
         }
 
-        private void DestroyTile(ScoringActionType action = ScoringActionType.NULL)
+        private void DestroyTile(DamageSource source)
         {
-            if (action != ScoringActionType.NULL)
-                ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
-
             LevelGenerator.Instance.DebrisParticles(transform.position);
             var hit = Physics.OverlapSphere(transform.position, 1, 1 << 6);
             for (int i = 0; i < hit.Length; i++)
@@ -62,44 +61,37 @@ namespace MrPink.Health
             }
         }
 
-        public override void Kill(bool combo)
-        {
-            if (IsDead)
-                return;
-            
-            if (combo)
-                ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed);
-
-            Damage(Health);
-        }
-
-        public override void Damage(int damage)
+        public override void Damage(int damage, DamageSource source)
         {
             if (IsDead)
                 return;
 
-            Health -= damage;
+            base.Damage(damage, source);
 
             if (IsAlive)
                 LevelGenerator.Instance.TileDamaged(this);
             else
-                Death();
+                Death(source);
         }
 
-        private void Death()
+        private void Death(DamageSource source)
         {
-            DestroyTile();
+            if (source == DamageSource.Player)
+                ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
+            
+            DestroyTile(source);
+            
             if (_parentRoom != null)
                 LevelGenerator.Instance.TileDestroyed(_parentRoom, tileRoomCoordinates);
             Destroy(gameObject);
         }
 
-        public override CollisionTarget HandleDamageCollision(Vector3 collisionPosition, int damage, ScoringActionType actionOnHit)
+        public override CollisionTarget HandleDamageCollision(Vector3 collisionPosition, DamageSource source, int damage, ScoringActionType actionOnHit)
         {
             if (IsAlive)
             {
                 UnitsManager.Instance.RagdollTileExplosion(collisionPosition, actionOnHit);
-                Damage(damage);
+                Damage(damage, source);
             }
 
             return CollisionTarget.Solid;

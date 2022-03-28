@@ -610,7 +610,7 @@ public class LevelGenerator : MonoBehaviour
                     }
 
                     var bodyPart = hit[i].transform.gameObject.GetComponent<TileHealth>();
-                    bodyPart.Kill(false);
+                    bodyPart.Kill(DamageSource.Environment);
                 }
             }
             yield return new WaitForSeconds(0.1f);
