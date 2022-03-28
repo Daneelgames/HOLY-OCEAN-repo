@@ -14,7 +14,7 @@ namespace MrPink.Health
 
 
         [SerializeField, SceneObjectsOnly, CanBeNull]
-        private HealthController _healthController;
+        protected HealthController _healthController;
 
 
         public int Health

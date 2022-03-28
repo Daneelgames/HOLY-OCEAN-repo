@@ -75,13 +75,6 @@ namespace MrPink.WeaponsSystem
                 return CollisionTarget.Self;
 
             return targetHealth.HandleDamageCollision(transform.position, damage, actionOnHit);
-
-            /* REAL BODY PART
-            else
-            {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.HealthController.Damage(damage, actionOnHit, ownerHealth.transform);
-            }*/
         }
 
         protected void PlaySound([CanBeNull] AudioSource source)
