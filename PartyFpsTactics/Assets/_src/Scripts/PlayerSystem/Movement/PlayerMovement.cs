@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
@@ -20,7 +21,6 @@ namespace MrPink.PlayerSystem
         public float crouchRunSpeed = 3.5f;
         public float acceleration = 1;
         public float groundCheckRadius = 0.25f;
-        private bool _grounded;
         private Vector3 _targetVelocity;
         private Vector2 _movementInput;
         private Vector3 _moveVector;
@@ -28,9 +28,6 @@ namespace MrPink.PlayerSystem
         private Vector3 _resultVelocity;
         public float coyoteTimeMax = 0.5f;
         private float coyoteTime = 0;
-        bool leaning = false;
-        bool moving = false;
-        bool running = false;
 
         [Header("Slopes")] 
         bool onSlope = false;
@@ -68,6 +65,8 @@ namespace MrPink.PlayerSystem
 
         private GrindRail activeGrindRail;
 
+        [ShowInInspector, ReadOnly]
+        private MovementsState _state = new MovementsState();
 
 
         private void Start()
@@ -80,15 +79,15 @@ namespace MrPink.PlayerSystem
             if (_isDead)
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
-                leaning = false;
+                _state.IsLeaning = false;
                 return;
             }
         
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
 
-            GetCrouch();
-            GetMovement();
+            HandleCrouch();
+            HandleMovement();
         }
         
         private void FixedUpdate()
@@ -105,18 +104,14 @@ namespace MrPink.PlayerSystem
             if (activeGrindRail == null)
                 ApplyFreeMovement();
             else
-            {
                 ApplyGrindRailMovement();
-            }
         }
         
 
-        private void GetCrouch()
+        private void HandleCrouch()
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
                 SetCrouch(!crouching);
-            }
         }
         
         private void SetCrouch(bool crouch)
@@ -157,24 +152,19 @@ namespace MrPink.PlayerSystem
             Player.LookAround.SetCrouch(crouching);
         }
         
-        private void GetMovement()
+        private void HandleMovement()
         {
             float targetAngle;
+            _state.IsLeaning = true;
             
             if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
-            {
                 targetAngle = -minMaxRotatorAngle;
-                leaning = true;
-            }
             else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
-            {
                 targetAngle = minMaxRotatorAngle;
-                leaning = true;
-            }
             else
             {
                 targetAngle = 0;
-                leaning = false;
+                _state.IsLeaning = false;
             }
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, targetAngle, rotatorSpeed * Time.deltaTime));
 
@@ -192,7 +182,7 @@ namespace MrPink.PlayerSystem
                 _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
             // jump
-            if (Input.GetKeyDown(KeyCode.Space) && (_grounded || coyoteTime > 0))
+            if (Input.GetKeyDown(KeyCode.Space) && (_state.IsGrounded || coyoteTime > 0))
             {
                 SetGrindRail(null);
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
@@ -202,8 +192,8 @@ namespace MrPink.PlayerSystem
         
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                running = moveInFrame;
-                moving = false;
+                _state.IsRunning = moveInFrame;
+                _state.IsMoving = false;
 
                 if (!crouching)
                     _targetVelocity = _moveVector * runSpeed;
@@ -212,8 +202,8 @@ namespace MrPink.PlayerSystem
             }
             else
             {
-                moving = moveInFrame;
-                running = false;
+                _state.IsMoving = moveInFrame;
+                _state.IsRunning = false;
             
                 if (!crouching)
                     _targetVelocity = _moveVector * walkSpeed;
@@ -231,7 +221,7 @@ namespace MrPink.PlayerSystem
 
         private void SlopeCheck()
         {
-            if (!_grounded)
+            if (!_state.IsGrounded)
             {
                 onSlope = false;
                 return;
@@ -263,18 +253,18 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                _grounded = true;
+                _state.IsGrounded = true;
                 additinalFallForce = 0;
                 if (canUseCoyoteTime)
                     coyoteTime = 0;
             }
             else
             {
-                if (_grounded && canUseCoyoteTime)
+                if (_state.IsGrounded && canUseCoyoteTime)
                     coyoteTime = coyoteTimeMax;
 
                 additinalFallForce += Time.deltaTime;
-                _grounded = false;
+                _state.IsGrounded = false;
                 
                 if (canUseCoyoteTime && coyoteTime > 0)
                 {
@@ -286,7 +276,7 @@ namespace MrPink.PlayerSystem
         private void ApplyFreeMovement()
         {
             float resultGravity = 0;
-            if (!_grounded)
+            if (!_state.IsGrounded)
                 resultGravity = gravity + additinalFallForce;
             else if (!onSlope)
                 resultGravity = 1;
@@ -311,34 +301,34 @@ namespace MrPink.PlayerSystem
             activeGrindRail = rail;
         }
     
-       
-
+        
         public ScoringActionType GetCurrentScoringAction()
         {
-            ScoringActionType currentAction = ScoringActionType.NULL;
-        
-            if (!_grounded)
-                currentAction = ScoringActionType.KillRangedOnJump;
-            else if (running)
-                currentAction = ScoringActionType.KillRangedOnRun;
-            else if (moving)
-                currentAction = ScoringActionType.KillRangedOnMove;
-            else
-                currentAction = ScoringActionType.KillRangedIdle;
-        
-            if (leaning)
+            if (_state.IsLeaning)
             {
-                if (!_grounded)
-                    currentAction = ScoringActionType.KillLeaningRangedOnJump;
-                else if (running)
-                    currentAction = ScoringActionType.KillLeaningRangedOnRun;
-                else if (moving)
-                    currentAction = ScoringActionType.KillLeaningRangedOnMove;
-                else
-                    currentAction = ScoringActionType.KillLeaningRangedIdle;
+                if (!_state.IsGrounded)
+                    return ScoringActionType.KillLeaningRangedOnJump;
+                
+                if (_state.IsRunning)
+                    return ScoringActionType.KillLeaningRangedOnRun;
+                
+                if (_state.IsMoving)
+                    return ScoringActionType.KillLeaningRangedOnMove;
+                
+                return ScoringActionType.KillLeaningRangedIdle;
             }
-        
-            return currentAction;
+            
+            if (!_state.IsGrounded)
+                return ScoringActionType.KillRangedOnJump;
+            
+            if (_state.IsRunning)
+                return ScoringActionType.KillRangedOnRun;
+            
+            if (_state.IsMoving)
+                return ScoringActionType.KillRangedOnMove;
+            
+            return ScoringActionType.KillRangedIdle;
+            
         }
         
         public void Death(Transform killer = null)
