@@ -79,7 +79,6 @@ namespace MrPink.PlayerSystem
         private void Start()
         {
             _playerHeadHeightTarget = _playerHeadHeight;
-            headTransform.parent = null;
             SetCrouch(false);
         }
 

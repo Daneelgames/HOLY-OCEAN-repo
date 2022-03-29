@@ -1,3 +1,4 @@
+using System;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -65,9 +66,15 @@ namespace MrPink.PlayerSystem
             => _instance._interactor;
 
         public static Vector3 Position
+            => _instance._positionableObject.position;
+
+
+        public void MoveTransformUnderRoot(Transform child)
         {
-            get => _instance._positionableObject.position;
-            set => _instance._positionableObject.position = value;
+            if (!child.IsChildOf(_positionableObject))
+                throw new Exception($"Вы пытаетесь закинуть под персонажа не персонажа: {child.gameObject.name}");
+
+            child.parent = _instance.transform;
         }
         
         
