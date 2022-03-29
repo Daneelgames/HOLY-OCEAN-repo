@@ -1,4 +1,3 @@
-using _src.Scripts;
 using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -47,11 +46,14 @@ namespace MrPink.WeaponsSystem
         
         protected ScoringActionType actionOnHit;
 
+        private DamageSource _damageSource;
+
         
-        public virtual void Init(HealthController owner, ScoringActionType action = ScoringActionType.NULL)
+        public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
         {
             ownerHealth = owner;
             actionOnHit = action;
+            _damageSource = source;
         }
         
         
@@ -62,33 +64,19 @@ namespace MrPink.WeaponsSystem
 
             if (targetCollider.gameObject == Player.GameObject)
             {
-                Player.Health.Damage(damage, actionOnHit);
+                Player.Health.Damage(damage, _damageSource, actionOnHit);
                 return CollisionTarget.Creature;
             }
 
-            var bodyPart = targetCollider.gameObject.GetComponent<BodyPart>();
+            var targetHealth = targetCollider.gameObject.GetComponent<BasicHealth>();
 
-            if (bodyPart == null)
+            if (targetHealth == null)
                 return CollisionTarget.Solid;
             
-            if (bodyPart.hc == ownerHealth)
+            if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;
-            
-            if (bodyPart.hc == null)
-            {
-                if (bodyPart.localHealth <= 0) 
-                    return CollisionTarget.Solid;
-                
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.DamageTile(damage, actionOnHit);
-            }
-            else
-            {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, actionOnHit);
-                bodyPart.hc.Damage(damage, actionOnHit, ownerHealth.transform);
-            }
 
-            return CollisionTarget.Solid;
+            return targetHealth.HandleDamageCollision(transform.position, _damageSource, damage, actionOnHit);
         }
 
         protected void PlaySound([CanBeNull] AudioSource source)

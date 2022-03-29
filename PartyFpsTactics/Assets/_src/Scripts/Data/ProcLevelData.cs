@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink;
+using MrPink.Health;
 using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -22,9 +23,9 @@ namespace _src.Scripts.Data
         public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
         
         public GameObject levelGoalPrefab;
-        public BodyPart tilePrefab;
-        public BodyPart tileWallPrefab;
-        public BodyPart tileWallThinPrefab;
+        public TileHealth tilePrefab;
+        public TileHealth tileWallPrefab;
+        public TileHealth tileWallThinPrefab;
         public GameObject explosiveBarrelPrefab;
         public GrindRail grindRailsPrefab;
         

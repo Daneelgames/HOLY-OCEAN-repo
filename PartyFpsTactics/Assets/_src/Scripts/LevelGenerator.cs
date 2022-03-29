@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using MrPink;
+using MrPink.Health;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -28,12 +29,12 @@ public class LevelGenerator : MonoBehaviour
     [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
     
     public GameObject levelGoalPrefab;
-    public BodyPart tilePrefab;
-    public BodyPart tileWallPrefab;
-    public BodyPart tileWallThinPrefab;
+    public TileHealth tilePrefab;
+    public TileHealth tileWallPrefab;
+    public TileHealth tileWallThinPrefab;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
-    public List<BodyPart> propsPrefabs;
+    public List<TileHealth> propsPrefabs;
     
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
@@ -212,7 +213,7 @@ public class LevelGenerator : MonoBehaviour
         newLevelGameObject.transform.position = pos;
         newLevelGameObject.transform.rotation = rot;
 
-        newLevel.roomTilesMatrix = new BodyPart[size.x,size.y,size.z];
+        newLevel.roomTilesMatrix = new TileHealth[size.x,size.y,size.z];
         bool hasRoof = index == levelsHeights.Count - 1;
         
 
@@ -608,8 +609,8 @@ public class LevelGenerator : MonoBehaviour
                         continue;
                     }
 
-                    var bodyPart = hit[i].transform.gameObject.GetComponent<BodyPart>();
-                    bodyPart.DamageTile(bodyPart.localHealth);
+                    var bodyPart = hit[i].transform.gameObject.GetComponent<TileHealth>();
+                    bodyPart.Kill(DamageSource.Environment);
                 }
             }
             yield return new WaitForSeconds(0.1f);
@@ -661,7 +662,7 @@ public class LevelGenerator : MonoBehaviour
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
     }
 
-    public void TileDamaged(BodyPart tile)
+    public void TileDamaged(TileHealth tile)
     {
         if (tilesToDamage.Contains(tile.transform))
             return;
@@ -805,9 +806,9 @@ public class LevelGenerator : MonoBehaviour
 public class Level
 {
     public List<Room> spawnedRooms = new List<Room>();
-    public BodyPart[,,] roomTilesMatrix;
-    public List<BodyPart> tilesInside = new List<BodyPart>();
-    public List<BodyPart> tilesWalls = new List<BodyPart>();
+    public TileHealth[,,] roomTilesMatrix;
+    public List<TileHealth> tilesInside = new List<TileHealth>();
+    public List<TileHealth> tilesWalls = new List<TileHealth>();
     public Transform spawnedTransform;
     public Vector3 position;
     public Vector3Int size;
