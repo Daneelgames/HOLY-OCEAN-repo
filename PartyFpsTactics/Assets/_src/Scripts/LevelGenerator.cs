@@ -32,13 +32,17 @@ public class LevelGenerator : MonoBehaviour
     public TileHealth tilePrefab;
     public TileHealth tileWallPrefab;
     public TileHealth tileWallThinPrefab;
+    public List<TileHealth> tileWallThinColorPrefabs;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
     public List<TileHealth> propsPrefabs;
+    public List<InteractiveObject> lootToSpawnAround;
     
+
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
     public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
+    public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
@@ -103,6 +107,7 @@ public class LevelGenerator : MonoBehaviour
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
         explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
         propsPerLevelMinMax = currentLevel.propsPerLevelMinMax;
+        lootPerLevelMinMax = currentLevel.lootPerLevelMinMax;
         grindRailsMinMax = currentLevel.grindRailsPerLevelMinMax;
         grindRailsPrefab = currentLevel.grindRailsPrefab;
         stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
@@ -165,7 +170,8 @@ public class LevelGenerator : MonoBehaviour
         SpawnGoalOnTop();
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
-        yield return StartCoroutine(SpawnGrindRails());
+        yield return SpawnLoot();
+        //yield return StartCoroutine(SpawnGrindRails());
     }
 
 
@@ -318,16 +324,82 @@ public class LevelGenerator : MonoBehaviour
             yield return null;   
         }
 
-        yield return StartCoroutine(SpawnThinWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
+        yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
         
         spawnedLevels.Add(newLevel);
     }
-
-    IEnumerator SpawnThinWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
+    
+    IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
     {
-        // SPAWN INVISIBLE BLOCKERS FOR EMPTY SPACES
+        for (int i = 0; i < Random.Range(1, 4); i++)
+        {
+            // SPAWN ROOM
+            int leftSidePosition = Random.Range(1, level.size.x - 1);
+            int rightSidePosition = 0;
+            int backSidePosition = Random.Range(1, level.size.z - 1);
+            int frontSidePosition = 0;
+
+            if (leftSidePosition < level.size.x / 2)
+            {
+                rightSidePosition = leftSidePosition + Random.Range(2, level.size.x / 2);
+            }
+            else
+            {
+                var tempPos = leftSidePosition - Random.Range(2, level.size.x / 2);
+                rightSidePosition = leftSidePosition;
+                leftSidePosition = tempPos;
+            }
+
+            if (backSidePosition < level.size.z / 2)
+            {
+                frontSidePosition = backSidePosition + Random.Range(2, level.size.z / 2);
+            }
+            else
+            {
+                var tempPos = backSidePosition - Random.Range(2, level.size.z / 2);
+                frontSidePosition = backSidePosition;
+                backSidePosition = tempPos;
+            }
+
+            /*
+            leftSidePosition = Mathf.Clamp(leftSidePosition, 1, level.size.x - 1);
+            frontSidePosition = Mathf.Clamp(frontSidePosition, 1, level.size.y - 1);
+            rightSidePosition = Mathf.Clamp(rightSidePosition, 1, level.size.x - 1);
+            backSidePosition = Mathf.Clamp(backSidePosition, 1, level.size.y - 1);
+            */
+
+            var roomPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
+            for (int x = leftSidePosition; x <= rightSidePosition; x++)
+            {
+                for (int z = backSidePosition; z <= frontSidePosition; z++)
+                {
+                    if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition &&
+                        z != frontSidePosition)
+                    {
+                        continue;
+                    }
+
+                    int buildWallUntillY = level.size.y;
+                    if (hasRoof)
+                        buildWallUntillY = level.size.y - 1;
+
+                    for (int y = 1; y < buildWallUntillY; y++)
+                    {
+                        var newRoomWallTile = Instantiate(roomPrefab, level.spawnedTransform);
+                        newRoomWallTile.transform.localRotation = Quaternion.identity;
+                        newRoomWallTile.transform.localPosition =
+                            new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
+                        level.roomTilesMatrix[x, y, z] = newRoomWallTile;
+
+                        var coords = new Vector3Int(x, y, z);
+                        newRoomWallTile.SetTileRoomCoordinates(coords, level);
+                    }
+                }
+            }
+        }
+        // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
-        Vector3Int roomSize = new Vector3Int(level.size.x / 2, level.size.y, level.size.z / 2);
+        Vector3Int roomSize = new Vector3Int(level.size.x / 5, level.size.y, level.size.z / 5);
         Vector3Int roomLocalCoords = new Vector3Int(Random.Range(0, level.size.x / 2), 0, Random.Range(0, level.size.z / 2));
         for (int x = 0; x < roomSize.x; x++)
         {
@@ -339,7 +411,7 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
-        
+        // RANDOM WALLS
         int wallsAmount = Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y);
         for (int i = 0; i < wallsAmount; i++)
         {
@@ -522,7 +594,6 @@ public class LevelGenerator : MonoBehaviour
         
         Transform levelFromClosestTile = levelFrom.tilesInside[Random.Range(0, levelFrom.tilesInside.Count)].transform;
         Transform levelToClosestTile = levelTo.tilesInside[levelTo.tilesInside.Count/2].transform;
-
         float distance = 10000;
         for (int j = 0; j < levelTo.tilesInside.Count; j++)
         {
@@ -541,7 +612,8 @@ public class LevelGenerator : MonoBehaviour
             if (tile == levelToClosestTile)
                 continue;
 
-            if (!Mathf.Approximately(tile.transform.position.x, levelToClosestTile.position.x) && !Mathf.Approximately(tile.transform.position.z, levelToClosestTile.position.z))
+            if (!Mathf.Approximately(tile.transform.position.x, levelFromClosestTile.position.x) && 
+                !Mathf.Approximately(tile.transform.position.z, levelFromClosestTile.position.z))
             {
                 continue;
             }
@@ -555,19 +627,20 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        yield return null;
-        StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform));
+        yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 20, levelFromClosestTile, levelToClosestTile));
     }
 
-    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, Transform parent, int maxBridgeTiles = -1)
+    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, Transform parent, int maxBridgeTiles = -1, Transform startTile = null, Transform targetTile = null)
     {
         List<Transform> stairsTiles = new List<Transform>();
         
         // SPAWN BRIDGE
         float bridgeTilesAmount = Vector3.Distance(fromPosition, toPosition);
+        bridgeTilesAmount = Mathf.CeilToInt(bridgeTilesAmount);
 
         if (maxBridgeTiles > 0)
             bridgeTilesAmount = Mathf.Clamp(bridgeTilesAmount, 1, maxBridgeTiles);
+        
         for (int j = 0; j <= bridgeTilesAmount; j++)
         {
             Quaternion rot = Quaternion.identity;
@@ -596,11 +669,15 @@ public class LevelGenerator : MonoBehaviour
             
             if (destroyTilesAround)
             {
-                var hit = Physics.OverlapSphere(newStairsTile.transform.position, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), 1 << 6);
+                var hit = Physics.OverlapSphere(newStairsTile.transform.position + Vector3.up, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), 1 << 6);
                 
                 for (int i = 0; i < hit.Length; i++)
                 {
                     if (hit[i].transform == null)
+                        continue;
+                    if (hit[i].transform == targetTile)
+                        continue;
+                    if (hit[i].transform == startTile)
                         continue;
 
                     if (newStairsTile == null || stairsTiles.Contains(hit[i].transform) ||
@@ -610,11 +687,11 @@ public class LevelGenerator : MonoBehaviour
                     }
 
                     var bodyPart = hit[i].transform.gameObject.GetComponent<TileHealth>();
-                    bodyPart.Kill(DamageSource.Environment);
+                    bodyPart.DestroyTileFromGenerator();
                 }
             }
-            yield return new WaitForSeconds(0.1f);
         }
+        yield return null;
     }
 
     void SpawnNavmesh(Level spawnedLevel)
@@ -637,6 +714,74 @@ public class LevelGenerator : MonoBehaviour
             Vector3 pos = randomTile.transform.position + Vector3.up;
             randomLevel.tilesInside.Remove(randomTile);
             Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+            yield return null;
+        }
+    }
+
+    IEnumerator SpawnLoot()
+    {
+        for (int i = 0; i < spawnedLevels.Count; i++)
+        {
+            int amount = Random.Range(lootPerLevelMinMax.x, lootPerLevelMinMax.y);
+            
+            // get all available tiles
+            List<TileHealth> tilesForSpawn = new List<TileHealth>();
+            for (int x = 0; x < spawnedLevels[i].size.x; x++)
+            {
+                for (int y = 0; y < spawnedLevels[i].size.y; y++)
+                {
+                    for (int z = 0; z < spawnedLevels[i].size.z; z++)
+                    {
+                        if (spawnedLevels[i].roomTilesMatrix[x, y, z] != null)
+                        {
+                            tilesForSpawn.Add(spawnedLevels[i].roomTilesMatrix[x, y, z]);
+                        }
+                    }
+                }
+            }
+            
+            for (int j = 0; j < amount; j++)
+            {
+                // choose tile to spawn on
+                var randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
+                while (randomTile == null)
+                {
+                    for (int k = tilesForSpawn.Count - 1; k >= 0; k--)
+                    {
+                        if (k >= tilesForSpawn.Count)
+                            continue;
+
+                        if (tilesForSpawn[k] == null)
+                            tilesForSpawn.RemoveAt(k);
+                    }
+
+                    if (tilesForSpawn.Count <= 0)
+                        break;
+                    
+                    randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
+                    yield return null;
+                }
+
+                if (randomTile == null)
+                    break;
+                
+                Vector3 randomOffset = Vector3.forward * 0.5f;
+                float r = Random.value;
+                if (r < 0.1)
+                    randomOffset = Vector3.down * 0.5f;
+                else if (r < 0.2f)
+                    randomOffset = Vector3.left * 0.5f;
+                else if (r < 0.3f)
+                    randomOffset = Vector3.right * 0.5f;
+                else if (r < 0.4f)
+                    randomOffset = Vector3.forward * 0.5f;
+                else if (r < 0.5f)
+                    randomOffset = Vector3.back * 0.5f;
+                else
+                    randomOffset = Vector3.up * 0.5f;
+                Vector3 spawnPos = randomTile.transform.position + randomOffset; 
+                var newLoot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], spawnPos, Quaternion.Euler(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360)));
+            }
             yield return null;
         }
     }
@@ -683,30 +828,31 @@ public class LevelGenerator : MonoBehaviour
         int y = destroyedTileCoords.y;
         int z = destroyedTileCoords.z;
         
+        /*
         Debug.Log("Tile Destroyed, destroyedTileCoords: " + destroyedTileCoords);
-        Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);
+        Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);*/
         room.roomTilesMatrix[x, y, z] = null;
         
         for (int YYY = 1; YYY < room.size.y; YYY++)
         {
-            Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
+            //Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
             if (room.roomTilesMatrix[x, YYY, z] != null)
             {
-                Debug.Log("1");
+                //Debug.Log("1");
                 if (room.roomTilesMatrix[x, YYY - 1, z] != null)
                 {
-                    Debug.Log("2");
+                    //Debug.Log("2");
                     if (YYY-2 >= 0 && room.roomTilesMatrix[x,YYY-2,z] != null)
                         continue;
                 }
                 if (YYY + 1 < room.size.y && room.roomTilesMatrix[x, YYY + 1, z] != null)
                 {
-                    Debug.Log("3");
+                    //Debug.Log("3");
                     if (YYY + 2 < room.size.y && room.roomTilesMatrix[x,YYY+2,z] != null)
                         continue;
                 }
 
-                Debug.Log("Tile Destroyed AddRigidbody");
+                //Debug.Log("Tile Destroyed AddRigidbody");
                 room.roomTilesMatrix[x, YYY, z].AddRigidbody(100, tilePhysicsMaterial);
             }
         }

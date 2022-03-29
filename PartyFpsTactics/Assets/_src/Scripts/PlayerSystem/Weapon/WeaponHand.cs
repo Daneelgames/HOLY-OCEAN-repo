@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace MrPink.PlayerSystem
 {
@@ -11,7 +12,7 @@ namespace MrPink.PlayerSystem
         [SerializeField, SceneObjectsOnly]
         [CanBeNull]
         private WeaponController _weapon;
-
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnityDictionary<WeaponPosition, Transform> _positions = new UnityDictionary<WeaponPosition, Transform>();
 
@@ -43,6 +44,15 @@ namespace MrPink.PlayerSystem
             set => _weapon = value;
         }
 
+
+        public void MoveHand(float gunMoveSpeed)
+        {
+            if (!_weapon)
+                return;
+            
+            transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(Player.Movement.MoveVector.x, Player.Movement.MoveVector.y + Player.Movement.rb.velocity.y * 0.3f, 0) 
+                                                                            * _weapon.gunsMoveDistanceScaler,  gunMoveSpeed * Time.deltaTime);
+        }
 
         public void UpdateState(bool isDead)
         {

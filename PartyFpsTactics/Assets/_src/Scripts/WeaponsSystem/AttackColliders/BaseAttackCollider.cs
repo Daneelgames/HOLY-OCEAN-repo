@@ -62,6 +62,8 @@ namespace MrPink.WeaponsSystem
             if (!_isSelfCollisionAvailable && ownerHealth.gameObject == targetCollider.gameObject)
                 return CollisionTarget.Self;
 
+            InteractableManager.Instance.ExplosionNearInteractables(transform.position);
+            
             if (targetCollider.gameObject == Player.GameObject)
             {
                 Player.Health.Damage(damage, _damageSource, actionOnHit);

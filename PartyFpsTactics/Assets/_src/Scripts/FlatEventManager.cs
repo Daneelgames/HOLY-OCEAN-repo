@@ -47,6 +47,9 @@ enum LastPlayerAnswer
                 case ScriptedEventType.SpawnObject:
                     yield return StartCoroutine(RunSpawn(_event));
                     break;
+                case ScriptedEventType.AddScore:
+                    ScoringSystem.Instance.AddScore(_event.scoreToAdd);
+                    break;
             }
             yield return new WaitForSeconds(_event.delayOut);
         }

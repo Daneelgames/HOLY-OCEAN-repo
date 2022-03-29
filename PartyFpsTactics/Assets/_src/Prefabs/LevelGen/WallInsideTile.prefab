@@ -490,6 +490,7 @@ GameObject:
   - component: {fileID: 5237696207237465462}
   - component: {fileID: 8301032256490927210}
   - component: {fileID: 1567761268291774263}
+  - component: {fileID: 9047405592732863751}
   m_Layer: 6
   m_Name: WallInsideTile
   m_TagString: Untagged
@@ -541,6 +542,7 @@ MonoBehaviour:
   localHealth: 100
   colliders:
   - {fileID: 1211562686235662036}
+  rb: {fileID: 0}
 --- !u!114 &8301032256490927210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,6 +569,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
+--- !u!208 &9047405592732863751
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943623579927757030}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.45, y: 0.45, z: 0.45}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &8964101285921246057
 GameObject:
   m_ObjectHideFlags: 0

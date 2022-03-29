@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
@@ -24,6 +25,7 @@ namespace MrPink.PlayerSystem
         private Vector3 _targetVelocity;
         private Vector2 _movementInput;
         private Vector3 _moveVector;
+        public Vector3 MoveVector => _moveVector;
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
         public float coyoteTimeMax = 0.5f;
@@ -350,7 +352,17 @@ namespace MrPink.PlayerSystem
         {
             activeGrindRail = rail;
         }
-    
+
+        /*
+        public float pushSolidRbForce = 50;
+        private void OnCollisionStay(Collision other)
+        {
+            if (other.rigidbody && other.gameObject.layer == 6 && transform.position.y < other.transform.position.y)
+            {
+                other.rigidbody.AddForce((new Vector3(other.transform.position.x, 0, other.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z)).normalized * pushSolidRbForce * Time.deltaTime);
+            }
+        }*/
+
         void MouseLook()
         {
             if (dead && killerToLookAt != null)

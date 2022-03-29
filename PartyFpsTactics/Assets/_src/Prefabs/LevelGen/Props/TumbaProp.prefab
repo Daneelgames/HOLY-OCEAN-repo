@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1877505377624061809}
   - component: {fileID: 477422723233368455}
   - component: {fileID: 3179537994599689377}
+  - component: {fileID: 6174942307194121404}
   m_Layer: 6
   m_Name: TumbaProp
   m_TagString: Untagged
@@ -64,6 +65,7 @@ MonoBehaviour:
   localHealth: 100
   colliders:
   - {fileID: 306994038918772167}
+  rb: {fileID: 6174942307194121404}
 --- !u!114 &477422723233368455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,6 +92,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
+--- !u!54 &6174942307194121404
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743293280166790513}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 1
+  m_AngularDrag: 0.1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &3952610193731302189
 PrefabInstance:
   m_ObjectHideFlags: 0

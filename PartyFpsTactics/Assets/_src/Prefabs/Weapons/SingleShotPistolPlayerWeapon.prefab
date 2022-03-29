@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 4860745060149239904}
   - component: {fileID: -2919768044141576140}
   m_Layer: 7
-  m_Name: SingleShotPistolPlayer
+  m_Name: SingleShotPistolPlayerWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -229,6 +229,10 @@ MonoBehaviour:
   _attackSignalAudioSource: {fileID: 0}
   _attackColliderPrefab: {fileID: 444546634323287089, guid: 039ca83bf8d7e4842b79b7ef81e955c8, type: 3}
   _animation: {fileID: 0}
+  gunsMoveDistanceScaler: 0.3
+  reloadingAu: {fileID: -2919768044141576140}
+  reloadingClip: {fileID: 8300000, guid: 90d5b1f819f8c304b9dd3b9735248145, type: 3}
+  reloadingEndClip: {fileID: 8300000, guid: 2bf4861d107b9b7419d79db4b1a604fe, type: 3}
 --- !u!82 &-2919768044141576140
 AudioSource:
   m_ObjectHideFlags: 0
@@ -241,9 +245,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.PlayerSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -114,10 +115,7 @@ public class ScoringSystem : MonoBehaviour
         }
 
         scoreCooldownFeedback.fillAmount = 0;
-        CurrentScore += currentScoreInCombo * currentMultiplier;
-        PlayerPrefs.SetInt("currentScore", CurrentScore);
-        PlayerPrefs.Save();
-        currentScoreText.text = "SCORE: " + CurrentScore;
+        AddScore(currentScoreInCombo * currentMultiplier);
         actionNameText.text = String.Empty;
         comboText.text = String.Empty;
         currentScoreInCombo = 0;
@@ -125,11 +123,21 @@ public class ScoringSystem : MonoBehaviour
         scoreCooldownCoroutine = null;
     }
 
+    public void AddScore(int amount)
+    {
+        CurrentScore += amount;
+        
+        PlayerPrefs.SetInt("currentScore", CurrentScore);
+        currentScoreText.text = "SCORE: " + CurrentScore;
+        PlayerPrefs.Save();
+    }
+
     public void RemoveScore(int amount)
     {
         CurrentScore -= amount;
         
         PlayerPrefs.SetInt("currentScore", CurrentScore);
+        currentScoreText.text = "SCORE: " + CurrentScore;
         PlayerPrefs.Save();
     }
     public void CooldownToZero()

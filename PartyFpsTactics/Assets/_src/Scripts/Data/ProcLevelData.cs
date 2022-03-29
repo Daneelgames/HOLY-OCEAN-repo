@@ -35,6 +35,7 @@ namespace _src.Scripts.Data
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(2,2);
         public Vector2Int grindRailsPerLevelMinMax = new Vector2Int(1, 2);
         public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
+        public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 5);
         public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
         public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
         public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);

@@ -29,7 +29,7 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            weaponsTargetsParent.parent = null;
+            //weaponsTargetsParent.parent = null;
         }
 
         private void Update()
@@ -49,6 +49,9 @@ namespace MrPink.PlayerSystem
 
             weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
             weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
+
+            _hands[Hand.Left].MoveHand(gunMoveSpeed);
+            _hands[Hand.Right].MoveHand(gunMoveSpeed);
         }
 
 

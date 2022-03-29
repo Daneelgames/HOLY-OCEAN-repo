@@ -6,6 +6,7 @@ using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class InteractableManager : MonoBehaviour
 {
@@ -71,12 +72,32 @@ public class InteractableManager : MonoBehaviour
             case ScriptedEventType.StartFlatScene:
                 GameManager.Instance.StartFlatScene();
                 break;
+            
+            case ScriptedEventType.AddScore:
+                ScoringSystem.Instance.AddScore(IOevent.scoreToAdd);
+                break;
         }
         
         if (gameObjectToDestroy)
             Destroy(gameObjectToDestroy);
     }
-    
+
+    public void ExplosionNearInteractables(Vector3 explosionPosition, float distance = 10, float force = 10)
+    {
+        for (int i = 0; i < InteractiveObjects.Count; i++)
+        {
+            if (InteractiveObjects[i].rb == null)
+            {
+                var rb = InteractiveObjects[i].gameObject.AddComponent<Rigidbody>();
+                rb.isKinematic = false;
+                rb.useGravity = true;
+
+                InteractiveObjects[i].rb = rb;
+                
+                rb.AddExplosionForce(force, explosionPosition, distance);
+            }
+        }
+    }
 }
 
 
