@@ -51,11 +51,14 @@ namespace MrPink.Health
         }
 		public void DestroyTileFromGenerator()
         {
-            Death(DamageSource.Environment ,false); 
+            // no death effects
+            Death(DamageSource.Environment ,false, false); 
         }
-        private void DestroyTile(DamageSource source)
+        private void DestroyTile(DamageSource source, bool deathParticles = true)
         {
-            LevelGenerator.Instance.DebrisParticles(transform.position);
+            if (deathParticles)
+                LevelGenerator.Instance.DebrisParticles(transform.position);
+            
             var hit = Physics.OverlapSphere(transform.position, 1, 1 << 6);
             for (int i = 0; i < hit.Length; i++)
             {
@@ -79,12 +82,12 @@ namespace MrPink.Health
                 Death(source);
         }
 
-        private void Death(DamageSource source, bool sendToLevelgen = true)
+        private void Death(DamageSource source, bool sendToLevelgen = true, bool deathParticles = true)
         {
             if (source == DamageSource.Player)
                 ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
             
-            DestroyTile(source);
+            DestroyTile(source, deathParticles);
             
             if (_parentRoom != null && sendToLevelgen)
                 LevelGenerator.Instance.TileDestroyed(_parentRoom, tileRoomCoordinates);
