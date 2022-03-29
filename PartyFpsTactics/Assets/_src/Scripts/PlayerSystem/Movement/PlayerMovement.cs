@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,15 +24,21 @@ namespace MrPink.PlayerSystem
         private Vector3 _moveVector;
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
-        public float coyoteTimeMax = 0.5f;
-        private float coyoteTime = 0;
+        
+        [SerializeField]
+        private float _coyoteTimeMax = 0.5f;
+        private float _coyoteTime = 0;
 
         [Header("Slopes")] 
         bool onSlope = false;
         private Vector3 slopeMoveDirection;
         private Vector3 slopeNormal;
-        public float slopeRayHeight = 0.25f;
-        public float slopeRayDistance = 0.5f;
+        
+        [SerializeField]
+        private float _slopeRayHeight = 0.25f;
+        
+        [SerializeField]
+        private float _slopeRayDistance = 0.5f;
 
         [Header("Crouching")] 
         public bool crouching = false;
@@ -66,7 +70,7 @@ namespace MrPink.PlayerSystem
         private GrindRail activeGrindRail;
 
         [ShowInInspector, ReadOnly]
-        private MovementsState _state = new MovementsState();
+        public MovementsState State { get; private set; } = new MovementsState();
 
 
         private void Start()
@@ -79,7 +83,7 @@ namespace MrPink.PlayerSystem
             if (_isDead)
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
-                _state.IsLeaning = false;
+                State.IsLeaning = false;
                 return;
             }
         
@@ -155,7 +159,7 @@ namespace MrPink.PlayerSystem
         private void HandleMovement()
         {
             float targetAngle;
-            _state.IsLeaning = true;
+            State.IsLeaning = true;
             
             if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
                 targetAngle = -minMaxRotatorAngle;
@@ -164,7 +168,7 @@ namespace MrPink.PlayerSystem
             else
             {
                 targetAngle = 0;
-                _state.IsLeaning = false;
+                State.IsLeaning = false;
             }
             rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, targetAngle, rotatorSpeed * Time.deltaTime));
 
@@ -182,18 +186,18 @@ namespace MrPink.PlayerSystem
                 _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
             // jump
-            if (Input.GetKeyDown(KeyCode.Space) && (_state.IsGrounded || coyoteTime > 0))
+            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {
                 SetGrindRail(null);
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 StartCoroutine(CoyoteTimeCooldown());
-                coyoteTime = 0;
+                _coyoteTime = 0;
             }
         
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                _state.IsRunning = moveInFrame;
-                _state.IsMoving = false;
+                State.IsRunning = moveInFrame;
+                State.IsMoving = false;
 
                 if (!crouching)
                     _targetVelocity = _moveVector * runSpeed;
@@ -202,8 +206,8 @@ namespace MrPink.PlayerSystem
             }
             else
             {
-                _state.IsMoving = moveInFrame;
-                _state.IsRunning = false;
+                State.IsMoving = moveInFrame;
+                State.IsRunning = false;
             
                 if (!crouching)
                     _targetVelocity = _moveVector * walkSpeed;
@@ -221,13 +225,13 @@ namespace MrPink.PlayerSystem
 
         private void SlopeCheck()
         {
-            if (!_state.IsGrounded)
+            if (!State.IsGrounded)
             {
                 onSlope = false;
                 return;
             }
         
-            if (Physics.Raycast(transform.position + Vector3.up * slopeRayHeight, Vector3.down, out var hit, slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position + Vector3.up * _slopeRayHeight, Vector3.down, out var hit, _slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.normal != Vector3.up)
                 {
@@ -244,7 +248,7 @@ namespace MrPink.PlayerSystem
         private IEnumerator CoyoteTimeCooldown()
         {
             canUseCoyoteTime = false;
-            yield return new WaitForSeconds(coyoteTimeMax);
+            yield return new WaitForSeconds(_coyoteTimeMax);
             
             canUseCoyoteTime = true;
         }
@@ -253,22 +257,22 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                _state.IsGrounded = true;
+                State.IsGrounded = true;
                 additinalFallForce = 0;
                 if (canUseCoyoteTime)
-                    coyoteTime = 0;
+                    _coyoteTime = 0;
             }
             else
             {
-                if (_state.IsGrounded && canUseCoyoteTime)
-                    coyoteTime = coyoteTimeMax;
+                if (State.IsGrounded && canUseCoyoteTime)
+                    _coyoteTime = _coyoteTimeMax;
 
                 additinalFallForce += Time.deltaTime;
-                _state.IsGrounded = false;
+                State.IsGrounded = false;
                 
-                if (canUseCoyoteTime && coyoteTime > 0)
+                if (canUseCoyoteTime && _coyoteTime > 0)
                 {
-                    coyoteTime -= Time.deltaTime;
+                    _coyoteTime -= Time.deltaTime;
                 }
             }
         }
@@ -276,7 +280,7 @@ namespace MrPink.PlayerSystem
         private void ApplyFreeMovement()
         {
             float resultGravity = 0;
-            if (!_state.IsGrounded)
+            if (!State.IsGrounded)
                 resultGravity = gravity + additinalFallForce;
             else if (!onSlope)
                 resultGravity = 1;
@@ -300,36 +304,7 @@ namespace MrPink.PlayerSystem
         {
             activeGrindRail = rail;
         }
-    
         
-        public ScoringActionType GetCurrentScoringAction()
-        {
-            if (_state.IsLeaning)
-            {
-                if (!_state.IsGrounded)
-                    return ScoringActionType.KillLeaningRangedOnJump;
-                
-                if (_state.IsRunning)
-                    return ScoringActionType.KillLeaningRangedOnRun;
-                
-                if (_state.IsMoving)
-                    return ScoringActionType.KillLeaningRangedOnMove;
-                
-                return ScoringActionType.KillLeaningRangedIdle;
-            }
-            
-            if (!_state.IsGrounded)
-                return ScoringActionType.KillRangedOnJump;
-            
-            if (_state.IsRunning)
-                return ScoringActionType.KillRangedOnRun;
-            
-            if (_state.IsMoving)
-                return ScoringActionType.KillRangedOnMove;
-            
-            return ScoringActionType.KillRangedIdle;
-            
-        }
         
         public void Death(Transform killer = null)
         {

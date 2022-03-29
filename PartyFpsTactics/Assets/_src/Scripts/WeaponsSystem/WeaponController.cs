@@ -72,7 +72,7 @@ namespace MrPink.WeaponsSystem
 
             bool isPlayer = ownerHc == Player.Health;
             
-            ScoringActionType action = isPlayer ? Player.Movement.GetCurrentScoringAction() : ScoringActionType.NULL;
+            ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
             
             newProjectile.Init(ownerHc, source, action);
@@ -88,6 +88,36 @@ namespace MrPink.WeaponsSystem
             OnCooldown = true;
             await UniTask.Delay((int) (cooldown * 1000));
             OnCooldown = false;
+        }
+        
+        private static ScoringActionType GetPlayerScoringAction()
+        {
+            var state = Player.Movement.State;
+            
+            if (state.IsLeaning)
+            {
+                if (!state.IsGrounded)
+                    return ScoringActionType.KillLeaningRangedOnJump;
+                
+                if (state.IsRunning)
+                    return ScoringActionType.KillLeaningRangedOnRun;
+                
+                if (state.IsMoving)
+                    return ScoringActionType.KillLeaningRangedOnMove;
+                
+                return ScoringActionType.KillLeaningRangedIdle;
+            }
+            
+            if (!state.IsGrounded)
+                return ScoringActionType.KillRangedOnJump;
+            
+            if (state.IsRunning)
+                return ScoringActionType.KillRangedOnRun;
+            
+            if (state.IsMoving)
+                return ScoringActionType.KillRangedOnMove;
+            
+            return ScoringActionType.KillRangedIdle;
         }
     }
 }
