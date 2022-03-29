@@ -50,7 +50,7 @@ namespace MrPink.PlayerSystem
             if (!_weapon)
                 return;
             
-            transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(Player.Movement.MoveVector.x, Player.Movement.MoveVector.y + Player.Movement.rb.velocity.y * 0.3f, 0) 
+            transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(Player.Movement.MoveVector.x, - Player.Movement.MoveVector.y - Player.Movement.rb.velocity.normalized.y * 0.3f, 0) 
                                                                             * _weapon.gunsMoveDistanceScaler,  gunMoveSpeed * Time.deltaTime);
         }
 
