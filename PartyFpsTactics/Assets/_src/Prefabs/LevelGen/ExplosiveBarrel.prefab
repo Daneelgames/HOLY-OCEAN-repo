@@ -4898,7 +4898,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3664669614464395266}
   - component: {fileID: 8318412091301529756}
-  - component: {fileID: 5237696207237465462}
   - component: {fileID: 1211562686235662036}
   - component: {fileID: 8922779236127297447}
   - component: {fileID: 1778691473734447936}
@@ -4939,16 +4938,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 300
+  healthMax: 100
   destroyOnDeath: 1
   visibilityTrigger: {fileID: 1211562686235662036}
-  proceduralDamageShake: 0
-  shakeX: 0
-  shakeY: 0
-  shakeZ: 0
+  proceduralDamageShake: 1
+  shakeX: 1
+  shakeY: 1
+  shakeZ: 1
   maxShakeOffset: 0.1
-  transformToShake: {fileID: 0}
+  transformToShake: {fileID: 3664669614464395266}
   AiMovement: {fileID: 0}
-  AiWeaponControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 6857697932595898852, guid: 1354d180a93e6ac45b98c239b3570cc7, type: 3}
@@ -4957,25 +4956,8 @@ MonoBehaviour:
   rb: {fileID: 8922779236127297447}
   team: 2
   bodyParts:
-  - {fileID: 5237696207237465462}
+  - {fileID: 0}
   damageStates: []
---- !u!114 &5237696207237465462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943623579927757030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hc: {fileID: 8318412091301529756}
-  localHealth: 300
-  colliders:
-  - {fileID: 1211562686235662036}
-  - {fileID: 1778691473734447936}
 --- !u!65 &1211562686235662036
 BoxCollider:
   m_ObjectHideFlags: 0
