@@ -17,6 +17,9 @@ namespace _src.Scripts.Data
     {
         public ScriptedEventType scriptedEventType = ScriptedEventType.SpawnObject;
 
+        [ShowIf("scriptedEventType", ScriptedEventType.AddScore)]
+        public int scoreToAdd;
+        
         [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
         public GameObject prefabToSpawn;
 
@@ -38,6 +41,6 @@ namespace _src.Scripts.Data
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore
     }
 }

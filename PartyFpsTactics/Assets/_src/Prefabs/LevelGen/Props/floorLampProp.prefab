@@ -293,8 +293,10 @@ GameObject:
   - component: {fileID: 1616192913251846936}
   - component: {fileID: 8479649807028026866}
   - component: {fileID: 6317402387976731221}
+  - component: {fileID: -294520438059770980}
+  - component: {fileID: 2115140063837842929}
   m_Layer: 6
-  m_Name: FloorLampProp
+  m_Name: floorLampProp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,6 +334,7 @@ MonoBehaviour:
   colliders:
   - {fileID: 1616192913251846936}
   - {fileID: 3868437479379071588}
+  rb: {fileID: -294520438059770980}
 --- !u!136 &3868437479379071588
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -343,9 +346,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.05
-  m_Height: 1.8948299
+  m_Height: 1.873146
   m_Direction: 1
-  m_Center: {x: 0, y: 0.93925864, z: 0}
+  m_Center: {x: 0, y: 0.95010054, z: 0}
 --- !u!65 &1616192913251846936
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -357,8 +360,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.47631836, y: 0.4751768, z: 0.46665835}
-  m_Center: {x: 0, y: 2.0436873, z: -0.0031205043}
+  m_Size: {x: 0.44812942, y: 0.4751768, z: 0.46665835}
+  m_Center: {x: -0.0140944645, y: 2.0436873, z: -0.0031205118}
 --- !u!114 &8479649807028026866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,3 +388,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
+--- !u!54 &-294520438059770980
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943844518363093458}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 1
+  m_AngularDrag: 0.1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2115140063837842929
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943844518363093458}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.37765706, y: 0.059932113, z: 0.38100737}
+  m_Center: {x: 0.0027104616, y: 0.027429044, z: -0.0014942288}

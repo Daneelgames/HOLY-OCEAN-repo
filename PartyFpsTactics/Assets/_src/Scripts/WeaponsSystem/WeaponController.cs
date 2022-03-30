@@ -30,6 +30,11 @@ namespace MrPink.WeaponsSystem
         [SerializeField, ChildGameObjectsOnly, CanBeNull]
         private BaseWeaponAnimation _animation;
 
+        public float gunsMoveDistanceScaler = 0.2f;
+        public AudioSource reloadingAu;
+        public AudioClip reloadingClip;
+        public AudioClip reloadingEndClip;
+
         public Quaternion InitLocalRotation { get; private set; }
     
         public bool OnCooldown { get; set; } = false;
@@ -82,12 +87,27 @@ namespace MrPink.WeaponsSystem
                 _animation.Play().ForgetWithHandler();
         }
     
-
         private async UniTask Cooldown()
         {
             OnCooldown = true;
+            
+            if (reloadingAu)
+            {
+                reloadingAu.clip = reloadingClip;
+                reloadingAu.loop = true;
+                reloadingAu.pitch = Random.Range(0.8f, 1.1f);
+                reloadingAu.Play();
+            }
             await UniTask.Delay((int) (cooldown * 1000));
             OnCooldown = false;
+            
+            if (reloadingAu)
+            {
+                reloadingAu.clip = reloadingEndClip;
+                reloadingAu.loop = false;
+                reloadingAu.pitch = Random.Range(0.8f, 1.1f);
+                reloadingAu.Play();
+            }
         }
         
         private static ScoringActionType GetPlayerScoringAction()

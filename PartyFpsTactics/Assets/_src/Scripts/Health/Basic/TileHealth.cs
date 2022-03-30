@@ -10,6 +10,7 @@ namespace MrPink.Health
         private Vector3Int tileRoomCoordinates = Vector3Int.zero;
         public List<Collider> colliders;
         private Level _parentRoom;
+        [SerializeField]
         private Rigidbody rb;
 
         public void SetTileRoomCoordinates(Vector3Int coords, Level parentRoom)
@@ -37,6 +38,7 @@ namespace MrPink.Health
             Debug.Log("Add Rigidbody");
             
             rb = gameObject.AddComponent<Rigidbody>();
+            if (rb == null) return;
             rb.useGravity = true;
             foreach (var coll in colliders)
             {
@@ -44,10 +46,13 @@ namespace MrPink.Health
             }
             
             rb.isKinematic = false;
-            rb.mass = 50;
+            rb.mass = 5;
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
         }
-
+		public void DestroyTileFromGenerator()
+        {
+            Death(DamageSource.Environment ,false); 
+        }
         private void DestroyTile(DamageSource source)
         {
             LevelGenerator.Instance.DebrisParticles(transform.position);
@@ -74,14 +79,14 @@ namespace MrPink.Health
                 Death(source);
         }
 
-        private void Death(DamageSource source)
+        private void Death(DamageSource source, bool sendToLevelgen = true)
         {
             if (source == DamageSource.Player)
                 ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
             
             DestroyTile(source);
             
-            if (_parentRoom != null)
+            if (_parentRoom != null && sendToLevelgen)
                 LevelGenerator.Instance.TileDestroyed(_parentRoom, tileRoomCoordinates);
             Destroy(gameObject);
         }

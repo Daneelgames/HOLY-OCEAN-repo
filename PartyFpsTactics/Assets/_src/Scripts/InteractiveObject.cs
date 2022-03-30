@@ -8,6 +8,7 @@ public class InteractiveObject : MonoBehaviour
 {
     public string interactiveObjectName = "A THING";
     public List<ScriptedEvent> eventsOnInteraction;
+    public Rigidbody rb;
     private void Start()
     {
         InteractableManager.Instance.AddInteractable(this);

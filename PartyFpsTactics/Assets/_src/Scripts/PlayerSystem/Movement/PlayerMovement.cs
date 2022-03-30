@@ -71,6 +71,8 @@ namespace MrPink.PlayerSystem
 
         [ShowInInspector, ReadOnly]
         public MovementsState State { get; private set; } = new MovementsState();
+        
+        public Vector3 MoveVector => _moveVector;
 
 
         private void Start()
