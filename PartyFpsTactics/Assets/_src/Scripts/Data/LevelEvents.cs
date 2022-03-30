@@ -28,6 +28,11 @@ namespace _src.Scripts.Data
         
         [ShowIf("scriptedEventType", ScriptedEventType.SetCurrentLevel)]
         public int currentLevelToSet;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.PlaySound)]
+        public AudioClip soundToPlay;
+        [ShowIf("scriptedEventType", ScriptedEventType.PlaySound)]
+        public Vector2 auPitchMinMax = new Vector2(1, 1);
         
         [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
         [Tooltip("Spawns object inside player's camera at zero local coordinates")]
@@ -41,6 +46,6 @@ namespace _src.Scripts.Data
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound
     }
 }

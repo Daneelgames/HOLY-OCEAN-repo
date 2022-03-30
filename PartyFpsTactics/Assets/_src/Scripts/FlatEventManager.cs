@@ -50,6 +50,16 @@ enum LastPlayerAnswer
                 case ScriptedEventType.AddScore:
                     ScoringSystem.Instance.AddScore(_event.scoreToAdd);
                     break;
+                case ScriptedEventType.PlaySound:
+                    var newGo = new GameObject("Sound " + _event.soundToPlay.name);
+                    var au = newGo.AddComponent<AudioSource>();
+                    au.pitch = Random.Range(_event.auPitchMinMax.x, _event.auPitchMinMax.y);
+                    au.clip = _event.soundToPlay;
+                    au.playOnAwake = false;
+                    au.loop = false;
+                    au.Play();
+                    Destroy(newGo, _event.soundToPlay.length);
+                    break;
             }
             yield return new WaitForSeconds(_event.delayOut);
         }

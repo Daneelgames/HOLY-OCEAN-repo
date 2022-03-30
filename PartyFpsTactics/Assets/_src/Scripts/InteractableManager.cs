@@ -5,6 +5,7 @@ using _src.Scripts.Data;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -75,6 +76,17 @@ public class InteractableManager : MonoBehaviour
             
             case ScriptedEventType.AddScore:
                 ScoringSystem.Instance.AddScore(IOevent.scoreToAdd);
+                break;
+            
+            case ScriptedEventType.PlaySound:
+                var newGo = new GameObject("Sound " + IOevent.soundToPlay.name);
+                var au = newGo.AddComponent<AudioSource>();
+                au.pitch = UnityEngine.Random.Range(IOevent.auPitchMinMax.x, IOevent.auPitchMinMax.y);
+                au.clip = IOevent.soundToPlay;
+                au.playOnAwake = false;
+                au.loop = false;
+                au.Play();
+                Destroy(newGo, IOevent.soundToPlay.length);
                 break;
         }
         
