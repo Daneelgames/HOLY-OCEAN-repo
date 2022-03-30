@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using _src.Scripts;
 using MrPink;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class UnitsManager : MonoBehaviour
 {
@@ -18,6 +20,11 @@ public class UnitsManager : MonoBehaviour
 
     private List<BasicHealth> _bodyPartsQueueToKill = new List<BasicHealth>();
     private List<BasicHealth> _bodyPartsQueueToKillCombo = new List<BasicHealth>();
+    
+    public PhysicMaterial corpsesMaterial;
+    public HealthController redTeamUnitPrefab;
+    public HealthController blueTeamUnitPrefab;
+    public HealthController neutralUnitPrefab;
     private void Awake()
     {
         Instance = this;
@@ -28,6 +35,27 @@ public class UnitsManager : MonoBehaviour
         StartCoroutine(BodyPartsKillQueue());
     }
 
+    public void SpawnBlueUnit(Vector3 pos)
+    {
+        var newUnit = Instantiate(blueTeamUnitPrefab, pos, Quaternion.identity);
+        newUnit.AiMovement.TakeCoverOrder();
+        //CommanderControls.Instance.unitsInParty.Add(newUnit);
+    }
+    public void SpawnRedUnit(Vector3 pos)
+    {
+        var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
+        if (Random.value > 0.9f)
+            newUnit.AiMovement.MoveToPositionOrder(Player.GameObject.transform.position);
+        else 
+            newUnit.AiMovement.TakeCoverOrder();
+    }
+    public void SpawnNeutralUnit(Vector3 pos)
+    {
+        var newUnit = Instantiate(neutralUnitPrefab, pos, Quaternion.identity);
+        
+        newUnit.AiMovement.TakeCoverOrder();
+    }
+    
     public void RagdollTileExplosion(Vector3 explosionPosition, ScoringActionType action)
     {
         RagdollTileExplosion(explosionPosition, -1, -1, -1, action);

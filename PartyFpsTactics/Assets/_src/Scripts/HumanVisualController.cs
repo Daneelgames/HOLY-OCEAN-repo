@@ -152,7 +152,7 @@ public class HumanVisualController : MonoBehaviour
         }
         for (int i = 0; i < colliders.Count; i++)
         {
-            colliders[i].material = GameManager.Instance.corpsesMaterial;
+            colliders[i].material = UnitsManager.Instance.corpsesMaterial;
         }
     }
 

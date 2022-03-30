@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
+using _src.Scripts.LevelGenerators;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -167,10 +168,12 @@ public class LevelGenerator : MonoBehaviour
         Player.Movement.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         levelIsReady = true;
         
-        SpawnGoalOnTop();
+        // GOALS
+        SpawnGoals();
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
+        RoomGenerator.Instance.GenerateRooms(spawnedLevels);
         //yield return StartCoroutine(SpawnGrindRails());
     }
 
@@ -218,6 +221,7 @@ public class LevelGenerator : MonoBehaviour
         newLevel.spawnedTransform = newLevelGameObject.transform;
         newLevelGameObject.transform.position = pos;
         newLevelGameObject.transform.rotation = rot;
+        newLevel.floorWorldHeight = pos.y + 0.5f;
 
         newLevel.roomTilesMatrix = new TileHealth[size.x,size.y,size.z];
         bool hasRoof = index == levelsHeights.Count - 1;
@@ -390,7 +394,6 @@ public class LevelGenerator : MonoBehaviour
                     }
                     
                     // NOW SPAWN WALLS AROUND THE ROOM
-                    
                     
                     RoomsOccupiedTilesPositions.Add(new Vector2Int(x,z));
                     
@@ -815,10 +818,18 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    void SpawnGoalOnTop()
+    void SpawnGoals()
     {
         Vector3 spawnPosition = spawnedLevels[spawnedLevels.Count - 1].position + Vector3.up * 2;
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
+        for (int i = 0; i < spawnedLevels.Count; i++)
+        {
+            for (int j = 0; j < spawnedLevels[i].spawnedRooms.Count; j++)
+            {
+                var room = spawnedLevels[i].spawnedRooms[j];
+                
+            }
+        }
     }
 
     public void TileDamaged(TileHealth tile)
@@ -966,6 +977,7 @@ public class LevelGenerator : MonoBehaviour
 public class Level
 {
     public List<Room> spawnedRooms = new List<Room>();
+    public float floorWorldHeight;
     public TileHealth[,,] roomTilesMatrix;
     public List<TileHealth> tilesInside = new List<TileHealth>();
     public List<TileHealth> tilesWalls = new List<TileHealth>();

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class PlayerUi : MonoBehaviour
 
     public Dictionary<HealthController, Image> markedEnemies = new Dictionary<HealthController, Image>();
     public Vector3 enemyMarkerOffset;
+    public Image healthBar;
 
     public Animator shieldFeedbackAnim;
 
@@ -82,6 +84,11 @@ public class PlayerUi : MonoBehaviour
         }
     }
 
+    public void UpdateHealthBar()
+    {
+        healthBar.fillAmount = (float)Player.Health.health / (float)Player.Health.healthMax;
+    }
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))

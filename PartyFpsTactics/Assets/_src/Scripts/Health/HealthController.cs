@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
@@ -15,7 +16,7 @@ namespace MrPink.Health
     public class HealthController : MonoBehaviour
     {
         public int health = 100;
-        private int healthMax = 100;
+        public int healthMax = 100;
         public bool destroyOnDeath = false;
         public Collider visibilityTrigger;
     
@@ -109,7 +110,11 @@ namespace MrPink.Health
             }
             else
                 health -= damage;
-        
+
+            if (Player.Health == this)
+            {
+                PlayerUi.Instance.UpdateHealthBar();
+            }
 
             if (health <= 0)
             {

@@ -35,29 +35,29 @@ public class UnitVision : MonoBehaviour
                 
                 if (enemy.health <= 0)
                 {
-                    if (visibleEnemies.Contains(enemy))
-                        visibleEnemies.Remove(enemy);
+                    if (VisibleEnemies.Contains(enemy))
+                        VisibleEnemies.Remove(enemy);
                     
                     continue;
                 }
                 
-                if (enemy.team == hc.team || enemy.team == Team.NULL)
+                if (enemy.team == hc.team || enemy.team == Team.NULL || hc.team == Team.NULL)
                     continue;
 
                 if (LineOfSight(enemy.visibilityTrigger.transform))
                 {
-                    if (!visibleEnemies.Contains(enemy))
-                        visibleEnemies.Add(enemy);
+                    if (!VisibleEnemies.Contains(enemy))
+                        VisibleEnemies.Add(enemy);
                 }
-                else if (visibleEnemies.Contains(enemy))
-                    visibleEnemies.Remove(enemy);
+                else if (VisibleEnemies.Contains(enemy))
+                    VisibleEnemies.Remove(enemy);
                 
                 yield return new WaitForSeconds(0.1f);   
             }
             
             yield return null;
         }
-        visibleEnemies.Clear();
+        VisibleEnemies.Clear();
     }
 
     bool LineOfSight (Transform target) 

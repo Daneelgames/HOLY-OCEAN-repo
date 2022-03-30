@@ -53,7 +53,7 @@ namespace _src.Scripts
                     newSpawnPoint.transform.parent = transform;
                     blueRespawns.Add(newSpawnPoint.transform);
                 
-                    GameManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
+                    UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
                 }
             
                 if (i < 1)
@@ -66,7 +66,7 @@ namespace _src.Scripts
                     newSpawnPoint.transform.parent = transform;
                     redRespawns.Add(newSpawnPoint.transform);
                 
-                    GameManager.Instance.SpawnRedUnit(randomTile.transform.position);
+                    UnitsManager.Instance.SpawnRedUnit(randomTile.transform.position);
                 }
             }
         }

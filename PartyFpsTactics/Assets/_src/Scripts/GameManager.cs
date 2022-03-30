@@ -10,9 +10,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public PhysicMaterial corpsesMaterial;
-    public HealthController redTeamUnitPrefab;
-    public HealthController blueTeamUnitPrefab;
     
     
     private void Awake()
@@ -52,20 +49,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void SpawnBlueUnit(Vector3 pos)
-    {
-        var newUnit = Instantiate(blueTeamUnitPrefab, pos, Quaternion.identity);
-        newUnit.AiMovement.TakeCoverOrder();
-        //CommanderControls.Instance.unitsInParty.Add(newUnit);
-    }
-    public void SpawnRedUnit(Vector3 pos)
-    {
-        var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
-        if (Random.value > 0.9f)
-            newUnit.AiMovement.MoveToPositionOrder(Player.GameObject.transform.position);
-        else 
-            newUnit.AiMovement.TakeCoverOrder();
-    }
 
     public bool IsPositionInPlayerFov(Vector3 pos)
     {
