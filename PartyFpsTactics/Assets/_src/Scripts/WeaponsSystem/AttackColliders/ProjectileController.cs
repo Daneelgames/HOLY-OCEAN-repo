@@ -43,7 +43,6 @@ public class ProjectileController : BaseAttackCollider
     private CustomLadder _customLadder;
     
     
-    
     public override void Init(HealthController owner, DamageSource source, ScoringActionType action = ScoringActionType.NULL)
     {
         base.Init(owner, source, action);

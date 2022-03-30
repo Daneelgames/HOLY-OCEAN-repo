@@ -331,9 +331,11 @@ public class LevelGenerator : MonoBehaviour
     
     IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
     {
-        for (int i = 0; i < Random.Range(1, 4); i++)
+        List<Vector2Int> RoomsOccupiedTilesPositions = new List<Vector2Int>(); // this will make sure rooms dont intersect
+        
+        for (int i = 0; i < Random.Range(1, 4); i++) // ROOMS AMOUNT
         {
-            // SPAWN ROOM
+            // SPAWN INNER ROOMS
             int leftSidePosition = Random.Range(1, level.size.x - 1);
             int rightSidePosition = 0;
             int backSidePosition = Random.Range(1, level.size.z - 1);
@@ -369,26 +371,41 @@ public class LevelGenerator : MonoBehaviour
             */
 
             var roomPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
+            var newRoom = new Room();
             for (int x = leftSidePosition; x <= rightSidePosition; x++)
             {
                 for (int z = backSidePosition; z <= frontSidePosition; z++)
                 {
+                    if (RoomsOccupiedTilesPositions.Contains(new Vector2Int(x,z)))
+                        continue;
+                    
                     if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition &&
                         z != frontSidePosition)
                     {
+                        // IF NOT A TILE FOR A WALL,
+                        // MARK THIS EMPTY SPACE AS A ROOM
+                        newRoom.coordsInside.Add(new Vector3Int(x, 0, z));
+                        RoomsOccupiedTilesPositions.Add(new Vector2Int(x,z));
                         continue;
                     }
-
+                    
+                    // NOW SPAWN WALLS AROUND THE ROOM
+                    
+                    
+                    RoomsOccupiedTilesPositions.Add(new Vector2Int(x,z));
+                    
                     int buildWallUntillY = level.size.y;
                     if (hasRoof)
                         buildWallUntillY = level.size.y - 1;
 
                     for (int y = 1; y < buildWallUntillY; y++)
                     {
+                        if (level.roomTilesMatrix[x, y, z] != null)
+                            continue;
+                        
                         var newRoomWallTile = Instantiate(roomPrefab, level.spawnedTransform);
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
-                        newRoomWallTile.transform.localPosition =
-                            new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
+                        newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
 
                         var coords = new Vector3Int(x, y, z);
@@ -396,6 +413,8 @@ public class LevelGenerator : MonoBehaviour
                     }
                 }
             }
+            
+            level.spawnedRooms.Add(newRoom);
         }
         // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
@@ -566,15 +585,6 @@ public class LevelGenerator : MonoBehaviour
         return false;
     }
 
-    [ContextMenu("ToggleRoomsTiles")]
-    public void ToggleRoomsTiles()
-    {
-        var room = spawnedLevels[0].spawnedRooms[Random.Range(0, spawnedLevels[0].spawnedRooms.Count)];
-        for (int i = 0; i < room.tilesInside.Count; i++)
-        {
-            room.tilesInside[i].gameObject.SetActive(!room.tilesInside[i].gameObject.activeInHierarchy);
-        }
-    }
 
     IEnumerator MakeLadders(int i)
     {
@@ -597,15 +607,16 @@ public class LevelGenerator : MonoBehaviour
         float distance = 10000;
         for (int j = 0; j < levelTo.tilesInside.Count; j++)
         {
-            float newDistance = Vector3.Distance(levelFromClosestTile.position,
-                levelTo.tilesInside[j].transform.position);
-            if (newDistance < distance)
+            float newDistance = Vector3.Distance(new Vector3(levelFromClosestTile.position.x, 0, levelFromClosestTile.position.z),
+                new Vector3(levelTo.tilesInside[j].transform.position.x, 0, levelTo.tilesInside[j].transform.position.z));
+            if (newDistance >= stairsDistanceMinMax.x && newDistance <= stairsDistanceMinMax.y && newDistance < distance)
             {
                 distance = newDistance;
                 levelToClosestTile = levelTo.tilesInside[j].transform;
             }
         }
 
+        /*
         for (int j = 0; j < levelTo.tilesInside.Count; j++)
         {
             var tile = levelTo.tilesInside[j].transform;
@@ -626,6 +637,7 @@ public class LevelGenerator : MonoBehaviour
                 break;
             }
         }
+        */
 
         yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 20, levelFromClosestTile, levelToClosestTile));
     }
@@ -965,6 +977,5 @@ public class Level
 [Serializable]
 public class Room
 {
-    public List<Transform> tilesToGrow = new List<Transform>();
-    public List<Transform> tilesInside = new List<Transform>();
+    public List<Vector3Int> coordsInside = new List<Vector3Int>();
 }
