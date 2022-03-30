@@ -116,7 +116,7 @@ public class UnitsManager : MonoBehaviour
             if (rb)
             {
                 propBumped = true;
-                rb.AddExplosionForce(tileExplosionForceBarrels, explosionPosition, distance);
+                rb.AddExplosionForce(tileExplosionForceBarrels * 10, explosionPosition, distance);
             }
         }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using Brezg.Extensions.UniTaskExtensions;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using MrPink.Tools;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
@@ -69,10 +70,12 @@ public class ProjectileController : BaseAttackCollider
         if (dead)
             return;
 
-        if (other.gameObject.layer != 6 && other.gameObject.layer != 11) 
+        if (other.gameObject.layer == 6 || other.gameObject.layer == 11) 
             return;
         
-        
+        if (toolType != ToolType.Null && other.gameObject == Player.Movement.gameObject)
+            return;
+
         if (stickOnContact)
             StickToObject(other.collider);
 
