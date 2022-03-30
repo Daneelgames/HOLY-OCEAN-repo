@@ -9781,9 +9781,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dc5f448cfdddb8429528b89b349ce0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
+  _isSelfCollisionAvailable: 1
+  _hitSolidFx: {fileID: 0}
+  _hitUnitFx: {fileID: 0}
+  _hitAudioSource: {fileID: 0}
+  _debrisParticles: {fileID: 0}
+  _bloodParticles: {fileID: 0}
   addVelocityEveryFrame: 0
   projectileSpeed: 30
-  damage: 0
   lifeTime: -1
   toolType: 3
   dieOnContact: 0
@@ -9794,17 +9800,14 @@ MonoBehaviour:
   gravity: 5
   solidsMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4160
   unitsMask:
     serializedVersion: 2
     m_Bits: 128
   shotAu: {fileID: 7601328651385341622}
   flyAu: {fileID: 9157171069865134070}
-  hitSolidFx: {fileID: 8300000, guid: 6f72c3e289dae814492b6b78578c5ee9, type: 3}
-  hitUnitFx: {fileID: 8300000, guid: b95d6461821a4f040a18bf0eec4f80b8, type: 3}
-  hitAu: {fileID: -2500232918689918222}
-  debrisParticles: {fileID: 5167591468334604664}
-  bloodParticles: {fileID: 1237124668835116927}
+  _fragGrenade: {fileID: 0}
+  _customLadder: {fileID: 0}
 --- !u!135 &8831351853180130487
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -106,6 +106,7 @@ public class UnitsManager : MonoBehaviour
         }
         
         // BUMP PROPS
+        bool propBumped = false;
         for (int i = 0; i < LevelGenerator.Instance.spawnedProps.Count; i++)
         {
             if (Vector3.Distance(LevelGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) > distance)
@@ -114,11 +115,15 @@ public class UnitsManager : MonoBehaviour
             var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody();
             if (rb)
             {
-                if (action != ScoringActionType.NULL)
-                    ScoringSystem.Instance.RegisterAction(ScoringActionType.PropBumped, 2);
-                
-                rb.AddForce((rb.centerOfMass - explosionPosition).normalized * tileExplosionForceBarrels, ForceMode.VelocityChange);
+                propBumped = true;
+                rb.AddExplosionForce(tileExplosionForceBarrels, explosionPosition, distance);
             }
+        }
+
+        if (propBumped)
+        {
+            if (action != ScoringActionType.NULL)
+                ScoringSystem.Instance.RegisterAction(ScoringActionType.PropBumped, 2);
         }
     }
 

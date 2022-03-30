@@ -49,15 +49,18 @@ namespace MrPink.Health
             _parentRoom = parentRoom;
         }
 
-        public void AddRigidbody(int newHealth, PhysicMaterial mat = null)
+        public void AddRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false)
         {
             if (rb) 
                 return;
 
             // TODO нарушаем инкапсуляцию
             _health = newHealth;
-            Debug.Log("Add Rigidbody");
+
+            if (setLayer11)
+                gameObject.layer = 11;
             
+            Debug.Log("Add Rigidbody");
             rb = gameObject.AddComponent<Rigidbody>();
             if (rb == null) return;
             rb.useGravity = true;

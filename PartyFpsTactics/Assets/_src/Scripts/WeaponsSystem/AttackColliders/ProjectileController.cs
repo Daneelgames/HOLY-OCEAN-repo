@@ -69,7 +69,7 @@ public class ProjectileController : BaseAttackCollider
         if (dead)
             return;
 
-        if (other.gameObject.layer != 6) 
+        if (other.gameObject.layer != 6 && other.gameObject.layer != 11) 
             return;
         
         

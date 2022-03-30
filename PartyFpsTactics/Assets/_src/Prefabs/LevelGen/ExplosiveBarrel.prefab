@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 383759117570996381}
   - component: {fileID: 8869536228176387537}
   - component: {fileID: 4140074982883023895}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4817,7 +4817,7 @@ GameObject:
   - component: {fileID: 3267150933252966831}
   - component: {fileID: 5269227538450621789}
   - component: {fileID: 4705570133712412397}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4902,7 +4902,8 @@ GameObject:
   - component: {fileID: 8922779236127297447}
   - component: {fileID: 1778691473734447936}
   - component: {fileID: 4607643709088218880}
-  m_Layer: 6
+  - component: {fileID: 5473310076994681561}
+  m_Layer: 12
   m_Name: ExplosiveBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5015,3 +5016,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToDeath: 5
   countingFeedback: {fileID: 193045947022757141}
+--- !u!208 &5473310076994681561
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943623579927757030}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8816270519188897430}
   - component: {fileID: 520528541283246858}
   - component: {fileID: 8734730078742256388}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: ceiling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2928318158893908098}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 4219694992135680083}
   - component: {fileID: 3061684621314806651}
   - component: {fileID: 5404348720753562844}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 7306190344282196336}
   - component: {fileID: 8782376386660105393}
   - component: {fileID: 2984728767459635348}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Wallpapper (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 7321920043459384569}
   - component: {fileID: 3710828721261998338}
   - component: {fileID: 2973726044638021528}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Wallpapper (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +368,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4285591427665000727}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Block_Brick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 6372423433446204988}
   - component: {fileID: 1116067578202451424}
   - component: {fileID: 4283088268514760962}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Wallpapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   - component: {fileID: 1567761268291774263}
   - component: {fileID: 2241941510232051234}
   - component: {fileID: -5921644646300918705}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: WallInsideTileBlue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,8 +538,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hc: {fileID: 0}
-  localHealth: 100
+  _health: 100
+  _healthController: {fileID: 0}
+  prop: 0
   colliders:
   - {fileID: 1211562686235662036}
   rb: {fileID: 0}
@@ -596,7 +597,7 @@ GameObject:
   - component: {fileID: 6625039370098873166}
   - component: {fileID: 1008835709293409809}
   - component: {fileID: 6122037305597629261}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Wallpapper (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

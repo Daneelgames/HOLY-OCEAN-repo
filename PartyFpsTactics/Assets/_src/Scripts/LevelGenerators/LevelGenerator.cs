@@ -926,24 +926,9 @@ public class LevelGenerator : MonoBehaviour
             for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
             {
                 navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
-                yield return new WaitForSecondsRealtime(0.5f);
+                
+                yield return new WaitForSecondsRealtime(1);
             }
-            
-            continue;
-            /*
-            float distance = 10000;
-            NavMeshSurface closestSurface = null;
-            for (int i = 0; i < navMeshSurfaces.Count; i++)
-            {
-                float newDistance = Vector3.Distance(navMeshSurfaces[i].transform.position, pos);
-                if (newDistance < distance)
-                {
-                    distance = newDistance;
-                    closestSurface = navMeshSurfaces[i];
-                }
-            }   
-            closestSurface.UpdateNavMesh(closestSurface.navMeshData);
-            */   
         }
     }
     
