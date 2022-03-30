@@ -35,11 +35,11 @@ public class ProjectileController : BaseAttackCollider
     private bool dead = false;
     
     [ShowIf("toolType", ToolType.FragGrenade)]
-    [FormerlySerializedAs("fragGrenade")]
+    [SerializeField]
     private FragGrenade _fragGrenade;
     
     [ShowIf("toolType", ToolType.CustomLadder)]
-    [FormerlySerializedAs("customLadder")]
+    [SerializeField]
     private CustomLadder _customLadder;
     
     

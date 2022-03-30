@@ -653,6 +653,8 @@ public class LevelGenerator : MonoBehaviour
             transformLocalScale.x = 1.5f;
             newStairsTile.transform.localScale = transformLocalScale;
             newStairsTile.transform.parent = parent;
+            
+            // ПОРУЧНИ
             for (int k = 0; k < 2; k++)
             {
                 var newStairsTileHandle = Instantiate(tilePrefab, newStairsTile.transform.position, newStairsTile.transform.rotation);
@@ -662,7 +664,7 @@ public class LevelGenerator : MonoBehaviour
                     x *= -1;
                 
                 newStairsTileHandle.transform.localPosition = new Vector3(x, 0.898f, 0);
-                newStairsTileHandle.transform.localScale = new Vector3(0.1f, 1f, 1);
+                newStairsTileHandle.transform.localScale = new Vector3(0.3f, 1f, 1);
                 stairsTiles.Add(newStairsTileHandle.transform);
             }
             stairsTiles.Add(newStairsTile.transform);

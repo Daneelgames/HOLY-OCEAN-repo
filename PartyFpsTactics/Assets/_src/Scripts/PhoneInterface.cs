@@ -36,6 +36,9 @@ public class PhoneInterface : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
             TogglePhone(!phoneActive);
         
+        if (!phoneActive)
+            return;
+        
         if (Input.GetKeyDown(KeyCode.E))
             PlayerAnswered(true);
         if (Input.GetKeyDown(KeyCode.Q))
