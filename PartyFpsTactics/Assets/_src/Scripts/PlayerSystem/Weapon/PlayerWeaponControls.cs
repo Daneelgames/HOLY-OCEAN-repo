@@ -7,8 +7,11 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerWeaponControls : MonoBehaviour
     {
-        public Transform weaponsTargetsParent;
-        public Transform weaponsParent;
+        [SerializeField, SceneObjectsOnly, Required]
+        private Transform _weaponsTargetsParent;
+        
+        [SerializeField, SceneObjectsOnly, Required]
+        private Transform _weaponsParent;
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnityDictionary<Hand, WeaponHand> _hands = new UnityDictionary<Hand, WeaponHand>();
@@ -25,12 +28,7 @@ namespace MrPink.PlayerSystem
         float targetFov = 90;
         
         private bool _isDead = false;
-
-
-        private void Start()
-        {
-            //weaponsTargetsParent.parent = null;
-        }
+        
 
         private void Update()
         {
@@ -47,8 +45,8 @@ namespace MrPink.PlayerSystem
             
             targetFov = aiming ? camFovAim : camFovIdle;
 
-            weaponsTargetsParent.position = Vector3.Lerp(weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
-            weaponsTargetsParent.rotation = Quaternion.Slerp(weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
+            _weaponsTargetsParent.position = Vector3.Lerp(_weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
+            _weaponsTargetsParent.rotation = Quaternion.Slerp(_weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
 
             _hands[Hand.Left].MoveHand(gunMoveSpeed);
             _hands[Hand.Right].MoveHand(gunMoveSpeed);
@@ -81,7 +79,7 @@ namespace MrPink.PlayerSystem
         public void SetWeapon(WeaponController weapon, Hand hand)
         {
             _hands[hand].Weapon = weapon;
-            weapon.transform.parent = weaponsParent;
+            weapon.transform.parent = _weaponsParent;
         }
 
         public void Death()

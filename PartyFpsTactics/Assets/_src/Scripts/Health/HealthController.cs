@@ -51,6 +51,9 @@ namespace MrPink.Health
         [ShowInInspector, ReadOnly] 
         public bool IsImmortal { get; set; } = false;
 
+        [ShowInInspector, ReadOnly] 
+        public bool IsDead { get; private set; } = false;
+
         private void Start()
         {
             healthMax = health;
@@ -174,6 +177,8 @@ namespace MrPink.Health
 
         private IEnumerator Death(ScoringActionType action, Transform killer = null)
         {
+            IsDead = true;
+            
             if (AiMovement)
                 AiMovement.Death();
 
@@ -193,11 +198,8 @@ namespace MrPink.Health
             }
         
             if (Player.Health == this)
-            {
-                Player.Movement.Death(killer);
-                ScoringSystem.Instance.CooldownToZero();
-            }
-        
+                Player.Death(killer);
+
             if (destroyOnDeath)
             {
                 Destroy(gameObject);

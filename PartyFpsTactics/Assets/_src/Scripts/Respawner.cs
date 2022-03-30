@@ -73,7 +73,7 @@ namespace _src.Scripts
 
         void Update()
         {
-            if (Player.GameObject.transform.position.y < corpseShredderY)
+            if (Player.Position.y < corpseShredderY)
             {
                 GameManager.Instance.StartProcScene();
                 return;

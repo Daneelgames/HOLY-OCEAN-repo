@@ -37,7 +37,7 @@ namespace MrPink.PlayerSystem
         // TODO стороны - через enum
         private void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
         {
-            var wpn = Instantiate(weaponPrefab, Player.GameObject.transform.position, Quaternion.identity);
+            var wpn = Instantiate(weaponPrefab, Player.Position, Quaternion.identity);
             switch (side)
             {
                 case 0:
