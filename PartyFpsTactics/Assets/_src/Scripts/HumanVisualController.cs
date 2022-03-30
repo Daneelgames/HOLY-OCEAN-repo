@@ -18,18 +18,13 @@ public class HumanVisualController : MonoBehaviour
     public List<ConfigurableJoint> joints;
     List<Quaternion> initRotations = new List<Quaternion>();
 
-    [Header("IK")] 
-    public Transform ikAimBone;
-    public Transform ikTarget;
-    public Transform ikAimTransform;
-    public int aimIkIterations = 10;
-    public Vector3 rotationOffset;
     private static readonly int InCover = Animator.StringToHash("InCover");
 
     private HealthController hc;
     private bool ragdoll = false;
     public Material deadMaterial;
     public SkinnedMeshRenderer meshRenderer;
+    public LayerMask tilesLayerMask;
     private void Start()
     {
         hc = gameObject.GetComponent<HealthController>();
@@ -118,7 +113,11 @@ public class HumanVisualController : MonoBehaviour
     public void ActivateRagdoll()
     {
         if (ragdoll)
-            return;
+        {
+            if (followRagdollCoroutine != null)
+                StopCoroutine(followRagdollCoroutine);
+            //return;
+        }
         
         anim.enabled = false;
         ragdoll = true;
@@ -126,11 +125,6 @@ public class HumanVisualController : MonoBehaviour
         
         for (int i = 0; i < joints.Count; i++)
         {
-            /*
-            joints[i].angularXMotion = ConfigurableJointMotion.Free;
-            joints[i].angularYMotion = ConfigurableJointMotion.Free;
-            joints[i].angularZMotion = ConfigurableJointMotion.Free;*/
-            
             var angularXDrive = joints[i].angularXDrive;
             angularXDrive.positionSpring = 0;
             angularXDrive.positionDamper = 0;
@@ -148,7 +142,6 @@ public class HumanVisualController : MonoBehaviour
             rigidbodies[i].angularDrag = 0.5f;
             rigidbodies[i].isKinematic = false;
             rigidbodies[i].useGravity = true;
-            //rigidbodies[i].gameObject.layer = 6;
         }
         for (int i = 0; i < colliders.Count; i++)
         {
@@ -229,7 +222,7 @@ public class HumanVisualController : MonoBehaviour
             yield return new WaitForSeconds(3f);
             transform.position = ragdollOrigin.transform.position;
             
-            if (Physics.CheckSphere(transform.position, 0.5f, 1<<6, QueryTriggerInteraction.Ignore))
+            if (Physics.CheckSphere(ragdollOrigin.transform.position, 0.5f, tilesLayerMask, QueryTriggerInteraction.Ignore))
             {
                 break;
             }
@@ -242,6 +235,7 @@ public class HumanVisualController : MonoBehaviour
 
     public void ExplosionRagdoll(Vector3 pos, float force, float distance)
     {
+        Debug.Log("ExplosionRagdoll");
         for (int i = 0; i < rigidbodies.Count; i++)
         {
             rigidbodies[i].AddExplosionForce(force, pos, distance);

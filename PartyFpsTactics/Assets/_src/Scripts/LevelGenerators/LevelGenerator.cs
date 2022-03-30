@@ -932,15 +932,6 @@ public class LevelGenerator : MonoBehaviour
         }
     }
     
-    public void AddNavMeshBubble(NavMeshSurface bubble)
-    {
-        navMeshSurfacesSpawned.Add(bubble);
-    }
-    public void RemoveNavMeshBubble(NavMeshSurface bubble)
-    {
-        bubble.RemoveData();
-        navMeshSurfacesSpawned.Remove(bubble);
-    }
 
     public void ConstructCover(GameObject newCoverGo)
     {

@@ -28,7 +28,7 @@ public class AiWeaponControls : MonoBehaviour
         {
             yield return null;
             
-            if (activeWeapon.OnCooldown)
+            if (!activeWeapon || activeWeapon.OnCooldown)
             {
                 continue;
             }

@@ -42,7 +42,6 @@ public class AiMovement : MonoBehaviour
     List<CoverSpot> goodCoverPoints = new List<CoverSpot>();
     public HealthController enemyToLookAt;
     private Transform lookTransform;
-    public NavMeshSurface navMeshBubble;
     private void Awake()
     {
         hc = GetComponent<HealthController>();
@@ -52,11 +51,6 @@ public class AiMovement : MonoBehaviour
     {
         lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
 
-        if (navMeshBubble)
-        {
-            navMeshBubble.BuildNavMesh();
-            LevelGenerator.Instance.AddNavMeshBubble(navMeshBubble);
-        }
         StartCoroutine(Awareness());
     }
 
@@ -335,8 +329,6 @@ public class AiMovement : MonoBehaviour
     public void Death()
     {
         agent.enabled = false;
-        if (navMeshBubble)
-            LevelGenerator.Instance.RemoveNavMeshBubble(navMeshBubble);
         StopAllBehaviorCoroutines();
         humanVisualController.SetMovementVelocity(Vector3.zero);
     }
