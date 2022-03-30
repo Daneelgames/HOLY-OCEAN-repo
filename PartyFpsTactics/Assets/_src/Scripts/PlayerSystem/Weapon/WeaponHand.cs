@@ -1,3 +1,4 @@
+using System;
 using Brezg.Serialization;
 using JetBrains.Annotations;
 using MrPink.WeaponsSystem;
@@ -45,13 +46,23 @@ namespace MrPink.PlayerSystem
         }
 
 
-        public void MoveHand(float gunMoveSpeed)
+        public void MoveHand(float gunMoveSpeed, float gunRotationSpeed)
         {
             if (!_weapon)
                 return;
             
-            transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(Player.Movement.MoveVector.x, - Player.Movement.MoveVector.y - Player.Movement.rb.velocity.normalized.y * 0.3f, 0) 
-                                                                            * _weapon.gunsMoveDistanceScaler,  gunMoveSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, 
+                new Vector3(Player.Movement.MoveVector.x, - Player.Movement.MoveVector.y - Player.Movement.rb.velocity.normalized.y * 0.3f, 0) * _weapon.gunsMoveDistanceScaler,  
+                gunMoveSpeed * Time.deltaTime);
+            
+            
+            var rot = transform.localRotation;
+            float mouseX = Input.GetAxis("Mouse X");
+            if (Mathf.Abs(mouseX) > 0.2f)
+                gunRotationSpeed *= 0.2f;
+            
+            rot.eulerAngles += new Vector3(0, 0, mouseX * gunRotationSpeed * Time.deltaTime);
+            transform.localRotation = Quaternion.Slerp(rot, Quaternion.identity, Time.deltaTime);
         }
 
         public void UpdateState(bool isDead)

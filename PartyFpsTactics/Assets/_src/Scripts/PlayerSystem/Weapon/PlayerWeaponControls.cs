@@ -45,11 +45,13 @@ namespace MrPink.PlayerSystem
             
             targetFov = aiming ? camFovAim : camFovIdle;
 
+            /*
             _weaponsTargetsParent.position = Vector3.Lerp(_weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
             _weaponsTargetsParent.rotation = Quaternion.Slerp(_weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
+            */
 
-            _hands[Hand.Left].MoveHand(gunMoveSpeed);
-            _hands[Hand.Right].MoveHand(gunMoveSpeed);
+            _hands[Hand.Left].MoveHand(gunMoveSpeed, gunRotationSpeed);
+            _hands[Hand.Right].MoveHand(gunMoveSpeed, gunRotationSpeed);
         }
 
 

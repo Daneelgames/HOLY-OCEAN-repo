@@ -1065,7 +1065,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8837444585098229142}
-  - {fileID: 5126299365619244240}
   - {fileID: 8837444586277526205}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -1126,6 +1125,7 @@ Transform:
   - {fileID: 3235524484921543768}
   - {fileID: 4223736183445010004}
   - {fileID: 783230254}
+  - {fileID: 5126299365619244240}
   m_Father: {fileID: 2205026912588922412}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1708,13 +1708,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8485241481588852162}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 28064608572480494}
   - {fileID: 7726002239220614177}
-  m_Father: {fileID: 4081011892120011788}
-  m_RootOrder: 1
+  m_Father: {fileID: 4081011893066873260}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8506449180944130295
 GameObject:
@@ -1820,7 +1820,7 @@ Transform:
   - {fileID: 8132932542127472186}
   - {fileID: 3317097459454385456}
   m_Father: {fileID: 4081011892120011788}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5394631482521842026
 MonoBehaviour:
@@ -1834,7 +1834,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 300
+  healthMax: 300
   destroyOnDeath: 0
   visibilityTrigger: {fileID: 6990901838248676951}
   proceduralDamageShake: 1
@@ -1937,7 +1938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponsTargetsParent: {fileID: 5126299365619244240}
-  _weaponsParent: {fileID: 2205026912588922412}
+  _weaponsParent: {fileID: 5126299365619244240}
   _hands:
     _keyData: 0000000001000000
     _valueData:
@@ -1946,8 +1947,8 @@ MonoBehaviour:
   camFovIdle: 100
   camFovAim: 90
   fovChangeSpeed: 3
-  gunMoveSpeed: 50
-  gunRotationSpeed: 5
+  gunMoveSpeed: 5
+  gunRotationSpeed: 500
 --- !u!114 &7586209378139016779
 MonoBehaviour:
   m_ObjectHideFlags: 0
