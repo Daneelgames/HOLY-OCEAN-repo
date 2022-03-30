@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using _src.Scripts.LevelGenerators;
+using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -17,6 +18,7 @@ public class LevelGenerator : MonoBehaviour
 
     public LevelType levelType = LevelType.Game;
     public List<Level> spawnedLevels = new List<Level>();
+    public List<TileHealth> spawnedProps = new List<TileHealth>();
     public GameObject levelGoalSpawned;
 
     public Transform generatedBuildingFolder;
@@ -120,6 +122,15 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
+    public void AddProp(TileHealth prop)
+    {
+        spawnedProps.Add(prop);
+    }
+    public void RemoveProp(TileHealth prop)
+    {
+        spawnedProps.Remove(prop);
+    }
+
     IEnumerator GenerateLevel()
     {
         if (levelsHeights.Count == 0) // default 5 floors building
@@ -160,12 +171,12 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
         {
             navMeshSurfacesSpawned[i].BuildNavMesh();
+            yield return null;
         }
 
         StartCoroutine(UpdateNavMesh());
         yield return null;
         Respawner.Instance.Init();
-        Player.Movement.rb.MovePosition(spawnedLevels[0].tilesInside[Random.Range(0, spawnedLevels[0].tilesInside.Count)].transform.position + Vector3.up);
         levelIsReady = true;
         
         // GOALS
@@ -174,6 +185,11 @@ public class LevelGenerator : MonoBehaviour
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
         RoomGenerator.Instance.GenerateRooms(spawnedLevels);
+        
+        var targetPos = new Vector3(spawnedLevels[0].position.x + spawnedLevels[0].size.x / 2, 0.5f, spawnedLevels[0].position.z - spawnedLevels[0].size.z / 2 - 10);
+        
+        Player.Movement.transform.parent.parent = null;
+        Player.Movement.transform.parent.position = targetPos;
         //yield return StartCoroutine(SpawnGrindRails());
     }
 
@@ -203,11 +219,7 @@ public class LevelGenerator : MonoBehaviour
             levelRotation = Quaternion.Euler(0, Random.Range(0,360), 0);
 
         yield return StartCoroutine(SpawnBaseTiles(levelIndex, levelPosition, levelSize, levelRotation));
-        //yield return StartCoroutine(SpawnInsideWallsTiles());
-        if (levelIndex == 0)
-        {
-            Player.Movement.rb.MovePosition(levelPosition);
-        }
+        
     }
 
     IEnumerator SpawnBaseTiles(int index, Vector3 pos, Vector3Int size, Quaternion rot)
@@ -418,6 +430,7 @@ public class LevelGenerator : MonoBehaviour
             }
             
             level.spawnedRooms.Add(newRoom);
+            yield return null;
         }
         // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
@@ -619,29 +632,6 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        /*
-        for (int j = 0; j < levelTo.tilesInside.Count; j++)
-        {
-            var tile = levelTo.tilesInside[j].transform;
-            if (tile == levelToClosestTile)
-                continue;
-
-            if (!Mathf.Approximately(tile.transform.position.x, levelFromClosestTile.position.x) && 
-                !Mathf.Approximately(tile.transform.position.z, levelFromClosestTile.position.z))
-            {
-                continue;
-            }
-            
-            float dst = Vector3.Distance(tile.position, levelToClosestTile.position);
-
-            if (dst > stairsDistanceMinMax.x && dst < stairsDistanceMinMax.y)
-            {
-                levelToClosestTile = tile;
-                break;
-            }
-        }
-        */
-
         yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 20, levelFromClosestTile, levelToClosestTile));
     }
 
@@ -707,6 +697,7 @@ public class LevelGenerator : MonoBehaviour
                     bodyPart.DestroyTileFromGenerator();
                 }
             }
+            yield return null;
         }
         yield return null;
     }

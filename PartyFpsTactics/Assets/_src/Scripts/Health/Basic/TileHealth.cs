@@ -1,17 +1,38 @@
+using System;
 using System.Collections.Generic;
 using MrPink.WeaponsSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MrPink.Health
 {
     // TileHealth
     public class TileHealth : BasicHealth
     {
+        [Tooltip("Will be added to Levelgen spawnedProps List and will be bumped by shots")]
+        public bool prop = false;
         private Vector3Int tileRoomCoordinates = Vector3Int.zero;
         public List<Collider> colliders;
         private Level _parentRoom;
         [SerializeField]
         private Rigidbody rb;
+
+        private void Start()
+        {
+            if (prop)
+                LevelGenerator.Instance.AddProp(this);
+        }
+
+        private void OnDestroy()
+        {
+            if (prop)
+                LevelGenerator.Instance.RemoveProp(this);
+        }
+
+        public Rigidbody Rigidbody()
+        {
+            return rb;
+        }
 
         public void SetTileRoomCoordinates(Vector3Int coords, Level parentRoom)
         {

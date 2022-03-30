@@ -55,9 +55,6 @@ namespace _src.Scripts
                 
                     UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
                 }
-            
-                if (i < 1)
-                    continue;
 
                 for (int j = 0; j < Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y); j++)
                 {

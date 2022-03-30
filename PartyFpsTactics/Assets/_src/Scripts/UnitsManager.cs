@@ -70,6 +70,7 @@ public class UnitsManager : MonoBehaviour
         if (playerForce < 0)
             playerForce = tileExplosionForcePlayer;
         
+        // BUMP ENEMIES
         for (int i = 0; i < unitsInGame.Count; i++)
         {
             if (Vector3.Distance(explosionPosition, unitsInGame[i].transform.position + Vector3.up) <= distance)
@@ -87,7 +88,7 @@ public class UnitsManager : MonoBehaviour
                     
                     unitsInGame[i].Damage(1, DamageSource.Player);
                     if (action != ScoringActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped, 2);
+                        ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped, 3);
                 }
 
                 if (unitsInGame[i].HumanVisualController)
@@ -101,6 +102,22 @@ public class UnitsManager : MonoBehaviour
                 {
                     unitsInGame[i].AiMovement.Death();
                 }
+            }
+        }
+        
+        // BUMP PROPS
+        for (int i = 0; i < LevelGenerator.Instance.spawnedProps.Count; i++)
+        {
+            if (Vector3.Distance(LevelGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) > distance)
+                continue;
+            
+            var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody();
+            if (rb)
+            {
+                if (action != ScoringActionType.NULL)
+                    ScoringSystem.Instance.RegisterAction(ScoringActionType.PropBumped, 2);
+                
+                rb.AddForce((rb.centerOfMass - explosionPosition).normalized * tileExplosionForceBarrels, ForceMode.VelocityChange);
             }
         }
     }

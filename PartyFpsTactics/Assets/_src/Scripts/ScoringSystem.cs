@@ -223,5 +223,6 @@ public enum ScoringActionType
     KillExplosion,
     TileDestroyed,
     EnemyBumped,
-    BarrelBumped
+    BarrelBumped,
+    PropBumped
 }
