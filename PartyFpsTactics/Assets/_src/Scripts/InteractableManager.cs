@@ -83,6 +83,7 @@ public class InteractableManager : MonoBehaviour
                 var au = newGo.AddComponent<AudioSource>();
                 au.pitch = UnityEngine.Random.Range(IOevent.auPitchMinMax.x, IOevent.auPitchMinMax.y);
                 au.clip = IOevent.soundToPlay;
+                au.volume = 0.66f;
                 au.playOnAwake = false;
                 au.loop = false;
                 au.Play();

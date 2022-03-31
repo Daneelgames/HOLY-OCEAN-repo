@@ -28,7 +28,8 @@ namespace _src.Scripts.LevelGenerators
             for (int levelIndex = 0; levelIndex < spawnedLevels.Count; levelIndex++)
             {
                 var level = spawnedLevels[levelIndex];
-                for (int roomIndex = 0; roomIndex < spawnedLevels[levelIndex].spawnedRooms.Count; roomIndex++)
+                int amount = Random.Range(1, spawnedLevels[levelIndex].spawnedRooms.Count / 2);
+                for (int roomIndex = 0; roomIndex < amount; roomIndex++)
                 {
                     // SPAWN OBJECT OF INTEREST
                     var room = spawnedLevels[levelIndex].spawnedRooms[roomIndex];

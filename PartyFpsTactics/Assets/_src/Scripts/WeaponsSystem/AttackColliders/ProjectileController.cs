@@ -65,19 +65,19 @@ public class ProjectileController : BaseAttackCollider
         Gizmos.DrawRay(lastPosition, currentPosition - lastPosition);
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (dead)
             return;
 
-        if (other.gameObject.layer == 6 || other.gameObject.layer == 11) 
+        if (other.gameObject.layer != 6 && other.gameObject.layer != 11) 
             return;
         
         if (toolType != ToolType.Null && other.gameObject == Player.Movement.gameObject)
             return;
 
         if (stickOnContact)
-            StickToObject(other.collider);
+            StickToObject(other);
 
         if (dieOnContact)
             Death();

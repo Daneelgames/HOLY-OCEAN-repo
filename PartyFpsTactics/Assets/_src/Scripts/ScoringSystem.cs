@@ -15,6 +15,7 @@ public class ScoringSystem : MonoBehaviour
    
 
     public List<ActionScore> Scores;
+    [SerializeField]
     int currentScore = 0;
 
     public int CurrentScore
