@@ -26,7 +26,8 @@ public class LevelGoal : MonoBehaviour
         if (coll.gameObject == Player.GameObject)
         {
             collected = true;
-            GameManager.Instance.StartFlatScene();
+            ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
+            GameManager.Instance.StartProcScene();
         }
     }
 }

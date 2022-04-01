@@ -35,6 +35,7 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
+            
             if (gunMoveSpeed < 1) 
                 gunMoveSpeed = 1;
             

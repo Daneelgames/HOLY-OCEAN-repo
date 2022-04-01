@@ -6,6 +6,13 @@ using UnityEngine;
 
 public class InteractiveObject : MonoBehaviour
 {
+    public enum InteractableType
+    {
+        ItemInteractable, NpcInteractable
+    }
+
+    public InteractableType type = InteractableType.ItemInteractable;
+    
     public string interactiveObjectName = "A THING";
     public List<ScriptedEvent> eventsOnInteraction;
     public Rigidbody rb;

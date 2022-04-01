@@ -35,6 +35,7 @@ namespace MrPink.PlayerSystem
         private float _horizontalRotation = 0.0f;
 
         private bool _isDead = false;
+        private Transform currentCutsceneTargetTransform;
 
 
         private void Awake()
@@ -46,11 +47,29 @@ namespace MrPink.PlayerSystem
         {
             if (LevelGenerator.Instance.levelIsReady == false)
                 return;
+            if (ProceduralCutscenesManager.Instance.InCutScene)
+            {
+                FollowCutSceneTargetTransform();
+                return;
+            }
             
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
             MouseLook();
+        }
+
+        public void SetCurrentCutsceneTargetTrasform(Transform _transform)
+        {
+            currentCutsceneTargetTransform = _transform;
+        }
+        void FollowCutSceneTargetTransform()
+        {
+            if (!currentCutsceneTargetTransform)
+                return;
+            
+            _headTransform.position = Vector3.Lerp(_headTransform.position,currentCutsceneTargetTransform.position, Time.deltaTime);
+            _headTransform.rotation = Quaternion.Slerp(_headTransform.rotation,currentCutsceneTargetTransform.rotation, Time.deltaTime);
         }
 
 

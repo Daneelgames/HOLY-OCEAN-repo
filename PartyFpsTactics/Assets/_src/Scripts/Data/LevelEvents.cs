@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -24,7 +25,13 @@ namespace _src.Scripts.Data
         public GameObject prefabToSpawn;
 
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
-        public PhoneDialogue dialogueToStart;
+        public Dialogue dialogueToStart;
+        
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        public HealthController NpcHc;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        public List<Transform> randomCameraTargetTransforms;
         
         [ShowIf("scriptedEventType", ScriptedEventType.SetCurrentLevel)]
         public int currentLevelToSet;

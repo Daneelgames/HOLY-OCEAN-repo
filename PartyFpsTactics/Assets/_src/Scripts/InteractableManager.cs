@@ -47,6 +47,12 @@ public class InteractableManager : MonoBehaviour
     {
         switch (IOevent.scriptedEventType)
         {
+            case ScriptedEventType.StartDialogue:
+            
+                ProceduralCutscenesManager.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, IOevent.randomCameraTargetTransforms, IOevent.NpcHc);
+                //IOevent.dialogueToStart
+                break;
+            
             case ScriptedEventType.SpawnObject:
                 GameObject newObj;
                 if (IOevent.spawnInsideCamera)
@@ -99,6 +105,9 @@ public class InteractableManager : MonoBehaviour
     {
         for (int i = 0; i < InteractiveObjects.Count; i++)
         {
+            if (InteractiveObjects[i].type != InteractiveObject.InteractableType.ItemInteractable)
+                continue;
+            
             if (InteractiveObjects[i].rb == null)
             {
                 var rb = InteractiveObjects[i].gameObject.AddComponent<Rigidbody>();

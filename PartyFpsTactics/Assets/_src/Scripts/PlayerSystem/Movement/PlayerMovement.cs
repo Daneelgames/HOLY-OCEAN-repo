@@ -91,6 +91,8 @@ namespace MrPink.PlayerSystem
         
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
+            if (ProceduralCutscenesManager.Instance.InCutScene)
+                return;
 
             HandleCrouch();
             HandleMovement();
@@ -104,6 +106,9 @@ namespace MrPink.PlayerSystem
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
 
+            if (ProceduralCutscenesManager.Instance.InCutScene)
+                return;
+            
             GroundCheck();
             SlopeCheck();
             

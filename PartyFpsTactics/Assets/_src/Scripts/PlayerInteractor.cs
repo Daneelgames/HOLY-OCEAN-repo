@@ -41,6 +41,17 @@ public class PlayerInteractor : MonoBehaviour
         while (true)
         {
             yield return null;
+
+            if (ProceduralCutscenesManager.Instance.InCutScene)
+            {
+                if (selectedIO == null)
+                    continue;
+                
+                selectedIO = null;
+                selectedIOTransform = null;
+                uiItemNameFeedback.text = String.Empty;
+                continue;
+            }
             
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out var hit, raycastDistance, raycastMask))
             {
