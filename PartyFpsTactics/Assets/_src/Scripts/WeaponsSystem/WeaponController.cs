@@ -24,12 +24,17 @@ namespace MrPink.WeaponsSystem
         [FormerlySerializedAs("attackSignalAu")]
         private AudioSource _attackSignalAudioSource;
 
+        [SerializeField]
+        int bulletsPerShot = 1;
+
+        [Tooltip("Projectile prefab")]
         [SerializeField, AssetsOnly, Required]
         private BaseAttackCollider _attackColliderPrefab;
 
         [SerializeField, ChildGameObjectsOnly, CanBeNull]
         private BaseWeaponAnimation _animation;
 
+        [Header("Only for Player Weapon")]
         public float gunsMoveDistanceScaler = 0.2f;
         public AudioSource reloadingAu;
         public AudioClip reloadingClip;
@@ -67,20 +72,25 @@ namespace MrPink.WeaponsSystem
             if (ownerHc.health <= 0)
                 return;
             
+            // AI is aiming
             if (aiAimTransform != null)
             {
                 transform.LookAt(aiAimTransform.position);
                 direction = (aiAimTransform.position - shotHolder.position).normalized;
             }
             
-            var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
-
             bool isPlayer = ownerHc == Player.Health;
             
             ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
+
+            for (int i = 0; i < bulletsPerShot; i++)
+            {
+                var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
+                
+                newProjectile.Init(ownerHc, source, action);
+            }
             
-            newProjectile.Init(ownerHc, source, action);
             Cooldown().ForgetWithHandler();
             
             if (_animation != null)

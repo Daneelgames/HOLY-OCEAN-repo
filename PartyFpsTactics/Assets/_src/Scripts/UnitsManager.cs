@@ -22,9 +22,9 @@ public class UnitsManager : MonoBehaviour
     private List<BasicHealth> _bodyPartsQueueToKillCombo = new List<BasicHealth>();
     
     public PhysicMaterial corpsesMaterial;
-    public HealthController redTeamUnitPrefab;
-    public HealthController blueTeamUnitPrefab;
-    public HealthController neutralUnitPrefab;
+    public List<HealthController> redTeamUnitPrefabs;
+    public List<HealthController> blueTeamUnitPrefabs;
+    public List<HealthController> neutralUnitPrefabs;
     private void Awake()
     {
         Instance = this;
@@ -37,13 +37,13 @@ public class UnitsManager : MonoBehaviour
 
     public void SpawnBlueUnit(Vector3 pos)
     {
-        var newUnit = Instantiate(blueTeamUnitPrefab, pos, Quaternion.identity);
+        var newUnit = Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity);
         newUnit.AiMovement.TakeCoverOrder();
         //CommanderControls.Instance.unitsInParty.Add(newUnit);
     }
     public void SpawnRedUnit(Vector3 pos)
     {
-        var newUnit = Instantiate(redTeamUnitPrefab, pos, Quaternion.identity);
+        var newUnit = Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity);
         if (Random.value > 0.9f)
             newUnit.AiMovement.MoveToPositionOrder(Player.GameObject.transform.position);
         else 
@@ -51,7 +51,7 @@ public class UnitsManager : MonoBehaviour
     }
     public void SpawnNeutralUnit(Vector3 pos)
     {
-        var newUnit = Instantiate(neutralUnitPrefab, pos, Quaternion.identity);
+        var newUnit = Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity);
         
         newUnit.AiMovement.TakeCoverOrder();
     }

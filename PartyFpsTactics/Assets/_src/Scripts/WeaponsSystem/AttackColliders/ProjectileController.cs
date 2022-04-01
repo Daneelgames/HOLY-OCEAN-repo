@@ -17,7 +17,8 @@ public class ProjectileController : BaseAttackCollider
     public float lifeTime = 2;
 
     public ToolType toolType = ToolType.Null;
-    
+
+    public float projectileRandomRotationMax = 0;
     public bool dieOnContact = true;
     public bool ricochetOnContact = false;
     public bool stickOnContact = false;
@@ -53,9 +54,13 @@ public class ProjectileController : BaseAttackCollider
         PlaySound(shotAu);
         PlaySound(flyAu);
         
+        
+        
         if (rb != null && !addVelocityEveryFrame)
             rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
-        
+
+        transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);
+
         StartCoroutine(MoveProjectile());
     }
 
@@ -92,6 +97,7 @@ public class ProjectileController : BaseAttackCollider
         
         if (addVelocityEveryFrame)
             rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
+        
         currentPosition  = transform.position;
         distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
         
