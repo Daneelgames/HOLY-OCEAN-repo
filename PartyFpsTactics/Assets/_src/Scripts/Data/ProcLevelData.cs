@@ -33,6 +33,7 @@ namespace _src.Scripts.Data
         
         public int explosiveBarrelsAmount = 2;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(2,2);
+        public Vector2Int npcsPerRoomMinMax = new Vector2Int(1,2);
         public Vector2Int grindRailsPerLevelMinMax = new Vector2Int(1, 2);
         public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
         public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 5);

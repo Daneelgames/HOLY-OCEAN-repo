@@ -28,7 +28,7 @@ public class LevelGenerator : MonoBehaviour
     public bool spawnWalls = true;
     public bool spawnLadders = true;
     public bool spawnAdditionalTiles = true;
-
+    public LayerMask allSolidsLayerMask;
     [Range(0,5)] public float offsetToThinWallsTargetDirection = 0;
     
     public GameObject levelGoalPrefab;
@@ -64,6 +64,7 @@ public class LevelGenerator : MonoBehaviour
     public List<NavMeshSurface> navMeshSurfacesSpawned;
     public GameObject tileDestroyedParticles;
     public PhysicMaterial tilePhysicsMaterial;
+    
     public bool levelIsReady = false;
     private void Awake()
     {
@@ -676,7 +677,7 @@ public class LevelGenerator : MonoBehaviour
             
             if (destroyTilesAround)
             {
-                var hit = Physics.OverlapSphere(newStairsTile.transform.position + Vector3.up, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), 1 << 6);
+                var hit = Physics.OverlapSphere(newStairsTile.transform.position + Vector3.up, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), allSolidsLayerMask);
                 
                 for (int i = 0; i < hit.Length; i++)
                 {

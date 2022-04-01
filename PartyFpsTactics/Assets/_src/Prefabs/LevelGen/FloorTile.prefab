@@ -1402,6 +1402,7 @@ GameObject:
   - component: {fileID: 4636380872454741449}
   - component: {fileID: 9201142029684060503}
   - component: {fileID: 2037099963527117348}
+  - component: {fileID: 4791063650145651485}
   m_Layer: 6
   m_Name: FloorTile
   m_TagString: Untagged
@@ -1451,6 +1452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 300
   _healthController: {fileID: 0}
+  prop: 0
   colliders:
   - {fileID: 1211562686235662036}
   rb: {fileID: 0}
@@ -1480,3 +1482,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
+--- !u!208 &4791063650145651485
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943623579927757030}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.25, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.25, z: 0}
+  m_TimeToStationary: 0.5

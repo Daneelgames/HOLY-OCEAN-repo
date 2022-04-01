@@ -67,13 +67,17 @@ namespace MrPink.WeaponsSystem
             if (targetCollider.gameObject == Player.GameObject)
             {
                 Player.Health.Damage(damage, _damageSource, actionOnHit);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position);
                 return CollisionTarget.Creature;
             }
 
             var targetHealth = targetCollider.gameObject.GetComponent<BasicHealth>();
 
             if (targetHealth == null)
+            {
+                UnitsManager.Instance.RagdollTileExplosion(transform.position);
                 return CollisionTarget.Solid;
+            }
             
             if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;

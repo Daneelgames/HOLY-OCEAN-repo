@@ -45,12 +45,6 @@ public class HumanVisualController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        /*
-        if (Input.GetKeyDown("k"))
-        {
-            var hc = gameObject.GetComponent<HealthController>();
-            hc.Damage(hc.health);
-        }*/
         if (hc.health <= 0)
             return;
         
@@ -59,29 +53,18 @@ public class HumanVisualController : MonoBehaviour
         
         for (int i = 0; i < joints.Count; i++)
         {
+            /*if (i == 0)
+            {
+                joints[0].targetPosition = animatedBones[i].position;
+                
+                continue;
+            }*/
+
             joints[i].targetRotation = CopyRotation(i);
-            //joints[i].targetPosition = animatedBones[i].position;
             joints[i].transform.position = animatedBones[i].position;
+            //rigidbodies[i].MovePosition(animatedBones[i].position);
         }
     }
-
-    /*
-    private void LateUpdate()
-    {
-        for (int i = 0; i < aimIkIterations; i++)
-        {
-            AimAtTarget(ikAimBone, ikTarget.position);
-        }
-    }
-
-    void AimAtTarget(Transform bone, Vector3 pos)
-    {
-        Vector3 aimDirection = ikAimTransform.forward;
-        Vector3 targetDirection = pos - ikAimTransform.position;
-        Quaternion aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
-        bone.rotation = aimTowards * bone.rotation;
-    }
-    */
 
     Quaternion CopyRotation(int index)
     {
@@ -134,6 +117,23 @@ public class HumanVisualController : MonoBehaviour
             angularYZDrive.positionSpring = 0;
             angularYZDrive.positionDamper = 0;
             joints[i].angularYZDrive = angularYZDrive;
+            
+            var xDrive = joints[i].xDrive;
+            xDrive.positionSpring = 0;
+            xDrive.positionDamper = 0;
+            joints[i].xDrive = xDrive;
+
+            joints[i].xDrive = xDrive;
+            var yDrive = joints[i].yDrive;
+            xDrive.positionSpring = 0;
+            xDrive.positionDamper = 0;
+            joints[i].yDrive = yDrive;
+
+            joints[i].xDrive = xDrive;
+            var zDrive = joints[i].zDrive;
+            xDrive.positionSpring = 0;
+            xDrive.positionDamper = 0;
+            joints[i].zDrive = zDrive;
         }
         
         for (int i = 0; i < rigidbodies.Count; i++)
@@ -143,6 +143,7 @@ public class HumanVisualController : MonoBehaviour
             rigidbodies[i].isKinematic = false;
             rigidbodies[i].useGravity = true;
         }
+        
         for (int i = 0; i < colliders.Count; i++)
         {
             colliders[i].material = UnitsManager.Instance.corpsesMaterial;
@@ -160,35 +161,43 @@ public class HumanVisualController : MonoBehaviour
             var angularYZDrive = joints[i].angularYZDrive;
             if (i == 0)
             {
-                joints[i].angularXMotion = ConfigurableJointMotion.Limited;
-                joints[i].angularYMotion = ConfigurableJointMotion.Limited;
-                joints[i].angularZMotion = ConfigurableJointMotion.Limited;
+                var xDrive = joints[i].xDrive;
+                xDrive.positionSpring = 900;
+                xDrive.positionDamper = 100;
+                joints[i].xDrive = xDrive;
+
+                joints[i].xDrive = xDrive;
+                var yDrive = joints[i].yDrive;
+                xDrive.positionSpring = 900;
+                xDrive.positionDamper = 100;
+                joints[i].yDrive = yDrive;
+
+                joints[i].xDrive = xDrive;
+                var zDrive = joints[i].zDrive;
+                xDrive.positionSpring = 900;
+                xDrive.positionDamper = 100;
+                joints[i].zDrive = zDrive;
                 
-                angularXDrive.positionSpring = 1500;
-                angularXDrive.positionDamper = 200;
+                joints[i].angularXMotion = ConfigurableJointMotion.Free;
+                joints[i].angularYMotion = ConfigurableJointMotion.Free;
+                joints[i].angularZMotion = ConfigurableJointMotion.Free;
+                
+                angularXDrive.positionSpring = 900;
+                angularYZDrive.positionSpring = 900;
+                angularXDrive.positionDamper = 100;
+                angularYZDrive.positionDamper = 100; 
+                
                 joints[i].angularXDrive = angularXDrive;
-            
-                angularYZDrive.positionSpring = 1500;
-                angularYZDrive.positionDamper = 200;
                 joints[i].angularYZDrive = angularYZDrive;
                 continue;
             }
             
-            /*
-            joints[i].angularXMotion = ConfigurableJointMotion.Free;
-            joints[i].angularYMotion = ConfigurableJointMotion.Free;
-            joints[i].angularZMotion = ConfigurableJointMotion.Free;
-            angularXDrive.positionSpring = 0;
+            angularXDrive.positionSpring = 900;
+            angularYZDrive.positionSpring = 900;
             angularXDrive.positionDamper = 0;
-            angularYZDrive.positionSpring = 0;
-            angularYZDrive.positionDamper = 0;*/
+            angularYZDrive.positionDamper = 0;
             
-            angularXDrive.positionSpring = 1500;
-            angularXDrive.positionDamper = 200;
             joints[i].angularXDrive = angularXDrive;
-            
-            angularYZDrive.positionSpring = 1500;
-            angularYZDrive.positionDamper = 200;
             joints[i].angularYZDrive = angularYZDrive;
         }
         
@@ -199,13 +208,12 @@ public class HumanVisualController : MonoBehaviour
             
             if (i == 0)
             {
-                rigidbodies[i].isKinematic = true;
+                rigidbodies[i].isKinematic = false;
                 rigidbodies[i].useGravity = false;
                 continue;
             }
             rigidbodies[i].isKinematic = false;
-            rigidbodies[i].useGravity = true;
-            //rigidbodies[i].gameObject.layer = 6;
+            rigidbodies[i].useGravity = false;
         }
         for (int i = 0; i < colliders.Count; i++)
         {
@@ -217,10 +225,17 @@ public class HumanVisualController : MonoBehaviour
     {
         ragdollOriginParent = ragdollOrigin.parent;
         ragdollOrigin.parent = null;
+        float t = 0;
         while (true)
         {
-            yield return new WaitForSeconds(3f);
+            yield return null;
             transform.position = ragdollOrigin.transform.position;
+            t += Time.deltaTime;
+            
+            if (t < 3)
+                continue;
+            
+            t = 0;
             
             if (Physics.CheckSphere(ragdollOrigin.transform.position, 0.5f, tilesLayerMask, QueryTriggerInteraction.Ignore))
             {
