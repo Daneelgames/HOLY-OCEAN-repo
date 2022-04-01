@@ -104,8 +104,10 @@ namespace MrPink.PlayerSystem
         {
             if (!IsWeaponEquipped)
                 return;
-            
-            Weapon.transform.position = Vector3.Lerp(Weapon.transform.position,  CurrentTransform.position, gunMoveSpeed * Time.deltaTime);
+            float scaler = 1;
+            if (_isCollidingWithWall)
+                scaler = 0.5f;
+            Weapon.transform.position = Vector3.Lerp(Weapon.transform.position,  CurrentTransform.position, gunMoveSpeed * scaler * Time.deltaTime);
             Weapon.transform.rotation = Quaternion.Slerp(Weapon.transform.rotation, CurrentTransform.rotation, gunRotationSpeed * Time.deltaTime);
         }
 

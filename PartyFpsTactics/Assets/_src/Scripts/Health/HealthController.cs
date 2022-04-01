@@ -156,6 +156,8 @@ namespace MrPink.Health
                 transformToShake.localPosition = originalPos + new Vector3(x,y,z);
                 yield return null;
             }
+
+            transformToShake.localPosition = originalPos;
         }
 
         private void SetDamageState()

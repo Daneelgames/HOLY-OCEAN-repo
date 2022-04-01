@@ -55,19 +55,8 @@ public class HumanVisualController : MonoBehaviour
         
         for (int i = 0; i < joints.Count; i++)
         {
-            /*if (i == 0)
-            {
-                joints[0].targetPosition = animatedBones[i].position;
-                
-                continue;
-            }*/
-
             joints[i].targetRotation = CopyRotation(i);
-            //РАЗМАЗАТЬ ТУТ ПОВОРОТЫ И ПОЗИЦИИ
-            
             joints[i].transform.position = Vector3.Lerp(joints[i].transform.position, animatedBones[i].position, lerpToStand);
-            
-            //rigidbodies[i].MovePosition(animatedBones[i].position);
         }
     }
 
@@ -264,7 +253,7 @@ public class HumanVisualController : MonoBehaviour
             
             if (hc.health <= 0)
             {
-                transform.parent = ragdollOrigin;
+                ragdollOrigin.parent = ragdollOriginParent;
                 yield break;
             }
             
