@@ -865,6 +865,7 @@ public class LevelGenerator : MonoBehaviour
                 }
 
                 //Debug.Log("Tile Destroyed AddRigidbody");
+                UnitsManager.Instance.RagdollTileExplosion(room.roomTilesMatrix[x, YYY, z].transform.position);
                 room.roomTilesMatrix[x, YYY, z].AddRigidbody(100, tilePhysicsMaterial);
             }
         }
@@ -923,7 +924,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
                 
-                yield return new WaitForSecondsRealtime(1);
+                yield return new WaitForSeconds(1f);
             }
         }
     }
