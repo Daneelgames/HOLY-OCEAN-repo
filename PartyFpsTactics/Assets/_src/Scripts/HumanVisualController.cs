@@ -17,6 +17,7 @@ public class HumanVisualController : MonoBehaviour
     public List<Transform> animatedBones;
     public List<ConfigurableJoint> joints;
     List<Quaternion> initRotations = new List<Quaternion>();
+    public float timeToStandUp = 2;
 
     private static readonly int InCover = Animator.StringToHash("InCover");
 
@@ -25,6 +26,7 @@ public class HumanVisualController : MonoBehaviour
     public Material deadMaterial;
     public SkinnedMeshRenderer meshRenderer;
     public LayerMask tilesLayerMask;
+    private float lerpToStand = 1;
     private void Start()
     {
         hc = gameObject.GetComponent<HealthController>();
@@ -61,7 +63,10 @@ public class HumanVisualController : MonoBehaviour
             }*/
 
             joints[i].targetRotation = CopyRotation(i);
-            joints[i].transform.position = animatedBones[i].position;
+            //РАЗМАЗАТЬ ТУТ ПОВОРОТЫ И ПОЗИЦИИ
+            
+            joints[i].transform.position = Vector3.Lerp(joints[i].transform.position, animatedBones[i].position, lerpToStand);
+            
             //rigidbodies[i].MovePosition(animatedBones[i].position);
         }
     }
@@ -100,6 +105,11 @@ public class HumanVisualController : MonoBehaviour
             if (followRagdollCoroutine != null)
                 StopCoroutine(followRagdollCoroutine);
             //return;
+        }
+        
+        if (ChangeLerpToStandCoroutine != null)
+        {
+            StopCoroutine(ChangeLerpToStandCoroutine);
         }
         
         anim.enabled = false;
@@ -152,6 +162,8 @@ public class HumanVisualController : MonoBehaviour
 
     void DeactivateRagdoll()
     {
+        ChangeLerpToStandCoroutine = StartCoroutine(ChangeLerpToStand());
+        
         anim.enabled = true;
         ragdoll = false;
         
@@ -221,6 +233,21 @@ public class HumanVisualController : MonoBehaviour
         }
     }
 
+    private Coroutine ChangeLerpToStandCoroutine;
+    IEnumerator ChangeLerpToStand()
+    {
+        float t = 0;
+        lerpToStand = 0;
+
+        while (t < timeToStandUp)
+        {
+            t += Time.deltaTime;
+            lerpToStand = t;
+            yield return null;
+        }
+
+        lerpToStand = 1;
+    }
     IEnumerator FollowTheRagdoll()
     {
         ragdollOriginParent = ragdollOrigin.parent;
@@ -229,15 +256,21 @@ public class HumanVisualController : MonoBehaviour
         while (true)
         {
             yield return null;
-            transform.position = ragdollOrigin.transform.position;
+            transform.position = ragdollOrigin.position;
             t += Time.deltaTime;
             
             if (t < 3)
                 continue;
             
+            if (hc.health <= 0)
+            {
+                transform.parent = ragdollOrigin;
+                yield break;
+            }
+            
             t = 0;
             
-            if (Physics.CheckSphere(ragdollOrigin.transform.position, 0.5f, tilesLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.CheckSphere(ragdollOrigin.position, 1f, tilesLayerMask, QueryTriggerInteraction.Ignore))
             {
                 break;
             }

@@ -181,11 +181,12 @@ public class AiMovement : MonoBehaviour
         SetOccupiedSpot(chosenCover, hc);
         
         //SET PATH
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, chosenCover.transform.position, NavMesh.AllAreas, path);
-        
         if (agent && agent.enabled)
         {
+            transform.position = SamplePos(transform.position); 
+            NavMeshPath path = new NavMeshPath();
+            NavMesh.CalculatePath(transform.position, chosenCover.transform.position, NavMesh.AllAreas, path);
+
             agent.speed = moveSpeed;
             agent.stoppingDistance = stopDistanceMove;
             agent.SetPath(path);
@@ -281,10 +282,8 @@ public class AiMovement : MonoBehaviour
             if (!agent || !agent.enabled)
                 yield break;
             
-            if (NavMesh.SamplePosition(target, out var hit, 10f, NavMesh.AllAreas))
-            {
-                target = hit.position;
-            }
+            
+            transform.position = SamplePos(transform.position);
             NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
             agent.speed = moveSpeed;
             agent.SetPath(path);
@@ -306,8 +305,9 @@ public class AiMovement : MonoBehaviour
     IEnumerator MoveToPosition(Vector3 target)
     {
         NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
         
+        transform.position = SamplePos(transform.position);
+        NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
         agent.speed = moveSpeed;
         agent.stoppingDistance = stopDistanceMove;
         agent.SetPath(path);
@@ -321,6 +321,16 @@ public class AiMovement : MonoBehaviour
         FireWatchOrder();
     }
 
+    Vector3 SamplePos(Vector3 startPos)
+    {
+        if (NavMesh.SamplePosition(startPos, out var hit, 10f, NavMesh.AllAreas))
+        {
+            startPos = hit.position;
+        }
+
+        return startPos;
+    }
+    
     public void RunOrder()
     {
         agent.speed = runSpeed;
@@ -335,6 +345,11 @@ public class AiMovement : MonoBehaviour
 
     public void Resurrect()
     {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+        }
         agent.enabled = true;
         TakeCoverOrder();
     }

@@ -9,6 +9,7 @@ using MrPink.Health;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
@@ -252,6 +253,15 @@ public class LevelGenerator : MonoBehaviour
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
+
+                if (index == 0) // only on very first floor
+                {
+                    var newFloorObstacle = new GameObject("FloorObstacle");
+                    newFloorObstacle.transform.parent = newFloorTile.transform;
+                    newFloorObstacle.transform.localPosition = new Vector3(0, -0.5f, 0);
+                    var obst = newFloorObstacle.AddComponent<NavMeshObstacle>();
+                    obst.carving = true;
+                }
                 
                 if (hasRoof)
                 {
@@ -294,6 +304,7 @@ public class LevelGenerator : MonoBehaviour
                         if (y != 1 || x == 0 && z == 0 || x == 0 && z == size.z-1 || x == size.x-1 && z == 0 || x == size.x - 1 && z == size.z-1)
                             continue;
                         
+                        StartCoroutine(ConstructCover(newWallTile.gameObject, 3));
                         availableStarPositionsForThinWalls.Add(new Vector3Int(x,1,z));
                     }
                 }
@@ -307,34 +318,13 @@ public class LevelGenerator : MonoBehaviour
                         
                         var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
                             
-                        ConstructCover(newAdditionalTile.gameObject);
+                        StartCoroutine(ConstructCover(newAdditionalTile.gameObject, 0));
                             
                         newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
                         newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
                         newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
                         newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
                         newLevel.tilesWalls.Add(newAdditionalTile);
-                        
-                        /*
-                        int r = Random.Range(1, 4);
-                        r = 1;
-                        for (int i = 1; i <= r; i++)
-                        {
-                            if (newLevel.roomTilesMatrix[x, i, z] != null)
-                                continue;
-                            
-                            var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
-                            
-                            if (i == 1 && r > 1)
-                                ConstructCover(newAdditionalTile.gameObject);
-                            
-                            newAdditionalTile.transform.localRotation = newFloorTile.transform.localRotation;
-                            newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * i;
-                            newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,i,z), newLevel);
-                            newLevel.roomTilesMatrix[x, i, z] = newAdditionalTile;
-                            newLevel.tilesWalls.Add(newAdditionalTile);
-                        }
-                        */
                     }
                 }
             }
@@ -426,6 +416,11 @@ public class LevelGenerator : MonoBehaviour
 
                         var coords = new Vector3Int(x, y, z);
                         newRoomWallTile.SetTileRoomCoordinates(coords, level);
+                        
+                        if (y != 1)
+                            continue;
+                        
+                        StartCoroutine(ConstructCover(newRoomWallTile.gameObject, 3));
                     }
                 }
             }
@@ -934,8 +929,12 @@ public class LevelGenerator : MonoBehaviour
     }
     
 
-    public void ConstructCover(GameObject newCoverGo)
+    IEnumerator ConstructCover(GameObject newCoverGo, float waitTime)
     {
+        yield return new WaitForSeconds(waitTime);
+        if (newCoverGo == null)
+            yield break; 
+                
         var newCover = newCoverGo.gameObject.AddComponent<Cover>();
         newCover.ConstructSpots();
     }

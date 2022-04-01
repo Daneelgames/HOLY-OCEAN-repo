@@ -38,6 +38,7 @@ namespace MrPink.PlayerSystem
         public Transform this[WeaponPosition position]
             => _positions[position];
 
+        public LayerMask allSolidsLayerMask;
         
         public WeaponController Weapon
         {
@@ -117,7 +118,7 @@ namespace MrPink.PlayerSystem
             
             if (Physics.Raycast(raycastTransform.position,
                     raycastTransform.forward, out var hit,
-                    Vector3.Distance(raycastTransform.position, raycastTransform.position + raycastTransform.forward * 0.5f), 1 << 6))
+                    Vector3.Distance(raycastTransform.position, raycastTransform.position + raycastTransform.forward * 0.5f), allSolidsLayerMask))
             {
                 _isCollidingWithWall = true;
             }

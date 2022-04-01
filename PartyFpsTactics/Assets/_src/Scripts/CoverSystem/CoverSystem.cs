@@ -56,7 +56,6 @@ public class CoverSystem : MonoBehaviour
                     }
                     else if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position , new Vector3(0.1f, 0.5f, 0.1f), Quaternion.identity, 1 << 6))
                     {
-                        Debug.Log("This cover is true");
                         covers[i].ToggleSpot(j, true);
                         allCovers.Add(covers[i].coverSpotsList[j]);
                     }

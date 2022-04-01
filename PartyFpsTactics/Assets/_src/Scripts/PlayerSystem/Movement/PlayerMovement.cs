@@ -130,7 +130,7 @@ namespace MrPink.PlayerSystem
 
             if (!crouch)
             {
-                if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.up, out var hit, 1f, 1 << 6))
+                if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.up, out var hit, 1f, WalkableLayerMask))
                 {
                     // found obstacle, can't stand
                     Debug.Log(hit.collider.name);
@@ -163,9 +163,9 @@ namespace MrPink.PlayerSystem
             float targetAngle;
             State.IsLeaning = true;
             
-            if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, 1<<6))
+            if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, WalkableLayerMask))
                 targetAngle = -minMaxRotatorAngle;
-            else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, 1<<6))
+            else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, WalkableLayerMask))
                 targetAngle = minMaxRotatorAngle;
             else
             {
