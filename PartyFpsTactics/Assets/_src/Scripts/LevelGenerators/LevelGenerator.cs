@@ -532,7 +532,7 @@ public class LevelGenerator : MonoBehaviour
                     newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
                     level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
                     
-                    Debug.Log("thin walls. level.roomTilesMatrix[" + nextPos.x +", " + y +", " + nextPos.z +"]; " + level.roomTilesMatrix[nextPos.x, y, nextPos.z].name +"; newWallTile is " + newWallTile);
+                    //Debug.Log("thin walls. level.roomTilesMatrix[" + nextPos.x +", " + y +", " + nextPos.z +"]; " + level.roomTilesMatrix[nextPos.x, y, nextPos.z].name +"; newWallTile is " + newWallTile);
                     var coords = new Vector3Int(nextPos.x, y, nextPos.z);
                     newWallTile.SetTileRoomCoordinates(coords, level);
                 }
