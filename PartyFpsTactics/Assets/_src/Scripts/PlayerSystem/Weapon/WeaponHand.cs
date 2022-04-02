@@ -47,20 +47,21 @@ namespace MrPink.PlayerSystem
         }
 
 
-        public void MoveHand(float gunMoveSpeed, float gunRotationSpeed)
+        public void MoveHand()
         {
             if (!_weapon)
                 return;
+            float gunMoveSpeed = _weapon.gunMoveSpeed;
+            float gunRotationSpeed = _weapon.gunRotationSpeed;
             
             transform.localPosition = Vector3.Lerp(transform.localPosition, 
                 new Vector3(Player.Movement.MoveVector.x, - Player.Movement.MoveVector.y - Player.Movement.rb.velocity.normalized.y * 0.3f, 0) * _weapon.gunsMoveDistanceScaler,  
                 gunMoveSpeed * Time.deltaTime);
-            
-            
+
             var rot = transform.localRotation;
             float mouseX = Input.GetAxis("Mouse X");
-            if (Mathf.Abs(mouseX) > 0.2f)
-                gunRotationSpeed *= 0.2f;
+            if (Mathf.Abs(mouseX) > _weapon.WeaponRotationZScalerThreshold)
+                gunRotationSpeed *= _weapon.WeaponRotationZScaler;
             
             rot.eulerAngles += new Vector3(0, 0, mouseX * gunRotationSpeed * Time.deltaTime);
             transform.localRotation = Quaternion.Slerp(rot, Quaternion.identity, Time.deltaTime);
@@ -100,15 +101,23 @@ namespace MrPink.PlayerSystem
                 Weapon.Shot(Player.Health);
         }
 
-        public void UpdateWeaponPosition(float gunMoveSpeed, float gunRotationSpeed)
+        public void UpdateWeaponPosition()
         {
             if (!IsWeaponEquipped)
                 return;
+
+            float gunMoveSpeed = _weapon.gunMoveSpeed;
+            float gunRotationSpeed = _weapon.gunRotationSpeed;
+            
             float scaler = 1;
-            if (_isCollidingWithWall)
-                scaler = 0.5f;
+            float scalerRot = 1;
+            if (IsAiming)
+            {
+                scaler = _weapon.gunMoveSpeedScaler;
+                scalerRot = _weapon.gunRotSpeedScaler;
+            }
             Weapon.transform.position = Vector3.Lerp(Weapon.transform.position,  CurrentTransform.position, gunMoveSpeed * scaler * Time.deltaTime);
-            Weapon.transform.rotation = Quaternion.Slerp(Weapon.transform.rotation, CurrentTransform.rotation, gunRotationSpeed * Time.deltaTime);
+            Weapon.transform.rotation = Quaternion.Slerp(Weapon.transform.rotation, CurrentTransform.rotation, gunRotationSpeed * scaler * Time.deltaTime);
         }
 
         public void UpdateCollision()

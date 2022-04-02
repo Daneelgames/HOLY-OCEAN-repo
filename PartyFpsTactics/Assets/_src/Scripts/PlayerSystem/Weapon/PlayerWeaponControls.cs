@@ -21,8 +21,6 @@ namespace MrPink.PlayerSystem
         public float camFovIdle = 90;
         public float camFovAim = 90;
         public float fovChangeSpeed = 90;
-        public float gunMoveSpeed = 100;
-        public float gunRotationSpeed = 100;
         
 
         float targetFov = 90;
@@ -36,8 +34,6 @@ namespace MrPink.PlayerSystem
                 return;
         
             
-            if (gunMoveSpeed < 1) 
-                gunMoveSpeed = 1;
             
             _hands[Hand.Left].UpdateState(_isDead);
             _hands[Hand.Right].UpdateState(_isDead);
@@ -51,8 +47,8 @@ namespace MrPink.PlayerSystem
             _weaponsTargetsParent.rotation = Quaternion.Slerp(_weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
             */
 
-            _hands[Hand.Left].MoveHand(gunMoveSpeed, gunRotationSpeed);
-            _hands[Hand.Right].MoveHand(gunMoveSpeed, gunRotationSpeed);
+            _hands[Hand.Left].MoveHand();
+            _hands[Hand.Right].MoveHand();
         }
 
 
@@ -73,8 +69,8 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
-            _hands[Hand.Left].UpdateWeaponPosition(gunMoveSpeed, gunRotationSpeed);
-            _hands[Hand.Right].UpdateWeaponPosition(gunMoveSpeed, gunRotationSpeed);
+            _hands[Hand.Left].UpdateWeaponPosition();
+            _hands[Hand.Right].UpdateWeaponPosition();
 
             Player.MainCamera.fieldOfView = Mathf.Lerp(Player.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
         }

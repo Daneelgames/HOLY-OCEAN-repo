@@ -13,12 +13,28 @@ namespace MrPink.WeaponsSystem
     public class WeaponController : MonoBehaviour
     {
         public Transform shotHolder;
+
+        [Header("Player Weapon Movement")] 
+        [Range(0.1f,100)]
+        public float gunMoveSpeedScaler = 5;
+        [Range(0.1f,100)]
+        public float gunRotSpeedScaler = 5;
+        [Range(0.1f,500)]
+        public float gunMoveSpeed = 100;
+        [Range(0.1f,500)]
+        public float gunRotationSpeed = 100;
+        [Range(0,1)]
+        public float WeaponRotationZScalerThreshold = 0.2f;
+        [Range(0,1000)]
+        public float WeaponRotationZScaler = 3f;
         
+        [Header("Attacking")]
         public float cooldown = 1;
 
         [SerializeField]
         [FormerlySerializedAs("delay")]
         private float _delay = 0f;
+        
         
         [SerializeField]
         [FormerlySerializedAs("attackSignalAu")]
