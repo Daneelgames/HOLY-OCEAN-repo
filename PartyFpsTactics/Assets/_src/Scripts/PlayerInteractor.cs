@@ -33,7 +33,9 @@ public class PlayerInteractor : MonoBehaviour
             return;
 
         if (selectedIOTransform)
+        {
             uiItemNameFeedbackOutline.transform.position = cam.WorldToScreenPoint(selectedIOTransform.position);
+        }
 
         if (Input.GetKeyDown(KeyCode.E) && selectedIO != null)
         {

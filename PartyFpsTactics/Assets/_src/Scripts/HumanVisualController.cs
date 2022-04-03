@@ -184,8 +184,8 @@ public class HumanVisualController : MonoBehaviour
                 joints[i].angularZMotion = ConfigurableJointMotion.Free;
                 
                 angularXDrive.positionSpring = 900;
-                angularXDrive.positionDamper = 100;
-                angularYZDrive.positionSpring = 0;
+                angularXDrive.positionDamper = 0;
+                angularYZDrive.positionSpring = 900;
                 angularYZDrive.positionDamper = 0; 
                 
                 joints[i].angularXDrive = angularXDrive;
