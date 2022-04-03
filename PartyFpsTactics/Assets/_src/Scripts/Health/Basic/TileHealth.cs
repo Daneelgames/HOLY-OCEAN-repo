@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _src.Scripts.LevelGenerators;
 using MrPink.WeaponsSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,11 +12,14 @@ namespace MrPink.Health
     {
         [Tooltip("Will be added to Levelgen spawnedProps List and will be bumped by shots")]
         public bool prop = false;
-        private Vector3Int tileRoomCoordinates = Vector3Int.zero;
+        private Vector3Int tileLevelCoordinates = Vector3Int.zero;
+        public Vector3Int TileLevelCoordinates => tileLevelCoordinates;
         public List<Collider> colliders;
-        private Level _parentRoom;
+        private Level parentLevel;
         [SerializeField]
         private Rigidbody rb;
+        [HideInInspector]
+        public bool floorLevelTile = false;
 
         private void Start()
         {
@@ -27,6 +31,9 @@ namespace MrPink.Health
         {
             if (prop)
                 LevelGenerator.Instance.RemoveProp(this);
+            
+            if (parentLevel)
+                parentLevel.allTiles.Remove(this);
         }
 
         public Rigidbody Rigidbody()
@@ -34,22 +41,13 @@ namespace MrPink.Health
             return rb;
         }
 
-        public void SetTileRoomCoordinates(Vector3Int coords, Level parentRoom)
+        public void SetTileRoomCoordinates(Vector3Int coords, Level _parentLevel)
         {
-            tileRoomCoordinates = coords;
-            _parentRoom = parentRoom;
-        }
-        public void SetTileRoomCoordinates(Level parentRoom)
-        {
-            Vector3Int coords = Vector3Int.zero;
-            // find local coords
-            // transform.localPosition.x, transform.localPosition.y, transform.localPosition.z
-            Debug.Log("Thin wall tile local pos " + transform.localPosition);
-            tileRoomCoordinates = coords;
-            _parentRoom = parentRoom;
+            tileLevelCoordinates = coords;
+            parentLevel = _parentLevel;
         }
 
-        public void AddRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false)
+        public void AddRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1)
         {
             if (rb) 
                 return;
@@ -60,7 +58,7 @@ namespace MrPink.Health
             if (setLayer11)
                 gameObject.layer = 11;
             
-            Debug.Log("Add Rigidbody");
+            //Debug.Log("Add Rigidbody");
             rb = gameObject.AddComponent<Rigidbody>();
             if (rb == null) return;
             rb.useGravity = true;
@@ -71,7 +69,11 @@ namespace MrPink.Health
             
             rb.isKinematic = false;
             rb.mass = 5;
+            rb.drag = 1;
+            rb.angularDrag = 1;
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
+            if (explosionForce > 0)
+                rb.AddExplosionForce(explosionForce, rb.transform.position, 10);
         }
 		public void DestroyTileFromGenerator()
         {
@@ -113,8 +115,8 @@ namespace MrPink.Health
             
             DestroyTile(source, deathParticles);
             
-            if (_parentRoom != null && sendToLevelgen)
-                LevelGenerator.Instance.TileDestroyed(_parentRoom, tileRoomCoordinates);
+            if (parentLevel != null && sendToLevelgen)
+                LevelGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
             Destroy(gameObject);
         }
 

@@ -25,6 +25,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject levelGoalSpawned;
 
     public Transform generatedBuildingFolder;
+    public Transform disconnectedTilesFolder;
     [Header("SETTINGS")]
     public List<int> mainBuildingLevelsHeights = new List<int>();
 
@@ -83,6 +84,11 @@ public class LevelGenerator : MonoBehaviour
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
             generatedBuildingFolder.position = Vector3.zero;
+        }
+        if (disconnectedTilesFolder == null)
+        {
+            disconnectedTilesFolder = new GameObject("DisconnectedTiles").transform;
+            disconnectedTilesFolder.position = Vector3.zero;
         }
 
         switch (levelType)
@@ -190,7 +196,15 @@ public class LevelGenerator : MonoBehaviour
         {
             SpawnNavmesh(spawnedAdditionalLevels[i]);
         }
-        
+
+        for (int i = 0; i < spawnedMainBuildingLevels.Count; i++)
+        {
+            spawnedMainBuildingLevels[i].Init();
+        }
+        for (int i = 0; i < spawnedAdditionalLevels.Count; i++)
+        {
+            spawnedAdditionalLevels[i].Init();
+        }
         for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
         {
             navMeshSurfacesSpawned[i].BuildNavMesh();
@@ -212,7 +226,7 @@ public class LevelGenerator : MonoBehaviour
         var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
         
         Player.Movement.transform.parent.parent = null;
-        Player.Movement.transform.parent.position = targetPos;
+        Player.Movement.transform.position = targetPos;
         //yield return StartCoroutine(SpawnGrindRails());
     }
 
@@ -305,11 +319,10 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator SpawnBaseTiles(int groundLevelIndex, Vector3 pos, Vector3Int size, Quaternion rot, bool mainBuilding)
     {
-        Level newLevel = new Level();
+        GameObject newLevelGameObject = new GameObject();
+        Level newLevel = newLevelGameObject.AddComponent<Level>();
         newLevel.position = pos;
         newLevel.size = size;
-
-        GameObject newLevelGameObject = new GameObject();
         if (mainBuilding)
         {
             newLevelGameObject.name = "Building Level " + groundLevelIndex;
@@ -342,10 +355,13 @@ public class LevelGenerator : MonoBehaviour
             {
                 // FLOOR
                 var newFloorTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
+                newFloorTile.floorLevelTile = true;
                 newFloorTile.transform.localRotation = Quaternion.identity;
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
+                newLevel.tilesWalls.Add(newFloorTile);
+                newLevel.allTiles.Add(newFloorTile);
 
                 if (groundLevelIndex == 0) // only on very first floor
                 {
@@ -373,7 +389,6 @@ public class LevelGenerator : MonoBehaviour
                     }
                     
                     currentSpaceBetweenWindows--;
-                    newLevel.tilesWalls.Add(newFloorTile);
                     for (int y = 1; y < size.y; y++)
                     {
                         bool cornerTile = x == 0 && z == 0 || x == 0 && z == size.z - 1 ||
@@ -404,6 +419,7 @@ public class LevelGenerator : MonoBehaviour
                         newWallTile.transform.position = newFloorTile.transform.position + Vector3.up * y;
                         newLevel.roomTilesMatrix[x, y, z] = newWallTile;
                         newLevel.tilesWalls.Add(newWallTile);
+                        newLevel.allTiles.Add(newWallTile);
 
                         
                         if (cornerTile || y != 1)
@@ -417,6 +433,7 @@ public class LevelGenerator : MonoBehaviour
                 else // TILES INSIDE 
                 {
                     newLevel.tilesInside.Add(newFloorTile);
+                    newLevel.allTiles.Add(newFloorTile);
                     
                     if (hasRoof)
                     {
@@ -427,6 +444,8 @@ public class LevelGenerator : MonoBehaviour
                         newCeilingTile.transform.localPosition = new Vector3(x - size.x / 2, size.y - 1, z - size.z / 2);
                         newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x, size.y - 1, z), newLevel);
                         newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
+                        newLevel.allTiles.Add(newCeilingTile);
+                        newLevel.tilesInside.Add(newCeilingTile);
                     }
 
                     if (Random.value > 0.95f)
@@ -441,7 +460,8 @@ public class LevelGenerator : MonoBehaviour
                         newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
                         newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
                         newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
-                        newLevel.tilesWalls.Add(newAdditionalTile);
+                        /*newLevel.tilesInside.Add(newAdditionalTile);
+                        newLevel.allTiles.Add(newAdditionalTile);*/
                     }
                 }
             }
@@ -535,6 +555,8 @@ public class LevelGenerator : MonoBehaviour
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
                         newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
+                        level.tilesInside.Add(newRoomWallTile);
+                        level.allTiles.Add(newRoomWallTile);
 
                         var coords = new Vector3Int(x, y, z);
                         newRoomWallTile.SetTileRoomCoordinates(coords, level);
@@ -653,7 +675,8 @@ public class LevelGenerator : MonoBehaviour
                     newWallTile.transform.localRotation = Quaternion.identity;
                     newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
                     level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
-                    
+                    level.allTiles.Add(newWallTile);
+                    level.tilesInside.Add(newWallTile);
                     //Debug.Log("thin walls. level.roomTilesMatrix[" + nextPos.x +", " + y +", " + nextPos.z +"]; " + level.roomTilesMatrix[nextPos.x, y, nextPos.z].name +"; newWallTile is " + newWallTile);
                     var coords = new Vector3Int(nextPos.x, y, nextPos.z);
                     newWallTile.SetTileRoomCoordinates(coords, level);
@@ -1013,7 +1036,7 @@ public class LevelGenerator : MonoBehaviour
         StartCoroutine(TileDamagedCoroutine(tile));
     }
 
-    public void TileDestroyed(Level room, Vector3Int destroyedTileCoords)
+    public void TileDestroyed(Level level, Vector3Int destroyedTileCoords)
     {
         int x = destroyedTileCoords.x;
         int y = destroyedTileCoords.y;
@@ -1022,31 +1045,28 @@ public class LevelGenerator : MonoBehaviour
         /*
         Debug.Log("Tile Destroyed, destroyedTileCoords: " + destroyedTileCoords);
         Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);*/
-        room.roomTilesMatrix[x, y, z] = null;
+        level.roomTilesMatrix[x, y, z] = null;
         
         // check neighbours
-        for (int YYY = 1; YYY < room.size.y; YYY++)
+        for (int YYY = 1; YYY < level.size.y; YYY++)
         {
             //Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
-            if (room.roomTilesMatrix[x, YYY, z] != null)
+            if (level.roomTilesMatrix[x, YYY, z] != null)
             {
                 //Debug.Log("1");
-                if (room.roomTilesMatrix[x, YYY - 1, z] != null)
+                if (level.roomTilesMatrix[x, YYY - 1, z] != null)
                 {
-                    //Debug.Log("2");
-                    if (YYY-2 >= 0 && room.roomTilesMatrix[x,YYY-2,z] != null)
                         continue;
                 }
-                if (YYY + 1 < room.size.y && room.roomTilesMatrix[x, YYY + 1, z] != null)
+                if (YYY + 1 < level.size.y && level.roomTilesMatrix[x, YYY + 1, z] != null)
                 {
-                    //Debug.Log("3");
-                    if (YYY + 2 < room.size.y && room.roomTilesMatrix[x,YYY+2,z] != null)
                         continue;
                 }
 
                 //Debug.Log("Tile Destroyed AddRigidbody");
-                UnitsManager.Instance.RagdollTileExplosion(room.roomTilesMatrix[x, YYY, z].transform.position);
-                room.roomTilesMatrix[x, YYY, z].AddRigidbody(100, tilePhysicsMaterial);
+                UnitsManager.Instance.RagdollTileExplosion(level.roomTilesMatrix[x, YYY, z].transform.position);
+                level.roomTilesMatrix[x, YYY, z].AddRigidbody(100, tilePhysicsMaterial);
+                level.roomTilesMatrix[x, YYY, z] = null;
             }
         }
     }
@@ -1059,21 +1079,26 @@ public class LevelGenerator : MonoBehaviour
     {
         float t = 0;
         tilesToDamage.Add(tile);
-        Vector3 originalPosition = tile.position;
+        Vector3 originalLocalPosition = tile.localPosition;
+        Quaternion originalLocalRot = tile.localRotation;
+        
         while (t < 0.5f)
         {
             if (tile == null)
                 yield break;
             
             t += Time.deltaTime;
-            tile.position = originalPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f),
+            tile.localPosition = originalLocalPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f),
                 Random.Range(-0.1f, 0.1f));
             yield return null;
         }
 
-        tilesToDamage.Remove(tile);
         if (tile)
-            tile.position = originalPosition;
+        {
+            tile.localPosition = originalLocalPosition;
+            tile.localRotation = originalLocalRot;
+            tilesToDamage.Remove(tile);
+        }
     }
     public void DebrisParticles(Vector3 pos)
     {
@@ -1121,19 +1146,11 @@ public class LevelGenerator : MonoBehaviour
         var newCover = newCoverGo.gameObject.AddComponent<Cover>();
         newCover.ConstructSpots();
     }
-}
 
-[Serializable]
-public class Level
-{
-    public List<Room> spawnedRooms = new List<Room>();
-    public float floorWorldHeight;
-    public TileHealth[,,] roomTilesMatrix;
-    public List<TileHealth> tilesInside = new List<TileHealth>();
-    public List<TileHealth> tilesWalls = new List<TileHealth>();
-    public Transform spawnedTransform;
-    public Vector3 position;
-    public Vector3Int size;
+    public void AddToDisconnectedTilesFolder(Transform t)
+    {
+        t.parent = disconnectedTilesFolder;
+    }
 }
 
 [Serializable]

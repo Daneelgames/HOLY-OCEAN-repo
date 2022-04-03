@@ -13,7 +13,7 @@ namespace _src.Scripts
         private float currentYTorque = 0;
         IEnumerator Start()
         {
-            Player.Movement.rb.MovePosition(transform.position);
+            Player.Movement.transform.parent.position = transform.position;
             Player.Movement.transform.parent.parent = transform;
         
             while (!LevelGenerator.Instance.levelIsReady)
