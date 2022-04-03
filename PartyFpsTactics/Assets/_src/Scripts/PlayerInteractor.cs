@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -27,6 +28,9 @@ public class PlayerInteractor : MonoBehaviour
     
     private void Update()
     {
+        if (Player.Health.health <= 0)
+            return;
+
         if (selectedIOTransform)
             uiItemNameFeedback.transform.position = cam.WorldToScreenPoint(selectedIOTransform.position);
 
@@ -42,6 +46,15 @@ public class PlayerInteractor : MonoBehaviour
         {
             yield return null;
 
+            if (Player.Health.health <= 0)
+            {
+                if (selectedIO == null)
+                    continue;
+                selectedIO = null;
+                selectedIOTransform = null;
+                uiItemNameFeedback.text = String.Empty;
+            }
+            
             if (ProceduralCutscenesManager.Instance.InCutScene)
             {
                 if (selectedIO == null)

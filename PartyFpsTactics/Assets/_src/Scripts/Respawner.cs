@@ -32,15 +32,15 @@ namespace _src.Scripts
             tilesForSpawns = new List<TileHealth>();
             enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].enemiesPerRoomMinMax;
 
-            for (int i = 0; i < LevelGenerator.Instance.spawnedLevels.Count; i++)
+            for (int i = 0; i < LevelGenerator.Instance.spawnedMainBuildingLevels.Count; i++)
             {
                 tilesForSpawns.Clear();
-                for (var index = LevelGenerator.Instance.spawnedLevels[i].tilesInside.Count - 1; index >= 0; index--)
+                for (var index = LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside.Count - 1; index >= 0; index--)
                 {
-                    var tile = LevelGenerator.Instance.spawnedLevels[i].tilesInside[index];
+                    var tile = LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside[index];
                     if (tile == null)
                     {
-                        LevelGenerator.Instance.spawnedLevels[i].tilesInside.RemoveAt(index);
+                        LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside.RemoveAt(index);
                         continue;
                     }
                     tilesForSpawns.Add(tile);

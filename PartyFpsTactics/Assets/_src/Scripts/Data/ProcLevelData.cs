@@ -15,7 +15,6 @@ namespace _src.Scripts.Data
         [Header("Settings used in game")]
         public bool spawnWalls = true;
         public bool spawnLadders = true;
-        public bool spawnAdditionalTiles = true;
         
         public Vector2Int levelsPosMinMaxX = new Vector2Int(-10, 10);
         public Vector2Int levelsPosMinMaxZ = new Vector2Int(-10, 10);
