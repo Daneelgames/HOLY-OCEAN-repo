@@ -1024,6 +1024,7 @@ public class LevelGenerator : MonoBehaviour
         Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);*/
         room.roomTilesMatrix[x, y, z] = null;
         
+        // check neighbours
         for (int YYY = 1; YYY < room.size.y; YYY++)
         {
             //Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
@@ -1050,6 +1051,8 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    //IEnumerator CheckTilesToFall
+    
     private List<Transform> tilesToDamage = new List<Transform>();
 
     IEnumerator TileDamagedCoroutine(Transform tile)

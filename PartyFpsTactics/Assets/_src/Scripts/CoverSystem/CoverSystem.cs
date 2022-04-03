@@ -17,6 +17,7 @@ public class CoverSystem : MonoBehaviour
     public static CoverSystem Instance;
     public List<Cover> covers = new List<Cover>();
     List<CoverSpot> allCovers = new List<CoverSpot>();
+    public LayerMask allSolidsMask;
     private void Awake()
     {
         Instance = this;
@@ -50,11 +51,11 @@ public class CoverSystem : MonoBehaviour
                     if (i >= covers.Count)
                         continue;
                     
-                    if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position + Vector3.up * 0.5f, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, 1 << 6))
+                    if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position + Vector3.up * 0.5f, new Vector3(0.1f, 0.1f, 0.1f), Quaternion.identity, allSolidsMask))
                     {
                         covers[i].ToggleSpot(j, false);
                     }
-                    else if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position , new Vector3(0.1f, 0.5f, 0.1f), Quaternion.identity, 1 << 6))
+                    else if (Physics.CheckBox(covers[i].coverSpotsList[j].transform.position , new Vector3(0.1f, 0.5f, 0.1f), Quaternion.identity, allSolidsMask))
                     {
                         covers[i].ToggleSpot(j, true);
                         allCovers.Add(covers[i].coverSpotsList[j]);
