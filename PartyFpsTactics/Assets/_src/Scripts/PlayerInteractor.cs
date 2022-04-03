@@ -15,6 +15,7 @@ public class PlayerInteractor : MonoBehaviour
     private InteractiveObject selectedIO;
 
     public Text uiItemNameFeedback;
+    public Text uiItemNameFeedbackOutline;
     
     [Range(0,1)]
     public float skipChance = 0.9f;
@@ -32,7 +33,7 @@ public class PlayerInteractor : MonoBehaviour
             return;
 
         if (selectedIOTransform)
-            uiItemNameFeedback.transform.position = cam.WorldToScreenPoint(selectedIOTransform.position);
+            uiItemNameFeedbackOutline.transform.position = cam.WorldToScreenPoint(selectedIOTransform.position);
 
         if (Input.GetKeyDown(KeyCode.E) && selectedIO != null)
         {
@@ -53,6 +54,7 @@ public class PlayerInteractor : MonoBehaviour
                 selectedIO = null;
                 selectedIOTransform = null;
                 uiItemNameFeedback.text = String.Empty;
+                uiItemNameFeedbackOutline.text = String.Empty;
             }
             
             if (ProceduralCutscenesManager.Instance.InCutScene)
@@ -63,6 +65,7 @@ public class PlayerInteractor : MonoBehaviour
                 selectedIO = null;
                 selectedIOTransform = null;
                 uiItemNameFeedback.text = String.Empty;
+                uiItemNameFeedbackOutline.text = String.Empty;
                 continue;
             }
             
@@ -71,6 +74,7 @@ public class PlayerInteractor : MonoBehaviour
                 if (hit.collider.gameObject.layer != 11)
                 {
                     uiItemNameFeedback.text = String.Empty;
+                    uiItemNameFeedbackOutline.text = String.Empty;
                     selectedIO = null;
                     selectedIOTransform = null;
                     continue;
@@ -85,6 +89,15 @@ public class PlayerInteractor : MonoBehaviour
                 var newIO = hit.collider.gameObject.GetComponent<InteractiveObject>();
                 if (newIO)
                 {
+                    if (newIO.hc && newIO.hc.health <= 0 && selectedIO != null)
+                    {
+                        selectedIO = null;
+                        selectedIOTransform = null;
+                        uiItemNameFeedback.text = String.Empty;
+                        uiItemNameFeedbackOutline.text = String.Empty;
+                        continue;
+                    }
+                    
                     selectedIO = newIO;
                     selectedIOTransform = newIO.transform;
                 }
@@ -94,6 +107,7 @@ public class PlayerInteractor : MonoBehaviour
                 selectedIO = null;
                 selectedIOTransform = null;
                 uiItemNameFeedback.text = String.Empty;
+                uiItemNameFeedbackOutline.text = String.Empty;
             }
         }
     }
@@ -103,17 +117,18 @@ public class PlayerInteractor : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(selectedNameUpdateTime);
-            if (selectedIO == null)
-            {
-                continue;
-            }
-            if (Random.value < skipChance)
-                continue;
+            if (selectedIO && Random.value >= skipChance)
+                SetInteractionText(selectedIO.interactiveObjectName);
             
-            string newString = UppercaseRandomly(selectedIO.interactiveObjectName);
-            uiItemNameFeedback.text = newString;
+            yield return new WaitForSeconds(selectedNameUpdateTime);
         }
+    }
+
+    public void SetInteractionText(string text)
+    {
+        string newString = UppercaseRandomly(text);
+        uiItemNameFeedback.text = newString;
+        uiItemNameFeedbackOutline.text = newString;
     }
     
     string UppercaseRandomly(string s){

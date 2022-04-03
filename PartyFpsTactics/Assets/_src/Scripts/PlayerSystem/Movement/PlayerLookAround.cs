@@ -47,11 +47,11 @@ namespace MrPink.PlayerSystem
         {
             if (LevelGenerator.Instance.levelIsReady == false)
                 return;
-            if (ProceduralCutscenesManager.Instance.InCutScene)
+            /*if (ProceduralCutscenesManager.Instance.InCutScene)
             {
                 FollowCutSceneTargetTransform();
                 return;
-            }
+            }*/
             
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;

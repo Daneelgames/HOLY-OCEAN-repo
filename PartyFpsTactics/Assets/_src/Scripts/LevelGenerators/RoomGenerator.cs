@@ -27,8 +27,11 @@ namespace _src.Scripts.LevelGenerators
         {
             for (int levelIndex = 0; levelIndex < spawnedLevels.Count; levelIndex++)
             {
+                if (spawnedLevels[levelIndex].spawnedRooms.Count <= 0)
+                    continue;
+                
                 var level = spawnedLevels[levelIndex];
-                var minMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerRoomMinMax;
+                var minMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax;
                 int amount = Random.Range(minMax.x, minMax.y);
                 
                 for (int roomIndex = 0; roomIndex < amount; roomIndex++)
@@ -43,7 +46,6 @@ namespace _src.Scripts.LevelGenerators
                     // THEN SPAWN 
                     yield return null;
                 }
-                yield return null;
             }
         }
     }

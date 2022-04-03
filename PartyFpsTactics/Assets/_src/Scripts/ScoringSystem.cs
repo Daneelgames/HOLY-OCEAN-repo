@@ -5,6 +5,7 @@ using MrPink.PlayerSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ScoringSystem : MonoBehaviour
 {
@@ -34,7 +35,10 @@ public class ScoringSystem : MonoBehaviour
     public Text comboText;
     public Text actionNameText;
     public Image scoreCooldownFeedback;
+    public AudioSource scoreAddedAu;
 
+    public Transform addedScoreFeedbackTransform;
+    public Text addedScoreFeedbackText;
     private void Awake()
     {
         Instance = this;
@@ -42,9 +46,10 @@ public class ScoringSystem : MonoBehaviour
         if (PlayerPrefs.HasKey("currentScore"))
         {
             CurrentScore = PlayerPrefs.GetInt("currentScore");
-            currentScoreText.text = "SCORE: " + CurrentScore;
+            currentScoreText.text = "DOLAS: " + CurrentScore;
         }
 
+        addedScoreFeedbackTransform.transform.localScale = new Vector3(1, 0, 1);
         if (CurrentScore < 0)
             CurrentScore = 0;
     }
@@ -76,9 +81,9 @@ public class ScoringSystem : MonoBehaviour
                 
                 string multiplierString = String.Empty; 
                 if (currentMultiplier > 0)
-                    multiplierString = " * " + currentMultiplier;
+                    multiplierString = " X " + currentMultiplier;
 
-                comboText.text = "COMBO: " + currentScoreInCombo + multiplierString;
+                comboText.text = "DOLAS IN COMBO: " + currentScoreInCombo + multiplierString;
                 
                 break;
             }
@@ -126,11 +131,40 @@ public class ScoringSystem : MonoBehaviour
 
     public void AddScore(int amount)
     {
+        scoreAddedAu.pitch = Random.Range(0.9f, 1.1f);
+        scoreAddedAu.Play();
+        
         CurrentScore += amount;
+        addedScoreFeedbackText.text = "+" + amount;
+        
+        if (animateAddedScoreFeedback != null)
+            StopCoroutine(animateAddedScoreFeedback);
+        
+        StartCoroutine(AnimateAddedScoreFeedback());
         
         PlayerPrefs.SetInt("currentScore", CurrentScore);
-        currentScoreText.text = "SCORE: " + CurrentScore;
+        currentScoreText.text = "DOLAS: " + CurrentScore;
         PlayerPrefs.Save();
+    }
+
+    private Coroutine animateAddedScoreFeedback;
+    IEnumerator AnimateAddedScoreFeedback()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            addedScoreFeedbackTransform.transform.localScale = new Vector3(Random.Range(0.75f, 1.5f),
+                Random.Range(0.75f, 1.5f), Random.Range(0.75f, 1.5f));
+            yield return new WaitForSeconds(0.1f);
+        }
+        addedScoreFeedbackTransform.transform.localScale = Vector3.one;
+
+        float t = 0;
+        while (t < 3)
+        {
+            t += Time.deltaTime;
+            addedScoreFeedbackTransform.transform.localScale = new Vector3(1, Mathf.Lerp(1,0, t/3), 1);
+            yield return null;
+        }
     }
 
     public void RemoveScore(int amount)
@@ -138,7 +172,7 @@ public class ScoringSystem : MonoBehaviour
         CurrentScore -= amount;
         
         PlayerPrefs.SetInt("currentScore", CurrentScore);
-        currentScoreText.text = "SCORE: " + CurrentScore;
+        currentScoreText.text = "DOLAS: " + CurrentScore;
         PlayerPrefs.Save();
     }
     public void CooldownToZero()
@@ -148,7 +182,7 @@ public class ScoringSystem : MonoBehaviour
     public void UpdateScore()
     {
         scoreCooldownCurrent = 0;
-        currentScoreText.text = "SCORE: " + CurrentScore;
+        currentScoreText.text = "DOLAS: " + CurrentScore;
     }
 
     bool MultiplyAction(ScoringActionType action)

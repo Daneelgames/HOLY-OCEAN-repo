@@ -46,6 +46,23 @@ namespace _src.Scripts
                     tilesForSpawns.Add(tile);
                 }
 
+                if (i == 0)
+                {
+                    for (int j = 0; j <  LevelGenerator.Instance.spawnedAdditionalLevels.Count; j++)
+                    {
+                        for (var index = LevelGenerator.Instance.spawnedAdditionalLevels[j].tilesInside.Count - 1; index >= 0; index--)
+                        {
+                            var tile = LevelGenerator.Instance.spawnedAdditionalLevels[j].tilesInside[index];
+                            if (tile == null)
+                            {
+                                LevelGenerator.Instance.spawnedAdditionalLevels[j].tilesInside.RemoveAt(index);
+                                continue;
+                            }
+                            tilesForSpawns.Add(tile);
+                        }
+                    }
+                }
+
                 for (int j = 0; j < alliesAmount; j++)
                 {
                     var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
@@ -56,7 +73,10 @@ namespace _src.Scripts
                     UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
                 }
 
-                for (int j = 0; j < Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y); j++)
+                int enemiesAmount = Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y);
+                if (i == 0)
+                    enemiesAmount += LevelGenerator.Instance.additionalSmallBuildingsAmount;
+                for (int j = 0; j < enemiesAmount; j++)
                 {
                     var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
                     var newSpawnPoint = new GameObject("RedSpawnPoint");
@@ -65,6 +85,18 @@ namespace _src.Scripts
                 
                     UnitsManager.Instance.SpawnRedUnit(randomTile.transform.position);
                 }
+            }
+
+            int additionalNpcAmount = Random.Range(ProgressionManager.Instance
+                .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.x, ProgressionManager.Instance
+                .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.y);
+            for (int i = 0; i < additionalNpcAmount; i++)
+            {
+                var tiles = LevelGenerator.Instance
+                    .spawnedAdditionalLevels[Random.Range(0, LevelGenerator.Instance.spawnedAdditionalLevels.Count)]
+                    .tilesInside;
+                var randomTIle = tiles[Random.Range(0, tiles.Count)];
+                UnitsManager.Instance.SpawnNeutralUnit(randomTIle.transform.position);
             }
         }
 

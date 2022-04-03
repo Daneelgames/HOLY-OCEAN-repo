@@ -1,4 +1,5 @@
 using System.Collections;
+using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ namespace MrPink.PlayerSystem
         public Rigidbody rb;
         public float gravity = 5;
         public float jumpForce = 300;
+        public float fallForceAcceleration = 20;
+        public float fallDamageThreshold = 10;
+        public int fallDamage = 100;
+        
         public float walkSpeed = 5;
         public float runSpeed = 8;
         public float crouchSpeed = 2;
@@ -56,8 +61,7 @@ namespace MrPink.PlayerSystem
         private float bottomColliderHeightCrouching = 0.5f;
         
         public Transform headTransform;
-
-
+        
         private bool goingUpHill = false;
         public Transform rotator;
         public float rotatorSpeed = 10;
@@ -74,6 +78,7 @@ namespace MrPink.PlayerSystem
         
         public Vector3 MoveVector => _moveVector;
 
+        private float lastGroundedYPos = 0;
 
         private void Start()
         {
@@ -91,8 +96,9 @@ namespace MrPink.PlayerSystem
         
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
+            /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
-                return;
+                return;*/
 
             HandleCrouch();
             HandleMovement();
@@ -106,8 +112,9 @@ namespace MrPink.PlayerSystem
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
 
+            /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
-                return;
+                return;*/
             
             GroundCheck();
             SlopeCheck();
@@ -264,6 +271,16 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
+                if (!State.IsGrounded)
+                {
+                    if (transform.position.y + fallDamageThreshold < lastGroundedYPos)
+                    {
+                        Player.Health.Damage(fallDamage, DamageSource.Environment);
+                    }
+                }
+                
+                
+                lastGroundedYPos = transform.position.y;
                 State.IsGrounded = true;
                 additinalFallForce = 0;
                 if (canUseCoyoteTime)
@@ -274,7 +291,7 @@ namespace MrPink.PlayerSystem
                 if (State.IsGrounded && canUseCoyoteTime)
                     _coyoteTime = _coyoteTimeMax;
 
-                additinalFallForce += Time.deltaTime;
+                additinalFallForce += fallForceAcceleration * Time.deltaTime;
                 State.IsGrounded = false;
                 
                 if (canUseCoyoteTime && _coyoteTime > 0)
@@ -288,7 +305,7 @@ namespace MrPink.PlayerSystem
         {
             float resultGravity = 0;
             if (!State.IsGrounded)
-                resultGravity = gravity + additinalFallForce;
+                resultGravity = gravity * additinalFallForce;
             else if (!onSlope)
                 resultGravity = 1;
 

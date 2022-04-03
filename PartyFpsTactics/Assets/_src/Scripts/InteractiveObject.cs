@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
+using MrPink.Health;
 using UnityEngine;
 
 public class InteractiveObject : MonoBehaviour
@@ -16,6 +17,7 @@ public class InteractiveObject : MonoBehaviour
     public string interactiveObjectName = "A THING";
     public List<ScriptedEvent> eventsOnInteraction;
     public Rigidbody rb;
+    public HealthController hc;
     private void Start()
     {
         InteractableManager.Instance.AddInteractable(this);

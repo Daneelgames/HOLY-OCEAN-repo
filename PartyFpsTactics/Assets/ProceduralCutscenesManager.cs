@@ -15,6 +15,7 @@ public class ProceduralCutscenesManager : MonoBehaviour
     public bool CanAnswer => !playerAnswered;
     public bool InCutScene => inCutScene;
     private bool playerAnswered = false;
+    private HealthController currentTalknigNpc;
     
     enum LastPlayerAnswer
     {
@@ -26,27 +27,21 @@ public class ProceduralCutscenesManager : MonoBehaviour
         Instance = this;
     }
 
-    public void RunNpcDialogueCutscene(Dialogue dialogue, List<Transform> cameraTargetTransforms, HealthController npcHc)
+    public void RunNpcDialogueCutscene(Dialogue dialogue, HealthController npcHc, InteractiveObject destroyInteractorAfterDialogueCompleted, int scoreToAddOnDialogueCompleted)
     {
-        StartCoroutine(NpcDialogueCutscene(dialogue, cameraTargetTransforms, npcHc));
+        StartCoroutine(NpcDialogueCutscene(dialogue, npcHc, destroyInteractorAfterDialogueCompleted, scoreToAddOnDialogueCompleted));
     }
 
-    IEnumerator NpcDialogueCutscene(Dialogue dialogue, List<Transform> cameraTargetTransforms, HealthController npcHc)
+    IEnumerator NpcDialogueCutscene(Dialogue dialogue, HealthController npcHc, InteractiveObject destroyInteractorAfterDialogueCompleted, int scoreToAddOnDialogueCompleted)
     {
+        currentTalknigNpc = npcHc;
         inCutScene = true;
-        npcHc.IsImmortal = true;
-        Player.Health.IsImmortal = true;
-        var camTargetsTemp = new List<Transform>(cameraTargetTransforms);
-        var randomTransform = camTargetsTemp[Random.Range(0, camTargetsTemp.Count)];
+        //npcHc.IsImmortal = true;
+        //Player.Health.IsImmortal = true;
         DialogueWindowInterface.Instance.ToggleDialogueWindow(true);
         for (int i = 0; i < dialogue.phrases.Count; i++)
-        {
-            // CHOOSE CAMERA TARGET TRANSFORM
-            if (camTargetsTemp.Count <= 1)
-                camTargetsTemp = new List<Transform>(cameraTargetTransforms);
-            randomTransform = camTargetsTemp[Random.Range(0, camTargetsTemp.Count)];
-            camTargetsTemp.Remove(randomTransform);
-            Player.LookAround.SetCurrentCutsceneTargetTrasform(randomTransform);
+        {;
+            //Player.LookAround.SetCurrentCutsceneTargetTrasform(randomTransform);
             
             var phrase = dialogue.phrases[i];
             yield return new WaitForSeconds(phrase.delayIn);
@@ -80,13 +75,23 @@ public class ProceduralCutscenesManager : MonoBehaviour
             if (i >= dialogue.phrases.Count - 1)
                 DialogueWindowInterface.Instance.NewMessage(String.Empty, String.Empty, true);
         }
-
+        
+        // DIALOGUE SUCCESSGULLY COMPLETED
+        if (destroyInteractorAfterDialogueCompleted)
+            Destroy(destroyInteractorAfterDialogueCompleted.gameObject);
+        
+        if (scoreToAddOnDialogueCompleted > 0)
+            ScoringSystem.Instance.AddScore(scoreToAddOnDialogueCompleted);
+        
         DialogueWindowInterface.Instance.ToggleDialogueWindow(false);
-        Player.LookAround.SetCurrentCutsceneTargetTrasform(null);
-        Player.Health.IsImmortal = false;
         playerAnswered = false;
-        npcHc.IsImmortal = false;
+        
+        //Player.LookAround.SetCurrentCutsceneTargetTrasform(null);
+        //Player.Health.IsImmortal = false;
+        //npcHc.IsImmortal = false;
         inCutScene = false;
+        
+        currentTalknigNpc = null;
     }
     
     
@@ -98,7 +103,21 @@ public class ProceduralCutscenesManager : MonoBehaviour
         else
             _lastPlayerAnswer = LastPlayerAnswer.Negative;
     }
+
+    public void NpcDied(HealthController hc)
+    {
+        if (currentTalknigNpc == hc)
+        {
+            DialogueWindowInterface.Instance.ToggleDialogueWindow(false);
+        }
+    }
     
+    public void CloseCutscene()
+    {
+        playerAnswered = false;
+        inCutScene = false;
+        currentTalknigNpc = null;
+    }
     
     IEnumerator RunSpawn(ScriptedEvent _event)
     {

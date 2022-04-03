@@ -21,34 +21,42 @@ namespace _src.Scripts.Data
         [ShowIf("scriptedEventType", ScriptedEventType.AddScore)]
         public int scoreToAdd;
         
-        [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
+        
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]     
+        [Tooltip("If no spawnInsideCam and noCustomSpawnPOint, spawns at")]
         public GameObject prefabToSpawn;
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
+        [Tooltip("Spawns object inside player's camera at zero local coordinates")]
+        public bool spawnInsideCamera = false;
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
+        public Transform customSpawnPoint;
 
+        
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public Dialogue dialogueToStart;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        public InteractiveObject destroyInteractorAfterDialogueCompleted;
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        public int scoreToAddOnDialogueCompleted = 0;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        public float maxDistanceToSpeaker = 5;
         
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public HealthController NpcHc;
 
-        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
-        public List<Transform> randomCameraTargetTransforms;
         
         [ShowIf("scriptedEventType", ScriptedEventType.SetCurrentLevel)]
         public int currentLevelToSet;
 
+        
         [ShowIf("scriptedEventType", ScriptedEventType.PlaySound)]
         public AudioClip soundToPlay;
         [ShowIf("scriptedEventType", ScriptedEventType.PlaySound)]
         public Vector2 auPitchMinMax = new Vector2(1, 1);
         
-        [ShowIf("scriptedEventType", ScriptedEventType.SpawnObject)]
-        [Tooltip("Spawns object inside player's camera at zero local coordinates")]
-        public bool spawnInsideCamera = false;
         
-        
-        [Header("Time")]
-        public float delayIn = 1;
-        public float delayOut = 1;
     }
     
     public enum ScriptedEventType

@@ -32,9 +32,7 @@ namespace MrPink.PlayerSystem
         {
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
-        
-            
-            
+
             _hands[Hand.Left].UpdateState(_isDead);
             _hands[Hand.Right].UpdateState(_isDead);
 

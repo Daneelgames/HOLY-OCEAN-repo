@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class DialogueWindowInterface : MonoBehaviour
 {
@@ -22,7 +25,8 @@ public class DialogueWindowInterface : MonoBehaviour
 
     public AudioSource phoneAu;
     public AudioClip messageNotificationClip;
-    public AudioClip playerAnswerClip;
+    public AudioClip auClipYes;
+    public AudioClip auClipNo;
 
     private void Start()
     {
@@ -32,9 +36,11 @@ public class DialogueWindowInterface : MonoBehaviour
     
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (Input.GetKeyDown(KeyCode.Tab))
-                ToggleDialogueWindow(!dialogueWindowActive);
+            if (!dialogueWindowActive)
+                NewMessage(String.Empty, String.Empty, true);
+            ToggleDialogueWindow(!dialogueWindowActive);
         }
         if (!dialogueWindowActive)
             return;
@@ -70,16 +76,18 @@ public class DialogueWindowInterface : MonoBehaviour
         
         if (positiveAnswer)
         {
+            phoneAu.clip = auClipYes;
             playerAnswerText.text = ":-)";
             playerAnswerText.color = new Color(0.86f, 0.37f, 0.57f);
         }
         else
         {
+            phoneAu.clip = auClipNo;
             playerAnswerText.text = ":-(";
             playerAnswerText.color = new Color(0.38f, 0.42f, 0.58f);
         }
 
-        phoneAu.clip = playerAnswerClip;
+        phoneAu.pitch = Random.Range(0.9f, 1.1f);
         phoneAu.Play();
         ProceduralCutscenesManager.Instance.PlayerAnswered(positiveAnswer);
     }
@@ -88,13 +96,42 @@ public class DialogueWindowInterface : MonoBehaviour
     {
         if (toggleDialogueWIndowCoroutine != null)
             StopCoroutine(toggleDialogueWIndowCoroutine);
-        
+
+        if (!active)
+        {
+            if (CheckDistanceToSpeakerCoroutine != null)
+                StopCoroutine(CheckDistanceToSpeakerCoroutine);
+        }
+
         toggleDialogueWIndowCoroutine = StartCoroutine(ToggleDialogueWindowIEnumerator(active));
+    }
+
+    public void StartCheckingDistanceToSpeaker(HealthController hc, float maxDistance)
+    {
+        if (CheckDistanceToSpeakerCoroutine != null)
+            StopCoroutine(CheckDistanceToSpeakerCoroutine);
+        
+        CheckDistanceToSpeakerCoroutine = StartCoroutine(CheckDistanceToSpeaker(hc, maxDistance));
+    }
+
+    private Coroutine CheckDistanceToSpeakerCoroutine;
+    IEnumerator CheckDistanceToSpeaker(HealthController hc, float maxDistance)
+    {
+        while (true)
+        {
+            if (Vector3.Distance(Player.Movement.transform.position, hc.npcInteraction.transform.position) > maxDistance)
+            {
+                ToggleDialogueWindow(false);
+                yield break;
+            }
+            yield return null;
+        }
     }
 
     private Coroutine toggleDialogueWIndowCoroutine;
     IEnumerator ToggleDialogueWindowIEnumerator(bool active)
     {
+        Debug.Log("5");
         Transform targetTransform = null;
         targetTransform = active ? phoneActiveTransform : phoneInactiveTransform;
 
@@ -107,6 +144,7 @@ public class DialogueWindowInterface : MonoBehaviour
             phoneVisual.SetActive(true);
             yield return null;
             logoEye.SetActive(true);
+            
         }
         
         while (t < 1)
@@ -116,9 +154,13 @@ public class DialogueWindowInterface : MonoBehaviour
             phoneVisual.transform.rotation = Quaternion.Slerp(phoneVisual.transform.rotation, targetTransform.rotation, t / 1);
             t += Time.deltaTime;
         }
-
+        
         if (!active)
+        {
             phoneVisual.SetActive(false);
+            PlayerAnswered(false);
+            ProceduralCutscenesManager.Instance.CloseCutscene();
+        }
         
         toggleDialogueWIndowCoroutine = null;
     }

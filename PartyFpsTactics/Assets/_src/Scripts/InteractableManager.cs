@@ -49,8 +49,9 @@ public class InteractableManager : MonoBehaviour
         {
             case ScriptedEventType.StartDialogue:
             
-                ProceduralCutscenesManager.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, IOevent.randomCameraTargetTransforms, IOevent.NpcHc);
-                //IOevent.dialogueToStart
+                ProceduralCutscenesManager.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, IOevent.NpcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted);
+                if (IOevent.maxDistanceToSpeaker > 0)
+                    DialogueWindowInterface.Instance.StartCheckingDistanceToSpeaker(IOevent.NpcHc, IOevent.maxDistanceToSpeaker);
                 break;
             
             case ScriptedEventType.SpawnObject:
@@ -60,6 +61,10 @@ public class InteractableManager : MonoBehaviour
                     newObj = Instantiate(IOevent.prefabToSpawn, Player.Interactor.cam.transform);
                     newObj.transform.localPosition = Vector3.zero;
                     newObj.transform.localRotation = quaternion.identity;
+                }
+                else if (IOevent.customSpawnPoint)
+                {
+                    newObj = Instantiate(IOevent.prefabToSpawn, IOevent.customSpawnPoint.position, IOevent.customSpawnPoint.rotation);   
                 }
                 else
                 {

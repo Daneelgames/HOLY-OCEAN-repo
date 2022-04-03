@@ -289,7 +289,7 @@ MonoBehaviour:
   manualPositionAndScale: 0
   renderPriority: 1
   styledSpace0: 0
-  overrideMaterial: {fileID: 926822670}
+  overrideMaterial: {fileID: 869969349}
   overrideCamToVolumeDistance: 1
   overrideVolumeDistanceFade: 0
   version: 0
@@ -321,7 +321,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1685643563}
+  - {fileID: 957658080}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -587,7 +587,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
   m_PrefabInstance: {fileID: 6538700427450687722}
   m_PrefabAsset: {fileID: 0}
---- !u!21 &926822670
+--- !u!21 &869969349
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -643,6 +643,37 @@ Material:
     - _FogColorEnd: {r: 0.8862745, g: 1.443137, b: 2, a: 1}
     - _FogColorStart: {r: 0.4411765, g: 0.722515, b: 1, a: 1}
     - _NoiseSpeed: {r: 0.5, g: 0, b: 0.5, a: 0}
+  m_BuildTextureStacks: []
+--- !u!21 &957658080
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Height Fog Global
+  m_Shader: {fileID: 4800000, guid: 3a7ef1b66bafb7a448a880ef76d2e6e6, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3001
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _Banner: 1
+    - _HeightFogGlobal: 1
+    - _IsHDPipeline: 0
+    - _IsHeightFogShader: 1
+    - _IsStandardPipeline: 0
+    - _IsUniversalPipeline: 0
+    m_Colors:
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
 --- !u!1 &1071473296
 GameObject:
@@ -1138,15 +1169,15 @@ MonoBehaviour:
   useFloatingOriginHandler: 0
   applyFloatingOriginRotationAndScale: 0
   floatingOriginTransform: {fileID: 0}
-  isFrustumCulling: 1
-  isOcclusionCulling: 1
+  isFrustumCulling: 0
+  isOcclusionCulling: 0
   minCullingDistance: 3
   selectedPrototypeList:
   - {fileID: 11400000, guid: 012437b3d6005e642963b9a9ba4ec4e7, type: 2}
   isPrototypeTextMode: 0
   showSceneSettingsBox: 1
   showPrototypeBox: 1
-  showAdvancedBox: 1
+  showAdvancedBox: 0
   showHelpText: 0
   showDebugBox: 1
   showGlobalValuesBox: 1
@@ -1250,37 +1281,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1685643563
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Height Fog Global
-  m_Shader: {fileID: 4800000, guid: 3a7ef1b66bafb7a448a880ef76d2e6e6, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3001
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats:
-    - _AlphaCutoff: 0.5
-    - _Banner: 1
-    - _HeightFogGlobal: 1
-    - _IsHDPipeline: 0
-    - _IsHeightFogShader: 1
-    - _IsStandardPipeline: 0
-    - _IsUniversalPipeline: 0
-    m_Colors:
-    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1795308095
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,6 +2178,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 191805699, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2617362276532997964, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4081011892120011776, guid: 0c297b8f93284b24da31d8b17dde8916, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2240,10 +2248,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1663981897}
     m_Modifications:
-    - target: {fileID: 4158558409794818154, guid: c44e4dd727241804681f62003fe5554f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -60.160156
-      objectReference: {fileID: 0}
     - target: {fileID: 4158558410314725305, guid: c44e4dd727241804681f62003fe5554f, type: 3}
       propertyPath: m_RootOrder
       value: 4

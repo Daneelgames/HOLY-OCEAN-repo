@@ -36,6 +36,7 @@ namespace MrPink.Health
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
         public List<GameObject> objectsToSpawnOnDeath;
+        public InteractiveObject npcInteraction;
         public DeathOnHit deathOnHit;
 
         [Header("This RB will be affected by explosions")]
@@ -200,8 +201,17 @@ namespace MrPink.Health
             }
         
             if (Player.Health == this)
+            {
+                Player.Interactor.SetInteractionText("R TO RESTART");
                 Player.Death(killer);
+            }
 
+            if (npcInteraction)
+            {
+                ProceduralCutscenesManager.Instance.NpcDied(this);
+                Destroy(npcInteraction.gameObject);
+            }
+            
             if (destroyOnDeath)
             {
                 Destroy(gameObject);

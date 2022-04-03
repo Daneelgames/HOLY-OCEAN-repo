@@ -39,13 +39,13 @@ namespace MrPink.PlayerSystem
             => _positions[position];
 
         public LayerMask allSolidsLayerMask;
+        public bool canShootIfPhoneInUse = true;
         
         public WeaponController Weapon
         {
             get => _weapon;
             set => _weapon = value;
         }
-
 
         public void MoveHand()
         {
@@ -91,12 +91,18 @@ namespace MrPink.PlayerSystem
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
 
+            if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)
+            {
+                CurrentPosition = WeaponPosition.Reload;
+                return;
+            }
+            
             if (Input.GetMouseButton(_mouseButtonIndex))
             {
                 IsAiming = true;
                 CurrentPosition = WeaponPosition.Aim;
             }
-            
+
             if (Input.GetMouseButtonUp(_mouseButtonIndex))
                 Weapon.Shot(Player.Health);
         }
