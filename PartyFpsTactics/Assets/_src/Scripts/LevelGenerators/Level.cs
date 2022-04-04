@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody;
 using IngameDebugConsole;
 using MrPink.Health;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using Random = UnityEngine.Random;
 
 namespace _src.Scripts.LevelGenerators
 {
@@ -16,15 +19,41 @@ namespace _src.Scripts.LevelGenerators
         public List<TileHealth> allTiles = new List<TileHealth>();
         public List<TileHealth> tilesInside = new List<TileHealth>();
         public List<TileHealth> tilesWalls = new List<TileHealth>();
+        public List<TileHealth> tilesFloor = new List<TileHealth>();
         public Transform spawnedTransform;
         public Vector3 position;
         public Vector3Int size;
 
         int wallsInCurrentIslandAmount = 0;
         int floorConnectionsInCurrentIslandAmount = 0;
+        private int currentIslandSupports = 0;
         public void Init()
         {
             StartCoroutine(CheckTiles());
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (floorWorldHeight > 1)
+            {
+                for (int i = 0; i < tilesFloor.Count; i++)
+                {
+                    var tile = tilesFloor[i];
+
+                    if (tile == null)
+                        continue;
+                    
+                    if (!LevelgenTransforms.SetSupporterTile(LevelGenerator.Instance.spawnedMainBuildingLevels, tile))
+                    {
+                        Gizmos.color = Color.red;
+                    }
+                    else
+                    {
+                        Gizmos.color = Color.green;
+                    }
+                    Gizmos.DrawCube(tile.transform.position + Vector3.down, Vector3.one);
+                }
+            }
         }
 
         IEnumerator CheckTiles()
@@ -51,6 +80,7 @@ namespace _src.Scripts.LevelGenerators
                     List<TileHealth> newIsland = new List<TileHealth>();
                     wallsInCurrentIslandAmount = 0;
                     floorConnectionsInCurrentIslandAmount = 0;
+                    currentIslandSupports = 0;
 
                     var tile = allTilesTemp[i];
                     allTilesTemp.Remove(tile);
@@ -59,7 +89,7 @@ namespace _src.Scripts.LevelGenerators
                     if (wallsInCurrentIslandAmount <= 0)
                         continue;
                     
-                    if (floorConnectionsInCurrentIslandAmount == 0 ||
+                    if (currentIslandSupports == 0 || floorConnectionsInCurrentIslandAmount == 0 ||
                         wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
                     {
                         Debug.Log("Clash Island. walls: " + wallsInCurrentIslandAmount + "; floorConnectionsPoints: " + floorConnectionsInCurrentIslandAmount + "; size.y * 2: " + size.y * 2);
@@ -82,6 +112,8 @@ namespace _src.Scripts.LevelGenerators
                 yield return null;
             }
         }
+        
+        
 
         IEnumerator ClashIsland(List<TileHealth> newIsland)
         {
@@ -121,7 +153,7 @@ namespace _src.Scripts.LevelGenerators
                 {
                     tile.AddRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
                     LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
-                    yield return null;
+                    yield return new WaitForSeconds(Random.Range(0.01f, 0.5f));
                 }
             }
             Destroy(islandGo);
@@ -139,6 +171,12 @@ namespace _src.Scripts.LevelGenerators
             
             if (!tile.floorLevelTile)
                 wallsInCurrentIslandAmount++;
+            else
+            {
+                // LOOK SUPPORT FOR FLOOR TILE
+                //if (tile.supporterTile != null)
+                    currentIslandSupports++;
+            }
             
             island.Add(tile);
             allTilesTemp.Remove(tile);
@@ -158,7 +196,7 @@ namespace _src.Scripts.LevelGenerators
                     case 4: z++; break; // fwd
                     case 5: z--; break; // back
                 }
-                
+
                 if (x < 0 || x >= size.x|| y < 0 || y >= size.y || z < 0 || z >= size.z)
                     continue; // OUT OF BOUNDS
 

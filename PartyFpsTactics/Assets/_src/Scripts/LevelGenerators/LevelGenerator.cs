@@ -11,6 +11,7 @@ using Unity.AI.Navigation;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.WSA;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
@@ -223,6 +224,7 @@ public class LevelGenerator : MonoBehaviour
         yield return SpawnLoot();
         RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels);
 
+        GeneratedBuildingSupportsManager.Instance.Init();
         var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
         
         Player.Movement.transform.parent.parent = null;
@@ -321,6 +323,12 @@ public class LevelGenerator : MonoBehaviour
     {
         GameObject newLevelGameObject = new GameObject();
         Level newLevel = newLevelGameObject.AddComponent<Level>();
+        
+        if (mainBuilding)
+            spawnedMainBuildingLevels.Add(newLevel);
+        else
+            spawnedAdditionalLevels.Add(newLevel);
+        
         newLevel.position = pos;
         newLevel.size = size;
         if (mainBuilding)
@@ -360,8 +368,9 @@ public class LevelGenerator : MonoBehaviour
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
-                newLevel.tilesWalls.Add(newFloorTile);
+                //newLevel.tilesWalls.Add(newFloorTile);
                 newLevel.allTiles.Add(newFloorTile);
+                newLevel.tilesFloor.Add(newFloorTile);
 
                 if (groundLevelIndex == 0) // only on very first floor
                 {
@@ -370,6 +379,10 @@ public class LevelGenerator : MonoBehaviour
                     newFloorObstacle.transform.localPosition = new Vector3(0, -0.5f, 0);
                     var obst = newFloorObstacle.AddComponent<NavMeshObstacle>();
                     obst.carving = true;
+                }
+                else
+                {
+                    LevelgenTransforms.SetSupporterTile(spawnedMainBuildingLevels, newFloorTile);
                 }
                 
                 // SPAWN BUILDING'S OUTSIDE WALLS 
@@ -469,10 +482,6 @@ public class LevelGenerator : MonoBehaviour
         }
 
         yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
-        if (mainBuilding)
-            spawnedMainBuildingLevels.Add(newLevel);
-        else
-            spawnedAdditionalLevels.Add(newLevel);
     }
     
     IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
@@ -1157,4 +1166,58 @@ public class LevelGenerator : MonoBehaviour
 public class Room
 {
     public List<Vector3Int> coordsInside = new List<Vector3Int>();
+}
+
+public static class LevelgenTransforms
+{
+    public static TileHealth SetSupporterTile(List<Level> levels, TileHealth tile)
+    {
+        Debug.Log("SetSupporterTile 0; levels.count: " + levels.Count);
+        if (tile == null)
+            return null;
+        
+        
+        int levelIndex = levels.IndexOf(tile.ParentLevel);
+        Debug.Log("SetSupporterTile tile.ParentLevel: " + tile.ParentLevel +"; levelIndex: " + levelIndex);
+        
+        if (levelIndex <= 0)
+            return null;
+
+        var bottomLevel = levels[levelIndex - 1];
+
+        var tileBottomLevelLocalCoords = ConvertTilePositionToLocalLevelCoords(tile, levels[levelIndex], bottomLevel);
+
+        if (tileBottomLevelLocalCoords.x < 0 || tileBottomLevelLocalCoords.x >= bottomLevel.size.x ||
+            tileBottomLevelLocalCoords.y < 0 || tileBottomLevelLocalCoords.y >= bottomLevel.size.y ||
+            tileBottomLevelLocalCoords.z < 0 || tileBottomLevelLocalCoords.z >= bottomLevel.size.z)
+        {
+            
+            Debug.Log("SetSupporterTile NEW COORDS OUT OF BOUNDS");
+            return null;
+        }
+
+        Debug.Log("SetSupporterTile NEW COORDS INSIDE BOUNDS");
+        var supporterTile = bottomLevel.roomTilesMatrix[tileBottomLevelLocalCoords.x, tileBottomLevelLocalCoords.y,
+            tileBottomLevelLocalCoords.z];
+        supporterTile.supportedTile = tile;
+        tile.supporterTile = supporterTile;
+        
+        if (supporterTile != null)
+            return supporterTile;
+        
+        return null;
+    }
+
+    public static Vector3Int ConvertTilePositionToLocalLevelCoords(TileHealth tile, Level levelTop, Level levelBottom)
+    {
+        // найти дистанции по отдельным осям между нулевыми тайлами обоих этажей
+        
+        int x = Mathf.RoundToInt(Mathf.Abs((levelTop.position.x - levelTop.size.x / 2) - (levelBottom.position.x - levelBottom.size.x / 2)));
+        int y = Mathf.RoundToInt(Mathf.Abs((levelTop.position.x - levelTop.size.y / 2) - (levelBottom.position.y - levelBottom.size.y / 2)));
+        int z = Mathf.RoundToInt(Mathf.Abs((levelTop.position.z - levelTop.size.z / 2) - (levelBottom.position.z - levelBottom.size.z / 2)));
+        
+        Vector3Int newLocalCoords = new Vector3Int(Mathf.RoundToInt(tile.TileLevelCoordinates.x + x),Mathf.RoundToInt(tile.TileLevelCoordinates.y + y),Mathf.RoundToInt(tile.TileLevelCoordinates.z + z));
+        
+        return newLocalCoords;
+    }
 }

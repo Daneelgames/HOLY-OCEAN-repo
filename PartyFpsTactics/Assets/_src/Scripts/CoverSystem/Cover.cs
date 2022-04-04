@@ -60,6 +60,7 @@ public class Cover : MonoBehaviour
             CoverSystem.Instance.covers.Remove(this);
     }
 
+    /*
     private void OnDrawGizmos()
     {
         for (int i = 0; i < coverSpotsActive.Count; i++)
@@ -69,7 +70,7 @@ public class Cover : MonoBehaviour
             
             Gizmos.DrawWireCube(coverSpotsActive[i].transform.position + Vector3.up * 0.25f, Vector3.one / 2);
         }
-    }
+    }*/
 
     [ContextMenu("TestGoodSpotsAgainstTarget")]
     public void TestGoodSpotsAgainstTarget()

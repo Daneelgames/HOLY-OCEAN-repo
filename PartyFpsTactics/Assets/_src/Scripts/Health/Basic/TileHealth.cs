@@ -16,10 +16,15 @@ namespace MrPink.Health
         public Vector3Int TileLevelCoordinates => tileLevelCoordinates;
         public List<Collider> colliders;
         private Level parentLevel;
+        public Level ParentLevel => parentLevel;
+        
         [SerializeField]
         private Rigidbody rb;
         [HideInInspector]
         public bool floorLevelTile = false;
+
+        public TileHealth supporterTile;
+        public TileHealth supportedTile;
 
         private void Start()
         {
@@ -34,6 +39,11 @@ namespace MrPink.Health
             
             if (parentLevel)
                 parentLevel.allTiles.Remove(this);
+
+            if (supportedTile)
+                supportedTile.supporterTile = null;
+            if (supporterTile)
+                supporterTile.supportedTile = null;
         }
 
         public Rigidbody Rigidbody()
@@ -46,7 +56,7 @@ namespace MrPink.Health
             tileLevelCoordinates = coords;
             parentLevel = _parentLevel;
         }
-
+        
         public void AddRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1)
         {
             if (rb) 
@@ -66,6 +76,11 @@ namespace MrPink.Health
             {
                 coll.material = mat;   
             }
+            
+            if (supportedTile)
+                supportedTile.supporterTile = null;
+            if (supporterTile)
+                supporterTile.supportedTile = null;
             
             rb.isKinematic = false;
             rb.mass = 5;
