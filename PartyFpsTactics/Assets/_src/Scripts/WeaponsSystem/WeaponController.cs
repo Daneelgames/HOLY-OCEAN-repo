@@ -14,6 +14,9 @@ namespace MrPink.WeaponsSystem
     {
         public Transform shotHolder;
 
+        [SerializeField] 
+        private bool _isMelee;
+
         [Header("Player Weapon Movement")] 
         [Range(0.1f,100)]
         public float gunMoveSpeedScaler = 5;
@@ -59,6 +62,10 @@ namespace MrPink.WeaponsSystem
         public Quaternion InitLocalRotation { get; private set; }
     
         public bool OnCooldown { get; set; } = false;
+
+
+        public bool IsMelee
+            => _isMelee;
 
     
         private void Awake()

@@ -1,10 +1,8 @@
-using System;
 using Brezg.Serialization;
 using JetBrains.Annotations;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace MrPink.PlayerSystem
 {
@@ -96,11 +94,13 @@ namespace MrPink.PlayerSystem
                 CurrentPosition = WeaponPosition.Reload;
                 return;
             }
-            
+
             if (Input.GetMouseButton(_mouseButtonIndex))
             {
                 IsAiming = true;
-                CurrentPosition = WeaponPosition.Aim;
+                CurrentPosition = Weapon.IsMelee
+                    ? WeaponPosition.MeleeAim
+                    : WeaponPosition.Aim;
             }
 
             if (Input.GetMouseButtonUp(_mouseButtonIndex))
@@ -114,24 +114,19 @@ namespace MrPink.PlayerSystem
 
             float gunMoveSpeed = _weapon.gunMoveSpeed;
             float gunRotationSpeed = _weapon.gunRotationSpeed;
+            float scaler = IsAiming ? _weapon.gunMoveSpeedScaler : 1;
             
-            float scaler = 1;
-            float scalerRot = 1;
-            if (IsAiming)
-            {
-                scaler = _weapon.gunMoveSpeedScaler;
-                scalerRot = _weapon.gunRotSpeedScaler;
-            }
             Weapon.transform.position = Vector3.Lerp(Weapon.transform.position,  CurrentTransform.position, gunMoveSpeed * scaler * Time.deltaTime);
             Weapon.transform.rotation = Quaternion.Slerp(Weapon.transform.rotation, CurrentTransform.rotation, gunRotationSpeed * scaler * Time.deltaTime);
         }
 
         public void UpdateCollision()
         {
-            Transform raycastTransform = 
-                CurrentPosition == WeaponPosition.Aim ? 
-                    this[WeaponPosition.Aim] : 
-                    this[WeaponPosition.Idle];
+            Transform raycastTransform = this[
+                CurrentPosition == WeaponPosition.Aim || CurrentPosition == WeaponPosition.MeleeAim
+                    ? CurrentPosition
+                    : WeaponPosition.Idle
+            ];
             
             if (Physics.Raycast(raycastTransform.position,
                     raycastTransform.forward, out var hit,
