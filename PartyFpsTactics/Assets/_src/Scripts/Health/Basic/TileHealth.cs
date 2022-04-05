@@ -22,11 +22,13 @@ namespace MrPink.Health
         private Level parentLevel;
         public Level ParentLevel => parentLevel;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, ChildGameObjectsOnly]
         private Rigidbody rb;
         
         [HideInInspector]
         public bool floorLevelTile = false;
+        [HideInInspector]
+        public bool ceilingLevelTile = false;
 
         public TileHealth supporterTile;
         public TileHealth supportedTile;
@@ -65,7 +67,7 @@ namespace MrPink.Health
 
         public void ActivateRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1)
         {
-            if ( ! rb.isKinematic)  // Такое у предметов 
+            if (rb && ! rb.isKinematic)  // Такое у предметов 
                 return;
 
             // TODO нарушаем инкапсуляцию
@@ -82,7 +84,9 @@ namespace MrPink.Health
                 supportedTile.supporterTile = null;
             if (supporterTile)
                 supporterTile.supportedTile = null;
-            
+
+            if (rb == null)
+                rb = gameObject.AddComponent<Rigidbody>();
             SetRigidbodyState(ref rb, false, true, 5, 1, 1);
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
             if (explosionForce > 0)

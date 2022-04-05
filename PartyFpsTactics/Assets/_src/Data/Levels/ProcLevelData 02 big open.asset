@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d135c2c067af24980ba7ad6d4f7a0c, type: 3}
   m_Name: ProcLevelData 02 big open
   m_EditorClassIdentifier: 
-  spawnWalls: 0
+  spawnWalls: 1
   spawnLadders: 1
-  spawnAdditionalTiles: 1
   levelsPosMinMaxX: {x: 0, y: 0}
   levelsPosMinMaxZ: {x: 0, y: 0}
   levelsScaleMinMaxX: {x: 20, y: 20}
   levelsScaleMinMaxZ: {x: 20, y: 20}
+  additionalSmallBuildingsAmount: 3
+  additionalBuildingsScaleMinMaxX: {x: 4, y: 8}
+  additionalBuildingsScaleMinMaxY: {x: 5, y: 10}
+  additionalBuildingsScaleMinMaxZ: {x: 4, y: 8}
   levelGoalPrefab: {fileID: 3443701919470677471, guid: de73763fdd3804f41841451627e2e135, type: 3}
   tilePrefab: {fileID: 4636380872454741449, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   tileWallPrefab: {fileID: 5237696207237465462, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
@@ -28,6 +31,7 @@ MonoBehaviour:
   levelsHeights: 0500000005000000050000000700000008000000090000000a0000000a0000000a0000000a000000
   explosiveBarrelsAmount: 0
   enemiesPerRoomMinMax: {x: 5, y: 8}
+  npcsPerMainBuildingRoomMinMax: {x: 1, y: 2}
   grindRailsPerLevelMinMax: {x: 1, y: 2}
   propsPerLevelMinMax: {x: 1, y: 10}
   lootPerLevelMinMax: {x: 1, y: 5}

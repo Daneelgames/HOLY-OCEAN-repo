@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody;
 using IngameDebugConsole;
 using MrPink.Health;
@@ -20,9 +21,11 @@ namespace _src.Scripts.LevelGenerators
         public List<TileHealth> tilesInside = new List<TileHealth>();
         public List<TileHealth> tilesWalls = new List<TileHealth>();
         public List<TileHealth> tilesFloor = new List<TileHealth>();
+        public List<TileHealth> tilesTop = new List<TileHealth>();
         public Transform spawnedTransform;
         public Vector3 position;
         public Vector3Int size;
+        public bool levelCanClash = true;
 
         int wallsInCurrentIslandAmount = 0;
         int floorConnectionsInCurrentIslandAmount = 0;
@@ -89,8 +92,8 @@ namespace _src.Scripts.LevelGenerators
                     if (wallsInCurrentIslandAmount <= 0)
                         continue;
                     
-                    if (currentIslandSupports == 0 || floorConnectionsInCurrentIslandAmount == 0 ||
-                        wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
+                    if (levelCanClash && (currentIslandSupports == 0 || currentIslandSupports * 5 < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 ||
+                        wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5))
                     {
                         Debug.Log("Clash Island. walls: " + wallsInCurrentIslandAmount + "; floorConnectionsPoints: " + floorConnectionsInCurrentIslandAmount + "; size.y * 2: " + size.y * 2);
                         StartCoroutine(ClashIsland(newIsland));
@@ -120,11 +123,17 @@ namespace _src.Scripts.LevelGenerators
             for (int i = newIsland.Count - 1; i >= 0; i--)
             {
                 if (i >= newIsland.Count)
-                    break;
+                    continue;
 
                 if (newIsland[i] == null)
                 {
                     newIsland.RemoveAt(i);
+                }
+                else
+                {
+                    allTiles.Remove(newIsland[i]);
+                    roomTilesMatrix[newIsland[i].TileLevelCoordinates.x, newIsland[i].TileLevelCoordinates.y,
+                        newIsland[i].TileLevelCoordinates.z] = null;
                 }
             }
             
@@ -142,18 +151,24 @@ namespace _src.Scripts.LevelGenerators
 
             var rb = islandGo.AddComponent<Rigidbody>();
             rb.mass = newIsland.Count;
-            rb.drag = Mathf.Clamp(rb.mass / 5, 1, 10000);
-            rb.angularDrag = Mathf.Clamp(rb.mass / 5, 1, 10000);
-            rb.AddExplosionForce(Mathf.Clamp(rb.mass / 5, 20, 10000), rb.transform.position + Random.onUnitSphere * rb.mass / 2, Mathf.Clamp(rb.mass / 5, 20, 10000));
+            rb.drag = 1;
+            rb.angularDrag = 1;
+            rb.AddForce(((rb.transform.position - rb.transform.position - Vector3.up * 10) + Random.insideUnitSphere * 3).normalized * 20, ForceMode.VelocityChange);
             
-            for (int i = 0; i < newIsland.Count; i++)
+            while(newIsland.Count > 0)
             {
-                var tile = newIsland[i];
-                if (tile != null)
+                for (int i = 0; i < Random.Range(1,5); i++)
                 {
-                    tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
-                    LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
-                    yield return new WaitForSeconds(Random.Range(0.01f, 0.5f));
+                    if (newIsland.Count <= 0)
+                        break;
+                    yield return new WaitForSeconds(Random.Range(0.01f, 0.2f));
+                    var tile = newIsland[Random.Range(0, newIsland.Count)];
+                    newIsland.Remove(tile);
+                    if (tile != null)
+                    {
+                        tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
+                        LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
+                    }   
                 }
             }
             Destroy(islandGo);
@@ -174,7 +189,7 @@ namespace _src.Scripts.LevelGenerators
             else
             {
                 // LOOK SUPPORT FOR FLOOR TILE
-                //if (tile.supporterTile != null)
+                if (!levelCanClash || tile.supporterTile != null)
                     currentIslandSupports++;
             }
             

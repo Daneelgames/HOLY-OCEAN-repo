@@ -224,7 +224,6 @@ public class LevelGenerator : MonoBehaviour
         yield return SpawnLoot();
         RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels);
 
-        GeneratedBuildingSupportsManager.Instance.Init();
         var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
         
         Player.Movement.transform.parent.parent = null;
@@ -325,9 +324,17 @@ public class LevelGenerator : MonoBehaviour
         Level newLevel = newLevelGameObject.AddComponent<Level>();
         
         if (mainBuilding)
+        {
             spawnedMainBuildingLevels.Add(newLevel);
+
+            if (groundLevelIndex == 0)
+                newLevel.levelCanClash = false;
+        }
         else
+        {
             spawnedAdditionalLevels.Add(newLevel);
+            newLevel.levelCanClash = false;
+        }
         
         newLevel.position = pos;
         newLevel.size = size;
@@ -364,6 +371,7 @@ public class LevelGenerator : MonoBehaviour
                 // FLOOR
                 var newFloorTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
                 newFloorTile.floorLevelTile = true;
+                newFloorTile.gameObject.name = "Floor Tile. Coords: " + x +", " + 0 + ", " + z;
                 newFloorTile.transform.localRotation = Quaternion.identity;
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
@@ -434,6 +442,8 @@ public class LevelGenerator : MonoBehaviour
                         newLevel.tilesWalls.Add(newWallTile);
                         newLevel.allTiles.Add(newWallTile);
 
+                        if (groundLevelIndex < mainBuildingLevelsHeights.Count - 1 && y == size.y - 1)
+                            newLevel.tilesTop.Add(newWallTile);
                         
                         if (cornerTile || y != 1)
                             continue;
@@ -456,9 +466,11 @@ public class LevelGenerator : MonoBehaviour
                         newCeilingTile.transform.localRotation = Quaternion.identity;
                         newCeilingTile.transform.localPosition = new Vector3(x - size.x / 2, size.y - 1, z - size.z / 2);
                         newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x, size.y - 1, z), newLevel);
+                        newCeilingTile.ceilingLevelTile = true;
                         newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
                         newLevel.allTiles.Add(newCeilingTile);
                         newLevel.tilesInside.Add(newCeilingTile);
+                        newLevel.tilesTop.Add(newFloorTile);
                     }
 
                     if (Random.value > 0.95f)
@@ -528,7 +540,7 @@ public class LevelGenerator : MonoBehaviour
             backSidePosition = Mathf.Clamp(backSidePosition, 1, level.size.y - 1);
             */
 
-            var roomPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
+            var thinColorPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
             var newRoom = new Room();
             for (int x = leftSidePosition; x <= rightSidePosition; x++)
             {
@@ -560,12 +572,14 @@ public class LevelGenerator : MonoBehaviour
                         if (level.roomTilesMatrix[x, y, z] != null)
                             continue;
                         
-                        var newRoomWallTile = Instantiate(roomPrefab, level.spawnedTransform);
+                        var newRoomWallTile = Instantiate(thinColorPrefab, level.spawnedTransform);
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
                         newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
-                        level.tilesInside.Add(newRoomWallTile);
+                        //level.tilesInside.Add(newRoomWallTile);
                         level.allTiles.Add(newRoomWallTile);
+                        if (y == buildWallUntillY - 1)
+                            level.tilesTop.Add(newRoomWallTile);
 
                         var coords = new Vector3Int(x, y, z);
                         newRoomWallTile.SetTileRoomCoordinates(coords, level);
@@ -685,8 +699,9 @@ public class LevelGenerator : MonoBehaviour
                     newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
                     level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
                     level.allTiles.Add(newWallTile);
-                    level.tilesInside.Add(newWallTile);
-                    //Debug.Log("thin walls. level.roomTilesMatrix[" + nextPos.x +", " + y +", " + nextPos.z +"]; " + level.roomTilesMatrix[nextPos.x, y, nextPos.z].name +"; newWallTile is " + newWallTile);
+                    if (y == buildWallUntillY - 1)
+                        level.tilesTop.Add(newWallTile);
+                    
                     var coords = new Vector3Int(nextPos.x, y, nextPos.z);
                     newWallTile.SetTileRoomCoordinates(coords, level);
                 }
@@ -1060,8 +1075,11 @@ public class LevelGenerator : MonoBehaviour
         for (int YYY = 1; YYY < level.size.y; YYY++)
         {
             //Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
-            if (level.roomTilesMatrix[x, YYY, z] != null)
+            var tile = level.roomTilesMatrix[x, YYY, z];
+            if (tile != null)
             {
+                if (tile.ceilingLevelTile)
+                    continue;
                 //Debug.Log("1");
                 if (level.roomTilesMatrix[x, YYY - 1, z] != null)
                 {
@@ -1073,8 +1091,8 @@ public class LevelGenerator : MonoBehaviour
                 }
 
                 //Debug.Log("Tile Destroyed AddRigidbody");
-                UnitsManager.Instance.RagdollTileExplosion(level.roomTilesMatrix[x, YYY, z].transform.position);
-                level.roomTilesMatrix[x, YYY, z].ActivateRigidbody(100, tilePhysicsMaterial);
+                UnitsManager.Instance.RagdollTileExplosion(tile.transform.position);
+                tile.ActivateRigidbody(100, tilePhysicsMaterial);
                 level.roomTilesMatrix[x, YYY, z] = null;
             }
         }
@@ -1172,37 +1190,34 @@ public static class LevelgenTransforms
 {
     public static TileHealth SetSupporterTile(List<Level> levels, TileHealth tile)
     {
-        Debug.Log("SetSupporterTile 0; levels.count: " + levels.Count);
         if (tile == null)
             return null;
         
         
         int levelIndex = levels.IndexOf(tile.ParentLevel);
-        Debug.Log("SetSupporterTile tile.ParentLevel: " + tile.ParentLevel +"; levelIndex: " + levelIndex);
         
         if (levelIndex <= 0)
             return null;
 
         var bottomLevel = levels[levelIndex - 1];
 
-        var tileBottomLevelLocalCoords = ConvertTilePositionToLocalLevelCoords(levels[levelIndex], bottomLevel);
+        Vector3 bottomLevelCoordsOffset = ConvertTilePositionToLocalLevelCoords(levels[levelIndex], bottomLevel);
+        Vector3 tileBottomLevelLocalCoords = tile.TileLevelCoordinates + bottomLevelCoordsOffset + Vector3Int.down; 
 
         if (tileBottomLevelLocalCoords.x < 0 || tileBottomLevelLocalCoords.x >= bottomLevel.size.x ||
             tileBottomLevelLocalCoords.y < 0 || tileBottomLevelLocalCoords.y >= bottomLevel.size.y ||
             tileBottomLevelLocalCoords.z < 0 || tileBottomLevelLocalCoords.z >= bottomLevel.size.z)
         {
             
-            Debug.Log("SetSupporterTile COORDS OUT OF BOUNDS; tileBottomLevelLocalCoords:" + tileBottomLevelLocalCoords);
             return null;
         }
 
-        Debug.Log("SetSupporterTile FOUND COORDS INBOUNDS; tileBottomLevelLocalCoords:" + tileBottomLevelLocalCoords);
-        var supporterTile = bottomLevel.roomTilesMatrix[tileBottomLevelLocalCoords.x, tileBottomLevelLocalCoords.y,
-            tileBottomLevelLocalCoords.z];
+        var supporterTile = bottomLevel.roomTilesMatrix[(int)tileBottomLevelLocalCoords.x, (int)tileBottomLevelLocalCoords.y,
+            (int)tileBottomLevelLocalCoords.z];
         
         if (supporterTile != null)
         {
-            Debug.Log("SetSupporterTile SUPPORTER TILE SET; tileBottomLevelLocalCoords:" + tileBottomLevelLocalCoords);
+            Debug.Log("SetSupporterTile SUPPORTER TILE SET; tileTopLevelLocalCoords:" + tile.TileLevelCoordinates +"; bottomLevelCoordsOffset: " + bottomLevelCoordsOffset + "; tileBottomLevelLocalCoords: " + tileBottomLevelLocalCoords);
         
             supporterTile.supportedTile = tile;
             tile.supporterTile = supporterTile;

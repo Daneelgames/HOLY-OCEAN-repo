@@ -10,6 +10,8 @@ namespace MrPink.WeaponsSystem
         {
             if (ownerHealth == null)
                 return;
+            if (ownerHealth.gameObject == other.gameObject)
+                return;
             
             Debug.Log($"Коллизия с {other.gameObject.name}");
             

@@ -34,8 +34,30 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
+        if (LevelGenerator.Instance.levelIsReady == false)
+            return;
+        
+        if (Player.Health.health <= 0 && LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
             StartProcScene();
+        
+        if (Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.Z))
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+                StartProcScene();
+            
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                if (LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop.Count <= 0)
+                    return;
+
+                for (int i = LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
+                {
+                    var tile = LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop[i];
+                    if (tile)
+                        tile.Damage(1000, DamageSource.Environment);
+                }
+            }
+        }
     }
 
     public void StartProcScene()

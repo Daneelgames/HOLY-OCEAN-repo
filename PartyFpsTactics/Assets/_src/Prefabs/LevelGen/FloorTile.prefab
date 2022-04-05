@@ -1402,7 +1402,6 @@ GameObject:
   - component: {fileID: 4636380872454741449}
   - component: {fileID: 9201142029684060503}
   - component: {fileID: 2037099963527117348}
-  - component: {fileID: -1238478297931378076}
   m_Layer: 6
   m_Name: FloorTile
   m_TagString: Untagged
@@ -1455,8 +1454,11 @@ MonoBehaviour:
   prop: 0
   colliders:
   - {fileID: 1211562686235662036}
-  rb: {fileID: -1238478297931378076}
+  rb: {fileID: 0}
   floorLevelTile: 0
+  ceilingLevelTile: 0
+  supporterTile: {fileID: 0}
+  supportedTile: {fileID: 0}
 --- !u!114 &9201142029684060503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1483,19 +1485,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
---- !u!54 &-1238478297931378076
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943623579927757030}
-  serializedVersion: 2
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
