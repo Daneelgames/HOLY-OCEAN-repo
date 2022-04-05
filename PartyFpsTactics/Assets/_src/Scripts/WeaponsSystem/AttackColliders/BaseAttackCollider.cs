@@ -18,6 +18,9 @@ namespace MrPink.WeaponsSystem
         [SerializeField] 
         private bool _isSelfCollisionAvailable = true;
 
+        [SerializeField] 
+        private bool _isPlayerCollisionAvailable = true;
+        
 
         [SerializeField] 
         private bool _isAttachedToShotHolder = false;
@@ -25,7 +28,8 @@ namespace MrPink.WeaponsSystem
 
         [Header("If lifetime < 0, this object will not die on timer")]
         [FormerlySerializedAs("lifeTime")]
-        public float _lifeTime = 2;
+        [SerializeField]
+        private float _lifeTime = 2;
         
 
         [SerializeField, AssetsOnly, CanBeNull]
@@ -61,6 +65,9 @@ namespace MrPink.WeaponsSystem
 
         public bool IsAttachedToShotHolder
             => _isAttachedToShotHolder;
+
+        public float LifeTime
+            => _lifeTime;
 
         
         public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
