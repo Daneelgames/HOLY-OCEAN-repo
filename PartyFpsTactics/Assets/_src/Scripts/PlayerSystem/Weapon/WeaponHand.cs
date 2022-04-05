@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
+using Brezg.Extensions.UniTaskExtensions;
 using Brezg.Serialization;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace MrPink.PlayerSystem
 {
@@ -14,6 +16,9 @@ namespace MrPink.PlayerSystem
         [CanBeNull]
         private WeaponController _weapon;
         
+        [SerializeField]
+        private Color _gizmoColor = Color.red;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnityDictionary<WeaponPosition, Transform> _positions = new UnityDictionary<WeaponPosition, Transform>();
 
@@ -22,6 +27,18 @@ namespace MrPink.PlayerSystem
 
         [ShowInInspector, ReadOnly]
         private bool _isCollidingWithWall;
+
+#if UNITY_EDITOR
+        
+        [SerializeField] 
+        [BoxGroup("Position Debug")]
+        private bool _isDebugPositioningEnabled;
+        
+        [SerializeField] 
+        [BoxGroup("Position Debug")]
+        private WeaponPosition _debugPosition;
+        
+#endif
         
         [ShowInInspector, ReadOnly]
         public WeaponPosition CurrentPosition { get; set; } = WeaponPosition.Idle;
@@ -40,6 +57,10 @@ namespace MrPink.PlayerSystem
 
         public LayerMask allSolidsLayerMask;
         public bool canShootIfPhoneInUse = true;
+
+
+        private bool _isAttacking = false;
+        
         
         public WeaponController Weapon
         {
@@ -69,8 +90,12 @@ namespace MrPink.PlayerSystem
 
         public void UpdateState(bool isDead)
         {
-            CurrentPosition = WeaponPosition.Idle;
             IsAiming = false;
+            
+            if (_isAttacking)
+                return;
+            
+            CurrentPosition = WeaponPosition.Idle;
             
             if (isDead)
             {
@@ -96,42 +121,69 @@ namespace MrPink.PlayerSystem
                 CurrentPosition = WeaponPosition.Reload;
                 return;
             }
-            
+
             if (Input.GetMouseButton(_mouseButtonIndex))
             {
                 IsAiming = true;
-                CurrentPosition = WeaponPosition.Aim;
+                CurrentPosition = Weapon.IsMelee
+                    ? WeaponPosition.MeleeAim
+                    : WeaponPosition.Aim;
             }
 
             if (Input.GetMouseButtonUp(_mouseButtonIndex))
-                Weapon.Shot(Player.Health);
+            {
+                HandleAttack().ForgetWithHandler();
+            }
+        }
+
+
+        private async UniTask HandleAttack()
+        {
+            _isAttacking = true;
+            
+            if (Weapon.IsMelee)
+                CurrentPosition = WeaponPosition.MeleeAttack;
+
+            var attackTime = await Weapon.Shot(Player.Health);
+
+            if (Weapon.IsMelee)
+                await UniTask.Delay((int) (attackTime * 1000));
+            
+            _isAttacking = false;
         }
 
         public void UpdateWeaponPosition()
         {
             if (!IsWeaponEquipped)
                 return;
-
-            float gunMoveSpeed = _weapon.gunMoveSpeed;
-            float gunRotationSpeed = _weapon.gunRotationSpeed;
             
-            float scaler = 1;
-            float scalerRot = 1;
-            if (IsAiming)
-            {
-                scaler = _weapon.gunMoveSpeedScaler;
-                scalerRot = _weapon.gunRotSpeedScaler;
-            }
+#if UNITY_EDITOR
+
+            if (_isDebugPositioningEnabled)
+                CurrentPosition = _debugPosition;
+
+#endif
+
+            int meleeAttackScaler = 
+                CurrentPosition == WeaponPosition.MeleeAttack 
+                    ? 2 
+                    : 1;
+            
+            float gunMoveSpeed = _weapon.gunMoveSpeed * meleeAttackScaler;
+            float gunRotationSpeed = _weapon.gunRotationSpeed * meleeAttackScaler;
+            float scaler = IsAiming ? _weapon.gunMoveSpeedScaler : 1;
+            
             Weapon.transform.position = Vector3.Lerp(Weapon.transform.position,  CurrentTransform.position, gunMoveSpeed * scaler * Time.deltaTime);
             Weapon.transform.rotation = Quaternion.Slerp(Weapon.transform.rotation, CurrentTransform.rotation, gunRotationSpeed * scaler * Time.deltaTime);
         }
 
         public void UpdateCollision()
         {
-            Transform raycastTransform = 
-                CurrentPosition == WeaponPosition.Aim ? 
-                    this[WeaponPosition.Aim] : 
-                    this[WeaponPosition.Idle];
+            Transform raycastTransform = this[
+                CurrentPosition == WeaponPosition.Aim || CurrentPosition == WeaponPosition.MeleeAim
+                    ? CurrentPosition
+                    : WeaponPosition.Idle
+            ];
             
             if (Physics.Raycast(raycastTransform.position,
                     raycastTransform.forward, out var hit,
@@ -141,6 +193,19 @@ namespace MrPink.PlayerSystem
             }
             else
                 _isCollidingWithWall = false;
+        }
+
+
+        private void OnDrawGizmos()
+        {
+            var from = _positions[WeaponPosition.MeleeAim].position;
+            var to = _positions[WeaponPosition.MeleeAttack].position;
+            
+            Gizmos.color = _gizmoColor;
+
+            Gizmos.DrawSphere(from, 0.1f);
+            Gizmos.DrawSphere(to, 0.08f);
+            Gizmos.DrawLine(from, to);
         }
     }
 }

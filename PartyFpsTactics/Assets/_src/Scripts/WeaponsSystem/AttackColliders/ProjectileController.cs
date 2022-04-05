@@ -13,8 +13,7 @@ public class ProjectileController : BaseAttackCollider
 {
     public bool addVelocityEveryFrame = true;
     public float projectileSpeed = 100;
-    [Header("If lifetime < 0, this object will not die on timer")]
-    public float lifeTime = 2;
+    
 
     public ToolType toolType = ToolType.Null;
 
@@ -53,7 +52,6 @@ public class ProjectileController : BaseAttackCollider
         
         PlaySound(shotAu);
         PlaySound(flyAu);
-        
         
         
         if (rb != null && !addVelocityEveryFrame)
@@ -148,28 +146,17 @@ public class ProjectileController : BaseAttackCollider
     
     private IEnumerator MoveProjectile()
     {
-        float currentLifeTime = 0;
         while (true)
         {
             if (dead)
                 yield break;
-
-            yield return null;
-            if (lifeTime > 0)
-            {
-                currentLifeTime += Time.deltaTime;
-
-                if (currentLifeTime > lifeTime)
-                {
-                    Destroy(gameObject);
-                    yield break;
-                }
-            }
             
             lastPosition = transform.position;
+            
+            yield return null;
         }
     }
-    
+
 
     private void Death()
     {

@@ -1,9 +1,13 @@
-using System;
 using System.Collections.Generic;
 using _src.Scripts.LevelGenerators;
 using MrPink.WeaponsSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MrPink.Health
 {
@@ -18,14 +22,19 @@ namespace MrPink.Health
         private Level parentLevel;
         public Level ParentLevel => parentLevel;
         
-        [SerializeField]
+        [SerializeField, ChildGameObjectsOnly, Required]
         private Rigidbody rb;
+        
         [HideInInspector]
         public bool floorLevelTile = false;
 
         public TileHealth supporterTile;
         public TileHealth supportedTile;
 
+        public Rigidbody Rigidbody 
+            => rb;
+        
+        
         private void Start()
         {
             if (prop)
@@ -46,20 +55,17 @@ namespace MrPink.Health
                 supporterTile.supportedTile = null;
         }
 
-        public Rigidbody Rigidbody()
-        {
-            return rb;
-        }
 
+        
         public void SetTileRoomCoordinates(Vector3Int coords, Level _parentLevel)
         {
             tileLevelCoordinates = coords;
             parentLevel = _parentLevel;
         }
-        
-        public void AddRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1)
+
+        public void ActivateRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1)
         {
-            if (rb) 
+            if ( ! rb.isKinematic)  // Такое у предметов 
                 return;
 
             // TODO нарушаем инкапсуляцию
@@ -68,28 +74,21 @@ namespace MrPink.Health
             if (setLayer11)
                 gameObject.layer = 11;
             
-            //Debug.Log("Add Rigidbody");
-            rb = gameObject.AddComponent<Rigidbody>();
-            if (rb == null) return;
-            rb.useGravity = true;
-            foreach (var coll in colliders)
-            {
-                coll.material = mat;   
-            }
             
+            foreach (var coll in colliders)
+                coll.material = mat;
+
             if (supportedTile)
                 supportedTile.supporterTile = null;
             if (supporterTile)
                 supporterTile.supportedTile = null;
             
-            rb.isKinematic = false;
-            rb.mass = 5;
-            rb.drag = 1;
-            rb.angularDrag = 1;
+            SetRigidbodyState(ref rb, false, true, 5, 1, 1);
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
             if (explosionForce > 0)
                 rb.AddExplosionForce(explosionForce, rb.transform.position, 10);
         }
+        
 		public void DestroyTileFromGenerator()
         {
             // no death effects
@@ -145,5 +144,43 @@ namespace MrPink.Health
 
             return CollisionTarget.Solid;
         }
+
+        private static void SetRigidbodyState(
+            ref Rigidbody rigidbody,
+            bool isKinematic,
+            bool useGravity,
+            float mass,
+            float drag,
+            float angularDrag
+        )
+        {
+            rigidbody.isKinematic = isKinematic;
+            rigidbody.useGravity = useGravity;
+            rigidbody.mass = mass;
+            rigidbody.drag = drag;
+            rigidbody.angularDrag = angularDrag;
+        }
+
+#if UNITY_EDITOR
+
+        [ContextMenu("Добавить RB блока")]
+        private void LinkBodyParts()
+        {
+            if (rb != null)
+            {
+                Debug.LogWarning("Уже есть");
+                return;
+            }
+
+            rb = gameObject.AddComponent<Rigidbody>();
+            SetRigidbodyState(ref rb, true, false, 0, 0, 0);
+
+            EditorUtility.SetDirty(rb);
+            AssetDatabase.SaveAssets();
+            
+            Debug.Log("Добавлен RB блока");
+        }
+        
+#endif
     }
 }

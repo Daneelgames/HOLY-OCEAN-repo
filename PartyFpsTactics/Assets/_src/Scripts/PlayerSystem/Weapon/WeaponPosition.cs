@@ -6,5 +6,7 @@ namespace MrPink.PlayerSystem
         Aim,
         Reload,
         Death,
+        MeleeAim,
+        MeleeAttack,
     }
 }

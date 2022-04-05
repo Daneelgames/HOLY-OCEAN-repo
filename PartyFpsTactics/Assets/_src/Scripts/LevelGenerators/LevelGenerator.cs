@@ -1074,7 +1074,7 @@ public class LevelGenerator : MonoBehaviour
 
                 //Debug.Log("Tile Destroyed AddRigidbody");
                 UnitsManager.Instance.RagdollTileExplosion(level.roomTilesMatrix[x, YYY, z].transform.position);
-                level.roomTilesMatrix[x, YYY, z].AddRigidbody(100, tilePhysicsMaterial);
+                level.roomTilesMatrix[x, YYY, z].ActivateRigidbody(100, tilePhysicsMaterial);
                 level.roomTilesMatrix[x, YYY, z] = null;
             }
         }

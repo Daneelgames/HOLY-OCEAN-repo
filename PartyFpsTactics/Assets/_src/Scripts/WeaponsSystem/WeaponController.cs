@@ -14,6 +14,9 @@ namespace MrPink.WeaponsSystem
     {
         public Transform shotHolder;
 
+        [SerializeField] 
+        private bool _isMelee;
+
         [Header("Player Weapon Movement")] 
         [Range(0.1f,100)]
         public float gunMoveSpeedScaler = 5;
@@ -60,6 +63,10 @@ namespace MrPink.WeaponsSystem
     
         public bool OnCooldown { get; set; } = false;
 
+
+        public bool IsMelee
+            => _isMelee;
+
     
         private void Awake()
         {
@@ -68,13 +75,13 @@ namespace MrPink.WeaponsSystem
     
     
         [Button]
-        public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
+        public async UniTask<float> Shot(HealthController ownerHc, Transform aiAimTransform = null)
         {
-            Shot(shotHolder.forward, ownerHc, aiAimTransform).ForgetWithHandler();
+            return await Shot(shotHolder.forward, ownerHc, aiAimTransform);
         }
 
     
-        public async UniTask Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
+        public async UniTask<float> Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
         {
             OnCooldown = true;
             if (_attackSignalAudioSource != null)
@@ -86,7 +93,7 @@ namespace MrPink.WeaponsSystem
             await UniTask.Delay((int)(_delay * 1000));
         
             if (ownerHc.health <= 0)
-                return;
+                return 0;
             
             // AI is aiming
             if (aiAimTransform != null)
@@ -100,17 +107,27 @@ namespace MrPink.WeaponsSystem
             ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
 
+            float projectileLifeTime = 0;
+            
             for (int i = 0; i < bulletsPerShot; i++)
             {
-                var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
+                var newProjectile = 
+                    _attackColliderPrefab.IsAttachedToShotHolder
+                    ? Instantiate(_attackColliderPrefab, shotHolder)
+                    : Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
                 
                 newProjectile.Init(ownerHc, source, action);
+
+                if (projectileLifeTime < newProjectile.LifeTime)
+                    projectileLifeTime = newProjectile.LifeTime;
             }
             
             Cooldown().ForgetWithHandler();
             
             if (_animation != null)
                 _animation.Play().ForgetWithHandler();
+
+            return projectileLifeTime;
         }
     
         private async UniTask Cooldown()

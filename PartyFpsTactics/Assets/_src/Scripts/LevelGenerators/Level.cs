@@ -151,7 +151,7 @@ namespace _src.Scripts.LevelGenerators
                 var tile = newIsland[i];
                 if (tile != null)
                 {
-                    tile.AddRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
+                    tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
                     LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
                     yield return new WaitForSeconds(Random.Range(0.01f, 0.5f));
                 }

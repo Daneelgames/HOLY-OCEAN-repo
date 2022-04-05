@@ -1,8 +1,10 @@
+using System.Collections;
 using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MrPink.WeaponsSystem
 {
@@ -16,6 +18,19 @@ namespace MrPink.WeaponsSystem
         [SerializeField] 
         private bool _isSelfCollisionAvailable = true;
 
+        [SerializeField] 
+        private bool _isPlayerCollisionAvailable = true;
+        
+
+        [SerializeField] 
+        private bool _isAttachedToShotHolder = false;
+        
+
+        [Header("If lifetime < 0, this object will not die on timer")]
+        [FormerlySerializedAs("lifeTime")]
+        [SerializeField]
+        private float _lifeTime = 2;
+        
 
         [SerializeField, AssetsOnly, CanBeNull]
         [BoxGroup("Саунд")]
@@ -48,12 +63,20 @@ namespace MrPink.WeaponsSystem
 
         private DamageSource _damageSource;
 
+        public bool IsAttachedToShotHolder
+            => _isAttachedToShotHolder;
+
+        public float LifeTime
+            => _lifeTime;
+
         
         public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
         {
             ownerHealth = owner;
             actionOnHit = action;
             _damageSource = source;
+
+            StartCoroutine(LifetimeCoroutine());
         }
         
         
@@ -126,6 +149,26 @@ namespace MrPink.WeaponsSystem
             _bloodParticles.parent = null;
             _bloodParticles.position = contactPoint;
             _bloodParticles.gameObject.SetActive(true);
+        }
+        
+        private IEnumerator LifetimeCoroutine()
+        {
+            float currentLifeTime = 0;
+            while (true)
+            {
+                if (_lifeTime <= 0)
+                    yield break;
+            
+                currentLifeTime += Time.deltaTime;
+
+                if (currentLifeTime > _lifeTime)
+                {
+                    Destroy(gameObject);
+                    yield break;
+                }
+
+                yield return null;
+            }
         }
     }
 }

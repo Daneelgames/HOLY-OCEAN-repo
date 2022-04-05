@@ -1,4 +1,5 @@
 using System.Collections;
+using Brezg.Extensions.UniTaskExtensions;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.WeaponsSystem;
@@ -57,7 +58,7 @@ public class AiWeaponControls : MonoBehaviour
                 angle = Vector3.Angle(targetDir, transform.forward);
                 if (angle < minAngleToShoot)
                 {
-                    activeWeapon.Shot(hc, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform);
+                    activeWeapon.Shot(hc, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform).ForgetWithHandler();
                 }
             }
         }

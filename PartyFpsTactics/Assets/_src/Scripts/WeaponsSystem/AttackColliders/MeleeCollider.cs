@@ -1,4 +1,5 @@
 using System;
+using MrPink.Health;
 using UnityEngine;
 
 namespace MrPink.WeaponsSystem
@@ -7,6 +8,11 @@ namespace MrPink.WeaponsSystem
     {
         private void OnTriggerEnter(Collider other)
         {
+            if (ownerHealth == null)
+                return;
+            
+            Debug.Log($"Коллизия с {other.gameObject.name}");
+            
             var target = TryDoDamage(other);
             
             switch (target)
