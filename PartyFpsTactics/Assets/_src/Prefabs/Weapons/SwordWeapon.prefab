@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2642470501686540893}
-  - component: {fileID: 2642470501686540894}
-  - component: {fileID: 2642470501686540895}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -33,39 +31,6 @@ Transform:
   m_Father: {fileID: 2642470501878746762}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &2642470501686540894
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2642470501686540864}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 731637eeed1af4c49a49ffeb2ef1da98, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2642470501686540895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2642470501686540864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e735ac7c3b4daba1158568b2c66106, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 2642470501686540894}
-  _triggerName: Play
 --- !u!1 &2642470501878746764
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +88,7 @@ MonoBehaviour:
   _attackSignalAudioSource: {fileID: 0}
   bulletsPerShot: 1
   _attackColliderPrefab: {fileID: 4890726433194174976, guid: 32bb5c01ef640418c9b0c1aed7c17126, type: 3}
-  _animation: {fileID: 2642470501686540895}
+  _animation: {fileID: 0}
   gunsMoveDistanceScaler: 0.3
   reloadingAu: {fileID: 0}
   reloadingClip: {fileID: 0}
