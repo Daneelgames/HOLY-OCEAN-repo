@@ -92,10 +92,10 @@ namespace _src.Scripts.LevelGenerators
                     if (wallsInCurrentIslandAmount <= 0)
                         continue;
                     
-                    if (levelCanClash && (currentIslandSupports == 0 || currentIslandSupports * 5 < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 ||
+                    if (levelCanClash && (currentIslandSupports == 0 || currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 ||
                         wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5))
                     {
-                        Debug.Log("Clash Island. walls: " + wallsInCurrentIslandAmount + "; floorConnectionsPoints: " + floorConnectionsInCurrentIslandAmount + "; size.y * 2: " + size.y * 2);
+                        Debug.Log("ClashIsland. SUPPORTERS = " + currentIslandSupports + "; walls: " + wallsInCurrentIslandAmount + "; floorConnectionsPoints: " + floorConnectionsInCurrentIslandAmount + "; size.y * 2: " + size.y * 2);
                         StartCoroutine(ClashIsland(newIsland));
                     }
                     #region algorithm

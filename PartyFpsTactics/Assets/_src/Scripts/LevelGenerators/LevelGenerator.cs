@@ -3,15 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using _src.Scripts.LevelGenerators;
-using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.WSA;
 using Random = UnityEngine.Random;
 
 public class LevelGenerator : MonoBehaviour
@@ -73,6 +70,10 @@ public class LevelGenerator : MonoBehaviour
     public PhysicMaterial tilePhysicsMaterial;
     
     public bool levelIsReady = false;
+
+    [UnityEngine.Tooltip("More == buildings levels are more stable")]
+    public int islandSupportsScalerToClash = 20;
+    
     private void Awake()
     {
         Instance = this;
