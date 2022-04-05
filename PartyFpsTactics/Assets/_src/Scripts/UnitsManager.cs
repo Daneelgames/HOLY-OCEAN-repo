@@ -112,7 +112,7 @@ public class UnitsManager : MonoBehaviour
             if (Vector3.Distance(LevelGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) > distance)
                 continue;
             
-            var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody();
+            var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody;
             if (rb)
             {
                 propBumped = true;

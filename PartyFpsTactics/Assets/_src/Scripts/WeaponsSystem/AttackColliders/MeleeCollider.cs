@@ -7,6 +7,8 @@ namespace MrPink.WeaponsSystem
     {
         private void OnTriggerEnter(Collider other)
         {
+            Debug.Log($"Коллизия с {other.gameObject.name}");
+            
             var target = TryDoDamage(other);
             
             switch (target)

@@ -119,7 +119,7 @@ namespace _src.Scripts.LevelGenerators
                 var tile = newIsland[i];
                 if (tile != null)
                 {
-                    tile.AddRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
+                    tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
                     LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
                     yield return null;
                 }
