@@ -1185,7 +1185,7 @@ public static class LevelgenTransforms
 
         var bottomLevel = levels[levelIndex - 1];
 
-        var tileBottomLevelLocalCoords = ConvertTilePositionToLocalLevelCoords(tile, levels[levelIndex], bottomLevel);
+        var tileBottomLevelLocalCoords = ConvertTilePositionToLocalLevelCoords(levels[levelIndex], bottomLevel);
 
         if (tileBottomLevelLocalCoords.x < 0 || tileBottomLevelLocalCoords.x >= bottomLevel.size.x ||
             tileBottomLevelLocalCoords.y < 0 || tileBottomLevelLocalCoords.y >= bottomLevel.size.y ||
@@ -1212,16 +1212,24 @@ public static class LevelgenTransforms
         return null;
     }
 
-    public static Vector3Int ConvertTilePositionToLocalLevelCoords(TileHealth tile, Level levelTop, Level levelBottom)
+    public static Vector3Int ConvertTilePositionToLocalLevelCoords(Level levelTop, Level levelBottom)
     {
+        int tileSize = 1;
+        
         // найти дистанции по отдельным осям между нулевыми тайлами обоих этажей
+        var topTilePosition = GetZeroPosition(levelTop, tileSize);
+        var bottomTilePosition = GetZeroPosition(levelBottom, tileSize);
         
-        int x = Mathf.RoundToInt(Mathf.Abs((levelTop.position.x - levelTop.size.x / 2) - (levelBottom.position.x - levelBottom.size.x / 2)));
-        int y = Mathf.RoundToInt(Mathf.Abs((levelTop.position.x - levelTop.size.y / 2) - (levelBottom.position.y - levelBottom.size.y / 2)));
-        int z = Mathf.RoundToInt(Mathf.Abs((levelTop.position.z - levelTop.size.z / 2) - (levelBottom.position.z - levelBottom.size.z / 2)));
-        
-        Vector3Int newLocalCoords = new Vector3Int(Mathf.RoundToInt(tile.TileLevelCoordinates.x + x),Mathf.RoundToInt(tile.TileLevelCoordinates.y + y),Mathf.RoundToInt(tile.TileLevelCoordinates.z + z));
-        
-        return newLocalCoords;
+        int x = GetOffsetOfTiles(topTilePosition.x, bottomTilePosition.x, 1);
+        int y = levelBottom.size.y;
+        int z = GetOffsetOfTiles(topTilePosition.z, bottomTilePosition.z, 1);
+
+        return new Vector3Int(x, y, z);
     }
+
+    private static Vector3 GetZeroPosition(Level level, int tileSize)
+        => level.position - level.size/2*tileSize;
+    
+    private static int GetOffsetOfTiles(float positionA, float positionB, float size)
+        => Mathf.RoundToInt(Mathf.Abs(positionB - positionA) / size);
 }
