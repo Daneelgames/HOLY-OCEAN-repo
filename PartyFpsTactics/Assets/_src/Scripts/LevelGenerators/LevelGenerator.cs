@@ -1192,18 +1192,22 @@ public static class LevelgenTransforms
             tileBottomLevelLocalCoords.z < 0 || tileBottomLevelLocalCoords.z >= bottomLevel.size.z)
         {
             
-            Debug.Log("SetSupporterTile NEW COORDS OUT OF BOUNDS");
+            Debug.Log("SetSupporterTile COORDS OUT OF BOUNDS; tileBottomLevelLocalCoords:" + tileBottomLevelLocalCoords);
             return null;
         }
 
-        Debug.Log("SetSupporterTile NEW COORDS INSIDE BOUNDS");
+        Debug.Log("SetSupporterTile FOUND COORDS INBOUNDS; tileBottomLevelLocalCoords:" + tileBottomLevelLocalCoords);
         var supporterTile = bottomLevel.roomTilesMatrix[tileBottomLevelLocalCoords.x, tileBottomLevelLocalCoords.y,
             tileBottomLevelLocalCoords.z];
-        supporterTile.supportedTile = tile;
-        tile.supporterTile = supporterTile;
         
         if (supporterTile != null)
+        {
+            Debug.Log("SetSupporterTile SUPPORTER TILE SET; tileBottomLevelLocalCoords:" + tileBottomLevelLocalCoords);
+        
+            supporterTile.supportedTile = tile;
+            tile.supporterTile = supporterTile;
             return supporterTile;
+        }
         
         return null;
     }

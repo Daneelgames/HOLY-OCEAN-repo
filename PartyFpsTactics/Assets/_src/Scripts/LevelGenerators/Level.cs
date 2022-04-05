@@ -43,7 +43,7 @@ namespace _src.Scripts.LevelGenerators
                     if (tile == null)
                         continue;
                     
-                    if (!LevelgenTransforms.SetSupporterTile(LevelGenerator.Instance.spawnedMainBuildingLevels, tile))
+                    if (!tile.supporterTile)
                     {
                         Gizmos.color = Color.red;
                     }
