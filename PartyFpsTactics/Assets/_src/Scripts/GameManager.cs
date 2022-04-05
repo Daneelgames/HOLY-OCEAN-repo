@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    
+    public LayerMask AllSolidsMask;
     
     private void Awake()
     {

@@ -1193,7 +1193,18 @@ public static class LevelgenTransforms
     {
         if (tile == null)
             return null;
+
+        if (Physics.Raycast(tile.transform.position, Vector3.down, out var hit, 1,  GameManager.Instance.AllSolidsMask))
+        {
+            TileHealth supporter = hit.transform.gameObject.GetComponent<TileHealth>();
+            if (supporter && supporter != tile)
+            {
+                tile.supporterTile = supporter;
+                supporter.supportedTile = tile;
+            }
+        }
         
+        return null;
         
         int levelIndex = levels.IndexOf(tile.ParentLevel);
         
