@@ -109,7 +109,10 @@ namespace MrPink.WeaponsSystem
 
             for (int i = 0; i < bulletsPerShot; i++)
             {
-                var newProjectile = Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
+                var newProjectile = 
+                    _attackColliderPrefab.IsAttachedToShotHolder
+                    ? Instantiate(_attackColliderPrefab, shotHolder)
+                    : Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
                 
                 newProjectile.Init(ownerHc, source, action);
             }
