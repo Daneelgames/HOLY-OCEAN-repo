@@ -30,7 +30,9 @@ namespace MrPink.WeaponsSystem
         [FormerlySerializedAs("lifeTime")]
         [SerializeField]
         private float _lifeTime = 2;
-        
+
+        [SerializeField] private float ragdollExplosionDistance = 2;
+        [SerializeField] private float ragdollExplosionForce = 500;
 
         [SerializeField, AssetsOnly, CanBeNull]
         [BoxGroup("Саунд")]
@@ -99,7 +101,7 @@ namespace MrPink.WeaponsSystem
             if (targetCollider.gameObject == Player.GameObject)
             {
                 Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
-                UnitsManager.Instance.RagdollTileExplosion(transform.position);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,ragdollExplosionForce);
                 return CollisionTarget.Creature;
             }
 
@@ -107,7 +109,7 @@ namespace MrPink.WeaponsSystem
 
             if (targetHealth == null)
             {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,ragdollExplosionForce);
                 return CollisionTarget.Solid;
             }
             

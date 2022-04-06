@@ -8,7 +8,7 @@ using UnityEngine;
 public class BillboardGenerator : MonoBehaviour
 {
     public string currentBillboardSign = "welcome to dust";
-     Vector3Int BillboardDirection = Vector3Int.right;
+     Vector3Int BillboardDirection = Vector3Int.left;
     public Vector3 lettersEuler = Vector3.zero;
      Vector3 BillboardStartPos = Vector3.zero;
     public int wallSize = 10;
@@ -17,8 +17,13 @@ public class BillboardGenerator : MonoBehaviour
     public List<BillboardLetter> letters;
 
     public List<TileHealth> spawnedLetters = new List<TileHealth>();
+
     [ContextMenu("GenerateBillboard")]
     public void GenerateBillboard()
+    {
+        GenerateBillboard(wallSize,Vector3.zero, 270);
+    }
+    public void GenerateBillboard(int _wallSize, Vector3 _position, float yRot)
     {
         for (int i = spawnedLetters.Count - 1; i >= 0; i--)
         {
@@ -30,7 +35,7 @@ public class BillboardGenerator : MonoBehaviour
         int xxx = 0;
         int rows = 0;
         int x = 0;
-        BillboardStartPos.x = +wallSize / 2;
+        BillboardStartPos.x = _wallSize / 2;
         for (int i = 0; i < sign.Length; i++)
         {
             TileHealth letterPrefab = null;
@@ -45,7 +50,7 @@ public class BillboardGenerator : MonoBehaviour
 
             xxx += lettersSpacingInTilesHorizontal;
             
-            if (xxx >= wallSize) // new row
+            if (xxx >= _wallSize - 2) // new row
             {
                 rows++;
                 xxx = 0;
@@ -67,7 +72,35 @@ public class BillboardGenerator : MonoBehaviour
             letter.transform.localRotation = Quaternion.Euler(lettersEuler);
             spawnedLetters.Add(letter);
         }
+
+        transform.position = _position;
+        transform.eulerAngles = new Vector3(0, yRot, 0);
+        StartCoroutine(MakeLettersDependentOnTiles());
     }
+
+    IEnumerator MakeLettersDependentOnTiles()
+    {
+        for (int i = 0; i < spawnedLetters.Count; i++)
+        {
+            var letter = spawnedLetters[i];
+            var colliders = Physics.SphereCastAll(letter.transform.position + transform.forward, 0.5f,
+                -transform.forward, 2, GameManager.Instance.AllSolidsMask);
+            for (int j = 0; j < colliders.Length; j++)
+            {
+                if (colliders[j].transform == letter.transform)
+                    continue;
+
+                var supporterTile = colliders[j].collider.gameObject.GetComponent<TileHealth>();
+                if (supporterTile)
+                {
+                    supporterTile.objectsToClashOnClash.Add(letter);
+                    break;   
+                }
+            }
+            yield return null;
+        }
+    }
+    
     [Serializable]
     public class BillboardLetter
     {

@@ -32,6 +32,7 @@ namespace MrPink.Health
 
         public TileHealth supporterTile;
         public TileHealth supportedTile;
+        public List<TileHealth> objectsToClashOnClash = new List<TileHealth>();
 
         public TileAttack tileAttack;
         public Rigidbody Rigidbody 
@@ -67,8 +68,20 @@ namespace MrPink.Health
                 supportedTile.supporterTile = null;
             if (supporterTile)
                 supporterTile.supportedTile = null;
+
+            ClashDependantObjects();
         }
 
+        void ClashDependantObjects()
+        {
+            for (int i = 0; i < objectsToClashOnClash.Count; i++)
+            {
+                var o = objectsToClashOnClash[i];
+                if (o)
+                    o.ActivateRigidbody(o._health,null,false, 20, true);
+            }
+            objectsToClashOnClash.Clear();
+        }
 
         
         public void SetTileRoomCoordinates(Vector3Int coords, Level _parentLevel)
@@ -82,6 +95,8 @@ namespace MrPink.Health
             if (rb && ! rb.isKinematic)  // Такое у предметов 
                 return;
 
+            ClashDependantObjects();
+            
             // TODO нарушаем инкапсуляцию
             _health = newHealth;
 

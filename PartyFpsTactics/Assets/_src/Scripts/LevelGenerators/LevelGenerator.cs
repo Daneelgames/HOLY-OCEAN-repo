@@ -34,7 +34,8 @@ public class LevelGenerator : MonoBehaviour
     public bool spawnWalls = true;
     public bool spawnLadders = true;
     public LayerMask allSolidsLayerMask;
-    
+
+    public BillboardGenerator billboardGeneratorPrefab;
     public GameObject levelGoalPrefab;
     public TileHealth tilePrefab;
     public TileHealth tileWallPrefab;
@@ -223,6 +224,7 @@ public class LevelGenerator : MonoBehaviour
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
+        SpawnBillboard();
         RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels);
 
         var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
@@ -1016,8 +1018,46 @@ public class LevelGenerator : MonoBehaviour
             yield return null;
         }
     }
+
+    void SpawnBillboard()
+    {
+        if (spawnedMainBuildingLevels.Count <= 3)
+            return;
+        
+        var newBillboard = Instantiate(billboardGeneratorPrefab);
+        var randomLevel = spawnedMainBuildingLevels[Random.Range(2, spawnedMainBuildingLevels.Count - 1)];
+        // choose random orientation
+        int r = Random.Range(0, 4);
+        float yRot = 0;
+        int wallSize = 0;
+        Vector3 billboardPos = Vector3.zero;
+        switch (r)
+        {
+            case 0: // LEFT
+                billboardPos = randomLevel.position + Vector3.left + Vector3.left * randomLevel.size.x / 2;
+                yRot = 270;
+                wallSize = randomLevel.size.z;
+                break;
+            case 1: // FWD
+                billboardPos = randomLevel.position + Vector3.forward * randomLevel.size.z / 2;
+                yRot = 0;
+                wallSize = randomLevel.size.x;
+                break;
+            case 2: // RIGHT
+                billboardPos = randomLevel.position + Vector3.right * randomLevel.size.z / 2;
+                yRot = 90;
+                wallSize = randomLevel.size.z;
+                break;
+            case 3: // BACK
+                billboardPos = randomLevel.position + Vector3.back + Vector3.back * randomLevel.size.x / 2;
+                yRot = 180;
+                wallSize = randomLevel.size.x;
+                break;
+        }
+        newBillboard.GenerateBillboard(wallSize, billboardPos,yRot);
+    }
     
-    IEnumerator SpawnGrindRails()
+    IEnumerator SpawnGrindRails() // соединять главное здание с дополнительными
     {
         for (int j = 0; j < Random.Range(grindRailsMinMax.x, grindRailsMinMax.y); j++)
         {
