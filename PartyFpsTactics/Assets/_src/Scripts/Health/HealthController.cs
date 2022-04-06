@@ -142,6 +142,10 @@ namespace MrPink.Health
         {
             float t = 0f;
             var originalPos = transformToShake.localPosition;
+            
+            if (Player.Health == this)
+                originalPos = Vector3.up;
+            
             while (t < 0.5f)
             {
                 t += Time.deltaTime;

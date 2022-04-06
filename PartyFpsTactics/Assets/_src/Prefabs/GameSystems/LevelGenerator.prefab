@@ -46,18 +46,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelType: 0
-  spawnedLevels: []
+  spawnedMainBuildingLevels: []
+  spawnedAdditionalLevels: []
   spawnedProps: []
   levelGoalSpawned: {fileID: 0}
   generatedBuildingFolder: {fileID: 0}
-  levelsHeights: 
+  disconnectedTilesFolder: {fileID: 0}
+  mainBuildingLevelsHeights: 
+  additionalSmallBuildingsAmount: 3
+  additionalBuildingsScaleMinMaxX: {x: 4, y: 10}
+  additionalBuildingsScaleMinMaxZ: {x: 4, y: 10}
+  additionalBuildingsScaleMinMaxY: {x: 4, y: 10}
   spawnWalls: 1
   spawnLadders: 1
-  spawnAdditionalTiles: 1
   allSolidsLayerMask:
     serializedVersion: 2
     m_Bits: 4160
-  offsetToThinWallsTargetDirection: 0
   levelGoalPrefab: {fileID: 3443701919470677471, guid: de73763fdd3804f41841451627e2e135, type: 3}
   tilePrefab: {fileID: 4636380872454741449, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   tileWallPrefab: {fileID: 5237696207237465462, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
@@ -96,6 +100,7 @@ MonoBehaviour:
   tileDestroyedParticles: {fileID: 5759254466563253604, guid: d890a91fa5c68d341ab3abc978cf32d6, type: 3}
   tilePhysicsMaterial: {fileID: 13400000, guid: 00b141c113e623a4a99d5637946bbbdf, type: 2}
   levelIsReady: 0
+  islandSupportsScalerToClash: 25
 --- !u!114 &4867740379949603590
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ namespace MrPink.WeaponsSystem
     {
         [SerializeField]
         [Range(0, 1000)]
-        protected int damage = 100;
+        protected int damage = 20;
 
         
         [SerializeField] 
@@ -80,16 +80,25 @@ namespace MrPink.WeaponsSystem
         }
         
         
-        protected CollisionTarget TryDoDamage(Collider targetCollider)
+        protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
-            if (!_isSelfCollisionAvailable && ownerHealth.gameObject == targetCollider.gameObject)
+            if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
                 return CollisionTarget.Self;
 
+            if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Player.Movement.gameObject)
+                return CollisionTarget.Self;
+
+            var resultDmg = Mathf.RoundToInt(damage * damageScaler);
+                
+            /*
+            if (damageScaler > 1)
+                Debug.Log("TileAttack damageScaler " + damageScaler);*/
+            
             InteractableManager.Instance.ExplosionNearInteractables(transform.position);
             
             if (targetCollider.gameObject == Player.GameObject)
             {
-                Player.Health.Damage(damage, _damageSource, actionOnHit);
+                Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
                 UnitsManager.Instance.RagdollTileExplosion(transform.position);
                 return CollisionTarget.Creature;
             }
@@ -105,7 +114,7 @@ namespace MrPink.WeaponsSystem
             if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;
 
-            return targetHealth.HandleDamageCollision(transform.position, _damageSource, damage, actionOnHit);
+            return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
         }
 
         protected void PlaySound([CanBeNull] AudioSource source)
@@ -130,14 +139,21 @@ namespace MrPink.WeaponsSystem
             PlaySound(source);
         }
         
-        protected void PlayHitSolidFeedback()
+        protected void PlayHitSolidFeedback(Vector3 point)
         {
             PlaySound(_hitAudioSource, _hitSolidFx);
             
             if (_debrisParticles == null)
                 return;
+
+            var newParticles = Instantiate(_debrisParticles);
+            newParticles.parent = null;
+            newParticles.position = point;
+            newParticles.localScale = Vector3.one;
+            newParticles.gameObject.SetActive(true);
+            /*
             _debrisParticles.parent = null;
-            _debrisParticles.gameObject.SetActive(true);
+            _debrisParticles.gameObject.SetActive(true);*/
         }
     
         protected void PlayHitUnitFeedback(Vector3 contactPoint)
@@ -146,9 +162,17 @@ namespace MrPink.WeaponsSystem
             
             if (_bloodParticles == null)
                 return;
+            
+            var newParticles = Instantiate(_bloodParticles);
+            newParticles.parent = null;
+            newParticles.localScale = Vector3.one;
+            newParticles.position = contactPoint;
+            newParticles.gameObject.SetActive(true);
+            
+            /*
             _bloodParticles.parent = null;
             _bloodParticles.position = contactPoint;
-            _bloodParticles.gameObject.SetActive(true);
+            _bloodParticles.gameObject.SetActive(true);*/
         }
         
         private IEnumerator LifetimeCoroutine()

@@ -91,9 +91,19 @@ namespace _src.Scripts.LevelGenerators
 
                     if (wallsInCurrentIslandAmount <= 0)
                         continue;
+
+                    bool canCrash = false;
+                    if (levelCanClash == false)
+                    {
+                     if (currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || 
+                         floorConnectionsInCurrentIslandAmount == 0 ||wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
+                         canCrash = true;   
+                    }
+                    else if (currentIslandSupports == 0 || currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 ||
+                             wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
+                    canCrash = true;
                     
-                    if (levelCanClash && (currentIslandSupports == 0 || currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 ||
-                        wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5))
+                    if (canCrash)
                     {
                         Debug.Log("ClashIsland. SUPPORTERS = " + currentIslandSupports + "; walls: " + wallsInCurrentIslandAmount + "; floorConnectionsPoints: " + floorConnectionsInCurrentIslandAmount + "; size.y * 2: " + size.y * 2);
                         StartCoroutine(ClashIsland(newIsland));
@@ -154,10 +164,19 @@ namespace _src.Scripts.LevelGenerators
             rb.drag = 1;
             rb.angularDrag = 1;
             rb.AddForce(((rb.transform.position - rb.transform.position - Vector3.up * 10) + Random.insideUnitSphere * 3).normalized * 20, ForceMode.VelocityChange);
-            
+
+
+            int amount = 0;
             while(newIsland.Count > 0)
             {
-                for (int i = 0; i < Random.Range(1,5); i++)
+                if (newIsland.Count > 100)
+                    amount = Random.Range(10, 20);
+                else if (newIsland.Count > 30) 
+                    amount = Random.Range(5, 10);
+                else
+                    amount = Random.Range(1, 5);
+                
+                for (int i = 0; i < amount; i++)
                 {
                     if (newIsland.Count <= 0)
                         break;
@@ -166,7 +185,7 @@ namespace _src.Scripts.LevelGenerators
                     newIsland.Remove(tile);
                     if (tile != null)
                     {
-                        tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, true, 150);
+                        tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, false, 150);
                         LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
                     }   
                 }

@@ -118,6 +118,8 @@ public class InteractableManager : MonoBehaviour
                 var rb = InteractiveObjects[i].gameObject.AddComponent<Rigidbody>();
                 rb.isKinematic = false;
                 rb.useGravity = true;
+                rb.drag = 1;
+                rb.angularDrag = 1;
 
                 InteractiveObjects[i].rb = rb;
                 

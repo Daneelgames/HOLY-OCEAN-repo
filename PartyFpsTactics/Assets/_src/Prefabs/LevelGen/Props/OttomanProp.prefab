@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4168203712817413105}
   - component: {fileID: 1559430513812773035}
   - component: {fileID: 4556057947078349933}
+  - component: {fileID: 400505693}
   m_Layer: 12
   m_Name: OttomanProp
   m_TagString: Untagged
@@ -55,6 +56,11 @@ MonoBehaviour:
   colliders:
   - {fileID: 9002247223078494868}
   rb: {fileID: 1559430513812773035}
+  floorLevelTile: 0
+  ceilingLevelTile: 0
+  supporterTile: {fileID: 0}
+  supportedTile: {fileID: 0}
+  tileAttack: {fileID: 400505693}
 --- !u!65 &9002247223078494868
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -126,6 +132,32 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.45, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &400505693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9159615970426592225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8523b4d55adff4886048f20583de9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+  _isSelfCollisionAvailable: 0
+  _isPlayerCollisionAvailable: 0
+  _isAttachedToShotHolder: 0
+  _lifeTime: 2
+  _hitSolidFx: {fileID: 0}
+  _hitUnitFx: {fileID: 0}
+  _hitAudioSource: {fileID: 0}
+  _debrisParticles: {fileID: 0}
+  _bloodParticles: {fileID: 0}
+  prop: 0
+  dangerous: 0
+  rb: {fileID: 1559430513812773035}
+  minVelocityMagnitudeToAttack: 1
 --- !u!1001 &1086804210743720324
 PrefabInstance:
   m_ObjectHideFlags: 0

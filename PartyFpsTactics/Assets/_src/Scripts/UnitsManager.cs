@@ -113,10 +113,12 @@ public class UnitsManager : MonoBehaviour
                 continue;
             
             var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody;
+            
             if (rb)
             {
                 propBumped = true;
                 rb.AddExplosionForce(tileExplosionForceBarrels * 30, explosionPosition, distance);
+                LevelGenerator.Instance.spawnedProps[i].tileAttack.dangerous = true;
             }
         }
 

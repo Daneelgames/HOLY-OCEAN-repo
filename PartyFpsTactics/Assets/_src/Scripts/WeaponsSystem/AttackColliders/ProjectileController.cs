@@ -59,7 +59,7 @@ public class ProjectileController : BaseAttackCollider
 
         transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);
 
-        StartCoroutine(MoveProjectile());
+        StartCoroutine(UpdateLastPosition());
     }
 
     private void OnDrawGizmosSelected()
@@ -109,7 +109,7 @@ public class ProjectileController : BaseAttackCollider
             switch (target)
             {
                 case CollisionTarget.Solid:
-                    PlayHitSolidFeedback();
+                    PlayHitSolidFeedback(transform.position);
                     break;
                 
                 case CollisionTarget.Creature:
@@ -144,7 +144,7 @@ public class ProjectileController : BaseAttackCollider
             StickToObject(hit.collider);
     }
     
-    private IEnumerator MoveProjectile()
+    private IEnumerator UpdateLastPosition()
     {
         while (true)
         {

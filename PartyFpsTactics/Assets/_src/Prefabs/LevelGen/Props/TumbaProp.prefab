@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3179537994599689377}
   - component: {fileID: 6174942307194121404}
   - component: {fileID: 4643171329889785118}
+  - component: {fileID: 1422326500}
   m_Layer: 12
   m_Name: TumbaProp
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1743293280166790513}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -68,6 +69,11 @@ MonoBehaviour:
   colliders:
   - {fileID: 306994038918772167}
   rb: {fileID: 6174942307194121404}
+  floorLevelTile: 0
+  ceilingLevelTile: 0
+  supporterTile: {fileID: 0}
+  supportedTile: {fileID: 0}
+  tileAttack: {fileID: 1422326500}
 --- !u!114 &477422723233368455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,6 +132,32 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.65, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1422326500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743293280166790513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8523b4d55adff4886048f20583de9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+  _isSelfCollisionAvailable: 0
+  _isPlayerCollisionAvailable: 0
+  _isAttachedToShotHolder: 0
+  _lifeTime: 2
+  _hitSolidFx: {fileID: 0}
+  _hitUnitFx: {fileID: 0}
+  _hitAudioSource: {fileID: 0}
+  _debrisParticles: {fileID: 0}
+  _bloodParticles: {fileID: 0}
+  prop: 0
+  dangerous: 0
+  rb: {fileID: 6174942307194121404}
+  minVelocityMagnitudeToAttack: 1
 --- !u!1001 &3952610193731302189
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -54,10 +54,11 @@ namespace MrPink.WeaponsSystem
         private BaseWeaponAnimation _animation;
 
         [Header("Only for Player Weapon")]
-        public float gunsMoveDistanceScaler = 0.2f;
+        public AudioSource attackAu;
         public AudioSource reloadingAu;
         public AudioClip reloadingClip;
         public AudioClip reloadingEndClip;
+        public float gunsMoveDistanceScaler = 0.2f;
 
         public Quaternion InitLocalRotation { get; private set; }
     
@@ -91,7 +92,13 @@ namespace MrPink.WeaponsSystem
             }
 
             await UniTask.Delay((int)(_delay * 1000));
-        
+            
+            if (attackAu)
+            {
+                attackAu.pitch = Random.Range(0.75f, 1.25f);
+                attackAu.Play();
+            }
+            
             if (ownerHc.health <= 0)
                 return 0;
             

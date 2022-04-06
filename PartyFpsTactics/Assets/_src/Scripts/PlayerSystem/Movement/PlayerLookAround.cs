@@ -20,7 +20,7 @@ namespace MrPink.PlayerSystem
         
         [SerializeField, BoxGroup("Высота")]
         [PropertyRange(nameof(_playerHeadHeightCrouch), 2.5f)]
-        private float _playerHeadHeight = 1.8f;
+        public float _playerHeadHeight = 1.8f;
         
         [SerializeField, BoxGroup("Высота")]
         [PropertyRange(0, nameof(_playerHeadHeight))]

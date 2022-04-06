@@ -33,6 +33,7 @@ namespace MrPink.Health
         public TileHealth supporterTile;
         public TileHealth supportedTile;
 
+        public TileAttack tileAttack;
         public Rigidbody Rigidbody 
             => rb;
         
@@ -65,7 +66,7 @@ namespace MrPink.Health
             parentLevel = _parentLevel;
         }
 
-        public void ActivateRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1)
+        public void ActivateRigidbody(int newHealth, PhysicMaterial mat = null, bool setLayer11 = false, float explosionForce = -1, bool addTileAttack = false)
         {
             if (rb && ! rb.isKinematic)  // Такое у предметов 
                 return;
@@ -87,6 +88,15 @@ namespace MrPink.Health
 
             if (rb == null)
                 rb = gameObject.AddComponent<Rigidbody>();
+
+            if (addTileAttack)
+            {
+                var _tileAttack = gameObject.AddComponent<TileAttack>();
+                _tileAttack.rb = rb;
+                tileAttack = _tileAttack;
+                tileAttack.dangerous = true;
+            }
+            
             SetRigidbodyState(ref rb, false, true, 5, 1, 1);
             transform.localScale = Vector3.one * Random.Range(0.5f, 1f);
             if (explosionForce > 0)
@@ -103,13 +113,13 @@ namespace MrPink.Health
             if (deathParticles)
                 LevelGenerator.Instance.DebrisParticles(transform.position);
             
-            var hit = Physics.OverlapSphere(transform.position, 1, 1 << 6);
+            var hit = Physics.OverlapSphere(transform.position, 1, GameManager.Instance.AllSolidsMask);
             for (int i = 0; i < hit.Length; i++)
             {
-                if (hit[i].transform == transform)
+                if (hit[i].transform == transform || hit[i].gameObject.isStatic)
                     continue;
 
-                LevelGenerator.Instance.TileDamaged(hit[i].transform);
+                LevelGenerator.Instance.TileDamagedFeedback(hit[i].transform);
             }
         }
 
@@ -121,7 +131,10 @@ namespace MrPink.Health
             base.Damage(damage, source);
 
             if (IsAlive)
-                LevelGenerator.Instance.TileDamaged(this);
+            {
+                if ( ! rb)
+                    LevelGenerator.Instance.TileDamagedFeedback(this);
+            }
             else
                 Death(source);
         }

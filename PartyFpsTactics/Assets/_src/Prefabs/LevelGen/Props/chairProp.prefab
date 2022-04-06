@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 4836190851276480320}
   - component: {fileID: -7339335058865973671}
   - component: {fileID: 2756403468349696879}
+  - component: {fileID: 893518442}
   m_Layer: 12
   m_Name: chairProp
   m_TagString: Untagged
@@ -137,6 +138,11 @@ MonoBehaviour:
   colliders:
   - {fileID: -2596860956629557991}
   rb: {fileID: -7339335058865973671}
+  floorLevelTile: 0
+  ceilingLevelTile: 0
+  supporterTile: {fileID: 0}
+  supportedTile: {fileID: 0}
+  tileAttack: {fileID: 893518442}
 --- !u!65 &-2596860956629557991
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -208,6 +214,32 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.5, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &893518442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4694376958820584944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8523b4d55adff4886048f20583de9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+  _isSelfCollisionAvailable: 0
+  _isPlayerCollisionAvailable: 0
+  _isAttachedToShotHolder: 0
+  _lifeTime: 2
+  _hitSolidFx: {fileID: 0}
+  _hitUnitFx: {fileID: 0}
+  _hitAudioSource: {fileID: 0}
+  _debrisParticles: {fileID: 0}
+  _bloodParticles: {fileID: 0}
+  prop: 0
+  dangerous: 0
+  rb: {fileID: -7339335058865973671}
+  minVelocityMagnitudeToAttack: 1
 --- !u!1 &5230713404455007075
 GameObject:
   m_ObjectHideFlags: 0

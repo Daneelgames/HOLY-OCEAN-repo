@@ -12,7 +12,12 @@ namespace MrPink.WeaponsSystem
                 return;
             if (ownerHealth.gameObject == other.gameObject)
                 return;
-            
+
+            if (other.gameObject.layer == 9 || other.gameObject.layer == 10)
+            {
+                // DEFLECT PROJECTILE
+                other.transform.Rotate(0,180,0, Space.Self);
+            }
             
             Debug.Log($"Коллизия с {other.gameObject.name}");
             
@@ -21,11 +26,12 @@ namespace MrPink.WeaponsSystem
             switch (target)
             {
                 case CollisionTarget.Solid:
-                    PlayHitSolidFeedback();
+                    PlayHitSolidFeedback(other.transform.position);
                     break;
                 
                 case CollisionTarget.Creature:
-                    Debug.LogWarning("Can't find point");
+                    //Debug.LogWarning("Can't find point");
+                    PlayHitUnitFeedback(other.transform.position);
                     break;
             }
         }

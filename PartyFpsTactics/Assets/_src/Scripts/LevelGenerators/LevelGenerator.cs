@@ -1046,19 +1046,19 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    public void TileDamaged(TileHealth tile)
+    public void TileDamagedFeedback(TileHealth tile)
     {
         if (tilesToDamage.Contains(tile.transform))
             return;
         
-        StartCoroutine(TileDamagedCoroutine(tile.transform));
+        StartCoroutine(TileDamagedFeedbackCoroutine(tile.transform));
     }
-    public void TileDamaged(Transform tile)
+    public void TileDamagedFeedback(Transform tile)
     {
         if (tilesToDamage.Contains(tile))
             return;
         
-        StartCoroutine(TileDamagedCoroutine(tile));
+        StartCoroutine(TileDamagedFeedbackCoroutine(tile));
     }
 
     public void TileDestroyed(Level level, Vector3Int destroyedTileCoords)
@@ -1103,8 +1103,11 @@ public class LevelGenerator : MonoBehaviour
     
     private List<Transform> tilesToDamage = new List<Transform>();
 
-    IEnumerator TileDamagedCoroutine(Transform tile)
+    IEnumerator TileDamagedFeedbackCoroutine(Transform tile)
     {
+        if (tile.gameObject.isStatic)
+            yield break;
+        
         float t = 0;
         tilesToDamage.Add(tile);
         Vector3 originalLocalPosition = tile.localPosition;

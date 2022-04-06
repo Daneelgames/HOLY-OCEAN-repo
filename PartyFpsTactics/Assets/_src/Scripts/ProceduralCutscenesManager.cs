@@ -1,0 +1,128 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using _src.Scripts.Data;
+using MrPink.Health;
+using MrPink.PlayerSystem;
+using Unity.Mathematics;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
+public class ProceduralCutscenesManager : MonoBehaviour
+{
+    public static ProceduralCutscenesManager Instance;
+    private bool inCutScene = false;
+    public bool CanAnswer => !playerAnswered;
+    public bool InCutScene => inCutScene;
+    private bool playerAnswered = false;
+    private HealthController currentTalknigNpc;
+    
+    enum LastPlayerAnswer
+    {
+        Negative, Positive
+    }
+    private LastPlayerAnswer _lastPlayerAnswer = LastPlayerAnswer.Negative;
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    public void RunNpcDialogueCutscene(Dialogue dialogue, HealthController npcHc, InteractiveObject destroyInteractorAfterDialogueCompleted, int scoreToAddOnDialogueCompleted)
+    {
+        StartCoroutine(NpcDialogueCutscene(dialogue, npcHc, destroyInteractorAfterDialogueCompleted, scoreToAddOnDialogueCompleted));
+    }
+
+    IEnumerator NpcDialogueCutscene(Dialogue dialogue, HealthController npcHc, InteractiveObject destroyInteractorAfterDialogueCompleted, int scoreToAddOnDialogueCompleted)
+    {
+        currentTalknigNpc = npcHc;
+        inCutScene = true;
+        //npcHc.IsImmortal = true;
+        //Player.Health.IsImmortal = true;
+        DialogueWindowInterface.Instance.ToggleDialogueWindow(true);
+        for (int i = 0; i < dialogue.phrases.Count; i++)
+        {;
+            //Player.LookAround.SetCurrentCutsceneTargetTrasform(randomTransform);
+            
+            var phrase = dialogue.phrases[i];
+            yield return new WaitForSeconds(phrase.delayIn);
+            DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.messageText, true);
+
+            if (!phrase.waitForPlayerAnswer)
+                continue;
+
+            playerAnswered = false;
+            DialogueWindowInterface.Instance.TogglePlayerAnswerButtons(true);
+            while (!playerAnswered)
+            {
+                yield return null;
+            }
+
+            DialogueWindowInterface.Instance.TogglePlayerAnswerButtons(false);
+
+            if (_lastPlayerAnswer == LastPlayerAnswer.Positive && phrase.answerOnPositive)
+            {
+                yield return new WaitForSeconds(phrase.delayBeforeReactionOnPositiveAnswer);
+                DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.answerOnPositiveText, false);
+                yield return new WaitForSeconds(phrase.delayAfterReactionOnPositiveAnswer);
+            }
+            else if (_lastPlayerAnswer == LastPlayerAnswer.Negative && phrase.answerOnNegative)
+            {
+                yield return new WaitForSeconds(phrase.delayBeforeReactionOnNegativeAnswer);
+                DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.answerOnNegativeText, false);
+                yield return new WaitForSeconds(phrase.delayAfterReactionOnNegativeAnswer);
+            }
+
+            if (i >= dialogue.phrases.Count - 1)
+                DialogueWindowInterface.Instance.NewMessage(String.Empty, String.Empty, true);
+        }
+        
+        // DIALOGUE SUCCESSGULLY COMPLETED
+        if (destroyInteractorAfterDialogueCompleted)
+            Destroy(destroyInteractorAfterDialogueCompleted.gameObject);
+        
+        if (scoreToAddOnDialogueCompleted > 0)
+            ScoringSystem.Instance.AddScore(scoreToAddOnDialogueCompleted);
+        
+        DialogueWindowInterface.Instance.ToggleDialogueWindow(false);
+        playerAnswered = false;
+        
+        //Player.LookAround.SetCurrentCutsceneTargetTrasform(null);
+        //Player.Health.IsImmortal = false;
+        //npcHc.IsImmortal = false;
+        inCutScene = false;
+        
+        currentTalknigNpc = null;
+    }
+    
+    
+    public void PlayerAnswered(bool positiveAnswer)
+    {
+        playerAnswered = true;
+        if (positiveAnswer)
+            _lastPlayerAnswer = LastPlayerAnswer.Positive;
+        else
+            _lastPlayerAnswer = LastPlayerAnswer.Negative;
+    }
+
+    public void NpcDied(HealthController hc)
+    {
+        if (currentTalknigNpc == hc)
+        {
+            DialogueWindowInterface.Instance.ToggleDialogueWindow(false);
+        }
+    }
+    
+    public void CloseCutscene()
+    {
+        playerAnswered = false;
+        inCutScene = false;
+        currentTalknigNpc = null;
+    }
+    
+    IEnumerator RunSpawn(ScriptedEvent _event)
+    {
+        Instantiate(_event.prefabToSpawn, Vector3.zero, Quaternion.identity);
+        yield return null;
+    }
+
+}

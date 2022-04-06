@@ -63,15 +63,6 @@ namespace _src.Scripts
                     }
                 }
 
-                for (int j = 0; j < alliesAmount; j++)
-                {
-                    var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                    var newSpawnPoint = new GameObject("BlueSpawnPoint");
-                    newSpawnPoint.transform.parent = transform;
-                    blueRespawns.Add(newSpawnPoint.transform);
-                
-                    UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
-                }
 
                 int enemiesAmount = Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y);
                 if (i == 0)
@@ -97,6 +88,13 @@ namespace _src.Scripts
                     .tilesInside;
                 var randomTIle = tiles[Random.Range(0, tiles.Count)];
                 UnitsManager.Instance.SpawnNeutralUnit(randomTIle.transform.position);
+            }
+            
+            
+            for (int j = 0; j < alliesAmount; j++)
+            {
+                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
             }
         }
 
