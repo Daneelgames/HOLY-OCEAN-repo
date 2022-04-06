@@ -36,7 +36,18 @@ namespace MrPink.Health
         public TileAttack tileAttack;
         public Rigidbody Rigidbody 
             => rb;
-        
+
+
+        [ContextMenu("GetColliders")]
+        public void GetColliders()
+        {
+            colliders.Clear();
+            var _colliders = GetComponents<Collider>();
+            foreach (var collider1 in _colliders)
+            {
+                colliders.Add(collider1);
+            }
+        }
         
         private void Start()
         {
