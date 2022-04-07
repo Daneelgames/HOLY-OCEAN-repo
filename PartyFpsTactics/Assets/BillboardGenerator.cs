@@ -85,6 +85,18 @@ public class BillboardGenerator : MonoBehaviour
         }
 
         transform.position = _position;
+        switch (rows)
+        {
+            case 1:
+                transform.localScale = Vector3.one * 0.75f;
+                break;
+            case 2:
+                transform.localScale = Vector3.one * 0.5f;
+                break;
+            case 3:
+                transform.localScale = Vector3.one * 0.33f;
+                break;
+        } 
         transform.eulerAngles = new Vector3(0, yRot, 0);
         StartCoroutine(MakeLettersDependentOnTiles());
     }

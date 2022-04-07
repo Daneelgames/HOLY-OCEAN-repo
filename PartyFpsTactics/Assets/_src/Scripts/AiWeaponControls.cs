@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Brezg.Extensions.UniTaskExtensions;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -8,7 +9,8 @@ using Random = UnityEngine.Random;
 
 public class AiWeaponControls : MonoBehaviour
 {
-    public WeaponController activeWeapon;
+    public List<WeaponController> activeWeapons;
+    public Vector2 weaponsAttackSwitchCooldownMinMax = new Vector2(0,0);
     private HealthController hc;
     public float minAngleToRotateGun = 30;
     public float minAngleToShoot = 15;
@@ -28,37 +30,47 @@ public class AiWeaponControls : MonoBehaviour
         while (hc.health > 0)
         {
             yield return null;
-            
-            if (!activeWeapon || activeWeapon.OnCooldown)
+
+            for (int i = 0; i < activeWeapons.Count; i++)
             {
-                continue;
-            }
-            
-            if (hc.AiMovement.enemyToLookAt != null)
-            {
-                if (hc.AiMovement.enemyToLookAt.gameObject == Player.GameObject)
-                {
-                    if (!GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position) && Random.value > 0.5f)
-                    {
-                        continue;   
-                    }
-                }
+                var activeWeapon = activeWeapons[i];
                 
-                Vector3 targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
-                float angle = Vector3.Angle(targetDir, transform.forward);
-                if (angle < minAngleToRotateGun)
+                if (!activeWeapon || activeWeapon.OnCooldown)
                 {
-                    activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position);
+                    continue;
                 }
-                else
+            
+                if (hc.AiMovement.enemyToLookAt != null)
                 {
-                    activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
-                }
-                targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
-                angle = Vector3.Angle(targetDir, transform.forward);
-                if (angle < minAngleToShoot)
-                {
-                    activeWeapon.Shot(hc, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform).ForgetWithHandler();
+                    if (hc.AiMovement.enemyToLookAt.gameObject == Player.GameObject)
+                    {
+                        if (!GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position) && Random.value > 0.5f)
+                        {
+                            continue;   
+                        }
+                    }
+                
+                    Vector3 targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
+                    float angle = Vector3.Angle(targetDir, transform.forward);
+                    Vector3 offset = Vector3.zero;
+                    if (hc.AiMovement.enemyToLookAt.playerMovement)
+                        offset = hc.AiMovement.enemyToLookAt.playerMovement.rb.velocity;
+                
+                    if (angle < minAngleToRotateGun)
+                    {
+                        activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position + offset);
+                    }
+                    else
+                    {
+                        activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
+                    }
+                    targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
+                    angle = Vector3.Angle(targetDir, transform.forward);
+                    if (angle < minAngleToShoot)
+                    {
+                        activeWeapon.Shot(hc, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform).ForgetWithHandler();
+                        yield return new WaitForSeconds(Random.Range(weaponsAttackSwitchCooldownMinMax.x, weaponsAttackSwitchCooldownMinMax.y));
+                    }
                 }
             }
         }

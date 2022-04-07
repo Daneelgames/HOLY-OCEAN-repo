@@ -29,6 +29,8 @@ namespace MrPink.Health
         public Transform transformToShake;
     
         [Header("AI")]
+        public Team team;
+
         public AiMovement AiMovement;
         public HumanVisualController HumanVisualController;
 
@@ -42,7 +44,6 @@ namespace MrPink.Health
         [Header("This RB will be affected by explosions")]
         public Rigidbody rb;
 
-        public Team team;
 
         public List<BodyPart> bodyParts;
 
@@ -96,6 +97,14 @@ namespace MrPink.Health
         }
         
         #endif
+
+        public void SetDamager(HealthController damager)
+        {
+            if (AiMovement && AiMovement.unitVision)
+            {
+                AiMovement.unitVision.SetDamager(damager);
+            }
+        }
 
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {

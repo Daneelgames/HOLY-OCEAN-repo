@@ -134,11 +134,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 7683259333257678407}
+  _isMelee: 0
+  gunMoveSpeedScaler: 5
+  gunRotSpeedScaler: 5
+  gunMoveSpeed: 100
+  gunRotationSpeed: 100
+  WeaponRotationZScalerThreshold: 0.2
+  WeaponRotationZScaler: 3
   cooldown: 1
   _delay: 1
   _attackSignalAudioSource: {fileID: 3570548196317481403}
+  bulletsPerShot: 1
   _attackColliderPrefab: {fileID: 444546634323287089, guid: eb7b1d6f75a8aa441bd65304f3ce84b5, type: 3}
   _animation: {fileID: 0}
+  attackAu: {fileID: 0}
+  reloadingAu: {fileID: 0}
+  reloadingClip: {fileID: 0}
+  reloadingEndClip: {fileID: 0}
+  gunsMoveDistanceScaler: 0.2
 --- !u!82 &3570548196317481403
 AudioSource:
   m_ObjectHideFlags: 0
@@ -150,7 +163,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fb9fdc493ba74a341920aed2182689b1, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

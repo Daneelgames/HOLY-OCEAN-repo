@@ -27,19 +27,19 @@ namespace _src.Scripts.Data
         public string answerOnNegativeText;
         [ShowIf("answerOnNegative", true)]
         [Range(0.1f, 10)] 
-        public float delayAfterReactionOnNegativeAnswer = 2;
+        public float delayBeforeReactionOnNegativeAnswer = 1;
         [ShowIf("answerOnNegative", true)]
         [Range(0.1f, 10)] 
-        public float delayBeforeReactionOnNegativeAnswer = 1;
+        public float delayAfterReactionOnNegativeAnswer = 2;
         
         public bool answerOnPositive = false;
         [ShowIf("answerOnPositive", true)]
         public string answerOnPositiveText;
         [ShowIf("answerOnPositive", true)]
         [Range(0.1f, 10)] 
-        public float delayAfterReactionOnPositiveAnswer = 2;
+        public float delayBeforeReactionOnPositiveAnswer = 1;
         [ShowIf("answerOnPositive", true)]
         [Range(0.1f, 10)] 
-        public float delayBeforeReactionOnPositiveAnswer = 1;
+        public float delayAfterReactionOnPositiveAnswer = 2;
     }
 }

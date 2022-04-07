@@ -15,6 +15,7 @@ public class PlayerUi : MonoBehaviour
     public Dictionary<HealthController, Image> markedEnemies = new Dictionary<HealthController, Image>();
     public Vector3 enemyMarkerOffset;
     public Image healthBar;
+    public Image staminaBar;
 
     public Animator shieldFeedbackAnim;
 
@@ -78,6 +79,8 @@ public class PlayerUi : MonoBehaviour
                 Destroy(markedEnemies[unit].gameObject); // this destroys MARK
                 markedEnemies.Remove(unit);
             }
+
+            staminaBar.fillAmount = Player.Movement.stamina / Player.Movement.staminaMax;
             yield return new WaitForSeconds(0.1f);
         }
     }

@@ -229,6 +229,7 @@ public class LevelGenerator : MonoBehaviour
         SpawnBillboard();
         RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels);
 
+        yield break;
         var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
         
         Player.Movement.transform.parent.parent = null;
@@ -269,22 +270,33 @@ public class LevelGenerator : MonoBehaviour
 
         Vector3Int levelSize = new Vector3Int(Random.Range(additionalBuildingsScaleMinMaxX.x, additionalBuildingsScaleMinMaxX.y) * 2,
             Random.Range(additionalBuildingsScaleMinMaxY.x, additionalBuildingsScaleMinMaxY.y),Random.Range(additionalBuildingsScaleMinMaxZ.x, additionalBuildingsScaleMinMaxZ.y) * 2);
-
+       
         Vector3 levelPosition =  RandomPosForAdditionalLevel(levelSize);
-        
-        int tries = 50;
-        while (tries >= 0)
+        int globalInterations = 10;
+        bool found = false;
+        for (int i = 0; i < globalInterations; i++)
         {
             Vector3 posForLevel = RandomPosForAdditionalLevel(levelSize);
-            
-            if (!Physics.CheckBox(posForLevel + Vector3.up * Mathf.RoundToInt(levelSize.y / 2) + Vector3.up * 2, levelSize + Vector3Int.one, Quaternion.identity, allSolidsLayerMask))
-            {
-                levelPosition = posForLevel;
-                break;
-            }
 
-            tries--;
+            int tries = 50;
+            while (tries > 0)
+            {
+                if (!Physics.CheckBox(posForLevel + Vector3.up * Mathf.RoundToInt(levelSize.y / 2) + Vector3.up * 2, levelSize + Vector3Int.one, Quaternion.identity, allSolidsLayerMask))
+                {
+                    levelPosition = posForLevel;
+                    found = true;
+                    break;
+                }
+
+                tries--;
+            }
+            
+            if (found)
+                break;
+            
             yield return null;
+            levelSize = new Vector3Int(Random.Range(additionalBuildingsScaleMinMaxX.x, additionalBuildingsScaleMinMaxX.y) * 2,
+                Random.Range(additionalBuildingsScaleMinMaxY.x, additionalBuildingsScaleMinMaxY.y),Random.Range(additionalBuildingsScaleMinMaxZ.x, additionalBuildingsScaleMinMaxZ.y) * 2);
         }
 
         Quaternion levelRotation = Quaternion.identity;
@@ -474,7 +486,7 @@ public class LevelGenerator : MonoBehaviour
                         newCeilingTile.ceilingLevelTile = true;
                         newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
                         newLevel.allTiles.Add(newCeilingTile);
-                        newLevel.tilesInside.Add(newCeilingTile);
+                        //newLevel.tilesInside.Add(newCeilingTile);
                         newLevel.tilesTop.Add(newFloorTile);
                     }
 
@@ -817,22 +829,27 @@ public class LevelGenerator : MonoBehaviour
         if (spawnedMainBuildingLevels[0] == level)
             mainBuildingEntranceSide = randomSide;
         
+        
         switch (randomSide)
         {
             case 0: // LEFT
-                targetTileToConnect = level.roomTilesMatrix[0, 0, Random.Range(0, level.size.z)].transform;
+                var tile = level.roomTilesMatrix[0, 0, Random.Range(0, level.size.z)];
+                targetTileToConnect = tile.transform;
                 offsetVector = Vector3.left;
                 break;
             case 1: // FRONT
-                targetTileToConnect = level.roomTilesMatrix[Random.Range(0, level.size.x), 0, level.size.z - 1].transform;
+                var tileF = level.roomTilesMatrix[Random.Range(0, level.size.x), 0, level.size.z - 1];
+                targetTileToConnect = tileF.transform;
                 offsetVector = Vector3.forward;
                 break;
             case 2: // RIGHT
-                targetTileToConnect = level.roomTilesMatrix[level.size.x - 1, 0, Random.Range(0, level.size.z)].transform;
+                var tileR = level.roomTilesMatrix[level.size.x - 1, 0, Random.Range(0, level.size.z)];
+                targetTileToConnect = tileR.transform;
                 offsetVector = Vector3.right;
                 break;
             case 3: // BACK
-                targetTileToConnect = level.roomTilesMatrix[Random.Range(0, level.size.x), 0, 0].transform;
+                var tileB = level.roomTilesMatrix[Random.Range(0, level.size.x), 0, 0];
+                targetTileToConnect = tileB.transform;
                 offsetVector = Vector3.back;
                 break;
         }
@@ -902,7 +919,8 @@ public class LevelGenerator : MonoBehaviour
                     }
 
                     var bodyPart = hit[i].transform.gameObject.GetComponent<TileHealth>();
-                    bodyPart.DestroyTileFromGenerator();
+                    if (bodyPart)
+                        bodyPart.DestroyTileFromGenerator();
                 }
             }
             yield return null;

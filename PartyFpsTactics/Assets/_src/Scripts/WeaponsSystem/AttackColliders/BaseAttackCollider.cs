@@ -62,7 +62,12 @@ namespace MrPink.WeaponsSystem
         
         
         protected HealthController ownerHealth;
-        
+        public HealthController OwnerHealth
+        {
+            get => ownerHealth;
+            set => ownerHealth = value;
+        }
+
         protected ScoringActionType actionOnHit;
 
         private DamageSource _damageSource;
@@ -125,10 +130,13 @@ namespace MrPink.WeaponsSystem
                     return CollisionTarget.Creature;
                 }
 
+                if (ownerHealth)
+                    targetHealth.HealthController.SetDamager(ownerHealth);
+                    
+                Debug.Log("Damage " + targetHealth.HealthController);
                 damagedHealthControllers.Add(targetHealth.HealthController);
                 StartCoroutine(ClearDamagedHC(targetHealth.HealthController));
             }
-                
             return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
         }
 

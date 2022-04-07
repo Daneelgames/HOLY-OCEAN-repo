@@ -11,10 +11,18 @@ public class AiMovement : MonoBehaviour
 {
     public enum Order
     {
-        FollowLeader, MoveToPosition, TakeCover, FireWatch
+        FollowTarget, MoveToPosition, TakeCover, FireWatch
+    }
+    
+    public enum EnemiesBehaviour
+    {
+        HideFromEnemy, ApproachEnemy
     }
 
-    public Order currentOrder = Order.FollowLeader;
+    public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
+    public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
+
+    public Order currentOrder = Order.FollowTarget;
     public NavMeshAgent agent;
     [Range(1,5)]
     public float moveSpeed = 2;
@@ -97,10 +105,11 @@ public class AiMovement : MonoBehaviour
                   {
 
                   }
-                  else if (takeCoverCooldown <= 0 && currentOrder != Order.FollowLeader &&
+                  else if (takeCoverCooldown <= 0 && currentOrder != Order.FollowTarget &&
                            currentOrder != Order.MoveToPosition)
                   {
-                      TakeCoverOrder();
+                      TakeCoverOrder(false, true, unitVision.VisibleEnemies[i]);
+                      yield return null;
                   }
                 }   
             }
@@ -123,20 +132,20 @@ public class AiMovement : MonoBehaviour
     }
 
 
-    public void TakeCoverOrder(bool random = false, bool closest = true)
+    public void TakeCoverOrder(bool random = false, bool closest = true, HealthController takeCoverFrom = null)
     {
         SetOccupiedSpot(occupiedCoverSpot, null);
         StopAllBehaviorCoroutines();
         currentOrder = Order.TakeCover;
         takeCoverCooldown = CoverSystem.Instance.TakeCoverCooldown;
-        takeCoverCoroutine = StartCoroutine(TakeCover(random, closest));
+        takeCoverCoroutine = StartCoroutine(TakeCover(random, closest, takeCoverFrom));
     }
 
     
     
     private Coroutine takeCoverCoroutine;
 
-    IEnumerator TakeCover(bool randomCover, bool closest)
+    IEnumerator TakeCover(bool randomCover, bool closest, HealthController enemy = null)
     {
         if (randomCover)
         {
@@ -174,22 +183,42 @@ public class AiMovement : MonoBehaviour
 
         if (chosenCover == null)
         {
+            // CAN'T FIND COVER
+            Debug.Log(gameObject.name +  " can't find cover. takeCoverFrom " + enemy);
+            if (enemy == null)
+                yield break;
+            
+            if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
+            {
+                Vector3 targetPos = enemy.transform.position;
+                float targetStopDistance = stopDistanceFollow;
+                targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
+                targetStopDistance = stopDistanceFollow;
+                AgentSetPath(targetPos, targetStopDistance);
+            }
+            else
+            {
+                FollowTargetOrder(enemy.transform);
+            }
             yield break;
         }
         
-        //Spot occupied!
+        // GOOD COVER FOUND
+        if (enemy && coverFoundBehaviour == EnemiesBehaviour.ApproachEnemy)
+        {
+            FollowTargetOrder(enemy.transform);
+            //AgentSetPath(enemy.transform.position, stopDistanceFollow);
+            yield break;
+        }
+        
+        
+        // CHOSEN SPOT occupied!
         SetOccupiedSpot(chosenCover, hc);
         
         //SET PATH
         if (agent && agent.enabled)
         {
-            transform.position = SamplePos(transform.position); 
-            NavMeshPath path = new NavMeshPath();
-            NavMesh.CalculatePath(transform.position, chosenCover.transform.position, NavMesh.AllAreas, path);
-
-            agent.speed = moveSpeed;
-            agent.stoppingDistance = stopDistanceMove;
-            agent.SetPath(path);
+            AgentSetPath(chosenCover.transform.position, stopDistanceMove);
         }
         currentTargetPosition = occupiedCoverSpot.transform.position;
 
@@ -268,26 +297,21 @@ public class AiMovement : MonoBehaviour
     {
         SetOccupiedSpot(occupiedCoverSpot, null);
         StopAllBehaviorCoroutines();
-        currentOrder = Order.FollowLeader;
-        followTargetCoroutine = StartCoroutine(FollowTarget(target.position));
+        currentOrder = Order.FollowTarget;
+        followTargetCoroutine = StartCoroutine(FollowTarget(target));
     }
 
     private Coroutine followTargetCoroutine;
-    IEnumerator FollowTarget(Vector3 target)
+    IEnumerator FollowTarget(Transform target)
     {
-        agent.stoppingDistance = stopDistanceFollow;
-        NavMeshPath path = new NavMeshPath();
         while (true)
         {
             if (!agent || !agent.enabled)
                 yield break;
             
+            AgentSetPath(target.position, stopDistanceFollow);
             
-            transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
-            agent.speed = moveSpeed;
-            agent.SetPath(path);
-            currentTargetPosition = target;
+            currentTargetPosition = target.position;
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -304,13 +328,7 @@ public class AiMovement : MonoBehaviour
 
     IEnumerator MoveToPosition(Vector3 target)
     {
-        NavMeshPath path = new NavMeshPath();
-        
-        transform.position = SamplePos(transform.position);
-        NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
-        agent.speed = moveSpeed;
-        agent.stoppingDistance = stopDistanceMove;
-        agent.SetPath(path);
+        AgentSetPath(target, stopDistanceMove);
         currentTargetPosition = target;
         
         while (Vector3.Distance(transform.position, target) > 1)
@@ -321,6 +339,17 @@ public class AiMovement : MonoBehaviour
         FireWatchOrder();
     }
 
+    void AgentSetPath(Vector3 target, float stopDistance)
+    {
+        NavMeshPath path = new NavMeshPath();
+        
+        transform.position = SamplePos(transform.position);
+        NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+        agent.speed = moveSpeed;
+        agent.stoppingDistance = stopDistance;
+        agent.SetPath(path);
+    }
+    
     Vector3 SamplePos(Vector3 startPos)
     {
         if (NavMesh.SamplePosition(startPos, out var hit, 10f, NavMesh.AllAreas))
@@ -351,7 +380,11 @@ public class AiMovement : MonoBehaviour
             transform.position = hit.position;
         }
         agent.enabled = true;
-        TakeCoverOrder();
+        HealthController enemy = null;
+        if (unitVision.VisibleEnemies.Count > 0)
+            enemy = unitVision.VisibleEnemies[Random.Range(0, unitVision.VisibleEnemies.Count)];
+                
+        TakeCoverOrder(false, true, enemy);
     }
     
     private void OnDrawGizmosSelected()

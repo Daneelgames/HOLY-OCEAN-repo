@@ -14,7 +14,6 @@ public class ProjectileController : BaseAttackCollider
     public bool addVelocityEveryFrame = true;
     public float projectileSpeed = 100;
     
-
     public ToolType toolType = ToolType.Null;
 
     public float projectileRandomRotationMax = 0;

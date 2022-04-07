@@ -44,9 +44,9 @@ namespace MrPink.PlayerSystem
         }
 
         private void LateUpdate()
-        {
+        {/*
             if (LevelGenerator.Instance.levelIsReady == false)
-                return;
+                return;*/
             /*if (ProceduralCutscenesManager.Instance.InCutScene)
             {
                 FollowCutSceneTargetTransform();

@@ -5566,6 +5566,7 @@ MonoBehaviour:
   shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
+  team: 2
   AiMovement: {fileID: 6090508075434962156}
   HumanVisualController: {fileID: 3176254616865558108}
   playerMovement: {fileID: 0}
@@ -5574,7 +5575,6 @@ MonoBehaviour:
   npcInteraction: {fileID: 5205671269229392275}
   deathOnHit: {fileID: 0}
   rb: {fileID: 0}
-  team: 2
   bodyParts:
   - {fileID: 7556968747805940522}
   - {fileID: 4012822522910270257}
@@ -5614,6 +5614,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4416
   raycastOrigin: {fileID: 2292738347658247173}
+  setDamagerAsEnemyBehaviour: 1
 --- !u!114 &6090508075434962156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5626,6 +5627,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coverFoundBehaviour: 0
+  noCoverBehaviour: 0
   currentOrder: 3
   agent: {fileID: 8074880395059046385}
   moveSpeed: 2
@@ -5648,7 +5651,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da030c9638e719468202567e4578531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeWeapon: {fileID: 0}
+  activeWeapons:
+  - {fileID: 0}
+  - {fileID: 0}
+  weaponsAttackSwitchCooldownMinMax: {x: 0.5, y: 1}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
 --- !u!114 &3176254616865558108

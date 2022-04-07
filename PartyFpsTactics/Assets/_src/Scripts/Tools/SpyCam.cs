@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class SpyCam : MonoBehaviour
                 var unit = UnitsManager.Instance.unitsInGame[i];
                 if (unit == null)
                     continue;
-                if (unit.team != teamToScan)
+                if (unit == Player.Health)
                     continue;
                 if (unit.health <= 0)
                 {

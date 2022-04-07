@@ -34,6 +34,16 @@ namespace MrPink.PlayerSystem
         private float _coyoteTimeMax = 0.5f;
         private float _coyoteTime = 0;
 
+        [Header("Stamina")]
+        public float stamina = 100;
+        [HideInInspector]
+        public float staminaMax = 100;
+        [SerializeField] float runStaminaCost = 10;
+        [SerializeField] float runCrouchStaminaCost = 5;
+        [SerializeField] private float jumpStaminaCost = 10; 
+        [SerializeField] private float idleStaminaRegen = 33;
+        [SerializeField] private float moveStaminaRegen = 25; 
+        
         [Header("Slopes")] 
         bool onSlope = false;
         private Vector3 slopeMoveDirection;
@@ -82,6 +92,7 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
+            staminaMax = stamina;
             SetCrouch(false);
         }
 
@@ -94,14 +105,16 @@ namespace MrPink.PlayerSystem
                 return;
             }
         
+            /*
             if (!LevelGenerator.Instance.levelIsReady)
-                return;
+                return;*/
             /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
                 return;*/
 
             HandleCrouch();
             HandleMovement();
+            HandleStamina();
         }
         
         private void FixedUpdate()
@@ -109,8 +122,9 @@ namespace MrPink.PlayerSystem
             if (_isDead)
                 return;
             
+            /*
             if (!LevelGenerator.Instance.levelIsReady)
-                return;
+                return;*/
 
             /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
@@ -123,6 +137,35 @@ namespace MrPink.PlayerSystem
                 ApplyFreeMovement();
             else
                 ApplyGrindRailMovement();
+        }
+
+        private float targetStaminaScaler = 1;
+        void HandleStamina()
+        {
+            if (!State.IsRunning)
+            {
+                // MOVE
+                targetStaminaScaler = idleStaminaRegen;
+                if (State.IsMoving)
+                    targetStaminaScaler = moveStaminaRegen;
+                if (stamina < staminaMax)
+                {
+                    ChangeStamina(targetStaminaScaler * Time.deltaTime);
+                }
+                return;
+            }
+            
+            // IF RUN
+            if (!crouching)
+                targetStaminaScaler = runStaminaCost;
+            else
+                targetStaminaScaler = runCrouchStaminaCost;
+            ChangeStamina(-targetStaminaScaler * Time.deltaTime);
+        }
+
+        public void ChangeStamina(float offset)
+        {
+            stamina = Mathf.Clamp(stamina + offset, 0, staminaMax);
         }
         
 
@@ -199,24 +242,31 @@ namespace MrPink.PlayerSystem
             if (onSlope)
                 _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
-            // jump
+            // JUMP
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {
                 SetGrindRail(null);
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 StartCoroutine(CoyoteTimeCooldown());
+                stamina = Mathf.Clamp(stamina - jumpStaminaCost, 0, staminaMax);
                 _coyoteTime = 0;
             }
         
+            float scaler = 1;
+            
+            if (stamina < 0.1f && State.IsGrounded)
+                scaler = 0.33f;
+            
+            // RUNNING
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 State.IsRunning = moveInFrame;
                 State.IsMoving = false;
 
                 if (!crouching)
-                    _targetVelocity = _moveVector * runSpeed;
+                    _targetVelocity = _moveVector * runSpeed * scaler;
                 else
-                    _targetVelocity = _moveVector * crouchRunSpeed;
+                    _targetVelocity = _moveVector * crouchRunSpeed * scaler;
             }
             else
             {
@@ -224,9 +274,9 @@ namespace MrPink.PlayerSystem
                 State.IsRunning = false;
             
                 if (!crouching)
-                    _targetVelocity = _moveVector * walkSpeed;
+                    _targetVelocity = _moveVector * walkSpeed * scaler;
                 else
-                    _targetVelocity = _moveVector * crouchSpeed;
+                    _targetVelocity = _moveVector * crouchSpeed * scaler;
             }    
         
             if (goingUpHill)

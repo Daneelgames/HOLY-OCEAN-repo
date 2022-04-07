@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 
 public class HumanVisualController : MonoBehaviour
@@ -23,6 +24,7 @@ public class HumanVisualController : MonoBehaviour
 
     private HealthController hc;
     private bool ragdoll = false;
+    private bool visibleToPlayer = false;
     public Material deadMaterial;
     public SkinnedMeshRenderer meshRenderer;
     public LayerMask tilesLayerMask;
@@ -34,8 +36,41 @@ public class HumanVisualController : MonoBehaviour
         {
             initRotations.Add(animatedBones[i].localRotation);
         }
+
+        StartCoroutine(GetDistanceToPlayer());
     }
 
+    IEnumerator GetDistanceToPlayer()
+    {
+        while (true)
+        {
+            if (Vector3.Distance(transform.position, Player.MainCamera.transform.position) >= 50)
+            {
+                if (visibleToPlayer)
+                {
+                    for (int i = 0; i < joints.Count; i++)
+                    {
+                        joints[i].gameObject.SetActive(false);
+                    }
+                }
+                visibleToPlayer = false;
+            }
+            else
+            {
+                if (!visibleToPlayer)
+                {
+                    for (int i = 0; i < joints.Count; i++)
+                    {
+                        joints[i].gameObject.SetActive(true);
+                    }
+                }
+                
+                visibleToPlayer = true;
+            }
+            yield return new WaitForSeconds(1);
+        }
+    }
+    
     public void SetMovementVelocity(Vector3 velocity)
     {
         float velocityX = Vector3.Dot(velocity.normalized, transform.right);
@@ -51,6 +86,9 @@ public class HumanVisualController : MonoBehaviour
             return;
         
         if (ragdoll)
+            return;
+        
+        if (!visibleToPlayer)
             return;
         
         for (int i = 0; i < joints.Count; i++)

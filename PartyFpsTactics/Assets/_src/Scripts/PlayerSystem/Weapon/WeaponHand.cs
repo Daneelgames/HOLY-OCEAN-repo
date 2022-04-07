@@ -99,7 +99,7 @@ namespace MrPink.PlayerSystem
             
             if (isDead)
             {
-                IsAiming = true;
+                IsAiming = false;
                 CurrentPosition = WeaponPosition.Death;
                 return;
             }

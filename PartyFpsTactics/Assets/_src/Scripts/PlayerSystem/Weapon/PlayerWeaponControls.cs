@@ -32,9 +32,16 @@ namespace MrPink.PlayerSystem
         {
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
-
-            _hands[Hand.Left].UpdateState(_isDead);
-            _hands[Hand.Right].UpdateState(_isDead);
+            if (!LevelGenerator.Instance.levelIsReady)
+            {
+                _hands[Hand.Left].UpdateState(true);
+                _hands[Hand.Right].UpdateState(true);   
+            }
+            else
+            {
+                _hands[Hand.Left].UpdateState(_isDead);
+                _hands[Hand.Right].UpdateState(_isDead);   
+            }
 
             bool aiming = _hands[Hand.Left].IsAiming || _hands[Hand.Right].IsAiming;
             

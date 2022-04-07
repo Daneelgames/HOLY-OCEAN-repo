@@ -34,6 +34,7 @@ namespace MrPink.WeaponsSystem
         [Header("Attacking")]
         public float cooldown = 1;
 
+
         [SerializeField]
         [FormerlySerializedAs("delay")]
         private float _delay = 0f;
@@ -54,6 +55,7 @@ namespace MrPink.WeaponsSystem
         private BaseWeaponAnimation _animation;
 
         [Header("Only for Player Weapon")]
+        public float attackStaminaCost = 0;
         public AudioSource attackAu;
         public AudioSource reloadingAu;
         public AudioClip reloadingClip;
@@ -128,7 +130,10 @@ namespace MrPink.WeaponsSystem
                 if (projectileLifeTime < newProjectile.LifeTime)
                     projectileLifeTime = newProjectile.LifeTime;
             }
-            
+
+            if (isPlayer)
+                Player.Movement.ChangeStamina(-attackStaminaCost);
+
             Cooldown().ForgetWithHandler();
             
             if (_animation != null)
