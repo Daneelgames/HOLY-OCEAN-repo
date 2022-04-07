@@ -256,6 +256,8 @@ namespace MrPink.PlayerSystem
             
             if (stamina < 0.1f && State.IsGrounded)
                 scaler = 0.33f;
+            else if (Player.Interactor.carryingPortableRb)
+                scaler = 0.5f;
             
             // RUNNING
             if (Input.GetKey(KeyCode.LeftShift))

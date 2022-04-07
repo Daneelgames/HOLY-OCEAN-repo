@@ -69,10 +69,10 @@ namespace MrPink.Health
             if (supporterTile)
                 supporterTile.supportedTile = null;
 
-            ClashDependantObjects();
+            DestroyDependantObjects();
         }
 
-        void ClashDependantObjects()
+        void DestroyDependantObjects()
         {
             for (int i = 0; i < objectsToDestroyOnClash.Count; i++)
             {
@@ -95,7 +95,8 @@ namespace MrPink.Health
             if (rb && ! rb.isKinematic)  // Такое у предметов 
                 return;
 
-            ClashDependantObjects();
+            DestroyDependantObjects();
+            gameObject.tag = GameManager.Instance.portableObjectTag;
             
             // TODO нарушаем инкапсуляцию
             _health = newHealth;

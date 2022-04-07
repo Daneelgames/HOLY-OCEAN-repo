@@ -32,7 +32,8 @@ namespace MrPink.PlayerSystem
         {
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
-            if (!LevelGenerator.Instance.levelIsReady)
+            
+            if (!LevelGenerator.Instance.levelIsReady || Player.Interactor.carryingPortableRb)
             {
                 _hands[Hand.Left].UpdateState(true);
                 _hands[Hand.Right].UpdateState(true);   

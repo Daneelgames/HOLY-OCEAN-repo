@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public string portableObjectTag = "PortableObject";
     public LayerMask AllSolidsMask;
     
     private void Awake()

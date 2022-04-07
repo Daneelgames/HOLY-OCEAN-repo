@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 893518442}
   m_Layer: 12
   m_Name: chairProp
-  m_TagString: Untagged
+  m_TagString: PortableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
   ceilingLevelTile: 0
   supporterTile: {fileID: 0}
   supportedTile: {fileID: 0}
-  objectsToClashOnClash: []
+  objectsToDestroyOnClash: []
   tileAttack: {fileID: 893518442}
 --- !u!65 &-2596860956629557991
 BoxCollider:
@@ -232,6 +232,8 @@ MonoBehaviour:
   _isPlayerCollisionAvailable: 0
   _isAttachedToShotHolder: 0
   _lifeTime: 2
+  ragdollExplosionDistance: 2
+  ragdollExplosionForce: 500
   _hitSolidFx: {fileID: 0}
   _hitUnitFx: {fileID: 0}
   _hitAudioSource: {fileID: 0}
@@ -241,6 +243,7 @@ MonoBehaviour:
   dangerous: 0
   rb: {fileID: -7339335058865973671}
   minVelocityMagnitudeToAttack: 1
+  unitMinimalDamageTimeMax: 1
 --- !u!1 &5230713404455007075
 GameObject:
   m_ObjectHideFlags: 0

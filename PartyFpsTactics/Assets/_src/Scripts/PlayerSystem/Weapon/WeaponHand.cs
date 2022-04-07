@@ -122,7 +122,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            if (Input.GetMouseButton(_mouseButtonIndex))
+            if (Input.GetMouseButton(_mouseButtonIndex) && Player.Interactor.carryingPortableRb == null)
             {
                 IsAiming = true;
                 CurrentPosition = Weapon.IsMelee

@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 475759627}
   m_Layer: 12
   m_Name: floorLampProp
-  m_TagString: Untagged
+  m_TagString: PortableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
   ceilingLevelTile: 0
   supporterTile: {fileID: 0}
   supportedTile: {fileID: 0}
-  objectsToClashOnClash: []
+  objectsToDestroyOnClash: []
   tileAttack: {fileID: 475759627}
 --- !u!136 &3868437479379071588
 CapsuleCollider:
@@ -459,6 +459,8 @@ MonoBehaviour:
   _isPlayerCollisionAvailable: 0
   _isAttachedToShotHolder: 0
   _lifeTime: 2
+  ragdollExplosionDistance: 2
+  ragdollExplosionForce: 500
   _hitSolidFx: {fileID: 0}
   _hitUnitFx: {fileID: 0}
   _hitAudioSource: {fileID: 0}
@@ -468,3 +470,4 @@ MonoBehaviour:
   dangerous: 0
   rb: {fileID: -294520438059770980}
   minVelocityMagnitudeToAttack: 1
+  unitMinimalDamageTimeMax: 1

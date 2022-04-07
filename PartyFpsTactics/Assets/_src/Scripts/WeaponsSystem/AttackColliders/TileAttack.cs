@@ -43,6 +43,7 @@ namespace MrPink.WeaponsSystem
             }
         }
 
+        
         private void OnCollisionEnter(Collision coll)
         {
             if (!dangerous && prop)

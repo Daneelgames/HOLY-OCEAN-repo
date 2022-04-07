@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.WeaponsSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -11,9 +13,14 @@ public class PlayerInteractor : MonoBehaviour
     public Camera cam;
     public LayerMask raycastMask;
     public float raycastDistance = 3;
-    private Transform selectedIOTransform;
     private InteractiveObject selectedIO;
+    private Transform selectedIOTransform;
+    public Rigidbody carryingPortableRb;
+    private GameObject selectedPortable;
+    public float throwPortableForce = 100;
+    public float carryingPortablePower = 500;
 
+    public string pickUpText = "PICK UP";
     public Text uiItemNameFeedback;
     public Text uiItemNameFeedbackOutline;
     
@@ -36,10 +43,63 @@ public class PlayerInteractor : MonoBehaviour
         {
             uiItemNameFeedbackOutline.transform.position = cam.WorldToScreenPoint(selectedIOTransform.position);
         }
+        else if (selectedPortable)
+            uiItemNameFeedbackOutline.transform.position = cam.WorldToScreenPoint(selectedPortable.transform.position);
 
-        if (Input.GetKeyDown(KeyCode.E) && selectedIO != null)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            InteractableManager.Instance.InteractWithIO(selectedIO);
+            if (carryingPortableRb)
+            {
+                StopCoroutine(CarryPortableObjectCoroutine);
+                carryingPortableRb = null;
+                return;
+            }
+            
+            if (selectedIO)
+            {
+                InteractableManager.Instance.InteractWithIO(selectedIO);
+                return;
+            }
+            
+            if (selectedPortable)
+            {
+                CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        {
+            if (carryingPortableRb)
+            {
+                StopCoroutine(CarryPortableObjectCoroutine);
+                var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
+                if (tileAttack)
+                    tileAttack.dangerous = true;
+                carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
+                carryingPortableRb = null;
+            }
+        }
+    }
+
+    private Coroutine CarryPortableObjectCoroutine;
+    IEnumerator CarryPortableObject()
+    {
+        var rb = selectedPortable.GetComponent<Rigidbody>();
+        
+        if (!rb)
+            yield break;
+        
+        carryingPortableRb = rb;
+        
+        while (true)
+        {
+            carryingPortableRb.AddForce((cam.transform.position + cam.transform.forward /* * 2 - cam.transform.up*/ - carryingPortableRb.transform.position) * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
+            if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
+            {
+                carryingPortableRb = null;
+                yield break;
+            }
+            yield return null;
         }
     }
 
@@ -49,10 +109,12 @@ public class PlayerInteractor : MonoBehaviour
         {
             yield return null;
 
-            if (Player.Health.health <= 0)
+            if (Player.Health.health <= 0 || carryingPortableRb)
             {
-                if (selectedIO == null)
+                if (selectedIO == null && selectedPortable == null)
                     continue;
+                
+                selectedPortable = null;
                 selectedIO = null;
                 selectedIOTransform = null;
                 uiItemNameFeedback.text = String.Empty;
@@ -75,12 +137,25 @@ public class PlayerInteractor : MonoBehaviour
             {
                 if (hit.collider.gameObject.layer != 11)
                 {
-                    uiItemNameFeedback.text = String.Empty;
-                    uiItemNameFeedbackOutline.text = String.Empty;
+                    if (hit.collider.gameObject.CompareTag(GameManager.Instance.portableObjectTag))
+                    {
+                        selectedPortable = hit.collider.gameObject;
+                        
+                        uiItemNameFeedback.text = pickUpText;
+                        uiItemNameFeedbackOutline.text = pickUpText;
+                    }
+                    else
+                    {
+                        uiItemNameFeedback.text = String.Empty;
+                        uiItemNameFeedbackOutline.text = String.Empty;   
+                    }
+                    
                     selectedIO = null;
                     selectedIOTransform = null;
                     continue;
                 }
+
+                selectedPortable = null;
                 
                 
                 if (hit.collider.transform == selectedIOTransform)
@@ -106,6 +181,7 @@ public class PlayerInteractor : MonoBehaviour
             }
             else
             {
+                selectedPortable = null;
                 selectedIO = null;
                 selectedIOTransform = null;
                 uiItemNameFeedback.text = String.Empty;

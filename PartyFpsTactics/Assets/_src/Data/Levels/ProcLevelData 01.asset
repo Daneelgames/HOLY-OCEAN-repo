@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnWalls: 1
   spawnLadders: 1
-  spawnAdditionalTiles: 1
-  levelsPosMinMaxX: {x: -5, y: -5}
-  levelsPosMinMaxZ: {x: -5, y: -5}
-  levelsScaleMinMaxX: {x: 7, y: 15}
+  levelsPosMinMaxX: {x: -10, y: 10}
+  levelsPosMinMaxZ: {x: -10, y: 10}
+  levelsScaleMinMaxX: {x: 10, y: 15}
   levelsScaleMinMaxZ: {x: 10, y: 20}
+  additionalSmallBuildingsAmount: 3
+  additionalBuildingsScaleMinMaxX: {x: 4, y: 8}
+  additionalBuildingsScaleMinMaxY: {x: 5, y: 10}
+  additionalBuildingsScaleMinMaxZ: {x: 4, y: 8}
   levelGoalPrefab: {fileID: 3443701919470677471, guid: de73763fdd3804f41841451627e2e135, type: 3}
   tilePrefab: {fileID: 4636380872454741449, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   tileWallPrefab: {fileID: 5237696207237465462, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
@@ -26,8 +29,9 @@ MonoBehaviour:
   explosiveBarrelPrefab: {fileID: 8943623579927757030, guid: 5d2c0bd65a1f3534493166ecddb50a1f, type: 3}
   grindRailsPrefab: {fileID: 5147939674104939985, guid: fa6ec44f4708b9941b1df4c96f1f2139, type: 3}
   levelsHeights: 0500000006000000070000000800000009000000
-  explosiveBarrelsAmount: 2
+  explosiveBarrelsAmount: 1
   enemiesPerRoomMinMax: {x: 3, y: 6}
+  npcsPerMainBuildingRoomMinMax: {x: 1, y: 2}
   grindRailsPerLevelMinMax: {x: 1, y: 2}
   propsPerLevelMinMax: {x: 1, y: 10}
   lootPerLevelMinMax: {x: 1, y: 5}
@@ -40,3 +44,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c933306d310f955408e99822cbaf5f4c, type: 2}
   - {fileID: 11400000, guid: 52b071d6c199f3a40b20c72bbcb77090, type: 2}
   - {fileID: 11400000, guid: 75bd5108465f056409e2cc172068c288, type: 2}
+  - {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}

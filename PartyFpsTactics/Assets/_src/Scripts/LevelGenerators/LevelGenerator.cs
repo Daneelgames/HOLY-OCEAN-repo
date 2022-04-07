@@ -727,6 +727,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+
     bool HasNeighbourTiles(Vector3Int tilePos, Level level, Vector3Int ignorePosAsNeighbour, Vector3Int ignorePrevPosAsNeighbour)
     {        
         if (tilePos.x - 1 >= 0 && level.roomTilesMatrix[tilePos.x - 1, tilePos.y, tilePos.z] != null)
@@ -1056,7 +1057,7 @@ public class LevelGenerator : MonoBehaviour
         switch (mainBuildingEntranceSide)
         {
             case 0: // LEFT
-                billboardPos = randomLevel.position + Vector3.left + Vector3.left * randomLevel.size.x / 2;
+                billboardPos = randomLevel.position + Vector3.left + Vector3.left + Vector3.left * randomLevel.size.x / 2;
                 yRot = 270;
                 wallSize = randomLevel.size.z;
                 break;
@@ -1071,7 +1072,7 @@ public class LevelGenerator : MonoBehaviour
                 wallSize = randomLevel.size.z;
                 break;
             case 3: // BACK
-                billboardPos = randomLevel.position + Vector3.back + Vector3.back * randomLevel.size.x / 2;
+                billboardPos = randomLevel.position + Vector3.back + Vector3.back + Vector3.back * randomLevel.size.x / 2 ;
                 yRot = 180;
                 wallSize = randomLevel.size.x;
                 break;
