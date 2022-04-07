@@ -29,6 +29,7 @@ namespace GPUInstancer
 
         private void Start()
         {
+            
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_Jumping = false;

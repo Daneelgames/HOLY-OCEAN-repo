@@ -32,6 +32,7 @@ namespace MrPink.Health
 
         public HealthController HealthController
         {
+            get => _healthController;
             set => _healthController = value;
         }
 

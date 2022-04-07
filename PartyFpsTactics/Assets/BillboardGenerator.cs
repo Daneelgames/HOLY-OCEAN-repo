@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MrPink.Health;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BillboardGenerator : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class BillboardGenerator : MonoBehaviour
     public int lettersSpacingInTilesHorizontal = 3;
     public int lettersSpacingInTilesVertical  = 2;
     public List<BillboardLetter> letters;
+    public List<string> wordsToShuffle;
 
     public List<TileHealth> spawnedLetters = new List<TileHealth>();
 
@@ -25,11 +27,20 @@ public class BillboardGenerator : MonoBehaviour
     }
     public void GenerateBillboard(int _wallSize, Vector3 _position, float yRot)
     {
+        currentBillboardSign = String.Empty;
         for (int i = spawnedLetters.Count - 1; i >= 0; i--)
         {
             DestroyImmediate(spawnedLetters[i].gameObject);    
         }
         spawnedLetters.Clear();
+        var temp = new List<string>(wordsToShuffle);
+        for (int i = 0; i < Random.Range(2, 4); i++)
+        {
+            int r = Random.Range(0, temp.Count);
+
+            currentBillboardSign += temp[r] + " ";
+            temp.RemoveAt(r);
+        }  
         
         string sign = currentBillboardSign.ToUpper();
         int xxx = 0;
@@ -93,7 +104,8 @@ public class BillboardGenerator : MonoBehaviour
                 var supporterTile = colliders[j].collider.gameObject.GetComponent<TileHealth>();
                 if (supporterTile)
                 {
-                    supporterTile.objectsToClashOnClash.Add(letter);
+                    supporterTile.objectsToDestroyOnClash.Add(letter);
+                    letter.supporterTile = supporterTile;
                     break;   
                 }
             }

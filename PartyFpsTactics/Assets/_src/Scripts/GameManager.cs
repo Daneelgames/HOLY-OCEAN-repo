@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Random.InitState((int)DateTime.Now.Ticks);
         DontDestroyOnLoad(gameObject);
+        
+
     }
 
     void Start()
@@ -34,6 +36,16 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.O))
+            AudioListener.volume = Mathf.Clamp(AudioListener.volume - 0.1f, 0, 1);
+        if (Input.GetKeyDown(KeyCode.P))
+            AudioListener.volume = Mathf.Clamp(AudioListener.volume + 0.1f, 0, 1);
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            Player.LookAround._mouseSensitivity = Mathf.Clamp(Player.LookAround._mouseSensitivity + 50, 5, 1000);
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+            Player.LookAround._mouseSensitivity = Mathf.Clamp(Player.LookAround._mouseSensitivity - 50, 5, 1000);
+        
         if (LevelGenerator.Instance.levelIsReady == false)
             return;
         

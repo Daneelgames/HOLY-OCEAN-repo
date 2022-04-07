@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -65,6 +67,7 @@ namespace MrPink.WeaponsSystem
 
         private DamageSource _damageSource;
 
+        private List<HealthController> damagedHealthControllers = new List<HealthController>();
         public bool IsAttachedToShotHolder
             => _isAttachedToShotHolder;
 
@@ -80,8 +83,7 @@ namespace MrPink.WeaponsSystem
 
             StartCoroutine(LifetimeCoroutine());
         }
-        
-        
+
         protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
             if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
@@ -116,7 +118,28 @@ namespace MrPink.WeaponsSystem
             if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;
 
+            if (targetHealth.HealthController)
+            {
+                if (damagedHealthControllers.Contains(targetHealth.HealthController))
+                {
+                    return CollisionTarget.Creature;
+                }
+
+                damagedHealthControllers.Add(targetHealth.HealthController);
+                StartCoroutine(ClearDamagedHC(targetHealth.HealthController));
+            }
+                
             return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
+        }
+
+        IEnumerator ClearDamagedHC(HealthController hc)
+        {
+            yield return new WaitForSeconds(1);
+            for (int i = damagedHealthControllers.Count - 1; i >= 0; i--)
+            {
+                if (damagedHealthControllers[i] == hc)
+                    damagedHealthControllers.RemoveAt(i);
+            }
         }
 
         protected void PlaySound([CanBeNull] AudioSource source)

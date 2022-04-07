@@ -75,6 +75,8 @@ public class LevelGenerator : MonoBehaviour
     [UnityEngine.Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
     
+    private int mainBuildingEntranceSide = 0;
+    
     private void Awake()
     {
         Instance = this;
@@ -811,7 +813,10 @@ public class LevelGenerator : MonoBehaviour
 
         int randomSide = Random.Range(0, 4); // 0 - left, 1 - front, 2 - right, 3 - back
         Vector3 offsetVector = Vector3.zero;
-            
+
+        if (spawnedMainBuildingLevels[0] == level)
+            mainBuildingEntranceSide = randomSide;
+        
         switch (randomSide)
         {
             case 0: // LEFT
@@ -1026,12 +1031,11 @@ public class LevelGenerator : MonoBehaviour
         
         var newBillboard = Instantiate(billboardGeneratorPrefab);
         var randomLevel = spawnedMainBuildingLevels[Random.Range(2, spawnedMainBuildingLevels.Count - 1)];
-        // choose random orientation
-        int r = Random.Range(0, 4);
         float yRot = 0;
         int wallSize = 0;
         Vector3 billboardPos = Vector3.zero;
-        switch (r)
+        
+        switch (mainBuildingEntranceSide)
         {
             case 0: // LEFT
                 billboardPos = randomLevel.position + Vector3.left + Vector3.left * randomLevel.size.x / 2;

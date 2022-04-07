@@ -248,7 +248,7 @@ public class HumanVisualController : MonoBehaviour
             transform.position = ragdollOrigin.position;
             t += Time.deltaTime;
             
-            if (t < 3)
+            if (t < 1)
                 continue;
             
             if (hc.health <= 0)

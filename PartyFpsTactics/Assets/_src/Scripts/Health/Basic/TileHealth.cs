@@ -32,7 +32,7 @@ namespace MrPink.Health
 
         public TileHealth supporterTile;
         public TileHealth supportedTile;
-        public List<TileHealth> objectsToClashOnClash = new List<TileHealth>();
+        public List<TileHealth> objectsToDestroyOnClash = new List<TileHealth>();
 
         public TileAttack tileAttack;
         public Rigidbody Rigidbody 
@@ -74,13 +74,13 @@ namespace MrPink.Health
 
         void ClashDependantObjects()
         {
-            for (int i = 0; i < objectsToClashOnClash.Count; i++)
+            for (int i = 0; i < objectsToDestroyOnClash.Count; i++)
             {
-                var o = objectsToClashOnClash[i];
+                var o = objectsToDestroyOnClash[i];
                 if (o)
-                    o.ActivateRigidbody(o._health,null,false, 20, true);
+                    o.Kill(DamageSource.Environment);
             }
-            objectsToClashOnClash.Clear();
+            objectsToDestroyOnClash.Clear();
         }
 
         

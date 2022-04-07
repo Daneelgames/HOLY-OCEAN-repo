@@ -10,7 +10,7 @@ namespace MrPink.PlayerSystem
         private Transform _headTransform;
         
         [SerializeField]
-        private float _mouseSensitivity = 5;
+        public float _mouseSensitivity = 5;
         
         [SerializeField]
         private float _vertLookAngleClamp = 85;
@@ -59,6 +59,7 @@ namespace MrPink.PlayerSystem
             MouseLook();
         }
 
+        
         public void SetCurrentCutsceneTargetTrasform(Transform _transform)
         {
             currentCutsceneTargetTransform = _transform;

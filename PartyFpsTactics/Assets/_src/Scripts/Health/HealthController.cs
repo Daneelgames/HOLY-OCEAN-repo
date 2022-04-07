@@ -46,7 +46,6 @@ namespace MrPink.Health
 
         public List<BodyPart> bodyParts;
 
-
         public List<DamageState> damageStates;
 
         [ShowInInspector, ReadOnly] 

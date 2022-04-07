@@ -17,10 +17,18 @@ namespace MrPink.WeaponsSystem
         public float minVelocityMagnitudeToAttack = 1;
 
         private List<Collider> collidedObjects = new List<Collider>();
+        private float unitMinimalDamageTime = 0;
+        public float unitMinimalDamageTimeMax = 1;
 
         private float t = 1;
         private void LateUpdate()
         {
+            if (unitMinimalDamageTime > 0)
+            {
+                unitMinimalDamageTime -= Time.deltaTime;
+                return;
+            }
+            
             if (!dangerous)
                 return;
             
@@ -56,6 +64,10 @@ namespace MrPink.WeaponsSystem
             float scaler = rb.velocity.magnitude;
             if (coll.collider.gameObject == Player.Movement.gameObject)
                 scaler *= 0.5f;
+            
+            if (unitMinimalDamageTime > 0)
+                scaler = 0.01f;
+            
             var target = TryDoDamage(coll.collider, scaler);
             
             switch (target)
@@ -65,8 +77,8 @@ namespace MrPink.WeaponsSystem
                     break;
                 
                 case CollisionTarget.Creature:
-                    //Debug.LogWarning("Can't find point");
                     PlayHitUnitFeedback(coll.transform.position);
+                    unitMinimalDamageTime = unitMinimalDamageTimeMax; 
                     break;
             }
         }
