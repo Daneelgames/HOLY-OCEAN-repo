@@ -40,6 +40,9 @@ namespace MrPink.PlayerSystem
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerLookAround _lookAround;
         
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private PlayerVehicleControls _vehicleControls;
+        
         
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
         public static GameObject GameObject
@@ -74,6 +77,8 @@ namespace MrPink.PlayerSystem
 
         public static PlayerLookAround LookAround
             => _instance._lookAround;
+        public static PlayerVehicleControls VehicleControls
+            => _instance._vehicleControls;
         
 
         public static void Death(Transform killer)

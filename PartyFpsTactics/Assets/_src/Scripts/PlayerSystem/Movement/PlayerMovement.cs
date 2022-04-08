@@ -1,6 +1,7 @@
 using System.Collections;
 using MrPink.Health;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
@@ -111,10 +112,18 @@ namespace MrPink.PlayerSystem
             /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
                 return;*/
+            
+            HandleStamina();
+
+            if (Player.VehicleControls.controlledVehicle)
+            {
+                State.IsRunning = false;
+                _resultVelocity = Vector3.zero;
+                return;
+            }
 
             HandleCrouch();
             HandleMovement();
-            HandleStamina();
         }
         
         private void FixedUpdate()
@@ -175,7 +184,7 @@ namespace MrPink.PlayerSystem
                 SetCrouch(!crouching);
         }
         
-        private void SetCrouch(bool crouch)
+        public void SetCrouch(bool crouch)
         {
             if (narrativePlayer)
                 return;
@@ -255,9 +264,9 @@ namespace MrPink.PlayerSystem
             float scaler = 1;
             
             if (stamina < 0.1f && State.IsGrounded)
-                scaler = 0.33f;
+                scaler = 0.66f;
             else if (Player.Interactor.carryingPortableRb)
-                scaler = 0.5f;
+                scaler = 0.66f;
             
             // RUNNING
             if (Input.GetKey(KeyCode.LeftShift))

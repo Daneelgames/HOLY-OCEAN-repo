@@ -11,13 +11,19 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 6a040a542cec8ee4db4271161b6c79af, type: 3}
     second:
       variants:
+      - keywords: 
+        passType: 0
       - keywords: _METALLICSPECGLOSSMAP _NORMALMAP
         passType: 0
       - keywords: _ALPHATEST_ON _METALLICSPECGLOSSMAP _NORMALMAP
         passType: 0
       - keywords: _ALPHATEST_ON _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP
         passType: 0
+      - keywords: _DETAIL_MULX2 _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
+        passType: 0
       - keywords: _DETAIL_MULX2 _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP _PARALLAXMAP
+        passType: 0
+      - keywords: _DETAIL_MULX2 _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
         passType: 0
       - keywords: _DETAIL_MULX2 _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
           _PARALLAXMAP

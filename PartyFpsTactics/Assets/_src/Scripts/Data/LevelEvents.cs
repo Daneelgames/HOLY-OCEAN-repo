@@ -55,12 +55,15 @@ namespace _src.Scripts.Data
         public AudioClip soundToPlay;
         [ShowIf("scriptedEventType", ScriptedEventType.PlaySound)]
         public Vector2 auPitchMinMax = new Vector2(1, 1);
-        
-        
+
+        [ShowIf("scriptedEventType", ScriptedEventType.RideVehicle)]
+        public ControlledVehicle controlledVehicle;
+
+
     }
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle
     }
 }

@@ -9,7 +9,7 @@ public class InteractiveObject : MonoBehaviour
 {
     public enum InteractableType
     {
-        ItemInteractable, NpcInteractable
+        ItemInteractable, NpcInteractable, VehicleInteractable
     }
 
     public InteractableType type = InteractableType.ItemInteractable;

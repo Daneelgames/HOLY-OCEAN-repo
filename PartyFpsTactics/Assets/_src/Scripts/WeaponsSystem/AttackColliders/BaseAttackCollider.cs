@@ -130,8 +130,11 @@ namespace MrPink.WeaponsSystem
                     return CollisionTarget.Creature;
                 }
 
-                if (ownerHealth)
+                if (ownerHealth && damage > 0)
+                {
+                    Debug.Log("SetDamager; damage - " + damage);
                     targetHealth.HealthController.SetDamager(ownerHealth);
+                }
                     
                 Debug.Log("Damage " + targetHealth.HealthController);
                 damagedHealthControllers.Add(targetHealth.HealthController);

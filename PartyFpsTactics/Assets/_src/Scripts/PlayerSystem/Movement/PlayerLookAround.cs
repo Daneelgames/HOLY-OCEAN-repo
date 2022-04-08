@@ -102,9 +102,14 @@ namespace MrPink.PlayerSystem
             newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
             _headTransform.rotation = Quaternion.Euler(newRotation);
 
+            float resultFollowSpeed = _cameraFollowBodySmooth;
+            
+            if (Player.VehicleControls.controlledVehicle)
+                resultFollowSpeed *= 10;
+            
             _headTransform.transform.position = 
                 Vector3.Lerp(_headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeightTarget, 
-                    _cameraFollowBodySmooth * Time.deltaTime);
+                    resultFollowSpeed * Time.deltaTime);
         }
 
         public void Death(Transform killer = null)

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5530083849147367425}
   - component: {fileID: 4890726433194174976}
-  - component: {fileID: 7035882496314128384}
   - component: {fileID: -1534099197927810747}
+  - component: {fileID: 2480771041185101840}
   m_Layer: 10
   m_Name: Sword Attack Collider
   m_TagString: Untagged
@@ -61,20 +61,6 @@ MonoBehaviour:
   _debrisParticles: {fileID: 3525583768768854875}
   _bloodParticles: {fileID: 4455861895512572997}
   playerMeleeAttack: 1
---- !u!136 &7035882496314128384
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6244528441209416264}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.02
-  m_Height: 0.45572257
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.047861278, z: 0}
 --- !u!54 &-1534099197927810747
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -91,6 +77,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &2480771041185101840
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6244528441209416264}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.16764624, y: 0.61013657, z: 0.27006984}
+  m_Center: {x: 0.00661932, y: 0.17115103, z: -0.00025828433}
 --- !u!1 &7399819766588998531
 GameObject:
   m_ObjectHideFlags: 0

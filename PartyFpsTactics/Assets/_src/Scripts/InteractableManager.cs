@@ -100,6 +100,10 @@ public class InteractableManager : MonoBehaviour
                 au.Play();
                 Destroy(newGo, IOevent.soundToPlay.length);
                 break;
+            
+            case ScriptedEventType.RideVehicle:
+                Player.VehicleControls.RequestVehicleAction(IOevent.controlledVehicle);
+                break;
         }
         
         if (gameObjectToDestroy)

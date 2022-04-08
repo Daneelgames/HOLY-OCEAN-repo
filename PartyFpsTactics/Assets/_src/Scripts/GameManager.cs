@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public string portableObjectTag = "PortableObject";
+    public string terrainTag = "Terrain";
     public LayerMask AllSolidsMask;
     
     private void Awake()
@@ -35,6 +36,8 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;*/
     }
 
+    private bool cursorVisible = false;
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.O))
@@ -49,6 +52,27 @@ public class GameManager : MonoBehaviour
         
         if (LevelGenerator.Instance.levelIsReady == false)
             return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (cursorVisible)
+            {
+                cursorVisible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                Time.timeScale = 1f;
+                AudioListener.pause = false;
+            }
+            else
+            {
+                cursorVisible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                Time.timeScale = 0.1f;
+                AudioListener.pause = true;
+            }
+            
+        }
         
         if (Player.Health.health <= 0 && LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
             StartProcScene();

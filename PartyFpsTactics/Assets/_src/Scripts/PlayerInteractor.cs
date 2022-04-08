@@ -51,6 +51,8 @@ public class PlayerInteractor : MonoBehaviour
             if (carryingPortableRb)
             {
                 StopCoroutine(CarryPortableObjectCoroutine);
+                
+                carryingPortableRb.useGravity = true;
                 carryingPortableRb = null;
                 return;
             }
@@ -75,6 +77,7 @@ public class PlayerInteractor : MonoBehaviour
                 var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
                 if (tileAttack)
                     tileAttack.dangerous = true;
+                carryingPortableRb.useGravity = true;
                 carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                 carryingPortableRb = null;
             }
@@ -88,8 +91,9 @@ public class PlayerInteractor : MonoBehaviour
         
         if (!rb)
             yield break;
-        
+
         carryingPortableRb = rb;
+        carryingPortableRb.useGravity = false;
         
         while (true)
         {
@@ -97,6 +101,7 @@ public class PlayerInteractor : MonoBehaviour
             if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
             {
                 carryingPortableRb = null;
+                carryingPortableRb.useGravity = true;
                 yield break;
             }
             yield return null;
@@ -135,6 +140,7 @@ public class PlayerInteractor : MonoBehaviour
             
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out var hit, raycastDistance, raycastMask))
             {
+                Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer != 11)
                 {
                     if (hit.collider.gameObject.CompareTag(GameManager.Instance.portableObjectTag))
@@ -166,6 +172,7 @@ public class PlayerInteractor : MonoBehaviour
                 var newIO = hit.collider.gameObject.GetComponent<InteractiveObject>();
                 if (newIO)
                 {
+                    Debug.Log("RAYCAST newIO " + newIO);
                     if (newIO.hc && newIO.hc.health <= 0 && selectedIO != null)
                     {
                         selectedIO = null;
@@ -181,6 +188,7 @@ public class PlayerInteractor : MonoBehaviour
             }
             else
             {
+                Debug.Log("RAYCAST EMPTY");
                 selectedPortable = null;
                 selectedIO = null;
                 selectedIOTransform = null;

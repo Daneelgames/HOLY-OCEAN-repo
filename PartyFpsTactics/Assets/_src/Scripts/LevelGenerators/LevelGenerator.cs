@@ -226,6 +226,7 @@ public class LevelGenerator : MonoBehaviour
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
+        RoadGenerator.Instance.GenerateRoad();
         SpawnBillboard();
         RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels);
 
