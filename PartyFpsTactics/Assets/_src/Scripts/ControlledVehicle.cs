@@ -7,7 +7,8 @@ public class ControlledVehicle : MonoBehaviour
 {
     public Transform sitTransform;
     public Rigidbody rb;
-
+    public Transform centerOfMass;
+    public List<WheelCollider> wheels;
     public float acceleration = 100;
     public float rotateSpeed = 10;
     public float maxVelocityMagnitude = 100;
@@ -22,14 +23,20 @@ public class ControlledVehicle : MonoBehaviour
 
     private bool inControl = false;
 
+    private void Start()
+    {
+        rb.centerOfMass = centerOfMass.localPosition;
+    }
+
     public void SetPlayerInput(float hor, float ver)
     {
         inControl = true;
         h = hor;
         v = ver;
 
+        /*
         if (v < 0)
-            h *= -1;
+            h *= -1;*/
     }
 
     public void StopMovement()
@@ -42,7 +49,7 @@ public class ControlledVehicle : MonoBehaviour
 
     private void Update()
     {
-        if (!inControl)
+        //if (!inControl)
             return;
 
         float targetZ = z;
@@ -59,7 +66,19 @@ public class ControlledVehicle : MonoBehaviour
     {
         if (!inControl)
             return;
+        for (int i = 0; i < wheels.Count; i++)
+        {
+            wheels[i].motorTorque = v * acceleration;
+            
+            if (i < 2)
+            {
+                wheels[i].steerAngle = h * rotateSpeed;
+                //Debug.Log("wheels[i].steerAngle" + wheels[i].steerAngle);
+            }
+        }
 
+        return;
+        
         if (v > 0 && rb.velocity.magnitude < maxVelocityMagnitude || v < 0)
             rb.AddForce((transform.forward * v * acceleration + Vector3.up * upAcceleration) * Time.deltaTime, ForceMode.Acceleration);
 

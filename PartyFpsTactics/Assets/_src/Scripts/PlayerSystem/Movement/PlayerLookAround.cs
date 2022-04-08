@@ -37,10 +37,14 @@ namespace MrPink.PlayerSystem
         private bool _isDead = false;
         private Transform currentCutsceneTargetTransform;
 
+        Transform vehicleHeadDummyTransform;
 
         private void Awake()
         {
             SetCrouch(false);
+            
+            vehicleHeadDummyTransform = new GameObject("VehicleHeadDummy").transform;
+            vehicleHeadDummyTransform.parent = transform.parent;
         }
 
         private void LateUpdate()
@@ -91,15 +95,22 @@ namespace MrPink.PlayerSystem
         
             Vector3 newRotation = new Vector3(0, _horizontalRotation, 0);
             _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
-            newRotation = new Vector3(0, _horizontalRotation, 0);
-            transform.localRotation = Quaternion.Euler(newRotation);
-        
+            newRotation = new Vector3(transform.localRotation.x, _horizontalRotation, transform.localRotation.z);
+            
             _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
-            //newRotation = new Vector3(_vertRotation, 0, 0) + transform.localEulerAngles;
-            //headTransform.localRotation = Quaternion.Euler(newRotation);
-            newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
+            if (Player.VehicleControls.controlledVehicle == null)
+            {
+                transform.localRotation = Quaternion.Euler(newRotation);
+                newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
+            }
+            else
+            {
+                vehicleHeadDummyTransform.localRotation = Quaternion.Slerp( Quaternion.Euler(new Vector3(transform.localEulerAngles.x, newRotation.y, transform.localEulerAngles.z)), Quaternion.Euler(newRotation), Time.deltaTime);
+                newRotation = new Vector3(_verticalRotation, 0, 0) + vehicleHeadDummyTransform.eulerAngles;
+            }
+        
             _headTransform.rotation = Quaternion.Euler(newRotation);
 
             float resultFollowSpeed = _cameraFollowBodySmooth;
@@ -108,8 +119,9 @@ namespace MrPink.PlayerSystem
                 resultFollowSpeed *= 10;
             
             _headTransform.transform.position = 
-                Vector3.Lerp(_headTransform.transform.position,transform.position + Vector3.up * _playerHeadHeightTarget, 
+                Vector3.Lerp(_headTransform.transform.position,transform.position + transform.up * _playerHeadHeightTarget, 
                     resultFollowSpeed * Time.deltaTime);
+            vehicleHeadDummyTransform.position = _headTransform.transform.position;
         }
 
         public void Death(Transform killer = null)

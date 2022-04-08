@@ -78,6 +78,7 @@ public class PlayerVehicleControls : MonoBehaviour
                 yield break;
             }
             Player.Movement.transform.position = controlledVehicle.sitTransform.position;
+            Player.Movement.transform.rotation = controlledVehicle.sitTransform.rotation;
             float hor = Input.GetAxis("Horizontal");
             float ver = Input.GetAxis("Vertical");
             controlledVehicle.SetPlayerInput(hor,ver);

@@ -31,10 +31,15 @@ public class RoadGenerator : MonoBehaviour
         {
             if (spawnedRoadParts[i] == null)
                 continue;
-
+            
             Destroy(spawnedRoadParts[i].gameObject);
         }
         spawnedRoadParts.Clear();
+    }
+
+    public void RemoveFromSpawnedParts(RoadPart roadPart)
+    {
+        spawnedRoadParts.Remove(roadPart);
     }
     
     [ContextMenu("GenerateRoad")]
@@ -80,6 +85,7 @@ public class RoadGenerator : MonoBehaviour
             spawnRot = newPart.roadEnds[0].rotation;
             spawnedRoadParts.Add(newPart);
             newPart.transform.parent = transform;
+            newPart.Init();
             yield return null;
         }
     }
