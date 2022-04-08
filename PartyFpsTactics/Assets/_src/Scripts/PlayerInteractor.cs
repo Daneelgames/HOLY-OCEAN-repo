@@ -100,8 +100,8 @@ public class PlayerInteractor : MonoBehaviour
             carryingPortableRb.AddForce((cam.transform.position + cam.transform.forward /* * 2 - cam.transform.up*/ - carryingPortableRb.transform.position) * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
             if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
             {
-                carryingPortableRb = null;
                 carryingPortableRb.useGravity = true;
+                carryingPortableRb = null;
                 yield break;
             }
             yield return null;
@@ -140,7 +140,7 @@ public class PlayerInteractor : MonoBehaviour
             
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out var hit, raycastDistance, raycastMask))
             {
-                Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
+                //Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer != 11)
                 {
                     if (hit.collider.gameObject.CompareTag(GameManager.Instance.portableObjectTag))
@@ -172,7 +172,7 @@ public class PlayerInteractor : MonoBehaviour
                 var newIO = hit.collider.gameObject.GetComponent<InteractiveObject>();
                 if (newIO)
                 {
-                    Debug.Log("RAYCAST newIO " + newIO);
+                    //Debug.Log("RAYCAST newIO " + newIO);
                     if (newIO.hc && newIO.hc.health <= 0 && selectedIO != null)
                     {
                         selectedIO = null;
@@ -188,7 +188,7 @@ public class PlayerInteractor : MonoBehaviour
             }
             else
             {
-                Debug.Log("RAYCAST EMPTY");
+                //Debug.Log("RAYCAST EMPTY");
                 selectedPortable = null;
                 selectedIO = null;
                 selectedIOTransform = null;

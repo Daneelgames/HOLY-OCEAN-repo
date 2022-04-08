@@ -182,7 +182,7 @@ namespace MrPink.Health
         {
             if (IsAlive)
             {
-                UnitsManager.Instance.RagdollTileExplosion(collisionPosition, actionOnHit);
+                // UnitsManager.Instance.RagdollTileExplosion(collisionPosition, actionOnHit);
                 Damage(damage, source);
             }
 

@@ -62,7 +62,7 @@ public class RoadGenerator : MonoBehaviour
 
             if (roadPartToSpawn == null)
             {
-                //Debug.LogError("Can't spawn any RoadPart; spawnPos = " + spawnPos +"; spawnRot = " + spawnRot);
+                Debug.Log("Can't spawn any RoadPart; spawnPos = " + spawnPos +"; spawnRot = " + spawnRot);
 
                 var roadPartsBrokenPrefabsCurrent = new List<RoadPart>(GetCurrentRoadParts(spawnPos.y,
                     roadPartsBrokenPrefabsStraight, roadPartsBrokenPrefabsLeadingDown,
@@ -122,7 +122,10 @@ public class RoadGenerator : MonoBehaviour
         while (!prefabFound)
         {
             if (prefabsTemp.Count == 0)
+            {
+                Debug.Log("No RoadPart found. prefabsTemp.Count == 0");
                 return;
+            }
             
             prefabToSpawn = prefabsTemp[Random.Range(0, prefabsTemp.Count)];
             prefabFound = true;
@@ -139,15 +142,12 @@ public class RoadGenerator : MonoBehaviour
                 raycastTransform.localPosition = prefabToSpawn.raycastTransforms[i].localPosition;
                 raycastTransform.localRotation = prefabToSpawn.raycastTransforms[i].localRotation;
                 
-                /*
-                if (Physics.SphereCast(raycastTransform.position - raycastTransform.forward * 200, 2,
-                    raycastTransform.forward, out var hit, 500, allSolidsMask))*/
                 if (Physics.Raycast(raycastTransform.position - raycastTransform.forward * 1000,
                     raycastTransform.forward, out var hit, Mathf.Infinity, allSolidsMask))
                 {
-                    if (!hit.collider.gameObject.isStatic || hit.collider.gameObject.tag != GameManager.Instance.terrainTag)
+                    if (hit.collider.gameObject != GameManager.Instance.terrain.gameObject)
                     {
-                        //Debug.Log("Raycast RoadParts. Found " + hit.collider.gameObject.transform.parent.parent.gameObject.name + ". Want to prefabToSpawn: " + prefabToSpawn);
+                        Debug.Log("Raycast RoadParts. Found " + hit.collider.gameObject.name + ". Want to prefabToSpawn: " + prefabToSpawn);
                         gizmoRaycastPositions.Add(raycastTransform.position/* - raycastTransform.forward * 200*/);
                         gizmoRaycastDirections.Add(raycastTransform.forward);
                         gizmoRaycastHitPoints.Add(hit.point);

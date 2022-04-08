@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public string portableObjectTag = "PortableObject";
-    public string terrainTag = "Terrain";
+    public Terrain terrain;
     public LayerMask AllSolidsMask;
     
     private void Awake()
@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Random.InitState((int)DateTime.Now.Ticks);
         DontDestroyOnLoad(gameObject);
-        
-
     }
 
     void Start()

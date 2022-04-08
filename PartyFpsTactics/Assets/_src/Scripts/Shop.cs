@@ -112,12 +112,12 @@ public class Shop : MonoBehaviour
             if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore ||
                 Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
             {
-                buyForText.text = "Not enough dollars";   
+                buyForText.text = "Not enough DOLAS";   
                 buyButtonImage.color = Color.red;
             }
             else
             {
-                buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].scoreCost + " dollars";
+                buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].scoreCost + " DOLAS";
                 buyButtonImage.color = Color.green;
             }
         }

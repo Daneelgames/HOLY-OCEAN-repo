@@ -10,7 +10,7 @@ namespace MrPink.Health
         [SerializeField] private float damageScaler = 1;
         public override CollisionTarget HandleDamageCollision(Vector3 collisionPosition, DamageSource source, int damage, ScoringActionType actionOnHit)
         {
-            UnitsManager.Instance.RagdollTileExplosion(collisionPosition, actionOnHit);
+            //UnitsManager.Instance.RagdollTileExplosion(collisionPosition, actionOnHit);
 
             if (_healthController == null)
                 throw new Exception("BodyPart должен ссылаться на HealthController");

@@ -35,7 +35,8 @@ namespace MrPink.WeaponsSystem
 
         [SerializeField] private float ragdollExplosionDistance = 2;
         [SerializeField] private float ragdollExplosionForce = 500;
-
+        [SerializeField] private float playerExplosionForce = 100;
+        private bool unitsExplosionCompleted = false;
         [SerializeField, AssetsOnly, CanBeNull]
         [BoxGroup("Саунд")]
         private AudioClip _hitSolidFx;
@@ -103,12 +104,17 @@ namespace MrPink.WeaponsSystem
             if (damageScaler > 1)
                 Debug.Log("TileAttack damageScaler " + damageScaler);*/
             
-            InteractableManager.Instance.ExplosionNearInteractables(transform.position);
+            if (!unitsExplosionCompleted)
+            {
+                InteractableManager.Instance.ExplosionNearInteractables(transform.position);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
+                    ragdollExplosionForce, playerExplosionForce);
+                unitsExplosionCompleted = true;
+            }
             
             if (targetCollider.gameObject == Player.GameObject)
             {
                 Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,ragdollExplosionForce);
                 return CollisionTarget.Creature;
             }
 
@@ -116,7 +122,6 @@ namespace MrPink.WeaponsSystem
 
             if (targetHealth == null)
             {
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,ragdollExplosionForce);
                 return CollisionTarget.Solid;
             }
             

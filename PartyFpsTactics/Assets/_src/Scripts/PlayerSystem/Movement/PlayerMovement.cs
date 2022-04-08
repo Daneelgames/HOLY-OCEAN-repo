@@ -89,7 +89,7 @@ namespace MrPink.PlayerSystem
         
         public Vector3 MoveVector => _moveVector;
 
-        private float lastGroundedYPos = 0;
+        private float heightToFallFrom = 0;
 
         private void Start()
         {
@@ -328,20 +328,21 @@ namespace MrPink.PlayerSystem
             canUseCoyoteTime = true;
         }
 
+        private float lastVelocityInAirY = 0;
         private void GroundCheck()
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 if (!State.IsGrounded)
                 {
-                    if (transform.position.y + fallDamageThreshold < lastGroundedYPos)
+                    if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
                         Player.Health.Damage(fallDamage, DamageSource.Environment);
                     }
                 }
-                
-                
-                lastGroundedYPos = transform.position.y;
+
+                lastVelocityInAirY = 1;
+                heightToFallFrom = transform.position.y;
                 State.IsGrounded = true;
                 additinalFallForce = 0;
                 if (canUseCoyoteTime)
@@ -349,6 +350,11 @@ namespace MrPink.PlayerSystem
             }
             else
             {
+                if (lastVelocityInAirY >= 0 && rb.velocity.y < 0)
+                {
+                    lastVelocityInAirY = rb.velocity.y;
+                    heightToFallFrom = transform.position.y;
+                }
                 if (State.IsGrounded && canUseCoyoteTime)
                     _coyoteTime = _coyoteTimeMax;
 
