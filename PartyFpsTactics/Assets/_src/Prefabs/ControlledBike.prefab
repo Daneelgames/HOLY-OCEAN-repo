@@ -414,6 +414,36 @@ MonoBehaviour:
     controlledVehicle: {fileID: 6119827908447038146}
   rb: {fileID: 0}
   hc: {fileID: 0}
+--- !u!1 &2080504369707240350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6147981820096435532}
+  m_Layer: 7
+  m_Name: SlopeRaycastTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6147981820096435532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080504369707240350}
+  m_LocalRotation: {x: 0.26657, y: -0, z: -0, w: 0.9638156}
+  m_LocalPosition: {x: 0, y: 0.532, z: 1.395}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5752542937177413566}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 30.921, y: 0, z: 0}
 --- !u!1 &5752542936650441383
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +514,7 @@ Transform:
   - {fileID: 2531613661374642798}
   - {fileID: 910446149}
   - {fileID: 1770069065}
+  - {fileID: 6147981820096435532}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -507,12 +538,13 @@ MonoBehaviour:
   - {fileID: 569018933}
   - {fileID: 1707183066}
   - {fileID: 576318479}
-  acceleration: 500
+  acceleration: 100
+  slopesHelpScaler: 5
+  minAngleToHelpOnSlope: 10
+  brakeForce: 500
   rotateSpeed: 30
-  maxVelocityMagnitude: 100
-  verticalBalancePower: 20
-  upAcceleration: 50
-  balancingAngleThreshold: 45
+  minMaxWheelsAngle: 45
+  slopeRaycastTransform: {fileID: 6147981820096435532}
 --- !u!54 &5752542937177413564
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -522,8 +554,8 @@ Rigidbody:
   m_GameObject: {fileID: 5752542937177413555}
   serializedVersion: 2
   m_Mass: 1000
-  m_Drag: 0.1
-  m_AngularDrag: 0.1
+  m_Drag: 1
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0

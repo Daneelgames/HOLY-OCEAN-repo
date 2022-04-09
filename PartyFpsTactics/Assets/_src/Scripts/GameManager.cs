@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public string portableObjectTag = "PortableObject";
-    public Terrain terrain;
+    public List<Collider> terrainAndIslandsColliders = new List<Collider>();
     public LayerMask AllSolidsMask;
     
     private void Awake()

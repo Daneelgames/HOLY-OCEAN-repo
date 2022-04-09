@@ -58,7 +58,7 @@ public class RoadGenerator : MonoBehaviour
         
         DestroyRoad();
         
-        Vector3 spawnPos = Player.Movement.transform.position;
+        Vector3 spawnPos = new Vector3(Player.Movement.transform.position.x, -0.5f, Player.Movement.transform.position.z);
         Quaternion spawnRot = Quaternion.identity;
         
         for (int i = 0; i < roadPartsToSpawn; i++)
@@ -151,7 +151,7 @@ public class RoadGenerator : MonoBehaviour
                 if (Physics.Raycast(raycastTransform.position - raycastTransform.forward * 1000,
                     raycastTransform.forward, out var hit, Mathf.Infinity, allSolidsMask))
                 {
-                    if (hit.collider.gameObject != GameManager.Instance.terrain.gameObject)
+                    if (GameManager.Instance.terrainAndIslandsColliders.Contains(hit.collider) == false)
                     {
                         Debug.Log("Raycast RoadParts. Found " + hit.collider.gameObject.name + ". Want to prefabToSpawn: " + prefabToSpawn);
                         gizmoRaycastPositions.Add(raycastTransform.position/* - raycastTransform.forward * 200*/);

@@ -247,7 +247,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (i == levelIndex)
             {
-                levelY++;
+                //levelY++;
                 break;
             }
 
@@ -255,7 +255,11 @@ public class LevelGenerator : MonoBehaviour
         }
         
         Vector3 levelPosition = new Vector3(Random.Range(levelsPosMinMaxX.x, levelsPosMinMaxX.y), levelY, Random.Range(levelsPosMinMaxZ.x, levelsPosMinMaxZ.y));
-        
+        /*if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
+            GameManager.Instance.AllSolidsMask))
+        {
+            levelPosition = new Vector3(levelPosition.x, levelPosition.y + hit.point.y, levelPosition.z);
+        }*/
         Vector3Int levelSize = new Vector3Int(Random.Range(levelsScaleMinMaxX.x, levelsScaleMinMaxX.y) * 2,
             mainBuildingLevelsHeights[levelIndex],Random.Range(levelsScaleMinMaxZ.x, levelsScaleMinMaxZ.y) * 2);
         
@@ -299,7 +303,15 @@ public class LevelGenerator : MonoBehaviour
             levelSize = new Vector3Int(Random.Range(additionalBuildingsScaleMinMaxX.x, additionalBuildingsScaleMinMaxX.y) * 2,
                 Random.Range(additionalBuildingsScaleMinMaxY.x, additionalBuildingsScaleMinMaxY.y),Random.Range(additionalBuildingsScaleMinMaxZ.x, additionalBuildingsScaleMinMaxZ.y) * 2);
         }
-
+        
+        /*
+        if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
+            GameManager.Instance.AllSolidsMask))
+        {
+            levelPosition = new Vector3(levelPosition.x, levelPosition.y + hit.point.y, levelPosition.z);
+        }
+        */
+        
         Quaternion levelRotation = Quaternion.identity;
         if (randomLevelRotation)
             levelRotation = Quaternion.Euler(0, Random.Range(0,360), 0);
@@ -310,7 +322,7 @@ public class LevelGenerator : MonoBehaviour
     Vector3 RandomPosForAdditionalLevel(Vector3Int additionalLevelSize)
     {
         int x = 0;
-        int y = 1;
+        int y = 0;
         int z = 0;
         
         int side = Random.Range(0, 4);

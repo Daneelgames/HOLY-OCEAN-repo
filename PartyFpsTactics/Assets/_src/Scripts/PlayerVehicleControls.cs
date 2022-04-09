@@ -77,11 +77,14 @@ public class PlayerVehicleControls : MonoBehaviour
                 controlledVehicle = null;
                 yield break;
             }
+            
+            bool brake = Input.GetKey(KeyCode.LeftControl);
+            
             Player.Movement.transform.position = controlledVehicle.sitTransform.position;
             Player.Movement.transform.rotation = controlledVehicle.sitTransform.rotation;
             float hor = Input.GetAxis("Horizontal");
             float ver = Input.GetAxis("Vertical");
-            controlledVehicle.SetPlayerInput(hor,ver);
+            controlledVehicle.SetPlayerInput(hor,ver, brake);
             yield return null;
         }
     }

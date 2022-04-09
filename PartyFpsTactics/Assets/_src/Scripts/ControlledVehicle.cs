@@ -10,13 +10,15 @@ public class ControlledVehicle : MonoBehaviour
     public Transform centerOfMass;
     public List<WheelCollider> wheels;
     public float acceleration = 100;
+    public float slopesHelpScaler = 3;
+    [Range(0, 90)]
+    public float minAngleToHelpOnSlope = 5;
+    public float brakeForce = 500;
+    private bool braking = false;
     public float rotateSpeed = 10;
-    public float maxVelocityMagnitude = 100;
-    public float verticalBalancePower = 10;
-    public float upAcceleration = 10;
-    [Range(0,90)]
-    public float balancingAngleThreshold = 20;
+    public float minMaxWheelsAngle = 20;
 
+    public Transform slopeRaycastTransform;
     private float h = 0;
     private float v = 0;
     float z = 0;
@@ -28,11 +30,12 @@ public class ControlledVehicle : MonoBehaviour
         rb.centerOfMass = centerOfMass.localPosition;
     }
 
-    public void SetPlayerInput(float hor, float ver)
+    public void SetPlayerInput(float hor, float ver, bool brake)
     {
         inControl = true;
         h = hor;
         v = ver;
+        braking = brake;
 
         /*
         if (v < 0)
@@ -47,41 +50,39 @@ public class ControlledVehicle : MonoBehaviour
         z = 0;
     }
 
-    private void Update()
-    {
-        //if (!inControl)
-            return;
-
-        float targetZ = z;
-        if (Vector3.Angle(Vector3.up, transform.up) < balancingAngleThreshold)
-        {
-            targetZ = -h * balancingAngleThreshold;
-        }
-
-        z = Mathf.Lerp(z, targetZ, Time.deltaTime);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.rotation.eulerAngles.y, z), verticalBalancePower * Time.deltaTime);
-    }
-
     private void FixedUpdate()
     {
         if (!inControl)
             return;
-        for (int i = 0; i < wheels.Count; i++)
+
+        float resultAcceleration = acceleration;
+        if (Physics.Raycast(slopeRaycastTransform.position, slopeRaycastTransform.forward, out var hit, 2,
+            GameManager.Instance.AllSolidsMask))
         {
-            wheels[i].motorTorque = v * acceleration;
-            
-            if (i < 2)
+            if (Vector3.Angle(transform.forward, hit.normal) > minAngleToHelpOnSlope)
             {
-                wheels[i].steerAngle = h * rotateSpeed;
-                //Debug.Log("wheels[i].steerAngle" + wheels[i].steerAngle);
+                resultAcceleration *= slopesHelpScaler;
             }
         }
 
-        return;
-        
-        if (v > 0 && rb.velocity.magnitude < maxVelocityMagnitude || v < 0)
-            rb.AddForce((transform.forward * v * acceleration + Vector3.up * upAcceleration) * Time.deltaTime, ForceMode.Acceleration);
+        for (int i = 0; i < wheels.Count; i++)
+        {
+            if (braking)
+            {
+                wheels[i].brakeTorque = brakeForce;
+                wheels[i].motorTorque = 0;
+            }
+            else
+            {
+                wheels[i].brakeTorque = 0;
+                wheels[i].motorTorque = v * resultAcceleration;
+            }
 
-        rb.AddTorque(Vector3.up * h * rotateSpeed * Time.deltaTime, ForceMode.Acceleration);
+            
+            if (i < 2)
+            {
+                wheels[i].steerAngle = Mathf.Clamp(h * rotateSpeed, -minMaxWheelsAngle, minMaxWheelsAngle);
+            }
+        }
     }
 }
