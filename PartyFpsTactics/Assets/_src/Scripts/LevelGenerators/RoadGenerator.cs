@@ -145,8 +145,8 @@ public class RoadGenerator : MonoBehaviour
             {
                 Transform raycastTransform = new GameObject("RaycastTransform " + i).transform;
                 raycastTransform.parent = roadPartTemp.transform;
-                raycastTransform.localPosition = prefabToSpawn.raycastTransforms[i].localPosition;
-                raycastTransform.localRotation = prefabToSpawn.raycastTransforms[i].localRotation;
+                raycastTransform.localPosition = prefabToSpawn.raycastTransforms[i].localPosition * prefabToSpawn.transform.localScale.x;
+                raycastTransform.rotation = prefabToSpawn.raycastTransforms[i].rotation;
                 
                 if (Physics.Raycast(raycastTransform.position - raycastTransform.forward * 1000,
                     raycastTransform.forward, out var hit, Mathf.Infinity, allSolidsMask))
