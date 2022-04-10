@@ -222,20 +222,22 @@ public class LevelGenerator : MonoBehaviour
         levelIsReady = true;
         
         // GOALS
-        SpawnGoals();
+        yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels));
+        yield return StartCoroutine(SpawnGoals());
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
         RoadGenerator.Instance.GenerateRoad();
         SpawnBillboard();
-        RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels);
 
+        //yield return StartCoroutine(SpawnGrindRails());
+        
+        LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
         yield break;
         var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
         
         Player.Movement.transform.parent.parent = null;
         Player.Movement.transform.position = targetPos;
-        //yield return StartCoroutine(SpawnGrindRails());
     }
 
 
@@ -418,9 +420,32 @@ public class LevelGenerator : MonoBehaviour
                     var obst = newFloorObstacle.AddComponent<NavMeshObstacle>();
                     obst.carving = true;
                 }
-                else
+                else // on every other floor
                 {
-                    LevelgenTransforms.SetSupporterTile(spawnedMainBuildingLevels, newFloorTile);
+                    // TRY TO FIND SUPPORTER TILE
+                    if (LevelgenTransforms.SetSupporterTile(spawnedMainBuildingLevels, newFloorTile) == null)
+                    {
+                        // IF NO SUPPORTER TILE UNDER CORNER TILES -
+                        // SPAWN UNDESTRACTIBLE SUPPORT
+
+                        if (x == 0 && z == 0 || x == size.x - 1 && z == 0 || x == 0 && z == size.z - 1 ||
+                            x == size.x - 1 && z == size.z - 1)
+                        {
+                            GameObject newSupport = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                            newSupport.name = "STRONG SUPPORT";
+                            newSupport.transform.parent = newLevelGameObject.transform;
+                            newSupport.transform.localPosition = newFloorTile.transform.localPosition;
+                            newSupport.transform.localScale = new Vector3(0.9f, 1000, 0.9f);
+                            newSupport.transform.localPosition += Vector3.down * 500.5f;
+                            newSupport.layer = 12;
+                            var obstacle = newSupport.AddComponent<NavMeshObstacle>();
+                            obstacle.carving = true;
+                            var tileHealth = newSupport.AddComponent<TileHealth>();
+                            tileHealth.ImmuneToDamage = true;
+                            newFloorTile.supporterTile = tileHealth;
+                            tileHealth.supportedTile = newFloorTile;
+                        }
+                    }
                 }
                 
                 // SPAWN BUILDING'S OUTSIDE WALLS 
@@ -1108,7 +1133,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    void SpawnGoals()
+    IEnumerator SpawnGoals()
     {
         Vector3 spawnPosition = spawnedMainBuildingLevels[spawnedMainBuildingLevels.Count - 1].position + Vector3.up * 2;
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
@@ -1117,8 +1142,11 @@ public class LevelGenerator : MonoBehaviour
             for (int j = 0; j < spawnedMainBuildingLevels[i].spawnedRooms.Count; j++)
             {
                 var room = spawnedMainBuildingLevels[i].spawnedRooms[j];
-                
+
+                yield return null;                
             }
+
+            yield return null;
         }
     }
 
@@ -1284,40 +1312,10 @@ public static class LevelgenTransforms
         }
         
         return null;
-        
-        int levelIndex = levels.IndexOf(tile.ParentLevel);
-        
-        if (levelIndex <= 0)
-            return null;
-
-        var bottomLevel = levels[levelIndex - 1];
-
-        Vector3 bottomLevelCoordsOffset = ConvertTilePositionToLocalLevelCoords(levels[levelIndex], bottomLevel);
-        Vector3 tileBottomLevelLocalCoords = tile.TileLevelCoordinates + bottomLevelCoordsOffset + Vector3Int.down; 
-
-        if (tileBottomLevelLocalCoords.x < 0 || tileBottomLevelLocalCoords.x >= bottomLevel.size.x ||
-            tileBottomLevelLocalCoords.y < 0 || tileBottomLevelLocalCoords.y >= bottomLevel.size.y ||
-            tileBottomLevelLocalCoords.z < 0 || tileBottomLevelLocalCoords.z >= bottomLevel.size.z)
-        {
-            
-            return null;
-        }
-
-        var supporterTile = bottomLevel.roomTilesMatrix[(int)tileBottomLevelLocalCoords.x, (int)tileBottomLevelLocalCoords.y,
-            (int)tileBottomLevelLocalCoords.z];
-        
-        if (supporterTile != null)
-        {
-            Debug.Log("SetSupporterTile SUPPORTER TILE SET; tileTopLevelLocalCoords:" + tile.TileLevelCoordinates +"; bottomLevelCoordsOffset: " + bottomLevelCoordsOffset + "; tileBottomLevelLocalCoords: " + tileBottomLevelLocalCoords);
-        
-            supporterTile.supportedTile = tile;
-            tile.supporterTile = supporterTile;
-            return supporterTile;
-        }
-        
-        return null;
     }
 
+    
+    // OBSOLETE
     public static Vector3Int ConvertTilePositionToLocalLevelCoords(Level levelTop, Level levelBottom)
     {
         int tileSize = 1;

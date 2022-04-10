@@ -39,12 +39,15 @@ namespace _src.Scripts.Data
         public InteractiveObject destroyInteractorAfterDialogueCompleted;
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public int scoreToAddOnDialogueCompleted = 0;
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        public bool setNextLevelOnDialogueCompleted = false;
 
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
-        public float maxDistanceToSpeaker = 5;
+        public float maxDistanceToSpeaker = -1;
         
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public HealthController NpcHc;
+
 
         
         [ShowIf("scriptedEventType", ScriptedEventType.SetCurrentLevel)]
@@ -58,8 +61,6 @@ namespace _src.Scripts.Data
 
         [ShowIf("scriptedEventType", ScriptedEventType.RideVehicle)]
         public ControlledVehicle controlledVehicle;
-
-
     }
     
     public enum ScriptedEventType

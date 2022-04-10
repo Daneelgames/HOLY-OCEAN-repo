@@ -16,6 +16,7 @@ public class ControlledVehicle : MonoBehaviour
     public float brakeForce = 500;
     private bool braking = false;
     public float rotateSpeed = 10;
+    public float setRotationStraightThreshold = 90;
     public float minMaxWheelsAngle = 20;
 
     public Transform slopeRaycastTransform;
@@ -25,11 +26,121 @@ public class ControlledVehicle : MonoBehaviour
 
     private bool inControl = false;
 
+    [Header("Feedback")] 
+    public ParticleSystem bikeMovementParticles;
+    ParticleSystem.EmissionModule bikeMovementParticlesEmission;
+    public float particlesMaxDriveRate = 200;
+    public AudioSource bikeIdleAu;
+    public AudioSource bikeDriveAu;
+    public AudioSource bikeWheelsAu;
+    public AudioSource bikeDriftAu;
+
     private void Start()
     {
+        bikeMovementParticlesEmission = bikeMovementParticles.emission;
         rb.centerOfMass = centerOfMass.localPosition;
+
+        StartCoroutine(UpdateBikeMoveFeedback());
     }
 
+    IEnumerator UpdateBikeMoveFeedback()
+    {
+        var rate = bikeMovementParticlesEmission.rateOverTime;
+        while (true)
+        {
+            if (v > 0)
+            {
+                rate.constant = Mathf.Lerp(rate.constant, particlesMaxDriveRate, 10 * Time.deltaTime);
+                bikeDriveAu.volume += 0.1f;
+            }
+            else if (v < 0)
+            {
+                rate.constant = Mathf.Lerp(rate.constant, 0, 10 * Time.deltaTime);
+                bikeDriveAu.volume -= 0.1f;
+            }
+            else
+            {
+                rate.constant = Mathf.Lerp(rate.constant, 0, 10 * Time.deltaTime);
+                bikeDriveAu.volume -= 0.1f;
+            }
+
+            if (rb.velocity.magnitude > 0.5f)
+            {
+                bikeWheelsAu.volume += 0.1f;
+            }
+            else
+            {
+                bikeWheelsAu.volume -= 0.1f;
+            }
+
+            if (rb.velocity.magnitude > 0.5f && Vector3.Angle(transform.forward, rb.velocity) > 20 && Vector3.Angle(-transform.forward, rb.velocity) > 20)
+            {
+                bikeDriftAu.volume += 0.1f;
+            }
+            else
+            {
+                bikeDriftAu.volume -= 0.1f;
+            }
+
+            bikeDriveAu.volume = Mathf.Clamp(bikeDriveAu.volume, 0, 0.75f);
+            bikeDriftAu.volume = Mathf.Clamp(bikeDriftAu.volume, 0, 0.75f);
+            //bikeWheelsAu.volume = Mathf.Clamp(bikeWheelsAu.volume, 0, 0.75f);
+
+            bikeMovementParticlesEmission.rateOverTime = rate;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+
+    public void StartPlayerInput()
+    {
+        rb.drag = 0.01f;
+        rb.angularDrag = 0.5f;
+        SetRotationStraight();
+    }
+
+    void SetRotationStraight()
+    {
+        if (SetRotationStraightCoroutine != null)
+            return;
+        
+        SetRotationStraightCoroutine = StartCoroutine(SetRotationStraightOverTime());
+    }
+
+
+    private Coroutine SetRotationStraightCoroutine;
+    IEnumerator SetRotationStraightOverTime()
+    {
+        float t = 0;
+        float tt = 1f;
+        while (t < tt)
+        {
+            rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, t/tt);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, Quaternion.Euler(new Vector3(rb.rotation.eulerAngles.x, rb.rotation.eulerAngles.y, 0)), t / tt));
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        SetRotationStraightCoroutine = null;
+    }
+    
+    public void StopMovement()
+    {
+        rb.drag = 1f;
+        rb.angularDrag = 1f;
+        inControl = false;
+        
+        for (int i = 0; i < wheels.Count; i++)
+        {
+            wheels[i].brakeTorque = brakeForce;
+            wheels[i].motorTorque = 0;
+            wheels[i].steerAngle = 0;
+        }
+        
+        v = 0;
+        h = 0;
+        z = 0;
+    }
     public void SetPlayerInput(float hor, float ver, bool brake)
     {
         inControl = true;
@@ -40,14 +151,6 @@ public class ControlledVehicle : MonoBehaviour
         /*
         if (v < 0)
             h *= -1;*/
-    }
-
-    public void StopMovement()
-    {
-        inControl = false;
-        v = 0;
-        h = 0;
-        z = 0;
     }
 
     private void FixedUpdate()
@@ -67,7 +170,7 @@ public class ControlledVehicle : MonoBehaviour
 
         for (int i = 0; i < wheels.Count; i++)
         {
-            if (braking)
+            if (braking || (rb.velocity.magnitude < 5 && v > -1 && v < 1))
             {
                 wheels[i].brakeTorque = brakeForce;
                 wheels[i].motorTorque = 0;
@@ -83,6 +186,11 @@ public class ControlledVehicle : MonoBehaviour
             {
                 wheels[i].steerAngle = Mathf.Clamp(h * rotateSpeed, -minMaxWheelsAngle, minMaxWheelsAngle);
             }
+        }
+
+        if (Vector3.Angle(transform.up, Vector3.down) < setRotationStraightThreshold)
+        {
+            SetRotationStraight();
         }
     }
 }

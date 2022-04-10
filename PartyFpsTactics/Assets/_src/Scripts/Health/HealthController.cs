@@ -220,7 +220,7 @@ namespace MrPink.Health
 
             if (npcInteraction)
             {
-                ProceduralCutscenesManager.Instance.NpcDied(this);
+                PhoneDialogueEvents.Instance.NpcDied(this);
                 Destroy(npcInteraction.gameObject);
             }
             

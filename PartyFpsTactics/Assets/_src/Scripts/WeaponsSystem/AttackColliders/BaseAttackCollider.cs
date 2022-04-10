@@ -106,7 +106,7 @@ namespace MrPink.WeaponsSystem
             
             if (!unitsExplosionCompleted)
             {
-                InteractableManager.Instance.ExplosionNearInteractables(transform.position);
+                InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
                     ragdollExplosionForce, playerExplosionForce);
                 unitsExplosionCompleted = true;

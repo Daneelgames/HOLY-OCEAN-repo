@@ -67,6 +67,7 @@ public class PlayerVehicleControls : MonoBehaviour
     private Coroutine controlVehicleCoroutine;
     IEnumerator ControlVehicle()
     {
+        controlledVehicle.StartPlayerInput();
         while (true)
         {
             if (Input.GetKey(KeyCode.Space))

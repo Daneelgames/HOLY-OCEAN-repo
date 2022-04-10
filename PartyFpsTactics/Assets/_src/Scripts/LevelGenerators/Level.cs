@@ -99,8 +99,8 @@ namespace _src.Scripts.LevelGenerators
                          floorConnectionsInCurrentIslandAmount == 0 ||wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
                          canCrash = true;   
                     }
-                    else if (currentIslandSupports == 0 || currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 ||
-                             wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
+                    else if (currentIslandSupports == 0 || currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 /*||
+                             wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5*/)
                     canCrash = true;
                     
                     if (canCrash)
@@ -126,8 +126,6 @@ namespace _src.Scripts.LevelGenerators
             }
         }
         
-        
-
         IEnumerator ClashIsland(List<TileHealth> newIsland)
         {
             for (int i = newIsland.Count - 1; i >= 0; i--)

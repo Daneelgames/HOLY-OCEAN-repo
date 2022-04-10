@@ -84,8 +84,8 @@ namespace MrPink.PlayerSystem
             if (Mathf.Abs(mouseX) > _weapon.WeaponRotationZScalerThreshold)
                 gunRotationSpeed *= _weapon.WeaponRotationZScaler;
             
-            rot.eulerAngles += new Vector3(0, 0, mouseX * gunRotationSpeed * Time.deltaTime);
-            transform.localRotation = Quaternion.Slerp(rot, Quaternion.identity, Time.deltaTime);
+            rot.eulerAngles += new Vector3(0, 0, mouseX * gunRotationSpeed * Time.smoothDeltaTime);
+            transform.localRotation = Quaternion.Slerp(rot, Quaternion.identity, Time.smoothDeltaTime);
         }
 
         public void UpdateState(bool isDead)

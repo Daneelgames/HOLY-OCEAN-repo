@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnWalls: 1
   spawnLadders: 1
-  spawnAdditionalTiles: 1
   levelsPosMinMaxX: {x: 0, y: 0}
   levelsPosMinMaxZ: {x: 0, y: 0}
   levelsScaleMinMaxX: {x: 10, y: 10}
   levelsScaleMinMaxZ: {x: 10, y: 10}
+  additionalSmallBuildingsAmount: 3
+  additionalBuildingsScaleMinMaxX: {x: 4, y: 8}
+  additionalBuildingsScaleMinMaxY: {x: 5, y: 10}
+  additionalBuildingsScaleMinMaxZ: {x: 4, y: 8}
   levelGoalPrefab: {fileID: 3443701919470677471, guid: de73763fdd3804f41841451627e2e135, type: 3}
   tilePrefab: {fileID: 4636380872454741449, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   tileWallPrefab: {fileID: 5237696207237465462, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
@@ -28,6 +31,7 @@ MonoBehaviour:
   levelsHeights: 050000000a0000000f000000
   explosiveBarrelsAmount: 0
   enemiesPerRoomMinMax: {x: 0, y: 0}
+  npcsPerMainBuildingRoomMinMax: {x: 1, y: 2}
   grindRailsPerLevelMinMax: {x: 1, y: 2}
   propsPerLevelMinMax: {x: 1, y: 10}
   lootPerLevelMinMax: {x: 1, y: 5}
@@ -38,3 +42,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 322b5f8917b332740a3ab594b309d904, type: 2}
   - {fileID: 11400000, guid: c933306d310f955408e99822cbaf5f4c, type: 2}
   - {fileID: 11400000, guid: 52b071d6c199f3a40b20c72bbcb77090, type: 2}
+  levelEvents:
+  - conditions:
+    - conditionType: 1
+      transformA: {fileID: 0}
+      actorIdA: 0
+      transformB: {fileID: 0}
+      actorIdB: 1
+      distanceToCompare: 5
+    events:
+    - scriptedEventType: 0
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: abb4d33e9d101034a8b1e474a42d1c5e, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 10000
+      setNextLevelOnDialogueCompleted: 1
+      maxDistanceToSpeaker: -1
+      NpcHc: {fileID: 0}
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledVehicle: {fileID: 0}

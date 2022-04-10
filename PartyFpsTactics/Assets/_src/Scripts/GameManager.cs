@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public string portableObjectTag = "PortableObject";
     public List<Collider> terrainAndIslandsColliders = new List<Collider>();
     public LayerMask AllSolidsMask;
+    private bool cursorVisible = false;
     
     private void Awake()
     {
@@ -26,16 +27,9 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Random.InitState((int)DateTime.Now.Ticks);
         DontDestroyOnLoad(gameObject);
+        Physics.autoSyncTransforms = false;
     }
 
-    void Start()
-    {
-        /*
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;*/
-    }
-
-    private bool cursorVisible = false;
     
     private void Update()
     {

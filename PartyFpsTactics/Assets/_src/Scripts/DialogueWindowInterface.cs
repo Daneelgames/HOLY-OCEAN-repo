@@ -71,7 +71,7 @@ public class DialogueWindowInterface : MonoBehaviour
 
     private void PlayerAnswered(bool positiveAnswer)
     {
-        if (!ProceduralCutscenesManager.Instance.CanAnswer)
+        if (!PhoneDialogueEvents.Instance.CanAnswer)
             return;
         
         if (positiveAnswer)
@@ -89,7 +89,7 @@ public class DialogueWindowInterface : MonoBehaviour
 
         phoneAu.pitch = Random.Range(0.9f, 1.1f);
         phoneAu.Play();
-        ProceduralCutscenesManager.Instance.PlayerAnswered(positiveAnswer);
+        PhoneDialogueEvents.Instance.PlayerAnswered(positiveAnswer);
     }
 
     public void ToggleDialogueWindow(bool active)
@@ -159,7 +159,7 @@ public class DialogueWindowInterface : MonoBehaviour
         {
             phoneVisual.SetActive(false);
             PlayerAnswered(false);
-            ProceduralCutscenesManager.Instance.CloseCutscene();
+            PhoneDialogueEvents.Instance.CloseCutscene();
         }
         
         toggleDialogueWIndowCoroutine = null;

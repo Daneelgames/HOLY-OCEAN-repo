@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnWalls: 1
   spawnLadders: 1
-  levelsPosMinMaxX: {x: 0, y: 0}
-  levelsPosMinMaxZ: {x: 0, y: 0}
-  levelsScaleMinMaxX: {x: 20, y: 20}
-  levelsScaleMinMaxZ: {x: 20, y: 20}
+  levelsPosMinMaxX: {x: -20, y: 20}
+  levelsPosMinMaxZ: {x: -20, y: 20}
+  levelsScaleMinMaxX: {x: 10, y: 20}
+  levelsScaleMinMaxZ: {x: 10, y: 20}
   additionalSmallBuildingsAmount: 3
   additionalBuildingsScaleMinMaxX: {x: 4, y: 8}
   additionalBuildingsScaleMinMaxY: {x: 5, y: 10}
@@ -28,9 +28,9 @@ MonoBehaviour:
   tileWallThinPrefab: {fileID: 5237696207237465462, guid: 0b2f22b3f2e6df147bc2b1197ac73c16, type: 3}
   explosiveBarrelPrefab: {fileID: 8943623579927757030, guid: 5d2c0bd65a1f3534493166ecddb50a1f, type: 3}
   grindRailsPrefab: {fileID: 5147939674104939985, guid: fa6ec44f4708b9941b1df4c96f1f2139, type: 3}
-  levelsHeights: 0500000005000000050000000700000008000000090000000a0000000a0000000a0000000a000000
+  levelsHeights: 060000000700000008000000090000000a000000
   explosiveBarrelsAmount: 0
-  enemiesPerRoomMinMax: {x: 5, y: 8}
+  enemiesPerRoomMinMax: {x: 6, y: 10}
   npcsPerMainBuildingRoomMinMax: {x: 1, y: 2}
   grindRailsPerLevelMinMax: {x: 1, y: 2}
   propsPerLevelMinMax: {x: 1, y: 10}
@@ -44,3 +44,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c933306d310f955408e99822cbaf5f4c, type: 2}
   - {fileID: 11400000, guid: 52b071d6c199f3a40b20c72bbcb77090, type: 2}
   - {fileID: 11400000, guid: 75bd5108465f056409e2cc172068c288, type: 2}
+  levelEvents:
+  - conditions:
+    - conditionType: 1
+      transformA: {fileID: 0}
+      actorIdA: 0
+      transformB: {fileID: 0}
+      actorIdB: 1
+      distanceToCompare: 5
+    events:
+    - scriptedEventType: 0
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: abb4d33e9d101034a8b1e474a42d1c5e, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 10000
+      setNextLevelOnDialogueCompleted: 1
+      maxDistanceToSpeaker: -1
+      NpcHc: {fileID: 0}
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledVehicle: {fileID: 0}

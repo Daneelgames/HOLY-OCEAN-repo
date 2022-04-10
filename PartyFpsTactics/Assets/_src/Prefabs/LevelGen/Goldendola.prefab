@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 8377756284098766513}
   - component: {fileID: 6534839781448827977}
   - component: {fileID: 1681895939128005191}
+  - component: {fileID: 2713240063431324565}
   m_Layer: 12
   m_Name: Goldendola
   m_TagString: PortableObject
@@ -164,13 +165,27 @@ MonoBehaviour:
   _lifeTime: -1
   ragdollExplosionDistance: 2
   ragdollExplosionForce: 500
+  playerExplosionForce: 100
   _hitSolidFx: {fileID: 0}
   _hitUnitFx: {fileID: 0}
   _hitAudioSource: {fileID: 0}
   _debrisParticles: {fileID: 0}
   _bloodParticles: {fileID: 0}
-  prop: 0
+  prop: 1
   dangerous: 0
   rb: {fileID: 8377756284098766513}
   minVelocityMagnitudeToAttack: 1
   unitMinimalDamageTimeMax: 1
+--- !u!114 &2713240063431324565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3443701919470677471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15bc8770ccc766549b3f67b0273582d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actorId: 0

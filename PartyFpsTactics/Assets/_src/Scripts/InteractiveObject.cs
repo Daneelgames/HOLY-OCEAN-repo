@@ -20,11 +20,11 @@ public class InteractiveObject : MonoBehaviour
     public HealthController hc;
     private void Start()
     {
-        InteractableManager.Instance.AddInteractable(this);
+        InteractableEventsManager.Instance.AddInteractable(this);
     }
 
     private void OnDestroy()
     {
-        InteractableManager.Instance.RemoveInteractable(this);
+        InteractableEventsManager.Instance.RemoveInteractable(this);
     }
 }

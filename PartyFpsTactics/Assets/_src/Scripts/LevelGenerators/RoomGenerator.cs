@@ -18,9 +18,9 @@ namespace _src.Scripts.LevelGenerators
             Instance = this;
         }
 
-        public void GenerateRooms(List<Level> spawnedLevels)
+        public IEnumerator GenerateRooms(List<Level> spawnedLevels)
         {
-            StartCoroutine(GenerateRoomsCoroutine(spawnedLevels));
+            yield return StartCoroutine(GenerateRoomsCoroutine(spawnedLevels));
         }
 
         IEnumerator GenerateRoomsCoroutine(List<Level> spawnedLevels)

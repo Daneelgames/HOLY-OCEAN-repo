@@ -59,7 +59,7 @@ public class PlayerInteractor : MonoBehaviour
             
             if (selectedIO)
             {
-                InteractableManager.Instance.InteractWithIO(selectedIO);
+                InteractableEventsManager.Instance.InteractWithIO(selectedIO);
                 return;
             }
             
@@ -126,7 +126,7 @@ public class PlayerInteractor : MonoBehaviour
                 uiItemNameFeedbackOutline.text = String.Empty;
             }
             
-            if (ProceduralCutscenesManager.Instance.InCutScene)
+            if (PhoneDialogueEvents.Instance.InCutScene)
             {
                 if (selectedIO == null)
                     continue;

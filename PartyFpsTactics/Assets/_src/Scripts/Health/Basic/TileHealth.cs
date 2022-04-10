@@ -14,6 +14,7 @@ namespace MrPink.Health
     // TileHealth
     public class TileHealth : BasicHealth
     {
+        public bool ImmuneToDamage = false;
         [Tooltip("Will be added to Levelgen spawnedProps List and will be bumped by shots")]
         public bool prop = false;
         private Vector3Int tileLevelCoordinates = Vector3Int.zero;
@@ -152,6 +153,9 @@ namespace MrPink.Health
 
         public override void Damage(int damage, DamageSource source)
         {
+            if (ImmuneToDamage)
+                return;
+            
             if (IsDead)
                 return;
 

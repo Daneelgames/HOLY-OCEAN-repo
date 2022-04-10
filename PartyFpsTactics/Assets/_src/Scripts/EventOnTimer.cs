@@ -14,7 +14,7 @@ public class EventOnTimer : MonoBehaviour
         yield return new WaitForSeconds(time);
         for (int i = 0; i < TimerEvents.Count; i++)
         {
-            InteractableManager.Instance.RunEvent(TimerEvents[i], gameObject);   
+            InteractableEventsManager.Instance.RunEvent(TimerEvents[i], gameObject);   
         }
     }
 }

@@ -45,5 +45,31 @@ namespace _src.Scripts.Data
         public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
 
         public List<Tool> toolsInShop;
+
+        public List<LevelEvent> levelEvents;
+    }
+
+    [Serializable]
+    public class LevelEvent
+    {
+        public List<Condition> conditions;
+        public List<ScriptedEvent> events;
+    }
+
+    [Serializable]
+    public class Condition
+    {
+        public enum ConditionType
+        {
+            DistanceIsBigger, DistanceIsSmaller
+        }
+
+        public ConditionType conditionType = ConditionType.DistanceIsSmaller;
+
+        public Transform transformA;
+        public int actorIdA = -1;
+        public Transform transformB;
+        public int actorIdB = -1;
+        public float distanceToCompare = 5;
     }
 }
