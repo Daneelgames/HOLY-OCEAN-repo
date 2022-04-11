@@ -56,6 +56,7 @@ public class ScoringSystem : MonoBehaviour
 
     public void RegisterAction(ScoringActionType scoringAction, float addToCooldown = 5)
     {
+        return;
         if (Player.Health.health <= 0)
             return;
         
@@ -131,6 +132,7 @@ public class ScoringSystem : MonoBehaviour
 
     public void AddScore(int amount)
     {
+        return;
         scoreAddedAu.pitch = Random.Range(0.9f, 1.1f);
         scoreAddedAu.Play();
         

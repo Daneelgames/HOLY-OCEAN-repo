@@ -17,6 +17,12 @@ public class HumanVisualController : MonoBehaviour
     public List<Rigidbody> rigidbodies;
     public List<Transform> animatedBones;
     public List<ConfigurableJoint> joints;
+    
+    public float activePositionSpring = 1500;
+    public float activePositionDamper = 100;
+    public float activeAngularPositionSpring = 1500;
+    public float activeAngularPositionDamper = 100;
+    
     List<Quaternion> initRotations = new List<Quaternion>();
     public float timeToStandUp = 2;
 
@@ -207,40 +213,40 @@ public class HumanVisualController : MonoBehaviour
             if (i == 0)
             {
                 var xDrive = joints[i].xDrive;
-                xDrive.positionSpring = 900;
-                xDrive.positionDamper = 100;
+                xDrive.positionSpring = activePositionSpring;
+                xDrive.positionDamper = activePositionDamper;
                 joints[i].xDrive = xDrive;
 
                 joints[i].xDrive = xDrive;
                 var yDrive = joints[i].yDrive;
-                xDrive.positionSpring = 900;
-                xDrive.positionDamper = 100;
+                xDrive.positionSpring = activePositionSpring;
+                xDrive.positionDamper = activePositionDamper;
                 joints[i].yDrive = yDrive;
 
                 joints[i].xDrive = xDrive;
                 var zDrive = joints[i].zDrive;
-                xDrive.positionSpring = 900;
-                xDrive.positionDamper = 100;
+                xDrive.positionSpring = activePositionSpring;
+                xDrive.positionDamper = activePositionDamper;
                 joints[i].zDrive = zDrive;
                 
                 joints[i].angularXMotion = ConfigurableJointMotion.Free;
                 joints[i].angularYMotion = ConfigurableJointMotion.Free;
                 joints[i].angularZMotion = ConfigurableJointMotion.Free;
                 
-                angularXDrive.positionSpring = 900;
-                angularXDrive.positionDamper = 0;
-                angularYZDrive.positionSpring = 900;
-                angularYZDrive.positionDamper = 0; 
+                angularXDrive.positionSpring = activeAngularPositionSpring;
+                angularXDrive.positionDamper = activeAngularPositionDamper;
+                angularYZDrive.positionSpring = activeAngularPositionSpring;
+                angularYZDrive.positionDamper = activeAngularPositionDamper; 
                 
                 joints[i].angularXDrive = angularXDrive;
                 joints[i].angularYZDrive = angularYZDrive;
                 continue;
             }
             
-            angularXDrive.positionSpring = 900;
-            angularYZDrive.positionSpring = 900;
-            angularXDrive.positionDamper = 0;
-            angularYZDrive.positionDamper = 0;
+            angularXDrive.positionSpring = activeAngularPositionSpring;
+            angularYZDrive.positionSpring = activeAngularPositionSpring;
+            angularXDrive.positionDamper = activeAngularPositionDamper;
+            angularYZDrive.positionDamper = activeAngularPositionDamper;
             
             joints[i].angularXDrive = angularXDrive;
             joints[i].angularYZDrive = angularYZDrive;

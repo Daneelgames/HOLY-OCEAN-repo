@@ -198,6 +198,7 @@ public class AiMovement : MonoBehaviour
             }
             else
             {
+                RunOrder();
                 FollowTargetOrder(enemy.transform);
             }
             yield break;
@@ -206,6 +207,7 @@ public class AiMovement : MonoBehaviour
         // GOOD COVER FOUND
         if (enemy && coverFoundBehaviour == EnemiesBehaviour.ApproachEnemy)
         {
+            RunOrder();
             FollowTargetOrder(enemy.transform);
             //AgentSetPath(enemy.transform.position, stopDistanceFollow);
             yield break;
@@ -281,6 +283,7 @@ public class AiMovement : MonoBehaviour
             else
             {
                 SetInCover(false);
+                RunOrder();
             }
             yield return null;
 

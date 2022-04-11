@@ -9,6 +9,7 @@ public class UnitVision : MonoBehaviour
 {
     private HealthController hc;
     public float fov = 70.0f;
+    public float visibilityDistanceMax = 100;
     private RaycastHit hit;
     public LayerMask raycastsLayerMask;
     public Transform raycastOrigin;
@@ -93,7 +94,7 @@ public class UnitVision : MonoBehaviour
     bool LineOfSight (Transform target) 
     {
         if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov &&
-            Physics.Linecast(raycastOrigin.position, target.position, out hit, raycastsLayerMask) &&
+            Physics.Raycast(raycastOrigin.position, target.position - raycastOrigin.position, out hit, visibilityDistanceMax, raycastsLayerMask) &&
             hit.collider.transform == target)
         {
             return true;

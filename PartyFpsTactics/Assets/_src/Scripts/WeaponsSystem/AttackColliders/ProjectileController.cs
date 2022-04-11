@@ -190,7 +190,7 @@ public class ProjectileController : BaseAttackCollider
         dead = true;
         
         if (toolType == ToolType.CustomLadder)
-            _customLadder.ConstructLadder(ownerHealth.transform.position);
+            _customLadder.ConstructLadder(ownerHealth.transform.position - Vector3.up);
     }
 
     private async UniTask DeathCoroutine()

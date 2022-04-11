@@ -91,9 +91,9 @@ public class ControlledVehicle : MonoBehaviour
                 bikeDriftAu.volume -= 0.1f;
             }
 
-            bikeDriveAu.volume = Mathf.Clamp(bikeDriveAu.volume, 0, 0.66f);
-            bikeDriftAu.volume = Mathf.Clamp(bikeDriftAu.volume, 0, 0.66f);
-            bikeWheelsAu.volume = Mathf.Clamp(bikeWheelsAu.volume, 0, 0.66f);
+            bikeDriveAu.volume = Mathf.Clamp(bikeDriveAu.volume, 0, 0.5f);
+            bikeDriftAu.volume = Mathf.Clamp(bikeDriftAu.volume, 0, 0.5f);
+            bikeWheelsAu.volume = Mathf.Clamp(bikeWheelsAu.volume, 0, 0.5f);
 
             bikeMovementParticlesEmission.rateOverTime = rate;
             yield return new WaitForSeconds(0.1f);
@@ -103,7 +103,7 @@ public class ControlledVehicle : MonoBehaviour
 
     public void StartPlayerInput()
     {
-        rb.drag = 0.01f;
+        rb.drag = 0.1f;
         rb.angularDrag = 0.5f;
         SetRotationStraight();
     }
@@ -162,6 +162,9 @@ public class ControlledVehicle : MonoBehaviour
         v = ver;
         braking = brake;
 
+        if (wheels[0].motorTorque > 0 && v < 0)
+            braking = true;
+        
         /*
         if (v < 0)
             h *= -1;*/
@@ -210,6 +213,7 @@ public class ControlledVehicle : MonoBehaviour
 
     void OnCollisionEnter(Collision coll)
     {
+        return;
         if (cooldownOnDamageOwnerOnCrashCurrent > 0)
             return;
         
