@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public List<Collider> terrainAndIslandsColliders = new List<Collider>();
     public LayerMask AllSolidsMask;
     private bool cursorVisible = false;
+
+    public Material rockDefaultMaterial;
     
     private void Awake()
     {

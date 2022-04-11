@@ -524,7 +524,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.05, y: 1.05, z: 1.05}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5237696207237465462
 MonoBehaviour:
@@ -540,6 +540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 0}
+  ImmuneToDamage: 0
   prop: 0
   colliders:
   - {fileID: 1211562686235662036}
@@ -548,6 +549,8 @@ MonoBehaviour:
   ceilingLevelTile: 0
   supporterTile: {fileID: 0}
   supportedTile: {fileID: 0}
+  objectsToDestroyOnClash: []
+  tileAttack: {fileID: 0}
 --- !u!114 &1567761268291774263
 MonoBehaviour:
   m_ObjectHideFlags: 0

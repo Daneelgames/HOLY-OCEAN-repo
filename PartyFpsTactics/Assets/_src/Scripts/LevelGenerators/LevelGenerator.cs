@@ -437,6 +437,8 @@ public class LevelGenerator : MonoBehaviour
                             newSupport.transform.localPosition = newFloorTile.transform.localPosition;
                             newSupport.transform.localScale = new Vector3(0.9f, 1000, 0.9f);
                             newSupport.transform.localPosition += Vector3.down * 500.5f;
+                            var mesh = newSupport.GetComponent<MeshRenderer>();
+                            mesh.material = GameManager.Instance.rockDefaultMaterial;
                             newSupport.layer = 12;
                             var obstacle = newSupport.AddComponent<NavMeshObstacle>();
                             obstacle.carving = true;

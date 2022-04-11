@@ -17,6 +17,12 @@ namespace MrPink.Health
     {
         public int health = 100;
         public int healthMax = 100;
+        
+        public float endurance = 100;
+        float enduranceMax = 100;
+        public float enduranceRegenSpeed = 100;
+        public float UnitRagdollStandupCooldown = 1;
+        
         public bool destroyOnDeath = false;
         public Collider visibilityTrigger;
     
@@ -41,7 +47,7 @@ namespace MrPink.Health
         public InteractiveObject npcInteraction;
         public DeathOnHit deathOnHit;
 
-        [Header("This RB will be affected by explosions")]
+        [Header("This RB will be affected by explosions. For barrels etc")]
         public Rigidbody rb;
 
 
@@ -58,10 +64,11 @@ namespace MrPink.Health
         private void Start()
         {
             healthMax = health;
+            enduranceMax = endurance;
             UnitsManager.Instance.unitsInGame.Add(this);
         }
         
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
         [ContextMenu("Link Body Parts")]
         private void LinkBodyParts()
@@ -96,8 +103,36 @@ namespace MrPink.Health
             EditorUtility.SetDirty(this);
         }
         
-        #endif
+#endif
 
+        public float DamageEndurance(int dmg)
+        {
+            endurance = Mathf.Clamp(endurance - dmg, 0, enduranceMax);
+            
+            if (EnduranceRegenCoroutine != null)
+                StopCoroutine(EnduranceRegenCoroutine);
+            EnduranceRegenCoroutine = StartCoroutine(EnduranceRegen());
+
+            return endurance;
+        }
+
+        private Coroutine EnduranceRegenCoroutine;
+        IEnumerator EnduranceRegen()
+        {
+            while (endurance < enduranceMax)
+            {
+                yield return null;
+
+                endurance += enduranceRegenSpeed * Time.deltaTime;
+                endurance = Mathf.Clamp(endurance, 0, enduranceMax);
+            }
+        }
+
+        public void RestoreEndurance()
+        {
+            endurance = enduranceMax;
+        }
+        
         public void SetDamager(HealthController damager)
         {
             if (AiMovement && AiMovement.unitVision)

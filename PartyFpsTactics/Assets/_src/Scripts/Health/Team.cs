@@ -2,6 +2,6 @@ namespace MrPink.Health
 {
     public enum Team
     {
-        Red, Blue, NULL
+        Red, Blue, NULL, Beast
     }
 }

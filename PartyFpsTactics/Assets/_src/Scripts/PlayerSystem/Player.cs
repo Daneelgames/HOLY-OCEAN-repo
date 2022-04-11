@@ -7,7 +7,7 @@ namespace MrPink.PlayerSystem
 {
     public class Player : MonoBehaviour
     {
-        private static Player _instance;
+        public static Player _instance;
         
         
         [SerializeField, ChildGameObjectsOnly, Required]

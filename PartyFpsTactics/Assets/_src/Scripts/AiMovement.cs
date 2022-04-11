@@ -24,9 +24,9 @@ public class AiMovement : MonoBehaviour
 
     public Order currentOrder = Order.FollowTarget;
     public NavMeshAgent agent;
-    [Range(1,5)]
+    [Range(1,100)]
     public float moveSpeed = 2;
-    [Range(1,10)]
+    [Range(1,100)]
     public float runSpeed = 4;
     [Range(1,10)]
     public float turnSpeed = 4;

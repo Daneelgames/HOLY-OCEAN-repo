@@ -44,6 +44,13 @@ public class HumanVisualController : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitForSeconds(1);
+            if (Player._instance == null)
+            {
+                visibleToPlayer = true;
+                continue;
+            }
+            
             if (Vector3.Distance(transform.position, Player.MainCamera.transform.position) >= 50)
             {
                 if (visibleToPlayer)
@@ -67,7 +74,6 @@ public class HumanVisualController : MonoBehaviour
                 
                 visibleToPlayer = true;
             }
-            yield return new WaitForSeconds(1);
         }
     }
     
@@ -279,6 +285,7 @@ public class HumanVisualController : MonoBehaviour
     {
         ragdollOriginParent = ragdollOrigin.parent;
         ragdollOrigin.parent = null;
+        float standupCooldown = hc.UnitRagdollStandupCooldown;
         float t = 0;
         while (true)
         {
@@ -286,7 +293,7 @@ public class HumanVisualController : MonoBehaviour
             transform.position = ragdollOrigin.position;
             t += Time.deltaTime;
             
-            if (t < 1)
+            if (t < standupCooldown)
                 continue;
             
             if (hc.health <= 0)
@@ -304,6 +311,7 @@ public class HumanVisualController : MonoBehaviour
         }
         ragdollOrigin.parent = ragdollOriginParent;
         DeactivateRagdoll();
+        hc.RestoreEndurance();
         hc.AiMovement.Resurrect();
 
     }

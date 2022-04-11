@@ -13,6 +13,8 @@ public class UnitsManager : MonoBehaviour
     public static UnitsManager Instance;
     public List<HealthController> unitsInGame = new List<HealthController>();
 
+    public int defaultInduranceDamage = 100;
+    
     public float tileExplosionDistance = 3;
     public float tileExplosionForce = 100;
     public float tileExplosionForceBarrels = 50;
@@ -56,10 +58,6 @@ public class UnitsManager : MonoBehaviour
         newUnit.AiMovement.TakeCoverOrder();
     }
     
-    public void RagdollTileExplosion(Vector3 explosionPosition, ScoringActionType action)
-    {
-        RagdollTileExplosion(explosionPosition, -1, -1, -1, action);
-    }
     
     public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1, ScoringActionType action = ScoringActionType.NULL)
     {
@@ -81,7 +79,8 @@ public class UnitsManager : MonoBehaviour
                         .AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized * playerForce, ForceMode.VelocityChange);
                     continue;
                 }
-                if (unitsInGame[i].rb)
+                
+                if (unitsInGame[i].rb) // BARRELS
                 {
                     unitsInGame[i].rb.AddForce((unitsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                tileExplosionForceBarrels, ForceMode.VelocityChange);
@@ -89,18 +88,23 @@ public class UnitsManager : MonoBehaviour
                     unitsInGame[i].Damage(1, DamageSource.Player);
                     if (action != ScoringActionType.NULL)
                         ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped, 3);
+                    
+                    continue;
                 }
 
-                if (unitsInGame[i].HumanVisualController)
+                if (unitsInGame[i].DamageEndurance(defaultInduranceDamage) <= 0)
                 {
-                    if (unitsInGame[i].health > 0 && action != ScoringActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringActionType.EnemyBumped, 2);
-                    unitsInGame[i].HumanVisualController.ActivateRagdoll();
-                    unitsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
-                }
-                if (unitsInGame[i].AiMovement)
-                {
-                    unitsInGame[i].AiMovement.Death();
+                    if (unitsInGame[i].HumanVisualController)
+                    {
+                        if (unitsInGame[i].health > 0 && action != ScoringActionType.NULL)
+                            ScoringSystem.Instance.RegisterAction(ScoringActionType.EnemyBumped, 2);
+                        unitsInGame[i].HumanVisualController.ActivateRagdoll();
+                        unitsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
+                    }
+                    if (unitsInGame[i].AiMovement)
+                    {
+                        unitsInGame[i].AiMovement.Death();
+                    }   
                 }
             }
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
+using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
 
@@ -70,11 +71,15 @@ public class PlayerVehicleControls : MonoBehaviour
         controlledVehicle.StartPlayerInput();
         while (true)
         {
+            if (Player.Health.health <= 0)
+                yield break;
+            
             if (Input.GetKey(KeyCode.Space))
             {
                 TogglePlayerInside(false);
                 controlledVehicle.StopMovement();
                 controlVehicleCoroutine = null;
+                Player.Movement.Jump(controlledVehicle.rb.velocity, true);
                 controlledVehicle = null;
                 yield break;
             }

@@ -120,7 +120,7 @@ namespace MrPink.PlayerSystem
             
             _headTransform.transform.position = 
                 Vector3.Lerp(_headTransform.transform.position,transform.position + transform.up * _playerHeadHeightTarget, 
-                    resultFollowSpeed * Time.deltaTime);
+                    resultFollowSpeed * Time.smoothDeltaTime);
             vehicleHeadDummyTransform.position = _headTransform.transform.position;
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using MrPink.Health;
+using Pathfinding;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,7 +15,13 @@ namespace MrPink.PlayerSystem
 
         public Rigidbody rb;
         public float gravity = 5;
+        public float fallMultiplayer = 2.5f; 
+        public float lowJumpMultiplayer = 2.5f; 
+            
         public float jumpForce = 300;
+        public float jumpTime = 0;
+        public float jumpTimeMax = 0.5f;
+        
         public float fallForceAcceleration = 20;
         public float fallDamageThreshold = 10;
         public int fallDamage = 100;
@@ -251,15 +258,6 @@ namespace MrPink.PlayerSystem
             if (onSlope)
                 _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
         
-            // JUMP
-            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
-            {
-                SetGrindRail(null);
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-                StartCoroutine(CoyoteTimeCooldown());
-                stamina = Mathf.Clamp(stamina - jumpStaminaCost, 0, staminaMax);
-                _coyoteTime = 0;
-            }
         
             float scaler = 1;
             
@@ -290,6 +288,18 @@ namespace MrPink.PlayerSystem
                     _targetVelocity = _moveVector * crouchSpeed * scaler;
             }    
         
+            // JUMP
+            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
+            {
+                jumpTime = jumpTimeMax;
+                Jump(Vector3.zero);
+            }
+            /*
+            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
+            {
+                Jump(Vector3.zero, ForceMode.Force);
+            }*/
+            
             if (goingUpHill)
                 _targetVelocity += Vector3.up * 2;
         
@@ -298,6 +308,23 @@ namespace MrPink.PlayerSystem
         }
 
 
+        public void Jump(Vector3 additionalForce, bool instant = false)
+        {
+            SetGrindRail(null);
+            if (instant)
+            {
+                rb.AddForce(Vector3.up * jumpForce + additionalForce, ForceMode.Impulse);
+            }
+            else
+            {
+                _targetVelocity += Vector3.up * jumpForce + additionalForce;   
+            }
+            
+            StartCoroutine(CoyoteTimeCooldown());
+            stamina = Mathf.Clamp(stamina - jumpStaminaCost * Time.deltaTime, 0, staminaMax);
+            _coyoteTime = 0;
+        }
+        
         private void SlopeCheck()
         {
             if (!State.IsGrounded)
@@ -333,7 +360,7 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded)
+                if (!State.IsGrounded && Player.VehicleControls.controlledVehicle == null)
                 {
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
@@ -350,6 +377,8 @@ namespace MrPink.PlayerSystem
             }
             else
             {
+                
+                jumpTime -= Time.deltaTime;
                 if (lastVelocityInAirY >= 0 && rb.velocity.y < 0)
                 {
                     lastVelocityInAirY = rb.velocity.y;
@@ -376,7 +405,18 @@ namespace MrPink.PlayerSystem
             else if (!onSlope)
                 resultGravity = 1;
 
-            rb.velocity = _resultVelocity + Vector3.down * resultGravity;
+            if (_resultVelocity.y < 0 || jumpTime <= 0)
+            {
+                _resultVelocity += Vector3.down * resultGravity * (fallMultiplayer - 1);
+            }
+            else if (_resultVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
+            {    
+                _resultVelocity += Vector3.down * resultGravity * (lowJumpMultiplayer - 1);
+            }
+            
+            //rb.velocity = _resultVelocity + Vector3.down * resultGravity;
+            rb.velocity = _resultVelocity;
+
         }
 
         private void ApplyGrindRailMovement()

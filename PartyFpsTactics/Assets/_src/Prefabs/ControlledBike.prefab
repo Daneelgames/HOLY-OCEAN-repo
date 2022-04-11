@@ -406,7 +406,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569018931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0.65, z: 1}
+  m_LocalPosition: {x: -0.5, y: 0.65, z: 1.284}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1770069065}
@@ -685,7 +685,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911499878}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.50000054, y: 0.65, z: 1}
+  m_LocalPosition: {x: 0.50000346, y: 0.65, z: 1.2839981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1770069065}
@@ -5924,6 +5924,9 @@ MonoBehaviour:
   setRotationStraightThreshold: 140
   minMaxWheelsAngle: 60
   slopeRaycastTransform: {fileID: 6147981820096435532}
+  cooldownOnDamageOwnerOnCrash: 1
+  velocityToDamageCrashThreshold: 10
+  contactAngleToDamageCrashThreshold: 10
   bikeMovementParticles: {fileID: 7176716480502378555}
   particlesMaxDriveRate: 200
   bikeIdleAu: {fileID: 560357402}
@@ -5940,7 +5943,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1000
   m_Drag: 0.01
-  m_AngularDrag: 0.1
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0

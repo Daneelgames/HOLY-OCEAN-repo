@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
+using MrPink.PlayerSystem;
 using UnityEngine;
 
 public class ControlledVehicle : MonoBehaviour
@@ -19,13 +21,20 @@ public class ControlledVehicle : MonoBehaviour
     public float setRotationStraightThreshold = 90;
     public float minMaxWheelsAngle = 20;
 
+
     public Transform slopeRaycastTransform;
     private float h = 0;
     private float v = 0;
     float z = 0;
 
-    private bool inControl = false;
+    private HealthController ownerHc;
 
+    [Header("CRASH")]
+    public float cooldownOnDamageOwnerOnCrash = 1;
+    private float cooldownOnDamageOwnerOnCrashCurrent = 0;
+    public float velocityToDamageCrashThreshold = 10;
+    public float contactAngleToDamageCrashThreshold = 10;
+    
     [Header("Feedback")] 
     public ParticleSystem bikeMovementParticles;
     ParticleSystem.EmissionModule bikeMovementParticlesEmission;
@@ -82,9 +91,9 @@ public class ControlledVehicle : MonoBehaviour
                 bikeDriftAu.volume -= 0.1f;
             }
 
-            bikeDriveAu.volume = Mathf.Clamp(bikeDriveAu.volume, 0, 0.75f);
-            bikeDriftAu.volume = Mathf.Clamp(bikeDriftAu.volume, 0, 0.75f);
-            //bikeWheelsAu.volume = Mathf.Clamp(bikeWheelsAu.volume, 0, 0.75f);
+            bikeDriveAu.volume = Mathf.Clamp(bikeDriveAu.volume, 0, 0.66f);
+            bikeDriftAu.volume = Mathf.Clamp(bikeDriftAu.volume, 0, 0.66f);
+            bikeWheelsAu.volume = Mathf.Clamp(bikeWheelsAu.volume, 0, 0.66f);
 
             bikeMovementParticlesEmission.rateOverTime = rate;
             yield return new WaitForSeconds(0.1f);
@@ -112,7 +121,7 @@ public class ControlledVehicle : MonoBehaviour
     IEnumerator SetRotationStraightOverTime()
     {
         float t = 0;
-        float tt = 1f;
+        float tt = 3f;
         while (t < tt)
         {
             rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, t/tt);
@@ -128,8 +137,8 @@ public class ControlledVehicle : MonoBehaviour
     {
         rb.drag = 1f;
         rb.angularDrag = 1f;
-        inControl = false;
-        
+        ownerHc = null;
+        cooldownOnDamageOwnerOnCrashCurrent = 0;
         for (int i = 0; i < wheels.Count; i++)
         {
             wheels[i].brakeTorque = brakeForce;
@@ -143,7 +152,12 @@ public class ControlledVehicle : MonoBehaviour
     }
     public void SetPlayerInput(float hor, float ver, bool brake)
     {
-        inControl = true;
+        // перекинуть в общий прием инпута от юнитов
+
+        if (cooldownOnDamageOwnerOnCrashCurrent > 0)
+            cooldownOnDamageOwnerOnCrashCurrent -= Time.deltaTime;
+        
+        ownerHc = Player.Health;
         h = hor;
         v = ver;
         braking = brake;
@@ -155,7 +169,7 @@ public class ControlledVehicle : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!inControl)
+        if (!ownerHc)
             return;
 
         float resultAcceleration = acceleration;
@@ -191,6 +205,28 @@ public class ControlledVehicle : MonoBehaviour
         if (Vector3.Angle(transform.up, Vector3.down) < setRotationStraightThreshold)
         {
             SetRotationStraight();
+        }
+    }
+
+    void OnCollisionEnter(Collision coll)
+    {
+        if (cooldownOnDamageOwnerOnCrashCurrent > 0)
+            return;
+        
+        if (coll.gameObject.layer != 6 && coll.gameObject.layer != 12 )
+            return;
+
+        var collisionForce = coll.impulse / Time.fixedDeltaTime;
+        if (Vector3.Angle(collisionForce, rb.velocity) > contactAngleToDamageCrashThreshold)
+            return;
+        
+        if (coll.relativeVelocity.magnitude > velocityToDamageCrashThreshold)
+        {
+            if (ownerHc == Player.Health)
+            {
+                cooldownOnDamageOwnerOnCrashCurrent = cooldownOnDamageOwnerOnCrash;
+                ownerHc.Damage(50, DamageSource.Environment);
+            }
         }
     }
 }
