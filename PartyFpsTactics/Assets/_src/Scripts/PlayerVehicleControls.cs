@@ -11,6 +11,8 @@ public class PlayerVehicleControls : MonoBehaviour
     public static PlayerVehicleControls Instance;
 
     public ControlledVehicle controlledVehicle;
+    public float playerFollowMoveScaler = 10;
+    public float playerFollowRotScaler = 10;
     private void Awake()
     {
         Instance = this;
@@ -79,15 +81,15 @@ public class PlayerVehicleControls : MonoBehaviour
                 TogglePlayerInside(false);
                 controlledVehicle.StopMovement();
                 controlVehicleCoroutine = null;
-                Player.Movement.Jump(controlledVehicle.rb.velocity, true);
+                Player.Movement.Jump(Player.Movement.transform.forward * 200, true);
                 controlledVehicle = null;
                 yield break;
             }
             
             bool brake = Input.GetKey(KeyCode.LeftControl);
             
-            Player.Movement.transform.position = controlledVehicle.sitTransform.position;
-            Player.Movement.transform.rotation = controlledVehicle.sitTransform.rotation;
+            Player.Movement.transform.position = Vector3.Lerp(Player.Movement.transform.position, controlledVehicle.sitTransform.position, playerFollowMoveScaler * Time.deltaTime);
+            Player.Movement.transform.rotation = Quaternion.Slerp(Player.Movement.transform.rotation, controlledVehicle.sitTransform.rotation, playerFollowRotScaler * Time.deltaTime);
             float hor = Input.GetAxis("Horizontal");
             float ver = Input.GetAxis("Vertical");
             controlledVehicle.SetPlayerInput(hor,ver, brake);

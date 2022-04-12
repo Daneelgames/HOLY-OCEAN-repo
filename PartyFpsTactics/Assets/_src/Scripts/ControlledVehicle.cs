@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
+using VehicleBehaviour;
 
 public class ControlledVehicle : MonoBehaviour
 {
+    public WheelVehicle wheelVehicle;
     public Transform sitTransform;
-    public Rigidbody rb;
-    public Transform centerOfMass;
+    
+    [Header("DONT USE BELOW")]
+    //public Rigidbody rb;
     public List<WheelCollider> wheels;
     public float acceleration = 100;
     public float slopesHelpScaler = 3;
@@ -47,9 +50,8 @@ public class ControlledVehicle : MonoBehaviour
     private void Start()
     {
         bikeMovementParticlesEmission = bikeMovementParticles.emission;
-        rb.centerOfMass = centerOfMass.localPosition;
 
-        StartCoroutine(UpdateBikeMoveFeedback());
+        //StartCoroutine(UpdateBikeMoveFeedback());
     }
 
     IEnumerator UpdateBikeMoveFeedback()
@@ -73,6 +75,7 @@ public class ControlledVehicle : MonoBehaviour
                 bikeDriveAu.volume -= 0.1f;
             }
 
+            /*
             if (rb.velocity.magnitude > 0.5f)
             {
                 bikeWheelsAu.volume += 0.1f;
@@ -89,7 +92,7 @@ public class ControlledVehicle : MonoBehaviour
             else
             {
                 bikeDriftAu.volume -= 0.1f;
-            }
+            }*/
 
             bikeDriveAu.volume = Mathf.Clamp(bikeDriveAu.volume, 0, 0.5f);
             bikeDriftAu.volume = Mathf.Clamp(bikeDriftAu.volume, 0, 0.5f);
@@ -103,13 +106,18 @@ public class ControlledVehicle : MonoBehaviour
 
     public void StartPlayerInput()
     {
+        wheelVehicle.IsPlayer = true;
+        wheelVehicle.Handbrake = false;
+        return;
+        /*
         rb.drag = 0.1f;
-        rb.angularDrag = 0.5f;
+        rb.angularDrag = 0.5f;*/
         SetRotationStraight();
     }
 
     void SetRotationStraight()
     {
+        return;
         if (SetRotationStraightCoroutine != null)
             return;
         
@@ -123,9 +131,9 @@ public class ControlledVehicle : MonoBehaviour
         float t = 0;
         float tt = 3f;
         while (t < tt)
-        {
+        {/*
             rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, t/tt);
-            rb.MoveRotation(Quaternion.Slerp(rb.rotation, Quaternion.Euler(new Vector3(rb.rotation.eulerAngles.x, rb.rotation.eulerAngles.y, 0)), t / tt));
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, Quaternion.Euler(new Vector3(rb.rotation.eulerAngles.x, rb.rotation.eulerAngles.y, 0)), t / tt));*/
             t += Time.deltaTime;
             yield return null;
         }
@@ -135,9 +143,13 @@ public class ControlledVehicle : MonoBehaviour
     
     public void StopMovement()
     {
-        rb.drag = 1f;
-        rb.angularDrag = 1f;
+        wheelVehicle.IsPlayer = false;
+        wheelVehicle.Handbrake = true;
         ownerHc = null;
+        return;
+        /*
+        rb.drag = 1f;
+        rb.angularDrag = 1f;*/
         cooldownOnDamageOwnerOnCrashCurrent = 0;
         for (int i = 0; i < wheels.Count; i++)
         {
@@ -152,6 +164,7 @@ public class ControlledVehicle : MonoBehaviour
     }
     public void SetPlayerInput(float hor, float ver, bool brake)
     {
+        return;
         // перекинуть в общий прием инпута от юнитов
 
         if (cooldownOnDamageOwnerOnCrashCurrent > 0)
@@ -172,6 +185,7 @@ public class ControlledVehicle : MonoBehaviour
 
     private void FixedUpdate()
     {
+        return;/*
         if (!ownerHc)
             return;
 
@@ -208,7 +222,7 @@ public class ControlledVehicle : MonoBehaviour
         if (Vector3.Angle(transform.up, Vector3.down) < setRotationStraightThreshold)
         {
             SetRotationStraight();
-        }
+        }*/
     }
 
     void OnCollisionEnter(Collision coll)
@@ -220,9 +234,10 @@ public class ControlledVehicle : MonoBehaviour
         if (coll.gameObject.layer != 6 && coll.gameObject.layer != 12 )
             return;
 
+        /*
         var collisionForce = coll.impulse / Time.fixedDeltaTime;
         if (Vector3.Angle(collisionForce, rb.velocity) > contactAngleToDamageCrashThreshold)
-            return;
+            return;*/
         
         if (coll.relativeVelocity.magnitude > velocityToDamageCrashThreshold)
         {

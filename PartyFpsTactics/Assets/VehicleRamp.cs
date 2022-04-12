@@ -13,7 +13,7 @@ public class VehicleRamp : MonoBehaviour
         var vehicle = other.gameObject.GetComponent<ControlledVehicle>();
         if (vehicle)
         {
-            vehicle.rb.AddForce(ForceTransform.forward * forceAmount, ForceMode.Impulse);
+            //vehicle.rb.AddForce(ForceTransform.forward * forceAmount, ForceMode.Impulse);
         }
     }
 }
