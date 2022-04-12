@@ -76,6 +76,7 @@ public class PlayerVehicleControls : MonoBehaviour
             if (Player.Health.health <= 0)
                 yield break;
             
+            /*
             if (Input.GetKey(KeyCode.Space))
             {
                 TogglePlayerInside(false);
@@ -84,7 +85,7 @@ public class PlayerVehicleControls : MonoBehaviour
                 Player.Movement.Jump(Player.Movement.transform.forward * 200, true);
                 controlledVehicle = null;
                 yield break;
-            }
+            }*/
             
             bool brake = Input.GetKey(KeyCode.LeftControl);
             
