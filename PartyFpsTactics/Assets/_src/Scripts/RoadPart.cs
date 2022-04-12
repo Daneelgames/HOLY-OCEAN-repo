@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class RoadPart : MonoBehaviour
@@ -13,22 +14,25 @@ public class RoadPart : MonoBehaviour
 
     public List<BoxCollider> collidersToCheck;
 
+    public NavMeshSurface navMeshSurface;
+
     public void Init()
     {
         visualGo.SetActive(false);
         for (int i = 0; i < collidersToCheck.Count; i++)
         {
-            RaycastHit[] hit = { };
-            Physics.BoxCastNonAlloc(collidersToCheck[i].transform.position, collidersToCheck[i].size, collidersToCheck[i].transform.forward, hit, collidersToCheck[i].transform.rotation, 0.5f, GameManager.Instance.AllSolidsMask);
+            var hits = Physics.OverlapBox(collidersToCheck[i].transform.position, collidersToCheck[i].size, collidersToCheck[i].transform.rotation, GameManager.Instance.AllSolidsMask);
             
-            for (int j = hit.Length - 1; j >= 0; j--)
+            for (int j = hits.Length - 1; j >= 0; j--)
             {
-                var tile = hit[j].collider.gameObject.GetComponent<TileHealth>();
+                var tile = hits[j].gameObject.GetComponent<TileHealth>();
                 if (tile)
                 {
                     tile.Kill(DamageSource.Environment);
+                    continue;
                 }
-                else
+                
+                if (RoadGenerator.Instance.spawnedRoadPartsGO.Contains(hits[j].gameObject))
                 {
                     Destroy(gameObject);
                     return;
@@ -43,6 +47,8 @@ public class RoadPart : MonoBehaviour
         
         collidersToCheck.Clear();
         visualGo.SetActive(true);
+        
+        navMeshSurface.BuildNavMesh();
     }
 
     private void OnDestroy()

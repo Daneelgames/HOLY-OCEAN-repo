@@ -16,6 +16,7 @@ public class RoadGenerator : MonoBehaviour
     public List<RoadPart> roadPartsBrokenPrefabsLeadingUp = new List<RoadPart>();
     public List<RoadPart> roadPartsBrokenPrefabsLeadingDown = new List<RoadPart>();
     List<RoadPart> spawnedRoadParts = new List<RoadPart>();
+    public List<GameObject> spawnedRoadPartsGO = new List<GameObject>();
     public int roadPartsToSpawn = 20;
     public LayerMask allSolidsMask;
 
@@ -40,6 +41,7 @@ public class RoadGenerator : MonoBehaviour
     public void RemoveFromSpawnedParts(RoadPart roadPart)
     {
         spawnedRoadParts.Remove(roadPart);
+        spawnedRoadPartsGO.Remove(roadPart.gameObject);
     }
     
     [ContextMenu("GenerateRoad")]
@@ -84,6 +86,7 @@ public class RoadGenerator : MonoBehaviour
             spawnPos = newPart.roadEnds[0].position;
             spawnRot = newPart.roadEnds[0].rotation;
             spawnedRoadParts.Add(newPart);
+            spawnedRoadPartsGO.Add(newPart.gameObject);
             newPart.transform.parent = transform;
             newPart.Init();
             yield return null;

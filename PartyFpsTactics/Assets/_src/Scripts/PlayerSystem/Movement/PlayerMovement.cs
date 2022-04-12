@@ -292,7 +292,7 @@ namespace MrPink.PlayerSystem
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {
                 jumpTime = jumpTimeMax;
-                Jump(Vector3.zero);
+                Jump(Vector3.zero, true);
             }
             /*
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
@@ -317,7 +317,7 @@ namespace MrPink.PlayerSystem
             }
             else
             {
-                _targetVelocity += Vector3.up * jumpForce + additionalForce;   
+                _targetVelocity += (Vector3.up * jumpForce + additionalForce);   
             }
             
             StartCoroutine(CoyoteTimeCooldown());

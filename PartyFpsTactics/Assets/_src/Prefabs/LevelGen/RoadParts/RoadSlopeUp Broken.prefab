@@ -218,6 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3919044758720269499}
   - component: {fileID: 5528036394808990987}
+  - component: {fileID: -162772971841946861}
   m_Layer: 6
   m_Name: RoadSlopeUp Broken
   m_TagString: Untagged
@@ -269,6 +270,37 @@ MonoBehaviour:
   - {fileID: 3736262359328411376}
   - {fileID: 8185563143085485197}
   - {fileID: 3134305704303068706}
+  navMeshSurface: {fileID: -162772971841946861}
+--- !u!114 &-162772971841946861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2410060822816139651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.06666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
 --- !u!1 &3838622392784911586
 GameObject:
   m_ObjectHideFlags: 0
