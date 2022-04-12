@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
 using UnityEngine;
 
 public class RoadPart : MonoBehaviour
@@ -17,18 +18,27 @@ public class RoadPart : MonoBehaviour
         visualGo.SetActive(false);
         for (int i = 0; i < collidersToCheck.Count; i++)
         {
-            if (Physics.CheckBox(collidersToCheck[i].transform.position,
-                collidersToCheck[i].size, collidersToCheck[i].transform.rotation, GameManager.Instance.AllSolidsMask))
+            RaycastHit[] hit = { };
+            Physics.BoxCastNonAlloc(collidersToCheck[i].transform.position, collidersToCheck[i].size, collidersToCheck[i].transform.forward, hit, collidersToCheck[i].transform.rotation, 0.5f, GameManager.Instance.AllSolidsMask);
+            
+            for (int j = hit.Length - 1; j >= 0; j--)
             {
-                // SPAWN A WAY TO GET TO THE END AND TO THE START OF PART FROM THE GROUND / CLIFF
-                Destroy(gameObject);
-                return;
+                var tile = hit[j].collider.gameObject.GetComponent<TileHealth>();
+                if (tile)
+                {
+                    tile.Kill(DamageSource.Environment);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                    return;
+                }
             }
         }
 
         for (int i = collidersToCheck.Count - 1; i >= 0; i--)
         {
-          Destroy(collidersToCheck[i].gameObject);  
+            Destroy(collidersToCheck[i].gameObject);  
         }
         
         collidersToCheck.Clear();

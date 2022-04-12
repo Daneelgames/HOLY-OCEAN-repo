@@ -27,6 +27,7 @@ public class UnitsManager : MonoBehaviour
     public List<HealthController> redTeamUnitPrefabs;
     public List<HealthController> blueTeamUnitPrefabs;
     public List<HealthController> neutralUnitPrefabs;
+    public List<HealthController> desertBeastPrefabs;
     private void Awake()
     {
         Instance = this;
@@ -57,7 +58,12 @@ public class UnitsManager : MonoBehaviour
         
         newUnit.AiMovement.TakeCoverOrder();
     }
-    
+
+    public void SpawnDesertBeast(Vector3 pos)
+    {
+        var newUnit = Instantiate(desertBeastPrefabs[Random.Range(0, desertBeastPrefabs.Count)], pos, Quaternion.identity);
+        newUnit.AiMovement.TakeCoverOrder();
+    }
     
     public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1, float playerForce = -1, ScoringActionType action = ScoringActionType.NULL)
     {

@@ -74,7 +74,9 @@ public class LevelGenerator : MonoBehaviour
 
     [UnityEngine.Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
-    
+
+    public Transform partyParentTransform;
+    public Transform captainSpawnTransform;
     private int mainBuildingEntranceSide = 0;
     
     private void Awake()
@@ -84,6 +86,7 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator Start()
     {
+        
         Init();
         if (generatedBuildingFolder == null)
         {
@@ -115,6 +118,9 @@ public class LevelGenerator : MonoBehaviour
     void Init()
     {
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
+        
+        partyParentTransform.eulerAngles = new Vector3(0, currentLevel.partyParentEulerRotationY, 0);
+        
         levelsPosMinMaxX = currentLevel.levelsPosMinMaxX;
         levelsPosMinMaxZ = currentLevel.levelsPosMinMaxZ;
         levelsScaleMinMaxX = currentLevel.levelsScaleMinMaxX;

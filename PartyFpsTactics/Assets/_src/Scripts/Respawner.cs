@@ -11,6 +11,7 @@ namespace _src.Scripts
     {
         public float corpseShredderY = -50;
         public List<Transform> redRespawns;
+        public List<Transform> desertRespawns;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
         public List<Transform> blueRespawns;
         public int alliesAmount = 3;
@@ -27,7 +28,12 @@ namespace _src.Scripts
         {
             if (!spawn)
                 return;
-        
+
+            var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,
+                LevelGenerator.Instance.captainSpawnTransform.position,
+                LevelGenerator.Instance.captainSpawnTransform.rotation);
+            
+            
             // create enemy spawns
             tilesForSpawns = new List<TileHealth>();
             enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].enemiesPerRoomMinMax;
@@ -79,8 +85,8 @@ namespace _src.Scripts
             }
 
             int additionalNpcAmount = Random.Range(ProgressionManager.Instance
-                .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.x, ProgressionManager.Instance
-                .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.y);
+                .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.x, 
+                ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.y);
             for (int i = 0; i < additionalNpcAmount; i++)
             {
                 var tiles = LevelGenerator.Instance
@@ -95,6 +101,11 @@ namespace _src.Scripts
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
                 UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
+            }
+
+            for (int i = 0; i < ProgressionManager.Instance.CurrentLevel.desertBeastsSpawnAmount; i++)
+            {
+                UnitsManager.Instance.SpawnDesertBeast(desertRespawns[Random.Range(0, desertRespawns.Count)].position);
             }
         }
 

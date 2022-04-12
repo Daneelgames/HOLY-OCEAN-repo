@@ -6,7 +6,6 @@ using UnityEngine;
 public class LevelEventActor : MonoBehaviour
 {
     public int actorId = 0;
-    public InteractiveObject npcInteraction;
 
     private void Start()
     {
