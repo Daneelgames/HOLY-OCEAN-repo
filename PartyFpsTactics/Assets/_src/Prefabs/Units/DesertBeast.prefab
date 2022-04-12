@@ -595,6 +595,7 @@ GameObject:
   - component: {fileID: 2177682337277068683}
   - component: {fileID: 8692219909506116655}
   - component: {fileID: 2646737403989280130}
+  - component: {fileID: 8254907987185259264}
   m_Layer: 7
   m_Name: DesertBeast
   m_TagString: Untagged
@@ -674,6 +675,9 @@ MonoBehaviour:
   - {fileID: 2826255802997956646}
   - {fileID: 7751187313285896886}
   damageStates: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6634025865956733556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,13 +708,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _selfMovement: {fileID: 8254907987185259264}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
   currentOrder: 3
-  agent: {fileID: 2646737403989280130}
-  moveSpeed: 50
   runSpeed: 50
-  turnSpeed: 10
   stopDistanceFollow: 1
   stopDistanceMove: 0
   humanVisualController: {fileID: 8692219909506116655}
@@ -858,6 +860,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!114 &8254907987185259264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 50
+  _turnSpeed: 10
+  _stopDistanceFollow: 1
+  _stopDistanceMove: 0
+  _agent: {fileID: 2646737403989280130}
+  _selfVisualController: {fileID: 8692219909506116655}
 --- !u!1 &617381421211773646
 GameObject:
   m_ObjectHideFlags: 0

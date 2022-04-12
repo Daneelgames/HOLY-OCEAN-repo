@@ -4,7 +4,9 @@ using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
+using MrPink.Units;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
@@ -37,7 +39,7 @@ namespace MrPink.Health
         [Header("AI")]
         public Team team;
 
-        public AiMovement AiMovement;
+        public UnitAi AiMovement;
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
@@ -61,6 +63,8 @@ namespace MrPink.Health
         [ShowInInspector, ReadOnly] 
         public bool IsDead { get; private set; } = false;
 
+        public UnityEvent OnDeathEvent = new UnityEvent();
+        
         private void Start()
         {
             healthMax = health;
@@ -259,10 +263,10 @@ namespace MrPink.Health
                 Destroy(npcInteraction.gameObject);
             }
             
+            OnDeathEvent.Invoke();
+            
             if (destroyOnDeath)
-            {
                 Destroy(gameObject);
-            }
         }
 
         private void OnDestroy()

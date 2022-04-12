@@ -2322,11 +2322,13 @@ MonoBehaviour:
     dialogueToStart: {fileID: 11400000, guid: 751b115dd58a1894b8cbb502fd88879d, type: 2}
     destroyInteractorAfterDialogueCompleted: {fileID: 5205671269229392275}
     scoreToAddOnDialogueCompleted: 500
+    setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 15
     NpcHc: {fileID: 5673859260790904911}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
+    controlledVehicle: {fileID: 0}
   rb: {fileID: 0}
   hc: {fileID: 5673859260790904911}
 --- !u!136 &4226590641253379149
@@ -5521,6 +5523,7 @@ GameObject:
   - component: {fileID: 5371681404181358584}
   - component: {fileID: 3176254616865558108}
   - component: {fileID: 8074880395059046385}
+  - component: {fileID: 7767769086912786514}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
   m_TagString: Untagged
@@ -5558,6 +5561,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 300
   healthMax: 300
+  endurance: 100
+  enduranceRegenSpeed: 100
+  UnitRagdollStandupCooldown: 1
   destroyOnDeath: 0
   visibilityTrigger: {fileID: 2179284810325467565}
   proceduralDamageShake: 0
@@ -5597,6 +5603,9 @@ MonoBehaviour:
   - {fileID: 8326106670276248149}
   - {fileID: 4550072142803007685}
   damageStates: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &622743779293351943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5627,13 +5636,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _selfMovement: {fileID: 7767769086912786514}
   coverFoundBehaviour: 0
   noCoverBehaviour: 0
   currentOrder: 3
-  agent: {fileID: 8074880395059046385}
-  moveSpeed: 2
   runSpeed: 4
-  turnSpeed: 4
   stopDistanceFollow: 1.5
   stopDistanceMove: 0
   humanVisualController: {fileID: 3176254616865558108}
@@ -5783,6 +5790,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!114 &7767769086912786514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 2
+  _turnSpeed: 4
+  _stopDistanceFollow: 1.5
+  _stopDistanceMove: 0
+  _agent: {fileID: 8074880395059046385}
+  _selfVisualController: {fileID: 3176254616865558108}
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0
@@ -8515,13 +8540,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36d268af6efbfaf439981dc2f52f598a, type: 3}
---- !u!4 &3889088391191958488 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 36d268af6efbfaf439981dc2f52f598a, type: 3}
-  m_PrefabInstance: {fileID: 3635082422454514739}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4517956937524431202 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 36d268af6efbfaf439981dc2f52f598a, type: 3}
+  m_PrefabInstance: {fileID: 3635082422454514739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3889088391191958488 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 36d268af6efbfaf439981dc2f52f598a, type: 3}
   m_PrefabInstance: {fileID: 3635082422454514739}
   m_PrefabAsset: {fileID: 0}
