@@ -76,7 +76,6 @@ public class LevelGenerator : MonoBehaviour
     public int islandSupportsScalerToClash = 20;
 
     public Transform partyParentTransform;
-    public Transform captainSpawnTransform;
     private int mainBuildingEntranceSide = 0;
     
     private void Awake()
@@ -159,6 +158,13 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator GenerateProcLevel()
     {
+        yield return StartCoroutine(RoadGenerator.Instance.GenerateRoadCoroutine());
+        
+        PartyController.Instance.Init(RoadGenerator.Instance.GetPlayerPosOnRoadEnd());
+        
+        // засунуть игрока в машину
+        // переместить машину на последний кусок дороги
+        
         if (mainBuildingLevelsHeights.Count == 0) // default 5 floors building
         {
             mainBuildingLevelsHeights = new List<int>();
@@ -233,7 +239,6 @@ public class LevelGenerator : MonoBehaviour
         
         yield return StartCoroutine(SpawnExplosiveBarrels());
         yield return SpawnLoot();
-        RoadGenerator.Instance.GenerateRoad();
         SpawnBillboard();
 
         //yield return StartCoroutine(SpawnGrindRails());

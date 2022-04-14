@@ -7,6 +7,16 @@ using UnityEngine;
 
 public class RoadPart : MonoBehaviour
 {
+    public enum RoadType
+    {
+        Straight,
+        StraightVertical,
+        Turn90,
+        Turn90Vertical
+    }
+
+    public RoadType roadType = RoadType.Straight;
+    
     public List<Transform> raycastTransforms;
     public Transform roadStart;
     public List<Transform> roadEnds;

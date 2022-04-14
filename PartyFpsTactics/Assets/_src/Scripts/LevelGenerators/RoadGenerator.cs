@@ -36,6 +36,7 @@ public class RoadGenerator : MonoBehaviour
             Destroy(spawnedRoadParts[i].gameObject);
         }
         spawnedRoadParts.Clear();
+        spawnedRoadPartsGO.Clear();
     }
 
     public void RemoveFromSpawnedParts(RoadPart roadPart)
@@ -47,12 +48,12 @@ public class RoadGenerator : MonoBehaviour
     [ContextMenu("GenerateRoad")]
     public void GenerateRoad()
     {
-        Console.Clear();
+        //Console.Clear();
         StartCoroutine(GenerateRoadCoroutine());
     }
 
     private RoadPart roadPartToSpawn;
-    IEnumerator GenerateRoadCoroutine()
+    public IEnumerator GenerateRoadCoroutine()
     {
         gizmoRaycastPositions.Clear();
         gizmoRaycastDirections.Clear();
@@ -170,6 +171,19 @@ public class RoadGenerator : MonoBehaviour
         }
 
         roadPartToSpawn = prefabToSpawn;
+    }
+
+    public Transform GetPlayerPosOnRoadEnd()
+    {
+        for (int i = 0; i < spawnedRoadParts.Count; i++)
+        {
+            if (spawnedRoadParts[i].roadType == RoadPart.RoadType.Straight)
+            {
+                return spawnedRoadParts[i].transform;
+            }
+        }
+
+        return null;
     }
 
     private List<Vector3> gizmoRaycastPositions = new List<Vector3>();

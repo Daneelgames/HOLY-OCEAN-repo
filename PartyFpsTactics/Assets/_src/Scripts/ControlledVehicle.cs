@@ -10,6 +10,7 @@ public class ControlledVehicle : MonoBehaviour
 {
     public WheelVehicle wheelVehicle;
     public Transform sitTransform;
+    public Transform sitTransformNpc;
     
     [Header("DONT USE BELOW")]
     //public Rigidbody rb;
