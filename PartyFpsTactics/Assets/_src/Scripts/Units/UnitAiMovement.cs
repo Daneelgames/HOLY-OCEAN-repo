@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Brezg.Extensions.UniTaskExtensions;
+using Cysharp.Threading.Tasks;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,8 +17,11 @@ using UnityEditor;
 
 namespace MrPink.Units
 {
-    public class UnitAi : MonoBehaviour
+    public class UnitAiMovement : MonoBehaviour
     {
+        [SerializeField] 
+        private Team _team;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitMovement _selfMovement;
         
@@ -38,8 +44,7 @@ namespace MrPink.Units
         private bool inCover = false;
         
         public HealthController enemyToLookAt;
-
-        private List<CoverSpot> _goodCoverPoints = new List<CoverSpot>();
+        
         private CoverSpot _occupiedCoverSpot;
         private float _takeCoverCooldown = 0;
         
@@ -49,13 +54,18 @@ namespace MrPink.Units
         private Coroutine _takeCoverCoroutine;
         private Coroutine _getInCoverCoroutine;
         private Coroutine _moveToPositionCoroutine;
-        
+
 
         private void Start()
         {
             _selfHealth.OnDeathEvent.AddListener(Death);
-            
-            StartCoroutine(Awareness());
+
+            Awareness().ForgetWithHandler();
+
+            if (_team == Team.Red && Random.value > 0.9f)
+                MoveToPositionOrder(Player.GameObject.transform.position);
+            else
+                TakeCoverOrder();
         }
 
         private void Update()
@@ -66,50 +76,44 @@ namespace MrPink.Units
             if (_takeCoverCooldown > 0)
                 _takeCoverCooldown -= Time.deltaTime;
         }
-        
 
-        private IEnumerator Awareness()
+
+        private async UniTask Awareness()
         {
             while (_selfHealth.health > 0)
             {
-                float distance = 1000;
-                HealthController closestVisibleEnemy = null;
-                for (int i = unitVision.VisibleEnemies.Count - 1; i >= 0; i--)
-                {
-                    yield return null;
+                enemyToLookAt = await unitVision.GetClosestVisibleEnemy();
                 
-                    if (i >= unitVision.VisibleEnemies.Count)
-                        continue;
+                if (enemyToLookAt != null)
+                    TryCoverFromClosest(enemyToLookAt);
                 
-                    if (unitVision.VisibleEnemies[i])
-                    {
-                        float newDistance = Vector3.Distance(transform.position, unitVision.VisibleEnemies[i].transform.position);
-                        if (newDistance < distance)
-                        {
-                            distance = newDistance;
-                            closestVisibleEnemy = unitVision.VisibleEnemies[i];
-                        }
-
-                        var isCovered = CoverSystem.IsCoveredFrom(_selfHealth, unitVision.VisibleEnemies[i]);
-                        
-                        if (
-                            !isCovered &&
-                            _takeCoverCooldown <= 0 &&
-                            currentOrder != MovementOrder.FollowTarget &&
-                            currentOrder != MovementOrder.MoveToPosition
-                            )
-                        {
-                            TakeCoverOrder(false, true, unitVision.VisibleEnemies[i]);
-                            yield return null;
-                        }
-                    }
-                }
-
-                enemyToLookAt = closestVisibleEnemy;
-                yield return null;   
+                await UniTask.DelayFrame(1);
             }
 
             StopAllBehaviorCoroutines();
+        }
+        
+
+        private void TryCoverFromClosest(HealthController enemy)
+        {
+            if (enemy == null)
+                return;
+            
+            var isCovered = CoverSystem.IsCoveredFrom(_selfHealth, enemy);
+
+            if (isCovered)
+                return;
+
+            if (_takeCoverCooldown > 0)
+                return;
+
+            if (currentOrder == MovementOrder.FollowTarget)
+                return;
+
+            if (currentOrder == MovementOrder.MoveToPosition)
+                return;
+                        
+            TakeCoverOrder(false, true, enemy);
         }
 
         private void StopAllBehaviorCoroutines()
@@ -124,7 +128,7 @@ namespace MrPink.Units
         }
 
 
-        public void TakeCoverOrder(bool random = false, bool closest = true, HealthController takeCoverFrom = null)
+        private void TakeCoverOrder(bool random = false, bool closest = true, HealthController takeCoverFrom = null)
         {
             SetOccupiedSpot(_occupiedCoverSpot, null);
             StopAllBehaviorCoroutines();
@@ -136,34 +140,8 @@ namespace MrPink.Units
         
         private IEnumerator TakeCover(bool randomCover, bool closest, HealthController enemy = null)
         {
-            if (randomCover)
-                _goodCoverPoints = CoverSystem.Instance.GetAllCovers();
-            else
-                // FIND GOOD COVERS TO HIDE FROM EVERY VISIBLE ENEMY
-                _goodCoverPoints = CoverSystem.Instance.FindCover(transform, unitVision.VisibleEnemies);
-
-
-            CoverSpot chosenCover = null;
-            if (closest)
-            {
-                // PICK CLOSEST COVER
-                float distance = 1000;
-                for (int i = 0; i < _goodCoverPoints.Count; i++)
-                {
-                    if (_goodCoverPoints[i] == null)
-                        continue;
-                
-                    float newDistance = Vector3.Distance(_goodCoverPoints[i].transform.position, transform.position);
-                    if (newDistance < distance)
-                    {
-                        distance = newDistance;
-                        chosenCover = _goodCoverPoints[i];
-                    }
-                }   
-            }
-            else
-                chosenCover = _goodCoverPoints[Random.Range(0, _goodCoverPoints.Count)];
-
+            CoverSpot chosenCover = GetCover(randomCover, closest);
+            
             if (chosenCover == null)
             {
                 // CAN'T FIND COVER
@@ -173,8 +151,7 @@ namespace MrPink.Units
             
                 if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
                 {
-                    Vector3 targetPos = enemy.transform.position;
-                    targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
+                    Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
 
                     _selfMovement.AgentSetPath(targetPos, true);
                 }
@@ -215,6 +192,40 @@ namespace MrPink.Units
             FireWatchOrder();
         }
 
+        private CoverSpot GetCover(bool isFromRandomPool, bool isClosestNeeded)
+        {
+            var goodCoverSpots = isFromRandomPool 
+                ? CoverSystem.Instance.GetAllCovers()
+                : CoverSystem.Instance.FindCover(transform, unitVision.visibleEnemies);
+            
+            if (isClosestNeeded)
+                return GetClosestCover(goodCoverSpots);
+            
+            return goodCoverSpots[Random.Range(0, goodCoverSpots.Count)];
+
+        }
+
+        private CoverSpot GetClosestCover(List<CoverSpot> goodCoverSpots)
+        {
+            float distance = 1000;
+            CoverSpot closest = null;
+            foreach (var cover in goodCoverSpots)
+            {
+                if (cover == null)
+                    continue;
+                
+                float newDistance = Vector3.Distance(cover.transform.position, transform.position);
+                
+                if (newDistance >= distance)
+                    continue;
+                
+                distance = newDistance;
+                closest = cover;
+            }
+
+            return closest;
+        }
+
         private void SetOccupiedSpot(CoverSpot spot, HealthController occupator)
         {
             //Spot occupied!
@@ -227,19 +238,17 @@ namespace MrPink.Units
             
                 SetInCover(false);
             }
-        
-            if (spot)
-            {
-                if (occupator == null && spot.Occupator != _selfHealth)
-                    return;
 
-                if (occupator == _selfHealth)
-                {
-                    _getInCoverCoroutine = StartCoroutine(CheckIfCloseToCover());
-                }
+            if (!spot) 
+                return;
             
-                spot.Occupator = occupator;
-            }
+            if (occupator == null && spot.Occupator != _selfHealth)
+                return;
+
+            if (occupator == _selfHealth)
+                _getInCoverCoroutine = StartCoroutine(CheckIfCloseToCover());
+
+            spot.Occupator = occupator;
         }
 
         private void SetInCover(bool isInCover)
@@ -315,8 +324,8 @@ namespace MrPink.Units
             _selfMovement.Resurrect();
             
             HealthController enemy = null;
-            if (unitVision.VisibleEnemies.Count > 0)
-                enemy = unitVision.VisibleEnemies[Random.Range(0, unitVision.VisibleEnemies.Count)];
+            if (unitVision.visibleEnemies.Count > 0)
+                enemy = unitVision.visibleEnemies[Random.Range(0, unitVision.visibleEnemies.Count)];
                 
             TakeCoverOrder(false, true, enemy);
         }

@@ -39,7 +39,7 @@ namespace MrPink.Health
         [Header("AI")]
         public Team team;
 
-        public UnitAi AiMovement;
+        public UnitAiMovement AiMovement;
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 

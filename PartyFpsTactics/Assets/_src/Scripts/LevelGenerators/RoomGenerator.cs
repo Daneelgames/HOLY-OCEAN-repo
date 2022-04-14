@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Units;
 using UnityEngine;
 
 namespace _src.Scripts.LevelGenerators

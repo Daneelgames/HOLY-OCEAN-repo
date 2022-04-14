@@ -117,7 +117,7 @@ namespace MrPink.Units
         
         #if UNITY_EDITOR
 
-        public void TransferData(UnitAi source)
+        public void TransferData(UnitAiMovement source)
         {
             _selfVisualController = source.humanVisualController;
         }
