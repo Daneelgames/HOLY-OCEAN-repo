@@ -19,6 +19,13 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitMovement _selfMovement;
         
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private UnitFollowTarget _selfFollow;
+        
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private HealthController _selfHealth;
+        
+        
         public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
         public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
 
@@ -27,16 +34,11 @@ namespace MrPink.Units
 
         public HumanVisualController humanVisualController;
         public UnitVision unitVision;
-
         
         private bool inCover = false;
-
-        private Vector3 currentTargetPosition;
+        
         public HealthController enemyToLookAt;
-        
-        
-        private HealthController _selfHealth;
-        
+
         private List<CoverSpot> _goodCoverPoints = new List<CoverSpot>();
         private CoverSpot _occupiedCoverSpot;
         private float _takeCoverCooldown = 0;
@@ -46,14 +48,8 @@ namespace MrPink.Units
         
         private Coroutine _takeCoverCoroutine;
         private Coroutine _getInCoverCoroutine;
-        private Coroutine _followTargetCoroutine;
         private Coroutine _moveToPositionCoroutine;
         
-        
-        private void Awake()
-        {
-            _selfHealth = GetComponent<HealthController>();
-        }
 
         private void Start()
         {
@@ -121,8 +117,7 @@ namespace MrPink.Units
             if (_moveToPositionCoroutine != null)
                 StopCoroutine(_moveToPositionCoroutine);
             
-            if (_followTargetCoroutine != null)
-                StopCoroutine(_followTargetCoroutine);
+            _selfFollow.StopFollowing();
             
             if (_takeCoverCoroutine != null)
                 StopCoroutine(_takeCoverCoroutine);
@@ -205,9 +200,9 @@ namespace MrPink.Units
             if (_selfMovement != null)
                 _selfMovement.AgentSetPath(chosenCover.transform.position, false);
             
-            currentTargetPosition = _occupiedCoverSpot.transform.position;
+            var spotPosition = _occupiedCoverSpot.transform.position;
 
-            while (Vector3.Distance(transform.position, currentTargetPosition) > 0.33f)
+            while (Vector3.Distance(transform.position, spotPosition) > 0.33f)
             {
                 if (_occupiedCoverSpot.Occupator != _selfHealth)
                 {
@@ -264,9 +259,8 @@ namespace MrPink.Units
                     transform.rotation = Quaternion.Slerp(transform.rotation, _occupiedCoverSpot.transform.rotation, Time.deltaTime * 3);
                 }
                 else
-                {
                     SetInCover(false);
-                }
+                
                 yield return null;
 
             }
@@ -275,7 +269,6 @@ namespace MrPink.Units
         private void FireWatchOrder()
         {
             StopAllBehaviorCoroutines();
-            currentTargetPosition = transform.position;
             currentOrder = MovementOrder.FireWatch;
         }
         
@@ -284,7 +277,7 @@ namespace MrPink.Units
             SetOccupiedSpot(_occupiedCoverSpot, null);
             StopAllBehaviorCoroutines();
             currentOrder = MovementOrder.FollowTarget;
-            _followTargetCoroutine = StartCoroutine(_selfMovement.FollowTarget(target));
+            _selfFollow.FollowTarget(target);
         }
 
         
@@ -319,10 +312,6 @@ namespace MrPink.Units
 
         public void Resurrect()
         {
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
-                transform.position = hit.position;
-            
             _selfMovement.Resurrect();
             
             HealthController enemy = null;
@@ -331,21 +320,15 @@ namespace MrPink.Units
                 
             TakeCoverOrder(false, true, enemy);
         }
-    
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(currentTargetPosition , Vector3.one);
-        }
 
-        
-        
-        
+
 #if UNITY_EDITOR
 
         [ContextMenu("Transfer movement")]
         private void TransferMovementData()
         {
+            _selfHealth = GetComponent<HealthController>();
+            
             _selfMovement = GetComponent<UnitMovement>();
             if (_selfMovement == null)
             {
@@ -355,6 +338,17 @@ namespace MrPink.Units
             
             _selfMovement.TransferData(this);
             EditorUtility.SetDirty(_selfMovement);
+            
+            _selfFollow = GetComponent<UnitFollowTarget>();
+            if (_selfFollow == null)
+            {
+                _selfFollow = gameObject.AddComponent<UnitFollowTarget>();
+                EditorUtility.SetDirty(this);
+            }
+            
+            _selfFollow.TransferData();
+            EditorUtility.SetDirty(_selfFollow);
+            
             AssetDatabase.SaveAssets();
         }
         

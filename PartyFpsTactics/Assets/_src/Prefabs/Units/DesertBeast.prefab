@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 8692219909506116655}
   - component: {fileID: 2646737403989280130}
   - component: {fileID: 8254907987185259264}
+  - component: {fileID: -8284327079036214745}
   m_Layer: 7
   m_Name: DesertBeast
   m_TagString: Untagged
@@ -709,12 +710,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selfMovement: {fileID: 8254907987185259264}
+  _selfFollow: {fileID: -8284327079036214745}
+  _selfHealth: {fileID: 1876098499272473148}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
   currentOrder: 3
-  runSpeed: 50
-  stopDistanceFollow: 1
-  stopDistanceMove: 0
   humanVisualController: {fileID: 8692219909506116655}
   unitVision: {fileID: 6634025865956733556}
   enemyToLookAt: {fileID: 0}
@@ -878,6 +878,20 @@ MonoBehaviour:
   _stopDistanceMove: 0
   _agent: {fileID: 2646737403989280130}
   _selfVisualController: {fileID: 8692219909506116655}
+--- !u!114 &-8284327079036214745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selfAgent: {fileID: 2646737403989280130}
+  _selfMovement: {fileID: 8254907987185259264}
 --- !u!1 &617381421211773646
 GameObject:
   m_ObjectHideFlags: 0

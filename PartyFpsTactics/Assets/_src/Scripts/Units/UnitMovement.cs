@@ -33,7 +33,7 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private HumanVisualController _selfVisualController;
 
-        private Vector3 _currentTargetPosition;
+        
         private Vector3 _currentVelocity;
         private Transform _lookTransform;
 
@@ -58,6 +58,10 @@ namespace MrPink.Units
 
         public void Resurrect()
         {
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
+                transform.position = hit.position;
+            
             _agent.enabled = true;
             this.enabled = true;
         }
@@ -72,26 +76,11 @@ namespace MrPink.Units
             _lookTransform.LookAt(targetPosition, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, _lookTransform.rotation, Time.deltaTime * _turnSpeed);  
         }
-
-
-        public IEnumerator FollowTarget(Transform target)
-        {
-            while (true)
-            {
-                if (!_agent || !_agent.enabled)
-                    yield break;
-            
-                AgentSetPath(target.position, true);
-            
-                _currentTargetPosition = target.position;
-                yield return new WaitForSeconds(0.5f);
-            }
-        }
+        
         
         public IEnumerator MoveToPosition(Vector3 target)
         {
             AgentSetPath(target, false);
-            _currentTargetPosition = target;
         
             while (Vector3.Distance(transform.position, target) > 1)
                 yield return new WaitForSeconds(0.5f);

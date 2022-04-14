@@ -5579,6 +5579,7 @@ GameObject:
   - component: {fileID: 8074880395059046385}
   - component: {fileID: 1333313718681721511}
   - component: {fileID: -4709905595307477388}
+  - component: {fileID: -8108894381655698296}
   m_Layer: 7
   m_Name: MrCaptain
   m_TagString: Untagged
@@ -5692,12 +5693,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selfMovement: {fileID: -4709905595307477388}
+  _selfFollow: {fileID: -8108894381655698296}
+  _selfHealth: {fileID: 5673859260790904911}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
   currentOrder: 3
-  runSpeed: 6
-  stopDistanceFollow: 1.5
-  stopDistanceMove: 0
   humanVisualController: {fileID: 3176254616865558108}
   unitVision: {fileID: 622743779293351943}
   enemyToLookAt: {fileID: 0}
@@ -5876,6 +5876,20 @@ MonoBehaviour:
   _stopDistanceMove: 0
   _agent: {fileID: 8074880395059046385}
   _selfVisualController: {fileID: 3176254616865558108}
+--- !u!114 &-8108894381655698296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selfAgent: {fileID: 8074880395059046385}
+  _selfMovement: {fileID: -4709905595307477388}
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0
@@ -8550,11 +8564,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
---- !u!4 &5138361042116118051 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
-  m_PrefabInstance: {fileID: 2822950946478345442}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8335250814285952587 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6089395122212797097, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
@@ -8566,6 +8575,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eee4ce499a7b04080f83fc6893de5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &5138361042116118051 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
+  m_PrefabInstance: {fileID: 2822950946478345442}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5183777294767449176
 PrefabInstance:
   m_ObjectHideFlags: 0
