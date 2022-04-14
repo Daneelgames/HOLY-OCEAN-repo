@@ -132,7 +132,6 @@ public class ScoringSystem : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        return;
         scoreAddedAu.pitch = Random.Range(0.9f, 1.1f);
         scoreAddedAu.Play();
         

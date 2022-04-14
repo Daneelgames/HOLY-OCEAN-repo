@@ -49,7 +49,7 @@ public class ControlledVehicle : MonoBehaviour
 
     private void Start()
     {
-        bikeMovementParticlesEmission = bikeMovementParticles.emission;
+        //bikeMovementParticlesEmission = bikeMovementParticles.emission;
 
         //StartCoroutine(UpdateBikeMoveFeedback());
     }
