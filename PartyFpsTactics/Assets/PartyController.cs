@@ -32,6 +32,8 @@ public class PartyController : MonoBehaviour
         playerCar.transform.position = newCarPos;
         playerCar.transform.rotation = newCarRot;
 
+        Player.Movement.gameObject.SetActive(true);
+        Player.Interactor.cam.gameObject.SetActive(true);
         Player.VehicleControls.RequestVehicleAction(playerCar);
     }
 }

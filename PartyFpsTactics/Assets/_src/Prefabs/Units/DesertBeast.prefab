@@ -270,7 +270,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000006891787, y: 0.17821251, z: 0.000000007450581}
+  m_ConnectedAnchor: {x: -0.00000008754432, y: 0.17821257, z: -0.000000031664968}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -330,12 +330,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -434,7 +434,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d27598582e5920342a5dd8c2d012d6b0, type: 2}
+  - {fileID: 2100000, guid: 8e2505a27b3a0c64fb715513b2ddd020, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -595,6 +595,8 @@ GameObject:
   - component: {fileID: 2177682337277068683}
   - component: {fileID: 8692219909506116655}
   - component: {fileID: 2646737403989280130}
+  - component: {fileID: 8254907987185259264}
+  - component: {fileID: -8284327079036214745}
   m_Layer: 7
   m_Name: DesertBeast
   m_TagString: Untagged
@@ -611,7 +613,7 @@ Transform:
   m_GameObject: {fileID: 576296732197411295}
   m_LocalRotation: {x: -0, y: -0.38803858, z: 0, w: -0.92164314}
   m_LocalPosition: {x: 22.67156, y: 0.15698862, z: 49.633125}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 8681167232412001252}
   - {fileID: 4784770148644231833}
@@ -632,15 +634,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 2000
   healthMax: 2000
-  endurance: 50
-  enduranceRegenSpeed: 30
+  endurance: 1000
+  enduranceRegenSpeed: 100
   UnitRagdollStandupCooldown: 3
   destroyOnDeath: 0
   visibilityTrigger: {fileID: 5371381171661652958}
   proceduralDamageShake: 0
-  shakeX: 0
+  shakeX: 1
   shakeY: 0
-  shakeZ: 0
+  shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
   team: 0
@@ -648,10 +650,7 @@ MonoBehaviour:
   HumanVisualController: {fileID: 8692219909506116655}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
-  objectsToSpawnOnDeath:
-  - {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
-  - {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
-  - {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
+  objectsToSpawnOnDeath: []
   npcInteraction: {fileID: 0}
   deathOnHit: {fileID: 0}
   rb: {fileID: 0}
@@ -677,6 +676,9 @@ MonoBehaviour:
   - {fileID: 2826255802997956646}
   - {fileID: 7751187313285896886}
   damageStates: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6634025865956733556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -690,7 +692,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
-  visibilityDistanceMax: 100
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
@@ -708,15 +709,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _selfMovement: {fileID: 8254907987185259264}
+  _selfFollow: {fileID: -8284327079036214745}
+  _selfHealth: {fileID: 1876098499272473148}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
   currentOrder: 3
-  agent: {fileID: 2646737403989280130}
-  moveSpeed: 20
-  runSpeed: 20
-  turnSpeed: 10
-  stopDistanceFollow: 3
-  stopDistanceMove: 2
   humanVisualController: {fileID: 8692219909506116655}
   unitVision: {fileID: 6634025865956733556}
   enemyToLookAt: {fileID: 0}
@@ -834,10 +832,6 @@ MonoBehaviour:
   - {fileID: 7147599452781533243}
   - {fileID: 8993234795829460015}
   - {fileID: 5800788775649073539}
-  activePositionSpring: 1500
-  activePositionDamper: 100
-  activeAngularPositionSpring: 1500
-  activeAngularPositionDamper: 100
   timeToStandUp: 2
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 7631144225832590342}
@@ -866,6 +860,38 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!114 &8254907987185259264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 50
+  _turnSpeed: 10
+  _stopDistanceFollow: 1
+  _stopDistanceMove: 0
+  _agent: {fileID: 2646737403989280130}
+  _selfVisualController: {fileID: 8692219909506116655}
+--- !u!114 &-8284327079036214745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selfAgent: {fileID: 2646737403989280130}
+  _selfMovement: {fileID: 8254907987185259264}
 --- !u!1 &617381421211773646
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,7 +986,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.025869824, y: 0.28135177, z: 0.11711818}
+  m_ConnectedAnchor: {x: -0.02586998, y: 0.28135177, z: 0.11711828}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -1020,12 +1046,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -1308,7 +1334,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000056686173, y: 0.10010622, z: -0.00000032782555}
+  m_ConnectedAnchor: {x: 6.175978e-10, y: 0.10010646, z: 0.00000012293458}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -1368,12 +1394,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -2103,7 +2129,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.13135543, y: -0.027335621, z: -0.022333562}
+  m_ConnectedAnchor: {x: 0.13135524, y: -0.027335566, z: -0.022333533}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2163,12 +2189,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -2279,7 +2305,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000036146363, y: 0.07905402, z: 0.000000052154064}
+  m_ConnectedAnchor: {x: 1.2236387e-10, y: 0.07905401, z: -0.0000000037252903}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2339,12 +2365,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -2502,7 +2528,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000000059316125, y: 0.077108905, z: 0.000000014901161}
+  m_ConnectedAnchor: {x: 2.8852032e-10, y: 0.077108905, z: 0.000000014901161}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -2562,12 +2588,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -3063,7 +3089,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000000070780516, y: 0.1782124, z: -0.00000013550743}
+  m_ConnectedAnchor: {x: 0.00000008754432, y: 0.17821257, z: -0.000000031664968}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3123,12 +3149,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -3588,7 +3614,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000006819181, y: 0.37025514, z: 0.10310925}
+  m_ConnectedAnchor: {x: 7.260676e-10, y: 0.3702551, z: 0.10310937}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3648,12 +3674,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -3764,7 +3790,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.13135536, y: -0.027335726, z: -0.022333272}
+  m_ConnectedAnchor: {x: -0.13135526, y: -0.027335566, z: -0.022333533}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -3824,12 +3850,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -4323,7 +4349,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.571, y: 0.024800897, z: 0.00000014156103}
+  m_ConnectedAnchor: {x: -0.57100004, y: 0.024801016, z: 0}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
@@ -4383,12 +4409,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -5435,7 +5461,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000000005644379, y: 0.4998504, z: 0}
+  m_ConnectedAnchor: {x: 0.000000005644379, y: 0.49985024, z: -0.000000045155033}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -5495,12 +5521,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -5641,7 +5667,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0.2956988, z: 0.000000007450581}
+  m_ConnectedAnchor: {x: 0.000000029802322, y: 0.2956988, z: -0.000000022351742}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -5701,12 +5727,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -5821,7 +5847,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000006239861, y: 0.27191293, z: -0.000000059604645}
+  m_ConnectedAnchor: {x: 0.000000017229468, y: 0.271913, z: -0.000000059604645}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -5881,12 +5907,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -6058,7 +6084,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.025870187, y: 0.2813518, z: 0.11711816}
+  m_ConnectedAnchor: {x: 0.02586998, y: 0.28135177, z: 0.11711828}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -6118,12 +6144,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -6357,7 +6383,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000079444635, y: 0.5189002, z: 0.00000031044087}
+  m_ConnectedAnchor: {x: -0.000000011288758, y: 0.5189001, z: -0.00000009595445}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -6417,12 +6443,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -6809,7 +6835,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000028954818, y: 0.10325074, z: 0.00000010803342}
+  m_ConnectedAnchor: {x: 9.313225e-11, y: 0.10325078, z: -0.0000000037252903}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -6869,12 +6895,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -7106,7 +7132,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0000004289728, y: 0.4998503, z: 0.000000033866275}
+  m_ConnectedAnchor: {x: 0, y: 0.49985024, z: -0.000000033866275}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -7166,12 +7192,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -7348,7 +7374,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.0000000547152, y: 0.27191287, z: -0.00000013411045}
+  m_ConnectedAnchor: {x: -0.00000003981404, y: 0.2719129, z: -0.00000008940697}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -7408,12 +7434,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -7879,7 +7905,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.00000033019617, y: 0.51890004, z: -0.00000086359}
+  m_ConnectedAnchor: {x: 0.000000012699854, y: 0.51890016, z: -0.000000022577517}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -7939,12 +7965,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:
@@ -8085,7 +8111,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000000074505806, y: 0.2956987, z: 0.00000010058284}
+  m_ConnectedAnchor: {x: -0.000000074505806, y: 0.29569876, z: -0.000000018626451}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 0
@@ -8145,12 +8171,12 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_AngularYZDrive:
     serializedVersion: 3
-    positionSpring: 1500
+    positionSpring: 900
     positionDamper: 0
     maximumForce: 3.4028233e+38
   m_SlerpDrive:

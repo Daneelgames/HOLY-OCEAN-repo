@@ -6,6 +6,7 @@ using _src.Scripts.LevelGenerators;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.Units;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -158,6 +159,9 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator GenerateProcLevel()
     {
+        Player.Movement.gameObject.SetActive(false);
+        Player.Interactor.cam.gameObject.SetActive(false);
+        
         yield return StartCoroutine(RoadGenerator.Instance.GenerateRoadCoroutine());
         
         PartyController.Instance.Init(RoadGenerator.Instance.GetPlayerPosOnRoadEnd());
