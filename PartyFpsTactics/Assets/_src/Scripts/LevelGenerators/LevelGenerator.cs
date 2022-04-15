@@ -86,7 +86,6 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator Start()
     {
-        
         Init();
         if (generatedBuildingFolder == null)
         {
@@ -162,9 +161,12 @@ public class LevelGenerator : MonoBehaviour
         Player.Movement.gameObject.SetActive(false);
         Player.Interactor.cam.gameObject.SetActive(false);
         
-        yield return StartCoroutine(RoadGenerator.Instance.GenerateRoadCoroutine());
-        
+        // road is already generated
+        //yield return StartCoroutine(RoadGenerator.Instance.GenerateRoadCoroutine());
+
+        yield return null;
         PartyController.Instance.Init(RoadGenerator.Instance.GetPlayerPosOnRoadEnd());
+        
         
         // засунуть игрока в машину
         // переместить машину на последний кусок дороги
@@ -249,10 +251,6 @@ public class LevelGenerator : MonoBehaviour
         
         LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
         yield break;
-        var targetPos = new Vector3(spawnedMainBuildingLevels[0].position.x + spawnedMainBuildingLevels[0].size.x / 2, 0.5f, spawnedMainBuildingLevels[0].position.z - spawnedMainBuildingLevels[0].size.z / 2 - 10);
-        
-        Player.Movement.transform.parent.parent = null;
-        Player.Movement.transform.position = targetPos;
     }
 
 

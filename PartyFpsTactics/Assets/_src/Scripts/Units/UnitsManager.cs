@@ -115,7 +115,7 @@ namespace MrPink.Units
                         }
 
                         if (unitsInGame[i].AiMovement)
-                            unitsInGame[i].AiMovement.Death();
+                            unitsInGame[i].AiMovement.StopActivities();
 
                     }
                 }

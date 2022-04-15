@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -77,10 +76,10 @@ public class RoadGenerator : MonoBehaviour
         var i = spawnedRoadParts[spawnedRoadParts.Count - 1];
         spawnedRoadPartsGO.Remove(i.gameObject);
         spawnedRoadParts.Remove(i);
-        Destroy(i.gameObject);
+        DestroyImmediate(i.gameObject);
     }
     
-    public void GenerateRoad()
+    void GenerateRoad()
     {
         //Console.Clear();
         //StartCoroutine(GenerateRoadCoroutine());
@@ -96,9 +95,9 @@ public class RoadGenerator : MonoBehaviour
             spawnRot = spawnedRoadParts[spawnedRoadParts.Count-1].roadEnds[0].rotation;
         }
 
-        var o = PrefabUtility.InstantiatePrefab(roadPartToSpawn);
+        var o = PrefabUtility.InstantiatePrefab(roadPartToSpawn.gameObject);
         GameObject go = o as GameObject;
-        Debug.Log("GameObject go = o as GameObject: " + go);
+        Debug.Log("GameObject go = o as GameObject: " + go +"; roadPartToSpawn " + roadPartToSpawn);
         var newPart = go.GetComponent<RoadPart>();
         
         newPart.transform.rotation = spawnRot;
@@ -232,15 +231,18 @@ public class RoadGenerator : MonoBehaviour
 
     public Transform GetPlayerPosOnRoadEnd()
     {
-        for (int i = 0; i < spawnedRoadParts.Count; i++)
+        Transform t = null;
+        Debug.Log("spawnedRoadParts.Count: " + spawnedRoadParts.Count);
+        for (int i = spawnedRoadParts.Count - 1; i >= 0; i--)
         {
             if (spawnedRoadParts[i].roadType == RoadPart.RoadType.Straight)
             {
-                return spawnedRoadParts[i].transform;
+                t = spawnedRoadParts[i].transform;
+                break;
             }
         }
 
-        return null;
+        return t;
     }
 
     private List<Vector3> gizmoRaycastPositions = new List<Vector3>();

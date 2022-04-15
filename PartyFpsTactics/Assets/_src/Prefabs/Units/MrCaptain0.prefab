@@ -5580,8 +5580,9 @@ GameObject:
   - component: {fileID: 1333313718681721511}
   - component: {fileID: -4709905595307477388}
   - component: {fileID: -8108894381655698296}
+  - component: {fileID: -8210908667786329200}
   m_Layer: 7
-  m_Name: MrCaptain
+  m_Name: MrCaptain0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5630,6 +5631,7 @@ MonoBehaviour:
   transformToShake: {fileID: 0}
   team: 1
   AiMovement: {fileID: 6090508075434962156}
+  aiVehicleControls: {fileID: -8210908667786329200}
   HumanVisualController: {fileID: 3176254616865558108}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
@@ -5692,6 +5694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _team: 0
   _selfMovement: {fileID: -4709905595307477388}
   _selfFollow: {fileID: -8108894381655698296}
   _selfHealth: {fileID: 5673859260790904911}
@@ -5817,6 +5820,10 @@ MonoBehaviour:
   - {fileID: 4000879407984425544}
   - {fileID: 2916861603622100572}
   - {fileID: 302919725877640176}
+  activePositionSpring: 1500
+  activePositionDamper: 100
+  activeAngularPositionSpring: 1500
+  activeAngularPositionDamper: 100
   timeToStandUp: 2
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 4419122463221333621}
@@ -5890,6 +5897,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selfAgent: {fileID: 8074880395059046385}
   _selfMovement: {fileID: -4709905595307477388}
+--- !u!114 &-8210908667786329200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hc: {fileID: 5673859260790904911}
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

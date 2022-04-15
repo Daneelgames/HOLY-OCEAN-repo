@@ -29,6 +29,7 @@ public class HumanVisualController : MonoBehaviour
     
     private bool ragdoll = false;
     private bool visibleToPlayer = false;
+    private bool inVehicle = false;
     public Material deadMaterial;
     public SkinnedMeshRenderer meshRenderer;
     public LayerMask tilesLayerMask;
@@ -38,8 +39,9 @@ public class HumanVisualController : MonoBehaviour
     
     private Coroutine _changeLerpToStandCoroutine;
     private Coroutine _followRagdollCoroutine;
-    
-    
+        private static readonly int Passenger = Animator.StringToHash("Passenger");
+
+
     private void Start()
     {
         _selfHealth = gameObject.GetComponent<HealthController>();
@@ -99,7 +101,11 @@ public class HumanVisualController : MonoBehaviour
         
         for (int i = 0; i < joints.Count; i++)
         {
-            joints[i].targetRotation = CopyRotation(i);
+            if (!inVehicle)
+                joints[i].targetRotation = CopyRotation(i);
+            else
+                joints[i].transform.rotation = animatedBones[i].rotation;
+            
             joints[i].transform.position = Vector3.Lerp(joints[i].transform.position, animatedBones[i].position, lerpToStand);
         }
     }
@@ -121,6 +127,20 @@ public class HumanVisualController : MonoBehaviour
             colliders.Add(rb.gameObject.GetComponent<Collider>());
     }
 
+
+    public void SetVehiclePassenger(ControlledVehicle vehicle)
+    {
+        inVehicle = vehicle;
+        anim.enabled = true;
+        anim.SetBool(Passenger, inVehicle);
+        
+        foreach (var rb in rigidbodies)
+        {
+            rb.isKinematic = inVehicle;
+            rb.useGravity = !inVehicle;
+        }
+    }
+    
     public void Death()
     {
         meshRenderer.material = deadMaterial;
@@ -300,7 +320,7 @@ public class HumanVisualController : MonoBehaviour
         ragdollOrigin.parent = ragdollOriginParent;
         DeactivateRagdoll();
         _selfHealth.RestoreEndurance();
-        _selfHealth.AiMovement.Resurrect();
+        _selfHealth.AiMovement.RestartActivities();
 
     }
 

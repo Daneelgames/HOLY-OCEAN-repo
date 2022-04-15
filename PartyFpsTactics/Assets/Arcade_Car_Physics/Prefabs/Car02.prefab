@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4782141027330822}
   - component: {fileID: 198272172785696948}
   - component: {fileID: 199402147754596638}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: BoostParticle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,19 +39,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1003818438190776}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -601,6 +601,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 1000
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -4767,6 +4768,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -4834,7 +4836,7 @@ GameObject:
   - component: {fileID: 146014540103652148}
   - component: {fileID: 114507247422366396}
   - component: {fileID: 114822347051870414}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: FLWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4932,7 +4934,7 @@ GameObject:
   - component: {fileID: 4164912928920760}
   - component: {fileID: 198543391918994702}
   - component: {fileID: 199662306909027432}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: ExhaustSmoke (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4960,19 +4962,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1249457045589676}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 1
   looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -5522,6 +5524,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 500
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -9688,6 +9691,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -9755,7 +9759,7 @@ GameObject:
   - component: {fileID: 146802126822764044}
   - component: {fileID: 114526905319013540}
   - component: {fileID: 114783648448176536}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: FRWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9851,7 +9855,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4629044809684432}
-  m_Layer: 10
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9885,7 +9889,7 @@ GameObject:
   - component: {fileID: 146793865263719070}
   - component: {fileID: 114341878329182152}
   - component: {fileID: 114303260965533220}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: BLWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9981,7 +9985,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4688843054088998}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CenterOfMass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10016,7 +10020,7 @@ GameObject:
   - component: {fileID: 114064628577781280}
   - component: {fileID: 82875422344952318}
   - component: {fileID: 82884678253985140}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: Car02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10030,7 +10034,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1637335803908784}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -10075,7 +10079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c241727a8fc83048b56bdd0b450f8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 1
+  isPlayer: 0
   m_Inputs: {fileID: 11400000, guid: aa7cb0d7aa0bdc275ba25985f96c9bd5, type: 2}
   turnInputCurve:
     serializedVersion: 2
@@ -10157,7 +10161,7 @@ MonoBehaviour:
   driftIntensity: 1.3
   centerOfMass: {fileID: 4688843054088998}
   downforce: 8
-  handbrake: 0
+  handbrake: 1
   allowDrift: 1
   speed: 0
   gasParticles:
@@ -10396,7 +10400,7 @@ GameObject:
   - component: {fileID: 4735994598529606}
   - component: {fileID: 198120220505843178}
   - component: {fileID: 199659184519991680}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: ExhaustSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10424,19 +10428,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672480277976696}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 1
   looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -10986,6 +10990,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 500
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -15152,6 +15157,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -15218,7 +15224,7 @@ GameObject:
   - component: {fileID: 4949822519101120}
   - component: {fileID: 198943574344631330}
   - component: {fileID: 199717170146851664}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: BoostParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15246,19 +15252,19 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833165821557742}
-  serializedVersion: 7
+  serializedVersion: 8
   lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
+  emitterVelocityMode: 0
   looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -15808,6 +15814,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     maxNumParticles: 1000
+    customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -19974,6 +19981,7 @@ ParticleSystemRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -20041,7 +20049,7 @@ GameObject:
   - component: {fileID: 146504509095465980}
   - component: {fileID: 114800290297643028}
   - component: {fileID: 114649827415014558}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: BRWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20128,6 +20136,20 @@ MonoBehaviour:
   trailing: 0
   parent: {fileID: 7644527375715346919}
   offset: {x: 0, y: -0.29, z: 0}
+--- !u!64 &2061152187736714077
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2421338244116335808}
+  m_Material: {fileID: 13400000, guid: d95b5e49839d84ee191c3c6961b60124, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2432090755550338912, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
 --- !u!1001 &195895538068549716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20138,6 +20160,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
       propertyPath: m_Name
       value: Car02
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
       propertyPath: m_RootOrder
@@ -20183,6 +20209,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
 --- !u!4 &195895538068941524 stripped
@@ -20195,20 +20225,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2534866581884222612, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
   m_PrefabInstance: {fileID: 195895538068549716}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &2061152187736714077
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2421338244116335808}
-  m_Material: {fileID: 13400000, guid: d95b5e49839d84ee191c3c6961b60124, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2432090755550338912, guid: 2bdb67dd109374a0cb46d1c3f285d23d, type: 3}
 --- !u!1001 &2255186364966579178
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20219,6 +20235,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_Name
       value: Wheel05
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_RootOrder
@@ -20264,16 +20284,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
---- !u!1 &2255186364966546762 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
-  m_PrefabInstance: {fileID: 2255186364966579178}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2255186364966711658 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+  m_PrefabInstance: {fileID: 2255186364966579178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2255186364966546762 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
   m_PrefabInstance: {fileID: 2255186364966579178}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7644527375715480423
@@ -20286,6 +20310,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_Name
       value: Wheel05
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_RootOrder
@@ -20330,6 +20358,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
@@ -20354,6 +20386,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wheel05
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -20398,16 +20434,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
---- !u!4 &8764304683743298102 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
-  m_PrefabInstance: {fileID: 8764304683742910646}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8764304683742813718 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+  m_PrefabInstance: {fileID: 8764304683742910646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8764304683743298102 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
   m_PrefabInstance: {fileID: 8764304683742910646}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9145836640419907178
@@ -20420,6 +20460,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_Name
       value: Wheel05
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_RootOrder
@@ -20464,6 +20508,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: f41f23c0bd8904f16962311e0064c059, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f41f23c0bd8904f16962311e0064c059, type: 3}

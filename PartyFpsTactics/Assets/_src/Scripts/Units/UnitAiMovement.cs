@@ -58,7 +58,7 @@ namespace MrPink.Units
 
         private void Start()
         {
-            _selfHealth.OnDeathEvent.AddListener(Death);
+            _selfHealth.OnDeathEvent.AddListener(StopActivities);
 
             Awareness().ForgetWithHandler();
 
@@ -310,7 +310,7 @@ namespace MrPink.Units
             _selfMovement.Run();
         }
     
-        public void Death()
+        public void StopActivities()
         {
             _selfMovement.Death();
             this.enabled = false;
@@ -319,7 +319,7 @@ namespace MrPink.Units
             humanVisualController.SetMovementVelocity(Vector3.zero);
         }
 
-        public void Resurrect()
+        public void RestartActivities()
         {
             _selfMovement.Resurrect();
             

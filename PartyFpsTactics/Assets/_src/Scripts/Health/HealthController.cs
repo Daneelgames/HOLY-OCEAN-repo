@@ -40,6 +40,7 @@ namespace MrPink.Health
         public Team team;
 
         public UnitAiMovement AiMovement;
+        public AiVehicleControls aiVehicleControls;
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
@@ -234,7 +235,7 @@ namespace MrPink.Health
             IsDead = true;
             
             if (AiMovement)
-                AiMovement.Death();
+                AiMovement.StopActivities();
 
             if (HumanVisualController)
                 HumanVisualController.Death();

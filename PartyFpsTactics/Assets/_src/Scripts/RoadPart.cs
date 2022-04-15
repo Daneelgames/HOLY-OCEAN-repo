@@ -24,8 +24,6 @@ public class RoadPart : MonoBehaviour
 
     public List<BoxCollider> collidersToCheck;
 
-    public NavMeshSurface navMeshSurface;
-
     public void Init()
     {
         visualGo.SetActive(false);
@@ -57,8 +55,6 @@ public class RoadPart : MonoBehaviour
         
         collidersToCheck.Clear();
         visualGo.SetActive(true);
-        
-        navMeshSurface.BuildNavMesh();
     }
 
     private void OnDestroy()

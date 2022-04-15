@@ -270,7 +270,12 @@ namespace VehicleBehaviour {
                 // Accelerate & brake
                 if (throttleInput != "" && throttleInput != null)
                 {
-                    throttle = GetInput(throttleInput) - GetInput(brakeInput);
+                    var brake = GetInput(brakeInput);
+                    
+                    if (Mathf.Approximately(brake, 0) == false)
+                        throttle = 0;
+                    else
+                        throttle = GetInput(throttleInput) - brake;
                 }
                 // Boost
                 boosting = (GetInput(boostInput) > 0.5f);

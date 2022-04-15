@@ -6539,6 +6539,9 @@ GameObject:
   - component: {fileID: 3176254616865558108}
   - component: {fileID: 8074880395059046385}
   - component: {fileID: 1333313718681721511}
+  - component: {fileID: 1732534460851470254}
+  - component: {fileID: -4984108032942175587}
+  - component: {fileID: 4956189074310848978}
   m_Layer: 7
   m_Name: MrCaptain1
   m_TagString: Untagged
@@ -6589,6 +6592,7 @@ MonoBehaviour:
   transformToShake: {fileID: 0}
   team: 1
   AiMovement: {fileID: 6090508075434962156}
+  aiVehicleControls: {fileID: 1732534460851470254}
   HumanVisualController: {fileID: 3176254616865558108}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
@@ -6623,6 +6627,9 @@ MonoBehaviour:
   - {fileID: 8326106670276248149}
   - {fileID: 4550072142803007685}
   damageStates: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &622743779293351943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6636,7 +6643,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
-  visibilityDistanceMax: 100
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
@@ -6654,15 +6660,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _team: 0
+  _selfMovement: {fileID: -4984108032942175587}
+  _selfFollow: {fileID: 4956189074310848978}
+  _selfHealth: {fileID: 5673859260790904911}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
   currentOrder: 3
-  agent: {fileID: 8074880395059046385}
-  moveSpeed: 4
-  runSpeed: 6
-  turnSpeed: 4
-  stopDistanceFollow: 1.5
-  stopDistanceMove: 0
   humanVisualController: {fileID: 3176254616865558108}
   unitVision: {fileID: 622743779293351943}
   enemyToLookAt: {fileID: 0}
@@ -6827,7 +6831,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actorId: 1
-  npcInteraction: {fileID: 5205671269229392275}
+--- !u!114 &1732534460851470254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hc: {fileID: 5673859260790904911}
+--- !u!114 &-4984108032942175587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 4
+  _turnSpeed: 4
+  _stopDistanceFollow: 1.5
+  _stopDistanceMove: 0
+  _agent: {fileID: 8074880395059046385}
+  _selfVisualController: {fileID: 3176254616865558108}
+--- !u!114 &4956189074310848978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selfAgent: {fileID: 8074880395059046385}
+  _selfMovement: {fileID: -4984108032942175587}
 --- !u!1 &6039511770793414000
 GameObject:
   m_ObjectHideFlags: 0
@@ -10157,6 +10205,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
+--- !u!4 &2851476981732683417 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
+  m_PrefabInstance: {fileID: 5183777294767449176}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1401069621869813489 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6089395122212797097, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
@@ -10168,8 +10221,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eee4ce499a7b04080f83fc6893de5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &2851476981732683417 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
-  m_PrefabInstance: {fileID: 5183777294767449176}
-  m_PrefabAsset: {fileID: 0}

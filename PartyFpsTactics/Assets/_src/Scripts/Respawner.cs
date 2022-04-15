@@ -29,10 +29,6 @@ namespace _src.Scripts
         {
             if (!spawn)
                 return;
-
-            var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,
-                PartyController.Instance.playerCar.sitTransformNpc.position,
-                PartyController.Instance.playerCar.sitTransformNpc.rotation);
             
             
             // create enemy spawns

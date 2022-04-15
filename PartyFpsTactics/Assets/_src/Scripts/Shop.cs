@@ -29,11 +29,16 @@ public class Shop : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     IEnumerator Start()
     {
         toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
+        CloseShop();
+        yield break;
+        
         switch (LevelGenerator.Instance.levelType)
         {
             case LevelGenerator.LevelType.Game:
