@@ -93,7 +93,7 @@ public class PlayerVehicleControls : MonoBehaviour
             Player.Movement.transform.rotation = Quaternion.Slerp(Player.Movement.transform.rotation, controlledVehicle.sitTransform.rotation, playerFollowRotScaler * Time.deltaTime);
             float hor = Input.GetAxis("Horizontal");
             float ver = Input.GetAxis("Vertical");
-            controlledVehicle.SetPlayerInput(hor,ver, brake);
+            controlledVehicle.SetCarInput(hor,ver, brake);
             yield return null;
         }
     }

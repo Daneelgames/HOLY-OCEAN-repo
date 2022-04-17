@@ -259,33 +259,40 @@ namespace VehicleBehaviour {
                 if (boost > maxBoost) { boost = maxBoost; }
             }
         }
+
+        public void SetInput(float _hor, float _ver, bool _brake)
+        {
+            //var brake = GetInput(brakeInput)
+            float brake = 0;
+            if (_brake) brake = 1;
+                
+            if (Mathf.Approximately(brake, 0) == false)
+                throttle = 0;
+            else
+                throttle = _ver - brake;
+            
+            // Turn
+            steering = turnInputCurve.Evaluate(_hor) * steerAngle;
+            
+            /*
+            // Boost
+            boosting = (GetInput(boostInput) > 0.5f);
+            // Dirft
+            drift = GetInput(driftInput) > 0 && rb.velocity.sqrMagnitude > 100;
+            // Jump
+            jumping = GetInput(jumpInput) != 0;
+            */
+        }
         
         // Update everything
         void FixedUpdate () {
             // Mesure current speed
             speed = transform.InverseTransformDirection(rb.velocity).z * 3.6f;
 
+            /*
             // Get all the inputs!
             if (isPlayer) {
-                // Accelerate & brake
-                if (throttleInput != "" && throttleInput != null)
-                {
-                    var brake = GetInput(brakeInput);
-                    
-                    if (Mathf.Approximately(brake, 0) == false)
-                        throttle = 0;
-                    else
-                        throttle = GetInput(throttleInput) - brake;
-                }
-                // Boost
-                boosting = (GetInput(boostInput) > 0.5f);
-                // Turn
-                steering = turnInputCurve.Evaluate(GetInput(turnInput)) * steerAngle;
-                // Dirft
-                drift = GetInput(driftInput) > 0 && rb.velocity.sqrMagnitude > 100;
-                // Jump
-                jumping = GetInput(jumpInput) != 0;
-            }
+            }*/
 
             // Direction
             foreach (WheelCollider wheel in turnWheel)
