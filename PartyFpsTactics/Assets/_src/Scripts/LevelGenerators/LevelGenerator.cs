@@ -118,8 +118,6 @@ public class LevelGenerator : MonoBehaviour
     {
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
         
-        partyParentTransform.eulerAngles = new Vector3(0, currentLevel.partyParentEulerRotationY, 0);
-        
         levelsPosMinMaxX = currentLevel.levelsPosMinMaxX;
         levelsPosMinMaxZ = currentLevel.levelsPosMinMaxZ;
         levelsScaleMinMaxX = currentLevel.levelsScaleMinMaxX;
@@ -1098,6 +1096,9 @@ public class LevelGenerator : MonoBehaviour
 
     void SpawnBillboard()
     {
+        // fix later
+        return;
+        
         if (spawnedMainBuildingLevels.Count <= 3)
             return;
         

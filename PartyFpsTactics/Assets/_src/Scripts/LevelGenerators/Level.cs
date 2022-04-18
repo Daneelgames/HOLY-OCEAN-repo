@@ -99,7 +99,7 @@ namespace _src.Scripts.LevelGenerators
                          floorConnectionsInCurrentIslandAmount == 0 ||wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
                          canCrash = true;   
                     }
-                    else if (currentIslandSupports == 0 || currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || floorConnectionsInCurrentIslandAmount == 0 /*||
+                    else if (currentIslandSupports == 0 || floorConnectionsInCurrentIslandAmount == 0 /*|| currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount ||
                              wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5*/)
                     canCrash = true;
                     

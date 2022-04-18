@@ -30,12 +30,17 @@ public class PartyController : MonoBehaviour
         // PLACE NPC INSIDE THE CAR
         // MOVE THE CAR TO NEW TRANSFORM
 
+        /*
         playerCar.transform.position = newCarPos;
-        playerCar.transform.rotation = newCarRot;
+        playerCar.transform.rotation = newCarRot;*/
 
 
-        var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn, playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
-        captain.aiVehicleControls.PassengerSit(playerCar);
+        if (ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn)
+        {
+            var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,
+                playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
+            captain.aiVehicleControls.PassengerSit(playerCar);
+        }
         Player.Movement.gameObject.SetActive(true);
         Player.Interactor.cam.gameObject.SetActive(true);
         Player.VehicleControls.RequestVehicleAction(playerCar);

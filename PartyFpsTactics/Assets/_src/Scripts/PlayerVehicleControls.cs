@@ -23,16 +23,19 @@ public class PlayerVehicleControls : MonoBehaviour
         if (controlledVehicle != null && controlledVehicle == _controlledVehicle)
         {
             // выйти из тачки
+            Player.Movement.SetCollidersTrigger(false);
             StopCoroutine(controlVehicleCoroutine);
             controlledVehicle.StopMovement();
             controlledVehicle = null;
             TogglePlayerInside(false);
+            Player.Movement.Jump(Vector3.zero, true);
             return;
         }
 
         if (controlledVehicle == null && _controlledVehicle != null)
         {
             // зайти в тачку
+            Player.Movement.SetCollidersTrigger(true);
             controlledVehicle = _controlledVehicle;
             TogglePlayerInside(true);
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
@@ -42,6 +45,7 @@ public class PlayerVehicleControls : MonoBehaviour
         if (controlledVehicle != null && controlledVehicle != _controlledVehicle)
         {
             // зайти в новую тачку
+            Player.Movement.SetCollidersTrigger(true);
             StopCoroutine(controlVehicleCoroutine);
             controlledVehicle.StopMovement();
             controlledVehicle = _controlledVehicle;
@@ -70,27 +74,23 @@ public class PlayerVehicleControls : MonoBehaviour
     private Coroutine controlVehicleCoroutine;
     IEnumerator ControlVehicle()
     {
-        controlledVehicle.StartPlayerInput();
+        controlledVehicle.StartInput();
+        float resultMoveScaler = 1;
+        float resultRotScaler = 1;
         while (true)
         {
             if (Player.Health.health <= 0)
                 yield break;
             
-            /*
-            if (Input.GetKey(KeyCode.Space))
-            {
-                TogglePlayerInside(false);
-                controlledVehicle.StopMovement();
-                controlVehicleCoroutine = null;
-                Player.Movement.Jump(Player.Movement.transform.forward * 200, true);
-                controlledVehicle = null;
-                yield break;
-            }*/
+            bool brake = Input.GetKey(KeyCode.Space);
+
+            if (resultMoveScaler < playerFollowMoveScaler)
+                resultMoveScaler += 50 * Time.deltaTime;
+            if (resultRotScaler < playerFollowRotScaler)
+                resultRotScaler += 50 * Time.deltaTime;
             
-            bool brake = Input.GetKey(KeyCode.LeftControl);
-            
-            Player.Movement.transform.position = Vector3.Lerp(Player.Movement.transform.position, controlledVehicle.sitTransform.position, playerFollowMoveScaler * Time.deltaTime);
-            Player.Movement.transform.rotation = Quaternion.Slerp(Player.Movement.transform.rotation, controlledVehicle.sitTransform.rotation, playerFollowRotScaler * Time.deltaTime);
+            Player.Movement.transform.position = Vector3.Lerp(Player.Movement.transform.position, controlledVehicle.sitTransform.position, resultMoveScaler * Time.deltaTime);
+            Player.Movement.transform.rotation = Quaternion.Slerp(Player.Movement.transform.rotation, controlledVehicle.sitTransform.rotation, resultRotScaler * Time.deltaTime);
             float hor = Input.GetAxis("Horizontal");
             float ver = Input.GetAxis("Vertical");
             controlledVehicle.SetCarInput(hor,ver, brake);

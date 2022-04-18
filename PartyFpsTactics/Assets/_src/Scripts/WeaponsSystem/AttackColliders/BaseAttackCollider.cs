@@ -169,8 +169,13 @@ namespace MrPink.WeaponsSystem
         }
 
         // TODO вытащить в отдельный компонент
+        private float playSoundCooldownCurrent = 0;
         protected void PlaySound([CanBeNull] AudioSource source, [CanBeNull] AudioClip clip)
         {
+            if (playSoundCooldownCurrent > 0)
+                return;
+            StartCoroutine(PlaySoundCooldown());
+            
             if (source == null) 
                 return;
             
@@ -179,6 +184,13 @@ namespace MrPink.WeaponsSystem
 
             source.clip = clip;
             PlaySound(source);
+        }
+
+        IEnumerator PlaySoundCooldown()
+        {
+            playSoundCooldownCurrent = 0.25f;
+            yield return new WaitForSeconds(playSoundCooldownCurrent);
+            playSoundCooldownCurrent = 0;
         }
         
         protected void PlayHitSolidFeedback(Vector3 point)
