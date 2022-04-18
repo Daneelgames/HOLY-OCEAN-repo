@@ -129,6 +129,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
+            HandleJump();
             HandleCrouch();
             HandleMovement();
         }
@@ -148,11 +149,21 @@ namespace MrPink.PlayerSystem
             
             GroundCheck();
             SlopeCheck();
+
             
             if (activeGrindRail == null)
                 ApplyFreeMovement();
             else
                 ApplyGrindRailMovement();
+        }
+
+        void HandleJump()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
+            {
+                jumpTime = jumpTimeMax;
+                Jump(Vector3.zero, true);
+            }
         }
 
         private float targetStaminaScaler = 1;
@@ -190,7 +201,13 @@ namespace MrPink.PlayerSystem
             if (Input.GetKeyDown(KeyCode.LeftControl))
                 SetCrouch(!crouching);
         }
-        
+
+        public void SetCollidersTrigger(bool trigger)
+        {
+            bottomCollider.isTrigger = trigger;
+            topCollider.isTrigger = trigger;
+        }
+
         public void SetCrouch(bool crouch)
         {
             if (narrativePlayer)
@@ -289,11 +306,6 @@ namespace MrPink.PlayerSystem
             }    
         
             // JUMP
-            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
-            {
-                jumpTime = jumpTimeMax;
-                Jump(Vector3.zero, true);
-            }
             /*
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {

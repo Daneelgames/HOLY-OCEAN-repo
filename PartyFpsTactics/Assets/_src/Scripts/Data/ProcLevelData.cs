@@ -39,7 +39,6 @@ namespace _src.Scripts.Data
         public Vector2Int npcsPerMainBuildingRoomMinMax = new Vector2Int(1,2);
         public int desertBeastsSpawnAmount = 0;
         public HealthController mrCaptainPrefabToSpawn;
-        public float partyParentEulerRotationY = -162.29f;
         public Vector2Int grindRailsPerLevelMinMax = new Vector2Int(1, 2);
         public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
         public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 5);

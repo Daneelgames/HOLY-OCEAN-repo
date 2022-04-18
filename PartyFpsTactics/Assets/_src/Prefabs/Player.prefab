@@ -1396,7 +1396,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -2424,6 +2424,7 @@ MonoBehaviour:
   transformToShake: {fileID: 4081011893066873260}
   team: 1
   AiMovement: {fileID: 0}
+  aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
   playerMovement: {fileID: 8837444586277526206}
   explosionOnDeath: {fileID: 0}
@@ -2456,9 +2457,9 @@ MonoBehaviour:
   gravity: 2
   fallMultiplayer: 2.5
   lowJumpMultiplayer: 2.5
-  jumpForce: 100
+  jumpForce: 50
   jumpTime: 0
-  jumpTimeMax: 0.25
+  jumpTimeMax: 0.5
   fallForceAcceleration: 15
   fallDamageThreshold: 10
   fallDamage: 100

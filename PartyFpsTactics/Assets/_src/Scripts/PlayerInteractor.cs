@@ -52,6 +52,8 @@ public class PlayerInteractor : MonoBehaviour
             {
                 StopCoroutine(CarryPortableObjectCoroutine);
                 
+                carryingPortableRb.interpolation = RigidbodyInterpolation.None;
+                carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                 carryingPortableRb.useGravity = true;
                 carryingPortableRb = null;
                 return;
@@ -77,6 +79,8 @@ public class PlayerInteractor : MonoBehaviour
                 var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
                 if (tileAttack)
                     tileAttack.dangerous = true;
+                carryingPortableRb.interpolation = RigidbodyInterpolation.None;
+                carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                 carryingPortableRb.useGravity = true;
                 carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                 carryingPortableRb = null;
@@ -88,6 +92,9 @@ public class PlayerInteractor : MonoBehaviour
     IEnumerator CarryPortableObject()
     {
         var rb = selectedPortable.GetComponent<Rigidbody>();
+        
+        carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
+        carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         
         if (!rb)
             yield break;
@@ -162,7 +169,6 @@ public class PlayerInteractor : MonoBehaviour
                 }
 
                 selectedPortable = null;
-                
                 
                 if (hit.collider.transform == selectedIOTransform)
                 {

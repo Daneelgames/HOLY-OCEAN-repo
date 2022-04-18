@@ -1,9 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Unity.AI.Navigation;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AiVehicleControls : MonoBehaviour
 {
@@ -11,6 +16,11 @@ public class AiVehicleControls : MonoBehaviour
     public HealthController hc;
     public ControlledVehicle controlledVehicle;
     public Vector3 targetPosition;
+    private Vector3[] cornersPath;
+    
+    public float stoppingDistance = 20;
+    public float maxReverseDistance = 100;
+    public float stoppingSpeed = 50;
 
     private void Start()
     {
@@ -31,20 +41,63 @@ public class AiVehicleControls : MonoBehaviour
 
     public void DriverSit(ControlledVehicle vehicle)
     {
+        controlledVehicle = vehicle;
         inControl = true;
-        StartCoroutine(ControlVehicle());
+        updateNavMeshPathCoroutine = StartCoroutine(UpdateNavmeshPath());
+        controlVehicleCoroutine = StartCoroutine(ControlVehicle());
     }
 
+    private Coroutine updateNavMeshPathCoroutine;
+    IEnumerator UpdateNavmeshPath()
+    {
+        NavMeshPath path = new NavMeshPath();
+        Vector3 posToSample = Vector3.zero;
+        while (true)
+        {
+            posToSample = Player.Position;
+            NavMesh.SamplePosition(posToSample, out var hit, 10, NavMesh.AllAreas);
+            if (NavMesh.CalculatePath(transform.position, Player.Position, NavMesh.AllAreas, path))
+            {
+                cornersPath = path.corners;
+                //targetPosition = cornersPath.Last();
+                targetPosition = cornersPath.Length > 1 ? cornersPath[1] : Player.Position;
+            }
+                
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (cornersPath == null || cornersPath.Length <= 1)
+            return;
+        
+        for (var index = 0; index < cornersPath.Length - 1; index++)
+        {
+            var corner = cornersPath[index];
+            
+            if (index == 1)
+                Gizmos.color = Color.green;
+            else
+                Gizmos.color = Color.yellow;
+            
+            Gizmos.DrawSphere(corner, 1);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(corner, cornersPath[index + 1]);
+        }
+    }
+
+    private Coroutine controlVehicleCoroutine;
     IEnumerator ControlVehicle()
     {
         float hor = 0;
         float ver = 0;
         bool brake = false;
         controlledVehicle.wheelVehicle.Handbrake = false;
+        
         while (controlledVehicle)
         {
             yield return null;
-            targetPosition = Player.Movement.transform.position;
             
             float reachedTargetDistance = 5;
             float distance = Vector3.Distance(transform.position, targetPosition);
@@ -58,8 +111,6 @@ public class AiVehicleControls : MonoBehaviour
                     // target in front
                     ver = 1f;
 
-                    float stoppingDistance = 30;
-                    float stoppingSpeed = 50;
                     if (distance < stoppingDistance && controlledVehicle.wheelVehicle.Speed > stoppingSpeed)
                     {
                         ver = -1;
@@ -68,7 +119,7 @@ public class AiVehicleControls : MonoBehaviour
                 else
                 {
                     // target behind
-                    if (distance > 20)
+                    if (distance > maxReverseDistance)
                     {
                         // too far to rewerse
                         ver = 1f;
@@ -86,6 +137,7 @@ public class AiVehicleControls : MonoBehaviour
             }
             else
             {
+                // try to stop
                 if (controlledVehicle.wheelVehicle.Speed > 10)
                     ver = -1;
                 else
