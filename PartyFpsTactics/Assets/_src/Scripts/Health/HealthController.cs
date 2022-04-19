@@ -155,7 +155,7 @@ namespace MrPink.Health
                 damage = 0;
             
             
-            if (Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
+            if (Game.Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
             {
                 PlayerUi.Instance.RemoveShieldFeedback();
                 PlayerInventory.Instance.RemoveTool(ToolType.OneTimeShield);
@@ -163,7 +163,7 @@ namespace MrPink.Health
             else
                 health -= damage;
 
-            if (Player.Health == this)
+            if (Game.Player.Health == this)
             {
                 PlayerUi.Instance.UpdateHealthBar();
             }
@@ -191,7 +191,7 @@ namespace MrPink.Health
             float t = 0f;
             var originalPos = transformToShake.localPosition;
             
-            if (Player.Health == this)
+            if (Game.Player.Health == this)
                 originalPos = Vector3.up;
             
             while (t < 0.5f)
@@ -252,10 +252,10 @@ namespace MrPink.Health
                 yield return null;
             }
         
-            if (Player.Health == this)
+            if (Game.Player.Health == this)
             {
-                Player.Interactor.SetInteractionText("R TO RESTART");
-                Player.Death(killer);
+                Game.Player.Interactor.SetInteractionText("R TO RESTART");
+                Game.Player.Death(killer);
             }
 
             if (npcInteraction)
@@ -276,8 +276,8 @@ namespace MrPink.Health
             
             if (UnitsManager.Instance.unitsInGame.Contains(this))
                 UnitsManager.Instance.unitsInGame.Remove(this);
-            if (Player.CommanderControls.unitsInParty.Contains(this))
-                Player.CommanderControls.unitsInParty.Remove(this);
+            if (Game.Player.CommanderControls.unitsInParty.Contains(this))
+                Game.Player.CommanderControls.unitsInParty.Remove(this);
         }
     }
 }

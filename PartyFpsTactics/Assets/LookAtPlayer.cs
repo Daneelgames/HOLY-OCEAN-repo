@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using MrPink.PlayerSystem;
 using UnityEngine;
 
-public class LookAtPlayer : MonoBehaviour
+namespace MrPink
 {
-    void Update()
+    public class LookAtPlayer : MonoBehaviour
     {
-        transform.LookAt(Player.MainCamera.transform.position);
+        void Update()
+        {
+            transform.LookAt(Game.Player.MainCamera.transform.position);
+        }
     }
 }

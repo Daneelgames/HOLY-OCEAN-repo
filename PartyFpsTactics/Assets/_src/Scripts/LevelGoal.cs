@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MrPink;
 using MrPink.PlayerSystem;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class LevelGoal : MonoBehaviour
         if (collected)
             return;
         
-        if (coll.gameObject == Player.GameObject)
+        if (coll.gameObject == Game.Player.GameObject)
         {
             collected = true;
             ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);

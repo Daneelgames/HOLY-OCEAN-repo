@@ -28,10 +28,10 @@ namespace MrPink.WeaponsSystem
                 {
                     Debug.Log("DEFLECT PROJECTILE 0");
                     var proj = other.gameObject.GetComponent<ProjectileController>();
-                    if (proj /*&& proj.OwnerHealth && proj.OwnerHealth !=  Player.Health*/)
+                    if (proj /*&& proj.OwnerHealth && proj.OwnerHealth !=  Game.Player.Health*/)
                     {
                         Debug.Log("DEFLECT PROJECTILE 1");
-                        proj.OwnerHealth = Player.Health;
+                        proj.OwnerHealth = Game.Player.Health;
                         other.transform.Rotate(0, 180, 0, Space.Self);
                     }
                 }

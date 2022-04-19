@@ -30,7 +30,7 @@ namespace MrPink.Cheats
             var status = value ? "activated" : "deactivated";
             Debug.Log($"Immortality cheat {status}");
 
-            Player.Health.IsImmortal = value;
+            Game.Player.Health.IsImmortal = value;
         }
 
         private static void SetMuteState(bool value)
