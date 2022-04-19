@@ -3,18 +3,12 @@ using MrPink.Health;
 
 namespace MrPink.Units.Behaviours
 {
-    public class IsAlive : Conditional
+    [TaskCategory("MrPink/Units")]
+    public class IsAlive : BaseUnitConditional
     {
-        private Unit _selfUnit;
-        
-        public override void OnAwake()
-        {
-            _selfUnit = GetComponent<Unit>();
-        }
-
         public override TaskStatus OnUpdate()
         {
-            if (_selfUnit.HealthController.IsDead)
+            if (selfUnit.HealthController.IsDead)
                 return TaskStatus.Failure;
 
             return TaskStatus.Success;

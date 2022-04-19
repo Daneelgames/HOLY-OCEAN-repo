@@ -1,19 +1,16 @@
 using BehaviorDesigner.Runtime.Tasks;
+using MrPink.Health;
 
 namespace MrPink.Units.Behaviours
 {
-    public class IsDead : Conditional
+    [TaskCategory("MrPink/Units")]
+    public class IsTeam : BaseUnitConditional
     {
-        private Unit _selfUnit;
-        
-        public override void OnAwake()
-        {
-            _selfUnit = GetComponent<Unit>();
-        }
+        public Team team;
         
         public override TaskStatus OnUpdate()
         {
-            if (_selfUnit.HealthController.IsDead)
+            if (selfUnit.HealthController.team == team)
                 return TaskStatus.Success;
 
             return TaskStatus.Failure;
