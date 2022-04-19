@@ -44,6 +44,7 @@ namespace MrPink
                     playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
                 //captain.aiVehicleControls.PassengerSit(playerCar);
                 npcInParty = captain;
+                Game.Player.CommanderControls.unitsInParty.Add(captain);
             }
         
             Game.Player.Movement.gameObject.SetActive(true);

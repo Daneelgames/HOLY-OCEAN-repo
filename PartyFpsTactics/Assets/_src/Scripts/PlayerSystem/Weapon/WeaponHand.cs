@@ -122,7 +122,10 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            if (Input.GetMouseButton(_mouseButtonIndex) && Game.Player.Interactor.carryingPortableRb == null)
+            if (Game.Player.Interactor.carryingPortableRb != null)
+                return;
+            
+            if (Input.GetMouseButton(_mouseButtonIndex))
             {
                 IsAiming = true;
                 CurrentPosition = Weapon.IsMelee
@@ -130,7 +133,7 @@ namespace MrPink.PlayerSystem
                     : WeaponPosition.Aim;
             }
 
-            if (Input.GetMouseButtonUp(_mouseButtonIndex))
+            if (Input.GetMouseButtonUp(_mouseButtonIndex) && IsAiming)
             {
                 HandleAttack().ForgetWithHandler();
             }
