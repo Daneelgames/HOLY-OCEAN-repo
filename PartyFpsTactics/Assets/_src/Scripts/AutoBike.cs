@@ -16,7 +16,7 @@ namespace MrPink
             Game.Player.Movement.transform.parent.position = transform.position;
             Game.Player.Movement.transform.parent.parent = transform;
         
-            while (!LevelGenerator.Instance.levelIsReady)
+            while (!LevelGenerator.Instance.IsLevelReady)
             {
                 yield return new WaitForSeconds(Random.Range(1, 4));
                 currentYTorque = Random.Range(-1f, 1f);
@@ -29,7 +29,7 @@ namespace MrPink
 
         private void FixedUpdate()
         {
-            if (LevelGenerator.Instance.levelIsReady)
+            if (LevelGenerator.Instance.IsLevelReady)
             {
                 return;
             }

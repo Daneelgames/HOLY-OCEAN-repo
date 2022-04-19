@@ -135,7 +135,7 @@ namespace MrPink
                     uiItemNameFeedbackOutline.text = String.Empty;
                 }
             
-                if (PhoneDialogueEvents.Instance.InCutScene)
+                if (PhoneDialogueEvents.Instance != null && PhoneDialogueEvents.Instance.InCutScene)
                 {
                     if (selectedIO == null)
                         continue;
