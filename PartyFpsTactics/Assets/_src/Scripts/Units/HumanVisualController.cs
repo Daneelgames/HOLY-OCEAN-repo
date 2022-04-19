@@ -44,6 +44,7 @@ public class HumanVisualController : MonoBehaviour
 
     private void Start()
     {
+        ragdollOriginParent = ragdollOrigin.parent;
         _selfHealth = gameObject.GetComponent<HealthController>();
         for (int i = 0; i < joints.Count; i++)
             initRotations.Add(animatedBones[i].localRotation);
@@ -127,11 +128,11 @@ public class HumanVisualController : MonoBehaviour
             colliders.Add(rb.gameObject.GetComponent<Collider>());
     }
 
-    public void SetUnitKinematic(bool kinematic)
+    public void SetCollidersTriggers(bool trigger)
     {
-        foreach (var rb in rigidbodies)
+        foreach (var coll in colliders)
         {
-            rb.isKinematic = kinematic;
+            coll.isTrigger = trigger;
         }
     }
     
@@ -298,7 +299,6 @@ public class HumanVisualController : MonoBehaviour
     
     private IEnumerator FollowTheRagdoll()
     {
-        ragdollOriginParent = ragdollOrigin.parent;
         ragdollOrigin.parent = null;
         float standupCooldown = _selfHealth.UnitRagdollStandupCooldown;
         float t = 0;

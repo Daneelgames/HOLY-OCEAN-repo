@@ -29,27 +29,45 @@ public class AiVehicleControls : MonoBehaviour
             DriverSit(controlledVehicle);
     }
 
+    private Coroutine exitCoroutine;
+    IEnumerator ExitVehicleCoroutine()
+    {
+        float t = 0;
+        float tt = 0.5f;
+
+        while (t < tt)
+        {
+            t += Time.deltaTime;
+            hc.transform.position = Vector3.Lerp(controlledVehicle.sitTransformNpc.position, 
+                controlledVehicle.sitTransformNpc.position + controlledVehicle.sitTransformNpc.right * 1.5f, t/tt);
+            yield return null;
+        }
+        controlledVehicle = null;
+        hc.HumanVisualController.SetCollidersTriggers(false);
+        hc.AiMovement.RestartActivities();
+    }
     public void PassengerSit(ControlledVehicle _vehicle)
     {
         // включить анимацию
         // начинать преследовать трансформ нпс сит
+        if (exitCoroutine != null)
+            StopCoroutine(exitCoroutine);
         
-        controlledVehicle = _vehicle;
-        if (controlledVehicle != null)
+        if (_vehicle != null)
         {
+            controlledVehicle = _vehicle;
             controllingVehicle = false;
             hc.AiMovement.StopActivities();
-            hc.HumanVisualController.SetUnitKinematic(true);
+            hc.HumanVisualController.SetCollidersTriggers(true);
             hc.HumanVisualController.SetVehiclePassenger(controlledVehicle);
             followSitCoroutine = StartCoroutine(FollowSit());   
         }
         else
         {
             controllingVehicle = false;
+            exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
             StopCoroutine(followSitCoroutine);
             hc.HumanVisualController.SetVehiclePassenger(null);
-            hc.HumanVisualController.SetUnitKinematic(false);
-            hc.AiMovement.RestartActivities();
         }
     }
 

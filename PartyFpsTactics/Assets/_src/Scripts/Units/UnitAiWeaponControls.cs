@@ -18,6 +18,8 @@ namespace MrPink.Units
         public float minAngleToShoot = 15;
         public bool rotateWeaponTowardTarget = true;
         public float minDistanceToAttack = 1000;
+        public float updateRate = 0.1f;
+        public float maxDistanceFromPlayerToShoot = 250;
 
         private void Awake()
         {
@@ -33,7 +35,13 @@ namespace MrPink.Units
         {
             while (hc.health > 0)
             {
-                yield return null;
+                if (updateRate > 0)
+                    yield return new WaitForSeconds(updateRate);
+                else
+                    yield return null;
+                
+                if (Vector3.Distance(transform.position, Player.MainCamera.transform.position) > maxDistanceFromPlayerToShoot)
+                    continue;
 
                 foreach (var activeWeapon in activeWeapons)
                     yield return MakeWeaponDecision(activeWeapon);

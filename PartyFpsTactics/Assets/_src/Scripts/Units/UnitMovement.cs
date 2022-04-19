@@ -53,7 +53,7 @@ namespace MrPink.Units
         public void Death()
         {
             _agent.enabled = false;
-            this.enabled = false;
+            //this.enabled = false;
         }
 
         public void Resurrect()
@@ -76,7 +76,6 @@ namespace MrPink.Units
             _lookTransform.LookAt(targetPosition, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, _lookTransform.rotation, Time.deltaTime * _turnSpeed);  
         }
-        
         
         public IEnumerator MoveToPosition(Vector3 target)
         {

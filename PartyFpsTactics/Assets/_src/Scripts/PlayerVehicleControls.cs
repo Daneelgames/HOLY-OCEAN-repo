@@ -33,9 +33,9 @@ public class PlayerVehicleControls : MonoBehaviour
             yield return null;
         }
         Player.Movement.SetCollidersTrigger(false);
-        TogglePlayerInside(controlledVehicle);
         controlledVehicle.StopMovement();
         controlledVehicle = null;
+        TogglePlayerInside(null);
     }
 
     public void RequestVehicleAction(ControlledVehicle _controlledVehicle)

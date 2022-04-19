@@ -130,14 +130,26 @@ namespace MrPink.Units
 
         private bool IsInLineOfSight(Transform target) 
         {
-            if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov &&
-                Physics.Linecast(raycastOrigin.position, target.position, out _hit, raycastsLayerMask) &&
-                _hit.collider.transform == target)
+            if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov)
             {
-                return true;
-            }
+                if (Physics.Linecast(raycastOrigin.position, target.position, out _hit, raycastsLayerMask))
+                {
+                    if (_hit.collider.transform == target)
+                        return true;
 
+                    lastRaycastedPoint = _hit.point;
+                }
+            }
+            
             return false;
+        }
+
+        private Vector3 lastRaycastedPoint = Vector3.zero;
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawWireSphere(lastRaycastedPoint, 1);
+            Gizmos.DrawSphere(lastRaycastedPoint, 0.2f);
         }
     }
 }
