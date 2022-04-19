@@ -309,12 +309,21 @@ namespace MrPink.Units
             ragdollOrigin.parent = null;
             float standupCooldown = _selfHealth.UnitRagdollStandupCooldown;
             float t = 0;
+            Vector3 prevPos = rigidbodies[0].transform.position;
             while (true)
             {
                 yield return null;
                 transform.position = ragdollOrigin.position;
                 t += Time.deltaTime;
-            
+
+                if (Physics.Linecast(prevPos, transform.position, out var hit,
+                    GameManager.Instance.AllSolidsMask))
+                {
+                    transform.position = hit.point;
+                }
+                
+                prevPos = transform.position;
+                
                 if (t < standupCooldown)
                     continue;
             

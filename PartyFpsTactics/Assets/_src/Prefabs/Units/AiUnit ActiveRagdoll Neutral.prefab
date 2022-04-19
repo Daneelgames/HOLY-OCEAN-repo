@@ -6403,6 +6403,7 @@ GameObject:
   - component: {fileID: 8074880395059046385}
   - component: {fileID: 7767769086912786514}
   - component: {fileID: -4915185774981738495}
+  - component: {fileID: -5815359496610328672}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
   m_TagString: Untagged
@@ -6452,6 +6453,7 @@ MonoBehaviour:
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
   team: 2
+  UnitVision: {fileID: 622743779293351943}
   AiMovement: {fileID: 6090508075434962156}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 3176254616865558108}
@@ -6505,6 +6507,7 @@ MonoBehaviour:
     m_Bits: 4416
   raycastOrigin: {fileID: 2292738347658247173}
   setDamagerAsEnemyBehaviour: 1
+  _enemiesToRemember: []
   visibleEnemies: []
 --- !u!114 &6090508075434962156
 MonoBehaviour:
@@ -6713,6 +6716,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selfAgent: {fileID: 8074880395059046385}
   _selfMovement: {fileID: 7767769086912786514}
+--- !u!114 &-5815359496610328672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllingVehicle: 0
+  hc: {fileID: 5673859260790904911}
+  controlledVehicle: {fileID: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  stoppingDistance: 20
+  maxReverseDistance: 100
+  stoppingSpeed: 50
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

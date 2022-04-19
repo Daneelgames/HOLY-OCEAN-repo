@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -8,11 +9,14 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace MrPink.WeaponsSystem
 {
     public class BaseAttackCollider : MonoBehaviour
     {
+        [Tooltip("For Vehicle Damage Colliders")]
+        public bool autoInitOnStart = false;
         [SerializeField]
         [Range(0, 1000)]
         protected int damage = 20;
@@ -64,8 +68,8 @@ namespace MrPink.WeaponsSystem
         [BoxGroup("Частицы")]
         private Transform _bloodParticles;
         
-        
-        protected HealthController ownerHealth;
+        [SerializeField]
+        private protected HealthController ownerHealth;
         public HealthController OwnerHealth
         {
             get => ownerHealth;
@@ -83,7 +87,17 @@ namespace MrPink.WeaponsSystem
         public float LifeTime
             => _lifeTime;
 
-        
+
+        private void Start()
+        {
+            if (autoInitOnStart)
+            {
+                actionOnHit = ScoringActionType.NULL;
+                _damageSource = DamageSource.Environment;
+                StartCoroutine(LifetimeCoroutine());
+            }
+        }
+
         public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
         {
             ownerHealth = owner;
@@ -110,6 +124,7 @@ namespace MrPink.WeaponsSystem
             if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
                 return CollisionTarget.Self;
 
+            
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
                 
             /*
@@ -124,14 +139,18 @@ namespace MrPink.WeaponsSystem
                 unitsExplosionCompleted = true;
             }
             
-            if (targetCollider.gameObject == Game.Player.GameObject)
+            if (targetCollider.gameObject == Game.Player.GameObject && IsPlayerEnemyToOwner())
             {
+                if (ownerHealth.controlledVehicle &&
+                    ownerHealth.controlledVehicle == Game.Player.VehicleControls.controlledVehicle)
+                    return CollisionTarget.Self;
+                
                 Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
                 return CollisionTarget.Creature;
             }
 
             var targetHealth = targetCollider.gameObject.GetComponent<BasicHealth>();
-
+            
             if (targetHealth == null)
             {
                 if (targetCollider.isTrigger)
@@ -139,7 +158,17 @@ namespace MrPink.WeaponsSystem
                 
                 return CollisionTarget.Solid;
             }
-            
+
+            // if vehicle tries to damage unit inside
+            if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
+                ownerHealth.controlledVehicle == targetHealth.HealthController.aiVehicleControls.controlledVehicle)
+                return CollisionTarget.Self;
+
+            // if unit inside tries to hit the vehicle AND IT'S NOT PLAYER
+            if (targetHealth.HealthController && targetHealth.HealthController.controlledVehicle &&
+                ownerHealth.aiVehicleControls &&  ownerHealth.aiVehicleControls.controlledVehicle == targetHealth.HealthController.controlledVehicle)
+                return CollisionTarget.Self;
+
             if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;
 
@@ -160,9 +189,32 @@ namespace MrPink.WeaponsSystem
                 damagedHealthControllers.Add(targetHealth.HealthController);
                 StartCoroutine(ClearDamagedHC(targetHealth.HealthController));
             }
+
+            // reduce velocity of vehicle who did the damage
+            if (ownerHealth && ownerHealth.controlledVehicle)
+            {
+                resultDmg = Mathf.RoundToInt(resultDmg * ownerHealth.controlledVehicle.rb.velocity.magnitude);
+                if (targetHealth.gameObject.layer == 6 || targetHealth.gameObject.layer == 12)
+                    ownerHealth.controlledVehicle.AddForceOnImpact(targetCollider.bounds.center);
+            }
+            
             return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
         }
 
+        bool IsPlayerEnemyToOwner()
+        {
+            if (!ownerHealth)
+                return true; // damage anyway
+
+            if (ownerHealth.team != Game.Player.Health.team)
+                return true;
+            
+            if (ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
+                return true;
+
+            return false;
+        }
+        
         IEnumerator ClearDamagedHC(HealthController hc)
         {
             yield return new WaitForSeconds(1);
@@ -245,10 +297,26 @@ namespace MrPink.WeaponsSystem
         
         private IEnumerator LifetimeCoroutine()
         {
+            float t = 0;
+            float tt = 0.5f;
             while (true)
             {
+                yield return null;
+
+                if (unitsExplosionCompleted)
+                {
+                    t += Time.deltaTime;
+                    if (t >= tt)
+                    {
+                        t = 0;
+                        unitsExplosionCompleted = false;
+                    }
+                }
+                
                 if (_lifeTime <= 0)
-                    yield break;
+                {
+                    continue;
+                }
             
                 currentLifeTime += Time.deltaTime;
 
@@ -258,8 +326,8 @@ namespace MrPink.WeaponsSystem
                     yield break;
                 }
 
-                yield return null;
             }
+            
         }
     }
 }

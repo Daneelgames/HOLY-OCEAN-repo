@@ -93,7 +93,7 @@ namespace MrPink.Units
             var path = new NavMeshPath();
         
             transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
             _agent.SetPath(path);
