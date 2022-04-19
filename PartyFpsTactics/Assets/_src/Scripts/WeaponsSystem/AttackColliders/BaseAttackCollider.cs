@@ -107,7 +107,7 @@ namespace MrPink.WeaponsSystem
             if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
                 return CollisionTarget.Self;
 
-            if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Player.Movement.gameObject)
+            if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
                 return CollisionTarget.Self;
 
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
@@ -124,9 +124,9 @@ namespace MrPink.WeaponsSystem
                 unitsExplosionCompleted = true;
             }
             
-            if (targetCollider.gameObject == Player.GameObject)
+            if (targetCollider.gameObject == Game.Player.GameObject)
             {
-                Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
+                Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
                 return CollisionTarget.Creature;
             }
 

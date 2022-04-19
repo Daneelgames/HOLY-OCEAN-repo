@@ -33,7 +33,7 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
             
-            if (!LevelGenerator.Instance.levelIsReady || Player.Interactor.carryingPortableRb)
+            if (!LevelGenerator.Instance.levelIsReady || Game.Player.Interactor.carryingPortableRb)
             {
                 _hands[Hand.Left].UpdateState(true);
                 _hands[Hand.Right].UpdateState(true);   
@@ -49,8 +49,8 @@ namespace MrPink.PlayerSystem
             targetFov = aiming ? camFovAim : camFovIdle;
 
             /*
-            _weaponsTargetsParent.position = Vector3.Lerp(_weaponsTargetsParent.position,  Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
-            _weaponsTargetsParent.rotation = Quaternion.Slerp(_weaponsTargetsParent.rotation, Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
+            _weaponsTargetsParent.position = Vector3.Lerp(_weaponsTargetsParent.position,  Game.Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
+            _weaponsTargetsParent.rotation = Quaternion.Slerp(_weaponsTargetsParent.rotation, Game.Player.MainCamera.transform.rotation, gunRotationSpeed * Time.deltaTime);
             */
 
             _hands[Hand.Left].MoveHand();
@@ -78,7 +78,7 @@ namespace MrPink.PlayerSystem
             _hands[Hand.Left].UpdateWeaponPosition();
             _hands[Hand.Right].UpdateWeaponPosition();
 
-            Player.MainCamera.fieldOfView = Mathf.Lerp(Player.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
+            Game.Player.MainCamera.fieldOfView = Mathf.Lerp(Game.Player.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
         }
 
         public void SetWeapon(WeaponController weapon, Hand hand)

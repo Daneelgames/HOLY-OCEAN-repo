@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MrPink.Health;
+using MrPink.WeaponsSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +30,7 @@ namespace MrPink.PlayerSystem
             if (!LevelGenerator.Instance.levelIsReady)
                 return;
         
-            if (Player.Health.health <= 0)
+            if (Game.Player.Health.health <= 0)
                 return;
             
             // TODO роутить управление централизованно
@@ -48,7 +49,7 @@ namespace MrPink.PlayerSystem
                     if (i < 0)
                         i = toolsPrefabs.Count - 1;
                 
-                    if (Player.Inventory.GetAmount(toolsPrefabs[i].toolType) > 0)
+                    if (Game.Player.Inventory.GetAmount(toolsPrefabs[i].toolType) > 0)
                     {
                         selectedTool = i;
                         break;
@@ -64,17 +65,17 @@ namespace MrPink.PlayerSystem
         
             if (Input.GetKeyDown(KeyCode.F))
             { 
-                if (Player.Inventory.GetAmount(toolsPrefabs[selectedTool].toolType) <= 0)
+                if (Game.Player.Inventory.GetAmount(toolsPrefabs[selectedTool].toolType) <= 0)
                 {
                     return;
                 }
             
                 // throw selected
                 var newTool = Instantiate(toolsPrefabs[selectedTool]);
-                newTool.transform.position = Player.Movement.headTransform.position;
-                newTool.transform.rotation = Player.MainCamera.transform.rotation;
-                newTool.Init(Player.Health, DamageSource.Player);
-                Player.Inventory.RemoveTool(toolsPrefabs[selectedTool].toolType);
+                newTool.transform.position = Game.Player.Movement.headTransform.position;
+                newTool.transform.rotation = Game.Player.MainCamera.transform.rotation;
+                newTool.Init(Game.Player.Health, DamageSource.Player);
+                Game.Player.Inventory.RemoveTool(toolsPrefabs[selectedTool].toolType);
                 UpdateSelectedToolFeedback();
             }
         }
@@ -87,7 +88,7 @@ namespace MrPink.PlayerSystem
                 if (i >= toolsPrefabs.Count)
                     i = 0;
 
-                var amount = Player.Inventory.GetAmount(toolsPrefabs[i].toolType); 
+                var amount = Game.Player.Inventory.GetAmount(toolsPrefabs[i].toolType); 
                 if (amount > 0)
                 {
                     selectedTool = i;
@@ -104,7 +105,7 @@ namespace MrPink.PlayerSystem
         
         void UpdateSelectedToolFeedback()
         {
-            selectedToolAmount = Player.Inventory.GetAmount(toolsPrefabs[selectedTool].toolType);
+            selectedToolAmount = Game.Player.Inventory.GetAmount(toolsPrefabs[selectedTool].toolType);
             
             if (selectedToolAmount <= 0)
                 toolsControlsHintText.text = String.Empty;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEditor;

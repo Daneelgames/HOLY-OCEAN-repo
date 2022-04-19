@@ -6643,11 +6643,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
+  visionDistance: 250
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
   raycastOrigin: {fileID: 2292738347658247173}
   setDamagerAsEnemyBehaviour: 1
+  visibleEnemies: []
 --- !u!114 &6090508075434962156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6688,6 +6690,10 @@ MonoBehaviour:
   weaponsAttackSwitchCooldownMinMax: {x: 0.2, y: 1}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
+  rotateWeaponTowardTarget: 1
+  minDistanceToAttack: 1000
+  updateRate: 0.1
+  maxDistanceFromPlayerToShoot: 250
 --- !u!114 &3176254616865558108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6701,6 +6707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 4959962318712032868}
+  hc: {fileID: 5673859260790904911}
   ragdollOrigin: {fileID: 1835491071426791599}
   colliders:
   - {fileID: 7658356037835355582}
@@ -6843,7 +6850,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controllingVehicle: 0
   hc: {fileID: 5673859260790904911}
+  controlledVehicle: {fileID: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  stoppingDistance: 20
+  maxReverseDistance: 100
+  stoppingSpeed: 50
 --- !u!114 &-4984108032942175587
 MonoBehaviour:
   m_ObjectHideFlags: 0

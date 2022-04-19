@@ -63,7 +63,7 @@ namespace MrPink.Units
             Awareness().ForgetWithHandler();
 
             if (_team == Team.Red && Random.value > 0.9f)
-                MoveToPositionOrder(Player.GameObject.transform.position);
+                MoveToPositionOrder(Game.Player.GameObject.transform.position);
             else
                 TakeCoverOrder();
         }

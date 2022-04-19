@@ -693,11 +693,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
+  visionDistance: 250
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
   raycastOrigin: {fileID: 5432981809372733046}
   setDamagerAsEnemyBehaviour: 1
+  visibleEnemies: []
 --- !u!114 &13917179899874975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,6 +741,8 @@ MonoBehaviour:
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
   minDistanceToAttack: 30
+  updateRate: 0.1
+  maxDistanceFromPlayerToShoot: 250
 --- !u!114 &8692219909506116655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,6 +756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 1180495305240521751}
+  hc: {fileID: 1876098499272473148}
   ragdollOrigin: {fileID: 5605956984530299612}
   colliders:
   - {fileID: 6428326719803498867}

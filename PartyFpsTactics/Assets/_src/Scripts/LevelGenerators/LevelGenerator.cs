@@ -156,8 +156,8 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator GenerateProcLevel()
     {
-        Player.Movement.gameObject.SetActive(false);
-        Player.Interactor.cam.gameObject.SetActive(false);
+        Game.Player.Movement.gameObject.SetActive(false);
+        Game.Player.Interactor.cam.gameObject.SetActive(false);
         
         // road is already generated
         //yield return StartCoroutine(RoadGenerator.Instance.GenerateRoadCoroutine());

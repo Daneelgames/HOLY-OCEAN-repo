@@ -91,7 +91,7 @@ namespace MrPink.PlayerSystem
     
         bool MoveOrder()
         {
-            var ray = Player.MainCamera.ScreenPointToRay(Input.mousePosition);
+            var ray = Game.Player.MainCamera.ScreenPointToRay(Input.mousePosition);
 
             Vector3 worldPointOnMouse = Vector3.zero;
         

@@ -76,7 +76,7 @@ namespace MrPink.PlayerSystem
             float gunRotationSpeed = _weapon.gunRotationSpeed;
             
             transform.localPosition = Vector3.Lerp(transform.localPosition, 
-                new Vector3(Player.Movement.MoveVector.x, - Player.Movement.MoveVector.y - Player.Movement.rb.velocity.normalized.y * 0.3f, 0) * _weapon.gunsMoveDistanceScaler,  
+                new Vector3(Game.Player.Movement.MoveVector.x, - Game.Player.Movement.MoveVector.y - Game.Player.Movement.rb.velocity.normalized.y * 0.3f, 0) * _weapon.gunsMoveDistanceScaler,  
                 gunMoveSpeed * Time.deltaTime);
 
             var rot = transform.localRotation;
@@ -122,7 +122,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            if (Input.GetMouseButton(_mouseButtonIndex) && Player.Interactor.carryingPortableRb == null)
+            if (Input.GetMouseButton(_mouseButtonIndex) && Game.Player.Interactor.carryingPortableRb == null)
             {
                 IsAiming = true;
                 CurrentPosition = Weapon.IsMelee
@@ -144,7 +144,7 @@ namespace MrPink.PlayerSystem
             if (Weapon.IsMelee)
                 CurrentPosition = WeaponPosition.MeleeAttack;
 
-            var attackTime = await Weapon.Shot(Player.Health);
+            var attackTime = await Weapon.Shot(Game.Player.Health);
 
             if (Weapon.IsMelee)
                 await UniTask.Delay((int) (attackTime * 1000));
