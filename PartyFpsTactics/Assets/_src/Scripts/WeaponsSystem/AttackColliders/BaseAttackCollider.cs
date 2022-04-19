@@ -159,15 +159,19 @@ namespace MrPink.WeaponsSystem
                 return CollisionTarget.Solid;
             }
 
-            // if vehicle tries to damage unit inside
-            if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
-                ownerHealth.controlledVehicle == targetHealth.HealthController.aiVehicleControls.controlledVehicle)
-                return CollisionTarget.Self;
+            if (ownerHealth)
+            {
+                // if vehicle tries to damage unit inside
+                if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
+                    ownerHealth.controlledVehicle == targetHealth.HealthController.aiVehicleControls.controlledVehicle)
+                    return CollisionTarget.Self;
 
-            // if unit inside tries to hit the vehicle AND IT'S NOT PLAYER
-            if (targetHealth.HealthController && targetHealth.HealthController.controlledVehicle &&
-                ownerHealth.aiVehicleControls &&  ownerHealth.aiVehicleControls.controlledVehicle == targetHealth.HealthController.controlledVehicle)
-                return CollisionTarget.Self;
+                // if unit inside tries to hit the vehicle AND IT'S NOT PLAYER
+                if (targetHealth.HealthController && targetHealth.HealthController.controlledVehicle &&
+                    ownerHealth.aiVehicleControls && ownerHealth.aiVehicleControls.controlledVehicle ==
+                    targetHealth.HealthController.controlledVehicle)
+                    return CollisionTarget.Self;
+            }
 
             if (targetHealth.IsOwnedBy(ownerHealth))
                 return CollisionTarget.Self;

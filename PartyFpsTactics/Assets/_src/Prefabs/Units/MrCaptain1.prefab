@@ -6595,6 +6595,7 @@ MonoBehaviour:
   AiMovement: {fileID: 6090508075434962156}
   aiVehicleControls: {fileID: 1732534460851470254}
   HumanVisualController: {fileID: 3176254616865558108}
+  controlledVehicle: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath:
@@ -6693,7 +6694,7 @@ MonoBehaviour:
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
-  minDistanceToAttack: 1000
+  maxDistanceToAttack: 100
   updateRate: 0.1
   maxDistanceFromPlayerToShoot: 250
 --- !u!114 &3176254616865558108

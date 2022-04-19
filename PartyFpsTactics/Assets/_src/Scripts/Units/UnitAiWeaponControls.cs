@@ -17,7 +17,7 @@ namespace MrPink.Units
         public float minAngleToRotateGun = 30;
         public float minAngleToShoot = 15;
         public bool rotateWeaponTowardTarget = true;
-        public float minDistanceToAttack = 1000;
+        public float maxDistanceToAttack = 1000;
         public float updateRate = 0.1f;
         public float maxDistanceFromPlayerToShoot = 250;
 
@@ -59,7 +59,7 @@ namespace MrPink.Units
             if (hc.AiMovement.enemyToLookAt == null)
                 yield break;
             
-            if (Vector3.Distance(transform.position, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position) > minDistanceToAttack)
+            if (Vector3.Distance(transform.position, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position) > maxDistanceToAttack)
                 yield break;
 
             if (hc.AiMovement.enemyToLookAt.gameObject == Game.Player.GameObject)
