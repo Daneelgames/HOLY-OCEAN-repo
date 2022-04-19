@@ -162,7 +162,7 @@ namespace MrPink.PlayerSystem
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {
                 jumpTime = jumpTimeMax;
-                Jump(Vector3.zero, true);
+                Jump(Vector3.zero);
             }
         }
 
@@ -320,17 +320,10 @@ namespace MrPink.PlayerSystem
         }
 
 
-        public void Jump(Vector3 additionalForce, bool instant = false)
+        public void Jump(Vector3 additionalForce)
         {
             SetGrindRail(null);
-            if (instant)
-            {
-                rb.AddForce(Vector3.up * jumpForce + additionalForce, ForceMode.Impulse);
-            }
-            else
-            {
-                _targetVelocity += (Vector3.up * jumpForce + additionalForce);   
-            }
+            rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce * jumpForce, ForceMode.Impulse);
             
             StartCoroutine(CoyoteTimeCooldown());
             stamina = Mathf.Clamp(stamina - jumpStaminaCost * Time.deltaTime, 0, staminaMax);

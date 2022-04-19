@@ -127,7 +127,14 @@ public class HumanVisualController : MonoBehaviour
             colliders.Add(rb.gameObject.GetComponent<Collider>());
     }
 
-
+    public void SetUnitKinematic(bool kinematic)
+    {
+        foreach (var rb in rigidbodies)
+        {
+            rb.isKinematic = kinematic;
+        }
+    }
+    
     public void SetVehiclePassenger(ControlledVehicle vehicle)
     {
         inVehicle = vehicle;

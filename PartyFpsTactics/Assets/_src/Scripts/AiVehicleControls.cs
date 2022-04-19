@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
+using Cysharp.Threading.Tasks.Triggers;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
@@ -12,7 +13,7 @@ using UnityEngine.AI;
 
 public class AiVehicleControls : MonoBehaviour
 {
-    public bool inControl = false;
+    public bool controllingVehicle = false;
     public HealthController hc;
     public ControlledVehicle controlledVehicle;
     public Vector3 targetPosition;
@@ -24,7 +25,7 @@ public class AiVehicleControls : MonoBehaviour
 
     private void Start()
     {
-        if (inControl)
+        if (controllingVehicle)
             DriverSit(controlledVehicle);
     }
 
@@ -32,17 +33,30 @@ public class AiVehicleControls : MonoBehaviour
     {
         // включить анимацию
         // начинать преследовать трансформ нпс сит
+        
         controlledVehicle = _vehicle;
-        inControl = false;
-        hc.AiMovement.StopActivities();
-        hc.HumanVisualController.SetVehiclePassenger(controlledVehicle);
-        StartCoroutine(FollowSit());
+        if (controlledVehicle != null)
+        {
+            controllingVehicle = false;
+            hc.AiMovement.StopActivities();
+            hc.HumanVisualController.SetUnitKinematic(true);
+            hc.HumanVisualController.SetVehiclePassenger(controlledVehicle);
+            followSitCoroutine = StartCoroutine(FollowSit());   
+        }
+        else
+        {
+            controllingVehicle = false;
+            StopCoroutine(followSitCoroutine);
+            hc.HumanVisualController.SetVehiclePassenger(null);
+            hc.HumanVisualController.SetUnitKinematic(false);
+            hc.AiMovement.RestartActivities();
+        }
     }
 
     public void DriverSit(ControlledVehicle vehicle)
     {
         controlledVehicle = vehicle;
-        inControl = true;
+        controllingVehicle = true;
         updateNavMeshPathCoroutine = StartCoroutine(UpdateNavmeshPath());
         controlVehicleCoroutine = StartCoroutine(ControlVehicle());
     }
@@ -150,7 +164,8 @@ public class AiVehicleControls : MonoBehaviour
             controlledVehicle.SetCarInput(hor, ver, brake);
         }
     }
-    
+
+    private Coroutine followSitCoroutine;
     IEnumerator FollowSit()
     {
         var sit = controlledVehicle.sitTransformNpc;

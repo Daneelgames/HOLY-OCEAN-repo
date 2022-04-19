@@ -10,6 +10,7 @@ public class PartyController : MonoBehaviour
     public static PartyController Instance;
     
     public ControlledVehicle playerCar;
+    public HealthController npcInParty;
 
     private void Awake()
     {
@@ -39,10 +40,18 @@ public class PartyController : MonoBehaviour
         {
             var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,
                 playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
-            captain.aiVehicleControls.PassengerSit(playerCar);
+            //captain.aiVehicleControls.PassengerSit(playerCar);
+            npcInParty = captain;
         }
+        
         Player.Movement.gameObject.SetActive(true);
         Player.Interactor.cam.gameObject.SetActive(true);
         Player.VehicleControls.RequestVehicleAction(playerCar);
+    }
+
+    public void SetPlayerInCar(ControlledVehicle vehicle)
+    {
+        if (npcInParty)
+            npcInParty.aiVehicleControls.PassengerSit(vehicle);
     }
 }

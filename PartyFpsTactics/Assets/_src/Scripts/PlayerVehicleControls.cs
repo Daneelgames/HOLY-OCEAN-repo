@@ -27,8 +27,8 @@ public class PlayerVehicleControls : MonoBehaviour
             StopCoroutine(controlVehicleCoroutine);
             controlledVehicle.StopMovement();
             controlledVehicle = null;
-            TogglePlayerInside(false);
-            Player.Movement.Jump(Vector3.zero, true);
+            TogglePlayerInside(controlledVehicle);
+            Player.Movement.Jump(new Vector3(-1, 1, 0));
             return;
         }
 
@@ -37,7 +37,7 @@ public class PlayerVehicleControls : MonoBehaviour
             // зайти в тачку
             Player.Movement.SetCollidersTrigger(true);
             controlledVehicle = _controlledVehicle;
-            TogglePlayerInside(true);
+            TogglePlayerInside(controlledVehicle);
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
             return;
         }
@@ -49,14 +49,16 @@ public class PlayerVehicleControls : MonoBehaviour
             StopCoroutine(controlVehicleCoroutine);
             controlledVehicle.StopMovement();
             controlledVehicle = _controlledVehicle;
-            TogglePlayerInside(true);
+            TogglePlayerInside(controlledVehicle);
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
         }
     }
     
-    void TogglePlayerInside(bool inside)
+    void TogglePlayerInside(ControlledVehicle vehicle)
     {
-        if (inside)
+        PartyController.Instance.SetPlayerInCar(vehicle);
+        
+        if (vehicle)
         {
             Player.Movement.SetCrouch(false);
             Player.Movement.rb.isKinematic = true;

@@ -33,6 +33,8 @@ namespace MrPink.WeaponsSystem
         [FormerlySerializedAs("lifeTime")]
         [SerializeField]
         private float _lifeTime = 2;
+        [SerializeField] internal float currentLifeTime = 0;
+        [SerializeField] internal float _dangerousTime = 2;
 
         [SerializeField] private float ragdollExplosionDistance = 2;
         [SerializeField] private float ragdollExplosionForce = 500;
@@ -93,6 +95,12 @@ namespace MrPink.WeaponsSystem
 
         protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
+            if (currentLifeTime > _dangerousTime)
+            {
+                Debug.Log("currentLifeTime > _dangerousTime");
+                return CollisionTarget.Self;
+            }
+            
             if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
                 return CollisionTarget.Self;
 
@@ -231,7 +239,6 @@ namespace MrPink.WeaponsSystem
         
         private IEnumerator LifetimeCoroutine()
         {
-            float currentLifeTime = 0;
             while (true)
             {
                 if (_lifeTime <= 0)

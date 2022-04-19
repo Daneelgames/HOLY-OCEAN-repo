@@ -17,20 +17,6 @@ namespace MrPink.WeaponsSystem
         [SerializeField] 
         private bool _isMelee;
 
-        [Header("Player Weapon Movement")] 
-        [Range(0.1f,100)]
-        public float gunMoveSpeedScaler = 5;
-        [Range(0.1f,100)]
-        public float gunRotSpeedScaler = 5;
-        [Range(0.1f,500)]
-        public float gunMoveSpeed = 100;
-        [Range(0.1f,500)]
-        public float gunRotationSpeed = 100;
-        [Range(0,1)]
-        public float WeaponRotationZScalerThreshold = 0.2f;
-        [Range(0,1000)]
-        public float WeaponRotationZScaler = 3f;
-        
         [Header("Attacking")]
         public float cooldown = 1;
 
@@ -55,12 +41,28 @@ namespace MrPink.WeaponsSystem
         private BaseWeaponAnimation _animation;
 
         [Header("Only for Player Weapon")]
+        
         public float attackStaminaCost = 0;
         public AudioSource attackAu;
         public AudioSource reloadingAu;
         public AudioClip reloadingClip;
         public AudioClip reloadingEndClip;
         public float gunsMoveDistanceScaler = 0.2f;
+        
+        [Header("Player Weapon Movement")] 
+        [Range(0.1f,100)]
+        public float gunMoveSpeedScaler = 5;
+        [Range(0.1f,100)]
+        public float gunRotSpeedScaler = 5;
+        [Range(0.1f,500)]
+        public float gunMoveSpeed = 100;
+        [Range(0.1f,500)]
+        public float gunRotationSpeed = 100;
+        [Range(0,1)]
+        public float WeaponRotationZScalerThreshold = 0.2f;
+        [Range(0,1000)]
+        public float WeaponRotationZScaler = 3f;
+
 
         public Quaternion InitLocalRotation { get; private set; }
     

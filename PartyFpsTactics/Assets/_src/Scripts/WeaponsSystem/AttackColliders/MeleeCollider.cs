@@ -10,6 +10,8 @@ namespace MrPink.WeaponsSystem
         public bool playerMeleeAttack = false;
         private void OnTriggerEnter(Collider other)
         {
+            if (currentLifeTime > _dangerousTime)
+                return;
             if (ownerHealth == null)
                 return;
             if (ownerHealth.gameObject == other.gameObject)

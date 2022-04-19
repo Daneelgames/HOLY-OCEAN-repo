@@ -16,6 +16,8 @@ namespace MrPink.Units
         private HealthController hc;
         public float minAngleToRotateGun = 30;
         public float minAngleToShoot = 15;
+        public bool rotateWeaponTowardTarget = true;
+        public float minDistanceToAttack = 1000;
 
         private void Awake()
         {
@@ -48,7 +50,9 @@ namespace MrPink.Units
 
             if (hc.AiMovement.enemyToLookAt == null)
                 yield break;
-
+            
+            if (Vector3.Distance(transform.position, hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position) > minDistanceToAttack)
+                yield break;
 
             if (hc.AiMovement.enemyToLookAt.gameObject == Player.GameObject)
             {
@@ -65,10 +69,14 @@ namespace MrPink.Units
             if (hc.AiMovement.enemyToLookAt.playerMovement)
                 offset = hc.AiMovement.enemyToLookAt.playerMovement.rb.velocity;
 
-            if (angle < minAngleToRotateGun)
-                activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position + offset);
-            else
-                activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
+            if (rotateWeaponTowardTarget)
+            {
+                if (angle < minAngleToRotateGun)
+                    activeWeapon.transform.LookAt(hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position +
+                                                  offset);
+                else
+                    activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
+            }
 
             targetDir = hc.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
             angle = Vector3.Angle(targetDir, transform.forward);
