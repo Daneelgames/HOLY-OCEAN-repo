@@ -1,4 +1,3 @@
-using System;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,9 +6,6 @@ namespace MrPink.PlayerSystem
 {
     public class Player : MonoBehaviour
     {
-        public static Player _instance;
-        
-        
         [SerializeField, ChildGameObjectsOnly, Required]
         public Camera _mainCamera;
         
@@ -45,43 +41,43 @@ namespace MrPink.PlayerSystem
         
         
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
-        public static GameObject GameObject
-            => _instance._positionableObject.gameObject;
+        public GameObject GameObject
+            => _positionableObject.gameObject;
         
-        public static Camera MainCamera
-            => _instance._mainCamera;
+        public Camera MainCamera
+            => _mainCamera;
 
-        public static PlayerMovement Movement
-            => _instance._movement;
+        public PlayerMovement Movement
+            => _movement;
         
-        public static HealthController Health
-            => _instance._health;
+        public HealthController Health
+            => _health;
 
-        public static CommanderControls CommanderControls
-            => _instance._commanderControls;
+        public CommanderControls CommanderControls
+            => _commanderControls;
 
-        public static PlayerWeaponControls Weapon
-            => _instance._weapon;
-        public static PlayerThrowablesControls ThrowableControls
-            => _instance._throwableControls;
+        public PlayerWeaponControls Weapon
+            => _weapon;
+        public PlayerThrowablesControls ThrowableControls
+            => _throwableControls;
 
-        public static PlayerInventory Inventory
-            => _instance._inventory;
+        public PlayerInventory Inventory
+            => _inventory;
         
-        public static PlayerInteractor Interactor
-            => _instance._interactor;
+        public PlayerInteractor Interactor
+            => _interactor;
 
-        public static Vector3 Position
-            => _instance._positionableObject.position;
+        public Vector3 Position
+            => _positionableObject.position;
 
 
-        public static PlayerLookAround LookAround
-            => _instance._lookAround;
-        public static PlayerVehicleControls VehicleControls
-            => _instance._vehicleControls;
+        public PlayerLookAround LookAround
+            => _lookAround;
+        public PlayerVehicleControls VehicleControls
+            => _vehicleControls;
         
 
-        public static void Death(Transform killer)
+        public void Death(Transform killer)
         {
             Movement.Death(killer);
             LookAround.Death(killer);
@@ -89,9 +85,5 @@ namespace MrPink.PlayerSystem
             ScoringSystem.Instance.CooldownToZero();
         }
 
-        private void Awake()
-        {
-            _instance = this;
-        }
     }
 }

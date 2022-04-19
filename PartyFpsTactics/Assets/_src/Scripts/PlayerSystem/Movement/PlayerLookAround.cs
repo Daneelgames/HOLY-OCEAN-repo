@@ -100,7 +100,7 @@ namespace MrPink.PlayerSystem
             _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
-            if (Player.VehicleControls.controlledVehicle == null)
+            if (Game.Player.VehicleControls.controlledVehicle == null)
             {
                 transform.localRotation = Quaternion.Euler(newRotation);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
@@ -115,7 +115,7 @@ namespace MrPink.PlayerSystem
 
             float resultFollowSpeed = _cameraFollowBodySmooth;
             
-            if (Player.VehicleControls.controlledVehicle)
+            if (Game.Player.VehicleControls.controlledVehicle)
                 resultFollowSpeed *= 10;
             
             _headTransform.transform.position = 

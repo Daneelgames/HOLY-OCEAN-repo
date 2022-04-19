@@ -3,7 +3,7 @@ using MrPink.PlayerSystem;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace _src.Scripts
+namespace MrPink
 {
     public class AutoBike : MonoBehaviour
     {
@@ -13,8 +13,8 @@ namespace _src.Scripts
         private float currentYTorque = 0;
         IEnumerator Start()
         {
-            Player.Movement.transform.parent.position = transform.position;
-            Player.Movement.transform.parent.parent = transform;
+            Game.Player.Movement.transform.parent.position = transform.position;
+            Game.Player.Movement.transform.parent.parent = transform;
         
             while (!LevelGenerator.Instance.levelIsReady)
             {
@@ -22,7 +22,7 @@ namespace _src.Scripts
                 currentYTorque = Random.Range(-1f, 1f);
             }
 
-            transform.position = Player.Movement.transform.position;
+            transform.position = Game.Player.Movement.transform.position;
             rb.drag = 1;
             rb.angularDrag = 1;
         }

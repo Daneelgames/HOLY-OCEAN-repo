@@ -122,7 +122,7 @@ namespace MrPink.PlayerSystem
             
             HandleStamina();
 
-            if (Player.VehicleControls.controlledVehicle)
+            if (Game.Player.VehicleControls.controlledVehicle)
             {
                 State.IsRunning = false;
                 _resultVelocity = Vector3.zero;
@@ -243,7 +243,7 @@ namespace MrPink.PlayerSystem
                 bottomCollider.height = bottomColliderHeightStanding;
             }
             
-            Player.LookAround.SetCrouch(crouching);
+            Game.Player.LookAround.SetCrouch(crouching);
         }
         
         private void HandleMovement()
@@ -280,7 +280,7 @@ namespace MrPink.PlayerSystem
             
             if (stamina < 0.1f && State.IsGrounded)
                 scaler = 0.66f;
-            else if (Player.Interactor.carryingPortableRb)
+            else if (Game.Player.Interactor.carryingPortableRb)
                 scaler = 0.66f;
             
             // RUNNING
@@ -365,11 +365,11 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded && Player.VehicleControls.controlledVehicle == null)
+                if (!State.IsGrounded && Game.Player.VehicleControls.controlledVehicle == null)
                 {
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
-                        Player.Health.Damage(fallDamage, DamageSource.Environment);
+                        Game.Player.Health.Damage(fallDamage, DamageSource.Environment);
                     }
                 }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
+using MrPink;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -58,7 +59,7 @@ public class InteractableEventsManager : MonoBehaviour
                 GameObject newObj;
                 if (IOevent.spawnInsideCamera)
                 {
-                    newObj = Instantiate(IOevent.prefabToSpawn, Player.Interactor.cam.transform);
+                    newObj = Instantiate(IOevent.prefabToSpawn, Game.Player.Interactor.cam.transform);
                     newObj.transform.localPosition = Vector3.zero;
                     newObj.transform.localRotation = quaternion.identity;
                 }
@@ -102,7 +103,7 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.RideVehicle:
-                Player.VehicleControls.RequestVehicleAction(IOevent.controlledVehicle);
+                Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledVehicle);
                 break;
         }
         
