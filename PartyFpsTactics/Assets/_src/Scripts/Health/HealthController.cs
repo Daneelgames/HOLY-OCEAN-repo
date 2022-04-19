@@ -36,14 +36,16 @@ namespace MrPink.Health
         public float maxShakeOffset = 0.1f;
         public Transform transformToShake;
     
-        [Header("AI")]
+        [Header("AI")]  // TODO здоровье не должно разруливать интеллект, подкрутить архитектуру
         public Team team;
 
+        public UnitVision UnitVision;
         public UnitAiMovement AiMovement;
         public AiVehicleControls aiVehicleControls;
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
+        public ControlledVehicle controlledVehicle;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
         public List<GameObject> objectsToSpawnOnDeath;
@@ -140,10 +142,13 @@ namespace MrPink.Health
         
         public void SetDamager(HealthController damager)
         {
-            if (AiMovement && AiMovement.unitVision)
-            {
-                AiMovement.unitVision.SetDamager(damager);
-            }
+            if (AiMovement == null)
+                return;
+            
+            var vision = AiMovement.GetComponent<UnitVision>();
+            
+            if (vision)
+                vision.SetDamager(damager);
         }
 
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)

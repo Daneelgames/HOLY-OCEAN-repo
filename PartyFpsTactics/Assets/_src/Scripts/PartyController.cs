@@ -53,7 +53,7 @@ namespace MrPink
 
         public void SetPlayerInCar(ControlledVehicle vehicle)
         {
-            if (npcInParty)
+            if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.Player.Position) < 15)
                 npcInParty.aiVehicleControls.SetPassengerSit(vehicle);
         }
     }

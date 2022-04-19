@@ -48,21 +48,40 @@ namespace MrPink
             hc.HumanVisualController.SetCollidersTriggers(false);
             hc.AiMovement.RestartActivities();
         }
+        private Coroutine enterCoroutine;
+        IEnumerator EnterVehicleCoroutine()
+        {
+            float t = 0;
+            float tt = 0.5f;
+
+            hc.HumanVisualController.SetVehiclePassenger(controlledVehicle);
+            hc.HumanVisualController.SetCollidersTriggers(true);
+            hc.AiMovement.StopActivities();
+            var initPos = hc.transform.position;
+            while (t < tt)
+            {
+                t += Time.deltaTime;
+                hc.transform.position = Vector3.Lerp(initPos, 
+                    controlledVehicle.sitTransformNpc.position, t/tt);
+                yield return null;
+            }
+            followSitCoroutine = StartCoroutine(FollowSit());   
+        }
         public void SetPassengerSit(ControlledVehicle _vehicle, bool smoothExit = true)
         {
             // включить анимацию
             // начинать преследовать трансформ нпс сит
             if (exitCoroutine != null)
                 StopCoroutine(exitCoroutine);
+            if (enterCoroutine != null)
+                StopCoroutine(enterCoroutine);
         
             if (_vehicle != null)
             {
                 controlledVehicle = _vehicle;
                 controllingVehicle = false;
-                hc.AiMovement.StopActivities();
-                hc.HumanVisualController.SetCollidersTriggers(true);
-                hc.HumanVisualController.SetVehiclePassenger(controlledVehicle);
-                followSitCoroutine = StartCoroutine(FollowSit());   
+                
+                enterCoroutine = StartCoroutine(EnterVehicleCoroutine());
             }
             else
             {

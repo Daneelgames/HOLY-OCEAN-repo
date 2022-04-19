@@ -23,24 +23,13 @@ namespace MrPink.Units
         private Team _team;
         
         [SerializeField, ChildGameObjectsOnly, Required]
-        private UnitMovement _selfMovement;
-        
-        [SerializeField, ChildGameObjectsOnly, Required]
-        private UnitFollowTarget _selfFollow;
-        
-        [SerializeField, ChildGameObjectsOnly, Required]
-        private HealthController _selfHealth;
-        
+        private Unit _selfUnit;
         
         public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
         public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
 
         public MovementOrder currentOrder = MovementOrder.FollowTarget;
 
-
-        public HumanVisualController humanVisualController;
-        public UnitVision unitVision;
-        
         private bool inCover = false;
         
         public HealthController enemyToLookAt;
@@ -58,7 +47,7 @@ namespace MrPink.Units
 
         private void Start()
         {
-            _selfHealth.OnDeathEvent.AddListener(StopActivities);
+            _selfUnit.HealthController.OnDeathEvent.AddListener(StopActivities);
 
             Awareness().ForgetWithHandler();
 
@@ -71,7 +60,7 @@ namespace MrPink.Units
         private void Update()
         {
             if (enemyToLookAt != null && !inCover && enemyToLookAt)
-                _selfMovement.LookAt(enemyToLookAt.transform.position);
+                _selfUnit.UnitMovement.LookAt(enemyToLookAt.transform.position);
 
             if (_takeCoverCooldown > 0)
                 _takeCoverCooldown -= Time.deltaTime;
@@ -80,9 +69,9 @@ namespace MrPink.Units
 
         private async UniTask Awareness()
         {
-            while (_selfHealth.health > 0)
+            while (_selfUnit.HealthController.health > 0)
             {
-                enemyToLookAt = await unitVision.GetClosestVisibleEnemy();
+                enemyToLookAt = await _selfUnit.UnitVision.GetClosestVisibleEnemy();
                 
                 if (enemyToLookAt != null)
                     TryCoverFromClosest(enemyToLookAt);
@@ -99,7 +88,7 @@ namespace MrPink.Units
             if (enemy == null)
                 return;
             
-            var isCovered = CoverSystem.IsCoveredFrom(_selfHealth, enemy);
+            var isCovered = CoverSystem.IsCoveredFrom(_selfUnit.HealthController, enemy);
 
             if (isCovered)
                 return;
@@ -121,7 +110,7 @@ namespace MrPink.Units
             if (_moveToPositionCoroutine != null)
                 StopCoroutine(_moveToPositionCoroutine);
             
-            _selfFollow.StopFollowing();
+            _selfUnit.UnitFollowTarget.StopFollowing();
             
             if (_takeCoverCoroutine != null)
                 StopCoroutine(_takeCoverCoroutine);
@@ -153,7 +142,7 @@ namespace MrPink.Units
                 {
                     Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
 
-                    _selfMovement.AgentSetPath(targetPos, true);
+                    _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
                 }
                 else
                     FollowTargetOrder(enemy.transform);
@@ -171,17 +160,17 @@ namespace MrPink.Units
         
         
             // CHOSEN SPOT occupied!
-            SetOccupiedSpot(chosenCover, _selfHealth);
+            SetOccupiedSpot(chosenCover, _selfUnit.HealthController);
         
             //SET PATH
-            if (_selfMovement != null)
-                _selfMovement.AgentSetPath(chosenCover.transform.position, false);
+            if (_selfUnit.UnitMovement != null)
+                _selfUnit.UnitMovement.AgentSetPath(chosenCover.transform.position, false);
             
             var spotPosition = _occupiedCoverSpot.transform.position;
 
             while (Vector3.Distance(transform.position, spotPosition) > 0.33f)
             {
-                if (_occupiedCoverSpot.Occupator != _selfHealth)
+                if (_occupiedCoverSpot.Occupator != _selfUnit.HealthController)
                 {
                     FireWatchOrder();
                     yield break;
@@ -196,7 +185,7 @@ namespace MrPink.Units
         {
             var goodCoverSpots = isFromRandomPool 
                 ? CoverSystem.Instance.GetAllCovers()
-                : CoverSystem.Instance.FindCover(transform, unitVision.visibleEnemies);
+                : CoverSystem.Instance.FindCover(transform, _selfUnit.UnitVision.visibleEnemies);
             
             if (isClosestNeeded)
                 return GetClosestCover(goodCoverSpots);
@@ -242,10 +231,10 @@ namespace MrPink.Units
             if (!spot) 
                 return;
             
-            if (occupator == null && spot.Occupator != _selfHealth)
+            if (occupator == null && spot.Occupator != _selfUnit.HealthController)
                 return;
 
-            if (occupator == _selfHealth)
+            if (occupator == _selfUnit.HealthController)
                 _getInCoverCoroutine = StartCoroutine(CheckIfCloseToCover());
 
             spot.Occupator = occupator;
@@ -254,7 +243,7 @@ namespace MrPink.Units
         private void SetInCover(bool isInCover)
         {
             inCover = isInCover;
-            _selfHealth.HumanVisualController.SetInCover(isInCover);
+            _selfUnit.HealthController.HumanVisualController.SetInCover(isInCover);
         }
 
         
@@ -286,7 +275,7 @@ namespace MrPink.Units
             SetOccupiedSpot(_occupiedCoverSpot, null);
             StopAllBehaviorCoroutines();
             currentOrder = MovementOrder.FollowTarget;
-            _selfFollow.FollowTarget(target);
+            _selfUnit.UnitFollowTarget.FollowTarget(target);
         }
 
         
@@ -300,66 +289,44 @@ namespace MrPink.Units
 
         private IEnumerator MoveToPositionAndFireWatchOrder(Vector3 target)
         {
-            yield return _selfMovement.MoveToPosition(target);
+            yield return _selfUnit.UnitMovement.MoveToPosition(target);
             
             FireWatchOrder();
         }
         
         public void RunOrder()
         {
-            _selfMovement.Run();
+            _selfUnit.UnitMovement.Run();
         }
     
         public void StopActivities()
         {
-            _selfMovement.Death();
+            _selfUnit.UnitMovement.Death();
             
             //this.enabled = false;
             
             StopAllBehaviorCoroutines();
-            humanVisualController.SetMovementVelocity(Vector3.zero);
+            _selfUnit.HumanVisualController.SetMovementVelocity(Vector3.zero);
         }
 
         public void RestartActivities()
         {
-            _selfMovement.Resurrect();
+            _selfUnit.UnitMovement.Resurrect();
             
             HealthController enemy = null;
-            if (unitVision.visibleEnemies.Count > 0)
-                enemy = unitVision.visibleEnemies[Random.Range(0, unitVision.visibleEnemies.Count)];
+            if (_selfUnit.UnitVision.visibleEnemies.Count > 0)
+                enemy = _selfUnit.UnitVision.visibleEnemies[Random.Range(0, _selfUnit.UnitVision.visibleEnemies.Count)];
                 
             TakeCoverOrder(false, true, enemy);
         }
 
 
 #if UNITY_EDITOR
-
-        [ContextMenu("Transfer movement")]
-        private void TransferMovementData()
+        
+        public void SetUnit(Unit unit)
         {
-            _selfHealth = GetComponent<HealthController>();
-            
-            _selfMovement = GetComponent<UnitMovement>();
-            if (_selfMovement == null)
-            {
-                _selfMovement = gameObject.AddComponent<UnitMovement>();
-                EditorUtility.SetDirty(this);
-            }
-            
-            _selfMovement.TransferData(this);
-            EditorUtility.SetDirty(_selfMovement);
-            
-            _selfFollow = GetComponent<UnitFollowTarget>();
-            if (_selfFollow == null)
-            {
-                _selfFollow = gameObject.AddComponent<UnitFollowTarget>();
-                EditorUtility.SetDirty(this);
-            }
-            
-            _selfFollow.TransferData();
-            EditorUtility.SetDirty(_selfFollow);
-            
-            AssetDatabase.SaveAssets();
+            _selfUnit = unit;
+            EditorUtility.SetDirty(_selfUnit);
         }
         
 #endif

@@ -6395,14 +6395,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2050471779700809745}
+  - component: {fileID: 834634797964359098}
   - component: {fileID: 5673859260790904911}
   - component: {fileID: 622743779293351943}
+  - component: {fileID: 1971991689436263911}
   - component: {fileID: 6090508075434962156}
+  - component: {fileID: 7767769086912786514}
+  - component: {fileID: -4915185774981738495}
   - component: {fileID: 5371681404181358584}
   - component: {fileID: 3176254616865558108}
   - component: {fileID: 8074880395059046385}
-  - component: {fileID: 7767769086912786514}
-  - component: {fileID: -4915185774981738495}
   - component: {fileID: 1937434427710141243}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
@@ -6427,6 +6429,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -195, z: 0}
+--- !u!114 &834634797964359098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthController: {fileID: 5673859260790904911}
+  _unitVision: {fileID: 622743779293351943}
+  _unitAiMovement: {fileID: 6090508075434962156}
+  _humanVisualController: {fileID: 3176254616865558108}
+  _unitMovement: {fileID: 7767769086912786514}
+  _followTarget: {fileID: -4915185774981738495}
 --- !u!114 &5673859260790904911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6453,9 +6473,11 @@ MonoBehaviour:
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
   team: 2
+  UnitVision: {fileID: 622743779293351943}
   AiMovement: {fileID: 6090508075434962156}
-  aiVehicleControls: {fileID: 0}
+  aiVehicleControls: {fileID: 1971991689436263911}
   HumanVisualController: {fileID: 3176254616865558108}
+  controlledVehicle: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
@@ -6506,7 +6528,27 @@ MonoBehaviour:
     m_Bits: 4416
   raycastOrigin: {fileID: 2292738347658247173}
   setDamagerAsEnemyBehaviour: 1
+  _enemiesToRemember: []
   visibleEnemies: []
+--- !u!114 &1971991689436263911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllingVehicle: 0
+  hc: {fileID: 5673859260790904911}
+  controlledVehicle: {fileID: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  stoppingDistance: 20
+  maxReverseDistance: 100
+  stoppingSpeed: 50
 --- !u!114 &6090508075434962156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6520,15 +6562,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _team: 0
-  _selfMovement: {fileID: 7767769086912786514}
-  _selfFollow: {fileID: -4915185774981738495}
-  _selfHealth: {fileID: 5673859260790904911}
+  _selfUnit: {fileID: 834634797964359098}
   coverFoundBehaviour: 0
   noCoverBehaviour: 0
   currentOrder: 3
-  humanVisualController: {fileID: 3176254616865558108}
-  unitVision: {fileID: 622743779293351943}
   enemyToLookAt: {fileID: 0}
+--- !u!114 &7767769086912786514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 2
+  _turnSpeed: 4
+  _stopDistanceFollow: 1.5
+  _stopDistanceMove: 0
+  _agent: {fileID: 8074880395059046385}
+  _selfUnit: {fileID: 834634797964359098}
+--- !u!114 &-4915185774981738495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selfAgent: {fileID: 8074880395059046385}
+  _selfMovement: {fileID: 7767769086912786514}
 --- !u!114 &5371681404181358584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6548,7 +6618,7 @@ MonoBehaviour:
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
-  minDistanceToAttack: 1000
+  maxDistanceToAttack: 1000
   updateRate: 0.1
   maxDistanceFromPlayerToShoot: 250
 --- !u!114 &3176254616865558108
@@ -6682,38 +6752,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &7767769086912786514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveSpeed: 2
-  _turnSpeed: 4
-  _stopDistanceFollow: 1.5
-  _stopDistanceMove: 0
-  _agent: {fileID: 8074880395059046385}
-  _selfVisualController: {fileID: 3176254616865558108}
---- !u!114 &-4915185774981738495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _selfAgent: {fileID: 8074880395059046385}
-  _selfMovement: {fileID: 7767769086912786514}
 --- !u!114 &1937434427710141243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6742,9 +6780,9 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(478.636963,28.52216)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-4.2191925,147.647736)"},"ID":1,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Log","NodeData":{"Offset":"(-102.018982,119.330948)"},"ID":2,"Name":"Log","Instant":true,"SharedStringtext":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"Hello
-        there"},"SharedBoollogError":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoollogTime":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.Log","NodeData":{"Offset":"(101.434387,118.581085)"},"ID":3,"Name":"Log","Instant":true,"SharedStringtext":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"General
-        Kenoby"},"SharedBoollogError":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoollogTime":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}}'
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(478.636963,28.52216)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(-0.8630371,135.522156)"},"ID":1,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}},"DetachedTasks":[{"Type":"BehaviorDesigner.Runtime.Tasks.Log","NodeData":{"Offset":"(580,300)"},"ID":2,"Name":"Log","Instant":true,"SharedStringtext":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"General
+        Kenoby"},"SharedBoollogError":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoollogTime":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.Log","NodeData":{"Offset":"(380,300)"},"ID":3,"Name":"Log","Instant":true,"SharedStringtext":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"Hello
+        there"},"SharedBoollogError":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoollogTime":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 

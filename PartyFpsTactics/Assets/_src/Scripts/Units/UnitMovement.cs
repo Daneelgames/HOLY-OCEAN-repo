@@ -4,6 +4,11 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+
 namespace MrPink.Units
 {
     public class UnitMovement : MonoBehaviour
@@ -31,7 +36,7 @@ namespace MrPink.Units
         private NavMeshAgent _agent;
 
         [SerializeField, ChildGameObjectsOnly, Required]
-        private HumanVisualController _selfVisualController;
+        private Unit _selfUnit;
 
         
         private Vector3 _currentVelocity;
@@ -46,7 +51,7 @@ namespace MrPink.Units
         private void Update()
         {
             _currentVelocity = _agent.velocity;
-            _selfVisualController.SetMovementVelocity(_currentVelocity);
+            _selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
             _lookTransform.transform.position = transform.position;
         }
 
@@ -93,7 +98,7 @@ namespace MrPink.Units
             var path = new NavMeshPath();
         
             transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
             _agent.SetPath(path);
@@ -116,9 +121,10 @@ namespace MrPink.Units
         
         #if UNITY_EDITOR
 
-        public void TransferData(UnitAiMovement source)
+        public void SetUnit(Unit unit)
         {
-            _selfVisualController = source.humanVisualController;
+            _selfUnit = unit;
+            EditorUtility.SetDirty(_selfUnit);
         }
         
         #endif

@@ -1,6 +1,7 @@
 using System;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.WeaponsSystem
@@ -8,8 +9,21 @@ namespace MrPink.WeaponsSystem
     public class MeleeCollider : BaseAttackCollider
     {
         public bool playerMeleeAttack = false;
+
+        public bool carCrashCollider = false;
+        [ShowIf("carCrashCollider", true)]
+        public Rigidbody carRb;
+        [ShowIf("carCrashCollider", true)]
+        public float minCarRbVelocityToDamage = 50;
+
+
         private void OnTriggerEnter(Collider other)
         {
+            if (carCrashCollider)
+            {
+                if (carRb.velocity.magnitude < minCarRbVelocityToDamage)
+                    return;
+            }
             if (currentLifeTime > _dangerousTime)
                 return;
             if (ownerHealth == null)
@@ -37,7 +51,7 @@ namespace MrPink.WeaponsSystem
                 }
             }
             
-            Debug.Log($"Коллизия с {other.gameObject.name}");
+            //Debug.Log($"Коллизия с {other.gameObject.name}");
             
             var target = TryDoDamage(other);
             
