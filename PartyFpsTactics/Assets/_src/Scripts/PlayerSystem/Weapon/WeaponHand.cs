@@ -90,10 +90,12 @@ namespace MrPink.PlayerSystem
 
         public void UpdateState(bool isDead)
         {
-            IsAiming = false;
             
             if (_isAttacking)
+            {
+                IsAiming = false;
                 return;
+            }
             
             CurrentPosition = WeaponPosition.Idle;
             
@@ -109,15 +111,21 @@ namespace MrPink.PlayerSystem
 
             if (Weapon.OnCooldown || _isCollidingWithWall)
             {
+                IsAiming = false;
                 CurrentPosition = WeaponPosition.Reload;
                 return;
             }
             
             if (!LevelGenerator.Instance.IsLevelReady)
+            {
+                IsAiming = false;
+                CurrentPosition = WeaponPosition.Reload;
                 return;
+            }
 
             if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)
             {
+                IsAiming = false;
                 CurrentPosition = WeaponPosition.Reload;
                 return;
             }

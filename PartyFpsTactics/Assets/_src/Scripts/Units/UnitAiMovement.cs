@@ -59,7 +59,7 @@ namespace MrPink.Units
 
         private void Update()
         {
-            if (_selfHealth.health <= 0)
+            if (_selfUnit.HealthController.health <= 0)
                 return;
             
             if (enemyToLookAt != null && !inCover && enemyToLookAt)

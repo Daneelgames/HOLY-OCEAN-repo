@@ -38,8 +38,9 @@ namespace MrPink
         IEnumerator Start()
         {
             toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
+            /*
             CloseShop();
-            yield break;
+            yield break;*/
         
             switch (LevelGenerator.Instance.levelType)
             {

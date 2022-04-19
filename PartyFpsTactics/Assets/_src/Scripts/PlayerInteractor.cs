@@ -133,6 +133,7 @@ namespace MrPink
                     selectedIOTransform = null;
                     uiItemNameFeedback.text = String.Empty;
                     uiItemNameFeedbackOutline.text = String.Empty;
+                    Debug.Log("RAYCAST NULL ");
                 }
             
                 if (PhoneDialogueEvents.Instance != null && PhoneDialogueEvents.Instance.InCutScene)
@@ -144,12 +145,13 @@ namespace MrPink
                     selectedIOTransform = null;
                     uiItemNameFeedback.text = String.Empty;
                     uiItemNameFeedbackOutline.text = String.Empty;
+                    Debug.Log("RAYCAST NULL ");
                     continue;
                 }
             
                 if (Physics.Raycast(cam.transform.position, cam.transform.forward, out var hit, raycastDistance, raycastMask))
                 {
-                    //Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
+                    Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
                     if (hit.collider.gameObject.layer != 11)
                     {
                         if (hit.collider.gameObject.CompareTag(GameManager.Instance.portableObjectTag))
@@ -167,6 +169,7 @@ namespace MrPink
                     
                         selectedIO = null;
                         selectedIOTransform = null;
+                        Debug.Log("RAYCAST NULL ");
                         continue;
                     }
 
@@ -174,13 +177,14 @@ namespace MrPink
                 
                     if (hit.collider.transform == selectedIOTransform)
                     {
+                        Debug.Log("RAYCAST NULL ");
                         continue;
                     }
                 
                     var newIO = hit.collider.gameObject.GetComponent<InteractiveObject>();
                     if (newIO)
                     {
-                        //Debug.Log("RAYCAST newIO " + newIO);
+                        Debug.Log("RAYCAST newIO " + newIO);
                         if (newIO.hc && newIO.hc.health <= 0 && selectedIO != null)
                         {
                             selectedIO = null;
@@ -195,8 +199,7 @@ namespace MrPink
                     }
                 }
                 else
-                {
-                    //Debug.Log("RAYCAST EMPTY");
+                {Debug.Log("RAYCAST NULL ");
                     selectedPortable = null;
                     selectedIO = null;
                     selectedIOTransform = null;
