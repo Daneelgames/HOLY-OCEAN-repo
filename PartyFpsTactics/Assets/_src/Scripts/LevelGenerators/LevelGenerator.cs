@@ -70,8 +70,17 @@ public class LevelGenerator : MonoBehaviour
     public List<NavMeshSurface> navMeshSurfacesSpawned;
     public GameObject tileDestroyedParticles;
     public PhysicMaterial tilePhysicsMaterial;
-    
-    public bool levelIsReady = false;
+
+    private bool _isLevelReady = false;
+    public bool IsLevelReady
+    {
+        get => _isLevelReady;
+        set
+        {
+            _isLevelReady = value;
+            Game.Flags.IsPlayerInputBlocked = !_isLevelReady;
+        }
+    }
 
     [UnityEngine.Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
@@ -109,7 +118,7 @@ public class LevelGenerator : MonoBehaviour
                 // and then set level ready
                 
                 yield return new WaitForSecondsRealtime(1);
-                levelIsReady = true;
+                IsLevelReady = true;
                 break;
         }
     }
@@ -235,7 +244,7 @@ public class LevelGenerator : MonoBehaviour
         StartCoroutine(UpdateNavMesh());
         yield return null;
         Respawner.Instance.Init();
-        levelIsReady = true;
+        IsLevelReady = true;
         
         // GOALS
         yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(spawnedMainBuildingLevels));

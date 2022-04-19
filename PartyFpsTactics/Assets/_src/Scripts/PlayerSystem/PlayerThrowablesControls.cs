@@ -27,7 +27,7 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
 
-            if (!LevelGenerator.Instance.levelIsReady)
+            if (Game.Flags.IsPlayerInputBlocked)
                 return;
         
             if (Game.Player.Health.health <= 0)
