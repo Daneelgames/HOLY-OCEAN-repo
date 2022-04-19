@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
 using UnityEngine;
 
 public class VehicleRamp : MonoBehaviour
@@ -9,11 +10,21 @@ public class VehicleRamp : MonoBehaviour
     public float forceAmount = 2000;
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer != 11) // vehicle colliders are on interaactiveObjectLayer
+            return;
 
-        var vehicle = other.gameObject.GetComponent<ControlledVehicle>();
-        if (vehicle)
-        {
-            //vehicle.rb.AddForce(ForceTransform.forward * forceAmount, ForceMode.Impulse);
-        }
+        var bodyPart = other.gameObject.GetComponent<BodyPart>();
+        if (!bodyPart)
+            return;
+        
+        var hc = bodyPart.HealthController;
+        if (!hc)
+            return;
+        
+        var vehicle = hc.controlledVehicle;
+        if (!vehicle)
+            return;
+
+        vehicle.AddRampForce(forceAmount, ForceTransform.forward);
     }
 }

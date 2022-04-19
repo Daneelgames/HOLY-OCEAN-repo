@@ -39,11 +39,13 @@ namespace MrPink.Health
         [Header("AI")]  // TODO здоровье не должно разруливать интеллект, подкрутить архитектуру
         public Team team;
 
+        public UnitVision UnitVision;
         public UnitAiMovement AiMovement;
         public AiVehicleControls aiVehicleControls;
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
+        public ControlledVehicle controlledVehicle;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
         public List<GameObject> objectsToSpawnOnDeath;

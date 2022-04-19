@@ -37,6 +37,7 @@ namespace MrPink.Units
             {
                 _currentTargetPosition = target.position;
                 _selfMovement.AgentSetPath(_currentTargetPosition, true);
+                Debug.Log("FollowTargetCoroutine");
                 yield return new WaitForSeconds(0.5f);
             }
         }

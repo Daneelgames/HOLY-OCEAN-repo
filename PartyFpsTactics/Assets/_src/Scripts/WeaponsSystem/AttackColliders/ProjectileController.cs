@@ -98,14 +98,14 @@ namespace MrPink.WeaponsSystem
         
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
-        
+            var target = CollisionTarget.Self;
             if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out var hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
             {
                 if (hit.transform == null)
                     return;
             
                 
-                var target = TryDoDamage(hit.collider);
+                target = TryDoDamage(hit.collider);
             
                 switch (target)
                 {
@@ -127,7 +127,7 @@ namespace MrPink.WeaponsSystem
                     return;
                 
             
-                TryDoDamage(hit.collider);
+                target = TryDoDamage(hit.collider);
                 PlayHitUnitFeedback(hit.point);
             }
             else
@@ -137,12 +137,16 @@ namespace MrPink.WeaponsSystem
             if (hit.collider.gameObject.layer == 11 && hit.collider.isTrigger)
                 return;
 
-            HandleEndOfCollision(hit);
+            HandleEndOfCollision(hit, target);
         }
 
-        private void HandleEndOfCollision(RaycastHit hit)
+        private void HandleEndOfCollision(RaycastHit hit, CollisionTarget collisionTarget)
         {
             Debug.Log("projectile hit " + hit.collider.name);
+            
+            if (collisionTarget == CollisionTarget.Self) // THIS CONTACT DOESNT COUNT, DO NOTHING
+                return;
+            
             if (dieOnContact)
                 Death();
             else if (ricochetOnContact)

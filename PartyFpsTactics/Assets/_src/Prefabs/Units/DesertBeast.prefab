@@ -647,9 +647,11 @@ MonoBehaviour:
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
   team: 0
+  UnitVision: {fileID: 6634025865956733556}
   AiMovement: {fileID: 13917179899874975}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 8692219909506116655}
+  controlledVehicle: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
@@ -700,6 +702,7 @@ MonoBehaviour:
     m_Bits: 4416
   raycastOrigin: {fileID: 5432981809372733046}
   setDamagerAsEnemyBehaviour: 1
+  _enemiesToRemember: []
   visibleEnemies: []
 --- !u!114 &13917179899874975
 MonoBehaviour:
@@ -737,7 +740,7 @@ MonoBehaviour:
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
-  minDistanceToAttack: 30
+  maxDistanceToAttack: 20
   updateRate: 0.1
   maxDistanceFromPlayerToShoot: 250
 --- !u!114 &8692219909506116655

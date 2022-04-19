@@ -6398,12 +6398,13 @@ GameObject:
   - component: {fileID: 834634797964359098}
   - component: {fileID: 5673859260790904911}
   - component: {fileID: 622743779293351943}
+  - component: {fileID: 1971991689436263911}
   - component: {fileID: 6090508075434962156}
+  - component: {fileID: 7767769086912786514}
+  - component: {fileID: -4915185774981738495}
   - component: {fileID: 5371681404181358584}
   - component: {fileID: 3176254616865558108}
   - component: {fileID: 8074880395059046385}
-  - component: {fileID: 7767769086912786514}
-  - component: {fileID: -4915185774981738495}
   - component: {fileID: 1937434427710141243}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
@@ -6472,9 +6473,11 @@ MonoBehaviour:
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
   team: 2
+  UnitVision: {fileID: 622743779293351943}
   AiMovement: {fileID: 6090508075434962156}
-  aiVehicleControls: {fileID: 0}
+  aiVehicleControls: {fileID: 1971991689436263911}
   HumanVisualController: {fileID: 3176254616865558108}
+  controlledVehicle: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
@@ -6525,7 +6528,27 @@ MonoBehaviour:
     m_Bits: 4416
   raycastOrigin: {fileID: 2292738347658247173}
   setDamagerAsEnemyBehaviour: 1
+  _enemiesToRemember: []
   visibleEnemies: []
+--- !u!114 &1971991689436263911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllingVehicle: 0
+  hc: {fileID: 5673859260790904911}
+  controlledVehicle: {fileID: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  stoppingDistance: 20
+  maxReverseDistance: 100
+  stoppingSpeed: 50
 --- !u!114 &6090508075434962156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6544,6 +6567,38 @@ MonoBehaviour:
   noCoverBehaviour: 0
   currentOrder: 3
   enemyToLookAt: {fileID: 0}
+--- !u!114 &7767769086912786514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 2
+  _turnSpeed: 4
+  _stopDistanceFollow: 1.5
+  _stopDistanceMove: 0
+  _agent: {fileID: 8074880395059046385}
+  _selfVisualController: {fileID: 3176254616865558108}
+--- !u!114 &-4915185774981738495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selfAgent: {fileID: 8074880395059046385}
+  _selfMovement: {fileID: 7767769086912786514}
 --- !u!114 &5371681404181358584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6697,38 +6752,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &7767769086912786514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveSpeed: 2
-  _turnSpeed: 4
-  _stopDistanceFollow: 1.5
-  _stopDistanceMove: 0
-  _agent: {fileID: 8074880395059046385}
-  _selfUnit: {fileID: 834634797964359098}
---- !u!114 &-4915185774981738495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0efcf3c2751f4dc199109b2097516e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _selfAgent: {fileID: 8074880395059046385}
-  _selfMovement: {fileID: 7767769086912786514}
 --- !u!114 &1937434427710141243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6769,8 +6792,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.2
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
+  gizmoViewMode: 0
+  showBehaviorDesignerGizmo: 0
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0
