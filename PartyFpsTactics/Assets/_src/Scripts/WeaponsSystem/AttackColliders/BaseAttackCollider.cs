@@ -95,9 +95,12 @@ namespace MrPink.WeaponsSystem
 
         protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
+            // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
+            if (targetCollider.gameObject.layer == 11 && targetCollider.isTrigger)
+                return CollisionTarget.Self;
+            
             if (currentLifeTime > _dangerousTime)
             {
-                Debug.Log("currentLifeTime > _dangerousTime");
                 return CollisionTarget.Self;
             }
             
@@ -131,6 +134,9 @@ namespace MrPink.WeaponsSystem
 
             if (targetHealth == null)
             {
+                if (targetCollider.isTrigger)
+                    return CollisionTarget.Self;
+                
                 return CollisionTarget.Solid;
             }
             
@@ -146,7 +152,7 @@ namespace MrPink.WeaponsSystem
 
                 if (ownerHealth && damage > 0)
                 {
-                    Debug.Log("SetDamager; damage - " + damage);
+                    Debug.Log("SetDamager; damage  " + damage);
                     targetHealth.HealthController.SetDamager(ownerHealth);
                 }
                     

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
+using Cysharp.Threading.Tasks.Triggers;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
@@ -18,17 +19,35 @@ public class PlayerVehicleControls : MonoBehaviour
         Instance = this;
     }
 
+    private Coroutine exitCoroutine;
+    IEnumerator ExitVehicleCoroutine()
+    {
+        float t = 0;
+        float tt = 0.5f;
+
+        while (t < tt)
+        {
+            t += Time.deltaTime;
+            Player.Movement.rb.MovePosition(Vector3.Lerp(controlledVehicle.sitTransform.position, 
+                controlledVehicle.sitTransform.position - controlledVehicle.sitTransform.right * 1.5f, t/tt));
+            yield return null;
+        }
+        Player.Movement.SetCollidersTrigger(false);
+        TogglePlayerInside(controlledVehicle);
+        controlledVehicle.StopMovement();
+        controlledVehicle = null;
+    }
+
     public void RequestVehicleAction(ControlledVehicle _controlledVehicle)
     {
+        if (exitCoroutine != null)
+            StopCoroutine(exitCoroutine);
+        
         if (controlledVehicle != null && controlledVehicle == _controlledVehicle)
         {
             // выйти из тачки
-            Player.Movement.SetCollidersTrigger(false);
+            exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
             StopCoroutine(controlVehicleCoroutine);
-            controlledVehicle.StopMovement();
-            controlledVehicle = null;
-            TogglePlayerInside(controlledVehicle);
-            Player.Movement.Jump(new Vector3(-1, 1, 0));
             return;
         }
 

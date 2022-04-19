@@ -16,6 +16,10 @@ namespace MrPink.WeaponsSystem
                 return;
             if (ownerHealth.gameObject == other.gameObject)
                 return;
+            
+            // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
+            if (other.gameObject.layer == 11 && other.isTrigger)
+                return;
 
             if (other.gameObject.layer == 9 || other.gameObject.layer == 10)
             {

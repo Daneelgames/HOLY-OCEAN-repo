@@ -102,6 +102,7 @@ public class ProjectileController : BaseAttackCollider
         {
             if (hit.transform == null)
                 return;
+            
                 
             var target = TryDoDamage(hit.collider);
             
@@ -124,17 +125,23 @@ public class ProjectileController : BaseAttackCollider
             if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
                 return;
                 
+            
             TryDoDamage(hit.collider);
             PlayHitUnitFeedback(hit.point);
         }
         else
             return;
         
+        // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
+        if (hit.collider.gameObject.layer == 11 && hit.collider.isTrigger)
+            return;
+
         HandleEndOfCollision(hit);
     }
 
     private void HandleEndOfCollision(RaycastHit hit)
     {
+        Debug.Log("projectile hit " + hit.collider.name);
         if (dieOnContact)
             Death();
         else if (ricochetOnContact)

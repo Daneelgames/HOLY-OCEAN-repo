@@ -313,7 +313,8 @@ namespace MrPink.Units
         public void StopActivities()
         {
             _selfMovement.Death();
-            this.enabled = false;
+            
+            //this.enabled = false;
             
             StopAllBehaviorCoroutines();
             humanVisualController.SetMovementVelocity(Vector3.zero);

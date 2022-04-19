@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.Units
@@ -17,12 +18,14 @@ namespace MrPink.Units
         public EnemiesSetterBehaviour setDamagerAsEnemyBehaviour = EnemiesSetterBehaviour.SetOnlyOtherTeam;
         
         // TODO кажется, не используется. Точно должно жить не здесь
+        // используется, ё маё. с помощью этой штуки  тиммейты могут начать считать тебя врагом при соответствующем поведении
         private readonly List<HealthController> _enemiesToRemember = new List<HealthController>();
 
         private RaycastHit _hit;
         private HealthController _selfHealth;
 
-        public readonly List<HealthController> visibleEnemies = new List<HealthController>();
+        [ReadOnly]
+        public List<HealthController> visibleEnemies = new List<HealthController>();
 
 
         private void Start()
