@@ -70,6 +70,9 @@ namespace MrPink.Units
 
         private void Update()
         {
+            if (_selfHealth.health <= 0)
+                return;
+            
             if (enemyToLookAt != null && !inCover && enemyToLookAt)
                 _selfMovement.LookAt(enemyToLookAt.transform.position);
 

@@ -99,11 +99,22 @@ namespace MrPink.WeaponsSystem
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
             var target = CollisionTarget.Self;
-            if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out var hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
             {
                 if (hit.transform == null)
                     return;
             
+                if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
+                    return;
+                
+            
+                target = TryDoDamage(hit.collider);
+                PlayHitUnitFeedback(hit.point);
+            }
+            else if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
+            {
+                if (hit.transform == null || (hit.collider.isTrigger && hit.transform.gameObject.layer == 11)) // ignore npc interaction colliders
+                    return;
                 
                 target = TryDoDamage(hit.collider);
             
@@ -117,18 +128,6 @@ namespace MrPink.WeaponsSystem
                         PlayHitUnitFeedback(hit.point);
                         break;
                 }
-            }
-            else if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
-            {
-                if (hit.transform == null)
-                    return;
-            
-                if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
-                    return;
-                
-            
-                target = TryDoDamage(hit.collider);
-                PlayHitUnitFeedback(hit.point);
             }
             else
                 return;
