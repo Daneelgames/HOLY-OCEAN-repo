@@ -46,7 +46,7 @@ public class AiVehicleControls : MonoBehaviour
         hc.HumanVisualController.SetCollidersTriggers(false);
         hc.AiMovement.RestartActivities();
     }
-    public void PassengerSit(ControlledVehicle _vehicle)
+    public void SetPassengerSit(ControlledVehicle _vehicle, bool smoothExit = true)
     {
         // включить анимацию
         // начинать преследовать трансформ нпс сит
@@ -65,8 +65,11 @@ public class AiVehicleControls : MonoBehaviour
         else
         {
             controllingVehicle = false;
-            exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
-            StopCoroutine(followSitCoroutine);
+            if (smoothExit)
+                exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
+            if (followSitCoroutine != null)
+                StopCoroutine(followSitCoroutine);
+            
             hc.HumanVisualController.SetVehiclePassenger(null);
         }
     }

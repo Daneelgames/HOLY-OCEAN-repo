@@ -12,6 +12,7 @@ namespace MrPink.Units
     public class UnitVision : MonoBehaviour
     {
         public float fov = 70.0f;
+        public float visionDistance = 250;
         public LayerMask raycastsLayerMask;
         public Transform raycastOrigin;
         
@@ -132,7 +133,7 @@ namespace MrPink.Units
         {
             if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov)
             {
-                if (Physics.Linecast(raycastOrigin.position, target.position, out _hit, raycastsLayerMask))
+                if (Physics.Raycast(raycastOrigin.position, target.position - raycastOrigin.position, out _hit, visionDistance, raycastsLayerMask))
                 {
                     if (_hit.collider.transform == target)
                         return true;
