@@ -93,15 +93,15 @@ public class PlayerInteractor : MonoBehaviour
     {
         var rb = selectedPortable.GetComponent<Rigidbody>();
         
-        carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
-        carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        
         if (!rb)
             yield break;
 
         carryingPortableRb = rb;
         carryingPortableRb.useGravity = false;
         
+        carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
+        carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
         while (true)
         {
             carryingPortableRb.AddForce((cam.transform.position + cam.transform.forward /* * 2 - cam.transform.up*/ - carryingPortableRb.transform.position) * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
