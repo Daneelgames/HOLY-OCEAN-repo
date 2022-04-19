@@ -52,6 +52,6 @@ public class PartyController : MonoBehaviour
     public void SetPlayerInCar(ControlledVehicle vehicle)
     {
         if (npcInParty)
-            npcInParty.aiVehicleControls.PassengerSit(vehicle);
+            npcInParty.aiVehicleControls.SetPassengerSit(vehicle);
     }
 }

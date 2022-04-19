@@ -8,6 +8,7 @@ using UnityEngine;
 public class HumanVisualController : MonoBehaviour
 {
     public Animator anim;
+    public HealthController hc;
 
     [Header("Ragdoll")] 
     public Transform ragdollOrigin;
@@ -158,6 +159,8 @@ public class HumanVisualController : MonoBehaviour
     
     public void ActivateRagdoll()
     {
+        if (hc.aiVehicleControls)
+            hc.aiVehicleControls.SetPassengerSit(null,false);
         if (ragdoll && _followRagdollCoroutine != null)
             StopCoroutine(_followRagdollCoroutine);
         
@@ -207,7 +210,10 @@ public class HumanVisualController : MonoBehaviour
         }
         
         foreach (var col in colliders)
+        {
             col.material = UnitsManager.Instance.corpsesMaterial;
+            col.isTrigger = false;
+        }
     }
 
     void DeactivateRagdoll()
