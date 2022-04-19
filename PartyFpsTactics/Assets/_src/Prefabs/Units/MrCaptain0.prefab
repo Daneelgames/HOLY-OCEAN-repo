@@ -5581,6 +5581,7 @@ GameObject:
   - component: {fileID: -4709905595307477388}
   - component: {fileID: -8108894381655698296}
   - component: {fileID: -8210908667786329200}
+  - component: {fileID: 2717574035419234524}
   m_Layer: 7
   m_Name: MrCaptain0
   m_TagString: Untagged
@@ -5697,14 +5698,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _team: 0
-  _selfMovement: {fileID: -4709905595307477388}
-  _selfFollow: {fileID: -8108894381655698296}
-  _selfHealth: {fileID: 5673859260790904911}
+  _selfUnit: {fileID: 2717574035419234524}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
   currentOrder: 3
-  humanVisualController: {fileID: 3176254616865558108}
-  unitVision: {fileID: 622743779293351943}
   enemyToLookAt: {fileID: 0}
 --- !u!114 &5371681404181358584
 MonoBehaviour:
@@ -5889,7 +5886,7 @@ MonoBehaviour:
   _stopDistanceFollow: 1.5
   _stopDistanceMove: 0
   _agent: {fileID: 8074880395059046385}
-  _selfVisualController: {fileID: 3176254616865558108}
+  _selfUnit: {fileID: 2717574035419234524}
 --- !u!114 &-8108894381655698296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5923,6 +5920,24 @@ MonoBehaviour:
   stoppingDistance: 20
   maxReverseDistance: 100
   stoppingSpeed: 50
+--- !u!114 &2717574035419234524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthController: {fileID: 5673859260790904911}
+  _unitVision: {fileID: 622743779293351943}
+  _unitAiMovement: {fileID: 6090508075434962156}
+  _humanVisualController: {fileID: 3176254616865558108}
+  _unitMovement: {fileID: -4709905595307477388}
+  _followTarget: {fileID: -8108894381655698296}
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0
