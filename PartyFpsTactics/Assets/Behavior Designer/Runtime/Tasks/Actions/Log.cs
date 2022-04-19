@@ -19,7 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             if (logError.Value) {
                 Debug.LogError(logTime.Value ? string.Format("{0}: {1}", Time.time, text) : text);
             } else {
-                Debug.Log(logTime.Value ? string.Format("{0}: {1}",Time.time, text) : text);
+                //Debug.Log(logTime.Value ? string.Format("{0}: {1}",Time.time, text) : text);
             }
             return TaskStatus.Success;
         }

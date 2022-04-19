@@ -153,13 +153,13 @@ namespace MrPink.WeaponsSystem
             
             if (targetHealth == null)
             {
-                if (targetCollider.isTrigger)
+                if (!targetCollider.isTrigger)
                     return CollisionTarget.Self;
                 
                 return CollisionTarget.Solid;
             }
 
-            if (ownerHealth)
+            if (ownerHealth && ownerHealth != Game.Player.Health)
             {
                 // if vehicle tries to damage unit inside
                 if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&

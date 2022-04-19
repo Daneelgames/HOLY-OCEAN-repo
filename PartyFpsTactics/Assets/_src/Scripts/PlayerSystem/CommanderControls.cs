@@ -1,12 +1,16 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace MrPink.PlayerSystem
 {
     public class CommanderControls : MonoBehaviour
     {
+        
         public LayerMask layersToRaycastOrders;
         public int unitToGiveOrder = 0;
         public List<HealthController> unitsInParty;
@@ -15,13 +19,23 @@ namespace MrPink.PlayerSystem
         private Vector3 moveOrderCurrentPos;
 
         private float cooldownForRunOrder = 0.5f;
-        
-    
+
+        private IEnumerator Start()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(10f, 30f));
+                unitToGiveOrder = 0;
+                FollowLeader();
+            }
+        }
+
         private void Update()
         {
             if (cooldownForRunOrder > 0)
                 cooldownForRunOrder -= Time.deltaTime;
-        
+            
+            return;
             OrderControls();
         }
 

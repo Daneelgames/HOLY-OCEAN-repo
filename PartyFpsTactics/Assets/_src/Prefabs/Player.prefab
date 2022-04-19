@@ -2427,6 +2427,7 @@ MonoBehaviour:
   AiMovement: {fileID: 0}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
+  controlledVehicle: {fileID: 0}
   playerMovement: {fileID: 8837444586277526206}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
@@ -2519,7 +2520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layersToRaycastOrders:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4160
   unitToGiveOrder: 0
   unitsInParty: []
   moveOrderVisualFeedback: {fileID: 7867435647168612690}
@@ -2643,7 +2644,7 @@ MonoBehaviour:
   raycastDistance: 3
   carryingPortableRb: {fileID: 0}
   throwPortableForce: 20
-  carryingPortablePower: 1000
+  carryingPortablePower: 500
   pickUpText: PICK UP
   uiItemNameFeedback: {fileID: 191805699}
   uiItemNameFeedbackOutline: {fileID: 2617362276532997964}

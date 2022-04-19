@@ -55,6 +55,7 @@ namespace MrPink.WeaponsSystem
             
             var target = TryDoDamage(other);
             
+            Debug.Log("melee tryDoDamage target: " + target);
             switch (target)
             {
                 case CollisionTarget.Solid:
