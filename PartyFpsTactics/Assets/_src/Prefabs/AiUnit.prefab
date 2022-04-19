@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &105626412292212013
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &301765947688902276
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &514014971889994648
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,6 +387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &731976697521915819
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,6 +539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &1069913465523279564
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &1466048347313473545
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &2295163176915088973
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,6 +938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &2615184511808002224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,6 +1061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &3190657169418440670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,11 +1366,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 9004609948449696128}
+  _isMelee: 0
   cooldown: 1
   _delay: 0
   _attackSignalAudioSource: {fileID: 0}
+  bulletsPerShot: 1
   _attackColliderPrefab: {fileID: 0}
   _animation: {fileID: 0}
+  attackStaminaCost: 0
+  attackAu: {fileID: 0}
+  reloadingAu: {fileID: 0}
+  reloadingClip: {fileID: 0}
+  reloadingEndClip: {fileID: 0}
+  gunsMoveDistanceScaler: 0.2
+  gunMoveSpeedScaler: 5
+  gunRotSpeedScaler: 5
+  gunMoveSpeed: 100
+  gunRotationSpeed: 100
+  WeaponRotationZScalerThreshold: 0.2
+  WeaponRotationZScaler: 3
 --- !u!1 &3780898087766706026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,6 +1476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &4126772342885004562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,6 +1708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &4932203111213751696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1744,6 +1769,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &5000585212539415188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1809,6 +1835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &5249824381520553162
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,6 +2216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &6840600463327679706
 GameObject:
   m_ObjectHideFlags: 0
@@ -2310,6 +2338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &7783815551648235697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,6 +2484,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  healthMax: 100
+  endurance: 100
+  enduranceRegenSpeed: 100
+  UnitRagdollStandupCooldown: 1
   destroyOnDeath: 0
   visibilityTrigger: {fileID: 6123762874684251812}
   proceduralDamageShake: 0
@@ -2463,14 +2496,16 @@ MonoBehaviour:
   shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
+  team: 0
   AiMovement: {fileID: 7977950126143452709}
+  aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
+  npcInteraction: {fileID: 0}
   deathOnHit: {fileID: 0}
   rb: {fileID: 0}
-  team: 0
   bodyParts:
   - {fileID: 8827379307393133773}
   - {fileID: 8315341831677944520}
@@ -2493,6 +2528,9 @@ MonoBehaviour:
   - {fileID: 4831091630972542557}
   - {fileID: 7407867969728122509}
   damageStates: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-5916321303883280000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2506,10 +2544,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 70
+  visionDistance: 250
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 320
   raycastOrigin: {fileID: 7647448849957403698}
+  setDamagerAsEnemyBehaviour: 0
+  visibleEnemies: []
 --- !u!114 &7977950126143452709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2522,17 +2563,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _team: 0
+  _selfMovement: {fileID: 0}
+  _selfFollow: {fileID: 0}
+  _selfHealth: {fileID: 7393423923570106077}
+  coverFoundBehaviour: 1
+  noCoverBehaviour: 1
   currentOrder: 3
-  agent: {fileID: 7977950126143452706}
-  moveSpeed: 2
-  runSpeed: 4
-  turnSpeed: 4
-  stopDistanceFollow: 1.5
-  stopDistanceMove: 0
   humanVisualController: {fileID: 1538236959322778139}
   unitVision: {fileID: -5916321303883280000}
   enemyToLookAt: {fileID: 0}
-  navMeshBubble: {fileID: 0}
 --- !u!114 &4522917420441185350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2545,9 +2585,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da030c9638e719468202567e4578531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeWeapon: {fileID: 2085819484726172565}
+  activeWeapons: []
+  weaponsAttackSwitchCooldownMinMax: {x: 0, y: 0}
   minAngleToRotateGun: 30
   minAngleToShoot: 15
+  rotateWeaponTowardTarget: 1
+  minDistanceToAttack: 1000
+  updateRate: 0.1
+  maxDistanceFromPlayerToShoot: 250
 --- !u!114 &1538236959322778139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2561,18 +2606,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 6276938897327206156}
+  hc: {fileID: 7393423923570106077}
   ragdollOrigin: {fileID: 0}
   colliders: []
   rigidbodies: []
   animatedBones: []
   joints: []
-  ikAimBone: {fileID: 0}
-  ikTarget: {fileID: 0}
-  ikAimTransform: {fileID: 0}
-  aimIkIterations: 10
-  rotationOffset: {x: 0, y: 0, z: 0}
+  activePositionSpring: 1500
+  activePositionDamper: 100
+  activeAngularPositionSpring: 1500
+  activeAngularPositionDamper: 100
+  timeToStandUp: 2
   deadMaterial: {fileID: 0}
   meshRenderer: {fileID: 0}
+  tilesLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!195 &7977950126143452706
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2655,6 +2704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &8319235235741432671
 GameObject:
   m_ObjectHideFlags: 0
@@ -2715,6 +2765,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &8722595760112736678
 GameObject:
   m_ObjectHideFlags: 0
@@ -2775,6 +2826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &8828472270902102586
 GameObject:
   m_ObjectHideFlags: 0
@@ -2835,6 +2887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &8890446088489567124
 GameObject:
   m_ObjectHideFlags: 0
@@ -2926,6 +2979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _healthController: {fileID: 7393423923570106077}
+  damageScaler: 1
 --- !u!1 &9097577450654499566
 GameObject:
   m_ObjectHideFlags: 0

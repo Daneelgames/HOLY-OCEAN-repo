@@ -6453,6 +6453,7 @@ MonoBehaviour:
   transformToShake: {fileID: 0}
   team: 2
   AiMovement: {fileID: 6090508075434962156}
+  aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 3176254616865558108}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
@@ -6498,12 +6499,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
-  visibilityDistanceMax: 100
+  visionDistance: 250
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
   raycastOrigin: {fileID: 2292738347658247173}
   setDamagerAsEnemyBehaviour: 1
+  visibleEnemies: []
 --- !u!114 &6090508075434962156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6516,6 +6518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _team: 0
   _selfMovement: {fileID: 7767769086912786514}
   _selfFollow: {fileID: -4915185774981738495}
   _selfHealth: {fileID: 5673859260790904911}
@@ -6543,6 +6546,10 @@ MonoBehaviour:
   weaponsAttackSwitchCooldownMinMax: {x: 0.5, y: 1}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
+  rotateWeaponTowardTarget: 1
+  minDistanceToAttack: 1000
+  updateRate: 0.1
+  maxDistanceFromPlayerToShoot: 250
 --- !u!114 &3176254616865558108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6556,6 +6563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 4959962318712032868}
+  hc: {fileID: 5673859260790904911}
   ragdollOrigin: {fileID: 1835491071426791599}
   colliders:
   - {fileID: 7658356037835355582}
