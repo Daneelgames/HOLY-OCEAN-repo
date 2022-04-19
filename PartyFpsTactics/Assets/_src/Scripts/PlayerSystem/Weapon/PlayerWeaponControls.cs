@@ -33,7 +33,7 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
             
-            if (!LevelGenerator.Instance.levelIsReady || Game.Player.Interactor.carryingPortableRb)
+            if (Game.Flags.IsPlayerInputBlocked || Game.Player.Interactor.carryingPortableRb)
             {
                 _hands[Hand.Left].UpdateState(true);
                 _hands[Hand.Right].UpdateState(true);   
@@ -63,7 +63,7 @@ namespace MrPink.PlayerSystem
             if (_isDead)
                 return;
         
-            if (!LevelGenerator.Instance.levelIsReady)
+            if (Game.Flags.IsPlayerInputBlocked)
                 return;
             
             _hands[Hand.Left].UpdateCollision();

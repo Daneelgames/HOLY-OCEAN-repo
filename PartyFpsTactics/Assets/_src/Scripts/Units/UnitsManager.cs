@@ -123,21 +123,23 @@ namespace MrPink.Units
 
             // BUMP PROPS
             bool propBumped = false;
-            for (int i = 0; i < LevelGenerator.Instance.spawnedProps.Count; i++)
-            {
-                if (Vector3.Distance(LevelGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) >
-                    distance)
-                    continue;
-
-                var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody;
-
-                if (!rb) 
-                    continue;
             
-                propBumped = true;
-                rb.AddExplosionForce(tileExplosionForceBarrels * 30, explosionPosition, distance);
-                LevelGenerator.Instance.spawnedProps[i].tileAttack.dangerous = true;
-            }
+            if (LevelGenerator.Instance != null)
+                for (int i = 0; i < LevelGenerator.Instance.spawnedProps.Count; i++)
+                {
+                    if (Vector3.Distance(LevelGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) >
+                        distance)
+                        continue;
+
+                    var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody;
+
+                    if (!rb) 
+                        continue;
+                
+                    propBumped = true;
+                    rb.AddExplosionForce(tileExplosionForceBarrels * 30, explosionPosition, distance);
+                    LevelGenerator.Instance.spawnedProps[i].tileAttack.dangerous = true;
+                }
 
             if (propBumped && action != ScoringActionType.NULL)
                 ScoringSystem.Instance.RegisterAction(ScoringActionType.PropBumped, 2);

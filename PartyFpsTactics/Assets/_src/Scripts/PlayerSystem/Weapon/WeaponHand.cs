@@ -113,7 +113,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
             
-            if (!LevelGenerator.Instance.levelIsReady)
+            if (!LevelGenerator.Instance.IsLevelReady)
                 return;
 
             if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)

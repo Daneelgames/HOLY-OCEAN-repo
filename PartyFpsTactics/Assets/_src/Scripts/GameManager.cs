@@ -47,7 +47,7 @@ namespace MrPink
             if (Input.GetKeyDown(KeyCode.Alpha9))
                 Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity - 50, 5, 1000);
         
-            if (LevelGenerator.Instance.levelIsReady == false)
+            if (LevelGenerator.Instance != null && LevelGenerator.Instance.IsLevelReady == false)
                 return;
 
             if (Input.GetKeyDown(KeyCode.Escape))
