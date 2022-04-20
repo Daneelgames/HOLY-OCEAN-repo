@@ -52,6 +52,8 @@ namespace MrPink.Units
         {
             if (_enemiesToRemember.Contains(teamMate))
                 _enemiesToRemember.Remove(teamMate);
+            if (visibleEnemies.Contains(teamMate))
+                visibleEnemies.Remove(teamMate);
         }
         
         public async UniTask<HealthController> GetClosestVisibleEnemy()

@@ -150,6 +150,8 @@ namespace MrPink.WeaponsSystem
                     return CollisionTarget.Self;
                 
                 Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
+                if (ownerHealth.team == Game.Player.Health.team)
+                    ownerHealth.UnitVision.ForgiveTeamMate(Game.Player.Health);
                 UnitsExplosion();
                 return CollisionTarget.Creature;
             }
@@ -197,6 +199,10 @@ namespace MrPink.WeaponsSystem
                     
                 Debug.Log("Damage " + targetHealth.HealthController);
                 damagedHealthControllers.Add(targetHealth.HealthController);
+                
+                if (ownerHealth && ownerHealth.UnitVision && ownerHealth.team == targetHealth.HealthController.team)
+                    ownerHealth.UnitVision.ForgiveTeamMate(targetHealth.HealthController);
+                
                 StartCoroutine(ClearDamagedHC(targetHealth.HealthController));
             }
 
@@ -209,6 +215,9 @@ namespace MrPink.WeaponsSystem
             }
             
             UnitsExplosion();
+            
+            if (targetHealth.HealthController && targetHealth.HealthController.team == Team.Red)
+                Debug.Log("DAMAGE RED FOR " + resultDmg + " DAMAGE");
             return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
         }
 
@@ -219,6 +228,7 @@ namespace MrPink.WeaponsSystem
 
             if (ownerHealth.team != Game.Player.Health.team)
                 return true;
+            
             
             if (ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
                 return true;

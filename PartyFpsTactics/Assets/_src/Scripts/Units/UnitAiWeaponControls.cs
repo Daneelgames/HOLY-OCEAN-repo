@@ -94,10 +94,7 @@ namespace MrPink.Units
             if (angle < minAngleToShoot)
             {
                 activeWeapon.Shot(_selfUnit.HealthController, enemyToShoot.visibilityTrigger.transform).ForgetWithHandler();
-                if (enemyToShoot.team == _selfUnit.HealthController.team)
-                {
-                    _selfUnit.UnitVision.ForgiveTeamMate(enemyToShoot);
-                }
+                
                 yield return new WaitForSeconds(Random.Range(weaponsAttackSwitchCooldownMinMax.x, weaponsAttackSwitchCooldownMinMax.y));
             }
         }

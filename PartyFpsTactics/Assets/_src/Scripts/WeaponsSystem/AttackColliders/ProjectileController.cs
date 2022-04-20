@@ -99,7 +99,7 @@ namespace MrPink.WeaponsSystem
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
             var target = CollisionTarget.Self;
-            if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.transform == null)
                     return;
@@ -111,7 +111,7 @@ namespace MrPink.WeaponsSystem
                 target = TryDoDamage(hit.collider);
                 PlayHitUnitFeedback(hit.point);
             }
-            else if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
+            else if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.transform == null || (hit.collider.isTrigger && hit.transform.gameObject.layer == 11)) // ignore npc interaction colliders
                     return;
