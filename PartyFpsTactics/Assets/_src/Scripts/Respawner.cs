@@ -119,25 +119,14 @@ namespace _src.Scripts
                     continue;
             
                 var corpse = UnitsManager.Instance.unitsInGame[i];
-                if (corpse.HumanVisualController && corpse.HumanVisualController.rigidbodies[0].transform.position.y < corpseShredderY)
+                
+                if (corpse.transform.position.y < corpseShredderY)
                 {
-                    /*
-                switch (corpse.team)
-                {
-                    case HealthController.Team.Blue:
-                        GameManager.Instance.SpawnBlueUnit(blueRespawns[Random.Range(0, blueRespawns.Count)].position);
-                        break;
-                    case HealthController.Team.Red:
-                        var spawners = GetSpawnersInRange(redRespawns, PlayerMovement.Instance.transform.position, 10, 100);
-                        if (spawners.Count == 0)
-                        {
-                            spawners = new List<Transform>(redRespawns);
-                        }
-                        GameManager.Instance.SpawnRedUnit(spawners[Random.Range(0, spawners.Count)].position);
-                        break;
-                }
-                */
-
+                    if (corpse == Game.Player.Health)
+                    {
+                        GameManager.Instance.StartProcScene();
+                        return;
+                    }
                     Destroy(corpse.gameObject);
                 }
             }

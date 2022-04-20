@@ -84,8 +84,6 @@ public class LevelGenerator : MonoBehaviour
 
     [UnityEngine.Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
-
-    public Transform partyParentTransform;
     private int mainBuildingEntranceSide = 0;
     
     private void Awake()

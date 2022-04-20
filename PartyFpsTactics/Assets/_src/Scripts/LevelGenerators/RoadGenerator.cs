@@ -11,13 +11,34 @@ using Random = UnityEngine.Random;
 public class RoadGenerator : MonoBehaviour
 {
     public static RoadGenerator Instance;
-    public Vector3 roadFirstTilePos;
     public List<RoadPart> roadPartsPrefabsStraight = new List<RoadPart>();
+    public List<RoadPart> roadPartsPrefabsStraightRight = new List<RoadPart>();
+    public List<RoadPart> roadPartsPrefabsStraightLeft = new List<RoadPart>();
     public List<RoadPart> roadPartsPrefabsLeadingUp = new List<RoadPart>();
+    public List<RoadPart> roadPartsPrefabsLeadingUpRight = new List<RoadPart>();
+    public List<RoadPart> roadPartsPrefabsLeadingUpLeft = new List<RoadPart>();
     public List<RoadPart> roadPartsPrefabsLeadingDown = new List<RoadPart>();
+    public List<RoadPart> roadPartsPrefabsLeadingDownRight = new List<RoadPart>();
+    public List<RoadPart> roadPartsPrefabsLeadingDownLeft = new List<RoadPart>();
+    public bool showBrokenPrefabs = false;
+    [ShowIf("showBrokenPrefabs", true)]
     public List<RoadPart> roadPartsBrokenPrefabsStraight = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
+    public List<RoadPart> roadPartsBrokenPrefabsStraightRight = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
+    public List<RoadPart> roadPartsBrokenPrefabsStraightLeft = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
     public List<RoadPart> roadPartsBrokenPrefabsLeadingUp = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
+    public List<RoadPart> roadPartsBrokenPrefabsLeadingUpRight = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
+    public List<RoadPart> roadPartsBrokenPrefabsLeadingUpLeft = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
     public List<RoadPart> roadPartsBrokenPrefabsLeadingDown = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
+    public List<RoadPart> roadPartsBrokenPrefabsLeadingDownRight = new List<RoadPart>();
+    [ShowIf("showBrokenPrefabs", true)]
+    public List<RoadPart> roadPartsBrokenPrefabsLeadingDownLeft = new List<RoadPart>();
     
     public List<RoadPart> spawnedRoadParts = new List<RoadPart>();
     public List<GameObject> spawnedRoadPartsGO = new List<GameObject>();
@@ -37,7 +58,7 @@ public class RoadGenerator : MonoBehaviour
             if (spawnedRoadParts[i] == null)
                 continue;
             
-            Destroy(spawnedRoadParts[i].gameObject);
+            DestroyImmediate(spawnedRoadParts[i].gameObject);
         }
         spawnedRoadParts.Clear();
         spawnedRoadPartsGO.Clear();
@@ -50,25 +71,77 @@ public class RoadGenerator : MonoBehaviour
     }
 
 
-    [Button("SpawnStraight")]
+    [Button("FORWARD")]
     public void SpawnStraight()
     {
         roadPartToSpawn = roadPartsPrefabsStraight[Random.Range(0, roadPartsPrefabsStraight.Count)];
         GenerateRoad();
     }
-    [Button("SpawnLeadingUp")]
+    [Button("FWD R")]
+    public void SpawnStraightRight()
+    {
+        roadPartToSpawn = roadPartsPrefabsStraightRight[Random.Range(0, roadPartsPrefabsStraightRight.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
+        GenerateRoad();
+    }
+    [Button("FWD L")]
+    public void SpawnStraightLeft()
+    {
+        roadPartToSpawn = roadPartsPrefabsStraightLeft[Random.Range(0, roadPartsPrefabsStraightLeft.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
+        GenerateRoad();
+    }
+    [Button("UP")]
     public void SpawnLeadingUp()
     {
         roadPartToSpawn = roadPartsPrefabsLeadingUp[Random.Range(0, roadPartsPrefabsLeadingUp.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
         GenerateRoad();
     }
-    [Button("SpawnLeadingDown")]
+    [Button("UP R")]
+    public void SpawnLeadingUpRIght()
+    {
+        roadPartToSpawn = roadPartsPrefabsLeadingUpRight[Random.Range(0, roadPartsPrefabsLeadingUpRight.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
+        GenerateRoad();
+    }
+    [Button("UP L")]
+    public void SpawnLeadingUpLeft()
+    {
+        roadPartToSpawn = roadPartsPrefabsLeadingUpLeft[Random.Range(0, roadPartsPrefabsLeadingUpLeft.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
+        GenerateRoad();
+    }
+    [Button("DOWN")]
     public void SpawnLeadingDown()
     {
         roadPartToSpawn = roadPartsPrefabsLeadingDown[Random.Range(0, roadPartsPrefabsLeadingDown.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
         GenerateRoad();
     }
-    [Button("RemoveLast")]
+    [Button("DOWN R")]
+    public void SpawnLeadingDownRight()
+    {
+        roadPartToSpawn = roadPartsPrefabsLeadingDownRight[Random.Range(0, roadPartsPrefabsLeadingDownRight.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
+        GenerateRoad();
+    }
+    [Button("DOWN L")]
+    public void SpawnLeadingDownLeft()
+    {
+        roadPartToSpawn = roadPartsPrefabsLeadingDownLeft[Random.Range(0, roadPartsPrefabsLeadingDownLeft.Count)];
+        if (roadPartToSpawn == null)
+            Debug.LogError("NO ROAD PARTS HERE");
+        GenerateRoad();
+    }
+    [Button("RemoveLastSpawned")]
     public void RemoveLast()
     {
         if (spawnedRoadParts.Count <= 0)
@@ -84,13 +157,12 @@ public class RoadGenerator : MonoBehaviour
     {
         Debug.LogError("GenerateRoad is disabled. Uncomment stuff below to edit stuff");
         
-        /*
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
         
 
         if (spawnedRoadParts.Count <= 0)
-            spawnPos = roadFirstTilePos;
+            spawnPos = transform.position;
         else
         {
             spawnPos = spawnedRoadParts[spawnedRoadParts.Count-1].roadEnds[0].position;
@@ -107,7 +179,7 @@ public class RoadGenerator : MonoBehaviour
 
         spawnedRoadParts.Add(newPart);
         spawnedRoadPartsGO.Add(newPart.gameObject);
-        newPart.transform.parent = transform;*/
+        newPart.transform.parent = transform;
     }
 
     private RoadPart roadPartToSpawn;
@@ -119,7 +191,7 @@ public class RoadGenerator : MonoBehaviour
         
         DestroyRoad();
         
-        Vector3 spawnPos = roadFirstTilePos;
+        Vector3 spawnPos = transform.position;
         Quaternion spawnRot = Quaternion.identity;
         
         for (int i = 0; i < roadPartsToSpawn; i++)
