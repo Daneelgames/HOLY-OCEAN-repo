@@ -44,7 +44,14 @@ namespace MrPink.Units
             if (_enemiesToRemember.Contains(damager))
                 return;
         
+            Debug.Log("SetDamager " + damager);
             _enemiesToRemember.Add(damager);
+        }
+
+        public void ForgiveTeamMate(HealthController teamMate)
+        {
+            if (_enemiesToRemember.Contains(teamMate))
+                _enemiesToRemember.Remove(teamMate);
         }
         
         public async UniTask<HealthController> GetClosestVisibleEnemy()

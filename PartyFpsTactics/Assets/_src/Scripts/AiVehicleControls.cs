@@ -75,6 +75,7 @@ namespace MrPink
                 StopCoroutine(exitCoroutine);
             if (enterCoroutine != null)
                 StopCoroutine(enterCoroutine);
+            Debug.Log("SetPassengerSit. veh: " + _vehicle + "; smooth: " + smoothExit);
         
             if (_vehicle != null)
             {

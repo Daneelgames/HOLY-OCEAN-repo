@@ -107,6 +107,17 @@ namespace MrPink.WeaponsSystem
             StartCoroutine(LifetimeCoroutine());
         }
 
+        void UnitsExplosion()
+        {
+            if (!unitsExplosionCompleted)
+            {
+                InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
+                    ragdollExplosionForce, playerExplosionForce);
+                unitsExplosionCompleted = true;
+            }
+        }
+        
         protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
             // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
@@ -131,13 +142,6 @@ namespace MrPink.WeaponsSystem
             if (damageScaler > 1)
                 Debug.Log("TileAttack damageScaler " + damageScaler);*/
             
-            if (!unitsExplosionCompleted)
-            {
-                InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
-                    ragdollExplosionForce, playerExplosionForce);
-                unitsExplosionCompleted = true;
-            }
             
             if (targetCollider.gameObject == Game.Player.GameObject && IsPlayerEnemyToOwner())
             {
@@ -146,6 +150,7 @@ namespace MrPink.WeaponsSystem
                     return CollisionTarget.Self;
                 
                 Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
+                UnitsExplosion();
                 return CollisionTarget.Creature;
             }
 
@@ -153,9 +158,10 @@ namespace MrPink.WeaponsSystem
             
             if (targetHealth == null)
             {
-                if (!targetCollider.isTrigger)
+                if (targetCollider.isTrigger)
                     return CollisionTarget.Self;
                 
+                UnitsExplosion();
                 return CollisionTarget.Solid;
             }
 
@@ -202,6 +208,7 @@ namespace MrPink.WeaponsSystem
                     ownerHealth.controlledVehicle.AddForceOnImpact(targetCollider.bounds.center);
             }
             
+            UnitsExplosion();
             return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
         }
 

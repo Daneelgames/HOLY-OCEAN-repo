@@ -65,7 +65,7 @@ namespace MrPink.Units
 
 
         public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1,
-            float playerForce = -1, ScoringActionType action = ScoringActionType.NULL)
+            float playerForce = -1, ScoringActionType action = ScoringActionType.NULL, int enduranceDamage = -1)
         {
             if (distance < 0)
                 distance = tileExplosionDistance;
@@ -76,6 +76,9 @@ namespace MrPink.Units
             if (playerForce < 0)
                 playerForce = tileExplosionForcePlayer;
 
+            if (enduranceDamage < 0)
+                enduranceDamage = defaultInduranceDamage;
+            
             // BUMP ENEMIES
             for (int i = 0; i < unitsInGame.Count; i++)
             {
@@ -104,7 +107,7 @@ namespace MrPink.Units
                         continue;
                     }
 
-                    if (unitsInGame[i].DamageEndurance(defaultInduranceDamage) <= 0)
+                    if (unitsInGame[i].DamageEndurance(enduranceDamage) <= 0)
                     {
                         if (unitsInGame[i].HumanVisualController)
                         {

@@ -119,12 +119,15 @@ namespace MrPink
 
         IEnumerator RaycastInteractables()
         {
+            Debug.Log("RAYCAST START ");
             while (true)
             {
+                Debug.Log("RAYCAST TRY ");
                 yield return null;
 
                 if (Game.Player.Health.health <= 0 || carryingPortableRb)
                 {
+                    Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null && selectedPortable == null)
                         continue;
                 
@@ -133,11 +136,11 @@ namespace MrPink
                     selectedIOTransform = null;
                     uiItemNameFeedback.text = String.Empty;
                     uiItemNameFeedbackOutline.text = String.Empty;
-                    Debug.Log("RAYCAST NULL ");
                 }
             
                 if (PhoneDialogueEvents.Instance != null && PhoneDialogueEvents.Instance.InCutScene)
                 {
+                    Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null)
                         continue;
                 
@@ -145,7 +148,6 @@ namespace MrPink
                     selectedIOTransform = null;
                     uiItemNameFeedback.text = String.Empty;
                     uiItemNameFeedbackOutline.text = String.Empty;
-                    Debug.Log("RAYCAST NULL ");
                     continue;
                 }
             
@@ -199,7 +201,8 @@ namespace MrPink
                     }
                 }
                 else
-                {Debug.Log("RAYCAST NULL ");
+                {
+                    Debug.Log("RAYCAST NULL ");
                     selectedPortable = null;
                     selectedIO = null;
                     selectedIOTransform = null;

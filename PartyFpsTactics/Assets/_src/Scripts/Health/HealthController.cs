@@ -148,7 +148,11 @@ namespace MrPink.Health
             var vision = AiMovement.GetComponent<UnitVision>();
             
             if (vision)
+            {
+                if (team != damager.team)
+                    Debug.Log("SetDamager other team: " + damager);
                 vision.SetDamager(damager);
+            }
         }
 
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
