@@ -13,12 +13,15 @@ namespace MrPink
     {
         public static GameManager Instance;
 
+        public float playerSleepTimeScale = 10;
         public string portableObjectTag = "PortableObject";
         public List<Collider> terrainAndIslandsColliders = new List<Collider>();
         public LayerMask AllSolidsMask;
         private bool cursorVisible = false;
 
         public Material rockDefaultMaterial;
+
+        public float currentTimeScale = 1;
     
         private void Awake()
         {
@@ -34,6 +37,21 @@ namespace MrPink
             Physics.autoSyncTransforms = false;
         }
 
+        public void SetPlayerSleepTimeScale(bool sleep)
+        {
+            if (sleep)
+                SetCurrentTimeScale(playerSleepTimeScale);
+            else
+                SetCurrentTimeScale(1);
+        }
+        
+        void SetCurrentTimeScale(float t)
+        {
+            currentTimeScale = t;
+            currentTimeScale = Mathf.Clamp(currentTimeScale, 0.1f, 100);
+            Time.timeScale = currentTimeScale;
+        }
+        
     
         private void Update()
         {
@@ -57,7 +75,7 @@ namespace MrPink
                     cursorVisible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
-                    Time.timeScale = 1f;
+                    Time.timeScale = currentTimeScale;
                     AudioListener.pause = false;
                 }
                 else
@@ -78,6 +96,8 @@ namespace MrPink
             {
                 if (Input.GetKeyDown(KeyCode.R))
                     StartProcScene();
+                if (Input.GetKeyDown(KeyCode.X))
+                    ScoringSystem.Instance.AddScore(-ScoringSystem.Instance.CurrentScore);
             
                 if (Input.GetKeyDown(KeyCode.D))
                 {

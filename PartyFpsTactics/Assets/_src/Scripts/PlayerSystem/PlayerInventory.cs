@@ -29,6 +29,7 @@ namespace MrPink.PlayerSystem
             if (LevelGenerator.Instance == null)
                 return;
             
+            return;
             if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game)
             {
                 SpawnPlayerWeapon(startingPistolWeapon, 0);

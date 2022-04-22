@@ -38,6 +38,8 @@ namespace MrPink.PlayerSystem
         
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerVehicleControls _vehicleControls;
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private CharacterNeeds _characterNeeds;
         
         
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
@@ -75,6 +77,8 @@ namespace MrPink.PlayerSystem
             => _lookAround;
         public PlayerVehicleControls VehicleControls
             => _vehicleControls;
+        public CharacterNeeds characterNeeds
+            => _characterNeeds;
         
 
         public void Death(Transform killer)

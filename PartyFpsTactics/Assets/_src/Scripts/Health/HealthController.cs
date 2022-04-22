@@ -45,7 +45,7 @@ namespace MrPink.Health
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
-        public ControlledVehicle controlledVehicle;
+        public ControlledMachine controlledMachine;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
         public List<GameObject> objectsToSpawnOnDeath;
@@ -139,6 +139,7 @@ namespace MrPink.Health
         {
             endurance = enduranceMax;
         }
+
         
         public void SetDamager(HealthController damager)
         {

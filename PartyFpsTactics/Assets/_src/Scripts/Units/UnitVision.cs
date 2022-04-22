@@ -28,6 +28,8 @@ namespace MrPink.Units
 
         [ReadOnly]
         public List<HealthController> visibleEnemies = new List<HealthController>();
+        [ReadOnly]
+        public List<HealthController> visibleUnits = new List<HealthController>();
 
 
         private void Start()
@@ -48,7 +50,7 @@ namespace MrPink.Units
             _enemiesToRemember.Add(damager);
         }
 
-        public void ForgiveTeamMate(HealthController teamMate)
+        public void ForgiveUnit(HealthController teamMate)
         {
             if (_enemiesToRemember.Contains(teamMate))
                 _enemiesToRemember.Remove(teamMate);
@@ -118,25 +120,40 @@ namespace MrPink.Units
                 return;
             }
                 
-            if (!ignoreTeams && (unit.team == _selfHealth.team || unit.team == Team.NULL || _selfHealth.team == Team.NULL))
-                return;
+            if (!ignoreTeams)
+            {
+                if (unit.team == _selfHealth.team || unit.team == Team.NULL || _selfHealth.team == Team.NULL)
+                {
+                    AddVisibleUnit(unit);
+                    return;
+                }
+            }
 
             if (IsInLineOfSight(unit.visibilityTrigger.transform))
-                AddToVisible(unit);
+                AddVisibleEnemy(unit);
             else
                 RemoveFromVisible(unit);
         }
 
-        private void AddToVisible(HealthController unit)
+        private void AddVisibleEnemy(HealthController unit)
         {
             if (!visibleEnemies.Contains(unit))
                 visibleEnemies.Add(unit);
+        }
+        
+        private void AddVisibleUnit(HealthController unit)
+        {
+            if (!visibleUnits.Contains(unit))
+                visibleUnits.Add(unit);
         }
 
         private void RemoveFromVisible(HealthController unit)
         {
             if (visibleEnemies.Contains(unit))
                 visibleEnemies.Remove(unit);
+
+            if (visibleUnits.Contains(unit))
+                visibleUnits.Remove(unit);
         }
 
         private bool IsInLineOfSight(Transform target) 

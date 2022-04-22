@@ -24,6 +24,9 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitFollowTarget _followTarget;
 
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private CharacterNeeds _characterNeeds;
+
 
         public HealthController HealthController
             => _healthController;
@@ -42,6 +45,8 @@ namespace MrPink.Units
         
         public UnitFollowTarget UnitFollowTarget
             => _followTarget;
+        public CharacterNeeds CharacterNeeds
+            => _characterNeeds;
         
         
         #if UNITY_EDITOR
@@ -55,6 +60,7 @@ namespace MrPink.Units
             _humanVisualController = GetComponent<HumanVisualController>();
             _unitMovement = GetComponent<UnitMovement>();
             _followTarget = GetComponent<UnitFollowTarget>();
+            _characterNeeds = GetComponent<CharacterNeeds>();
             
             _unitAiMovement.SetUnit(this);
             _unitMovement.SetUnit(this);

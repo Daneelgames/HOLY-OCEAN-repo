@@ -89,25 +89,25 @@ namespace MrPink.PlayerSystem
             
             if (_isDead && _killerToLookAt != null)
             {
-                _headTransform.rotation = Quaternion.Lerp(_headTransform.rotation, Quaternion.LookRotation(_killerToLookAt.position - _headTransform.position), Time.deltaTime);
+                _headTransform.rotation = Quaternion.Lerp(_headTransform.rotation, Quaternion.LookRotation(_killerToLookAt.position - _headTransform.position), Time.unscaledDeltaTime);
                 return;
             }
         
             Vector3 newRotation = new Vector3(0, _horizontalRotation, 0);
-            _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
+            _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.unscaledDeltaTime;
             newRotation = new Vector3(transform.localRotation.x, _horizontalRotation, transform.localRotation.z);
             
-            _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+            _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.unscaledDeltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
-            if (Game.Player.VehicleControls.controlledVehicle == null)
+            if (Game.Player.VehicleControls.controlledMachine == null)
             {
                 transform.localRotation = Quaternion.Euler(newRotation);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
             }
             else
             {
-                vehicleHeadDummyTransform.localRotation = Quaternion.Slerp( Quaternion.Euler(new Vector3(transform.localEulerAngles.x, newRotation.y, transform.localEulerAngles.z)), Quaternion.Euler(newRotation), Time.deltaTime);
+                vehicleHeadDummyTransform.localRotation = Quaternion.Slerp( Quaternion.Euler(new Vector3(transform.localEulerAngles.x, newRotation.y, transform.localEulerAngles.z)), Quaternion.Euler(newRotation), Time.unscaledDeltaTime);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + vehicleHeadDummyTransform.eulerAngles;
             }
         
@@ -115,12 +115,12 @@ namespace MrPink.PlayerSystem
 
             float resultFollowSpeed = _cameraFollowBodySmooth;
             
-            if (Game.Player.VehicleControls.controlledVehicle)
+            if (Game.Player.VehicleControls.controlledMachine)
                 resultFollowSpeed *= 10;
             
             _headTransform.transform.position = 
                 Vector3.Lerp(_headTransform.transform.position,transform.position + transform.up * _playerHeadHeightTarget, 
-                    resultFollowSpeed * Time.smoothDeltaTime);
+                    resultFollowSpeed * Time.unscaledDeltaTime);
             vehicleHeadDummyTransform.position = _headTransform.transform.position;
         }
 

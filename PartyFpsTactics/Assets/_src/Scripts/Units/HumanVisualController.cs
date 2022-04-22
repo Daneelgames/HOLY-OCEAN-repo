@@ -138,16 +138,19 @@ namespace MrPink.Units
             }
         }
     
-        public void SetVehiclePassenger(ControlledVehicle vehicle)
+        public void SetVehicleAiPassenger(ControlledMachine machine)
         {
-            inVehicle = vehicle;
+            if (machine && machine.sitTransformNpc == null)
+                return;
+            
+            inVehicle = machine;
             anim.enabled = true;
             anim.SetBool(Passenger, inVehicle);
         
             foreach (var rb in rigidbodies)
             {
                 rb.isKinematic = inVehicle;
-                rb.useGravity = !inVehicle;
+                rb.useGravity = false;
             }
         }
     

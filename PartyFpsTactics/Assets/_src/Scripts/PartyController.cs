@@ -11,7 +11,7 @@ namespace MrPink
     {
         public static PartyController Instance;
     
-        public ControlledVehicle playerCar;
+        public ControlledMachine playerCar;
         public HealthController npcInParty;
 
         private void Awake()
@@ -49,13 +49,13 @@ namespace MrPink
         
             Game.Player.Movement.gameObject.SetActive(true);
             Game.Player.Interactor.cam.gameObject.SetActive(true);
-            Game.Player.VehicleControls.RequestVehicleAction(playerCar);
+            //Game.Player.VehicleControls.RequestVehicleAction(playerCar);
         }
 
-        public void SetPlayerInCar(ControlledVehicle vehicle)
+        public void SetPlayerInCar(ControlledMachine machine)
         {
             if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.Player.Position) < 15)
-                npcInParty.aiVehicleControls.SetPassengerSit(vehicle);
+                npcInParty.aiVehicleControls.SetPassengerSit(machine);
         }
     }
 }

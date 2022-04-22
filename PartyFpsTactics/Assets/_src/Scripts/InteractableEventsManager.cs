@@ -103,7 +103,7 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.RideVehicle:
-                Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledVehicle);
+                Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledMachine);
                 break;
         }
         

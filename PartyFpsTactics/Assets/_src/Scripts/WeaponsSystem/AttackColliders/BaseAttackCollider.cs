@@ -122,18 +122,28 @@ namespace MrPink.WeaponsSystem
         {
             // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
             if (targetCollider.gameObject.layer == 11 && targetCollider.isTrigger)
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
             
             if (currentLifeTime > _dangerousTime)
             {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
             
             if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
 
             if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
 
             
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
@@ -145,14 +155,18 @@ namespace MrPink.WeaponsSystem
             
             if (targetCollider.gameObject == Game.Player.GameObject && IsPlayerEnemyToOwner())
             {
-                if (ownerHealth.controlledVehicle &&
-                    ownerHealth.controlledVehicle == Game.Player.VehicleControls.controlledVehicle)
+                if (ownerHealth.controlledMachine &&
+                    ownerHealth.controlledMachine == Game.Player.VehicleControls.controlledMachine)
+                {
+                    Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
                 
                 Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
-                if (ownerHealth.team == Game.Player.Health.team)
-                    ownerHealth.UnitVision.ForgiveTeamMate(Game.Player.Health);
+                if (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL)
+                    ownerHealth.UnitVision.ForgiveUnit(Game.Player.Health);
                 UnitsExplosion();
+                Debug.Log("return CollisionTarget.Creature;");
                 return CollisionTarget.Creature;
             }
 
@@ -161,7 +175,10 @@ namespace MrPink.WeaponsSystem
             if (targetHealth == null)
             {
                 if (targetCollider.isTrigger)
+                {
+                    Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
                 
                 UnitsExplosion();
                 return CollisionTarget.Solid;
@@ -171,23 +188,33 @@ namespace MrPink.WeaponsSystem
             {
                 // if vehicle tries to damage unit inside
                 if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
-                    ownerHealth.controlledVehicle == targetHealth.HealthController.aiVehicleControls.controlledVehicle)
+                    ownerHealth.controlledMachine == targetHealth.HealthController.aiVehicleControls.controlledMachine)
+                {
+                    //Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
 
                 // if unit inside tries to hit the vehicle AND IT'S NOT PLAYER
-                if (targetHealth.HealthController && targetHealth.HealthController.controlledVehicle &&
-                    ownerHealth.aiVehicleControls && ownerHealth.aiVehicleControls.controlledVehicle ==
-                    targetHealth.HealthController.controlledVehicle)
+                if (targetHealth.HealthController && targetHealth.HealthController.controlledMachine &&
+                    ownerHealth.aiVehicleControls && ownerHealth.aiVehicleControls.controlledMachine != null &&  ownerHealth.aiVehicleControls.controlledMachine ==
+                    targetHealth.HealthController.controlledMachine)
+                {
+                    //Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
             }
 
             if (targetHealth.IsOwnedBy(ownerHealth))
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
 
             if (targetHealth.HealthController)
             {
-                if (damagedHealthControllers.Contains(targetHealth.HealthController))
+                if (damagedHealthControllers.Count > 0 && damagedHealthControllers.Contains(targetHealth.HealthController))
                 {
+                    Debug.Log("return CollisionTarget.Creature;");
                     return CollisionTarget.Creature;
                 }
 
@@ -200,18 +227,19 @@ namespace MrPink.WeaponsSystem
                 Debug.Log("Damage " + targetHealth.HealthController);
                 damagedHealthControllers.Add(targetHealth.HealthController);
                 
-                if (ownerHealth && ownerHealth.UnitVision && ownerHealth.team == targetHealth.HealthController.team)
-                    ownerHealth.UnitVision.ForgiveTeamMate(targetHealth.HealthController);
+                if (ownerHealth && ownerHealth.UnitVision && 
+                    (ownerHealth.team == targetHealth.HealthController.team || targetHealth.HealthController.team == Team.NULL))
+                    ownerHealth.UnitVision.ForgiveUnit(targetHealth.HealthController);
                 
                 StartCoroutine(ClearDamagedHC(targetHealth.HealthController));
             }
 
             // reduce velocity of vehicle who did the damage
-            if (ownerHealth && ownerHealth.controlledVehicle)
+            if (ownerHealth && ownerHealth.controlledMachine)
             {
-                resultDmg = Mathf.RoundToInt(resultDmg * ownerHealth.controlledVehicle.rb.velocity.magnitude);
+                resultDmg = Mathf.RoundToInt(resultDmg * ownerHealth.controlledMachine.rb.velocity.magnitude);
                 if (targetHealth.gameObject.layer == 6 || targetHealth.gameObject.layer == 12)
-                    ownerHealth.controlledVehicle.AddForceOnImpact(targetCollider.bounds.center);
+                    ownerHealth.controlledMachine.AddForceOnImpact(targetCollider.bounds.center);
             }
             
             UnitsExplosion();

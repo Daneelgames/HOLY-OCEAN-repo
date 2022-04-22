@@ -60,7 +60,7 @@ namespace _src.Scripts.Data
         public Vector2 auPitchMinMax = new Vector2(1, 1);
 
         [ShowIf("scriptedEventType", ScriptedEventType.RideVehicle)]
-        public ControlledVehicle controlledVehicle;
+        public ControlledMachine controlledMachine;
     }
     
     public enum ScriptedEventType

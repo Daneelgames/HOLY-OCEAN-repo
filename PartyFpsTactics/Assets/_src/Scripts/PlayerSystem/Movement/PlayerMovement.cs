@@ -122,7 +122,7 @@ namespace MrPink.PlayerSystem
             
             HandleStamina();
 
-            if (Game.Player.VehicleControls.controlledVehicle)
+            if (Game.Player.VehicleControls.controlledMachine)
             {
                 State.IsRunning = false;
                 _resultVelocity = Vector3.zero;
@@ -365,7 +365,7 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded && Game.Player.VehicleControls.controlledVehicle == null)
+                if (!State.IsGrounded && Game.Player.VehicleControls.controlledMachine == null)
                 {
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {

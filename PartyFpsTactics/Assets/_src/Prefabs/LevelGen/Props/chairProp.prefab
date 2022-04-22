@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 300
   _healthController: {fileID: 0}
+  ImmuneToDamage: 0
   prop: 1
   colliders:
   - {fileID: -2596860956629557991}
@@ -191,7 +192,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4694376958820584944}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 1
   m_AngularDrag: 1
   m_UseGravity: 1
@@ -227,18 +228,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8523b4d55adff4886048f20583de9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoInitOnStart: 0
   damage: 5
   _isSelfCollisionAvailable: 0
   _isPlayerCollisionAvailable: 0
   _isAttachedToShotHolder: 0
   _lifeTime: 2
+  currentLifeTime: 0
+  _dangerousTime: 2
   ragdollExplosionDistance: 2
   ragdollExplosionForce: 500
+  playerExplosionForce: 100
   _hitSolidFx: {fileID: 0}
   _hitUnitFx: {fileID: 0}
   _hitAudioSource: {fileID: 0}
   _debrisParticles: {fileID: 0}
   _bloodParticles: {fileID: 0}
+  ownerHealth: {fileID: 0}
   prop: 0
   dangerous: 0
   rb: {fileID: -7339335058865973671}

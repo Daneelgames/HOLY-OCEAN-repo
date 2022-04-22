@@ -17,7 +17,7 @@ namespace MrPink
     {
         public bool controllingVehicle = false;
         public HealthController hc;
-        public ControlledVehicle controlledVehicle;
+        public ControlledMachine controlledMachine;
         public Vector3 targetPosition;
         private Vector3[] cornersPath;
     
@@ -28,23 +28,26 @@ namespace MrPink
         private void Start()
         {
             if (controllingVehicle)
-                DriverSit(controlledVehicle);
+                DriverSit(controlledMachine);
         }
 
         private Coroutine exitCoroutine;
-        IEnumerator ExitVehicleCoroutine()
+        IEnumerator AiExitVehicleCoroutine()
         {
+            if (controlledMachine.sitTransformNpc == null)
+                yield break;
+            
             float t = 0;
             float tt = 0.5f;
 
             while (t < tt)
             {
                 t += Time.deltaTime;
-                hc.transform.position = Vector3.Lerp(controlledVehicle.sitTransformNpc.position, 
-                    controlledVehicle.sitTransformNpc.position + controlledVehicle.sitTransformNpc.right * 1.5f, t/tt);
+                hc.transform.position = Vector3.Lerp(controlledMachine.sitTransformNpc.position, 
+                    controlledMachine.sitTransformNpc.position + controlledMachine.sitTransformNpc.right * 1.5f, t/tt);
                 yield return null;
             }
-            controlledVehicle = null;
+            controlledMachine = null;
             hc.HumanVisualController.SetCollidersTriggers(false);
             hc.AiMovement.RestartActivities();
         }
@@ -54,7 +57,7 @@ namespace MrPink
             float t = 0;
             float tt = 0.5f;
 
-            hc.HumanVisualController.SetVehiclePassenger(controlledVehicle);
+            hc.HumanVisualController.SetVehicleAiPassenger(controlledMachine);
             hc.HumanVisualController.SetCollidersTriggers(true);
             hc.AiMovement.StopActivities();
             var initPos = hc.transform.position;
@@ -62,24 +65,27 @@ namespace MrPink
             {
                 t += Time.deltaTime;
                 hc.transform.position = Vector3.Lerp(initPos, 
-                    controlledVehicle.sitTransformNpc.position, t/tt);
+                    controlledMachine.sitTransformNpc.position, t/tt);
                 yield return null;
             }
             followSitCoroutine = StartCoroutine(FollowSit());   
         }
-        public void SetPassengerSit(ControlledVehicle _vehicle, bool smoothExit = true)
+        public void SetPassengerSit(ControlledMachine machine, bool smoothExit = true)
         {
+            if (machine && machine.sitTransformNpc == null)
+                return;
+            
             // включить анимацию
             // начинать преследовать трансформ нпс сит
             if (exitCoroutine != null)
                 StopCoroutine(exitCoroutine);
             if (enterCoroutine != null)
                 StopCoroutine(enterCoroutine);
-            Debug.Log("SetPassengerSit. veh: " + _vehicle + "; smooth: " + smoothExit);
+            Debug.Log("SetPassengerSit. veh: " + machine + "; smooth: " + smoothExit);
         
-            if (_vehicle != null)
+            if (machine != null)
             {
-                controlledVehicle = _vehicle;
+                controlledMachine = machine;
                 controllingVehicle = false;
                 
                 enterCoroutine = StartCoroutine(EnterVehicleCoroutine());
@@ -88,17 +94,18 @@ namespace MrPink
             {
                 controllingVehicle = false;
                 if (smoothExit)
-                    exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
+                    exitCoroutine = StartCoroutine(AiExitVehicleCoroutine());
                 if (followSitCoroutine != null)
                     StopCoroutine(followSitCoroutine);
             
-                hc.HumanVisualController.SetVehiclePassenger(null);
+                if (smoothExit)
+                    hc.HumanVisualController.SetVehicleAiPassenger(null);
             }
         }
 
-        public void DriverSit(ControlledVehicle vehicle)
+        public void DriverSit(ControlledMachine machine)
         {
-            controlledVehicle = vehicle;
+            controlledMachine = machine;
             controllingVehicle = true;
             updateNavMeshPathCoroutine = StartCoroutine(UpdateNavmeshPath());
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
@@ -150,9 +157,9 @@ namespace MrPink
             float hor = 0;
             float ver = 0;
             bool brake = false;
-            controlledVehicle.wheelVehicle.Handbrake = false;
+            controlledMachine.wheelVehicle.Handbrake = false;
         
-            while (controlledVehicle)
+            while (controlledMachine)
             {
                 yield return null;
             
@@ -168,7 +175,7 @@ namespace MrPink
                         // target in front
                         ver = 1f;
 
-                        if (distance < stoppingDistance && controlledVehicle.wheelVehicle.Speed > stoppingSpeed)
+                        if (distance < stoppingDistance && controlledMachine.wheelVehicle.Speed > stoppingSpeed)
                         {
                             ver = -1;
                         }
@@ -195,7 +202,7 @@ namespace MrPink
                 else
                 {
                     // try to stop
-                    if (controlledVehicle.wheelVehicle.Speed > 10)
+                    if (controlledMachine.wheelVehicle.Speed > 10)
                         ver = -1;
                     else
                     {
@@ -204,14 +211,14 @@ namespace MrPink
                     }
                 }
             
-                controlledVehicle.SetCarInput(hor, ver, brake);
+                controlledMachine.SetCarInput(hor, ver, brake);
             }
         }
 
         private Coroutine followSitCoroutine;
         IEnumerator FollowSit()
         {
-            var sit = controlledVehicle.sitTransformNpc;
+            var sit = controlledMachine.sitTransformNpc;
             while (true)
             {
                 transform.position = sit.position;

@@ -17,6 +17,7 @@ namespace MrPink
         public float raycastDistance = 3;
         private InteractiveObject selectedIO;
         private Transform selectedIOTransform;
+        public Transform portableParent;
         public Rigidbody carryingPortableRb;
         private GameObject selectedPortable;
         public float throwPortableForce = 100;
@@ -57,7 +58,9 @@ namespace MrPink
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
+                    carryingPortableRb.drag = 1;
                     carryingPortableRb = null;
+                    carryingPortableRb.transform.parent = null;
                     return;
                 }
             
@@ -84,8 +87,10 @@ namespace MrPink
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
+                    carryingPortableRb.drag = 1;
                     carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
+                    carryingPortableRb.transform.parent = null;
                 }
             }
         }
@@ -100,17 +105,22 @@ namespace MrPink
 
             carryingPortableRb = rb;
             carryingPortableRb.useGravity = false;
+            var dragInit = carryingPortableRb.drag; 
+            carryingPortableRb.drag = 10;
         
             carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
             carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
+            carryingPortableRb.transform.parent = portableParent;
             while (true)
             {
-                carryingPortableRb.AddForce((cam.transform.position + cam.transform.forward /* * 2 - cam.transform.up*/ - carryingPortableRb.transform.position) * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
+                Vector3 dir = (portableParent.position - carryingPortableRb.position);
+                carryingPortableRb.AddForce(dir * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
                 if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
                 {
                     carryingPortableRb.useGravity = true;
                     carryingPortableRb = null;
+                    carryingPortableRb.drag = dragInit;
                     yield break;
                 }
                 yield return null;
@@ -119,15 +129,14 @@ namespace MrPink
 
         IEnumerator RaycastInteractables()
         {
-            Debug.Log("RAYCAST START ");
+            //Debug.Log("RAYCAST START ");
             while (true)
             {
-                Debug.Log("RAYCAST TRY ");
                 yield return null;
 
                 if (Game.Player.Health.health <= 0 || carryingPortableRb)
                 {
-                    Debug.Log("RAYCAST NULL ");
+                    //Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null && selectedPortable == null)
                         continue;
                 
@@ -140,7 +149,7 @@ namespace MrPink
             
                 if (PhoneDialogueEvents.Instance != null && PhoneDialogueEvents.Instance.InCutScene)
                 {
-                    Debug.Log("RAYCAST NULL ");
+                    //Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null)
                         continue;
                 
@@ -153,7 +162,7 @@ namespace MrPink
             
                 if (Physics.Raycast(cam.transform.position, cam.transform.forward, out var hit, raycastDistance, raycastMask))
                 {
-                    Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
+                    //Debug.Log("RAYCAST HIT " + hit.collider.gameObject.name);
                     if (hit.collider.gameObject.layer != 11)
                     {
                         if (hit.collider.gameObject.CompareTag(GameManager.Instance.portableObjectTag))
@@ -171,7 +180,7 @@ namespace MrPink
                     
                         selectedIO = null;
                         selectedIOTransform = null;
-                        Debug.Log("RAYCAST NULL ");
+                        //Debug.Log("RAYCAST NULL ");
                         continue;
                     }
 
@@ -179,14 +188,14 @@ namespace MrPink
                 
                     if (hit.collider.transform == selectedIOTransform)
                     {
-                        Debug.Log("RAYCAST NULL ");
+                        //Debug.Log("RAYCAST NULL ");
                         continue;
                     }
                 
                     var newIO = hit.collider.gameObject.GetComponent<InteractiveObject>();
                     if (newIO)
                     {
-                        Debug.Log("RAYCAST newIO " + newIO);
+                        //Debug.Log("RAYCAST newIO " + newIO);
                         if (newIO.hc && newIO.hc.health <= 0 && selectedIO != null)
                         {
                             selectedIO = null;
@@ -202,7 +211,7 @@ namespace MrPink
                 }
                 else
                 {
-                    Debug.Log("RAYCAST NULL ");
+                    //Debug.Log("RAYCAST NULL ");
                     selectedPortable = null;
                     selectedIO = null;
                     selectedIOTransform = null;
