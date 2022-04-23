@@ -45,6 +45,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
     public List<TileHealth> propsPrefabs;
+    public List<HealthController> controlledMachinesInRooms;
     public List<InteractiveObject> lootToSpawnAround;
     
 

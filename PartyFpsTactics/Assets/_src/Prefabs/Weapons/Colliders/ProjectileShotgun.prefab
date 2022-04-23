@@ -71,6 +71,9 @@ MonoBehaviour:
   addVelocityEveryFrame: 1
   projectileSpeed: 15
   toolType: 0
+  fragGrenadeTool: {fileID: 0}
+  customLadderTool: {fileID: 0}
+  consumableTool: {fileID: 0}
   projectileRandomRotationMax: 12
   dieOnContact: 1
   ricochetOnContact: 0
@@ -86,8 +89,6 @@ MonoBehaviour:
     m_Bits: 128
   shotAu: {fileID: 7601328651385341622}
   flyAu: {fileID: 9157171069865134070}
-  _fragGrenade: {fileID: 0}
-  _customLadder: {fileID: 0}
 --- !u!135 &8831351853180130487
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -138,9 +139,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 100
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -148,23 +149,23 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
+      time: 0.05
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.10882248
+      outSlope: -0.10882248
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.095213026
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -236,7 +237,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -245,22 +246,22 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0.997612
+      inSlope: -0.60338545
+      outSlope: -0.60338545
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0.12740074
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.024901971
+      outSlope: 0.024901971
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0.123534426
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -365,7 +366,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

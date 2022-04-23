@@ -9,6 +9,7 @@ namespace MrPink.Tools
         CustomLadder,
         FragGrenade,
         BugMeat,
-        SandWater
+        SandWater,
+        OilCoffee
     }
 }

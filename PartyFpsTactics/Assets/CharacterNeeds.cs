@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -28,9 +29,17 @@ public class CharacterNeeds : MonoBehaviour
 
     IEnumerator Needs()
     {
+        // ADD A WAY FOR NPC TO RESTORE THEIR NEEDS
+        // THEN UNBREAK IT
+        if (ownHealth != Game.Player.Health)
+            yield break;
+        ///////////////
         
         while (true)
         {
+            if (ownHealth.health <= 0)
+                yield break;
+            
             float needsPool = 0;
             float needsCurrent = 0;
             for (int i = 0; i < needs.Count; i++)
@@ -51,7 +60,8 @@ public class CharacterNeeds : MonoBehaviour
                 {
                     // need's deprivation event
                     // set unconcious
-                    ownHealth.Damage(ownHealth.health, DamageSource.Environment);
+                    ownHealth.DrainHealth(healthDrainOnNeeds);
+                    PlayerUi.Instance.SetNeedColor(i, Color.red);
                 }
             }
 
@@ -59,11 +69,20 @@ public class CharacterNeeds : MonoBehaviour
             {
                 // drain health
                 ownHealth.DrainHealth(healthDrainOnNeeds);
+                for (int i = 0; i < needs.Count; i++)
+                {
+                    PlayerUi.Instance.SetNeedColor(i, Color.red);   
+                }
             }
             else
             {
                 // regen health
                 ownHealth.RegenHealth(healthRegenOnNeeds);
+                
+                for (int i = 0; i < needs.Count; i++)
+                {
+                    PlayerUi.Instance.SetNeedColor(i, Color.white);   
+                }
             }
             
             yield return new WaitForSeconds(1);

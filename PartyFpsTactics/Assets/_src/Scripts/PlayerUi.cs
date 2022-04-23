@@ -43,6 +43,11 @@ namespace MrPink
             }
         }
 
+        public void SetNeedColor(int needIndex, Color color)
+        {
+            characterNeedsBars[needIndex].color = color;
+        }
+        
         IEnumerator Start()
         {
             while (true)
@@ -75,7 +80,7 @@ namespace MrPink
                     float d = Game.Player.characterNeeds.needs[i].needCurrent /
                               Game.Player.characterNeeds.needs[i].needMaxBase;
                     characterNeedsBars[i].fillAmount = d;
-                    characterNeedsBars[i].transform.parent.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 1.25f, d);
+                    characterNeedsBars[i].transform.parent.localScale = Vector3.Lerp(Vector3.one * 0.5f, Vector3.one * 1.25f, d);
                 }
                 yield return new WaitForSeconds(0.1f);
             }

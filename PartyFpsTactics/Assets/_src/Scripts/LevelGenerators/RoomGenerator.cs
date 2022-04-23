@@ -42,7 +42,16 @@ namespace _src.Scripts.LevelGenerators
                     var roomTilesCoordsTemp = new List<Vector3Int>(room.coordsInside);
                     var randomTileCoords = roomTilesCoordsTemp[Random.Range(0, roomTilesCoordsTemp.Count)];
                     Vector3 worldSpawnPosition = new Vector3(randomTileCoords.x - level.size.x / 2, level.floorWorldHeight + 0.5f, randomTileCoords.z - level.size.z / 2);
-                    UnitsManager.Instance.SpawnNeutralUnit(worldSpawnPosition);
+                    
+                    if (Random.value > 0.5f)
+                        UnitsManager.Instance.SpawnNeutralUnit(worldSpawnPosition);
+                    else
+                    {
+                        Instantiate(LevelGenerator.Instance.controlledMachinesInRooms[Random.Range(0, LevelGenerator.Instance.controlledMachinesInRooms.Count)],
+                            worldSpawnPosition, Quaternion.identity);
+                    }
+                    
+                    
                     
                     // THEN SPAWN 
                     yield return null;

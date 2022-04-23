@@ -19,7 +19,7 @@ namespace MrPink.Health
     {
         public int health = 100;
         public int healthMax = 100;
-        
+        public CharacterNeeds needs;
         public float endurance = 100;
         float enduranceMax = 100;
         public float enduranceRegenSpeed = 100;

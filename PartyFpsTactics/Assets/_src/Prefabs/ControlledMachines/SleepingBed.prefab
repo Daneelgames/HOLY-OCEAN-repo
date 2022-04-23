@@ -105,8 +105,10 @@ MonoBehaviour:
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 6002964883643043357}
+    toolToAdd: {fileID: 0}
+    weaponToAdd: {fileID: 0}
   rb: {fileID: 5221374690669736803}
-  hc: {fileID: 8452329197390470906}
+  hc: {fileID: 0}
 --- !u!1 &2305797570145326163
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
-  _healthController: {fileID: 8452329197390470906}
+  _healthController: {fileID: 0}
   damageScaler: 1
 --- !u!1 &2785329034833338893
 GameObject:
@@ -286,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
-  _healthController: {fileID: 8452329197390470906}
+  _healthController: {fileID: 0}
   damageScaler: 1
 --- !u!1 &5221374690669736812
 GameObject:
@@ -315,7 +317,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5221374690669736812}
-  m_LocalRotation: {x: 0, y: -0.91246676, z: 0, w: 0.4091508}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 125.33501, y: 1.135, z: 163.55307}
   m_LocalScale: {x: 1.7810996, y: 1.7811, z: 1.7810996}
   m_Children:
@@ -328,7 +330,7 @@ Transform:
   - {fileID: 2154170482742919408}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -131.697, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8452329197390470906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 1000
   healthMax: 1000
+  needs: {fileID: 0}
   endurance: 1000
   enduranceRegenSpeed: 1000
   UnitRagdollStandupCooldown: 1
@@ -498,8 +501,10 @@ MonoBehaviour:
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 6002964883643043357}
+    toolToAdd: {fileID: 0}
+    weaponToAdd: {fileID: 0}
   rb: {fileID: 5221374690669736803}
-  hc: {fileID: 8452329197390470906}
+  hc: {fileID: 0}
 --- !u!1001 &875653584355471095
 PrefabInstance:
   m_ObjectHideFlags: 0

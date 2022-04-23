@@ -11,7 +11,7 @@ public class ConsumableTool : MonoBehaviour
     public float addWaterNeed = -500;
     public void Consume(HealthController hc)
     {
-        var needs = hc.gameObject.GetComponent<CharacterNeeds>();
+        var needs = hc.needs;
         if (needs)
         {
             needs.AddToNeed(Need.NeedType.Sleep,addSleepNeed);
