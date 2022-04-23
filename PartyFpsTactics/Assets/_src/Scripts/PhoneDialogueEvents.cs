@@ -66,6 +66,8 @@ public class PhoneDialogueEvents : MonoBehaviour
                 yield return new WaitForSeconds(phrase.delayBeforeReactionOnPositiveAnswer);
                 DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.answerOnPositiveText, false);
                 yield return new WaitForSeconds(phrase.delayAfterReactionOnPositiveAnswer);
+                if (phrase.openShopOnPositive)
+                    Shop.Instance.OpenShop(0);
             }
             else if (_lastPlayerAnswer == LastPlayerAnswer.Negative && phrase.answerOnNegative)
             {

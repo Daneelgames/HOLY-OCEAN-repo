@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MrPink;
 using UnityEngine;
 
-public class FragGrenade : MonoBehaviour
+public class FragGrenadeTool : MonoBehaviour
 {
     public ExplosionController fragExplosion;
     public ScoringActionType scoringAction;

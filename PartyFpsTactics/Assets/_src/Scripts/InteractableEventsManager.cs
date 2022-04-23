@@ -105,6 +105,13 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.RideVehicle:
                 Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledMachine);
                 break;
+            
+            case ScriptedEventType.AddTool:
+                Game.Player.Inventory.AddTool(IOevent.toolToAdd);
+                break;
+            case ScriptedEventType.AddWeapon:
+                Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
+                break;
         }
         
         if (gameObjectToDestroy)

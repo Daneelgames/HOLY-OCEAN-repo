@@ -1252,7 +1252,7 @@ MonoBehaviour:
   _movement: {fileID: 8837444586277526206}
   _commanderControls: {fileID: 4757564508320939386}
   _weapon: {fileID: 7341760233292994245}
-  _throwableControls: {fileID: 7586209378139016779}
+  toolControls: {fileID: 7586209378139016779}
   _inventory: {fileID: 2039522459841344384}
   _interactor: {fileID: 6657719479548214186}
   _positionableObject: {fileID: 8837444586277526205}
@@ -2561,10 +2561,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a8adb7625b80245a14440d861bd543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toolsPrefabs:
+  toolsProjectilesPrefabs:
   - {fileID: 444546634323287089, guid: db27a447c4c89cc4fb9f384bb20ba0c4, type: 3}
   - {fileID: 444546634323287089, guid: 180202ff6f0d8714385dd6180241a922, type: 3}
   - {fileID: 444546634323287089, guid: 7c2760f953cad4a4ab2e4679d4874dd1, type: 3}
+  - {fileID: 444546634323287089, guid: 07607d3b9a3016b40988dfc411d285ad, type: 3}
+  - {fileID: 444546634323287089, guid: fd8ab6cc33ac83341a4d9e68e7664430, type: 3}
   selectedTool: 0
   selectedToolAmount: 0
   toolsControlsHintText: {fileID: 6847419135314902097}
@@ -2684,9 +2686,22 @@ MonoBehaviour:
   needs:
   - needType: 0
     needCurrent: 0
-    needMaxBase: 1200
-    needCostBase: 1
+    needMaxBase: 1000
+    needCostBase: 3.3333333
     needRegenBase: 3
+  - needType: 1
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1.6666666
+    needRegenBase: 200
+  - needType: 2
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 5.5555553
+    needRegenBase: 100
+  ownHealth: {fileID: 5394631482521842026}
+  healthRegenOnNeeds: 5
+  healthDrainOnNeeds: 5
 --- !u!1 &8921728803510169699
 GameObject:
   m_ObjectHideFlags: 0

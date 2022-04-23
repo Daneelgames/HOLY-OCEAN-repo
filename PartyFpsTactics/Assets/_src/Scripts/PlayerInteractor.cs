@@ -235,25 +235,10 @@ namespace MrPink
 
         public void SetInteractionText(string text)
         {
-            string newString = UppercaseRandomly(text);
+            string newString = GameManager.Instance.UppercaseRandomly(text);
             uiItemNameFeedback.text = newString;
             uiItemNameFeedbackOutline.text = newString;
         }
     
-        string UppercaseRandomly(string s){
-            if (string.IsNullOrEmpty(s))
-            {
-                return string.Empty;
-            }
-            char[] a = s.ToCharArray();
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (Random.value >= 0.5f)
-                    a[i] = char.ToUpper(a[i]);
-                else
-                    a[i] = char.ToLower(a[i]);
-            }
-            return new string(a);
-        }
     }
 }

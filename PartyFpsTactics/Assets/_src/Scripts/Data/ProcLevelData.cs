@@ -13,6 +13,8 @@ namespace _src.Scripts.Data
     public class ProcLevelData : ScriptableObject
     {
         [Header("Settings used in game")]
+        public string levelName = "GOLDENDOLA";
+        
         public bool spawnWalls = true;
         public bool spawnLadders = true;
         

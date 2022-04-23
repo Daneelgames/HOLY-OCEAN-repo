@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
+using MrPink.Tools;
+using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -61,10 +63,15 @@ namespace _src.Scripts.Data
 
         [ShowIf("scriptedEventType", ScriptedEventType.RideVehicle)]
         public ControlledMachine controlledMachine;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.AddTool)]
+        public Tool toolToAdd;
+        [ShowIf("scriptedEventType", ScriptedEventType.AddWeapon)]
+        public WeaponController weaponToAdd;
     }
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon
     }
 }

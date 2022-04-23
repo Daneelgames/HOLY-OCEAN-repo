@@ -15,6 +15,8 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnityDictionary<Hand, WeaponHand> _hands = new UnityDictionary<Hand, WeaponHand>();
+
+        public UnityDictionary<Hand, WeaponHand> Hands => _hands;
         
         
         [Header("CAMERA")]

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66d135c2c067af24980ba7ad6d4f7a0c, type: 3}
   m_Name: ProcLevelData 00 Tutorial
   m_EditorClassIdentifier: 
+  levelName: GOLDENDOLA
   spawnWalls: 1
   spawnLadders: 1
   levelsPosMinMaxX: {x: -5, y: 5}
@@ -41,11 +42,12 @@ MonoBehaviour:
   thinWallsPerLevelMinMax: {x: 2, y: 5}
   distanceToCutCeilingUnderStairsMinMax: {x: 2.5, y: 2.5}
   toolsInShop:
+  - {fileID: 11400000, guid: fa8f58b1f7e474e4191c3fc6963cb33e, type: 2}
+  - {fileID: 11400000, guid: 36977df4a39c8244ebed8cd365314274, type: 2}
   - {fileID: 11400000, guid: 322b5f8917b332740a3ab594b309d904, type: 2}
   - {fileID: 11400000, guid: c933306d310f955408e99822cbaf5f4c, type: 2}
   - {fileID: 11400000, guid: 52b071d6c199f3a40b20c72bbcb77090, type: 2}
   - {fileID: 11400000, guid: 75bd5108465f056409e2cc172068c288, type: 2}
-  - {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
   levelEvents:
   - conditions:
     - conditionType: 1
@@ -69,4 +71,5 @@ MonoBehaviour:
       currentLevelToSet: 0
       soundToPlay: {fileID: 0}
       auPitchMinMax: {x: 1, y: 1}
-      controlledVehicle: {fileID: 0}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}

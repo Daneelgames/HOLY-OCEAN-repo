@@ -39,9 +39,13 @@ namespace MrPink.PlayerSystem
     
     
         // TODO стороны - через enum
-        private void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
+        public void SpawnPlayerWeapon(WeaponController weaponPrefab, int side = 0) // 0- left, 1 - right
         {
             var wpn = Instantiate(weaponPrefab, Game.Player.Position, Quaternion.identity);
+            
+            if (Game.Player.Weapon.Hands[0].Weapon != null)
+                side = 1;
+            
             switch (side)
             {
                 case 0:
@@ -73,9 +77,13 @@ namespace MrPink.PlayerSystem
             if (amountOfEachTool.ContainsKey(tool.tool))
             {
                 amountOfEachTool[tool.tool]++;
+                Game.Player.ToolControls.UpdateSelectedToolFeedback();
                 return;
             }   
             amountOfEachTool.Add(tool.tool, 1);
+            
+            Game.Player.ToolControls.SelectNextTool();
+            Game.Player.ToolControls.UpdateSelectedToolFeedback();
         }
     
         public void RemoveTool(ToolType tool)

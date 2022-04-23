@@ -652,7 +652,7 @@ MonoBehaviour:
   AiMovement: {fileID: 13917179899874975}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 8692219909506116655}
-  controlledVehicle: {fileID: 0}
+  controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
@@ -939,7 +939,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa469efe28ea794b95ca139ee4f5258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  needs: []
+  needs:
+  - needType: 1
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1.6666666
+    needRegenBase: 200
+  ownHealth: {fileID: 1876098499272473148}
+  healthRegenOnNeeds: 10
+  healthDrainOnNeeds: 10
 --- !u!1 &617381421211773646
 GameObject:
   m_ObjectHideFlags: 0

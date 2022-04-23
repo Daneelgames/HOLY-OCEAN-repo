@@ -9744,9 +9744,9 @@ GameObject:
   - component: {fileID: 7601328651385341622}
   - component: {fileID: 9157171069865134070}
   - component: {fileID: -2500232918689918222}
-  - component: {fileID: -1795594407237315018}
+  - component: {fileID: -3385506331771523763}
   m_Layer: 10
-  m_Name: SpyCamProjectile
+  m_Name: CustomLadder Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9791,7 +9791,7 @@ MonoBehaviour:
   addVelocityEveryFrame: 0
   projectileSpeed: 30
   lifeTime: -1
-  toolType: 3
+  toolType: 4
   dieOnContact: 0
   ricochetOnContact: 0
   stickOnContact: 1
@@ -9807,7 +9807,7 @@ MonoBehaviour:
   shotAu: {fileID: 7601328651385341622}
   flyAu: {fileID: 9157171069865134070}
   _fragGrenade: {fileID: 0}
-  _customLadder: {fileID: 0}
+  _customLadder: {fileID: -3385506331771523763}
 --- !u!135 &8831351853180130487
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -10125,7 +10125,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-1795594407237315018
+--- !u!114 &-3385506331771523763
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10134,15 +10134,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3044484379556785917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea12fdfcaa51b3647895b4993e90dfe8, type: 3}
+  m_Script: {fileID: 11500000, guid: e845687bc6ac6f7419892efd97626295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scanDelay: 0.5
-  teamToScan: 0
-  scanDistance: 30
-  scanLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
+  maxLadderLength: 10
 --- !u!1 &3456577492223238953
 GameObject:
   m_ObjectHideFlags: 0

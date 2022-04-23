@@ -34,7 +34,7 @@ namespace MrPink
         private Coroutine exitCoroutine;
         IEnumerator AiExitVehicleCoroutine()
         {
-            if (controlledMachine.sitTransformNpc == null)
+            if (controlledMachine == null || controlledMachine.sitTransformNpc == null)
                 yield break;
             
             float t = 0;

@@ -2699,7 +2699,7 @@ MonoBehaviour:
     prefabToSpawn: {fileID: 0}
     spawnInsideCamera: 0
     customSpawnPoint: {fileID: 0}
-    dialogueToStart: {fileID: 11400000, guid: 751b115dd58a1894b8cbb502fd88879d, type: 2}
+    dialogueToStart: {fileID: 11400000, guid: 4859d84e963435244afb30137b3b3a56, type: 2}
     destroyInteractorAfterDialogueCompleted: {fileID: 5205671269229392275}
     scoreToAddOnDialogueCompleted: 500
     setNextLevelOnDialogueCompleted: 0
@@ -2708,7 +2708,8 @@ MonoBehaviour:
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
-    controlledVehicle: {fileID: 0}
+    controlledMachine: {fileID: 0}
+    toolToAdd: {fileID: 0}
   rb: {fileID: 0}
   hc: {fileID: 5673859260790904911}
 --- !u!136 &4226590641253379149
@@ -6461,8 +6462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 300
-  healthMax: 300
+  health: 1000
+  healthMax: 1000
   endurance: 100
   enduranceRegenSpeed: 100
   UnitRagdollStandupCooldown: 1
@@ -6479,7 +6480,7 @@ MonoBehaviour:
   AiMovement: {fileID: 6090508075434962156}
   aiVehicleControls: {fileID: 1971991689436263911}
   HumanVisualController: {fileID: 3176254616865558108}
-  controlledVehicle: {fileID: 0}
+  controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath: []
@@ -6547,7 +6548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controllingVehicle: 0
   hc: {fileID: 5673859260790904911}
-  controlledVehicle: {fileID: 0}
+  controlledMachine: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   stoppingDistance: 20
   maxReverseDistance: 100
@@ -6614,9 +6615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da030c9638e719468202567e4578531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeWeapons:
-  - {fileID: 0}
-  - {fileID: 0}
+  activeWeapons: []
   weaponsAttackSwitchCooldownMinMax: {x: 0.5, y: 1}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
@@ -6809,6 +6808,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa469efe28ea794b95ca139ee4f5258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  needs:
+  - needType: 0
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 3.3333333
+    needRegenBase: 3
+  - needType: 1
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1.6666666
+    needRegenBase: 200
+  - needType: 2
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 5.5555553
+    needRegenBase: 100
+  ownHealth: {fileID: 5673859260790904911}
+  healthRegenOnNeeds: 5
+  healthDrainOnNeeds: 5
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

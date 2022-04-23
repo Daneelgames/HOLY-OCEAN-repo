@@ -163,7 +163,7 @@ namespace MrPink.WeaponsSystem
                 }
                 
                 Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
-                if (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL)
+                if (ownerHealth.UnitVision && (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL))
                     ownerHealth.UnitVision.ForgiveUnit(Game.Player.Health);
                 UnitsExplosion();
                 Debug.Log("return CollisionTarget.Creature;");

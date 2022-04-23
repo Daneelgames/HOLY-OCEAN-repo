@@ -2299,7 +2299,7 @@ MonoBehaviour:
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
-    controlledVehicle: {fileID: 0}
+    controlledMachine: {fileID: 0}
   rb: {fileID: 0}
   hc: {fileID: 5673859260790904911}
 --- !u!136 &4226590641253379149
@@ -5636,7 +5636,7 @@ MonoBehaviour:
   AiMovement: {fileID: 6090508075434962156}
   aiVehicleControls: {fileID: -8210908667786329200}
   HumanVisualController: {fileID: 3176254616865558108}
-  controlledVehicle: {fileID: 0}
+  controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   objectsToSpawnOnDeath:
@@ -5925,7 +5925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controllingVehicle: 0
   hc: {fileID: 5673859260790904911}
-  controlledVehicle: {fileID: 0}
+  controlledMachine: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
   stoppingDistance: 20
   maxReverseDistance: 100
@@ -5961,6 +5961,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa469efe28ea794b95ca139ee4f5258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  needs:
+  - needType: 0
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1
+    needRegenBase: 3
+  - needType: 1
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 3
+    needRegenBase: 200
+  - needType: 2
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 3
+    needRegenBase: 100
+  ownHealth: {fileID: 5673859260790904911}
+  healthRegenOnNeeds: 100
+  healthDrainOnNeeds: 5
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

@@ -63,7 +63,7 @@ namespace MrPink
             }
         }
 
-        void OpenShop(int newSelectedItem)
+        public void OpenShop(int newSelectedItem)
         {
             ScoringSystem.Instance.UpdateScore();
             canvasAnim.gameObject.SetActive(true);
@@ -80,7 +80,7 @@ namespace MrPink
                 }
             
                 shopItemsIcons[i].ShowItem(toolsList[i].toolName);
-                if (toolsList[i].scoreCost > ScoringSystem.Instance.CurrentScore)
+                if (toolsList[i].baseCost > ScoringSystem.Instance.CurrentScore)
                     shopItemsIcons[i].raycastedSprite.color = Color.red;
                 else
                     shopItemsIcons[i].raycastedSprite.color = Color.white;
@@ -95,7 +95,7 @@ namespace MrPink
             IsActive = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            Game.Player.ThrowableControls.Init();    
+            Game.Player.ToolControls.Init();    
         }
     
         public void SelectItem(int index)
@@ -116,7 +116,7 @@ namespace MrPink
             }
             else
             {
-                if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore ||
+                if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore ||
                     Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
                 {
                     buyForText.text = "Not enough DOLAS";   
@@ -124,7 +124,7 @@ namespace MrPink
                 }
                 else
                 {
-                    buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].scoreCost + " DOLAS";
+                    buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].baseCost + " DOLAS";
                     buyButtonImage.color = Color.green;
                 }
             }
@@ -138,13 +138,13 @@ namespace MrPink
         public void BuyItem()
         {
             // buy selectedItemIndex item
-            if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore)
+            if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore)
                 return;
             if (!Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
                 return;
             Game.Player.Inventory.AddTool(toolsList[selectedItemIndex]);
         
-            ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].scoreCost);
+            ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].baseCost);
             OpenShop(selectedItemIndex);
         }
     }

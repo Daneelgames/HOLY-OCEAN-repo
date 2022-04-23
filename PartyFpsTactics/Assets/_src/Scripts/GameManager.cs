@@ -134,5 +134,38 @@ namespace MrPink
                 inFov = true;
             return inFov;
         }
+        
+        public string UppercaseRandomly(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (Random.value >= 0.5f)
+                    a[i] = char.ToUpper(a[i]);
+                else
+                    a[i] = char.ToLower(a[i]);
+            }
+            return new string(a);
+        }
+        public string RemoveRandomLetters(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (Random.value >= 0.5f)
+                    a[i] = Char.Parse(" ");
+                else
+                    a[i] = char.ToLower(a[i]);
+            }
+            return new string(a);
+        }
     }
 }

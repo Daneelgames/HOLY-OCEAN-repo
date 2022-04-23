@@ -18,6 +18,7 @@ namespace MrPink
         public Vector3 enemyMarkerOffset;
         public Image healthBar;
         public Image staminaBar;
+        public List<Image> characterNeedsBars;
 
         public Animator shieldFeedbackAnim;
 
@@ -57,23 +58,6 @@ namespace MrPink
                         unitsToRemove.Add(enemy.Key);
                     }
                     enemy.Value.transform.position = OnScreenPosition(enemy.Value, enemy.Key.visibilityTrigger.transform.position);
-
-                    /*
-                var worldPosition = enemy.Key.visibilityTrigger.transform.position;
-                Vector3 screenPoint = PlayerMovement.Instance.MainCam.WorldToViewportPoint(worldPosition);
-                
-                bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
-                
-                if (onScreen)
-                {
-                    enemy.Value.gameObject.SetActive(true);
-                    enemy.Value.transform.position = screenPoint;
-                }
-                else
-                {
-                    enemy.Value.gameObject.SetActive(false);
-                }
-                */
                 }
 
                 foreach (var unit in unitsToRemove)
@@ -83,6 +67,16 @@ namespace MrPink
                 }
 
                 staminaBar.fillAmount = Game.Player.Movement.stamina / Game.Player.Movement.staminaMax;
+                for (int i = 0; i < Game.Player.characterNeeds.needs.Count; i++)
+                {
+                    // 0 is sleep
+                    // 1 is hunger
+                    // 2 is water
+                    float d = Game.Player.characterNeeds.needs[i].needCurrent /
+                              Game.Player.characterNeeds.needs[i].needMaxBase;
+                    characterNeedsBars[i].fillAmount = d;
+                    characterNeedsBars[i].transform.parent.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 1.25f, d);
+                }
                 yield return new WaitForSeconds(0.1f);
             }
         }

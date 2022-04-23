@@ -114,6 +114,7 @@ namespace MrPink
             
                 Game.Player.Movement.transform.position = Vector3.Lerp(Game.Player.Movement.transform.position, controlledMachine.sitTransform.position, resultMoveScaler * Time.fixedUnscaledDeltaTime);
                 Game.Player.Movement.transform.rotation = Quaternion.Slerp(Game.Player.Movement.transform.rotation, controlledMachine.sitTransform.rotation, resultRotScaler * Time.fixedUnscaledDeltaTime);
+                
                 float hor = Input.GetAxis("Horizontal");
                 float ver = Input.GetAxis("Vertical");
                 controlledMachine.SetCarInput(hor,ver, brake);

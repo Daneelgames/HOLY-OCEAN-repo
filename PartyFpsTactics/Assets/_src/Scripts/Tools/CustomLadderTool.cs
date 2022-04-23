@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class CustomLadder : MonoBehaviour
+public class CustomLadderTool : MonoBehaviour
 {
     public int maxLadderLength = 10;
     public void ConstructLadder(Vector3 targetPos)

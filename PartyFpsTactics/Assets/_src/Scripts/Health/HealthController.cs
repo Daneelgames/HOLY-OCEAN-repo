@@ -140,6 +140,15 @@ namespace MrPink.Health
             endurance = enduranceMax;
         }
 
+
+        public void RegenHealth(int hpToRegen)
+        {
+            health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
+            if (Game.Player.Health == this)
+            {
+                PlayerUi.Instance.UpdateHealthBar();
+            }
+        }
         
         public void SetDamager(HealthController damager)
         {
@@ -156,6 +165,23 @@ namespace MrPink.Health
             }
         }
 
+        public void DrainHealth(int drainAmount)
+        {
+            if (health <= 0)
+                return;
+            health -= drainAmount;
+            
+            if (Game.Player.Health == this)
+            {
+                PlayerUi.Instance.UpdateHealthBar();
+            }
+
+            if (health <= 0)
+            {
+                StartCoroutine(Death(ScoringActionType.NULL, null));
+            }
+        }
+        
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {
             if (health <= 0)

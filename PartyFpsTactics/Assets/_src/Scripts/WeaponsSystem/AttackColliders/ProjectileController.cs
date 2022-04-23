@@ -16,7 +16,18 @@ namespace MrPink.WeaponsSystem
         public float projectileSpeed = 100;
     
         public ToolType toolType = ToolType.Null;
+        [ShowIf("toolType", ToolType.FragGrenade)]
+        [SerializeField]
+        private FragGrenadeTool fragGrenadeTool;
+    
+        [ShowIf("toolType", ToolType.CustomLadder)]
+        [SerializeField]
+        private CustomLadderTool customLadderTool;
+        [SerializeField]
+        private ConsumableTool consumableTool;
 
+        [Space]
+        
         public float projectileRandomRotationMax = 0;
         public bool dieOnContact = true;
         public bool ricochetOnContact = false;
@@ -35,13 +46,6 @@ namespace MrPink.WeaponsSystem
         public AudioSource flyAu;
         private bool dead = false;
     
-        [ShowIf("toolType", ToolType.FragGrenade)]
-        [SerializeField]
-        private FragGrenade _fragGrenade;
-    
-        [ShowIf("toolType", ToolType.CustomLadder)]
-        [SerializeField]
-        private CustomLadder _customLadder;
     
     
         public override void Init(HealthController owner, DamageSource source, ScoringActionType action = ScoringActionType.NULL)
@@ -60,6 +64,18 @@ namespace MrPink.WeaponsSystem
             transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);
 
             StartCoroutine(UpdateLastPosition());
+
+            CheckConsumable(owner);
+        }
+
+        void CheckConsumable(HealthController owner)
+        {
+            if (consumableTool)
+            {
+                consumableTool.Consume(owner);
+                Death();
+            }
+            
         }
 
         private void OnDrawGizmosSelected()
@@ -173,7 +189,7 @@ namespace MrPink.WeaponsSystem
             Debug.Log("Destroy projectile");
         
             if (toolType == ToolType.FragGrenade)
-                _fragGrenade.Explode();
+                fragGrenadeTool.Explode();
         
             dead = true;
             rb.isKinematic = true;
@@ -201,7 +217,7 @@ namespace MrPink.WeaponsSystem
             dead = true;
         
             if (toolType == ToolType.CustomLadder)
-                _customLadder.ConstructLadder(ownerHealth.transform.position - Vector3.up);
+                customLadderTool.ConstructLadder(ownerHealth.transform.position - Vector3.up);
         }
 
         private async UniTask DeathCoroutine()
