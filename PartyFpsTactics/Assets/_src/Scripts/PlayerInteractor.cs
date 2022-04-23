@@ -51,6 +51,13 @@ namespace MrPink
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                
+                if (selectedPortable && !carryingPortableRb)
+                {
+                    CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
+                    return;
+                }
+                
                 if (carryingPortableRb)
                 {
                     StopCoroutine(CarryPortableObjectCoroutine);
@@ -70,10 +77,6 @@ namespace MrPink
                     return;
                 }
             
-                if (selectedPortable)
-                {
-                    CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
-                }
             }
 
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
@@ -87,10 +90,10 @@ namespace MrPink
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
-                    carryingPortableRb.drag = 1;
+                    carryingPortableRb.drag = 1; 
+                    carryingPortableRb.transform.parent = null;
                     carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
-                    carryingPortableRb.transform.parent = null;
                 }
             }
         }
@@ -119,8 +122,9 @@ namespace MrPink
                 if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
                 {
                     carryingPortableRb.useGravity = true;
-                    carryingPortableRb = null;
                     carryingPortableRb.drag = dragInit;
+                    carryingPortableRb.transform.parent = null;
+                    carryingPortableRb = null;
                     yield break;
                 }
                 yield return null;
