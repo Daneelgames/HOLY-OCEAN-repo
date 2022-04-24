@@ -18,7 +18,10 @@ namespace MrPink.Units
         public List<Rigidbody> rigidbodies;
         public List<Transform> animatedBones;
         public List<ConfigurableJoint> joints;
-    
+        
+        [Space]
+        public List<Transform> allBones;
+
         public float activePositionSpring = 1500;
         public float activePositionDamper = 100;
         public float activeAngularPositionSpring = 1500;
