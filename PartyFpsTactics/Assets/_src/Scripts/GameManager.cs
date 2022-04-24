@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _src.Scripts;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
@@ -89,13 +90,20 @@ namespace MrPink
             
             }
         
-            if (Game.Player.Health.health <= 0 && LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
-                StartProcScene();
+            if (Game.Player.Health.health <= 0 && Input.GetKeyDown(KeyCode.R))
+            {
+                // player died
+                // restart at different place
+                LevelTitlesManager.Instance.ShowIntro();
+                RespawnPlayer();
+            }
         
             if (Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.Z))
             {
                 if (Input.GetKeyDown(KeyCode.R))
-                    StartProcScene();
+                    RespawnPlayer();
+                if (Input.GetKeyDown(KeyCode.K))
+                    KillPlayer();
                 if (Input.GetKeyDown(KeyCode.X))
                     ScoringSystem.Instance.AddScore(-ScoringSystem.Instance.CurrentScore);
             
@@ -112,6 +120,19 @@ namespace MrPink
                     }
                 }
             }
+        }
+
+        public void KillPlayer()
+        {
+            Game.Player.Health.Damage(10000000, DamageSource.Environment);
+        }
+        public void RespawnPlayer()
+        {
+            // change player's position
+            Respawner.Instance.MovePlayerToRandomRespawner();
+            ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
+            Game.Player.Inventory.DropRandomTools();
+            Game.Player.Resurrect();
         }
 
         public void StartProcScene()

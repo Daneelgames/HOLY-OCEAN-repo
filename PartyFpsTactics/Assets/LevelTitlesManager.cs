@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -11,8 +12,27 @@ public class LevelTitlesManager : MonoBehaviour
     public Animator levelTitlesAnim;
     public float levelNameTime = 4;
     public Text levelNameText;
-    private IEnumerator Start()
+
+    public static LevelTitlesManager Instance;
+
+    private void Awake()
     {
+        Instance = this;    
+    }
+
+    private void Start()
+    {
+        ShowIntro();
+    }
+
+    public void ShowIntro()
+    {
+        StartCoroutine(ShowIntroCoroutine());
+    }
+    
+    private IEnumerator ShowIntroCoroutine()
+    {
+        levelTitlesAnim.SetTrigger("Intro");
         levelNameText.text = String.Empty;
         
         yield return new WaitForSeconds(0.3f);

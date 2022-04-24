@@ -85,13 +85,23 @@ namespace MrPink.PlayerSystem
 
         public void SetWeapon(WeaponController weapon, Hand hand)
         {
+            PlayerInventory.Instance.SetWeapon(weapon, hand);
+            if (weapon)
+                weapon.transform.parent = _weaponsParent;
+            else if (_hands[hand].Weapon != null)
+            {
+                Destroy(_hands[hand].Weapon.gameObject);
+            }
             _hands[hand].Weapon = weapon;
-            weapon.transform.parent = _weaponsParent;
         }
 
         public void Death()
         {
             _isDead = true;
+        }
+        public void Resurrect()
+        {
+            _isDead = false;
         }
     }
 }

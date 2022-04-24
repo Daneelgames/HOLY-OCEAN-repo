@@ -440,7 +440,13 @@ namespace MrPink.PlayerSystem
         {
             activeGrindRail = rail;
         }
-        
+
+        public void TeleportToPosition(Vector3 pos)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.MovePosition(pos);
+        }
         
         public void Death(Transform killer = null)
         {
@@ -449,6 +455,14 @@ namespace MrPink.PlayerSystem
             rb.drag = 1;
             rb.angularDrag = 10;
             _isDead = true;
+        }
+        public void Resurrect()
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.drag = 1;
+            rb.angularDrag = 10;
+            _isDead = false;
         }
     }
 }

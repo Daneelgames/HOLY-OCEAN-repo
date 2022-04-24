@@ -141,8 +141,9 @@ namespace MrPink.Health
         }
 
 
-        public void RegenHealth(int hpToRegen)
+        public void AddHealth(int hpToRegen)
         {
+            Debug.Log("AddHealth " + hpToRegen);
             health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
             if (Game.Player.Health == this)
             {
@@ -206,6 +207,7 @@ namespace MrPink.Health
 
             if (health <= 0)
             {
+                health = 0;
                 StartCoroutine(Death(action, killer));
             
                 if (source == DamageSource.Player && action != ScoringActionType.NULL)
@@ -290,7 +292,7 @@ namespace MrPink.Health
         
             if (Game.Player.Health == this)
             {
-                Game.Player.Interactor.SetInteractionText("R TO RESTART");
+                GameManager.Instance.SetPlayerSleepTimeScale(false);
                 Game.Player.Death(killer);
             }
 
@@ -314,6 +316,12 @@ namespace MrPink.Health
                 UnitsManager.Instance.unitsInGame.Remove(this);
             if (Game.Player.CommanderControls.unitsInParty.Contains(this))
                 Game.Player.CommanderControls.unitsInParty.Remove(this);
+        }
+
+        public void Resurrect()
+        {
+            AddHealth(healthMax/2);
+            IsDead = false;
         }
     }
 }

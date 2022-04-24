@@ -11,9 +11,9 @@ public class CharacterNeeds : MonoBehaviour
     // 24 hours is 600 seconds is 10 minutes
     public List<Need> needs;
     //
-    private bool sleeping = false;
-    private bool eating = false;
-    private bool drinking = false;
+    private bool _sleeping = false;
+    private bool _eating = false;
+    private bool _drinking = false;
     public HealthController ownHealth;
     public int healthRegenOnNeeds = 3;
     public int healthDrainOnNeeds = 3;
@@ -22,10 +22,10 @@ public class CharacterNeeds : MonoBehaviour
     
     private void Start()
     {
-        needsCoroutine = StartCoroutine(Needs());
+        _needsCoroutine = StartCoroutine(Needs());
     }
 
-    private Coroutine needsCoroutine;
+    private Coroutine _needsCoroutine;
 
     IEnumerator Needs()
     {
@@ -77,7 +77,7 @@ public class CharacterNeeds : MonoBehaviour
             else
             {
                 // regen health
-                ownHealth.RegenHealth(healthRegenOnNeeds);
+                ownHealth.AddHealth(healthRegenOnNeeds);
                 
                 for (int i = 0; i < needs.Count; i++)
                 {
@@ -103,7 +103,7 @@ public class CharacterNeeds : MonoBehaviour
 
     public void SetSleeping(bool _sleeping)
     {
-        sleeping = _sleeping;
+        this._sleeping = _sleeping;
     }
 
     bool IsRestoringNeed(Need.NeedType need)
@@ -112,15 +112,15 @@ public class CharacterNeeds : MonoBehaviour
         switch (need)
         {
             case Need.NeedType.Sleep:
-                if (sleeping)
+                if (_sleeping)
                     restoring = true;
                 break;
             case Need.NeedType.Food:
-                if (eating)
+                if (_eating)
                     restoring = true;
                 break;
             case Need.NeedType.Water:
-                if (drinking)
+                if (_drinking)
                     restoring = true;
                 break;
         }

@@ -66,8 +66,8 @@ namespace MrPink
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
                     carryingPortableRb.drag = 1;
-                    carryingPortableRb = null;
                     carryingPortableRb.transform.parent = null;
+                    carryingPortableRb = null;
                     return;
                 }
             

@@ -83,11 +83,20 @@ namespace MrPink.PlayerSystem
 
         public void Death(Transform killer)
         {
+            Game.Player.Interactor.SetInteractionText("R TO RESTART");
             Movement.Death(killer);
             LookAround.Death(killer);
             Weapon.Death();
             ScoringSystem.Instance.CooldownToZero();
         }
-
+        
+        public void Resurrect()
+        {
+            Game.Player.Interactor.SetInteractionText("");
+            Health.Resurrect();
+            Movement.Resurrect();
+            LookAround.Resurrect();
+            Weapon.Resurrect();
+        }
     }
 }

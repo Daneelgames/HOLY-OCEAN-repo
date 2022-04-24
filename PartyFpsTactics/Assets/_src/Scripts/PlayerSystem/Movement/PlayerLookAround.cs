@@ -129,6 +129,10 @@ namespace MrPink.PlayerSystem
             _isDead = true;
             _killerToLookAt = killer;
         }
+        public void Resurrect()
+        {
+            _isDead = false;
+        }
         
     }
 }

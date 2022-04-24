@@ -18,7 +18,8 @@ namespace MrPink.Units
         public List<Rigidbody> rigidbodies;
         public List<Transform> animatedBones;
         public List<ConfigurableJoint> joints;
-        
+        public List<MeshRenderer> bodyPartsVisuals;
+
         [Space]
         public List<Transform> allBones;
 
@@ -35,6 +36,7 @@ namespace MrPink.Units
         private bool ragdoll = false;
         private bool visibleToPlayer = false;
         private bool inVehicle = false;
+        public Material aliveMaterial;
         public Material deadMaterial;
         public SkinnedMeshRenderer meshRenderer;
         public LayerMask tilesLayerMask;
@@ -55,6 +57,15 @@ namespace MrPink.Units
                 initRotations.Add(animatedBones[i].localRotation);
 
             StartCoroutine(GetDistanceToPlayer());
+        }
+
+        [ContextMenu("SetAliveMaterial")]
+        public void SetAliveMaterial()
+        {
+            for (int i = 0; i < bodyPartsVisuals.Count; i++)
+            {
+                bodyPartsVisuals[i].material = aliveMaterial;
+            }
         }
 
         private IEnumerator GetDistanceToPlayer()

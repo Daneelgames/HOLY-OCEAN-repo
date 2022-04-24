@@ -10,9 +10,10 @@ namespace _src.Scripts
 {
     public class Respawner : MonoBehaviour
     {
-        public float corpseShredderY = -50;
+        public float corpseShredderY = -25;
         public List<Transform> redRespawns;
         public List<Transform> desertRespawns;
+        public List<Transform> playerRespawns;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
         public List<Transform> blueRespawns;
         public int alliesAmount = 3;
@@ -124,7 +125,8 @@ namespace _src.Scripts
                 {
                     if (corpse == Game.Player.Health)
                     {
-                        GameManager.Instance.StartProcScene();
+                        GameManager.Instance.KillPlayer();
+                        GameManager.Instance.RespawnPlayer();
                         return;
                     }
                     Destroy(corpse.gameObject);
@@ -143,6 +145,11 @@ namespace _src.Scripts
             }
 
             return temp;
+        }
+
+        public void MovePlayerToRandomRespawner()
+        {
+            Game.Player.Movement.TeleportToPosition(playerRespawns[Random.Range(0, playerRespawns.Count)].position);
         }
     }
 }
