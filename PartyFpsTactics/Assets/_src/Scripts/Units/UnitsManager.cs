@@ -48,9 +48,9 @@ namespace MrPink.Units
             Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
-        public void SpawnRedUnit(Vector3 pos)
+        public HealthController SpawnRedUnit(Vector3 pos)
         {
-            Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            return Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
         public void SpawnNeutralUnit(Vector3 pos)

@@ -27,6 +27,8 @@ namespace MrPink.PlayerSystem
 
         [ShowInInspector, ReadOnly]
         private bool _isCollidingWithWall;
+        private float cooldownOnAttackInput = 0f;
+        private float cooldownOnAttackInputMax = 0.5f;
 
 #if UNITY_EDITOR
         
@@ -130,7 +132,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            if (Game.Player.Interactor.carryingPortableRb != null)
+            if (Game.Player.Interactor.carryingPortableRb != null || cooldownOnAttackInput > 0)
                 return;
             
             if (Input.GetMouseButton(_mouseButtonIndex))
@@ -147,7 +149,25 @@ namespace MrPink.PlayerSystem
             }
         }
 
+        public void CooldownOnAttack()
+        {
+            cooldownOnAttackInput = cooldownOnAttackInputMax;
+            if (_cooldownOnAttackCoroutine != null)
+                StopCoroutine(_cooldownOnAttackCoroutine);
+            _cooldownOnAttackCoroutine = StartCoroutine(CooldownOnAttackCoroutine());
+        }
 
+        private Coroutine _cooldownOnAttackCoroutine;
+
+        IEnumerator CooldownOnAttackCoroutine()
+        {
+            while (cooldownOnAttackInput > 0)
+            {
+                cooldownOnAttackInput -= Time.deltaTime;
+                yield return null;
+            }
+        }
+            
         private async UniTask HandleAttack()
         {
             _isAttacking = true;

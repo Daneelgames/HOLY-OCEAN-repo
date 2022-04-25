@@ -187,7 +187,7 @@ namespace MrPink.WeaponsSystem
             if (ownerHealth && ownerHealth != Game.Player.Health)
             {
                 // if vehicle tries to damage unit inside
-                if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
+                if (ownerHealth.controlledMachine && targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
                     ownerHealth.controlledMachine == targetHealth.HealthController.aiVehicleControls.controlledMachine)
                 {
                     //Debug.Log("return CollisionTarget.Self;");

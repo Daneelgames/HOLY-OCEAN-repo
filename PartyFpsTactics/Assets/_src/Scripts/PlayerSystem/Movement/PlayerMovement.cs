@@ -97,10 +97,15 @@ namespace MrPink.PlayerSystem
         public Vector3 MoveVector => _moveVector;
 
         private float heightToFallFrom = 0;
+        
+        private float rbInitAngularDrag;
+        private float rbInitDrag;
 
         private void Start()
         {
             staminaMax = stamina;
+            rbInitDrag = rb.drag;
+            rbInitAngularDrag = rb.angularDrag; 
             SetCrouch(false);
         }
 
@@ -456,12 +461,13 @@ namespace MrPink.PlayerSystem
             rb.angularDrag = 10;
             _isDead = true;
         }
+
         public void Resurrect()
         {
             rb.isKinematic = false;
             rb.useGravity = true;
-            rb.drag = 1;
-            rb.angularDrag = 10;
+            rb.drag = rbInitDrag;
+            rb.angularDrag = rbInitAngularDrag;
             _isDead = false;
         }
     }

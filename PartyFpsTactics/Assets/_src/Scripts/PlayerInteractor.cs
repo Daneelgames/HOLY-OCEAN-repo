@@ -94,6 +94,7 @@ namespace MrPink
                     carryingPortableRb.transform.parent = null;
                     carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
+                    Game.Player.Weapon.CooldownOnAttackInput();
                 }
             }
         }

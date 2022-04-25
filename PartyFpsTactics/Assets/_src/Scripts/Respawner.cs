@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using MrPink;
 using MrPink.Health;
@@ -13,6 +14,10 @@ namespace _src.Scripts
         public float corpseShredderY = -25;
         public List<Transform> redRespawns;
         public List<Transform> desertRespawns;
+        public List<Transform> banditsRespawns;
+        private List<HealthController> desertBanditsSpawned = new List<HealthController>();
+        float banditsSpawnCooldown = 60;
+        int maxAmount = 30;
         public List<Transform> playerRespawns;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
         public List<Transform> blueRespawns;
@@ -105,8 +110,45 @@ namespace _src.Scripts
             {
                 UnitsManager.Instance.SpawnDesertBeast(desertRespawns[Random.Range(0, desertRespawns.Count)].position);
             }
+
+            StartCoroutine(RespawnDesertBandits());
         }
 
+        IEnumerator RespawnDesertBandits()
+        {
+            while (true)
+            {
+                if (desertBanditsSpawned.Count > 0)
+                {
+                    for (int i = desertBanditsSpawned.Count - 1; i >= 0; i--)
+                    {
+                        if (desertBanditsSpawned[i] == null || desertBanditsSpawned[i].health <= 0)
+                            desertBanditsSpawned.RemoveAt(i);
+                    }
+                }
+                
+                List<Transform> spawns = new List<Transform>();
+                for (int i = 0; i < banditsRespawns.Count; i++)
+                {
+                    float dist = Vector3.Distance(Game.Player.Position, banditsRespawns[i].position);
+                    if (dist < 400 && dist > 50)
+                    {
+                        spawns.Add(banditsRespawns[i]);
+                    }
+                }
+
+                if (spawns.Count > 0)
+                {
+                    for (int i = desertBanditsSpawned.Count; i < maxAmount; i++)
+                    {
+                        var bandit = UnitsManager.Instance.SpawnRedUnit(spawns[Random.Range(0, spawns.Count)].position);
+                        desertBanditsSpawned.Add(bandit);
+                    }
+                }
+                yield return new WaitForSeconds(banditsSpawnCooldown);
+            }
+        }
+        
         void Update()
         {
             if (Game.Player.Position.y < corpseShredderY)

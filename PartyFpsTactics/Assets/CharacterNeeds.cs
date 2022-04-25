@@ -37,8 +37,10 @@ public class CharacterNeeds : MonoBehaviour
         
         while (true)
         {
+            yield return new WaitForSeconds(1);
+            
             if (ownHealth.health <= 0)
-                yield break;
+                continue;
             
             float needsPool = 0;
             float needsCurrent = 0;
@@ -85,7 +87,6 @@ public class CharacterNeeds : MonoBehaviour
                 }
             }
             
-            yield return new WaitForSeconds(1);
         }
     }
 
