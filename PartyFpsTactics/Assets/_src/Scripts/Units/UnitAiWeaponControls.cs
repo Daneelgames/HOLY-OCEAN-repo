@@ -26,11 +26,7 @@ namespace MrPink.Units
         {
             _selfUnit = GetComponent<Unit>();
         }
-
-        private void Start()
-        {
-            StartCoroutine(CheckIfNeedFireWeapon());
-        }
+        
 
         private IEnumerator CheckIfNeedFireWeapon()
         {
@@ -57,13 +53,13 @@ namespace MrPink.Units
             if (activeWeapon.OnCooldown)
                 yield break;
 
-            if (_selfUnit.HealthController.AiMovement.enemyToLookAt == null)
+            if (_selfUnit.UnitAiMovement.enemyToLookAt == null)
                 yield break;
             
-            if (Vector3.Distance(transform.position, _selfUnit.HealthController.AiMovement.enemyToLookAt.visibilityTrigger.transform.position) > maxDistanceToAttack)
+            if (Vector3.Distance(transform.position, _selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position) > maxDistanceToAttack)
                 yield break;
 
-            if (_selfUnit.HealthController.AiMovement.enemyToLookAt.gameObject == Game.Player.GameObject)
+            if (_selfUnit.UnitAiMovement.enemyToLookAt.gameObject == Game.Player.GameObject)
             {
                 var isNotInPlayerPov = !GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position);
                 var isCoinFlippedRight = Random.value > 0.5f;
@@ -72,27 +68,28 @@ namespace MrPink.Units
                     yield break;
             }
 
-            Vector3 targetDir = _selfUnit.HealthController.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
+            Vector3 targetDir = _selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
             float angle = Vector3.Angle(targetDir, transform.forward);
-            Vector3 offset = Vector3.zero;
-            if (_selfUnit.HealthController.AiMovement.enemyToLookAt.playerMovement)
-                offset = _selfUnit.HealthController.AiMovement.enemyToLookAt.playerMovement.rb.velocity;
+            
 
             if (rotateWeaponTowardTarget)
             {
+                Vector3 offset = Vector3.zero;
+
+                var targetMovement = _selfUnit.UnitAiMovement.enemyToLookAt.playerMovement;
+                
+                if (targetMovement)
+                    offset = _selfUnit.UnitAiMovement.enemyToLookAt.playerMovement.rb.velocity;
+                
                 if (angle < minAngleToRotateGun)
-                    activeWeapon.transform.LookAt(_selfUnit.HealthController.AiMovement.enemyToLookAt.visibilityTrigger.transform.position +
-                                                  offset);
+                    activeWeapon.transform.LookAt(_selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position + offset);
                 else
                     activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
             }
 
-            targetDir = _selfUnit.HealthController.AiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
-            angle = Vector3.Angle(targetDir, transform.forward);
-                
             if (angle < minAngleToShoot)
             {
-                activeWeapon.Shot(_selfUnit.HealthController, _selfUnit.HealthController.AiMovement.enemyToLookAt.visibilityTrigger.transform).ForgetWithHandler();
+                activeWeapon.Shot(_selfUnit.HealthController, _selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform).ForgetWithHandler();
                 yield return new WaitForSeconds(Random.Range(weaponsAttackSwitchCooldownMinMax.x, weaponsAttackSwitchCooldownMinMax.y));
             }
         }

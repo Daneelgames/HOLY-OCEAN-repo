@@ -71,6 +71,9 @@ namespace MrPink
             
             }
         
+            if (LevelGenerator.Instance == null)
+                return;
+            
             if (Game.Player.Health.health <= 0 && LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
                 StartProcScene();
         

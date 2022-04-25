@@ -14,6 +14,9 @@ namespace MrPink.Units
         
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitAiMovement _unitAiMovement;
+
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private UnitAiWeaponControls _weaponControls;
         
         [SerializeField, ChildGameObjectsOnly, Required]
         private HumanVisualController _humanVisualController;
@@ -42,6 +45,9 @@ namespace MrPink.Units
         
         public UnitFollowTarget UnitFollowTarget
             => _followTarget;
+
+        public UnitAiWeaponControls WeaponControls
+            => _weaponControls;
         
         
         #if UNITY_EDITOR
@@ -55,6 +61,7 @@ namespace MrPink.Units
             _humanVisualController = GetComponent<HumanVisualController>();
             _unitMovement = GetComponent<UnitMovement>();
             _followTarget = GetComponent<UnitFollowTarget>();
+            _weaponControls = GetComponent<UnitAiWeaponControls>();
             
             _unitAiMovement.SetUnit(this);
             _unitMovement.SetUnit(this);
