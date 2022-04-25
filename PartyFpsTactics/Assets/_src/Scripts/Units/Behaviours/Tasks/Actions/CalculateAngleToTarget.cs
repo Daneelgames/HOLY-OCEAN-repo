@@ -11,8 +11,11 @@ namespace MrPink.Units.Behaviours
         
         public override TaskStatus OnUpdate()
         {
+            if (selfUnit.UnitAiMovement.enemyToLookAt == null)
+                return TaskStatus.Failure;
+            
             Vector3 targetDir = selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
-            aimAngle = Vector3.Angle(targetDir, transform.forward);
+            aimAngle.Value = Vector3.Angle(targetDir, transform.forward);
             return TaskStatus.Success;
         }
     }

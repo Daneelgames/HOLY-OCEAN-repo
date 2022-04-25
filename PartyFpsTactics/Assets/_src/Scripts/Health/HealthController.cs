@@ -168,10 +168,8 @@ namespace MrPink.Health
             else
                 health -= damage;
 
-            if (Game.Player.Health == this)
-            {
+            if (Game.Player.Health == this && PlayerUi.Instance != null)
                 PlayerUi.Instance.UpdateHealthBar();
-            }
 
             if (health <= 0)
             {

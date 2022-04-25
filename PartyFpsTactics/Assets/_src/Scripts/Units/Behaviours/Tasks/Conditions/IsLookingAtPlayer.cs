@@ -8,10 +8,16 @@ namespace MrPink.Units.Behaviours
     {
         public override TaskStatus OnUpdate()
         {
-            if (selfUnit.UnitAiMovement.enemyToLookAt.gameObject == Game.Player.GameObject)
-                return TaskStatus.Success;
+            if (selfUnit.UnitAiMovement.enemyToLookAt == null)
+                return TaskStatus.Failure;
+            
+            if (Game.Player == null)
+                return TaskStatus.Failure;
+            
+            if (selfUnit.UnitAiMovement.enemyToLookAt.gameObject != Game.Player.GameObject)
+                return TaskStatus.Failure;
 
-            return TaskStatus.Failure;
+            return TaskStatus.Success;
         }
     }
 }
