@@ -59,7 +59,7 @@ namespace MrPink
                 npcInParty.aiVehicleControls.SetPassengerSit(machine);
         }
 
-        public void RespawnPlayer()
+        public IEnumerator RespawnPlayer()
         {
             var pos = Respawner.Instance.MovePlayerToRandomRespawner();
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
@@ -76,14 +76,19 @@ namespace MrPink
                     npcInParty.selfUnit.Resurrect();
                     npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
                 }
-
-                if (npcInParty.npcInteraction)
+                if (npcInParty.npcInteraction && npcInParty.npcInteraction.npcDialoguesList)
                 {
                     npcInParty.npcInteraction.CheckNpcDialogueList();
                 }
+
             }
-            
+
             Game.Player.Resurrect();
+            yield return new WaitForSeconds(1f);
+            if (npcInParty && npcInParty.npcInteraction)
+            {
+                npcInParty.npcInteraction.PlayerInteraction();
+            }
         }
     }
 }

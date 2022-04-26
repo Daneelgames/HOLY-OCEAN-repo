@@ -17,8 +17,10 @@ namespace _src.Scripts
         public List<Transform> desertRespawns;
         public List<Transform> banditsRespawns;
         private List<HealthController> desertBanditsSpawned = new List<HealthController>();
-        float banditsSpawnCooldown = 60;
-        int maxAmount = 30;
+        public float banditsSpawnCooldown = 60;
+        public float banditsSpawnDistanceMin = 30;
+        public float banditsSpawnDistanceMax = 200;
+        public int banditsMaxAmount = 30;
         public List<Transform> playerRespawns;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
         public List<Transform> blueRespawns;
@@ -151,7 +153,7 @@ namespace _src.Scripts
                 for (int i = 0; i < banditsRespawns.Count; i++)
                 {
                     float dist = Vector3.Distance(posToCheck, banditsRespawns[i].position);
-                    if (dist < 200 && dist > 20)
+                    if (dist < banditsSpawnDistanceMax && dist > banditsSpawnDistanceMin)
                     {
                         spawns.Add(banditsRespawns[i]);
                     }
@@ -159,7 +161,7 @@ namespace _src.Scripts
 
                 if (spawns.Count > 0)
                 {
-                    for (int i = desertBanditsSpawned.Count; i < maxAmount; i++)
+                    for (int i = desertBanditsSpawned.Count; i < banditsMaxAmount; i++)
                     {
                         yield return null;
                         var bandit = UnitsManager.Instance.SpawnRedUnit(spawns[Random.Range(0, spawns.Count)].position);

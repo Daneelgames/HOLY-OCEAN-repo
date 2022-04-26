@@ -129,7 +129,7 @@ namespace MrPink
         {
             // change player's position
             LevelTitlesManager.Instance.ShowIntro();
-            PartyController.Instance.RespawnPlayer();
+            StartCoroutine(PartyController.Instance.RespawnPlayer());
         }
 
         public void StartProcScene()

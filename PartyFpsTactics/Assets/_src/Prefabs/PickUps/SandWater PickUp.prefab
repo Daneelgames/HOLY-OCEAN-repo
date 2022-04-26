@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  npcDialoguesList: {fileID: 0}
   interactiveObjectName: Sand Water
   eventsOnInteraction:
   - scriptedEventType: 9
@@ -179,6 +180,7 @@ MonoBehaviour:
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 11400000, guid: fa8f58b1f7e474e4191c3fc6963cb33e, type: 2}
+    weaponToAdd: {fileID: 0}
   - scriptedEventType: 2
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -195,6 +197,7 @@ MonoBehaviour:
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 0}
+    weaponToAdd: {fileID: 0}
   rb: {fileID: 5178915654316266458}
   hc: {fileID: 0}
 --- !u!135 &-2958212832291290666
@@ -236,6 +239,6 @@ Rigidbody:
   m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
