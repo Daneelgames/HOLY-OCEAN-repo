@@ -73,7 +73,7 @@ namespace MrPink
             
                 if (selectedIO)
                 {
-                    InteractableEventsManager.Instance.InteractWithIO(selectedIO);
+                    selectedIO.PlayerInteraction();
                     return;
                 }
             

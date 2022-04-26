@@ -19,9 +19,6 @@ namespace MrPink.Units
 {
     public class UnitAiMovement : MonoBehaviour
     {
-        [SerializeField] 
-        private Team _team;
-        
         [SerializeField, ChildGameObjectsOnly, Required]
         private Unit _selfUnit;
         
@@ -51,7 +48,7 @@ namespace MrPink.Units
 
             Awareness().ForgetWithHandler();
 
-            if (_team == Team.Red && Random.value > 0.9f)
+            if (_selfUnit.HealthController.team == Team.Red && Random.value > 0.5f)
                 MoveToPositionOrder(Game.Player.GameObject.transform.position);
             else
                 TakeCoverOrder();

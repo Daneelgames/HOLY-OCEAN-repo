@@ -94,7 +94,6 @@ namespace MrPink
             {
                 // player died
                 // restart at different place
-                LevelTitlesManager.Instance.ShowIntro();
                 RespawnPlayer();
             }
         
@@ -129,10 +128,8 @@ namespace MrPink
         public void RespawnPlayer()
         {
             // change player's position
-            Respawner.Instance.MovePlayerToRandomRespawner();
-            ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
-            Game.Player.Inventory.DropRandomTools();
-            Game.Player.Resurrect();
+            LevelTitlesManager.Instance.ShowIntro();
+            PartyController.Instance.RespawnPlayer();
         }
 
         public void StartProcScene()

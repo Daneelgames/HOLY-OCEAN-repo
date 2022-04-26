@@ -599,6 +599,7 @@ GameObject:
   - component: {fileID: -8284327079036214745}
   - component: {fileID: -5930898470893031762}
   - component: {fileID: 334130167860987239}
+  - component: {fileID: 8269070158630374642}
   m_Layer: 7
   m_Name: DesertBeast
   m_TagString: Untagged
@@ -634,6 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfUnit: {fileID: -5930898470893031762}
   health: 2000
   healthMax: 2000
   needs: {fileID: 334130167860987239}
@@ -656,7 +658,6 @@ MonoBehaviour:
   controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
-  objectsToSpawnOnDeath: []
   npcInteraction: {fileID: 0}
   deathOnHit: {fileID: 0}
   rb: {fileID: 0}
@@ -719,7 +720,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _team: 0
   _selfUnit: {fileID: -5930898470893031762}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
@@ -845,11 +845,14 @@ MonoBehaviour:
   - {fileID: 7147599452781533243}
   - {fileID: 8993234795829460015}
   - {fileID: 5800788775649073539}
+  bodyPartsVisuals: []
+  allBones: []
   activePositionSpring: 1500
   activePositionDamper: 100
   activeAngularPositionSpring: 1500
   activeAngularPositionDamper: 100
   timeToStandUp: 2
+  aliveMaterial: {fileID: 0}
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 7631144225832590342}
   tilesLayerMask:
@@ -928,6 +931,7 @@ MonoBehaviour:
   _unitMovement: {fileID: 8254907987185259264}
   _followTarget: {fileID: -8284327079036214745}
   _characterNeeds: {fileID: 334130167860987239}
+  _spawnLootOnDeath: {fileID: 8269070158630374642}
 --- !u!114 &334130167860987239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -949,6 +953,20 @@ MonoBehaviour:
   ownHealth: {fileID: 1876098499272473148}
   healthRegenOnNeeds: 10
   healthDrainOnNeeds: 10
+--- !u!114 &8269070158630374642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e177287900ac6ac4bb32801a1898f38f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfUnit: {fileID: -5930898470893031762}
+  lootToSpawn: []
 --- !u!1 &617381421211773646
 GameObject:
   m_ObjectHideFlags: 0
@@ -8491,6 +8509,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee8c67256a0362245ab0df36ea0ddbe9, type: 3}
+--- !u!4 &8799047299024897259 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2642470501878746762, guid: ee8c67256a0362245ab0df36ea0ddbe9, type: 3}
+  m_PrefabInstance: {fileID: 6825079950644808289}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8799047299024897258 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2642470501878746763, guid: ee8c67256a0362245ab0df36ea0ddbe9, type: 3}
@@ -8502,8 +8525,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eee4ce499a7b04080f83fc6893de5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &8799047299024897259 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2642470501878746762, guid: ee8c67256a0362245ab0df36ea0ddbe9, type: 3}
-  m_PrefabInstance: {fileID: 6825079950644808289}
-  m_PrefabAsset: {fileID: 0}

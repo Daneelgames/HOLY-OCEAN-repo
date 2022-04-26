@@ -263,7 +263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &82441589
 Transform:
   m_ObjectHideFlags: 0
@@ -1904,7 +1904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &803527626
 Transform:
   m_ObjectHideFlags: 0
@@ -6728,6 +6728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  npcDialoguesList: {fileID: 0}
   interactiveObjectName: SAND STRANGER
   eventsOnInteraction:
   - scriptedEventType: 0
@@ -9988,6 +9989,7 @@ GameObject:
   - component: {fileID: 8074880395059046385}
   - component: {fileID: 1937434427710141243}
   - component: {fileID: -1517983677754019025}
+  - component: {fileID: 6385933416773639908}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
   m_TagString: Untagged
@@ -10030,6 +10032,8 @@ MonoBehaviour:
   _unitMovement: {fileID: 7767769086912786514}
   _followTarget: {fileID: -4915185774981738495}
   _characterNeeds: {fileID: -1517983677754019025}
+  _spawnLootOnDeath: {fileID: 6385933416773639908}
+  _npcInteraction: {fileID: 5205671269229392275}
 --- !u!114 &5673859260790904911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10042,6 +10046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfUnit: {fileID: 834634797964359098}
   health: 150
   healthMax: 150
   needs: {fileID: -1517983677754019025}
@@ -10064,7 +10069,6 @@ MonoBehaviour:
   controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
-  objectsToSpawnOnDeath: []
   npcInteraction: {fileID: 5205671269229392275}
   deathOnHit: {fileID: 0}
   rb: {fileID: 0}
@@ -10073,11 +10077,9 @@ MonoBehaviour:
   - {fileID: 4012822522910270257}
   - {fileID: 4691987997881987419}
   - {fileID: 5026495164918130571}
-  - {fileID: 0}
   - {fileID: 9065392115552460665}
   - {fileID: 7338908518939229483}
   - {fileID: 828742298664447535}
-  - {fileID: 0}
   - {fileID: 1690455547994608205}
   - {fileID: 7243486205967636596}
   - {fileID: 1666491104511595899}
@@ -10146,7 +10148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72784fed9136ab547a31c83ac17a6ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _team: 0
   _selfUnit: {fileID: 834634797964359098}
   coverFoundBehaviour: 0
   noCoverBehaviour: 0
@@ -10197,13 +10198,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeWeapons: []
+  handsIk:
+  - {fileID: 4916146062492788886}
+  - {fileID: 3900542015340425774}
   weaponsAttackSwitchCooldownMinMax: {x: 0.5, y: 1}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
-  maxDistanceToAttack: 1000
+  maxDistanceToAttack: 50
   updateRate: 0.1
-  maxDistanceFromPlayerToShoot: 250
+  maxDistanceFromPlayerToShoot: 200
 --- !u!114 &3176254616865558108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10495,6 +10499,28 @@ MonoBehaviour:
   ownHealth: {fileID: 5673859260790904911}
   healthRegenOnNeeds: 5
   healthDrainOnNeeds: 5
+--- !u!114 &6385933416773639908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e177287900ac6ac4bb32801a1898f38f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfUnit: {fileID: 834634797964359098}
+  lootToSpawn:
+  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
+    chance: 0.5
+  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: edfa06cee4886db40aa3d98992531fee, type: 3}
+    chance: 0.2
+  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: ed5c68905bba0c04bbc74c0beff70286, type: 3}
+    chance: 0.2
+  - objectToSpawnOnDeath: {fileID: 4533318020577912468, guid: 2b3ee23fed8c81946b30993d13db032e, type: 3}
+    chance: 0.2
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ namespace MrPink.Units
     public class UnitAiWeaponControls : MonoBehaviour
     {
         public List<WeaponController> activeWeapons;
+        public List<Transform> handsIk;
         public Vector2 weaponsAttackSwitchCooldownMinMax = new Vector2(0, 0);
         public float minAngleToRotateGun = 30;
         public float minAngleToShoot = 15;
@@ -44,12 +45,18 @@ namespace MrPink.Units
                 if (Vector3.Distance(transform.position, Game.Player.MainCamera.transform.position) > maxDistanceFromPlayerToShoot)
                     continue;
 
-                foreach (var activeWeapon in activeWeapons)
-                    yield return MakeWeaponDecision(activeWeapon);
+                for (var index = 0; index < activeWeapons.Count; index++)
+                {
+                    var activeWeapon = activeWeapons[index];
+                    Transform hand = null;
+                    if (handsIk.Count > index)
+                        hand = handsIk[index];
+                    yield return MakeWeaponDecision(activeWeapon, hand);
+                }
             }
         }
 
-        private IEnumerator MakeWeaponDecision(WeaponController activeWeapon)
+        private IEnumerator MakeWeaponDecision(WeaponController activeWeapon, Transform handIk)
         {
             if (!activeWeapon)
                 yield break;
@@ -81,11 +88,20 @@ namespace MrPink.Units
 
             if (rotateWeaponTowardTarget)
             {
+                
                 if (angle < minAngleToRotateGun)
-                    activeWeapon.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position +
-                                                  offset);
+                {
+                    if (handIk)
+                    {
+                        handIk.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
+                        
+                    }
+                    activeWeapon.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
+                }
                 else
+                {
                     activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
+                }
             }
 
             targetDir = enemyToShoot.visibilityTrigger.transform.position - transform.position;

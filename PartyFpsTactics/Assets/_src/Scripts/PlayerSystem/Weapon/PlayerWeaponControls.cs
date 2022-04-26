@@ -88,7 +88,8 @@ namespace MrPink.PlayerSystem
             PlayerInventory.Instance.SetWeapon(weapon, hand);
             if (weapon)
                 weapon.transform.parent = _weaponsParent;
-            else if (_hands[hand].Weapon != null)
+            
+            if (_hands[hand].Weapon != null)
             {
                 Destroy(_hands[hand].Weapon.gameObject);
             }

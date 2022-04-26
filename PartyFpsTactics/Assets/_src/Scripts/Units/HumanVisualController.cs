@@ -357,11 +357,17 @@ namespace MrPink.Units
                     break;
                 }
             }
+            
+            Resurrect();
+
+        }
+
+        public void Resurrect()
+        {
             ragdollOrigin.parent = ragdollOriginParent;
             DeactivateRagdoll();
             _selfHealth.RestoreEndurance();
             _selfHealth.AiMovement.RestartActivities();
-
         }
 
         public void ExplosionRagdoll(Vector3 pos, float force, float distance)

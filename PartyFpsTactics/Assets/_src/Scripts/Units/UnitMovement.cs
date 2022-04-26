@@ -46,6 +46,7 @@ namespace MrPink.Units
         {
             // TODO не делать этого в старте
             _lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
+            _lookTransform.parent = transform.parent;
         }
 
         private void Update()
@@ -103,7 +104,12 @@ namespace MrPink.Units
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
             _agent.SetPath(path);
         }
-    
+
+        public void TeleportNearPosition(Vector3 pos)
+        {
+            _agent.Warp(SamplePos(pos));
+        }
+        
         private Vector3 SamplePos(Vector3 startPos)
         {
             if (NavMesh.SamplePosition(startPos, out var hit, 10f, NavMesh.AllAreas))

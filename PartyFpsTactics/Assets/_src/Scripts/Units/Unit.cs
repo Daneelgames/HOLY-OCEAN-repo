@@ -26,6 +26,13 @@ namespace MrPink.Units
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private CharacterNeeds _characterNeeds;
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private SpawnLootOnDeath _spawnLootOnDeath;
+        
+        [SerializeField, ChildGameObjectsOnly]
+        private InteractiveObject _npcInteraction;
+        
+        
 
 
         public HealthController HealthController
@@ -47,6 +54,22 @@ namespace MrPink.Units
             => _followTarget;
         public CharacterNeeds CharacterNeeds
             => _characterNeeds;
+        public SpawnLootOnDeath SpawnLootOnDeath
+            => _spawnLootOnDeath;
+
+        public InteractiveObject NpcInteraction
+            => _npcInteraction;
+
+        public void Resurrect()
+        {
+            _healthController.Resurrect();
+            
+            if (_unitMovement)
+                _unitMovement.Resurrect();
+            
+            if (_humanVisualController)
+                _humanVisualController.Resurrect();
+        }
         
         
         #if UNITY_EDITOR

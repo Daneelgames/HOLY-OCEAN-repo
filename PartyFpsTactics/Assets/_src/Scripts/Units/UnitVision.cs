@@ -69,7 +69,7 @@ namespace MrPink.Units
                 if (i >= visibleEnemies.Count)
                     continue;
 
-                if (visibleEnemies[i] == null)
+                if (visibleEnemies[i] == null || visibleEnemies[i].transform == null)
                     continue;
 
                 float newDistance = Vector3.Distance(transform.position, visibleEnemies[i].transform.position);
@@ -85,8 +85,13 @@ namespace MrPink.Units
     
         private IEnumerator CheckEnemies()
         {
-            while (_selfHealth.health > 0)
+            while (true)
             {
+                yield return null;
+                
+                if (_selfHealth.health <= 0)
+                    continue;
+                
                 for (int i = 0; i < _enemiesToRemember.Count; i++)
                 {
                     var unit = _enemiesToRemember[i];

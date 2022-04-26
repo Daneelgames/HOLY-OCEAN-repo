@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
@@ -17,6 +18,7 @@ namespace MrPink.Health
 {
     public class HealthController : MonoBehaviour
     {
+        public Unit selfUnit;
         public int health = 100;
         public int healthMax = 100;
         public CharacterNeeds needs;
@@ -48,7 +50,7 @@ namespace MrPink.Health
         public ControlledMachine controlledMachine;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
-        public List<GameObject> objectsToSpawnOnDeath;
+        
         public InteractiveObject npcInteraction;
         public DeathOnHit deathOnHit;
 
@@ -283,12 +285,9 @@ namespace MrPink.Health
                 var explosion = Instantiate(explosionOnDeath, visibilityTrigger.transform.position, transform.rotation);
                 explosion.Init(action);
             }
-        
-            for (int i = 0; i < objectsToSpawnOnDeath.Count; i++)
-            {
-                Instantiate(objectsToSpawnOnDeath[i], visibilityTrigger.transform.position, transform.rotation);
-                yield return null;
-            }
+
+            if (selfUnit)
+                selfUnit.SpawnLootOnDeath.SpawnLoot();
         
             if (Game.Player.Health == this)
             {
@@ -303,7 +302,8 @@ namespace MrPink.Health
             }
             
             OnDeathEvent.Invoke();
-            
+
+            yield return null;
             if (destroyOnDeath)
                 Destroy(gameObject);
         }

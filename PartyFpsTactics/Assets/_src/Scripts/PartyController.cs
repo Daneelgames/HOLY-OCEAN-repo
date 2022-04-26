@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _src.Scripts;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
@@ -56,6 +57,33 @@ namespace MrPink
         {
             if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.Player.Position) < 15)
                 npcInParty.aiVehicleControls.SetPassengerSit(machine);
+        }
+
+        public void RespawnPlayer()
+        {
+            var pos = Respawner.Instance.MovePlayerToRandomRespawner();
+            ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
+            Game.Player.Inventory.DropRandomTools();
+
+            if (npcInParty)
+            {
+                if (npcInParty.health > 0)
+                {
+                    npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
+                }
+                else
+                {
+                    npcInParty.selfUnit.Resurrect();
+                    npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
+                }
+
+                if (npcInParty.npcInteraction)
+                {
+                    npcInParty.npcInteraction.CheckNpcDialogueList();
+                }
+            }
+            
+            Game.Player.Resurrect();
         }
     }
 }

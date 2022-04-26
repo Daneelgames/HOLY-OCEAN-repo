@@ -107,9 +107,13 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.AddTool:
+                // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
+                ScoringSystem.Instance.ItemFoundSound();
                 Game.Player.Inventory.AddTool(IOevent.toolToAdd);
                 break;
             case ScriptedEventType.AddWeapon:
+                // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
+                ScoringSystem.Instance.ItemFoundSound();
                 Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
                 break;
         }

@@ -4,6 +4,7 @@ using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -111,18 +112,37 @@ namespace _src.Scripts
                 UnitsManager.Instance.SpawnDesertBeast(desertRespawns[Random.Range(0, desertRespawns.Count)].position);
             }
 
-            StartCoroutine(RespawnDesertBandits());
+            StartRespawningBandits(Game.Player.Position);
         }
 
-        IEnumerator RespawnDesertBandits()
+        void StartRespawningBandits(Vector3 aroundPosition)
         {
+            if (respawnDesertBanditsCoroutine != null)
+                StopCoroutine(respawnDesertBanditsCoroutine);
+            
+            respawnDesertBanditsCoroutine = StartCoroutine(RespawnDesertBandits(aroundPosition));
+        }
+
+        private Coroutine respawnDesertBanditsCoroutine;
+        IEnumerator RespawnDesertBandits(Vector3 aroundPosition)
+        {
+            Vector3 posToCheck = aroundPosition;
             while (true)
             {
                 if (desertBanditsSpawned.Count > 0)
                 {
                     for (int i = desertBanditsSpawned.Count - 1; i >= 0; i--)
                     {
-                        if (desertBanditsSpawned[i] == null || desertBanditsSpawned[i].health <= 0)
+                        if (desertBanditsSpawned[i] == null)
+                        {
+                            desertBanditsSpawned.RemoveAt(i);
+                            continue;
+                        }
+
+                        if (Vector3.Distance(desertBanditsSpawned[i].transform.position, posToCheck) > 200)
+                            Destroy(desertBanditsSpawned[i].gameObject);
+                        
+                        if (desertBanditsSpawned[i].health <= 0)
                             desertBanditsSpawned.RemoveAt(i);
                     }
                 }
@@ -130,8 +150,8 @@ namespace _src.Scripts
                 List<Transform> spawns = new List<Transform>();
                 for (int i = 0; i < banditsRespawns.Count; i++)
                 {
-                    float dist = Vector3.Distance(Game.Player.Position, banditsRespawns[i].position);
-                    if (dist < 400 && dist > 50)
+                    float dist = Vector3.Distance(posToCheck, banditsRespawns[i].position);
+                    if (dist < 200 && dist > 20)
                     {
                         spawns.Add(banditsRespawns[i]);
                     }
@@ -141,11 +161,13 @@ namespace _src.Scripts
                 {
                     for (int i = desertBanditsSpawned.Count; i < maxAmount; i++)
                     {
+                        yield return null;
                         var bandit = UnitsManager.Instance.SpawnRedUnit(spawns[Random.Range(0, spawns.Count)].position);
                         desertBanditsSpawned.Add(bandit);
                     }
                 }
                 yield return new WaitForSeconds(banditsSpawnCooldown);
+                posToCheck = Game.Player.Position;
             }
         }
         
@@ -153,7 +175,8 @@ namespace _src.Scripts
         {
             if (Game.Player.Position.y < corpseShredderY)
             {
-                GameManager.Instance.StartProcScene();
+                GameManager.Instance.KillPlayer();
+                GameManager.Instance.RespawnPlayer();
                 return;
             }
             for (int i = UnitsManager.Instance.unitsInGame.Count - 1; i >= 0; i--)
@@ -189,9 +212,22 @@ namespace _src.Scripts
             return temp;
         }
 
-        public void MovePlayerToRandomRespawner()
+        public Vector3 MovePlayerToRandomRespawner()
         {
-            Game.Player.Movement.TeleportToPosition(playerRespawns[Random.Range(0, playerRespawns.Count)].position);
+            if (desertBanditsSpawned.Count > 0)
+            {
+                for (int i = desertBanditsSpawned.Count - 1; i >= 0; i--)
+                {
+                    if (desertBanditsSpawned[i] != null)
+                        Destroy(desertBanditsSpawned[i].gameObject);
+                }
+            }
+            desertBanditsSpawned.Clear();
+
+            var pos = playerRespawns[Random.Range(0, playerRespawns.Count)].position;
+            Game.Player.Movement.TeleportToPosition(pos);
+            StartRespawningBandits(pos);
+            return pos;
         }
     }
 }

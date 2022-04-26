@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
+using MrPink;
 using UnityEngine;
 
 public class LevelEventsOnConditions : MonoBehaviour
@@ -63,7 +64,22 @@ public class LevelEventsOnConditions : MonoBehaviour
         }
     }
 
-    bool IsConditionMet(Condition condition)
+    public bool CheckEventOnce(LevelEvent levelEvent)
+    {
+        bool allConditionsMet = true;
+        for (int j = 0; j < levelEvent.conditions.Count; j++)
+        {
+            var condition = levelEvent.conditions[j];
+            allConditionsMet = IsConditionMet(condition);
+                
+            if (!allConditionsMet)
+                break;
+        }
+
+        return allConditionsMet;
+    }
+
+    public bool IsConditionMet(Condition condition)
     {
         if (condition.transformA == null || condition.transformB == null)
         {
@@ -80,7 +96,9 @@ public class LevelEventsOnConditions : MonoBehaviour
                     condition.transformB = levelActors[i].transform;
                 }
             } 
-        } 
+        }
+
+        bool met = true;
         
         switch (condition.conditionType)
         {
@@ -88,17 +106,20 @@ public class LevelEventsOnConditions : MonoBehaviour
                 
                 if (Vector3.Distance(condition.transformA.position, condition.transformB.position) <= condition.distanceToCompare)
                 {
-                    return false;
+                    met = false;
                 }
                 break;
             case Condition.ConditionType.DistanceIsSmaller:
                 if (Vector3.Distance(condition.transformA.position, condition.transformB.position) >= condition.distanceToCompare)
                 {
-                    return false;
+                    met = false;
                 }
+                break;
+            case Condition.ConditionType.PlayerIsDead:
+                met =  Game.Player.Health.IsDead;
                 break;
         }
         
-        return true;
+        return met;
     }
 }
