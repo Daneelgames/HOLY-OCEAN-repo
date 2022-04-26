@@ -87,6 +87,7 @@ namespace MrPink.PlayerSystem
             Movement.Death(killer);
             LookAround.Death(killer);
             Weapon.Death();
+            VehicleControls.Death();
             ScoringSystem.Instance.CooldownToZero();
         }
         

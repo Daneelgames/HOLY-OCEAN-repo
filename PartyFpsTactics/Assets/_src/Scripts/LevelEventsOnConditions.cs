@@ -118,6 +118,9 @@ public class LevelEventsOnConditions : MonoBehaviour
             case Condition.ConditionType.PlayerIsDead:
                 met =  Game.Player.Health.IsDead;
                 break;
+            case Condition.ConditionType.PlayerIsDriving:
+                met =  Game.Player.VehicleControls.controlledMachine;
+                break;
         }
         
         return met;

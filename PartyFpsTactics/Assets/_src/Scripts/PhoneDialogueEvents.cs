@@ -84,8 +84,8 @@ public class PhoneDialogueEvents : MonoBehaviour
         if (destroyInteractorAfterDialogueCompleted)
             Destroy(destroyInteractorAfterDialogueCompleted.gameObject);
         
-        if (scoreToAddOnDialogueCompleted > 0)
-            ScoringSystem.Instance.AddScore(scoreToAddOnDialogueCompleted);
+        //if (scoreToAddOnDialogueCompleted > 0)
+        ScoringSystem.Instance.AddScore(scoreToAddOnDialogueCompleted);
         
         if (setNextLevelOnCompletion)
         {

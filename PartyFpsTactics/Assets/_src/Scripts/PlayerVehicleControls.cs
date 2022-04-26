@@ -40,6 +40,12 @@ namespace MrPink
             TogglePlayerInside(null);
         }
 
+        public void Death()
+        {
+            if (controlledMachine)
+                RequestVehicleAction(controlledMachine);
+        }
+        
         public void RequestVehicleAction(ControlledMachine controlledMachine)
         {
             if (exitCoroutine != null)

@@ -65,7 +65,7 @@ namespace _src.Scripts.Data
     {
         public enum ConditionType
         {
-            DistanceIsBigger, DistanceIsSmaller, PlayerIsDead
+            DistanceIsBigger, DistanceIsSmaller, PlayerIsDead, PlayerIsDriving
         }
 
         public ConditionType conditionType = ConditionType.DistanceIsSmaller;

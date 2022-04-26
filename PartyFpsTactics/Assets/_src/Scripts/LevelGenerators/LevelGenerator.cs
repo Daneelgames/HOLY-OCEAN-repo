@@ -263,7 +263,8 @@ public class LevelGenerator : MonoBehaviour
     IEnumerator SpawnNewBuildingLevel(int levelIndex)
     {
         float levelY = 0;
-
+        levelY = transform.position.y;
+        
         for (int i = 0; i < mainBuildingLevelsHeights.Count; i++)
         {
             if (i == levelIndex)
@@ -275,7 +276,7 @@ public class LevelGenerator : MonoBehaviour
             levelY += mainBuildingLevelsHeights[i];
         }
         
-        Vector3 levelPosition = new Vector3(Random.Range(levelsPosMinMaxX.x, levelsPosMinMaxX.y), levelY, Random.Range(levelsPosMinMaxZ.x, levelsPosMinMaxZ.y));
+        Vector3 levelPosition = new Vector3(transform.position.x + Random.Range(levelsPosMinMaxX.x, levelsPosMinMaxX.y), levelY, transform.position.z + Random.Range(levelsPosMinMaxZ.x, levelsPosMinMaxZ.y));
         /*if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
             GameManager.Instance.AllSolidsMask))
         {
@@ -366,7 +367,7 @@ public class LevelGenerator : MonoBehaviour
                 z = Mathf.RoundToInt(Random.Range(-levelsScaleMinMaxZ.y - additionalLevelSize.z * 2, -levelsScaleMinMaxZ.y - additionalLevelSize.z * 2 - additionalLevelSize.z));
                 break;
         }
-        return new Vector3(x, y, z);
+        return transform.position + new Vector3(x, y, z);
     }
 
     IEnumerator SpawnBaseTiles(int groundLevelIndex, Vector3 pos, Vector3Int size, Quaternion rot, bool mainBuilding)

@@ -140,9 +140,15 @@ namespace MrPink
         
         public void AddScore(int amount)
         {
+            if (amount == 0)
+                return;
+            
             ItemFoundSound();
             CurrentScore += amount;
-            addedScoreFeedbackText.text = "+" + amount;
+            if (amount > 0)
+                addedScoreFeedbackText.text = "+" + amount;
+            else
+                addedScoreFeedbackText.text = amount.ToString();
         
             if (animateAddedScoreFeedback != null)
                 StopCoroutine(animateAddedScoreFeedback);
