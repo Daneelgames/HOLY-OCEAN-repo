@@ -37,6 +37,7 @@ namespace MrPink.PlayerSystem
             
             if (Game.Flags.IsPlayerInputBlocked || Game.Player.Interactor.carryingPortableRb)
             {
+                Debug.Log("Game.Flags.IsPlayerInputBlocked");
                 _hands[Hand.Left].UpdateState(true);
                 _hands[Hand.Right].UpdateState(true);   
             }

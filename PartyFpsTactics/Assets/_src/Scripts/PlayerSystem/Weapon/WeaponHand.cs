@@ -118,12 +118,13 @@ namespace MrPink.PlayerSystem
                 return;
             }
             
+            /*
             if (!LevelGenerator.Instance.IsLevelReady)
             {
                 IsAiming = false;
                 CurrentPosition = WeaponPosition.Reload;
                 return;
-            }
+            }*/
 
             if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)
             {

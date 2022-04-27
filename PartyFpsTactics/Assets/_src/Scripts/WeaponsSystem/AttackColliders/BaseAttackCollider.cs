@@ -258,7 +258,7 @@ namespace MrPink.WeaponsSystem
                 return true;
             
             
-            if (ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
+            if (ownerHealth.UnitVision && ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
                 return true;
 
             return false;

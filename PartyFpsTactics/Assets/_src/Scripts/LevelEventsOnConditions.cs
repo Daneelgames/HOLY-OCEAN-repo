@@ -104,12 +104,24 @@ public class LevelEventsOnConditions : MonoBehaviour
         {
             case Condition.ConditionType.DistanceIsBigger:
                 
+                if (condition.transformA == null || condition.transformB == null)
+                {
+                    Debug.LogWarning("Distance comparing. One of transforms is missing. transformA = " + condition.transformA +"; transformB = " + condition.transformB);
+                    met = false;
+                    break;
+                }
                 if (Vector3.Distance(condition.transformA.position, condition.transformB.position) <= condition.distanceToCompare)
                 {
                     met = false;
                 }
                 break;
             case Condition.ConditionType.DistanceIsSmaller:
+                if (condition.transformA == null || condition.transformB == null)
+                {
+                    Debug.LogWarning("Distance comparing. One of transforms is missing. transformA = " + condition.transformA +"; transformB = " + condition.transformB);
+                    met = false;
+                    break;
+                }
                 if (Vector3.Distance(condition.transformA.position, condition.transformB.position) >= condition.distanceToCompare)
                 {
                     met = false;

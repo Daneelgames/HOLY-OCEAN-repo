@@ -25,7 +25,7 @@ namespace _src.Scripts.LevelGenerators
         public Transform spawnedTransform;
         public Vector3 position;
         public Vector3Int size;
-        public bool levelCanClash = true;
+        public bool firstFloor = false;
 
         int wallsInCurrentIslandAmount = 0;
         int floorConnectionsInCurrentIslandAmount = 0;
@@ -93,7 +93,7 @@ namespace _src.Scripts.LevelGenerators
                         continue;
 
                     bool canCrash = false;
-                    if (levelCanClash == false)
+                    if (firstFloor == false)
                     {
                      if (currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || 
                          floorConnectionsInCurrentIslandAmount == 0 ||wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
@@ -206,7 +206,7 @@ namespace _src.Scripts.LevelGenerators
             else
             {
                 // LOOK SUPPORT FOR FLOOR TILE
-                if (!levelCanClash || tile.supporterTile != null)
+                if (firstFloor || tile.supporterTile != null)
                     currentIslandSupports++;
             }
             

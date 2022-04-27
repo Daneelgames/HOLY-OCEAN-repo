@@ -34,7 +34,7 @@ namespace _src.Scripts.Data
         public GameObject explosiveBarrelPrefab;
         public GrindRail grindRailsPrefab;
         
-        public List<int> levelsHeights = new List<int>();
+        public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
         
         public int explosiveBarrelsAmount = 2;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(2,2);

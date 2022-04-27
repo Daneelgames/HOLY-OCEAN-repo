@@ -31,6 +31,10 @@ public class PhoneDialogueEvents : MonoBehaviour
 
     public void RunNpcDialogueCutscene(Dialogue dialogue, HealthController npcHc, InteractiveObject destroyInteractorAfterDialogueCompleted, int scoreToAddOnDialogueCompleted, bool setNextLevelOnCompletion)
     {
+        playerAnswered = false;
+        inCutScene = false;
+        currentTalknigNpc = null;
+            
         StartCoroutine(NpcDialogueCutscene(dialogue, npcHc, destroyInteractorAfterDialogueCompleted, scoreToAddOnDialogueCompleted, setNextLevelOnCompletion));
     }
 

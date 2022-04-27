@@ -108,12 +108,12 @@ namespace MrPink
             
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if (LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop.Count <= 0)
+                    if (LevelGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count <= 0)
                         return;
 
-                    for (int i = LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
+                    for (int i = LevelGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
                     {
-                        var tile = LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop[i];
+                        var tile = LevelGenerator.Instance.spawnedBuildingLevels[0].tilesTop[i];
                         if (tile)
                             tile.Damage(1000, DamageSource.Environment);
                     }

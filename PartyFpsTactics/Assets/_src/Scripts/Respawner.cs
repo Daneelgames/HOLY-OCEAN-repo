@@ -38,26 +38,30 @@ namespace _src.Scripts
         {
             if (!spawn)
                 return;
+            StartCoroutine(SpawnStartEnemies());
             
-            
-            // create enemy spawns
+        }
+
+        IEnumerator SpawnStartEnemies()
+        {
             tilesForSpawns = new List<TileHealth>();
             enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].enemiesPerRoomMinMax;
 
-            for (int i = 0; i < LevelGenerator.Instance.spawnedMainBuildingLevels.Count; i++)
+            for (int i = 0; i < LevelGenerator.Instance.spawnedBuildingLevels.Count; i++)
             {
                 tilesForSpawns.Clear();
-                for (var index = LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside.Count - 1; index >= 0; index--)
+                for (var index = LevelGenerator.Instance.spawnedBuildingLevels[i].tilesInside.Count - 1; index >= 0; index--)
                 {
-                    var tile = LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside[index];
+                    var tile = LevelGenerator.Instance.spawnedBuildingLevels[i].tilesInside[index];
                     if (tile == null)
                     {
-                        LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside.RemoveAt(index);
+                        LevelGenerator.Instance.spawnedBuildingLevels[i].tilesInside.RemoveAt(index);
                         continue;
                     }
                     tilesForSpawns.Add(tile);
                 }
 
+                /*
                 if (i == 0)
                 {
                     for (int j = 0; j <  LevelGenerator.Instance.spawnedAdditionalLevels.Count; j++)
@@ -73,7 +77,7 @@ namespace _src.Scripts
                             tilesForSpawns.Add(tile);
                         }
                     }
-                }
+                }*/
 
 
                 int enemiesAmount = Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y);
@@ -87,9 +91,11 @@ namespace _src.Scripts
                     redRespawns.Add(newSpawnPoint.transform);
                 
                     UnitsManager.Instance.SpawnRedUnit(randomTile.transform.position);
+                    yield return null;
                 }
             }
 
+            /*
             int additionalNpcAmount = Random.Range(ProgressionManager.Instance
                 .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.x, 
                 ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.y);
@@ -100,18 +106,20 @@ namespace _src.Scripts
                     .tilesInside;
                 var randomTIle = tiles[Random.Range(0, tiles.Count)];
                 UnitsManager.Instance.SpawnNeutralUnit(randomTIle.transform.position);
-            }
+            }*/
             
             
             for (int j = 0; j < alliesAmount; j++)
             {
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
+                UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);
+                yield return null;
             }
 
             for (int i = 0; i < ProgressionManager.Instance.CurrentLevel.desertBeastsSpawnAmount; i++)
             {
                 UnitsManager.Instance.SpawnDesertBeast(desertRespawns[Random.Range(0, desertRespawns.Count)].position);
+                yield return null;
             }
 
             StartRespawningBandits(Game.Player.Position);
