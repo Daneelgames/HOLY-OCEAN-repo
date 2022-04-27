@@ -47,15 +47,15 @@ public class InteractableEventsManager : MonoBehaviour
 
     public void RunEvent(ScriptedEvent IOevent, GameObject gameObjectToDestroy = null)
     {
+        var npcHc = IOevent.ActorNpc; 
+        if (npcHc == null && IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
+        {
+            npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
+        }
         switch (IOevent.scriptedEventType)
         {
             case ScriptedEventType.StartDialogue:
 
-                var npcHc = IOevent.NpcHc; 
-                if (npcHc == null && IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
-                {
-                    npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
-                }
                 PhoneDialogueEvents.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, npcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted, IOevent.setNextLevelOnDialogueCompleted);
                 if (IOevent.maxDistanceToSpeaker > 0)
                     DialogueWindowInterface.Instance.StartCheckingDistanceToSpeaker(npcHc, IOevent.maxDistanceToSpeaker);
@@ -94,6 +94,20 @@ public class InteractableEventsManager : MonoBehaviour
             
             case ScriptedEventType.AddScore:
                 ScoringSystem.Instance.AddScore(IOevent.scoreToAdd);
+                break;
+            
+            
+            case ScriptedEventType.AddHealth:
+                npcHc.AddHealth(IOevent.addToStatAmount);
+                break;
+            case ScriptedEventType.AddToFood:
+                npcHc.needs.AddToNeed(Need.NeedType.Food,IOevent.addToStatAmount);
+                break;
+            case ScriptedEventType.AddWater:
+                npcHc.needs.AddToNeed(Need.NeedType.Water,IOevent.addToStatAmount);
+                break;
+            case ScriptedEventType.AddSleep:
+                npcHc.needs.AddToNeed(Need.NeedType.Sleep,IOevent.addToStatAmount);
                 break;
             
             case ScriptedEventType.PlaySound:

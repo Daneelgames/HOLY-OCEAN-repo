@@ -768,7 +768,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 20, levelFromClosestTile, levelToClosestTile));
+        yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 100, levelFromClosestTile, levelToClosestTile));
     }
 
     IEnumerator MakeLadderOnEntrance(Level level)

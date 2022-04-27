@@ -47,12 +47,6 @@ namespace _src.Scripts.Data
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public float maxDistanceToSpeaker = -1;
         
-        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
-        public HealthController NpcHc;
-
-        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
-        [Header("If Id >= 0, game will try to find NpcHc by Id")]
-        public int actorId = -1;
 
 
         
@@ -72,10 +66,17 @@ namespace _src.Scripts.Data
         public Tool toolToAdd;
         [ShowIf("scriptedEventType", ScriptedEventType.AddWeapon)]
         public WeaponController weaponToAdd;
+        public HealthController ActorNpc;
+        public int addToStatAmount = 0;
+
+        [Header("If Id >= 0, game will try to find NpcHc by Id")]
+        public int actorId = -1;
+        
     }
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
+        AddHealth, AddToFood, AddWater, AddSleep
     }
 }
