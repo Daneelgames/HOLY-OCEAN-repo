@@ -2914,6 +2914,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6580179365770697054}
+  - {fileID: 3049115349435270797}
   m_Father: {fileID: 5473742174003087879}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3150,6 +3151,7 @@ MonoBehaviour:
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 15
     NpcHc: {fileID: 7776875987276874606}
+    actorId: -1
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
@@ -7753,6 +7755,36 @@ Transform:
   m_Father: {fileID: 2049484597136554732}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6255457311150751164
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3049115349435270797}
+  m_Layer: 7
+  m_Name: FaceCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3049115349435270797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255457311150751164}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.436}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4094042938754749491}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &6393680880629158981
 GameObject:
   m_ObjectHideFlags: 0
@@ -10027,6 +10059,7 @@ GameObject:
   - component: {fileID: 4590220488564910106}
   - component: {fileID: 5746472785082230798}
   - component: {fileID: 9065746006023407045}
+  - component: {fileID: -1206990434980849542}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Girl
   m_TagString: Untagged
@@ -10062,6 +10095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faceCam: {fileID: 3049115349435270797}
   _healthController: {fileID: 7776875987276874606}
   _unitVision: {fileID: 3311541302662433574}
   _unitAiMovement: {fileID: 8202549971289192397}
@@ -10098,16 +10132,18 @@ MonoBehaviour:
   shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
-  team: 2
+  team: 1
   UnitVision: {fileID: 3311541302662433574}
   AiMovement: {fileID: 8202549971289192397}
   aiVehicleControls: {fileID: 4471353770407177926}
   HumanVisualController: {fileID: 667880543447192957}
+  crimeLevel: {fileID: -1206990434980849542}
   controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   npcInteraction: {fileID: 3196694163748766099}
   deathOnHit: {fileID: 0}
+  unitsVisibleBy: []
   rb: {fileID: 0}
   bodyParts:
   - {fileID: 625652306601710673}
@@ -10558,6 +10594,18 @@ MonoBehaviour:
     chance: 0.2
   - objectToSpawnOnDeath: {fileID: 4533318020577912468, guid: 2b3ee23fed8c81946b30993d13db032e, type: 3}
     chance: 0.2
+--- !u!114 &-1206990434980849542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8510489342978318477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90475cd7ea1ff1a479ded3fa88b5b563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8535974676153623160
 GameObject:
   m_ObjectHideFlags: 0

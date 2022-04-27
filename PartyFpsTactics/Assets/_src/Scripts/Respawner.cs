@@ -81,8 +81,6 @@ namespace _src.Scripts
 
 
                 int enemiesAmount = Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y);
-                if (i == 0)
-                    enemiesAmount += LevelGenerator.Instance.additionalSmallBuildingsAmount;
                 for (int j = 0; j < enemiesAmount; j++)
                 {
                     var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];

@@ -20,7 +20,6 @@ public class LevelGenerator : MonoBehaviour
     public LevelType levelType = LevelType.Game;
     public List<Level> spawnedBuildingLevels = new List<Level>();
     [HideInInspector]
-    public List<Level> spawnedAdditionalLevels = new List<Level>();
     public List<TileHealth> spawnedProps = new List<TileHealth>();
     public GameObject levelGoalSpawned;
 
@@ -31,11 +30,6 @@ public class LevelGenerator : MonoBehaviour
 
     public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
     
-    
-    public int additionalSmallBuildingsAmount = 3;
-    public Vector2Int additionalBuildingsScaleMinMaxX = new Vector2Int(4, 10);
-    public Vector2Int additionalBuildingsScaleMinMaxZ = new Vector2Int(4, 10);
-    public Vector2Int additionalBuildingsScaleMinMaxY = new Vector2Int(4, 10);
     public bool spawnWalls = true;
     public bool spawnLadders = true;
     public LayerMask allSolidsLayerMask;
@@ -64,11 +58,6 @@ public class LevelGenerator : MonoBehaviour
     public bool randomLevelRotation = false;
     public int explosiveBarrelsAmount = 2;
 
-    [Header("SCALE IS SCALED BY 2 IN CODE")]
-    public Vector2Int levelsPosMinMaxX = new Vector2Int(-10, 10);
-    public Vector2Int levelsPosMinMaxZ = new Vector2Int(-10, 10);
-    public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
-    public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
     [Space] [Header("NAVIGATION")] 
     public Transform navMeshesParent;
     public NavMeshSurface navMeshSurfacePrefab;
@@ -131,21 +120,10 @@ public class LevelGenerator : MonoBehaviour
     {
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
         
-        levelsPosMinMaxX = currentLevel.levelsPosMinMaxX;
-        levelsPosMinMaxZ = currentLevel.levelsPosMinMaxZ;
-        levelsScaleMinMaxX = currentLevel.levelsScaleMinMaxX;
-        levelsScaleMinMaxZ = currentLevel.levelsScaleMinMaxZ;
-        additionalSmallBuildingsAmount = currentLevel.additionalSmallBuildingsAmount;
-        additionalBuildingsScaleMinMaxX = currentLevel.additionalBuildingsScaleMinMaxX;
-        additionalBuildingsScaleMinMaxY = currentLevel.additionalBuildingsScaleMinMaxY;
-        additionalBuildingsScaleMinMaxZ = currentLevel.additionalBuildingsScaleMinMaxZ;
-        
         levelGoalPrefab = currentLevel.levelGoalPrefab;
         tilePrefab = currentLevel.tilePrefab;
         tileWallPrefab = currentLevel.tileWallPrefab;
         tileWallThinPrefab = currentLevel.tileWallThinPrefab;
-        //mainBuildingLevelsHeights = currentLevel.levelsHeights;
-        //buildingsToSpawnSettings = currentLevel.buildingsToSpawnSettings;
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
         explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
         propsPerLevelMinMax = currentLevel.propsPerLevelMinMax;
@@ -186,7 +164,7 @@ public class LevelGenerator : MonoBehaviour
             var building = buildingsToSpawnSettings[i];
             for (int j = 0; j < building.buildingLevelsHeights.Count; j++)
             {
-                yield return StartCoroutine(SpawnNewBuildingLevel(j, building.buildingLevelsHeights, building.BuildingOriginTransform));
+                yield return StartCoroutine(SpawnNewBuildingLevel(j, building));
             }
         }
 
@@ -223,6 +201,7 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < spawnedBuildingLevels.Count; i++)
         {
             SpawnNavmesh(spawnedBuildingLevels[i]);
+            yield return null;
         }
         
         /*
@@ -265,8 +244,11 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    IEnumerator SpawnNewBuildingLevel(int levelIndexInBuilding, List<int> levelHeights, Transform buildingOrigin)
+    IEnumerator SpawnNewBuildingLevel(int levelIndexInBuilding,  BuildingSettings building)
     {
+        var levelHeights = building.buildingLevelsHeights;
+        var buildingOrigin = building.BuildingOriginTransform;
+        
         float levelY = 0;
         levelY = buildingOrigin.position.y;
         
@@ -281,129 +263,37 @@ public class LevelGenerator : MonoBehaviour
             levelY += levelHeights[i];
         }
         
-        Vector3 levelPosition = new Vector3(buildingOrigin.position.x + Random.Range(levelsPosMinMaxX.x, levelsPosMinMaxX.y), levelY, buildingOrigin.position.z + Random.Range(levelsPosMinMaxZ.x, levelsPosMinMaxZ.y));
+        Vector3 levelPosition = new Vector3(buildingOrigin.position.x + Random.Range(building.offsetPosMinMaxX.x, building.offsetPosMinMaxX.y), levelY, buildingOrigin.position.z + Random.Range(building.offsetPosMinMaxZ.x, building.offsetPosMinMaxZ.y));
         /*if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
             GameManager.Instance.AllSolidsMask))
         {
             levelPosition = new Vector3(levelPosition.x, levelPosition.y + hit.point.y, levelPosition.z);
         }*/
-        Vector3Int levelSize = new Vector3Int(Random.Range(levelsScaleMinMaxX.x, levelsScaleMinMaxX.y) * 2,
-            levelHeights[levelIndexInBuilding],Random.Range(levelsScaleMinMaxZ.x, levelsScaleMinMaxZ.y) * 2);
+        Vector3Int levelSize = new Vector3Int(Random.Range(building.levelsScaleMinMaxX.x, building.levelsScaleMinMaxX.y) * 2,
+            levelHeights[levelIndexInBuilding],Random.Range(building.levelsScaleMinMaxZ.x, building.levelsScaleMinMaxZ.y) * 2);
         
         Quaternion levelRotation = Quaternion.identity;
         if (randomLevelRotation)
             levelRotation = Quaternion.Euler(0, Random.Range(0,360), 0);
 
-        yield return StartCoroutine(SpawnBaseTiles(levelIndexInBuilding, levelPosition, levelSize, levelRotation, true, levelHeights));
+        yield return StartCoroutine(SpawnBaseTiles(levelIndexInBuilding, levelPosition, levelSize, levelRotation, levelHeights));
     }
-    IEnumerator SpawnNewAdditionalLevel(int levelIndex, List<int>levelHeights)
-    {
-        float levelY = 0;
-
-        Vector3Int levelSize = new Vector3Int(Random.Range(additionalBuildingsScaleMinMaxX.x, additionalBuildingsScaleMinMaxX.y) * 2,
-            Random.Range(additionalBuildingsScaleMinMaxY.x, additionalBuildingsScaleMinMaxY.y),Random.Range(additionalBuildingsScaleMinMaxZ.x, additionalBuildingsScaleMinMaxZ.y) * 2);
-       
-        Vector3 levelPosition =  RandomPosForAdditionalLevel(levelSize);
-        int globalInterations = 10;
-        bool found = false;
-        for (int i = 0; i < globalInterations; i++)
-        {
-            Vector3 posForLevel = RandomPosForAdditionalLevel(levelSize);
-
-            int tries = 50;
-            while (tries > 0)
-            {
-                if (!Physics.CheckBox(posForLevel + Vector3.up * Mathf.RoundToInt(levelSize.y / 2) + Vector3.up * 2, levelSize + Vector3Int.one, Quaternion.identity, allSolidsLayerMask))
-                {
-                    levelPosition = posForLevel;
-                    found = true;
-                    break;
-                }
-
-                tries--;
-            }
-            
-            if (found)
-                break;
-            
-            yield return null;
-            levelSize = new Vector3Int(Random.Range(additionalBuildingsScaleMinMaxX.x, additionalBuildingsScaleMinMaxX.y) * 2,
-                Random.Range(additionalBuildingsScaleMinMaxY.x, additionalBuildingsScaleMinMaxY.y),Random.Range(additionalBuildingsScaleMinMaxZ.x, additionalBuildingsScaleMinMaxZ.y) * 2);
-        }
-        
-        /*
-        if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
-            GameManager.Instance.AllSolidsMask))
-        {
-            levelPosition = new Vector3(levelPosition.x, levelPosition.y + hit.point.y, levelPosition.z);
-        }
-        */
-        
-        Quaternion levelRotation = Quaternion.identity;
-        if (randomLevelRotation)
-            levelRotation = Quaternion.Euler(0, Random.Range(0,360), 0);
-
-        yield return StartCoroutine(SpawnBaseTiles(levelIndex, levelPosition, levelSize, levelRotation, false, levelHeights));
-    }
-
-    Vector3 RandomPosForAdditionalLevel(Vector3Int additionalLevelSize)
-    {
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        
-        int side = Random.Range(0, 4);
-        switch (side)
-        {
-            case 0: // LEFT
-                x = Random.Range(-levelsScaleMinMaxX.y - additionalLevelSize.x * 2 - additionalLevelSize.x, - levelsScaleMinMaxX.y - additionalLevelSize.x * 2);
-                z = Mathf.RoundToInt(Random.Range(-levelsScaleMinMaxZ.y - additionalLevelSize.z * 2, levelsScaleMinMaxZ.y + additionalLevelSize.z * 2));
-                break;
-            case 1: // FWD
-                x = Random.Range(-levelsScaleMinMaxX.y - additionalLevelSize.x * 2, levelsScaleMinMaxX.y + additionalLevelSize.x * 2);
-                z = Mathf.RoundToInt(Random.Range(levelsScaleMinMaxZ.y + additionalLevelSize.z * 2, levelsScaleMinMaxZ.y + additionalLevelSize.z * 2 + additionalLevelSize.z));
-                break;
-            case 2: // RIGHT
-                x = Random.Range(levelsScaleMinMaxX.y + additionalLevelSize.x * 2, levelsScaleMinMaxX.y + additionalLevelSize.x * 2 + additionalLevelSize.x);
-                z = Mathf.RoundToInt(Random.Range(-levelsScaleMinMaxZ.y - additionalLevelSize.z * 2, levelsScaleMinMaxZ.y + additionalLevelSize.z * 2));
-                break;
-            case 3: // BACK
-                x = Random.Range(-levelsScaleMinMaxX.y - additionalLevelSize.x * 2, levelsScaleMinMaxX.y + additionalLevelSize.x * 2);
-                z = Mathf.RoundToInt(Random.Range(-levelsScaleMinMaxZ.y - additionalLevelSize.z * 2, -levelsScaleMinMaxZ.y - additionalLevelSize.z * 2 - additionalLevelSize.z));
-                break;
-        }
-        return transform.position + new Vector3(x, y, z);
-    }
-
-    IEnumerator SpawnBaseTiles(int levelIndexInBuilding, Vector3 pos, Vector3Int size, Quaternion rot, bool mainBuilding, List<int> levelHeights)
+    
+    IEnumerator SpawnBaseTiles(int levelIndexInBuilding, Vector3 pos, Vector3Int size, Quaternion rot, List<int> levelHeights)
     {
         GameObject newLevelGameObject = new GameObject();
         Level newLevel = newLevelGameObject.AddComponent<Level>();
         
-        if (mainBuilding)
-        {
-            spawnedBuildingLevels.Add(newLevel);
+        spawnedBuildingLevels.Add(newLevel);
 
-            if (levelIndexInBuilding == 0)
-                newLevel.firstFloor = true;
-        }
-        else
-        {
-            spawnedAdditionalLevels.Add(newLevel);
+        if (levelIndexInBuilding == 0)
             newLevel.firstFloor = true;
-        }
         
         newLevel.position = pos;
         newLevel.size = size;
-        if (mainBuilding)
-        {
-            newLevelGameObject.name = "Building Level " + levelIndexInBuilding;
-            newLevelGameObject.transform.parent = generatedBuildingFolder;
-        }
-        else
-        {
-            newLevelGameObject.name = "Additional Level";   
-        }
+        
+        newLevelGameObject.name = "Building Level " + levelIndexInBuilding;
+        newLevelGameObject.transform.parent = generatedBuildingFolder;
         newLevel.spawnedTransform = newLevelGameObject.transform;
         newLevelGameObject.transform.position = pos;
         newLevelGameObject.transform.rotation = rot;
@@ -412,8 +302,6 @@ public class LevelGenerator : MonoBehaviour
         newLevel.roomTilesMatrix = new TileHealth[size.x,size.y,size.z];
         bool hasRoof = levelIndexInBuilding == levelHeights.Count - 1;
 
-        if (!mainBuilding)
-            hasRoof = true;
 
         int spaceBetweenWindows = Random.Range(2, size.x);
         int currentSpaceBetweenWindows = spaceBetweenWindows;
@@ -1027,27 +915,6 @@ public class LevelGenerator : MonoBehaviour
             // get all available tiles
             List<TileHealth> tilesForSpawn = new List<TileHealth>();
             
-            if (i == 0) // first floor, spread stuff through all additionalBuidlings
-            {
-                amount += additionalSmallBuildingsAmount;
-                for (int j = 0; j < spawnedAdditionalLevels.Count; j++)
-                {
-                    for (int x = 0; x < spawnedAdditionalLevels[i].size.x; x++)
-                    {
-                        for (int y = 0; y < spawnedAdditionalLevels[i].size.y; y++)
-                        {
-                            for (int z = 0; z < spawnedAdditionalLevels[i].size.z; z++)
-                            {
-                                if (spawnedAdditionalLevels[i].roomTilesMatrix[x, y, z] != null)
-                                {
-                                    tilesForSpawn.Add(spawnedAdditionalLevels[i].roomTilesMatrix[x, y, z]);
-                                }
-                            }
-                        }
-                    }   
-                }
-            }
-            
             for (int x = 0; x < spawnedBuildingLevels[i].size.x; x++)
             {
                 for (int y = 0; y < spawnedBuildingLevels[i].size.y; y++)
@@ -1297,7 +1164,7 @@ public class LevelGenerator : MonoBehaviour
                 if (Vector3.Distance(Game.Player.Position, navMeshSurfacesSpawned[i].transform.position) < updateNavMeshDistance)
                     navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
                 
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSecondsRealtime(1f);
             }
         }
     }
@@ -1317,6 +1184,27 @@ public class LevelGenerator : MonoBehaviour
     {
         t.parent = disconnectedTilesFolder;
     }
+
+    private void OnDrawGizmos()
+    {
+        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
+        {
+            var building = buildingsToSpawnSettings[i];
+            float lastHeight = 0;
+            for (int j = 0; j < building.buildingLevelsHeights.Count; j++)
+            {
+                // yellow is min, red is full
+                Vector3 offsetVert = Vector3.up * building.buildingLevelsHeights[j] / 2 + Vector3.up * lastHeight;
+                
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.x, building.buildingLevelsHeights[j], building.levelsScaleMinMaxZ.x));
+                
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.y, building.buildingLevelsHeights[j], building.levelsScaleMinMaxZ.y));
+                lastHeight += building.buildingLevelsHeights[j];
+            }
+        }
+    }
 }
 
 [Serializable]
@@ -1330,6 +1218,12 @@ public class BuildingSettings
 {
     public List<int> buildingLevelsHeights = new List<int>();
     public Transform BuildingOriginTransform;
+    
+    public Vector2Int offsetPosMinMaxX = new Vector2Int(-10, 10);
+    public Vector2Int offsetPosMinMaxZ = new Vector2Int(-10, 10);
+    [Header("SCALE IS SCALED BY 2 IN CODE")]
+    public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
+    public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
 }
 
 public static class LevelgenTransforms

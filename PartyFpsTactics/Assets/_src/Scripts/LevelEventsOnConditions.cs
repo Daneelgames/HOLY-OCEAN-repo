@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
 using MrPink;
+using MrPink.Health;
 using UnityEngine;
 
 public class LevelEventsOnConditions : MonoBehaviour
@@ -10,7 +11,7 @@ public class LevelEventsOnConditions : MonoBehaviour
 
     public List<LevelEvent> currentEvents;
 
-    private List<LevelEventActor> levelActors = new List<LevelEventActor>();
+    public List<LevelEventActor> levelActors = new List<LevelEventActor>();
     void Awake()
     {
         Instance = this;
@@ -30,6 +31,17 @@ public class LevelEventsOnConditions : MonoBehaviour
     public void AddActor(LevelEventActor levelEventActor)
     {
         levelActors.Add(levelEventActor);
+    }
+
+    public HealthController GetHcById(int id)
+    {
+        for (int i = 0; i < levelActors.Count; i++)
+        {
+            if (levelActors[i].actorId == id)
+                return levelActors[i].gameObject.GetComponent<HealthController>();
+        }
+
+        return null;
     }
     
     IEnumerator CheckingEvent(LevelEvent levelEvent)

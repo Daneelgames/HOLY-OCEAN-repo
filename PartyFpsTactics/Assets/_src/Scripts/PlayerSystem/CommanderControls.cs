@@ -134,14 +134,6 @@ namespace MrPink.PlayerSystem
         
             moveOrderCurrentPos = closestNavPoint;
             return true;
-            for (int i = 0; i < unitsInParty.Count; i++)
-            {
-                if (unitsInParty[i].AiMovement)
-                    unitsInParty[i].AiMovement.MoveToPositionOrder(closestNavPoint);
-            }
-
-            moveOrderCurrentPos = closestNavPoint;
-            return true;
         }
 
         void RunOrder()

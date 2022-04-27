@@ -47,12 +47,13 @@ namespace MrPink.Health
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
+        public CrimeLevel crimeLevel;
         public ControlledMachine controlledMachine;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
-        
         public InteractiveObject npcInteraction;
         public DeathOnHit deathOnHit;
+        public List<HealthController> unitsVisibleBy = new List<HealthController>();
 
         [Header("This RB will be affected by explosions. For barrels etc")]
         public Rigidbody rb;
@@ -164,8 +165,10 @@ namespace MrPink.Health
             {
                 if (team != damager.team)
                     Debug.Log("SetDamager other team: " + damager);
-                vision.SetDamager(damager);
+                vision.SetDamager(damager, true, true);
             }
+            if (damager.crimeLevel)
+                damager.crimeLevel.CrimeCommitedAgainstTeam(team, true, true);
         }
 
         public void DrainHealth(int drainAmount)
@@ -308,6 +311,17 @@ namespace MrPink.Health
                 Destroy(gameObject);
         }
 
+        public void AddToVisibleByUnits(HealthController unit)
+        {
+            if (!unitsVisibleBy.Contains(unit))
+                unitsVisibleBy.Add(unit);
+        }
+        public void RemoveFromVisibleByUnits(HealthController unit)
+        {
+            if (unitsVisibleBy.Contains(unit))
+                unitsVisibleBy.Remove(unit);
+        }
+        
         private void OnDestroy()
         {
             // TODO инкапсулировать логику в сами классы

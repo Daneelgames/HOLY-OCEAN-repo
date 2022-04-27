@@ -8,6 +8,6 @@ public class SleepMachine : MonoBehaviour
     public void PlayerInside(bool inside)
     {
         GameManager.Instance.SetPlayerSleepTimeScale(inside);
-        Game.Player.characterNeeds.SetSleeping(inside);
+        Game.Player.CharacterNeeds.SetSleeping(inside);
     }
 }

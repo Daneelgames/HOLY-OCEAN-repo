@@ -27,6 +27,15 @@ public class CharacterNeeds : MonoBehaviour
 
     private Coroutine _needsCoroutine;
 
+    public void ResetNeeds()
+    {
+        for (int i = 0; i < needs.Count; i++)
+        {
+            var need = needs[i];
+            need.needCurrent = 0;
+        }
+    }
+    
     IEnumerator Needs()
     {
         // ADD A WAY FOR NPC TO RESTORE THEIR NEEDS

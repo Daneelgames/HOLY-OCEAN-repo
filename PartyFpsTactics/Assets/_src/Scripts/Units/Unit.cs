@@ -6,6 +6,7 @@ namespace MrPink.Units
 {
     public class Unit : MonoBehaviour
     {
+        public Transform faceCam;
         [SerializeField, ChildGameObjectsOnly, Required]
         private HealthController _healthController;
         

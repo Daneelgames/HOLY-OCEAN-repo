@@ -18,23 +18,12 @@ namespace _src.Scripts.Data
         public bool spawnWalls = true;
         public bool spawnLadders = true;
         
-        public Vector2Int levelsPosMinMaxX = new Vector2Int(-10, 10);
-        public Vector2Int levelsPosMinMaxZ = new Vector2Int(-10, 10);
-        public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
-        public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
-        public int additionalSmallBuildingsAmount = 3;
-        public Vector2Int additionalBuildingsScaleMinMaxX = new Vector2Int(4, 8);
-        public Vector2Int additionalBuildingsScaleMinMaxY = new Vector2Int(5, 10);
-        public Vector2Int additionalBuildingsScaleMinMaxZ = new Vector2Int(4, 8);
-        
         public GameObject levelGoalPrefab;
         public TileHealth tilePrefab;
         public TileHealth tileWallPrefab;
         public TileHealth tileWallThinPrefab;
         public GameObject explosiveBarrelPrefab;
         public GrindRail grindRailsPrefab;
-        
-        public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
         
         public int explosiveBarrelsAmount = 2;
         public Vector2Int enemiesPerRoomMinMax = new Vector2Int(2,2);

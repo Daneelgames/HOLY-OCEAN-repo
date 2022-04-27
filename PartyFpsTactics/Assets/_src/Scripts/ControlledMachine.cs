@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.WeaponsSystem;
@@ -25,6 +26,7 @@ public class ControlledMachine : MonoBehaviour
     public Rigidbody rb;
     private float rbDrag = 1;
     private float rbAngularDrag = 1;
+    public HealthController controllingHc;
     
     private void Awake()
     {
@@ -43,6 +45,7 @@ public class ControlledMachine : MonoBehaviour
 
     public void StartPlayerInput()
     {
+        controllingHc = Game.Player.Health;
         if (wheelVehicle)
         {
             wheelVehicle.IsPlayer = true;
@@ -163,6 +166,7 @@ public class ControlledMachine : MonoBehaviour
         
         rb.drag = rbDrag;
         rb.angularDrag = rbAngularDrag;
+        controllingHc = null;
     }
 
     IEnumerator ResetVisualTransform()

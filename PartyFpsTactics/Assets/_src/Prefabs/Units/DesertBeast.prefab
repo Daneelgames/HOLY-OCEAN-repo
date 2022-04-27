@@ -650,16 +650,18 @@ MonoBehaviour:
   shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
-  team: 3
+  team: 4
   UnitVision: {fileID: 6634025865956733556}
   AiMovement: {fileID: 13917179899874975}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 8692219909506116655}
+  crimeLevel: {fileID: 0}
   controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   npcInteraction: {fileID: 0}
   deathOnHit: {fileID: 0}
+  unitsVisibleBy: []
   rb: {fileID: 0}
   bodyParts:
   - {fileID: 4353602340024252761}
@@ -739,6 +741,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeWeapons:
   - {fileID: 8799047299024897258}
+  handsIk: []
   weaponsAttackSwitchCooldownMinMax: {x: 0.5, y: 0.5}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
@@ -924,6 +927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faceCam: {fileID: 0}
   _healthController: {fileID: 1876098499272473148}
   _unitVision: {fileID: 6634025865956733556}
   _unitAiMovement: {fileID: 13917179899874975}
@@ -932,6 +936,7 @@ MonoBehaviour:
   _followTarget: {fileID: -8284327079036214745}
   _characterNeeds: {fileID: 334130167860987239}
   _spawnLootOnDeath: {fileID: 8269070158630374642}
+  _npcInteraction: {fileID: 0}
 --- !u!114 &334130167860987239
 MonoBehaviour:
   m_ObjectHideFlags: 0

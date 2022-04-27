@@ -48,8 +48,8 @@ namespace MrPink.Units
 
             Awareness().ForgetWithHandler();
 
-            if (_selfUnit.HealthController.team == Team.Red && Random.value > 0.5f)
-                MoveToPositionOrder(Game.Player.GameObject.transform.position);
+            if (_selfUnit.HealthController.team == Team.Red && Game.Player.Health.team == Team.Blue && Random.value > 0.5f)
+                FollowTargetOrder(Game.Player.GameObject.transform);
             else
                 TakeCoverOrder();
         }

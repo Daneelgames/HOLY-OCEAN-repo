@@ -275,6 +275,7 @@ MonoBehaviour:
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
     NpcHc: {fileID: 0}
+    actorId: -1
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
@@ -15665,16 +15666,18 @@ MonoBehaviour:
   shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 0}
-  team: 2
+  team: 1
   UnitVision: {fileID: 0}
   AiMovement: {fileID: 0}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
+  crimeLevel: {fileID: 0}
   controlledMachine: {fileID: 6119827908447038146}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
   npcInteraction: {fileID: 4910991823978323835}
   deathOnHit: {fileID: 0}
+  unitsVisibleBy: []
   rb: {fileID: 0}
   bodyParts:
   - {fileID: 1409001292525907879}
@@ -15709,6 +15712,7 @@ MonoBehaviour:
   - {fileID: 3676565673249486911}
   - {fileID: 8838141839634738439}
   rb: {fileID: 5752542937177413564}
+  controllingHc: {fileID: 0}
 --- !u!114 &5299485256075476146
 MonoBehaviour:
   m_ObjectHideFlags: 0

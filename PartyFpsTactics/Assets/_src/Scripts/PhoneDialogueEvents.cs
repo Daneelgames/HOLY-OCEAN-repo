@@ -35,16 +35,20 @@ public class PhoneDialogueEvents : MonoBehaviour
         inCutScene = false;
         currentTalknigNpc = null;
             
-        StartCoroutine(NpcDialogueCutscene(dialogue, npcHc, destroyInteractorAfterDialogueCompleted, scoreToAddOnDialogueCompleted, setNextLevelOnCompletion));
+        if (NpcDialogueCutsceneCoroutine != null)
+            StopCoroutine(NpcDialogueCutsceneCoroutine);
+        
+        NpcDialogueCutsceneCoroutine = StartCoroutine(NpcDialogueCutscene(dialogue, npcHc, destroyInteractorAfterDialogueCompleted, scoreToAddOnDialogueCompleted, setNextLevelOnCompletion));
     }
 
+    private Coroutine NpcDialogueCutsceneCoroutine;
     IEnumerator NpcDialogueCutscene(Dialogue dialogue, HealthController npcHc, InteractiveObject destroyInteractorAfterDialogueCompleted, int scoreToAddOnDialogueCompleted, bool setNextLevelOnCompletion)
     {
         currentTalknigNpc = npcHc;
         inCutScene = true;
         //npcHc.IsImmortal = true;
         //Player.Health.IsImmortal = true;
-        DialogueWindowInterface.Instance.ToggleDialogueWindow(true);
+        DialogueWindowInterface.Instance.ToggleDialogueWindow(true, npcHc);
         for (int i = 0; i < dialogue.phrases.Count; i++)
         {;
             //Player.LookAround.SetCurrentCutsceneTargetTrasform(randomTransform);

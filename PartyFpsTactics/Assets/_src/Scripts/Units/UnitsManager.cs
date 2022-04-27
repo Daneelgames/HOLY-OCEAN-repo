@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace MrPink.Units
@@ -45,25 +47,40 @@ namespace MrPink.Units
 
         public void SpawnBlueUnit(Vector3 pos)
         {
+            pos = SamplePos(pos);
             Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
         public HealthController SpawnRedUnit(Vector3 pos)
         {
+            pos = SamplePos(pos);
             return Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
         public void SpawnNeutralUnit(Vector3 pos)
         {
+            pos = SamplePos(pos);
             Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
         public void SpawnDesertBeast(Vector3 pos)
         {
+            pos = SamplePos(pos);
             Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
 
+        Vector3 SamplePos(Vector3 pos)
+        {
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(pos, out hit, 10, NavMesh.AllAreas))
+            {
+                pos = hit.position;
+            }
 
+            return pos;
+        }
+
+        
         public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1,
             float playerForce = -1, ScoringActionType action = ScoringActionType.NULL, int enduranceDamage = -1)
         {

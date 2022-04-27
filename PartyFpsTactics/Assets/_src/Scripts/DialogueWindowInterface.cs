@@ -30,6 +30,12 @@ namespace MrPink
         public AudioClip auClipYes;
         public AudioClip auClipNo;
 
+        private HealthController speakerToRender;
+        public float faceCamSpeed = 2;
+        public float faceCamSpeedRot = 2;
+        public GameObject speakingCharacterPhoneRender;
+        public Camera speakingCharacterCamera;
+
         private void Start()
         {
             Instance = this;
@@ -53,6 +59,12 @@ namespace MrPink
                 PlayerAnswered(true);
             if (Input.GetKeyDown(KeyCode.Q))
                 PlayerAnswered(false);
+
+            if (speakerToRender && speakerToRender.selfUnit.faceCam)
+            {
+                speakingCharacterCamera.transform.position = Vector3.Lerp(speakingCharacterCamera.transform.position, speakerToRender.selfUnit.faceCam.position, faceCamSpeed * Time.deltaTime);
+                speakingCharacterCamera.transform.rotation = Quaternion.Slerp(speakingCharacterCamera.transform.rotation, speakerToRender.selfUnit.faceCam.rotation, faceCamSpeedRot * Time.deltaTime);
+            }
         }
 
         public void TogglePlayerAnswerButtons(bool active)
@@ -96,8 +108,10 @@ namespace MrPink
             PhoneDialogueEvents.Instance.PlayerAnswered(positiveAnswer);
         }
 
-        public void ToggleDialogueWindow(bool active)
+        public void ToggleDialogueWindow(bool active, HealthController hcNpc = null)
         {
+            speakerToRender = hcNpc;
+            
             if (toggleDialogueWIndowCoroutine != null)
                 StopCoroutine(toggleDialogueWIndowCoroutine);
 
@@ -158,14 +172,16 @@ namespace MrPink
                 phoneVisual.transform.rotation = Quaternion.Slerp(phoneVisual.transform.rotation, targetTransform.rotation, t / 1);
                 t += Time.deltaTime;
             }
-        
             if (!active)
             {
                 phoneVisual.SetActive(false);
                 PlayerAnswered(false);
                 PhoneDialogueEvents.Instance.CloseCutscene();
             }
-        
+            
+            speakingCharacterCamera.gameObject.SetActive(speakerToRender && speakerToRender.selfUnit.faceCam);
+            speakingCharacterPhoneRender.SetActive(speakerToRender && speakerToRender.selfUnit.faceCam);
+            
             toggleDialogueWIndowCoroutine = null;
         }
     }

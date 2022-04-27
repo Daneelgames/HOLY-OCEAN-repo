@@ -455,6 +455,7 @@ namespace MrPink.PlayerSystem
         
         public void Death(Transform killer = null)
         {
+            SetCollidersTrigger(false);
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.drag = 1;
@@ -464,6 +465,7 @@ namespace MrPink.PlayerSystem
 
         public void Resurrect()
         {
+            SetCollidersTrigger(false);
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.drag = rbInitDrag;

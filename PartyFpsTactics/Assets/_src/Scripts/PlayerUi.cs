@@ -72,13 +72,13 @@ namespace MrPink
                 }
 
                 staminaBar.fillAmount = Game.Player.Movement.stamina / Game.Player.Movement.staminaMax;
-                for (int i = 0; i < Game.Player.characterNeeds.needs.Count; i++)
+                for (int i = 0; i < Game.Player.CharacterNeeds.needs.Count; i++)
                 {
                     // 0 is sleep
                     // 1 is hunger
                     // 2 is water
-                    float d = Game.Player.characterNeeds.needs[i].needCurrent /
-                              Game.Player.characterNeeds.needs[i].needMaxBase;
+                    float d = Game.Player.CharacterNeeds.needs[i].needCurrent /
+                              Game.Player.CharacterNeeds.needs[i].needMaxBase;
                     characterNeedsBars[i].fillAmount = d;
                     characterNeedsBars[i].transform.parent.localScale = Vector3.Lerp(Vector3.one * 0.5f, Vector3.one * 1.25f, d);
                 }

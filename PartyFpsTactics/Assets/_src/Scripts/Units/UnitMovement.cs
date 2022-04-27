@@ -107,7 +107,15 @@ namespace MrPink.Units
 
         public void TeleportNearPosition(Vector3 pos)
         {
-            _agent.Warp(SamplePos(pos));
+            if (_agent.enabled)
+            {
+                _agent.Warp(SamplePos(pos));
+                return;
+            }
+            
+            // if not enabled
+            transform.position = SamplePos(pos);
+
         }
         
         private Vector3 SamplePos(Vector3 startPos)

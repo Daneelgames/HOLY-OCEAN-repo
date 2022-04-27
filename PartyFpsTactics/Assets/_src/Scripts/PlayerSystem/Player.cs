@@ -77,7 +77,7 @@ namespace MrPink.PlayerSystem
             => _lookAround;
         public PlayerVehicleControls VehicleControls
             => _vehicleControls;
-        public CharacterNeeds characterNeeds
+        public CharacterNeeds CharacterNeeds
             => _characterNeeds;
         
 
@@ -98,6 +98,7 @@ namespace MrPink.PlayerSystem
             Movement.Resurrect();
             LookAround.Resurrect();
             Weapon.Resurrect();
+            CharacterNeeds.ResetNeeds();
         }
     }
 }

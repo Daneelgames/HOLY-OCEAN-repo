@@ -50,6 +50,10 @@ namespace _src.Scripts.Data
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public HealthController NpcHc;
 
+        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
+        [Header("If Id >= 0, game will try to find NpcHc by Id")]
+        public int actorId = -1;
+
 
         
         [ShowIf("scriptedEventType", ScriptedEventType.SetCurrentLevel)]

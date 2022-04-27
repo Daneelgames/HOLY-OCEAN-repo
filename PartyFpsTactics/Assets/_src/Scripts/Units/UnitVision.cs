@@ -38,24 +38,45 @@ namespace MrPink.Units
             StartCoroutine(CheckEnemies());
         }
 
-        public void SetDamager(HealthController damager)
+        public void SetDamager(HealthController damager, bool stack = false, bool tellToFriends = false)
         {
             if (setDamagerAsEnemyBehaviour == EnemiesSetterBehaviour.SetOnlyOtherTeam && damager.team == _selfHealth.team)
                 return;
         
-            if (_enemiesToRemember.Contains(damager))
+            
+            if (!stack && _enemiesToRemember.Contains(damager))
                 return;
-        
+
+            // IF DAMAGED BY A MACHINE - SET DAMAGER DRIVER
+            if (damager.controlledMachine && damager.controlledMachine.controllingHc)
+                damager = damager.controlledMachine.controllingHc;
+            
             Debug.Log("SetDamager " + damager);
             _enemiesToRemember.Add(damager);
+            
+            if (!tellToFriends)
+                return;
+            
+            for (int i = 0; i < visibleUnits.Count; i++) // tell all his friends
+            {
+                var unit = visibleUnits[i];
+                if (unit.UnitVision && unit.team == _selfHealth.team)
+                {
+                    if (unit.UnitVision._enemiesToRemember.Contains(damager) == false)
+                        unit.UnitVision.SetDamager(damager);
+                }
+            }
         }
 
-        public void ForgiveUnit(HealthController teamMate)
+        public void ForgiveUnit(HealthController unit)
         {
-            if (_enemiesToRemember.Contains(teamMate))
-                _enemiesToRemember.Remove(teamMate);
-            if (visibleEnemies.Contains(teamMate))
-                visibleEnemies.Remove(teamMate);
+            for (int i = 0; i < _enemiesToRemember.Count; i++)
+            {
+                if (_enemiesToRemember[i] == unit)
+                    _enemiesToRemember.RemoveAt(i);
+            }
+            if (visibleEnemies.Contains(unit))
+                visibleEnemies.Remove(unit);
         }
         
         public async UniTask<HealthController> GetClosestVisibleEnemy()
@@ -105,7 +126,7 @@ namespace MrPink.Units
                 for (int i = 0; i < UnitsManager.Instance.unitsInGame.Count; i++)
                 {
                     var unit = UnitsManager.Instance.unitsInGame[i];
-                    if (unit == null || unit.team == _selfHealth.team)
+                    if (unit == null)
                         continue;
                 
                     CheckUnit(unit);
@@ -127,7 +148,7 @@ namespace MrPink.Units
                 
             if (!ignoreTeams)
             {
-                if (unit.team == _selfHealth.team || unit.team == Team.NULL || _selfHealth.team == Team.NULL)
+                if (TeamsManager.Instance.IsUnitEnemyToMe(_selfHealth.team, unit.team) == false)
                 {
                     AddVisibleUnit(unit);
                     return;
@@ -150,6 +171,8 @@ namespace MrPink.Units
         {
             if (!visibleUnits.Contains(unit))
                 visibleUnits.Add(unit);
+            
+            unit.AddToVisibleByUnits(_selfHealth);
         }
 
         private void RemoveFromVisible(HealthController unit)
@@ -159,6 +182,8 @@ namespace MrPink.Units
 
             if (visibleUnits.Contains(unit))
                 visibleUnits.Remove(unit);
+            
+            unit.RemoveFromVisibleByUnits(_selfHealth);
         }
 
         private bool IsInLineOfSight(Transform target) 

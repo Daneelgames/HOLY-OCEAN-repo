@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
 using MrPink;
+using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -49,10 +50,15 @@ public class InteractableEventsManager : MonoBehaviour
         switch (IOevent.scriptedEventType)
         {
             case ScriptedEventType.StartDialogue:
-            
-                PhoneDialogueEvents.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, IOevent.NpcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted, IOevent.setNextLevelOnDialogueCompleted);
+
+                var npcHc = IOevent.NpcHc; 
+                if (npcHc == null && IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
+                {
+                    npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
+                }
+                PhoneDialogueEvents.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, npcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted, IOevent.setNextLevelOnDialogueCompleted);
                 if (IOevent.maxDistanceToSpeaker > 0)
-                    DialogueWindowInterface.Instance.StartCheckingDistanceToSpeaker(IOevent.NpcHc, IOevent.maxDistanceToSpeaker);
+                    DialogueWindowInterface.Instance.StartCheckingDistanceToSpeaker(npcHc, IOevent.maxDistanceToSpeaker);
                 break;
             
             case ScriptedEventType.SpawnObject:
