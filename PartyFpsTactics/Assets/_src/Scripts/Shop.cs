@@ -41,6 +41,11 @@ namespace MrPink
             CloseShop();
         }
 
+        public void SetToolsList(List<Tool> tools)
+        {
+            toolsList = new List<Tool>(tools);
+        }
+
         public void OpenShop(int newSelectedItem)
         {
             ScoringSystem.Instance.UpdateScore();

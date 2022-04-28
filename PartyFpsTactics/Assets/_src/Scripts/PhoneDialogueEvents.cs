@@ -82,7 +82,10 @@ public class PhoneDialogueEvents : MonoBehaviour
                     yield return new WaitForSeconds(phrase.delayAfterReactionOnPositiveAnswer);
                 
                 if (phrase.openShopOnPositive)
+                {
+                    Shop.Instance.SetToolsList(npcHc.AiShop.toolsToSell);
                     Shop.Instance.OpenShop(0);
+                }
             }
             else if (_lastPlayerAnswer == LastPlayerAnswer.Negative && phrase.answerOnNegative)
             {

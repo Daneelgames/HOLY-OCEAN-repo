@@ -47,6 +47,7 @@ namespace MrPink.Health
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
+        public AiShop AiShop;
         public CrimeLevel crimeLevel;
         public ControlledMachine controlledMachine;
         public PlayerMovement playerMovement;
