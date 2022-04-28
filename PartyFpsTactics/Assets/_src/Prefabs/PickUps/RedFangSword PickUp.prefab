@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: -2958212832291290666}
   - component: {fileID: 6389766876289032058}
   - component: {fileID: 5178915654316266458}
+  - component: {fileID: -1870426396055259714}
   m_Layer: 11
   m_Name: RedFangSword PickUp
   m_TagString: Untagged
@@ -227,13 +228,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 0
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
-    NpcHc: {fileID: 0}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 11400000, guid: fa8f58b1f7e474e4191c3fc6963cb33e, type: 2}
     weaponToAdd: {fileID: 2642470501878746763, guid: e1bbc1d70dfae460fa94dc1bf7fd267f, type: 3}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    actorId: -1
   - scriptedEventType: 2
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -244,13 +247,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 0
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
-    NpcHc: {fileID: 0}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 0}
     weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    actorId: -1
   rb: {fileID: 5178915654316266458}
   hc: {fileID: 0}
 --- !u!135 &-2958212832291290666
@@ -295,6 +300,18 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &-1870426396055259714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8361261429759661543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3901d3f8759ceb048b9a2a4d24f562c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8483980112707504668
 GameObject:
   m_ObjectHideFlags: 0

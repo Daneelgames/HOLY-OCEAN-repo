@@ -51,14 +51,17 @@ public class PhoneDialogueEvents : MonoBehaviour
         DialogueWindowInterface.Instance.ToggleDialogueWindow(true, npcHc);
         for (int i = 0; i < dialogue.phrases.Count; i++)
         {;
-            //Player.LookAround.SetCurrentCutsceneTargetTrasform(randomTransform);
+            yield return null;
             
             var phrase = dialogue.phrases[i];
-            yield return new WaitForSeconds(phrase.delayIn);
+            if (!Input.GetKey(KeyCode.Tab))
+                yield return new WaitForSeconds(phrase.delayIn);
             DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.messageText, true);
 
             if (!phrase.waitForPlayerAnswer)
+            {
                 continue;
+            }
 
             playerAnswered = false;
             DialogueWindowInterface.Instance.TogglePlayerAnswerButtons(true);
@@ -71,17 +74,24 @@ public class PhoneDialogueEvents : MonoBehaviour
 
             if (_lastPlayerAnswer == LastPlayerAnswer.Positive && phrase.answerOnPositive)
             {
-                yield return new WaitForSeconds(phrase.delayBeforeReactionOnPositiveAnswer);
+                if (!Input.GetKey(KeyCode.Tab))
+                    yield return new WaitForSeconds(phrase.delayBeforeReactionOnPositiveAnswer);
                 DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.answerOnPositiveText, false);
-                yield return new WaitForSeconds(phrase.delayAfterReactionOnPositiveAnswer);
+                
+                if (!Input.GetKey(KeyCode.Tab))
+                    yield return new WaitForSeconds(phrase.delayAfterReactionOnPositiveAnswer);
+                
                 if (phrase.openShopOnPositive)
                     Shop.Instance.OpenShop(0);
             }
             else if (_lastPlayerAnswer == LastPlayerAnswer.Negative && phrase.answerOnNegative)
             {
-                yield return new WaitForSeconds(phrase.delayBeforeReactionOnNegativeAnswer);
+                if (!Input.GetKey(KeyCode.Tab))
+                    yield return new WaitForSeconds(phrase.delayBeforeReactionOnNegativeAnswer);
                 DialogueWindowInterface.Instance.NewMessage(phrase.messengerName, phrase.answerOnNegativeText, false);
-                yield return new WaitForSeconds(phrase.delayAfterReactionOnNegativeAnswer);
+                
+                if (!Input.GetKey(KeyCode.Tab))
+                    yield return new WaitForSeconds(phrase.delayAfterReactionOnNegativeAnswer);
             }
 
             if (i >= dialogue.phrases.Count - 1)

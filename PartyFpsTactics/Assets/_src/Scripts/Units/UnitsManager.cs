@@ -45,6 +45,11 @@ namespace MrPink.Units
             StartCoroutine(UniTask.ToCoroutine(BodyPartsKillQueue));
         }
 
+        public void SpawnUnit(HealthController prefab, Vector3 pos)
+        {
+            Instantiate(prefab, pos, Quaternion.identity, _spawnRoot);
+        }
+        
         public void SpawnBlueUnit(Vector3 pos)
         {
             pos = SamplePos(pos);

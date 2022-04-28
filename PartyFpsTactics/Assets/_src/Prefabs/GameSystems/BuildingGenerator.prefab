@@ -234,7 +234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1267900870}
   m_Layer: 0
-  m_Name: 2floorsBuilding
+  m_Name: Checkpoint 1floorsBuilding
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -294,7 +294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1474389162}
   m_Layer: 0
-  m_Name: 2floorsBuilding (2)
+  m_Name: TICKETS 2floorsBuilding
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -354,7 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1711918360}
   m_Layer: 0
-  m_Name: 1floorBuilding (6)
+  m_Name: BurningFone 1floorBuilding
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -384,7 +384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1814871269}
   m_Layer: 0
-  m_Name: 2floorsBuilding (1)
+  m_Name: HIRING 2floorsBuilding
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 6538700427162571402}
   - component: {fileID: 4867740379949603590}
   m_Layer: 0
-  m_Name: LevelGenerator
+  m_Name: BuildingGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -457,84 +457,304 @@ MonoBehaviour:
   generatedBuildingFolder: {fileID: 0}
   disconnectedTilesFolder: {fileID: 0}
   buildingsToSpawnSettings:
-  - buildingLevelsHeights: 09000000
+  - levelsSettings: []
     BuildingOriginTransform: {fileID: 1711918360}
     offsetPosMinMaxX: {x: -5, y: 5}
     offsetPosMinMaxZ: {x: -5, y: 5}
     levelsScaleMinMaxX: {x: 4, y: 8}
     levelsScaleMinMaxZ: {x: 4, y: 8}
-  - buildingLevelsHeights: 0500000005000000
-    BuildingOriginTransform: {fileID: 994919231}
-    offsetPosMinMaxX: {x: -4, y: 4}
-    offsetPosMinMaxZ: {x: -4, y: 4}
-    levelsScaleMinMaxX: {x: 8, y: 12}
-    levelsScaleMinMaxZ: {x: 8, y: 12}
-  - buildingLevelsHeights: 0700000007000000
+    spawnProps: 0
+    spawnLoot: 0
+    spawnUnits: 0
+    spawnLadders: 0
+    spawnRooms: 0
+    spawnNavMesh: 0
+    updateClash: 0
+  - levelsSettings:
+    - levelHeight: 7
+      uniqueNpcsToSpawn:
+      - {fileID: 1888395734998901733, guid: affad653461496343aa6aac937c7dd01, type: 3}
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn:
+      - {fileID: 6002964883643043357, guid: c1406ecefc92ba74288059276ae4787b, type: 3}
     BuildingOriginTransform: {fileID: 1267900870}
     offsetPosMinMaxX: {x: -4, y: 4}
     offsetPosMinMaxZ: {x: -4, y: 4}
     levelsScaleMinMaxX: {x: 8, y: 12}
     levelsScaleMinMaxZ: {x: 8, y: 12}
-  - buildingLevelsHeights: 0700000007000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 7
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      controlledMachinesToSpawn: []
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 1814871269}
     offsetPosMinMaxX: {x: -4, y: 4}
     offsetPosMinMaxZ: {x: -4, y: 4}
     levelsScaleMinMaxX: {x: 8, y: 12}
     levelsScaleMinMaxZ: {x: 8, y: 12}
-  - buildingLevelsHeights: 0700000007000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 7
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      controlledMachinesToSpawn: []
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 1474389162}
     offsetPosMinMaxX: {x: -4, y: 4}
     offsetPosMinMaxZ: {x: -4, y: 4}
     levelsScaleMinMaxX: {x: 8, y: 12}
     levelsScaleMinMaxZ: {x: 8, y: 12}
-  - buildingLevelsHeights: 04000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
+    BuildingOriginTransform: {fileID: 994919231}
+    offsetPosMinMaxX: {x: -4, y: 4}
+    offsetPosMinMaxZ: {x: -4, y: 4}
+    levelsScaleMinMaxX: {x: 8, y: 12}
+    levelsScaleMinMaxZ: {x: 8, y: 12}
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 1521820770}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 3, y: 10}
     levelsScaleMinMaxZ: {x: 3, y: 10}
-  - buildingLevelsHeights: 04000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 6829112495019383100}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 10, y: 15}
     levelsScaleMinMaxZ: {x: 10, y: 15}
-  - buildingLevelsHeights: 05000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 1282736948}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 4, y: 10}
     levelsScaleMinMaxZ: {x: 4, y: 10}
-  - buildingLevelsHeights: 06000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 961079018}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 6, y: 10}
     levelsScaleMinMaxZ: {x: 6, y: 10}
-  - buildingLevelsHeights: 07000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 687631765}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 6, y: 10}
     levelsScaleMinMaxZ: {x: 6, y: 10}
-  - buildingLevelsHeights: 08000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn: []
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 739509613}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 6, y: 10}
     levelsScaleMinMaxZ: {x: 6, y: 10}
-  - buildingLevelsHeights: 0500000005000000060000000600000004000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 5
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      controlledMachinesToSpawn: []
+    - levelHeight: 6
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn: []
+    - levelHeight: 7
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn: []
+    - levelHeight: 8
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn: []
+    - levelHeight: 9
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 410283105}
     offsetPosMinMaxX: {x: -10, y: 10}
     offsetPosMinMaxZ: {x: -10, y: 10}
     levelsScaleMinMaxX: {x: 8, y: 12}
     levelsScaleMinMaxZ: {x: 8, y: 12}
-  - buildingLevelsHeights: 08000000
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
+  - levelsSettings:
+    - levelHeight: 10
+      uniqueNpcsToSpawn: []
+      unitsToSpawn:
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+      - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+      controlledMachinesToSpawn: []
     BuildingOriginTransform: {fileID: 7650147627217467212}
     offsetPosMinMaxX: {x: 0, y: 0}
     offsetPosMinMaxZ: {x: 0, y: 0}
     levelsScaleMinMaxX: {x: 20, y: 20}
     levelsScaleMinMaxZ: {x: 20, y: 20}
+    spawnProps: 1
+    spawnLoot: 1
+    spawnUnits: 1
+    spawnLadders: 1
+    spawnRooms: 1
+    spawnNavMesh: 1
+    updateClash: 1
   spawnWalls: 1
   spawnLadders: 1
   allSolidsLayerMask:
@@ -556,8 +776,6 @@ MonoBehaviour:
   - {fileID: -6444434528068832751, guid: 3b88c4f0fec95b943abe47c1a4fef733, type: 3}
   - {fileID: 7422235489244223048, guid: 4236dc55a03c34f4caf7814cf58b9ef3, type: 3}
   - {fileID: 1877505377624061809, guid: 617fae7eb04de0d4395d58097591cc5e, type: 3}
-  controlledMachinesInRooms:
-  - {fileID: 8452329197390470906, guid: c1406ecefc92ba74288059276ae4787b, type: 3}
   lootToSpawnAround:
   - {fileID: 2750620269132520170, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
   - {fileID: 2750620269132520170, guid: edfa06cee4886db40aa3d98992531fee, type: 3}

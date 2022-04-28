@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1604602112074562993
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1788316478275161025}
+  - component: {fileID: 211124566939255669}
+  m_Layer: 6
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1788316478275161025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604602112074562993}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0041, y: 1.275, z: 0.0206}
+  m_LocalScale: {x: 0.21078685, y: 2.6833065, z: 0.4743202}
+  m_Children: []
+  m_Father: {fileID: 5052907079431669963}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &211124566939255669
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604602112074562993}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5572176062682796657
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,8 +57,9 @@ GameObject:
   - component: {fileID: 7057265401299245292}
   - component: {fileID: 9115925812583879756}
   - component: {fileID: 2068544717774054767}
+  - component: {fileID: 6343087948723722575}
   m_Layer: 11
-  m_Name: Cactus Eatable
+  m_Name: Kaktus Eatable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,6 +77,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8382803030799136960}
+  - {fileID: 1788316478275161025}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,7 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   npcDialoguesList: {fileID: 0}
-  interactiveObjectName: EAT SOME
+  interactiveObjectName: EAT SOME KAKTUS
   eventsOnInteraction:
   - scriptedEventType: 11
     scoreToAdd: 100
@@ -87,7 +133,7 @@ MonoBehaviour:
     toolToAdd: {fileID: 0}
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
-    addToStatAmount: -100
+    addToStatAmount: -50
     actorId: 0
   - scriptedEventType: 13
     scoreToAdd: 0
@@ -108,6 +154,25 @@ MonoBehaviour:
     ActorNpc: {fileID: 0}
     addToStatAmount: -50
     actorId: 0
+  - scriptedEventType: 14
+    scoreToAdd: 0
+    prefabToSpawn: {fileID: 0}
+    spawnInsideCamera: 0
+    customSpawnPoint: {fileID: 0}
+    dialogueToStart: {fileID: 0}
+    destroyInteractorAfterDialogueCompleted: {fileID: 0}
+    scoreToAddOnDialogueCompleted: 0
+    setNextLevelOnDialogueCompleted: 0
+    maxDistanceToSpeaker: -1
+    currentLevelToSet: 0
+    soundToPlay: {fileID: 0}
+    auPitchMinMax: {x: 1, y: 1}
+    controlledMachine: {fileID: 0}
+    toolToAdd: {fileID: 0}
+    weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 50
+    actorId: 0
   rb: {fileID: 9115925812583879756}
   hc: {fileID: 0}
 --- !u!65 &7057265401299245292
@@ -121,8 +186,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.47, y: 0.19999999, z: 0.2945464}
-  m_Center: {x: -7.1017877e-13, y: 0.030000001, z: 0.00002979487}
+  m_Size: {x: 0.47, y: 2.752184, z: 0.49601045}
+  m_Center: {x: 0, y: 1.2383351, z: 0.026145503}
 --- !u!54 &9115925812583879756
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -153,21 +218,18 @@ CapsuleCollider:
   m_Height: 3.1405947
   m_Direction: 1
   m_Center: {x: 0, y: 1.0702971, z: -0}
---- !u!114 &5129756471589726197
+--- !u!114 &6343087948723722575
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9159866847219802746}
+  m_GameObject: {fileID: 5572176062682796657}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c136d2e9b81c284bb53f5da5a030be4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3901d3f8759ceb048b9a2a4d24f562c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 7214377573043028911}
-  speedX: 0.5
-  speedY: 0.5
 --- !u!1001 &8349404931004096299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -245,18 +307,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fc6fc74d790da348b46f9487910f7be, type: 3}
---- !u!1 &9159866847219802746 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0fc6fc74d790da348b46f9487910f7be, type: 3}
-  m_PrefabInstance: {fileID: 8349404931004096299}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8382803030799136960 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0fc6fc74d790da348b46f9487910f7be, type: 3}
-  m_PrefabInstance: {fileID: 8349404931004096299}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &7214377573043028911 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 0fc6fc74d790da348b46f9487910f7be, type: 3}
   m_PrefabInstance: {fileID: 8349404931004096299}
   m_PrefabAsset: {fileID: 0}

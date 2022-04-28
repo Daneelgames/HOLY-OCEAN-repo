@@ -15,6 +15,7 @@ namespace MrPink.Units
         public float visionDistance = 250;
         public LayerMask raycastsLayerMask;
         public Transform raycastOrigin;
+        public float timeToForgive = 5;
         
         public EnemiesSetterBehaviour setDamagerAsEnemyBehaviour = EnemiesSetterBehaviour.SetOnlyOtherTeam;
         
@@ -42,8 +43,7 @@ namespace MrPink.Units
         {
             if (setDamagerAsEnemyBehaviour == EnemiesSetterBehaviour.SetOnlyOtherTeam && damager.team == _selfHealth.team)
                 return;
-        
-            
+
             if (!stack && _enemiesToRemember.Contains(damager))
                 return;
 
@@ -53,6 +53,11 @@ namespace MrPink.Units
             
             Debug.Log("SetDamager " + damager);
             _enemiesToRemember.Add(damager);
+
+            StartCoroutine(ForgiveUnitOverTime(damager));
+            
+            if (_selfHealth.AiMovement)
+                _selfHealth.AiMovement.SetEnemyToLookAt(damager);
             
             if (!tellToFriends)
                 return;
@@ -60,6 +65,9 @@ namespace MrPink.Units
             for (int i = 0; i < visibleUnits.Count; i++) // tell all his friends
             {
                 var unit = visibleUnits[i];
+                if (unit == _selfHealth)
+                    continue;
+                
                 if (unit.UnitVision && unit.team == _selfHealth.team)
                 {
                     if (unit.UnitVision._enemiesToRemember.Contains(damager) == false)
@@ -68,14 +76,23 @@ namespace MrPink.Units
             }
         }
 
-        public void ForgiveUnit(HealthController unit)
+        IEnumerator ForgiveUnitOverTime(HealthController unit)
         {
+            yield return new WaitForSeconds(timeToForgive);
+            ForgiveUnit(unit, unit.team == _selfHealth.team);
+        }
+
+        public void ForgiveUnit(HealthController unit, bool removeFromEnemies)
+        {
+            if (unit == null)
+                return;
+            
             for (int i = 0; i < _enemiesToRemember.Count; i++)
             {
                 if (_enemiesToRemember[i] == unit)
                     _enemiesToRemember.RemoveAt(i);
             }
-            if (visibleEnemies.Contains(unit))
+            if (removeFromEnemies && visibleEnemies.Contains(unit))
                 visibleEnemies.Remove(unit);
         }
         

@@ -29,7 +29,7 @@ public class PlayerFootsteps : MonoBehaviour
         {
             yield return null;
             
-            if (!pm.State.IsGrounded)
+            if (!pm.State.IsGrounded || Game.Player.VehicleControls.controlledMachine)
                 continue;
 
             if (pm.State.IsMoving)

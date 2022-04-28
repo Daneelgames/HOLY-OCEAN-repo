@@ -3150,14 +3150,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 500
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 15
-    NpcHc: {fileID: 7776875987276874606}
-    actorId: -1
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 0}
     weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 7776875987276874606}
+    addToStatAmount: 0
+    actorId: -1
   rb: {fileID: 0}
   hc: {fileID: 7776875987276874606}
 --- !u!65 &2245774395499290434
@@ -10181,11 +10182,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
-  visionDistance: 250
+  visionDistance: 200
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
   raycastOrigin: {fileID: 946565478833475966}
+  timeToForgive: 5
   setDamagerAsEnemyBehaviour: 1
   _enemiesToRemember: []
   visibleEnemies: []

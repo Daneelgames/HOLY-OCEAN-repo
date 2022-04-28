@@ -91,17 +91,23 @@ namespace MrPink.Units
                 yield return new WaitForSeconds(0.5f);
         }
         
-        public void AgentSetPath(Vector3 target, bool isFollowing)
+        public void AgentSetPath(Vector3 target, bool isFollowing, bool cheap = true)
         {
             if (this.enabled == false || _agent.enabled == false)
                 return;
             
-            var path = new NavMeshPath();
-        
-            transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
+            if (cheap)
+            {
+                _agent.SetDestination(SamplePos(target));
+                return;
+            }
+            
+            var path = new NavMeshPath();
+            transform.position = SamplePos(transform.position);
+            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
+            
             _agent.SetPath(path);
         }
 

@@ -26,8 +26,6 @@ namespace _src.Scripts.Data
         public GrindRail grindRailsPrefab;
         
         public int explosiveBarrelsAmount = 2;
-        public Vector2Int enemiesPerRoomMinMax = new Vector2Int(2,2);
-        public Vector2Int npcsPerMainBuildingRoomMinMax = new Vector2Int(1,2);
         public int desertBeastsSpawnAmount = 0;
         public HealthController mrCaptainPrefabToSpawn;
         public Vector2Int grindRailsPerLevelMinMax = new Vector2Int(1, 2);

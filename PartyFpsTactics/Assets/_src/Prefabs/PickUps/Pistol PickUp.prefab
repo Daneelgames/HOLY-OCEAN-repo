@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 6389766876289032058}
   - component: {fileID: 5178915654316266458}
   - component: {fileID: 8383037962718744759}
+  - component: {fileID: 6751773956728251279}
   m_Layer: 11
   m_Name: Pistol PickUp
   m_TagString: Untagged
@@ -228,13 +229,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 0
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
-    NpcHc: {fileID: 0}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 11400000, guid: fa8f58b1f7e474e4191c3fc6963cb33e, type: 2}
     weaponToAdd: {fileID: 4860745060149239904, guid: 9ff008ca9d8baed41b67b76d2aca903b, type: 3}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    actorId: -1
   - scriptedEventType: 2
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -245,13 +248,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 0
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
-    NpcHc: {fileID: 0}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 0}
     toolToAdd: {fileID: 0}
     weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    actorId: -1
   rb: {fileID: 5178915654316266458}
   hc: {fileID: 0}
 --- !u!135 &-2958212832291290666
@@ -309,6 +314,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.11185908, y: 0.24158746, z: 0.1517756}
   m_Center: {x: -0.0016631484, y: -0.049895585, z: -0.04490602}
+--- !u!114 &6751773956728251279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8361261429759661543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3901d3f8759ceb048b9a2a4d24f562c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5675625525000437402
 PrefabInstance:
   m_ObjectHideFlags: 0

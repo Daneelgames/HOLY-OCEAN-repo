@@ -66,12 +66,21 @@ namespace MrPink.Units
                 _takeCoverCooldown -= Time.deltaTime;
         }
 
-
+        private float lookForNewEnemyCooldown = 0;
+        public void SetEnemyToLookAt(HealthController hc)
+        {
+            enemyToLookAt = hc;
+            lookForNewEnemyCooldown = 1;
+        }
+        
         private async UniTask Awareness()
         {
             while (_selfUnit.HealthController.health > 0)
             {
-                enemyToLookAt = await _selfUnit.UnitVision.GetClosestVisibleEnemy();
+                if (lookForNewEnemyCooldown <= 0)
+                    enemyToLookAt = await _selfUnit.UnitVision.GetClosestVisibleEnemy();
+                else
+                    lookForNewEnemyCooldown -= Time.deltaTime;
                 
                 if (enemyToLookAt != null)
                     TryCoverFromClosest(enemyToLookAt);

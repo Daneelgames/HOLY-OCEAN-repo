@@ -15,21 +15,12 @@ MonoBehaviour:
   levelName: GOLDENDOLA
   spawnWalls: 1
   spawnLadders: 1
-  levelsPosMinMaxX: {x: -5, y: 5}
-  levelsPosMinMaxZ: {x: -5, y: 5}
-  levelsScaleMinMaxX: {x: 10, y: 15}
-  levelsScaleMinMaxZ: {x: 10, y: 15}
-  additionalSmallBuildingsAmount: 3
-  additionalBuildingsScaleMinMaxX: {x: 4, y: 8}
-  additionalBuildingsScaleMinMaxY: {x: 5, y: 6}
-  additionalBuildingsScaleMinMaxZ: {x: 4, y: 8}
   levelGoalPrefab: {fileID: 3443701919470677471, guid: de73763fdd3804f41841451627e2e135, type: 3}
   tilePrefab: {fileID: 4636380872454741449, guid: 23c6b8a74be945446ba3a539f212f6bc, type: 3}
   tileWallPrefab: {fileID: 5237696207237465462, guid: 3270e568ffa759a448d527e8fe93997a, type: 3}
   tileWallThinPrefab: {fileID: 5237696207237465462, guid: 0b2f22b3f2e6df147bc2b1197ac73c16, type: 3}
   explosiveBarrelPrefab: {fileID: 8943623579927757030, guid: 5d2c0bd65a1f3534493166ecddb50a1f, type: 3}
   grindRailsPrefab: {fileID: 5147939674104939985, guid: fa6ec44f4708b9941b1df4c96f1f2139, type: 3}
-  buildingsToSpawnSettings: []
   explosiveBarrelsAmount: 0
   enemiesPerRoomMinMax: {x: 4, y: 4}
   npcsPerMainBuildingRoomMinMax: {x: 1, y: 1}
@@ -51,32 +42,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75bd5108465f056409e2cc172068c288, type: 2}
   levelEvents:
   - conditions:
-    - conditionType: 1
-      transformA: {fileID: 0}
-      actorIdA: 0
-      transformB: {fileID: 0}
-      actorIdB: 2
-      distanceToCompare: 10
-    events:
-    - scriptedEventType: 0
-      scoreToAdd: 0
-      prefabToSpawn: {fileID: 0}
-      spawnInsideCamera: 0
-      customSpawnPoint: {fileID: 0}
-      dialogueToStart: {fileID: 11400000, guid: d3e36ac5c03cf70489246b8d2dee93bd, type: 2}
-      destroyInteractorAfterDialogueCompleted: {fileID: 0}
-      scoreToAddOnDialogueCompleted: 0
-      setNextLevelOnDialogueCompleted: 0
-      maxDistanceToSpeaker: -1
-      NpcHc: {fileID: 0}
-      actorId: 1
-      currentLevelToSet: 0
-      soundToPlay: {fileID: 0}
-      auPitchMinMax: {x: 1, y: 1}
-      controlledMachine: {fileID: 0}
-      toolToAdd: {fileID: 0}
-      weaponToAdd: {fileID: 0}
-  - conditions:
     - conditionType: 3
       transformA: {fileID: 0}
       actorIdA: -1
@@ -94,14 +59,15 @@ MonoBehaviour:
       scoreToAddOnDialogueCompleted: 0
       setNextLevelOnDialogueCompleted: 0
       maxDistanceToSpeaker: -1
-      NpcHc: {fileID: 0}
-      actorId: 1
       currentLevelToSet: 0
       soundToPlay: {fileID: 0}
       auPitchMinMax: {x: 1, y: 1}
       controlledMachine: {fileID: 0}
       toolToAdd: {fileID: 0}
       weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      actorId: 1
   - conditions:
     - conditionType: 1
       transformA: {fileID: 0}
@@ -120,11 +86,12 @@ MonoBehaviour:
       scoreToAddOnDialogueCompleted: 10000
       setNextLevelOnDialogueCompleted: 1
       maxDistanceToSpeaker: -1
-      NpcHc: {fileID: 0}
-      actorId: 1
       currentLevelToSet: 0
       soundToPlay: {fileID: 0}
       auPitchMinMax: {x: 1, y: 1}
       controlledMachine: {fileID: 0}
       toolToAdd: {fileID: 0}
       weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      actorId: 1

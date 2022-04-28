@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody;
 using IngameDebugConsole;
+using MrPink;
 using MrPink.Health;
 using UnityEditor;
 using UnityEngine;
@@ -30,9 +31,37 @@ namespace _src.Scripts.LevelGenerators
         int wallsInCurrentIslandAmount = 0;
         int floorConnectionsInCurrentIslandAmount = 0;
         private int currentIslandSupports = 0;
+        
+        public bool spawnProps = true;
+        public bool spawnLoot = true;
+        public bool spawnUnits = true;
+        public bool spawnRooms = true;
+        public bool spawnLadders = true;
+        public bool spawnNavMesh = true;
+        public bool updateClash = true;
+
+        public List<HealthController> uniqueNpcToSpawn = new List<HealthController>();
+        public List<HealthController> unitsToSpawn = new List<HealthController>();
+        public List<ControlledMachine> controlledMachinesToSpawn = new List<ControlledMachine>();
+
+        public void SetBuildingSettings(BuildingSettings buildingSettings, int levelIndex)
+        {
+            spawnProps = buildingSettings.spawnProps;
+            spawnLoot = buildingSettings.spawnLoot;
+            spawnUnits = buildingSettings.spawnUnits;
+            spawnRooms = buildingSettings.spawnRooms;
+            spawnLadders = buildingSettings.spawnLadders;
+            spawnNavMesh = buildingSettings.spawnNavMesh;
+            updateClash = buildingSettings.updateClash;
+            uniqueNpcToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].uniqueNpcsToSpawn);
+            unitsToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].unitsToSpawn);
+            controlledMachinesToSpawn = new List<ControlledMachine>(buildingSettings.levelsSettings[levelIndex].controlledMachinesToSpawn);
+        }
+        
         public void Init()
         {
-            StartCoroutine(CheckTiles());
+            if (updateClash)
+                StartCoroutine(CheckTiles());
         }
 
         private void OnDrawGizmosSelected()
@@ -63,6 +92,12 @@ namespace _src.Scripts.LevelGenerators
         {
             while (true)
             {
+                if (Vector3.Distance(position, Game.Player.Position) > 200)
+                {
+                    yield return new WaitForSecondsRealtime(1);
+                    continue;
+                }
+                
                 //find disconnected islands
                 var allTilesTemp = new List<TileHealth>(allTiles);
                 

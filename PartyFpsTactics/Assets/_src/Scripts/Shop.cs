@@ -35,32 +35,10 @@ namespace MrPink
             Cursor.lockState = CursorLockMode.None;
         }
 
-        IEnumerator Start()
+        void Start()
         {
             toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
             CloseShop();
-            yield break;
-        
-            switch (LevelGenerator.Instance.levelType)
-            {
-                case LevelGenerator.LevelType.Game:
-                    OpenShop(0);
-                    break;
-                case LevelGenerator.LevelType.Narrative:
-                    CloseShop();
-                    break;
-            }
-
-            while (isActive)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                    CloseShop();
-            
-                if (Input.GetKeyDown(KeyCode.F))
-                    BuyItem();
-            
-                yield return null;
-            }
         }
 
         public void OpenShop(int newSelectedItem)
