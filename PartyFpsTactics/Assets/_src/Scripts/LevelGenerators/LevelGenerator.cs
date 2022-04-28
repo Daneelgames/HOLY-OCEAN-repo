@@ -245,7 +245,6 @@ public class LevelGenerator : MonoBehaviour
         newLevel.SetBuildingSettings(building, levelIndexInBuilding);
         spawnedBuildingLevels.Add(newLevel);
 
-        
         if (levelIndexInBuilding == 0)
             newLevel.firstFloor = true;
         
@@ -702,8 +701,8 @@ public class LevelGenerator : MonoBehaviour
     {
         Level levelFrom = spawnedBuildingLevels[i];
         Level levelTo = spawnedBuildingLevels[i + 1];
-
-        if (!levelFrom.spawnLadders || !levelTo.spawnLadders)
+        
+        if (!levelFrom.spawnLadders || !levelTo.spawnLadders || levelTo.firstFloor)
             yield break;
         
         for (int j = levelFrom.tilesInside.Count - 1; j >= 0; j--)

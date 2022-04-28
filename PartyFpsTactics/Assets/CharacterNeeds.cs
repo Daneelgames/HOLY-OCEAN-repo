@@ -40,8 +40,6 @@ public class CharacterNeeds : MonoBehaviour
     {
         // ADD A WAY FOR NPC TO RESTORE THEIR NEEDS
         // THEN UNBREAK IT
-        if (ownHealth != Game.Player.Health)
-            yield break;
         ///////////////
         
         while (true)
@@ -50,6 +48,12 @@ public class CharacterNeeds : MonoBehaviour
             
             if (ownHealth.health <= 0)
                 continue;
+            
+            if (ownHealth != Game.Player.Health) // AI units only regen for now
+            {
+                ownHealth.AddHealth(healthRegenOnNeeds);
+                continue;
+            }
             
             float needsPool = 0;
             float needsCurrent = 0;
@@ -76,26 +80,25 @@ public class CharacterNeeds : MonoBehaviour
                 }
             }
 
-            if (needsCurrent > needsPool / needs.Count) 
+            if (needsCurrent > needsPool / needs.Count)
             {
                 // drain health
                 ownHealth.DrainHealth(healthDrainOnNeeds);
                 for (int i = 0; i < needs.Count; i++)
                 {
-                    PlayerUi.Instance.SetNeedColor(i, Color.red);   
+                    PlayerUi.Instance.SetNeedColor(i, Color.red);
                 }
             }
             else
             {
                 // regen health
                 ownHealth.AddHealth(healthRegenOnNeeds);
-                
+
                 for (int i = 0; i < needs.Count; i++)
                 {
-                    PlayerUi.Instance.SetNeedColor(i, Color.white);   
+                    PlayerUi.Instance.SetNeedColor(i, Color.white);
                 }
             }
-            
         }
     }
 

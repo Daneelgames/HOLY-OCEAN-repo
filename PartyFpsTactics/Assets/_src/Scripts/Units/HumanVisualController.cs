@@ -11,6 +11,7 @@ namespace MrPink.Units
         public Animator anim;
         public HealthController hc;
 
+        public bool noRagdoll = false;
         [Header("Ragdoll")] 
         public Transform ragdollOrigin;
         Transform ragdollOriginParent;
@@ -51,8 +52,12 @@ namespace MrPink.Units
 
         private void Start()
         {
-            ragdollOriginParent = ragdollOrigin.parent;
             _selfHealth = gameObject.GetComponent<HealthController>();
+            
+            if (noRagdoll)
+                return;
+            
+            ragdollOriginParent = ragdollOrigin.parent;
             for (int i = 0; i < joints.Count; i++)
                 initRotations.Add(animatedBones[i].localRotation);
 
@@ -107,6 +112,9 @@ namespace MrPink.Units
 
         private void FixedUpdate()
         {
+            if (noRagdoll)
+                return;
+            
             if (_selfHealth.health <= 0)
                 return;
         
@@ -170,6 +178,9 @@ namespace MrPink.Units
     
         public void Death()
         {
+            if (noRagdoll)
+                return;
+            
             meshRenderer.material = deadMaterial;
             if (!ragdoll)
                 ActivateRagdoll();
@@ -177,6 +188,9 @@ namespace MrPink.Units
     
         public void ActivateRagdoll()
         {
+            if (noRagdoll)
+                return;
+
             if (hc.aiVehicleControls)
                 hc.aiVehicleControls.SetPassengerSit(null,false);
             if (ragdoll && _followRagdollCoroutine != null)
@@ -236,6 +250,9 @@ namespace MrPink.Units
 
         void DeactivateRagdoll()
         {
+            if (noRagdoll)
+                return;
+
             _changeLerpToStandCoroutine = StartCoroutine(ChangeLerpToStand());
         
             anim.enabled = true;
@@ -372,6 +389,9 @@ namespace MrPink.Units
 
         public void ExplosionRagdoll(Vector3 pos, float force, float distance)
         {
+            if (noRagdoll)
+                return;
+
             Debug.Log("ExplosionRagdoll");
             foreach (var rb in rigidbodies)
                 rb.AddExplosionForce(force, pos, distance);

@@ -10,6 +10,7 @@ namespace MrPink.Tools
         FragGrenade,
         BugMeat,
         SandWater,
-        OilCoffee
+        OilCoffee,
+        CheckpointTicket
     }
 }

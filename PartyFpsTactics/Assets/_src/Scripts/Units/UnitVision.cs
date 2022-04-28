@@ -79,7 +79,7 @@ namespace MrPink.Units
         IEnumerator ForgiveUnitOverTime(HealthController unit)
         {
             yield return new WaitForSeconds(timeToForgive);
-            ForgiveUnit(unit, unit.team == _selfHealth.team);
+            ForgiveUnit(unit, unit.team == _selfHealth.team || unit.team == Team.PlayerParty);
         }
 
         public void ForgiveUnit(HealthController unit, bool removeFromEnemies)

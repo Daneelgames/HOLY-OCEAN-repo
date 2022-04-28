@@ -16,6 +16,9 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitAiMovement _unitAiMovement;
         
+        [SerializeField, ChildGameObjectsOnly]
+        private UnitAiWeaponControls _unitWeaponControls;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private HumanVisualController _humanVisualController;
         
@@ -44,6 +47,8 @@ namespace MrPink.Units
         
         public UnitAiMovement UnitAiMovement
             => _unitAiMovement;
+        public UnitAiWeaponControls UnitWeaponControls
+            => _unitWeaponControls;
         
         public HumanVisualController HumanVisualController
             => _humanVisualController;

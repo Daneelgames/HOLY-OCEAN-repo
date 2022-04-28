@@ -25,6 +25,7 @@ namespace MrPink.Units
         public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
         public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
 
+        public bool followClosestEnemyOnSpawn = false;
         public MovementOrder currentOrder = MovementOrder.FollowTarget;
 
         private bool inCover = false;
@@ -35,8 +36,7 @@ namespace MrPink.Units
         private float _takeCoverCooldown = 0;
         
         private Vector3 _currentVelocity;
-        
-        
+
         private Coroutine _takeCoverCoroutine;
         private Coroutine _getInCoverCoroutine;
         private Coroutine _moveToPositionCoroutine;
@@ -48,10 +48,17 @@ namespace MrPink.Units
 
             Awareness().ForgetWithHandler();
 
-            if (_selfUnit.HealthController.team == Team.Red && Game.Player.Health.team == Team.Blue && Random.value > 0.5f)
-                FollowTargetOrder(Game.Player.GameObject.transform);
-            else
-                TakeCoverOrder();
+            if (followClosestEnemyOnSpawn)
+            {
+                var targetHc = TeamsManager.Instance.FindClosestEnemyInRange(_selfUnit.HealthController.team, transform.position).transform;
+                if (targetHc)
+                {
+                    FollowTargetOrder(targetHc.transform);
+                    return;
+                }
+            }
+            
+            TakeCoverOrder();
         }
 
         private void Update()
