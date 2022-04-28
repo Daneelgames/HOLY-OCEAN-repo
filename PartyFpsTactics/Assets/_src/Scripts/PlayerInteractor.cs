@@ -31,7 +31,7 @@ namespace MrPink
         public float skipChance = 0.9f;
         [Range(0.01f,1)]
         public float selectedNameUpdateTime = 0.1f;
-        private void Start()
+        private void OnEnable()
         {
             StartCoroutine(RaycastInteractables());
             StartCoroutine(UpdateSelectedNameFeedback());

@@ -1166,10 +1166,10 @@ public class LevelGenerator : MonoBehaviour
                 Vector3 offsetVert = Vector3.up * building.levelsSettings[j].levelHeight / 2 + Vector3.up * lastHeight;
                 
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.x, building.levelsSettings[j].levelHeight, building.levelsScaleMinMaxZ.x));
+                Gizmos.DrawCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.x * 2, building.levelsSettings[j].levelHeight, building.levelsScaleMinMaxZ.x * 2));
                 
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.y, building.levelsSettings[j].levelHeight, building.levelsScaleMinMaxZ.y));
+                Gizmos.DrawWireCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.y * 2, building.levelsSettings[j].levelHeight, building.levelsScaleMinMaxZ.y * 2));
                 lastHeight += building.levelsSettings[j].levelHeight;
             }
         }
