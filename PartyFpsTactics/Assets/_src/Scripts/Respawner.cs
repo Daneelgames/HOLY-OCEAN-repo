@@ -44,9 +44,9 @@ namespace _src.Scripts
         {
             tilesForSpawns = new List<TileHealth>();
 
-            for (int i = 0; i < LevelGenerator.Instance.spawnedBuildingLevels.Count; i++)
+            for (int i = 0; i < BuildingGenerator.Instance.spawnedBuildingLevels.Count; i++)
             {
-                var level = LevelGenerator.Instance.spawnedBuildingLevels[i];
+                var level = BuildingGenerator.Instance.spawnedBuildingLevels[i];
                 if (level.spawnUnits == false)
                     continue;
                 

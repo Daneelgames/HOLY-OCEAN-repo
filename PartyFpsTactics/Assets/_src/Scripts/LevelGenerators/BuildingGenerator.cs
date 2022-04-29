@@ -12,9 +12,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour
+public class BuildingGenerator : MonoBehaviour
 {
-    public static LevelGenerator Instance;
+    public static BuildingGenerator Instance;
     public List<Level> spawnedBuildingLevels = new List<Level>();
     [HideInInspector]
     public List<TileHealth> spawnedProps = new List<TileHealth>();
@@ -50,7 +50,6 @@ public class LevelGenerator : MonoBehaviour
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
-    public LayerMask solidsUnitsLayerMask;
     public bool randomLevelRotation = false;
     public int explosiveBarrelsAmount = 2;
 

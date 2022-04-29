@@ -130,7 +130,7 @@ namespace _src.Scripts.LevelGenerators
                     bool canCrash = false;
                     if (firstFloor == false)
                     {
-                     if (currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || 
+                     if (currentIslandSupports * BuildingGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || 
                          floorConnectionsInCurrentIslandAmount == 0 ||wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
                          canCrash = true;   
                     }
@@ -218,8 +218,8 @@ namespace _src.Scripts.LevelGenerators
                     newIsland.Remove(tile);
                     if (tile != null)
                     {
-                        tile.ActivateRigidbody(100, LevelGenerator.Instance.tilePhysicsMaterial, false, 150);
-                        LevelGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
+                        tile.ActivateRigidbody(100, BuildingGenerator.Instance.tilePhysicsMaterial, false, 150);
+                        BuildingGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
                     }   
                 }
             }

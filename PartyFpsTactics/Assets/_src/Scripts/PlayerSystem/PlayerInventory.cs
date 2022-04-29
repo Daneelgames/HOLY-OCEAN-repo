@@ -27,7 +27,7 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            if (LevelGenerator.Instance == null)
+            if (BuildingGenerator.Instance == null)
                 return;
             
             SpawnPlayerWeapon(_startingSwordWeapon, 0);

@@ -66,7 +66,7 @@ namespace MrPink
             if (Input.GetKeyDown(KeyCode.Alpha9))
                 Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity - 50, 5, 1000);
         
-            if (LevelGenerator.Instance != null && LevelGenerator.Instance.IsLevelReady == false)
+            if (BuildingGenerator.Instance != null && BuildingGenerator.Instance.IsLevelReady == false)
                 return;
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -108,12 +108,12 @@ namespace MrPink
             
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if (LevelGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count <= 0)
+                    if (BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count <= 0)
                         return;
 
-                    for (int i = LevelGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
+                    for (int i = BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
                     {
-                        var tile = LevelGenerator.Instance.spawnedBuildingLevels[0].tilesTop[i];
+                        var tile = BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop[i];
                         if (tile)
                             tile.Damage(1000, DamageSource.Environment);
                     }

@@ -35,6 +35,11 @@ namespace MrPink.Units
         {
             while (_selfAgent && _selfAgent.enabled)
             {
+                if (target == null)
+                {
+                    StopFollowing();
+                    yield break;
+                }
                 _currentTargetPosition = target.position;
                 _selfMovement.AgentSetPath(_currentTargetPosition, true);
                 //Debug.Log("FollowTargetCoroutine");
