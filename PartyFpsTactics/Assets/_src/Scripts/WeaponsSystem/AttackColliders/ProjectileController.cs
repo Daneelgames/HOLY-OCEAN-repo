@@ -44,6 +44,7 @@ namespace MrPink.WeaponsSystem
         private Vector3 currentPosition;
         private Vector3 lastPosition;
         private float distanceBetweenPositions;
+        public Transform visual;
     
         public AudioSource shotAu;
         public AudioSource flyAu;
@@ -56,16 +57,21 @@ namespace MrPink.WeaponsSystem
             rbIsKinematicInit = rb.isKinematic;
         }
 
+        void OnEnable()
+        {
+            dead = false;
+            if (visual)
+                visual.gameObject.SetActive(true);
+            PlaySound(shotAu);
+            PlaySound(flyAu);
+        }
+
         public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
         {
             base.Init(owner, source, shotHolder, action);
 
-            dead = false;
             rb.isKinematic = rbIsKinematicInit;
             lastPosition = transform.position;
-        
-            PlaySound(shotAu);
-            PlaySound(flyAu);
 
             if (!IsAttachedToShotHolder)
             {
@@ -205,7 +211,8 @@ namespace MrPink.WeaponsSystem
         
             dead = true;
             rb.isKinematic = true;
-            transform.GetChild(0).gameObject.SetActive(false);
+            if (visual)
+                visual.gameObject.SetActive(false);
             DeathCoroutine().ForgetWithHandler();
             Release(3);
         }
