@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Net.Sockets;
 using Brezg.Extensions.UniTaskExtensions;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
@@ -7,6 +9,7 @@ using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace MrPink.WeaponsSystem
 {
@@ -45,23 +48,32 @@ namespace MrPink.WeaponsSystem
         public AudioSource shotAu;
         public AudioSource flyAu;
         private bool dead = false;
-    
-    
-    
-        public override void Init(HealthController owner, DamageSource source, ScoringActionType action = ScoringActionType.NULL)
-        {
-            base.Init(owner, source, action);
 
+        private bool rbIsKinematicInit = false;
+        
+        private void Awake()
+        {
+            rbIsKinematicInit = rb.isKinematic;
+        }
+
+        public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
+        {
+            base.Init(owner, source, shotHolder, action);
+
+            dead = false;
+            rb.isKinematic = rbIsKinematicInit;
             lastPosition = transform.position;
         
             PlaySound(shotAu);
             PlaySound(flyAu);
-        
-        
-            if (rb != null && !addVelocityEveryFrame)
-                rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
 
-            transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);
+            if (!IsAttachedToShotHolder)
+            {
+                if (rb != null && !addVelocityEveryFrame)
+                    rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
+
+                transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);   
+            }
 
             StartCoroutine(UpdateLastPosition());
 
@@ -195,7 +207,7 @@ namespace MrPink.WeaponsSystem
             rb.isKinematic = true;
             transform.GetChild(0).gameObject.SetActive(false);
             DeathCoroutine().ForgetWithHandler();
-            Destroy(gameObject, 3);
+            Release(3);
         }
 
         private void Ricochet(Vector3 hitNormal)

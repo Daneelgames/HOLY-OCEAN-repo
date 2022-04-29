@@ -57,7 +57,7 @@ namespace MrPink.Units
             StartCoroutine(ForgiveUnitOverTime(damager));
             
             if (_selfHealth.AiMovement)
-                _selfHealth.AiMovement.SetEnemyToLookAt(damager);
+                _selfHealth.AiMovement.SetDamager(damager);
             
             if (!tellToFriends)
                 return;

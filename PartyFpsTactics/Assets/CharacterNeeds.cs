@@ -18,9 +18,7 @@ public class CharacterNeeds : MonoBehaviour
     public int healthRegenOnNeeds = 3;
     public int healthDrainOnNeeds = 3;
 
-    
-    
-    private void Start()
+    private void OnEnable()
     {
         _needsCoroutine = StartCoroutine(Needs());
     }

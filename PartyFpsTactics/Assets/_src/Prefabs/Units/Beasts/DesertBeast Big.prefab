@@ -685,6 +685,27 @@ MonoBehaviour:
   - {fileID: 8910767177972868732}
   - {fileID: 2826255802997956646}
   - {fileID: 7751187313285896886}
+  bodyPartsTransforms:
+  - {fileID: 5605956984530299612}
+  - {fileID: 3670458400013969227}
+  - {fileID: 8377017553857844233}
+  - {fileID: 5534032461977172247}
+  - {fileID: 110467726886712593}
+  - {fileID: 6297347663989021577}
+  - {fileID: 1312611506022004317}
+  - {fileID: 3247968551274772206}
+  - {fileID: 3129937751296758488}
+  - {fileID: 3547032242969618485}
+  - {fileID: 3085296418696861859}
+  - {fileID: 4898232834469683069}
+  - {fileID: 7585120782614733198}
+  - {fileID: 530272780948393671}
+  - {fileID: 6774846925689802601}
+  - {fileID: 4475871445610959690}
+  - {fileID: 8459648145054244942}
+  - {fileID: 7010840618760983025}
+  - {fileID: 4223956982184485513}
+  - {fileID: 2848740519341052134}
   damageStates: []
   OnDeathEvent:
     m_PersistentCalls:
@@ -702,12 +723,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 360
-  visionDistance: 250
+  visionDistance: 100
   raycastsLayerMask:
     serializedVersion: 2
     m_Bits: 4416
   raycastOrigin: {fileID: 5432981809372733046}
-  timeToForgive: 1
+  timeToForgive: 90
   setDamagerAsEnemyBehaviour: 0
   _enemiesToRemember: []
   visibleEnemies: []
@@ -727,6 +748,7 @@ MonoBehaviour:
   _selfUnit: {fileID: -5930898470893031762}
   coverFoundBehaviour: 1
   noCoverBehaviour: 1
+  setDamagerBehaviour: 1
   followClosestEnemyOnSpawn: 1
   currentOrder: 3
   enemyToLookAt: {fileID: 0}
@@ -751,7 +773,7 @@ MonoBehaviour:
   rotateWeaponTowardTarget: 1
   maxDistanceToAttack: 5
   updateRate: 0.1
-  maxDistanceFromPlayerToShoot: 250
+  maxDistanceFromPlayerToShoot: 100
 --- !u!114 &8692219909506116655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -905,6 +927,7 @@ MonoBehaviour:
   _stopDistanceMove: 0
   _agent: {fileID: 2646737403989280130}
   _selfUnit: {fileID: -5930898470893031762}
+  rememberRespawPoint: 1
 --- !u!114 &-8284327079036214745
 MonoBehaviour:
   m_ObjectHideFlags: 0

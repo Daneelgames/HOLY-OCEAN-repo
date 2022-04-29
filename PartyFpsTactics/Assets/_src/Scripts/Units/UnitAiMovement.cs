@@ -24,12 +24,13 @@ namespace MrPink.Units
         
         public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
         public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
-
+        public EnemiesBehaviour setDamagerBehaviour = EnemiesBehaviour.ApproachEnemy;
+        
         public bool followClosestEnemyOnSpawn = false;
         public MovementOrder currentOrder = MovementOrder.FollowTarget;
 
         private bool inCover = false;
-        
+
         public HealthController enemyToLookAt;
         
         private CoverSpot _occupiedCoverSpot;
@@ -74,8 +75,16 @@ namespace MrPink.Units
         }
 
         private float lookForNewEnemyCooldown = 0;
-        public void SetEnemyToLookAt(HealthController hc)
+        public void SetDamager(HealthController hc)
         {
+            if (setDamagerBehaviour == EnemiesBehaviour.ApproachEnemy)
+            {
+                FollowTargetOrder(hc.transform);
+            }
+            else if (setDamagerBehaviour == EnemiesBehaviour.HideFromEnemy)
+            {
+                TakeCoverOrder(true, false, hc);
+            }
             enemyToLookAt = hc;
             lookForNewEnemyCooldown = 1;
         }
@@ -156,6 +165,7 @@ namespace MrPink.Units
             
                 if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
                 {
+                    // TO DO - переделать на систему вейпойнтов / спавнеров
                     Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
 
                     _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
@@ -166,7 +176,10 @@ namespace MrPink.Units
                 yield break;
             }
         
-            // GOOD COVER FOUND
+            // GOOD COVER FOUND!
+            ///
+            ///
+            // TRY TO FOLLOW ENEMY
             if (enemy && coverFoundBehaviour == EnemiesBehaviour.ApproachEnemy)
             {
                 FollowTargetOrder(enemy.transform);
@@ -174,11 +187,12 @@ namespace MrPink.Units
                 yield break;
             }
         
-        
+            // TRY TO OCCUPY COVER SPOT
+            
             // CHOSEN SPOT occupied!
             SetOccupiedSpot(chosenCover, _selfUnit.HealthController);
         
-            //SET PATH
+            //SET PATH TO SPOT
             if (_selfUnit.UnitMovement != null)
                 _selfUnit.UnitMovement.AgentSetPath(chosenCover.transform.position, false);
             

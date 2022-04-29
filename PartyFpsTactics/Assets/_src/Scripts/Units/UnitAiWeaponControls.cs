@@ -91,11 +91,12 @@ namespace MrPink.Units
                 
                 if (angle < minAngleToRotateGun)
                 {
+                    /*
                     if (handIk)
                     {
                         handIk.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
-                        
                     }
+                    */
                     activeWeapon.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
                 }
                 else

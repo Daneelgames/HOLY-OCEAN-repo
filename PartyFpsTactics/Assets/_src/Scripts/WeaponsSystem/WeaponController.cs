@@ -35,7 +35,7 @@ namespace MrPink.WeaponsSystem
 
         [Tooltip("Projectile prefab")]
         [SerializeField, AssetsOnly, Required]
-        private BaseAttackCollider _attackColliderPrefab;
+        private Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag;
 
         [SerializeField, ChildGameObjectsOnly, CanBeNull]
         private BaseWeaponAnimation _animation;
@@ -122,11 +122,15 @@ namespace MrPink.WeaponsSystem
             
             for (int i = 0; i < bulletsPerShot; i++)
             {
-                var newProjectile = _attackColliderPrefab.IsAttachedToShotHolder
-                    ? Instantiate(_attackColliderPrefab, shotHolder)
-                    : Instantiate(_attackColliderPrefab, shotHolder.position, Quaternion.LookRotation(direction));
-                
-                newProjectile.Init(ownerHc, source, action);
+                BaseAttackCollider newProjectile;
+                if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword)
+                    newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, shotHolder, Vector3.zero,
+                        Quaternion.identity);
+                else
+                    newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, null, shotHolder.position,
+                        Quaternion.LookRotation(direction));
+
+                newProjectile.Init(ownerHc, source, shotHolder, action);
 
                 if (projectileLifeTime < newProjectile.LifeTime)
                     projectileLifeTime = newProjectile.LifeTime;

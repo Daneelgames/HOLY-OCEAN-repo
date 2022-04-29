@@ -37,8 +37,9 @@ namespace MrPink.Health
         public bool shakeZ = true;
         public float maxShakeOffset = 0.1f;
         public Transform transformToShake;
-    
-        [Header("AI")]  // TODO здоровье не должно разруливать интеллект, подкрутить архитектуру
+
+        [Header("AI")] // TODO здоровье не должно разруливать интеллект, подкрутить архитектуру
+        
         public Team team;
 
         public UnitVision UnitVision;
@@ -61,6 +62,7 @@ namespace MrPink.Health
 
 
         public List<BodyPart> bodyParts;
+        public List<Transform> bodyPartsTransforms;
 
         public List<DamageState> damageStates;
 
@@ -97,6 +99,24 @@ namespace MrPink.Health
                 DestroyImmediate(deprecated);
                 var bodyPart = obj.AddComponent<BodyPart>();
                 EditorUtility.SetDirty(bodyPart);
+            }
+        }
+
+        public bool OwnCollider(Collider coll)
+        {
+            if (bodyPartsTransforms.Contains(coll.transform))
+                return true;
+            
+            return false;
+        }
+
+        [ContextMenu("SetupBodyPartsTransforms")]
+        public void SetupBodyPartsTransforms()
+        {
+            bodyPartsTransforms.Clear();
+            for (int i = 0; i < bodyParts.Count; i++)
+            {
+                bodyPartsTransforms.Add(bodyParts[i].transform);
             }
         }
         
@@ -153,6 +173,9 @@ namespace MrPink.Health
             {
                 PlayerUi.Instance.UpdateHealthBar();
             }
+
+            if (health <= 0)
+                StartCoroutine(Death(ScoringActionType.NULL));
         }
         
         public void SetDamager(HealthController damager)

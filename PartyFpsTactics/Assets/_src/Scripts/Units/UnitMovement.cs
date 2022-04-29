@@ -41,12 +41,18 @@ namespace MrPink.Units
         
         private Vector3 _currentVelocity;
         private Transform _lookTransform;
+        
+        public bool rememberRespawPoint = false;
+        private Vector3 rememberedRespawnPoint;
 
         private void Start()
         {
             // TODO не делать этого в старте
             _lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
             _lookTransform.parent = transform.parent;
+            
+            if (rememberRespawPoint)
+                rememberedRespawnPoint = transform.position;
         }
 
         private void Update()
@@ -121,7 +127,12 @@ namespace MrPink.Units
             
             // if not enabled
             transform.position = SamplePos(pos);
+        }
 
+        public void TeleportToRespawnPosition()
+        {
+            if (rememberRespawPoint)
+                TeleportNearPosition(rememberedRespawnPoint);
         }
         
         private Vector3 SamplePos(Vector3 startPos)

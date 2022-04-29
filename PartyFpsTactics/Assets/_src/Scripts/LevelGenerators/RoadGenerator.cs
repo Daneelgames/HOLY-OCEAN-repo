@@ -58,8 +58,8 @@ public class RoadGenerator : MonoBehaviour
             if (spawnedRoadParts[i] == null)
                 continue;
             
-            //Destroy(spawnedRoadParts[i].gameObject);
-            DestroyImmediate(spawnedRoadParts[i].gameObject);
+            Destroy(spawnedRoadParts[i].gameObject);
+            //DestroyImmediate(spawnedRoadParts[i].gameObject);
         }
         spawnedRoadParts.Clear();
         spawnedRoadPartsGO.Clear();
@@ -158,6 +158,7 @@ public class RoadGenerator : MonoBehaviour
     {
         Debug.LogError("GenerateRoad is disabled. Uncomment stuff below to edit stuff");
         
+        /*
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
         
@@ -180,7 +181,7 @@ public class RoadGenerator : MonoBehaviour
 
         spawnedRoadParts.Add(newPart);
         spawnedRoadPartsGO.Add(newPart.gameObject);
-        newPart.transform.parent = transform;
+        newPart.transform.parent = transform;*/
     }
 
     private RoadPart roadPartToSpawn;

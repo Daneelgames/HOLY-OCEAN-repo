@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using _src.Scripts;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.Units;
 using UnityEngine;
 
 namespace MrPink
@@ -84,6 +85,7 @@ namespace MrPink
             }
 
             Game.Player.Resurrect();
+            UnitsManager.Instance.MoveUnitsToRespawnPoints(true, true);
             yield return new WaitForSeconds(1f);
             if (npcInParty && npcInParty.npcInteraction)
             {

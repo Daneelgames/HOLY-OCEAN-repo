@@ -59,14 +59,14 @@ namespace MrPink.WeaponsSystem
         private AudioSource _hitAudioSource;
         
         
-        [SerializeField, ChildGameObjectsOnly, CanBeNull]
+        [SerializeField,  CanBeNull]
         [BoxGroup("Частицы")]
-        private Transform _debrisParticles;
+        private Pooling.ParticlesPool.ParticlePrefabTag _debrisParticlesTag;
         
         
-        [SerializeField, ChildGameObjectsOnly, CanBeNull]
+        [SerializeField, CanBeNull]
         [BoxGroup("Частицы")]
-        private Transform _bloodParticles;
+        private Pooling.ParticlesPool.ParticlePrefabTag _bloodParticlesTag;
         
         [SerializeField]
         private protected HealthController ownerHealth;
@@ -88,22 +88,41 @@ namespace MrPink.WeaponsSystem
             => _lifeTime;
 
 
-        private void Start()
+        private void OnEnable()
         {
             if (autoInitOnStart)
             {
+                Init(null, DamageSource.Environment, null);
+                
+                /*
                 actionOnHit = ScoringActionType.NULL;
                 _damageSource = DamageSource.Environment;
-                StartCoroutine(LifetimeCoroutine());
+                if (lifeTimeCoroutine != null)
+                    StopCoroutine(lifeTimeCoroutine);
+                lifeTimeCoroutine = StartCoroutine(LifetimeCoroutine());*/
             }
         }
 
-        public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
+        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
         {
+            currentLifeTime = 0;
             ownerHealth = owner;
             actionOnHit = action;
             _damageSource = source;
+            unitsExplosionCompleted = false;
+            damagedHealthControllers.Clear();
 
+            if (IsAttachedToShotHolder)
+                Debug.Log("IsAttachedToShotHolder " + IsAttachedToShotHolder + "; shotHolder " + shotHolder);
+            if (IsAttachedToShotHolder && shotHolder)
+            {
+                transform.parent = shotHolder;
+                transform.localPosition = Vector3.zero;
+                transform.localRotation = Quaternion.identity;
+            }
+            
+            if (lifeTimeCoroutine != null)
+                StopCoroutine(lifeTimeCoroutine);
             StartCoroutine(LifetimeCoroutine());
         }
 
@@ -133,7 +152,7 @@ namespace MrPink.WeaponsSystem
                 return CollisionTarget.Self;
             }
             
-            if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
+            if (!_isSelfCollisionAvailable && ownerHealth && (ownerHealth.gameObject == targetCollider.gameObject || ownerHealth.OwnCollider(targetCollider)))
             {
                 Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
@@ -202,6 +221,12 @@ namespace MrPink.WeaponsSystem
                     //Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
                 }
+
+
+                if (targetHealth.HealthController && ownerHealth.team == targetHealth.HealthController.team)
+                {
+                    resultDmg /= 3;
+                }
             }
 
             if (targetHealth.IsOwnedBy(ownerHealth))
@@ -241,6 +266,7 @@ namespace MrPink.WeaponsSystem
                 if (targetHealth.gameObject.layer == 6 || targetHealth.gameObject.layer == 12)
                     ownerHealth.controlledMachine.AddForceOnImpact(targetCollider.bounds.center);
             }
+            
             
             UnitsExplosion();
             
@@ -312,38 +338,37 @@ namespace MrPink.WeaponsSystem
         {
             PlaySound(_hitAudioSource, _hitSolidFx);
             
-            if (_debrisParticles == null)
+            if (_debrisParticlesTag == null)
                 return;
 
-            var newParticles = Instantiate(_debrisParticles);
+            Pooling.Instance.SpawnParticle(_debrisParticlesTag, point, Quaternion.identity);
+            
+            /*
+             var newParticles = Instantiate(_debrisParticles);
             newParticles.parent = null;
             newParticles.position = point;
             newParticles.localScale = Vector3.one;
-            newParticles.gameObject.SetActive(true);
-            /*
-            _debrisParticles.parent = null;
-            _debrisParticles.gameObject.SetActive(true);*/
+            newParticles.gameObject.SetActive(true);*/
         }
     
         protected void PlayHitUnitFeedback(Vector3 contactPoint)
         {
             PlaySound(_hitAudioSource, _hitUnitFx);
             
-            if (_bloodParticles == null)
+            if (_bloodParticlesTag == null)
                 return;
             
+            Pooling.Instance.SpawnParticle(_bloodParticlesTag, contactPoint, Quaternion.identity);
+           
+            /*
             var newParticles = Instantiate(_bloodParticles);
             newParticles.parent = null;
             newParticles.localScale = Vector3.one;
             newParticles.position = contactPoint;
-            newParticles.gameObject.SetActive(true);
-            
-            /*
-            _bloodParticles.parent = null;
-            _bloodParticles.position = contactPoint;
-            _bloodParticles.gameObject.SetActive(true);*/
+            newParticles.gameObject.SetActive(true);*/
         }
-        
+
+        private Coroutine lifeTimeCoroutine;
         private IEnumerator LifetimeCoroutine()
         {
             float t = 0;
@@ -371,12 +396,34 @@ namespace MrPink.WeaponsSystem
 
                 if (currentLifeTime > _lifeTime)
                 {
-                    Destroy(gameObject);
+                    Release();
                     yield break;
                 }
-
             }
+        }
+
+        private Pooling.AttackColliderPool pool;
+        public void SetPool(Pooling.AttackColliderPool _pool)
+        {
+            pool = _pool;
+        }
+
+        protected void Release(float time = 0)
+        {
+            if (releaseCoroutine != null)
+                return;
+
+            releaseCoroutine = StartCoroutine(ReleaseCoroutine(time));
+        }
+
+        private Coroutine releaseCoroutine;
+
+        IEnumerator ReleaseCoroutine(float t)
+        {
+            yield return new WaitForSeconds(t);
             
+            Pooling.Instance.ReleaseCollider(this, pool);
+            releaseCoroutine = null;
         }
     }
 }

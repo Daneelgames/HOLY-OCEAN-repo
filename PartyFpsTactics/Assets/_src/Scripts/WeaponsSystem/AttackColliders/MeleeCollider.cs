@@ -8,7 +8,7 @@ namespace MrPink.WeaponsSystem
 {
     public class MeleeCollider : BaseAttackCollider
     {
-        public bool playerMeleeAttack = false;
+        public bool canDeflectBullets = false;
 
         public bool carCrashCollider = false;
         [ShowIf("carCrashCollider", true)]
@@ -38,7 +38,7 @@ namespace MrPink.WeaponsSystem
             if (other.gameObject.layer == 9 || other.gameObject.layer == 10)
             {
                 // DEFLECT PROJECTILE
-                if (playerMeleeAttack)
+                if (canDeflectBullets)
                 {
                     Debug.Log("DEFLECT PROJECTILE 0");
                     var proj = other.gameObject.GetComponent<ProjectileController>();

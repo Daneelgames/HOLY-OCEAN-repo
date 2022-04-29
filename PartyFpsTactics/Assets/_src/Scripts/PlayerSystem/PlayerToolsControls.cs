@@ -74,7 +74,7 @@ namespace MrPink.PlayerSystem
                 var newTool = Instantiate(toolsProjectilesPrefabs[selectedTool]);
                 newTool.transform.position = Game.Player.Movement.headTransform.position;
                 newTool.transform.rotation = Game.Player.MainCamera.transform.rotation;
-                newTool.Init(Game.Player.Health, DamageSource.Player);
+                newTool.Init(Game.Player.Health, DamageSource.Player, null);
                 Game.Player.Inventory.RemoveTool(toolsProjectilesPrefabs[selectedTool].toolType);
                 UpdateSelectedToolFeedback();
             }

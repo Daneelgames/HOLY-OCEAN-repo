@@ -181,7 +181,35 @@ namespace MrPink.Units
             else
                 _bodyPartsQueueToKill.Add(part);
         }
-    
+
+        public void MoveUnitsToRespawnPoints(bool destroyDead, bool healAlive)
+        {
+            for (int i = 0; i < unitsInGame.Count; i++)
+            {
+                var unit = unitsInGame[i];
+                if (!unit)
+                    continue;
+
+                if (unit.health <= 0)
+                {
+                 if (destroyDead)
+                     Destroy(unit.gameObject);
+                
+                 continue;
+                }
+                
+                if (unit.health > 0)
+                {
+                    if (unit.health > 0 && unit.selfUnit && unit.selfUnit.UnitMovement)
+                        unit.selfUnit.UnitMovement.TeleportToRespawnPosition();
+                    
+                    if (healAlive)
+                        unit.AddHealth(unit.healthMax);
+                }
+
+            }
+        }
+        
         private async UniTask BodyPartsKillQueue()
         {
             int handledInFrame = 0;
