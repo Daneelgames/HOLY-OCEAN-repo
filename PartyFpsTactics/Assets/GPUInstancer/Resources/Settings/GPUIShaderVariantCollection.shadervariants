@@ -13,6 +13,8 @@ ShaderVariantCollection:
       variants:
       - keywords: 
         passType: 0
+      - keywords: _NORMALMAP
+        passType: 0
       - keywords: _DETAIL_MULX2
         passType: 0
       - keywords: _DETAIL_SCALED
@@ -23,6 +25,8 @@ ShaderVariantCollection:
         passType: 0
       - keywords: _ALPHATEST_ON _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP
         passType: 0
+      - keywords: _DETAIL_MULX2 _NORMALMAP _OCCLUSIONMAP
+        passType: 0
       - keywords: _DETAIL_MULX2 _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
         passType: 0
       - keywords: _DETAIL_MULX2 _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP _PARALLAXMAP
@@ -31,4 +35,19 @@ ShaderVariantCollection:
         passType: 0
       - keywords: _DETAIL_MULX2 _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
           _PARALLAXMAP
+        passType: 0
+  - first: {fileID: -6465566751694194690, guid: 78f1b5ae9238ef140869bdba4aef19db, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _ALPHATEST_ON _EMISSION _LIGHTMAPPING_DYNAMIC_LIGHTMAPS _LIGHTMAPPING_REALTIME
+          _UNIFORMWIND_ON _UVSEC_UV1
+        passType: 0
+  - first: {fileID: 4800000, guid: ac9c37a3466fdd5408add077369abf28, type: 3}
+    second:
+      variants:
+      - keywords: 
+        passType: 0
+      - keywords: _ALPHATEST_ON
         passType: 0
