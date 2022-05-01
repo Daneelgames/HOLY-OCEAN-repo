@@ -2,12 +2,14 @@ using BehaviorDesigner.Runtime.Tasks;
 
 namespace MrPink.Units.Behaviours
 {
-    [TaskCategory("MrPink/Units")]
-    public class IsWeaponRotationNeeded : BaseUnitConditional
+    [TaskCategory("MrPink/Units/Weapon")]
+    public class IsWeaponOnCooldown : BaseUnitConditional
     {
+        public SharedWeaponController activeWeapon;
+        
         public override TaskStatus OnUpdate()
         {
-            if (selfUnit.WeaponControls.rotateWeaponTowardTarget)
+            if (activeWeapon.Value.OnCooldown)
                 return TaskStatus.Success;
 
             return TaskStatus.Failure;

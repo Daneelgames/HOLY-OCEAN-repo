@@ -1,16 +1,16 @@
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using MrPink.Health;
 
 namespace MrPink.Units.Behaviours
 {
-    [TaskCategory("MrPink/Units")]
-    public class IsTeam : BaseUnitConditional
+    [TaskCategory("MrPink/Units/Weapon")]
+    public class IsAimedToTarget : BaseUnitConditional
     {
-        public Team team;
+        public SharedFloat aimAngle;
         
         public override TaskStatus OnUpdate()
         {
-            if (selfUnit.HealthController.team == team)
+            if (aimAngle.Value < selfUnit.WeaponControls.minAngleToShoot)
                 return TaskStatus.Success;
 
             return TaskStatus.Failure;

@@ -3,7 +3,7 @@ using Brezg.Extensions.UniTaskExtensions;
 
 namespace MrPink.Units.Behaviours
 {
-    [TaskCategory("MrPink/Units")]
+    [TaskCategory("MrPink/Units/Weapon")]
     public class ShotCurrentTarget : BaseUnitAction
     {
         public SharedWeaponController activeWeapon;

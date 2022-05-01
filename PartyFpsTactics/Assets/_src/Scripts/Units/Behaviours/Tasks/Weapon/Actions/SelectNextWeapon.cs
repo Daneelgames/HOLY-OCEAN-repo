@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MrPink.Units.Behaviours
 {
-    [TaskCategory("MrPink/Units")]
+    [TaskCategory("MrPink/Units/Weapon")]
     public class SelectNextWeapon : BaseUnitAction
     {
         public SharedWeaponController nextWeapon;

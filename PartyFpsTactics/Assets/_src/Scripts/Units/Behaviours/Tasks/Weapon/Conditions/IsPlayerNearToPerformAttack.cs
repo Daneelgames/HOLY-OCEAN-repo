@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MrPink.Units.Behaviours
 {
-    [TaskCategory("MrPink/Units")]
+    [TaskCategory("MrPink/Units/Weapon")]
     public class IsPlayerNearToPerformAttack : BaseUnitConditional
     {
         public override TaskStatus OnUpdate()
