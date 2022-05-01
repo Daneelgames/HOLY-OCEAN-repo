@@ -33,20 +33,20 @@ namespace _src.Scripts
             Instance = this;
         }
 
-        public void Init()
+        public void SpawnEnemiesInBuilding(BuildingGenerator.Building building)
         {
             if (!spawn)
                 return;
-            StartCoroutine(SpawnStartEnemies());
+            StartCoroutine(SpawnEnemiesInBuildingCoroutine(building));
         }
 
-        IEnumerator SpawnStartEnemies()
+        IEnumerator SpawnEnemiesInBuildingCoroutine(BuildingGenerator.Building building)
         {
             tilesForSpawns = new List<TileHealth>();
 
-            for (int i = 0; i < BuildingGenerator.Instance.spawnedBuildingLevels.Count; i++)
+            for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
             {
-                var level = BuildingGenerator.Instance.spawnedBuildingLevels[i];
+                var level = building.spawnedBuildingLevels[i];
                 if (level.spawnUnits == false)
                     continue;
                 
@@ -66,24 +66,18 @@ namespace _src.Scripts
                 {
                     var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
                     UnitsManager.Instance.SpawnUnit(level.unitsToSpawn[j], randomTile.transform.position);
+                    yield return null;
                 }
                 for (int j = 0; j < level.uniqueNpcToSpawn.Count; j++)
                 {
                     var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
                     UnitsManager.Instance.SpawnUnit(level.uniqueNpcToSpawn[j], randomTile.transform.position);
+                    yield return null;
                 }
             }
-            
-            for (int i = 0; i < ProgressionManager.Instance.CurrentLevel.desertBeastsSpawnAmount; i++)
-            {
-                UnitsManager.Instance.SpawnDesertBeast(desertRespawns[Random.Range(0, desertRespawns.Count)].position);
-                yield return null;
-            }
-
-            StartRespawningBandits(Game.Player.Position);
         }
 
-        void StartRespawningBandits(Vector3 aroundPosition)
+        public void StartRespawningBandits(Vector3 aroundPosition)
         {
             if (respawnDesertBanditsCoroutine != null)
                 StopCoroutine(respawnDesertBanditsCoroutine);

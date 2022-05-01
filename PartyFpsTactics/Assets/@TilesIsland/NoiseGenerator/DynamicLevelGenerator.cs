@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GPUInstancer;
+using MrPink;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -14,7 +15,6 @@ public class DynamicLevelGenerator : MonoBehaviour
 
     public float tileSize = 20;
     public Rigidbody playerTarget;
-    public float heightScale = 1000;
     public int viewDistance = 8;
     public int distanceToDestroyTile = 8;
     public float waterLevel = 250;
@@ -32,14 +32,14 @@ public class DynamicLevelGenerator : MonoBehaviour
     private GameObject tilesParent;
 
     [Header("GPU Instancing")]
-    public List<GameObject> tileGpuPrefabs;
+    public List<Pooling.IslandTilePool.IslandTilePrefabTag> tileGpuPrefabsTags;
     //public GPUInstancerPrefabManager prefabManager;
     
     [Serializable]
     public class TileCoordinate
     {
         public GameObject spawnedBuilding;
-        public GameObject spawnedTile;
+        public IslandTile spawnedTile;
         public GameObject spawnedNpc;
         public GPUInstancerPrefab spawnedGpuTile;
         public GameObject spawnedPath;
@@ -53,6 +53,7 @@ public class DynamicLevelGenerator : MonoBehaviour
         //GPUInstancerAPI.InitializeGPUInstancer(prefabManager);
     }
 
+    
     public void Init()
     {
         noiseMap = IslandGenerator.instance.GetNoiseMap();
@@ -62,17 +63,35 @@ public class DynamicLevelGenerator : MonoBehaviour
         tilesParent.name = "TilesParent";
 
         var spawnCoords = IslandGenerator.instance.playerSpawnPoint.coordinates;
-        playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize + Vector3.up * 200;
+        playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize - Offset() + Vector3.up * 200;
         playerTarget.isKinematic = false;
         
+        Invoke(nameof(TeleportPlayerToTarget), 1);
         StartCoroutine(UpdateLevelAroundPlayer());
         StartCoroutine(DestroyTiles());
+        
+        BuildingGenerator.Instance.Init();
+    }
+    
+    [ContextMenu("TeleportPlayerToTarget")]
+    public Vector3 TeleportPlayerToTarget()
+    {
+        Vector3 pos = playerTarget.position + Vector3.up * 1000;
+        Game.Player.Movement.TeleportToPosition(pos);
+        return pos;
+    }
+
+    Vector3 Offset()
+    {
+        return Vector3.zero;
+        return new Vector3(IslandGenerator.instance.mapWidth / 2, 0, IslandGenerator.instance.mapHeight / 2) * tileSize;
     }
 
     public Vector2Int GetCoordinatesFromWorldPosition(Vector3 pos)
     {
         return new Vector2Int(Mathf.RoundToInt(pos.x / tileSize), Mathf.RoundToInt(pos.z / tileSize));
     }
+
     
     public List<Node> GetCoordsOfClosestNeighbourOfTarget(Vector3 pos)
     {
@@ -94,7 +113,8 @@ public class DynamicLevelGenerator : MonoBehaviour
         
         while (true)
         {
-            playerCoords = GetCoordinatesFromWorldPosition(playerTarget.transform.position);
+            //playerCoords = GetCoordinatesFromWorldPosition(playerTarget.transform.position);
+            playerCoords = GetCoordinatesFromWorldPosition(Game.Player.Position);
 
             // spawn new tiles around player
             for (int x = - viewDistance + playerCoords.x; x <= viewDistance + playerCoords.x; x++)
@@ -112,7 +132,8 @@ public class DynamicLevelGenerator : MonoBehaviour
                         if (regionIndex < 2 || IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count == 0)
                             continue;
                             
-                        var reference = tileGpuPrefabs[regionIndex];
+                        var reference = tileGpuPrefabsTags[regionIndex];
+                        //var reference = tileGpuPrefabs[regionIndex];
                         //var reference = IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList[Random.Range(0, IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count)] ;
                         
                         if (reference == null)
@@ -156,29 +177,22 @@ public class DynamicLevelGenerator : MonoBehaviour
                         
                         //AssetSpawner.instance.SpawnTile(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize), 0, -1, -1, false, -1, false );
 
-                        SpawnTileGpu(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize), new Vector2Int(x, z));
+                        SpawnTileGpu(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize) - Offset(), new Vector2Int(x, z));
 
-                        yield return null;
-                        /*
-                        t++;
-                        if (t >= 10)
-                        {
-                            t = 0;
-                            yield return null;
-                        }*/
+                        yield return new WaitForSeconds(0.01f);
                     }
                 }
             }
-            yield return null;
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
-    void SpawnTileGpu(GameObject prefab, Vector3 pos, Vector2Int coords)
+    void SpawnTileGpu(Pooling.IslandTilePool.IslandTilePrefabTag prefabTag, Vector3 pos, Vector2Int coords)
     {
-        var newInstance = Instantiate(prefab, pos, quaternion.identity);
+        var newInstance = Pooling.Instance.SpawnIslandTile(prefabTag, pos, Quaternion.identity);
         //prefabManager.AddPrefabInstance(newInstance, true);
         spawnedTilesPositions.Add(coords);
-        StartCoroutine(ProceedTile(newInstance.gameObject));
+        StartCoroutine(ProceedTile(newInstance, coords));
     }
 
     bool CoordinatesInBounds(int x, int z)
@@ -219,7 +233,10 @@ public class DynamicLevelGenerator : MonoBehaviour
                     if (spawnedTiles[x, z] != null)
                     {
                         if (spawnedTiles[x,z].spawnedTile)
-                            Destroy(spawnedTiles[x,z].spawnedTile);
+                        {
+                            Pooling.Instance.ReleaseIslandTile(spawnedTiles[x,z].spawnedTile);
+                            Destroy(spawnedTiles[x, z].spawnedTile);
+                        }
                     
                         if (spawnedTiles[x,z].spawnedPath)
                             Destroy(spawnedTiles[x,z].spawnedPath);
@@ -232,7 +249,6 @@ public class DynamicLevelGenerator : MonoBehaviour
 
                         if (spawnedTiles[x, z].spawnedGpuTile)
                         {
-                            //GPUInstancerAPI.RemovePrefabInstance(prefabManager, spawnedTiles[x,z].spawnedGpuTile);
                             Destroy(spawnedTiles[x,z].spawnedGpuTile);
                         }
                         
@@ -320,12 +336,17 @@ public class DynamicLevelGenerator : MonoBehaviour
         return false;
     }
 
-    public IEnumerator ProceedTile(GameObject go)
+    public IEnumerator ProceedTile(IslandTile tile, Vector2Int coords)
     {
-        go.transform.Rotate(Vector3.up, Random.Range(0, 360f));
+        tile.transform.Rotate(Vector3.up, Random.Range(0, 360f));
         
-        int _x = Mathf.RoundToInt(go.transform.position.x / tileSize);
-        int _z = Mathf.RoundToInt(go.transform.position.z / tileSize);
+        int _x = Mathf.RoundToInt(tile.transform.position.x / tileSize);
+        int _z = Mathf.RoundToInt(tile.transform.position.z / tileSize);
+
+        /*
+        _x = coords.x;
+        _z = coords.y;
+        */
         
         if (spawnedTiles[_x, _z] == null)
         {
@@ -333,21 +354,30 @@ public class DynamicLevelGenerator : MonoBehaviour
             spawnedTiles[_x, _z].x = _x;
             spawnedTiles[_x, _z].z = _z;
         }
-        spawnedTiles[_x, _z].spawnedTile = go;
+        spawnedTiles[_x, _z].spawnedTile = tile;
 
-        go.transform.parent = tilesParent.transform;
+        tile.transform.parent = tilesParent.transform;
         yield return null;
         
-        if (spawnedTiles[_x, _z].spawnedNpc == null && IslandGenerator.instance.poisCoordinates.Contains(new Vector2Int(_x, _z)) && IslandGenerator.instance.poisCoordinates.IndexOf(new Vector2Int(_x, _z)) != 0)
+        // IF THIS TILE HAS POI
+        if (IslandGenerator.instance.poisCoordinates.Contains(new Vector2Int(_x, _z)))
         {
-            spawnedTiles[_x, _z].spawnedNpc = Instantiate(islandWalkerPrefab, go.transform.position, Quaternion.identity);
+            var poiIndex = IslandGenerator.instance.poisCoordinates.IndexOf(new Vector2Int(_x, _z));
+            BuildingGenerator.Instance.SpawnRandomBuilding(tile.transform.position,IslandGenerator.instance.poisCoordinates[poiIndex]);
+            /*if (poiIndex != 0) // 0 is player spawner?
+            {
+                // SPAWN BUILDING
+                BuildingGenerator.Instance.SpawnRandomBuilding(go.transform.position,IslandGenerator.instance.poisCoordinates[poiIndex]);
+            }*/
+            
+            //spawnedTiles[_x, _z].spawnedNpc = Instantiate(islandWalkerPrefab, go.transform.position, Quaternion.identity);
         }
         
         yield break;
         
         if (spawnedTiles[_x, _z].spawnedBuilding == null && IslandGenerator.instance.poisCoordinates.Contains(new Vector2Int(_x, _z)) && IslandGenerator.instance.poisCoordinates.IndexOf(new Vector2Int(_x, _z)) != 0)
         {
-            var poi = Instantiate(poiChurchPrefab, go.transform.position, Quaternion.identity);
+            var poi = Instantiate(poiChurchPrefab, tile.transform.position, Quaternion.identity);
             poi.transform.Rotate(Vector3.up, 90 * Random.Range(0,4));
             spawnedTiles[_x, _z].spawnedBuilding = poi;
         }

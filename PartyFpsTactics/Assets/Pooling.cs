@@ -10,10 +10,12 @@ public class Pooling : MonoBehaviour
     public static Pooling Instance;
     public List<AttackColliderTaggedPrefab> attackColliderPrefabs;
     public List<ParticlesTaggedPrefab> particlesPrefabs;
+    public List<IslandTileTaggedPrefab> islandTilePrefabs;
     [Space]
     
     public List<AttackColliderPool> AttackColliderPools;
     public List<ParticlesPool> ParticlesPools;
+    public List<IslandTilePool> IslandTilesPools;
 
 
     [Serializable]
@@ -34,6 +36,7 @@ public class Pooling : MonoBehaviour
         public AttackColliderPool.AttackColliderPrefabTag tag;
         public BaseAttackCollider prefab;
     }
+    
     [Serializable]
     public class ParticlesPool
     {
@@ -51,6 +54,25 @@ public class Pooling : MonoBehaviour
     {
         public ParticlesPool.ParticlePrefabTag tag;
         public GameObject prefab;
+    }
+    
+    [Serializable]
+    public class IslandTilePool
+    {
+        [Serializable]
+        public enum IslandTilePrefabTag
+        {
+            Deep, Water, Sand, Grass, Jungle,  Mountains, Cliffs, Snow
+        }
+
+        public IslandTilePrefabTag islandPrefabTag;
+        public List<IslandTile> pool;
+    }
+    [Serializable]
+    public class IslandTileTaggedPrefab
+    {
+        public IslandTilePool.IslandTilePrefabTag tag;
+        public IslandTile prefab;
     }
     
     private void Awake()
@@ -135,6 +157,36 @@ public class Pooling : MonoBehaviour
         return pooledParticle;
     }
 
+    public IslandTile SpawnIslandTile(IslandTilePool.IslandTilePrefabTag _islandPrefabTag, Vector3 pos, Quaternion rot)
+    {
+        IslandTilePool poolFound = null;
+        IslandTile pooledTile = null;
+        for (int i = 0; i < IslandTilesPools.Count; i++)
+        {
+            if (IslandTilesPools[i].islandPrefabTag == _islandPrefabTag)
+            {
+                poolFound = IslandTilesPools[i];
+                break;
+            }
+        }
+
+        if (poolFound == null)
+        {
+            var newList = new IslandTilePool();
+            newList.islandPrefabTag = _islandPrefabTag;
+            newList.pool = new List<IslandTile>();
+            InstantiateIslandTile(newList);
+            IslandTilesPools.Add(newList);
+            poolFound = newList;
+        }
+        
+        pooledTile = GetIslandTileFromPool(poolFound);
+        pooledTile.transform.position = pos;
+        pooledTile.transform.rotation = rot;
+        pooledTile.gameObject.SetActive(true); 
+        return pooledTile;
+    }
+
     void InstantiateCollider(AttackColliderPool list)
     {
         for (int i = 0; i < attackColliderPrefabs.Count; i++)
@@ -157,6 +209,19 @@ public class Pooling : MonoBehaviour
             {
                 var newCollider = Instantiate(particlesPrefabs[i].prefab);
                 list.pool.Add(newCollider);
+                break;
+            }
+        }
+    }
+    void InstantiateIslandTile(IslandTilePool list)
+    {
+        for (int i = 0; i < islandTilePrefabs.Count; i++)
+        {
+            if (islandTilePrefabs[i].tag == list.islandPrefabTag)
+            {
+                var newTile = Instantiate(islandTilePrefabs[i].prefab);
+                newTile.IslandTilePool = list;
+                list.pool.Add(newTile);
                 break;
             }
         }
@@ -188,6 +253,19 @@ public class Pooling : MonoBehaviour
         return coll;
     }
 
+    IslandTile GetIslandTileFromPool(IslandTilePool list)
+    {
+        IslandTile coll = null;
+        if (list.pool.Count <= 0)
+        {
+            InstantiateIslandTile(list);
+        }
+        coll = list.pool[0];
+        list.pool.RemoveAt(0);
+
+        return coll;
+    }
+
     public void ReleaseCollider(BaseAttackCollider coll, AttackColliderPool list)
     {
         for (int i = 0; i < AttackColliderPools.Count; i++)
@@ -206,5 +284,9 @@ public class Pooling : MonoBehaviour
         particle.gameObject.SetActive(false);
         list.pool.Add(particle);
     }
-    
+    public void ReleaseIslandTile(IslandTile tile)
+    {
+        tile.IslandTilePool.pool.Add(tile);        
+        tile.gameObject.SetActive(false);
+    }
 }

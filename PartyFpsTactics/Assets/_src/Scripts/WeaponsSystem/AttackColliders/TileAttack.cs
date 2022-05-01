@@ -48,8 +48,7 @@ namespace MrPink.WeaponsSystem
         {
             if (!dangerous && prop)
                 return;
-            if ( ! BuildingGenerator.Instance.IsLevelReady)
-                return;
+            
             if (coll.gameObject.layer != 7 /*&& coll.gameObject.layer != 6 && coll.gameObject.layer != 12*/)
                 return;
             

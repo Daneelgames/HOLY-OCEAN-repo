@@ -29,6 +29,11 @@ public class LevelTitlesManager : MonoBehaviour
     {
         StartCoroutine(ShowIntroCoroutine());
     }
+
+    public void HideIntro()
+    {
+        
+    }
     
     private IEnumerator ShowIntroCoroutine()
     {

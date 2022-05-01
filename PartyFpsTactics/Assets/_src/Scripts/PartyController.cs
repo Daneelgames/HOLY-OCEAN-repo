@@ -21,11 +21,12 @@ namespace MrPink
             Instance = this;
         }    
     
-        public void Init(Transform roadPartToSpawnOn)
+        public void Init(Transform roadPartToSpawnOn = null)
         {
+            /*
             if (roadPartToSpawnOn == null)
             {
-                Debug.LogError("NO STRAIGHT ROADS HERE");
+                //Debug.LogError("NO STRAIGHT ROADS HERE");
             }
             Vector3 newCarPos = roadPartToSpawnOn.position + roadPartToSpawnOn.forward * 5;
             Quaternion newCarRot = roadPartToSpawnOn.rotation;
@@ -35,10 +36,9 @@ namespace MrPink
             // PLACE NPC INSIDE THE CAR
             // MOVE THE CAR TO NEW TRANSFORM
 
-            /*
-        playerCar.transform.position = newCarPos;
-        playerCar.transform.rotation = newCarRot;*/
-
+            playerCar.transform.position = newCarPos;
+            playerCar.transform.rotation = newCarRot;
+            */
 
             if (ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn)
             {
@@ -51,7 +51,6 @@ namespace MrPink
         
             Game.Player.Movement.gameObject.SetActive(true);
             Game.Player.Interactor.cam.gameObject.SetActive(true);
-            //Game.Player.VehicleControls.RequestVehicleAction(playerCar);
         }
 
         public void SetPlayerInCar(ControlledMachine machine)
@@ -62,7 +61,9 @@ namespace MrPink
 
         public IEnumerator RespawnPlayer()
         {
-            var pos = Respawner.Instance.MovePlayerToRandomRespawner();
+            
+            //var pos = Respawner.Instance.MovePlayerToRandomRespawner();
+            var pos = DynamicLevelGenerator.instance.TeleportPlayerToTarget();
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
             Game.Player.Inventory.DropRandomTools();
 
@@ -84,6 +85,13 @@ namespace MrPink
 
             }
 
+            if (playerCar)
+            {
+                playerCar.rb.velocity = Vector3.zero;
+                playerCar.rb.angularVelocity = Vector3.zero;
+                playerCar.transform.rotation = Quaternion.identity;
+                playerCar.transform.position = pos;
+            }
             Game.Player.Resurrect();
             UnitsManager.Instance.MoveUnitsToRespawnPoints(true, true);
             yield return new WaitForSeconds(1f);

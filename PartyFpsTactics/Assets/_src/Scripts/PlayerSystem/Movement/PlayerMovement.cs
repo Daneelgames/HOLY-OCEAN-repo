@@ -448,6 +448,7 @@ namespace MrPink.PlayerSystem
 
         public void TeleportToPosition(Vector3 pos)
         {
+            Debug.Log("TeleportToPosition " + pos);
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.MovePosition(pos);

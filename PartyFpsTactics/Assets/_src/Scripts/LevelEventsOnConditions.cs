@@ -16,6 +16,7 @@ public class LevelEventsOnConditions : MonoBehaviour
     {
         Instance = this;
     }
+    
 
     public void Init(ProcLevelData levelData)
     {

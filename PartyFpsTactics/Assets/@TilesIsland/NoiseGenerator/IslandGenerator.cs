@@ -81,8 +81,9 @@ public class IslandGenerator : MonoBehaviour
     {
         Random.InitState((int) DateTime.Now.Ticks);
         
+        /*
         mapWidth = cellSize * Random.Range(5, 20);
-        mapHeight = cellSize * Random.Range(5, 20);
+        mapHeight = cellSize * Random.Range(5, 20);*/
         
         noiseScale = Random.Range(20, 200);
         smooth = Random.Range(0.7f, 1f);

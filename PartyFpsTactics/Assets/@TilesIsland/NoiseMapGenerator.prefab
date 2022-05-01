@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 111246922}
   - component: {fileID: 111246921}
   - component: {fileID: 111246920}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: MapCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 1811309838}
   - component: {fileID: 1811309837}
   - component: {fileID: 1811309836}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Map Obstacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 2610570011917151666}
   - component: {fileID: 9139437350408785638}
   - component: {fileID: 2205408001137817336}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Map Roads
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 7535578561586355682}
   - component: {fileID: 8300745436548744304}
   - component: {fileID: 4219231609224915509}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Map Poi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,7 +376,7 @@ GameObject:
   - component: {fileID: 1327546899}
   - component: {fileID: 5217022388109155350}
   - component: {fileID: 7247506727602441677}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: NoiseMapGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,8 +431,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawMode: 1
-  mapWidth: 500
-  mapHeight: 300
+  mapWidth: 50
+  mapHeight: 50
   cellSize: 10
   smooth: 0.81360495
   noiseScale: 118
@@ -582,26 +582,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b0886f143553c4988bee328a443110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 100
+  tileSize: 50
   playerTarget: {fileID: 0}
-  heightScale: 100
   viewDistance: 10
-  distanceToDestroyTile: 12
+  distanceToDestroyTile: 20
   waterLevel: 50
   maxBridgePartsHeightDiffrenece: 20
   bridgePlatformThreshold: 40
   spawnedTilesPositions: []
   islandWalkerPrefab: {fileID: 0}
   poiChurchPrefab: {fileID: 9118859631126355626, guid: 439a66cb8cb1aea478e77363f239d936, type: 3}
-  tileGpuPrefabs:
-  - {fileID: 5481642413771031046, guid: 8aa1e1583f2a8dc448c4790dd8ece1b6, type: 3}
-  - {fileID: 5481642413771031046, guid: 8aa1e1583f2a8dc448c4790dd8ece1b6, type: 3}
-  - {fileID: 5481642413771031046, guid: 682ba90476563734881769b2845d45e3, type: 3}
-  - {fileID: 5481642413771031046, guid: b3d8b3f20e610e54f9060f3bf388abe4, type: 3}
-  - {fileID: 5481642413771031046, guid: 8bbc1a89b48310e47a483735916517b4, type: 3}
-  - {fileID: 5481642413771031046, guid: f6b0f3e14d1dbea46a5f7d47f0478362, type: 3}
-  - {fileID: 5481642413771031046, guid: f6b0f3e14d1dbea46a5f7d47f0478362, type: 3}
-  - {fileID: 5481642413771031046, guid: f6b0f3e14d1dbea46a5f7d47f0478362, type: 3}
+  tileGpuPrefabsTags: 0000000001000000020000000300000004000000050000000600000007000000
 --- !u!114 &7247506727602441677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,7 +616,7 @@ GameObject:
   - component: {fileID: 7529001615931018277}
   - component: {fileID: 7529001615931018276}
   - component: {fileID: 7529001615931018279}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
