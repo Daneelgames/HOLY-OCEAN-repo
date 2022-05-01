@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3030819815748140585}
   - component: {fileID: 5206833830744191492}
   - component: {fileID: 1293076375109720954}
-  - component: {fileID: 171711333803788598}
   - component: {fileID: 5159145346172467881}
   - component: {fileID: 9009540493680752988}
+  - component: {fileID: 5157431206237566654}
   m_Layer: 6
   m_Name: roadFence
   m_TagString: Untagged
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &171711333803788598
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4760068881366953636}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.0012595921, y: 0.021221237, z: 0.009910745}
-  m_Center: {x: -0.00020397993, y: 0.009463048, z: 0.004885032}
 --- !u!114 &5159145346172467881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,3 +111,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
+--- !u!64 &5157431206237566654
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4760068881366953636}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4502763212567369994, guid: 873b5631a15427e4d800814daa6d3fe6, type: 3}

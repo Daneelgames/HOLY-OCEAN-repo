@@ -12,6 +12,7 @@ namespace MrPink.Units
     public class UnitAiWeaponControls : MonoBehaviour
     {
         public List<WeaponController> activeWeapons;
+        public List<Transform> handsIk;
         public Vector2 weaponsAttackSwitchCooldownMinMax = new Vector2(0, 0);
         public float minAngleToRotateGun = 30;
         public float minAngleToShoot = 15;
@@ -40,26 +41,33 @@ namespace MrPink.Units
                 if (Vector3.Distance(transform.position, Game.Player.MainCamera.transform.position) > maxDistanceFromPlayerToShoot)
                     continue;
 
-                foreach (var activeWeapon in activeWeapons)
-                    yield return MakeWeaponDecision(activeWeapon);
+                for (var index = 0; index < activeWeapons.Count; index++)
+                {
+                    var activeWeapon = activeWeapons[index];
+                    Transform hand = null;
+                    if (handsIk.Count > index)
+                        hand = handsIk[index];
+                    yield return MakeWeaponDecision(activeWeapon, hand);
+                }
             }
         }
 
-        private IEnumerator MakeWeaponDecision(WeaponController activeWeapon)
+        private IEnumerator MakeWeaponDecision(WeaponController activeWeapon, Transform handIk)
         {
             if (!activeWeapon)
                 yield break;
                 
             if (activeWeapon.OnCooldown)
                 yield break;
-
-            if (_selfUnit.UnitAiMovement.enemyToLookAt == null)
+            
+            var enemyToShoot = _selfUnit.HealthController.AiMovement.enemyToLookAt;
+            if (enemyToShoot == null)
                 yield break;
             
-            if (Vector3.Distance(transform.position, _selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position) > maxDistanceToAttack)
+            if (Vector3.Distance(transform.position, enemyToShoot.visibilityTrigger.transform.position) > maxDistanceToAttack)
                 yield break;
 
-            if (_selfUnit.UnitAiMovement.enemyToLookAt.gameObject == Game.Player.GameObject)
+            if (enemyToShoot.gameObject == Game.Player.GameObject)
             {
                 var isNotInPlayerPov = !GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position);
                 var isCoinFlippedRight = Random.value > 0.5f;
@@ -68,28 +76,38 @@ namespace MrPink.Units
                     yield break;
             }
 
-            Vector3 targetDir = _selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position - transform.position;
+            Vector3 targetDir = enemyToShoot.visibilityTrigger.transform.position - transform.position;
             float angle = Vector3.Angle(targetDir, transform.forward);
-            
+            Vector3 offset = Vector3.zero;
+            if (enemyToShoot.playerMovement)
+                offset = enemyToShoot.playerMovement.rb.velocity;
 
             if (rotateWeaponTowardTarget)
             {
-                Vector3 offset = Vector3.zero;
-
-                var targetMovement = _selfUnit.UnitAiMovement.enemyToLookAt.playerMovement;
-                
-                if (targetMovement)
-                    offset = _selfUnit.UnitAiMovement.enemyToLookAt.playerMovement.rb.velocity;
                 
                 if (angle < minAngleToRotateGun)
-                    activeWeapon.transform.LookAt(_selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform.position + offset);
+                {
+                    /*
+                    if (handIk)
+                    {
+                        handIk.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
+                    }
+                    */
+                    activeWeapon.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
+                }
                 else
+                {
                     activeWeapon.transform.localRotation = activeWeapon.InitLocalRotation;
+                }
             }
 
+            targetDir = enemyToShoot.visibilityTrigger.transform.position - transform.position;
+            angle = Vector3.Angle(targetDir, transform.forward);
+                
             if (angle < minAngleToShoot)
             {
-                activeWeapon.Shot(_selfUnit.HealthController, _selfUnit.UnitAiMovement.enemyToLookAt.visibilityTrigger.transform).ForgetWithHandler();
+                activeWeapon.Shot(_selfUnit.HealthController, enemyToShoot.visibilityTrigger.transform).ForgetWithHandler();
+                
                 yield return new WaitForSeconds(Random.Range(weaponsAttackSwitchCooldownMinMax.x, weaponsAttackSwitchCooldownMinMax.y));
             }
         }

@@ -4,6 +4,7 @@ using MrPink.Tools;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MrPink.PlayerSystem
 {
@@ -26,21 +27,21 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            if (LevelGenerator.Instance == null)
+            if (BuildingGenerator.Instance == null)
                 return;
             
-            if (LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game)
-            {
-                SpawnPlayerWeapon(startingPistolWeapon, 0);
-                SpawnPlayerWeapon(_startingSwordWeapon, 1);
-            }
+            SpawnPlayerWeapon(_startingSwordWeapon, 0);
         }
     
     
         // TODO стороны - через enum
-        private void SpawnPlayerWeapon(WeaponController weaponPrefab, int side) // 0- left, 1 - right
+        public void SpawnPlayerWeapon(WeaponController weaponPrefab, int side = 0) // 0- left, 1 - right
         {
             var wpn = Instantiate(weaponPrefab, Game.Player.Position, Quaternion.identity);
+            
+            if (Game.Player.Weapon.Hands[0].Weapon != null)
+                side = 1;
+            
             switch (side)
             {
                 case 0:
@@ -72,9 +73,13 @@ namespace MrPink.PlayerSystem
             if (amountOfEachTool.ContainsKey(tool.tool))
             {
                 amountOfEachTool[tool.tool]++;
+                Game.Player.ToolControls.UpdateSelectedToolFeedback();
                 return;
             }   
             amountOfEachTool.Add(tool.tool, 1);
+            
+            Game.Player.ToolControls.SelectNextTool();
+            Game.Player.ToolControls.UpdateSelectedToolFeedback();
         }
     
         public void RemoveTool(ToolType tool)
@@ -108,5 +113,44 @@ namespace MrPink.PlayerSystem
             return 0;
         }
 
+        public void DropRandomTools()
+        {
+            for (int i = 0; i < Game.Player.ToolControls.toolsProjectilesPrefabs.Count; i++)
+            {
+                var toolPrefab = Game.Player.ToolControls.toolsProjectilesPrefabs[i];
+                var amount = GetAmount(toolPrefab.toolType);
+                if (amount > 0)
+                {
+                    int dropAmount = Random.Range(0, amount);
+                    
+                    for (int j = 0; j < dropAmount; j++)
+                    {
+                        RemoveTool(toolPrefab.toolType);
+                    }
+                }
+            }
+            
+            if (rightWeapon != null)
+            {
+                Game.Player.Weapon.SetWeapon(null, Hand.Right);
+                SetWeapon(null, Hand.Right);
+                return;
+            }
+
+            if (leftWeapon != null)
+                Game.Player.Weapon.SetWeapon(null, Hand.Left);
+
+        }
+
+        WeaponController leftWeapon;
+        WeaponController rightWeapon;
+        public void SetWeapon(WeaponController weapon, Hand hand)
+        {
+            if (hand == Hand.Left)
+                leftWeapon = weapon;
+            
+            if (hand == Hand.Right)
+                rightWeapon = weapon;
+        }
     }
 }

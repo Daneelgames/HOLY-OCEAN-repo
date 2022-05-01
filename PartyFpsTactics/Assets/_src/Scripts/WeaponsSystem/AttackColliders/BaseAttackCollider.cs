@@ -59,14 +59,14 @@ namespace MrPink.WeaponsSystem
         private AudioSource _hitAudioSource;
         
         
-        [SerializeField, ChildGameObjectsOnly, CanBeNull]
+        [SerializeField,  CanBeNull]
         [BoxGroup("Частицы")]
-        private Transform _debrisParticles;
+        private Pooling.ParticlesPool.ParticlePrefabTag _debrisParticlesTag;
         
         
-        [SerializeField, ChildGameObjectsOnly, CanBeNull]
+        [SerializeField, CanBeNull]
         [BoxGroup("Частицы")]
-        private Transform _bloodParticles;
+        private Pooling.ParticlesPool.ParticlePrefabTag _bloodParticlesTag;
         
         [SerializeField]
         private protected HealthController ownerHealth;
@@ -88,41 +88,81 @@ namespace MrPink.WeaponsSystem
             => _lifeTime;
 
 
-        private void Start()
+        private void OnEnable()
         {
             if (autoInitOnStart)
             {
+                Init(null, DamageSource.Environment, null);
+                
+                /*
                 actionOnHit = ScoringActionType.NULL;
                 _damageSource = DamageSource.Environment;
-                StartCoroutine(LifetimeCoroutine());
+                if (lifeTimeCoroutine != null)
+                    StopCoroutine(lifeTimeCoroutine);
+                lifeTimeCoroutine = StartCoroutine(LifetimeCoroutine());*/
             }
         }
 
-        public virtual void Init(HealthController owner, DamageSource source,  ScoringActionType action = ScoringActionType.NULL)
+        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
         {
+            currentLifeTime = 0;
             ownerHealth = owner;
             actionOnHit = action;
             _damageSource = source;
+            unitsExplosionCompleted = false;
+            damagedHealthControllers.Clear();
 
+            if (IsAttachedToShotHolder)
+                Debug.Log("IsAttachedToShotHolder " + IsAttachedToShotHolder + "; shotHolder " + shotHolder);
+            if (IsAttachedToShotHolder && shotHolder)
+            {
+                transform.parent = shotHolder;
+                transform.localPosition = Vector3.zero;
+                transform.localRotation = Quaternion.identity;
+            }
+            
+            if (lifeTimeCoroutine != null)
+                StopCoroutine(lifeTimeCoroutine);
             StartCoroutine(LifetimeCoroutine());
         }
 
+        void UnitsExplosion()
+        {
+            if (!unitsExplosionCompleted)
+            {
+                InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
+                    ragdollExplosionForce, playerExplosionForce);
+                unitsExplosionCompleted = true;
+            }
+        }
+        
         protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
             // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
             if (targetCollider.gameObject.layer == 11 && targetCollider.isTrigger)
-                return CollisionTarget.Self;
-            
-            if (currentLifeTime > _dangerousTime)
             {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
             
-            if (!_isSelfCollisionAvailable && ownerHealth && ownerHealth.gameObject == targetCollider.gameObject)
+            if (currentLifeTime > _dangerousTime)
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
+            
+            if (!_isSelfCollisionAvailable && ownerHealth && (ownerHealth.gameObject == targetCollider.gameObject || ownerHealth.OwnCollider(targetCollider)))
+            {
+                Debug.Log("return CollisionTarget.Self;");
+                return CollisionTarget.Self;
+            }
 
             if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
 
             
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
@@ -131,21 +171,21 @@ namespace MrPink.WeaponsSystem
             if (damageScaler > 1)
                 Debug.Log("TileAttack damageScaler " + damageScaler);*/
             
-            if (!unitsExplosionCompleted)
-            {
-                InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
-                    ragdollExplosionForce, playerExplosionForce);
-                unitsExplosionCompleted = true;
-            }
             
             if (targetCollider.gameObject == Game.Player.GameObject && IsPlayerEnemyToOwner())
             {
-                if (ownerHealth.controlledVehicle &&
-                    ownerHealth.controlledVehicle == Game.Player.VehicleControls.controlledVehicle)
+                if (ownerHealth.controlledMachine &&
+                    ownerHealth.controlledMachine == Game.Player.VehicleControls.controlledMachine)
+                {
+                    Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
                 
                 Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
+                if (ownerHealth.UnitVision/* && (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL)*/)
+                    ownerHealth.UnitVision.ForgiveUnit(Game.Player.Health, ownerHealth.team == Game.Player.Health.team);
+                UnitsExplosion();
+                Debug.Log("return CollisionTarget.Creature;");
                 return CollisionTarget.Creature;
             }
 
@@ -154,32 +194,52 @@ namespace MrPink.WeaponsSystem
             if (targetHealth == null)
             {
                 if (targetCollider.isTrigger)
+                {
+                    Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
                 
+                UnitsExplosion();
                 return CollisionTarget.Solid;
             }
 
-            if (ownerHealth)
+            if (ownerHealth && ownerHealth != Game.Player.Health)
             {
                 // if vehicle tries to damage unit inside
-                if (targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
-                    ownerHealth.controlledVehicle == targetHealth.HealthController.aiVehicleControls.controlledVehicle)
+                if (ownerHealth.controlledMachine && targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
+                    ownerHealth.controlledMachine == targetHealth.HealthController.aiVehicleControls.controlledMachine)
+                {
+                    //Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
 
                 // if unit inside tries to hit the vehicle AND IT'S NOT PLAYER
-                if (targetHealth.HealthController && targetHealth.HealthController.controlledVehicle &&
-                    ownerHealth.aiVehicleControls && ownerHealth.aiVehicleControls.controlledVehicle ==
-                    targetHealth.HealthController.controlledVehicle)
+                if (targetHealth.HealthController && targetHealth.HealthController.controlledMachine &&
+                    ownerHealth.aiVehicleControls && ownerHealth.aiVehicleControls.controlledMachine != null &&  ownerHealth.aiVehicleControls.controlledMachine ==
+                    targetHealth.HealthController.controlledMachine)
+                {
+                    //Debug.Log("return CollisionTarget.Self;");
                     return CollisionTarget.Self;
+                }
+
+
+                if (targetHealth.HealthController && ownerHealth.team == targetHealth.HealthController.team)
+                {
+                    resultDmg /= 3;
+                }
             }
 
             if (targetHealth.IsOwnedBy(ownerHealth))
+            {
+                Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
+            }
 
             if (targetHealth.HealthController)
             {
-                if (damagedHealthControllers.Contains(targetHealth.HealthController))
+                if (damagedHealthControllers.Count > 0 && damagedHealthControllers.Contains(targetHealth.HealthController))
                 {
+                    Debug.Log("return CollisionTarget.Creature;");
                     return CollisionTarget.Creature;
                 }
 
@@ -191,17 +251,27 @@ namespace MrPink.WeaponsSystem
                     
                 Debug.Log("Damage " + targetHealth.HealthController);
                 damagedHealthControllers.Add(targetHealth.HealthController);
+                
+                if (ownerHealth && ownerHealth.UnitVision && 
+                    (ownerHealth.team == targetHealth.HealthController.team || targetHealth.HealthController.team == Team.NULL))
+                    ownerHealth.UnitVision.ForgiveUnit(targetHealth.HealthController, ownerHealth.team == targetHealth.HealthController.team);
+                
                 StartCoroutine(ClearDamagedHC(targetHealth.HealthController));
             }
 
             // reduce velocity of vehicle who did the damage
-            if (ownerHealth && ownerHealth.controlledVehicle)
+            if (ownerHealth && ownerHealth.controlledMachine)
             {
-                resultDmg = Mathf.RoundToInt(resultDmg * ownerHealth.controlledVehicle.rb.velocity.magnitude);
+                resultDmg = Mathf.RoundToInt(resultDmg * ownerHealth.controlledMachine.rb.velocity.magnitude);
                 if (targetHealth.gameObject.layer == 6 || targetHealth.gameObject.layer == 12)
-                    ownerHealth.controlledVehicle.AddForceOnImpact(targetCollider.bounds.center);
+                    ownerHealth.controlledMachine.AddForceOnImpact(targetCollider.bounds.center);
             }
             
+            
+            UnitsExplosion();
+            
+            if (targetHealth.HealthController && targetHealth.HealthController.team == Team.Red)
+                Debug.Log("DAMAGE RED FOR " + resultDmg + " DAMAGE");
             return targetHealth.HandleDamageCollision(transform.position, _damageSource, resultDmg, actionOnHit);
         }
 
@@ -213,7 +283,8 @@ namespace MrPink.WeaponsSystem
             if (ownerHealth.team != Game.Player.Health.team)
                 return true;
             
-            if (ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
+            
+            if (ownerHealth.UnitVision && ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
                 return true;
 
             return false;
@@ -267,38 +338,37 @@ namespace MrPink.WeaponsSystem
         {
             PlaySound(_hitAudioSource, _hitSolidFx);
             
-            if (_debrisParticles == null)
+            if (_debrisParticlesTag == null)
                 return;
 
-            var newParticles = Instantiate(_debrisParticles);
+            Pooling.Instance.SpawnParticle(_debrisParticlesTag, point, Quaternion.identity);
+            
+            /*
+             var newParticles = Instantiate(_debrisParticles);
             newParticles.parent = null;
             newParticles.position = point;
             newParticles.localScale = Vector3.one;
-            newParticles.gameObject.SetActive(true);
-            /*
-            _debrisParticles.parent = null;
-            _debrisParticles.gameObject.SetActive(true);*/
+            newParticles.gameObject.SetActive(true);*/
         }
     
         protected void PlayHitUnitFeedback(Vector3 contactPoint)
         {
             PlaySound(_hitAudioSource, _hitUnitFx);
             
-            if (_bloodParticles == null)
+            if (_bloodParticlesTag == null)
                 return;
             
+            Pooling.Instance.SpawnParticle(_bloodParticlesTag, contactPoint, Quaternion.identity);
+           
+            /*
             var newParticles = Instantiate(_bloodParticles);
             newParticles.parent = null;
             newParticles.localScale = Vector3.one;
             newParticles.position = contactPoint;
-            newParticles.gameObject.SetActive(true);
-            
-            /*
-            _bloodParticles.parent = null;
-            _bloodParticles.position = contactPoint;
-            _bloodParticles.gameObject.SetActive(true);*/
+            newParticles.gameObject.SetActive(true);*/
         }
-        
+
+        private Coroutine lifeTimeCoroutine;
         private IEnumerator LifetimeCoroutine()
         {
             float t = 0;
@@ -326,12 +396,34 @@ namespace MrPink.WeaponsSystem
 
                 if (currentLifeTime > _lifeTime)
                 {
-                    Destroy(gameObject);
+                    Release();
                     yield break;
                 }
-
             }
+        }
+
+        private Pooling.AttackColliderPool pool;
+        public void SetPool(Pooling.AttackColliderPool _pool)
+        {
+            pool = _pool;
+        }
+
+        protected void Release(float time = 0)
+        {
+            if (releaseCoroutine != null)
+                return;
+
+            releaseCoroutine = StartCoroutine(ReleaseCoroutine(time));
+        }
+
+        private Coroutine releaseCoroutine;
+
+        IEnumerator ReleaseCoroutine(float t)
+        {
+            yield return new WaitForSeconds(t);
             
+            Pooling.Instance.ReleaseCollider(this, pool);
+            releaseCoroutine = null;
         }
     }
 }

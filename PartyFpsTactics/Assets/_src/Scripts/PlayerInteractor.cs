@@ -17,6 +17,7 @@ namespace MrPink
         public float raycastDistance = 3;
         private InteractiveObject selectedIO;
         private Transform selectedIOTransform;
+        public Transform portableParent;
         public Rigidbody carryingPortableRb;
         private GameObject selectedPortable;
         public float throwPortableForce = 100;
@@ -30,7 +31,7 @@ namespace MrPink
         public float skipChance = 0.9f;
         [Range(0.01f,1)]
         public float selectedNameUpdateTime = 0.1f;
-        private void Start()
+        private void OnEnable()
         {
             StartCoroutine(RaycastInteractables());
             StartCoroutine(UpdateSelectedNameFeedback());
@@ -50,6 +51,13 @@ namespace MrPink
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                
+                if (selectedPortable && !carryingPortableRb)
+                {
+                    CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
+                    return;
+                }
+                
                 if (carryingPortableRb)
                 {
                     StopCoroutine(CarryPortableObjectCoroutine);
@@ -57,20 +65,18 @@ namespace MrPink
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
+                    carryingPortableRb.drag = 1;
+                    carryingPortableRb.transform.parent = null;
                     carryingPortableRb = null;
                     return;
                 }
             
                 if (selectedIO)
                 {
-                    InteractableEventsManager.Instance.InteractWithIO(selectedIO);
+                    selectedIO.PlayerInteraction();
                     return;
                 }
             
-                if (selectedPortable)
-                {
-                    CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
-                }
             }
 
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
@@ -84,8 +90,11 @@ namespace MrPink
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
+                    carryingPortableRb.drag = 1; 
+                    carryingPortableRb.transform.parent = null;
                     carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
+                    Game.Player.Weapon.CooldownOnAttackInput();
                 }
             }
         }
@@ -100,16 +109,22 @@ namespace MrPink
 
             carryingPortableRb = rb;
             carryingPortableRb.useGravity = false;
+            var dragInit = carryingPortableRb.drag; 
+            carryingPortableRb.drag = 10;
         
             carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
             carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
+            carryingPortableRb.transform.parent = portableParent;
             while (true)
             {
-                carryingPortableRb.AddForce((cam.transform.position + cam.transform.forward /* * 2 - cam.transform.up*/ - carryingPortableRb.transform.position) * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
+                Vector3 dir = (portableParent.position - carryingPortableRb.position);
+                carryingPortableRb.AddForce(dir * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
                 if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
                 {
                     carryingPortableRb.useGravity = true;
+                    carryingPortableRb.drag = dragInit;
+                    carryingPortableRb.transform.parent = null;
                     carryingPortableRb = null;
                     yield break;
                 }
@@ -119,12 +134,14 @@ namespace MrPink
 
         IEnumerator RaycastInteractables()
         {
+            //Debug.Log("RAYCAST START ");
             while (true)
             {
                 yield return null;
 
                 if (Game.Player.Health.health <= 0 || carryingPortableRb)
                 {
+                    //Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null && selectedPortable == null)
                         continue;
                 
@@ -137,6 +154,7 @@ namespace MrPink
             
                 if (PhoneDialogueEvents.Instance != null && PhoneDialogueEvents.Instance.InCutScene)
                 {
+                    //Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null)
                         continue;
                 
@@ -167,6 +185,7 @@ namespace MrPink
                     
                         selectedIO = null;
                         selectedIOTransform = null;
+                        //Debug.Log("RAYCAST NULL ");
                         continue;
                     }
 
@@ -174,6 +193,7 @@ namespace MrPink
                 
                     if (hit.collider.transform == selectedIOTransform)
                     {
+                        //Debug.Log("RAYCAST NULL ");
                         continue;
                     }
                 
@@ -196,7 +216,7 @@ namespace MrPink
                 }
                 else
                 {
-                    //Debug.Log("RAYCAST EMPTY");
+                    //Debug.Log("RAYCAST NULL ");
                     selectedPortable = null;
                     selectedIO = null;
                     selectedIOTransform = null;
@@ -220,25 +240,10 @@ namespace MrPink
 
         public void SetInteractionText(string text)
         {
-            string newString = UppercaseRandomly(text);
+            string newString = GameManager.Instance.UppercaseRandomly(text);
             uiItemNameFeedback.text = newString;
             uiItemNameFeedbackOutline.text = newString;
         }
     
-        string UppercaseRandomly(string s){
-            if (string.IsNullOrEmpty(s))
-            {
-                return string.Empty;
-            }
-            char[] a = s.ToCharArray();
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (Random.value >= 0.5f)
-                    a[i] = char.ToUpper(a[i]);
-                else
-                    a[i] = char.ToLower(a[i]);
-            }
-            return new string(a);
-        }
     }
 }

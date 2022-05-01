@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,10 +12,16 @@ namespace _src.Scripts
 {
     public class Respawner : MonoBehaviour
     {
-        public float corpseShredderY = -50;
+        public float corpseShredderY = -25;
         public List<Transform> redRespawns;
         public List<Transform> desertRespawns;
-        public Vector2Int enemiesPerRoomMinMax = new Vector2Int(3,10);
+        public List<Transform> banditsRespawns;
+        private List<HealthController> desertBanditsSpawned = new List<HealthController>();
+        public float banditsSpawnCooldown = 60;
+        public float banditsSpawnDistanceMin = 30;
+        public float banditsSpawnDistanceMax = 200;
+        public int banditsMaxAmount = 30;
+        public List<Transform> playerRespawns;
         public List<Transform> blueRespawns;
         public int alliesAmount = 3;
         List<TileHealth> tilesForSpawns = new List<TileHealth>();
@@ -29,88 +37,114 @@ namespace _src.Scripts
         {
             if (!spawn)
                 return;
-            
-            
-            // create enemy spawns
-            tilesForSpawns = new List<TileHealth>();
-            enemiesPerRoomMinMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].enemiesPerRoomMinMax;
+            StartCoroutine(SpawnStartEnemies());
+        }
 
-            for (int i = 0; i < LevelGenerator.Instance.spawnedMainBuildingLevels.Count; i++)
+        IEnumerator SpawnStartEnemies()
+        {
+            tilesForSpawns = new List<TileHealth>();
+
+            for (int i = 0; i < BuildingGenerator.Instance.spawnedBuildingLevels.Count; i++)
             {
+                var level = BuildingGenerator.Instance.spawnedBuildingLevels[i];
+                if (level.spawnUnits == false)
+                    continue;
+                
                 tilesForSpawns.Clear();
-                for (var index = LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside.Count - 1; index >= 0; index--)
+                for (var index = level.tilesInside.Count - 1; index >= 0; index--)
                 {
-                    var tile = LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside[index];
+                    var tile = level.tilesInside[index];
                     if (tile == null)
                     {
-                        LevelGenerator.Instance.spawnedMainBuildingLevels[i].tilesInside.RemoveAt(index);
+                        level.tilesInside.RemoveAt(index);
                         continue;
                     }
                     tilesForSpawns.Add(tile);
                 }
 
-                if (i == 0)
-                {
-                    for (int j = 0; j <  LevelGenerator.Instance.spawnedAdditionalLevels.Count; j++)
-                    {
-                        for (var index = LevelGenerator.Instance.spawnedAdditionalLevels[j].tilesInside.Count - 1; index >= 0; index--)
-                        {
-                            var tile = LevelGenerator.Instance.spawnedAdditionalLevels[j].tilesInside[index];
-                            if (tile == null)
-                            {
-                                LevelGenerator.Instance.spawnedAdditionalLevels[j].tilesInside.RemoveAt(index);
-                                continue;
-                            }
-                            tilesForSpawns.Add(tile);
-                        }
-                    }
-                }
-
-
-                int enemiesAmount = Random.Range(enemiesPerRoomMinMax.x, enemiesPerRoomMinMax.y);
-                if (i == 0)
-                    enemiesAmount += LevelGenerator.Instance.additionalSmallBuildingsAmount;
-                for (int j = 0; j < enemiesAmount; j++)
+                for (int j = 0; j < level.unitsToSpawn.Count; j++)
                 {
                     var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                    var newSpawnPoint = new GameObject("RedSpawnPoint");
-                    newSpawnPoint.transform.parent = transform;
-                    redRespawns.Add(newSpawnPoint.transform);
-                
-                    UnitsManager.Instance.SpawnRedUnit(randomTile.transform.position);
+                    UnitsManager.Instance.SpawnUnit(level.unitsToSpawn[j], randomTile.transform.position);
+                }
+                for (int j = 0; j < level.uniqueNpcToSpawn.Count; j++)
+                {
+                    var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                    UnitsManager.Instance.SpawnUnit(level.uniqueNpcToSpawn[j], randomTile.transform.position);
                 }
             }
-
-            int additionalNpcAmount = Random.Range(ProgressionManager.Instance
-                .levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.x, 
-                ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax.y);
-            for (int i = 0; i < additionalNpcAmount; i++)
-            {
-                var tiles = LevelGenerator.Instance
-                    .spawnedAdditionalLevels[Random.Range(0, LevelGenerator.Instance.spawnedAdditionalLevels.Count)]
-                    .tilesInside;
-                var randomTIle = tiles[Random.Range(0, tiles.Count)];
-                UnitsManager.Instance.SpawnNeutralUnit(randomTIle.transform.position);
-            }
             
-            
-            for (int j = 0; j < alliesAmount; j++)
-            {
-                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                UnitsManager.Instance.SpawnBlueUnit(randomTile.transform.position);   
-            }
-
             for (int i = 0; i < ProgressionManager.Instance.CurrentLevel.desertBeastsSpawnAmount; i++)
             {
                 UnitsManager.Instance.SpawnDesertBeast(desertRespawns[Random.Range(0, desertRespawns.Count)].position);
+                yield return null;
             }
+
+            StartRespawningBandits(Game.Player.Position);
         }
 
+        void StartRespawningBandits(Vector3 aroundPosition)
+        {
+            if (respawnDesertBanditsCoroutine != null)
+                StopCoroutine(respawnDesertBanditsCoroutine);
+            
+            respawnDesertBanditsCoroutine = StartCoroutine(RespawnDesertBandits(aroundPosition));
+        }
+
+        private Coroutine respawnDesertBanditsCoroutine;
+        IEnumerator RespawnDesertBandits(Vector3 aroundPosition)
+        {
+            Vector3 posToCheck = aroundPosition;
+            while (true)
+            {
+                if (desertBanditsSpawned.Count > 0)
+                {
+                    for (int i = desertBanditsSpawned.Count - 1; i >= 0; i--)
+                    {
+                        if (desertBanditsSpawned[i] == null)
+                        {
+                            desertBanditsSpawned.RemoveAt(i);
+                            continue;
+                        }
+
+                        if (Vector3.Distance(desertBanditsSpawned[i].transform.position, posToCheck) > 200)
+                            Destroy(desertBanditsSpawned[i].gameObject);
+                        
+                        if (desertBanditsSpawned[i].health <= 0)
+                            desertBanditsSpawned.RemoveAt(i);
+                    }
+                }
+                
+                List<Transform> spawns = new List<Transform>();
+                for (int i = 0; i < banditsRespawns.Count; i++)
+                {
+                    float dist = Vector3.Distance(posToCheck, banditsRespawns[i].position);
+                    if (dist < banditsSpawnDistanceMax && dist > banditsSpawnDistanceMin)
+                    {
+                        spawns.Add(banditsRespawns[i]);
+                    }
+                }
+
+                if (spawns.Count > 0)
+                {
+                    for (int i = desertBanditsSpawned.Count; i < banditsMaxAmount; i++)
+                    {
+                        yield return null;
+                        var bandit = UnitsManager.Instance.SpawnRedUnit(spawns[Random.Range(0, spawns.Count)].position);
+                        desertBanditsSpawned.Add(bandit);
+                    }
+                }
+                yield return new WaitForSeconds(banditsSpawnCooldown);
+                posToCheck = Game.Player.Position;
+            }
+        }
+        
         void Update()
         {
             if (Game.Player.Position.y < corpseShredderY)
             {
-                GameManager.Instance.StartProcScene();
+                GameManager.Instance.KillPlayer();
+                GameManager.Instance.RespawnPlayer();
                 return;
             }
             for (int i = UnitsManager.Instance.unitsInGame.Count - 1; i >= 0; i--)
@@ -119,25 +153,15 @@ namespace _src.Scripts
                     continue;
             
                 var corpse = UnitsManager.Instance.unitsInGame[i];
-                if (corpse.HumanVisualController && corpse.HumanVisualController.rigidbodies[0].transform.position.y < corpseShredderY)
+                
+                if (corpse.transform.position.y < corpseShredderY)
                 {
-                    /*
-                switch (corpse.team)
-                {
-                    case HealthController.Team.Blue:
-                        GameManager.Instance.SpawnBlueUnit(blueRespawns[Random.Range(0, blueRespawns.Count)].position);
-                        break;
-                    case HealthController.Team.Red:
-                        var spawners = GetSpawnersInRange(redRespawns, PlayerMovement.Instance.transform.position, 10, 100);
-                        if (spawners.Count == 0)
-                        {
-                            spawners = new List<Transform>(redRespawns);
-                        }
-                        GameManager.Instance.SpawnRedUnit(spawners[Random.Range(0, spawners.Count)].position);
-                        break;
-                }
-                */
-
+                    if (corpse == Game.Player.Health)
+                    {
+                        GameManager.Instance.KillPlayer();
+                        GameManager.Instance.RespawnPlayer();
+                        return;
+                    }
                     Destroy(corpse.gameObject);
                 }
             }
@@ -154,6 +178,24 @@ namespace _src.Scripts
             }
 
             return temp;
+        }
+
+        public Vector3 MovePlayerToRandomRespawner()
+        {
+            if (desertBanditsSpawned.Count > 0)
+            {
+                for (int i = desertBanditsSpawned.Count - 1; i >= 0; i--)
+                {
+                    if (desertBanditsSpawned[i] != null)
+                        Destroy(desertBanditsSpawned[i].gameObject);
+                }
+            }
+            desertBanditsSpawned.Clear();
+
+            var pos = playerRespawns[Random.Range(0, playerRespawns.Count)].position;
+            Game.Player.Movement.TeleportToPosition(pos);
+            StartRespawningBandits(pos);
+            return pos;
         }
     }
 }

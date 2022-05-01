@@ -41,11 +41,18 @@ namespace MrPink.Units
         
         private Vector3 _currentVelocity;
         private Transform _lookTransform;
+        
+        public bool rememberRespawPoint = false;
+        private Vector3 rememberedRespawnPoint;
 
         private void Start()
         {
             // TODO не делать этого в старте
             _lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
+            _lookTransform.parent = transform.parent;
+            
+            if (rememberRespawPoint)
+                rememberedRespawnPoint = transform.position;
         }
 
         private void Update()
@@ -90,20 +97,44 @@ namespace MrPink.Units
                 yield return new WaitForSeconds(0.5f);
         }
         
-        public void AgentSetPath(Vector3 target, bool isFollowing)
+        public void AgentSetPath(Vector3 target, bool isFollowing, bool cheap = true)
         {
             if (this.enabled == false || _agent.enabled == false)
                 return;
             
-            var path = new NavMeshPath();
-        
-            transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
+            if (cheap)
+            {
+                _agent.SetDestination(SamplePos(target));
+                return;
+            }
+            
+            var path = new NavMeshPath();
+            transform.position = SamplePos(transform.position);
+            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
+            
             _agent.SetPath(path);
         }
-    
+
+        public void TeleportNearPosition(Vector3 pos)
+        {
+            if (_agent.enabled)
+            {
+                _agent.Warp(SamplePos(pos));
+                return;
+            }
+            
+            // if not enabled
+            transform.position = SamplePos(pos);
+        }
+
+        public void TeleportToRespawnPosition()
+        {
+            if (rememberRespawPoint)
+                TeleportNearPosition(rememberedRespawnPoint);
+        }
+        
         private Vector3 SamplePos(Vector3 startPos)
         {
             if (NavMesh.SamplePosition(startPos, out var hit, 10f, NavMesh.AllAreas))

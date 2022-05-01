@@ -97,10 +97,15 @@ namespace MrPink.PlayerSystem
         public Vector3 MoveVector => _moveVector;
 
         private float heightToFallFrom = 0;
+        
+        private float rbInitAngularDrag;
+        private float rbInitDrag;
 
         private void Start()
         {
             staminaMax = stamina;
+            rbInitDrag = rb.drag;
+            rbInitAngularDrag = rb.angularDrag; 
             SetCrouch(false);
         }
 
@@ -122,7 +127,7 @@ namespace MrPink.PlayerSystem
             
             HandleStamina();
 
-            if (Game.Player.VehicleControls.controlledVehicle)
+            if (Game.Player.VehicleControls.controlledMachine)
             {
                 State.IsRunning = false;
                 _resultVelocity = Vector3.zero;
@@ -365,7 +370,7 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded && Game.Player.VehicleControls.controlledVehicle == null)
+                if (!State.IsGrounded && Game.Player.VehicleControls.controlledMachine == null)
                 {
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
@@ -440,15 +445,32 @@ namespace MrPink.PlayerSystem
         {
             activeGrindRail = rail;
         }
-        
+
+        public void TeleportToPosition(Vector3 pos)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.MovePosition(pos);
+        }
         
         public void Death(Transform killer = null)
         {
+            SetCollidersTrigger(false);
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.drag = 1;
             rb.angularDrag = 10;
             _isDead = true;
+        }
+
+        public void Resurrect()
+        {
+            SetCollidersTrigger(false);
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.drag = rbInitDrag;
+            rb.angularDrag = rbInitAngularDrag;
+            _isDead = false;
         }
     }
 }

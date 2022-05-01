@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
+using MrPink.Tools;
+using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -45,8 +47,6 @@ namespace _src.Scripts.Data
         [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
         public float maxDistanceToSpeaker = -1;
         
-        [ShowIf("scriptedEventType", ScriptedEventType.StartDialogue)]
-        public HealthController NpcHc;
 
 
         
@@ -60,11 +60,23 @@ namespace _src.Scripts.Data
         public Vector2 auPitchMinMax = new Vector2(1, 1);
 
         [ShowIf("scriptedEventType", ScriptedEventType.RideVehicle)]
-        public ControlledVehicle controlledVehicle;
+        public ControlledMachine controlledMachine;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.AddTool)]
+        public Tool toolToAdd;
+        [ShowIf("scriptedEventType", ScriptedEventType.AddWeapon)]
+        public WeaponController weaponToAdd;
+        public HealthController ActorNpc;
+        public int addToStatAmount = 0;
+
+        [Header("If Id >= 0, game will try to find NpcHc by Id")]
+        public int actorId = -1;
+        
     }
     
     public enum ScriptedEventType
     {
-        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle
+        StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
+        AddHealth, AddToFood, AddWater, AddSleep
     }
 }

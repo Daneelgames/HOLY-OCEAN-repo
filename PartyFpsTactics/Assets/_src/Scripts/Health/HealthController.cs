@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
@@ -17,9 +18,10 @@ namespace MrPink.Health
 {
     public class HealthController : MonoBehaviour
     {
+        public Unit selfUnit;
         public int health = 100;
         public int healthMax = 100;
-        
+        public CharacterNeeds needs;
         public float endurance = 100;
         float enduranceMax = 100;
         public float enduranceRegenSpeed = 100;
@@ -35,8 +37,9 @@ namespace MrPink.Health
         public bool shakeZ = true;
         public float maxShakeOffset = 0.1f;
         public Transform transformToShake;
-    
-        [Header("AI")]  // TODO здоровье не должно разруливать интеллект, подкрутить архитектуру
+
+        [Header("AI")] // TODO здоровье не должно разруливать интеллект, подкрутить архитектуру
+        
         public Team team;
 
         public UnitVision UnitVision;
@@ -45,18 +48,21 @@ namespace MrPink.Health
         public HumanVisualController HumanVisualController;
 
         [Header("Mis")] 
-        public ControlledVehicle controlledVehicle;
+        public AiShop AiShop;
+        public CrimeLevel crimeLevel;
+        public ControlledMachine controlledMachine;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
-        public List<GameObject> objectsToSpawnOnDeath;
         public InteractiveObject npcInteraction;
         public DeathOnHit deathOnHit;
+        public List<HealthController> unitsVisibleBy = new List<HealthController>();
 
         [Header("This RB will be affected by explosions. For barrels etc")]
         public Rigidbody rb;
 
 
         public List<BodyPart> bodyParts;
+        public List<Transform> bodyPartsTransforms;
 
         public List<DamageState> damageStates;
 
@@ -93,6 +99,24 @@ namespace MrPink.Health
                 DestroyImmediate(deprecated);
                 var bodyPart = obj.AddComponent<BodyPart>();
                 EditorUtility.SetDirty(bodyPart);
+            }
+        }
+
+        public bool OwnCollider(Collider coll)
+        {
+            if (bodyPartsTransforms.Contains(coll.transform))
+                return true;
+            
+            return false;
+        }
+
+        [ContextMenu("SetupBodyPartsTransforms")]
+        public void SetupBodyPartsTransforms()
+        {
+            bodyPartsTransforms.Clear();
+            for (int i = 0; i < bodyParts.Count; i++)
+            {
+                bodyPartsTransforms.Add(bodyParts[i].transform);
             }
         }
         
@@ -139,6 +163,20 @@ namespace MrPink.Health
         {
             endurance = enduranceMax;
         }
+
+
+        public void AddHealth(int hpToRegen)
+        {
+            Debug.Log("AddHealth " + hpToRegen);
+            health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
+            if (Game.Player.Health == this)
+            {
+                PlayerUi.Instance.UpdateHealthBar();
+            }
+
+            if (health <= 0)
+                StartCoroutine(Death(ScoringActionType.NULL));
+        }
         
         public void SetDamager(HealthController damager)
         {
@@ -148,9 +186,32 @@ namespace MrPink.Health
             var vision = AiMovement.GetComponent<UnitVision>();
             
             if (vision)
-                vision.SetDamager(damager);
+            {
+                if (team != damager.team)
+                    Debug.Log("SetDamager other team: " + damager);
+                vision.SetDamager(damager, true, true);
+            }
+            if (damager.crimeLevel)
+                damager.crimeLevel.CrimeCommitedAgainstTeam(team, true, true);
         }
 
+        public void DrainHealth(int drainAmount)
+        {
+            if (health <= 0)
+                return;
+            health -= drainAmount;
+            
+            if (Game.Player.Health == this)
+            {
+                PlayerUi.Instance.UpdateHealthBar();
+            }
+
+            if (health <= 0)
+            {
+                StartCoroutine(Death(ScoringActionType.NULL, null));
+            }
+        }
+        
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {
             if (health <= 0)
@@ -173,6 +234,7 @@ namespace MrPink.Health
 
             if (health <= 0)
             {
+                health = 0;
                 StartCoroutine(Death(action, killer));
             
                 if (source == DamageSource.Player && action != ScoringActionType.NULL)
@@ -248,16 +310,13 @@ namespace MrPink.Health
                 var explosion = Instantiate(explosionOnDeath, visibilityTrigger.transform.position, transform.rotation);
                 explosion.Init(action);
             }
-        
-            for (int i = 0; i < objectsToSpawnOnDeath.Count; i++)
-            {
-                Instantiate(objectsToSpawnOnDeath[i], visibilityTrigger.transform.position, transform.rotation);
-                yield return null;
-            }
+
+            if (selfUnit)
+                selfUnit.SpawnLootOnDeath.SpawnLoot();
         
             if (Game.Player.Health == this)
             {
-                Game.Player.Interactor.SetInteractionText("R TO RESTART");
+                GameManager.Instance.SetPlayerSleepTimeScale(false);
                 Game.Player.Death(killer);
             }
 
@@ -268,11 +327,23 @@ namespace MrPink.Health
             }
             
             OnDeathEvent.Invoke();
-            
+
+            yield return null;
             if (destroyOnDeath)
                 Destroy(gameObject);
         }
 
+        public void AddToVisibleByUnits(HealthController unit)
+        {
+            if (!unitsVisibleBy.Contains(unit))
+                unitsVisibleBy.Add(unit);
+        }
+        public void RemoveFromVisibleByUnits(HealthController unit)
+        {
+            if (unitsVisibleBy.Contains(unit))
+                unitsVisibleBy.Remove(unit);
+        }
+        
         private void OnDestroy()
         {
             // TODO инкапсулировать логику в сами классы
@@ -281,6 +352,12 @@ namespace MrPink.Health
                 UnitsManager.Instance.unitsInGame.Remove(this);
             if (Game.Player.CommanderControls.unitsInParty.Contains(this))
                 Game.Player.CommanderControls.unitsInParty.Remove(this);
+        }
+
+        public void Resurrect()
+        {
+            AddHealth(healthMax/2);
+            IsDead = false;
         }
     }
 }

@@ -54,13 +54,13 @@ namespace MrPink.Health
         private void Start()
         {
             if (prop)
-                LevelGenerator.Instance.AddProp(this);
+                BuildingGenerator.Instance.AddProp(this);
         }
 
         private void OnDestroy()
         {
             if (prop)
-                LevelGenerator.Instance.RemoveProp(this);
+                BuildingGenerator.Instance.RemoveProp(this);
             
             if (parentLevel)
                 parentLevel.allTiles.Remove(this);
@@ -139,7 +139,7 @@ namespace MrPink.Health
         private void DestroyTile(DamageSource source, bool deathParticles = true)
         {
             if (deathParticles)
-                LevelGenerator.Instance.DebrisParticles(transform.position);
+                BuildingGenerator.Instance.DebrisParticles(transform.position);
             
             var hit = Physics.OverlapSphere(transform.position, 1, GameManager.Instance.AllSolidsMask);
             for (int i = 0; i < hit.Length; i++)
@@ -147,7 +147,7 @@ namespace MrPink.Health
                 if (hit[i].transform == transform || hit[i].gameObject.isStatic)
                     continue;
 
-                LevelGenerator.Instance.TileDamagedFeedback(hit[i].transform);
+                BuildingGenerator.Instance.TileDamagedFeedback(hit[i].transform);
             }
         }
 
@@ -164,7 +164,7 @@ namespace MrPink.Health
             if (IsAlive)
             {
                 if ( ! rb)
-                    LevelGenerator.Instance.TileDamagedFeedback(this);
+                    BuildingGenerator.Instance.TileDamagedFeedback(this);
             }
             else
                 Death(source);
@@ -178,7 +178,7 @@ namespace MrPink.Health
             DestroyTile(source, deathParticles);
             
             if (parentLevel != null && sendToLevelgen)
-                LevelGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
+                BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
             Destroy(gameObject);
         }
 

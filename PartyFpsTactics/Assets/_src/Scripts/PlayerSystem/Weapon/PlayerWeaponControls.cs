@@ -15,6 +15,8 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnityDictionary<Hand, WeaponHand> _hands = new UnityDictionary<Hand, WeaponHand>();
+
+        public UnityDictionary<Hand, WeaponHand> Hands => _hands;
         
         
         [Header("CAMERA")]
@@ -35,6 +37,7 @@ namespace MrPink.PlayerSystem
             
             if (Game.Flags.IsPlayerInputBlocked || Game.Player.Interactor.carryingPortableRb)
             {
+                Debug.Log("Game.Flags.IsPlayerInputBlocked");
                 _hands[Hand.Left].UpdateState(true);
                 _hands[Hand.Right].UpdateState(true);   
             }
@@ -83,13 +86,32 @@ namespace MrPink.PlayerSystem
 
         public void SetWeapon(WeaponController weapon, Hand hand)
         {
+            PlayerInventory.Instance.SetWeapon(weapon, hand);
+            if (weapon)
+                weapon.transform.parent = _weaponsParent;
+            
+            if (_hands[hand].Weapon != null)
+            {
+                Destroy(_hands[hand].Weapon.gameObject);
+            }
             _hands[hand].Weapon = weapon;
-            weapon.transform.parent = _weaponsParent;
+        }
+
+        public void CooldownOnAttackInput()
+        {
+            foreach (var weaponHand in _hands)
+            {
+                weaponHand.Value.CooldownOnAttack();
+            }
         }
 
         public void Death()
         {
             _isDead = true;
+        }
+        public void Resurrect()
+        {
+            _isDead = false;
         }
     }
 }

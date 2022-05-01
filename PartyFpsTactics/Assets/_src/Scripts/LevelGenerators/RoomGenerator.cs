@@ -28,23 +28,24 @@ namespace _src.Scripts.LevelGenerators
         {
             for (int levelIndex = 0; levelIndex < spawnedLevels.Count; levelIndex++)
             {
+                if (spawnedLevels[levelIndex].spawnRooms == false)
+                    continue;
+                
                 if (spawnedLevels[levelIndex].spawnedRooms.Count <= 0)
                     continue;
                 
                 var level = spawnedLevels[levelIndex];
-                var minMax = ProgressionManager.Instance.levelDatas[ProgressionManager.Instance.currentLevelIndex].npcsPerMainBuildingRoomMinMax;
-                int amount = Random.Range(minMax.x, minMax.y);
                 
-                for (int roomIndex = 0; roomIndex < amount; roomIndex++)
+                // spawn unique npc and spawn controlled machines
+
+                for (int i = 0; i < level.controlledMachinesToSpawn.Count; i++)
                 {
-                    // SPAWN OBJECT OF INTEREST
-                    var room = spawnedLevels[levelIndex].spawnedRooms[roomIndex];
+                    var room = spawnedLevels[levelIndex].spawnedRooms[Random.Range(0,spawnedLevels[levelIndex].spawnedRooms.Count)];
                     var roomTilesCoordsTemp = new List<Vector3Int>(room.coordsInside);
                     var randomTileCoords = roomTilesCoordsTemp[Random.Range(0, roomTilesCoordsTemp.Count)];
                     Vector3 worldSpawnPosition = new Vector3(randomTileCoords.x - level.size.x / 2, level.floorWorldHeight + 0.5f, randomTileCoords.z - level.size.z / 2);
-                    UnitsManager.Instance.SpawnNeutralUnit(worldSpawnPosition);
-                    
-                    // THEN SPAWN 
+
+                    Instantiate(level.controlledMachinesToSpawn[Random.Range(0, level.controlledMachinesToSpawn.Count)], worldSpawnPosition, Quaternion.identity);
                     yield return null;
                 }
             }

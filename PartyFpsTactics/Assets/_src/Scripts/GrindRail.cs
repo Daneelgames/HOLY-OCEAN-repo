@@ -47,7 +47,7 @@ namespace MrPink
 
             var firstNode = nodes[0];
             var lastNode = nodes[nodes.Count - 1];
-            lastNode.transform.position = LevelGenerator.Instance.levelGoalSpawned.transform.position + Random.insideUnitSphere * 100f;
+            lastNode.transform.position = BuildingGenerator.Instance.levelGoalSpawned.transform.position + Random.insideUnitSphere * 100f;
             Vector3 direction = (lastNode.position - firstNode.position).normalized;
             float distance = Vector3.Distance(firstNode.position, lastNode.position);
             for (int i = 1; i < nodes.Count-1; i++)

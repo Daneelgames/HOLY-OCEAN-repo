@@ -21,7 +21,7 @@ public class VehicleRamp : MonoBehaviour
         if (!hc)
             return;
         
-        var vehicle = hc.controlledVehicle;
+        var vehicle = hc.controlledMachine;
         if (!vehicle)
             return;
 

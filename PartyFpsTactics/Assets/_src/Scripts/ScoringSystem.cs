@@ -132,13 +132,23 @@ namespace MrPink
             scoreCooldownCoroutine = null;
         }
 
-        public void AddScore(int amount)
+        public void ItemFoundSound()
         {
             scoreAddedAu.pitch = Random.Range(0.9f, 1.1f);
             scoreAddedAu.Play();
+        }
         
+        public void AddScore(int amount)
+        {
+            if (amount == 0)
+                return;
+            
+            ItemFoundSound();
             CurrentScore += amount;
-            addedScoreFeedbackText.text = "+" + amount;
+            if (amount > 0)
+                addedScoreFeedbackText.text = "+" + amount;
+            else
+                addedScoreFeedbackText.text = amount.ToString();
         
             if (animateAddedScoreFeedback != null)
                 StopCoroutine(animateAddedScoreFeedback);

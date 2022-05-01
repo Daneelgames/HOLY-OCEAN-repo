@@ -7,6 +7,10 @@ namespace MrPink.Tools
         OneTimeShield, 
         SpyCam, 
         CustomLadder,
-        FragGrenade
+        FragGrenade,
+        BugMeat,
+        SandWater,
+        OilCoffee,
+        CheckpointTicket
     }
 }

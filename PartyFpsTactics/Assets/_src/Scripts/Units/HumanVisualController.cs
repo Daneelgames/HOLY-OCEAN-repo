@@ -11,6 +11,7 @@ namespace MrPink.Units
         public Animator anim;
         public HealthController hc;
 
+        public bool noRagdoll = false;
         [Header("Ragdoll")] 
         public Transform ragdollOrigin;
         Transform ragdollOriginParent;
@@ -18,7 +19,11 @@ namespace MrPink.Units
         public List<Rigidbody> rigidbodies;
         public List<Transform> animatedBones;
         public List<ConfigurableJoint> joints;
-    
+        public List<MeshRenderer> bodyPartsVisuals;
+
+        [Space]
+        public List<Transform> allBones;
+
         public float activePositionSpring = 1500;
         public float activePositionDamper = 100;
         public float activeAngularPositionSpring = 1500;
@@ -32,6 +37,7 @@ namespace MrPink.Units
         private bool ragdoll = false;
         private bool visibleToPlayer = false;
         private bool inVehicle = false;
+        public Material aliveMaterial;
         public Material deadMaterial;
         public SkinnedMeshRenderer meshRenderer;
         public LayerMask tilesLayerMask;
@@ -46,12 +52,25 @@ namespace MrPink.Units
 
         private void Start()
         {
-            ragdollOriginParent = ragdollOrigin.parent;
             _selfHealth = gameObject.GetComponent<HealthController>();
+            
+            if (noRagdoll)
+                return;
+            
+            ragdollOriginParent = ragdollOrigin.parent;
             for (int i = 0; i < joints.Count; i++)
                 initRotations.Add(animatedBones[i].localRotation);
 
             StartCoroutine(GetDistanceToPlayer());
+        }
+
+        [ContextMenu("SetAliveMaterial")]
+        public void SetAliveMaterial()
+        {
+            for (int i = 0; i < bodyPartsVisuals.Count; i++)
+            {
+                bodyPartsVisuals[i].material = aliveMaterial;
+            }
         }
 
         private IEnumerator GetDistanceToPlayer()
@@ -93,6 +112,9 @@ namespace MrPink.Units
 
         private void FixedUpdate()
         {
+            if (noRagdoll)
+                return;
+            
             if (_selfHealth.health <= 0)
                 return;
         
@@ -138,21 +160,27 @@ namespace MrPink.Units
             }
         }
     
-        public void SetVehiclePassenger(ControlledVehicle vehicle)
+        public void SetVehicleAiPassenger(ControlledMachine machine)
         {
-            inVehicle = vehicle;
+            if (machine && machine.sitTransformNpc == null)
+                return;
+            
+            inVehicle = machine;
             anim.enabled = true;
             anim.SetBool(Passenger, inVehicle);
         
             foreach (var rb in rigidbodies)
             {
                 rb.isKinematic = inVehicle;
-                rb.useGravity = !inVehicle;
+                rb.useGravity = false;
             }
         }
     
         public void Death()
         {
+            if (noRagdoll)
+                return;
+            
             meshRenderer.material = deadMaterial;
             if (!ragdoll)
                 ActivateRagdoll();
@@ -160,6 +188,9 @@ namespace MrPink.Units
     
         public void ActivateRagdoll()
         {
+            if (noRagdoll)
+                return;
+
             if (hc.aiVehicleControls)
                 hc.aiVehicleControls.SetPassengerSit(null,false);
             if (ragdoll && _followRagdollCoroutine != null)
@@ -219,6 +250,9 @@ namespace MrPink.Units
 
         void DeactivateRagdoll()
         {
+            if (noRagdoll)
+                return;
+
             _changeLerpToStandCoroutine = StartCoroutine(ChangeLerpToStand());
         
             anim.enabled = true;
@@ -340,15 +374,24 @@ namespace MrPink.Units
                     break;
                 }
             }
+            
+            Resurrect();
+
+        }
+
+        public void Resurrect()
+        {
             ragdollOrigin.parent = ragdollOriginParent;
             DeactivateRagdoll();
             _selfHealth.RestoreEndurance();
             _selfHealth.AiMovement.RestartActivities();
-
         }
 
         public void ExplosionRagdoll(Vector3 pos, float force, float distance)
         {
+            if (noRagdoll)
+                return;
+
             Debug.Log("ExplosionRagdoll");
             foreach (var rb in rigidbodies)
                 rb.AddExplosionForce(force, pos, distance);

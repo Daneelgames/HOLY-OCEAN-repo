@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _src.Scripts;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
@@ -13,12 +14,15 @@ namespace MrPink
     {
         public static GameManager Instance;
 
+        public float playerSleepTimeScale = 10;
         public string portableObjectTag = "PortableObject";
         public List<Collider> terrainAndIslandsColliders = new List<Collider>();
         public LayerMask AllSolidsMask;
         private bool cursorVisible = false;
 
         public Material rockDefaultMaterial;
+
+        public float currentTimeScale = 1;
     
         private void Awake()
         {
@@ -34,6 +38,21 @@ namespace MrPink
             Physics.autoSyncTransforms = false;
         }
 
+        public void SetPlayerSleepTimeScale(bool sleep)
+        {
+            if (sleep)
+                SetCurrentTimeScale(playerSleepTimeScale);
+            else
+                SetCurrentTimeScale(1);
+        }
+        
+        void SetCurrentTimeScale(float t)
+        {
+            currentTimeScale = t;
+            currentTimeScale = Mathf.Clamp(currentTimeScale, 0.1f, 100);
+            Time.timeScale = currentTimeScale;
+        }
+        
     
         private void Update()
         {
@@ -47,7 +66,7 @@ namespace MrPink
             if (Input.GetKeyDown(KeyCode.Alpha9))
                 Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity - 50, 5, 1000);
         
-            if (LevelGenerator.Instance != null && LevelGenerator.Instance.IsLevelReady == false)
+            if (BuildingGenerator.Instance != null && BuildingGenerator.Instance.IsLevelReady == false)
                 return;
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -57,7 +76,7 @@ namespace MrPink
                     cursorVisible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
-                    Time.timeScale = 1f;
+                    Time.timeScale = currentTimeScale;
                     AudioListener.pause = false;
                 }
                 else
@@ -71,30 +90,46 @@ namespace MrPink
             
             }
         
-            if (LevelGenerator.Instance == null)
-                return;
-            
-            if (Game.Player.Health.health <= 0 && LevelGenerator.Instance.levelType == LevelGenerator.LevelType.Game && Input.GetKeyDown(KeyCode.R))
-                StartProcScene();
+            if (Game.Player.Health.health <= 0 && Input.GetKeyDown(KeyCode.R))
+            {
+                // player died
+                // restart at different place
+                RespawnPlayer();
+            }
         
             if (Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.Z))
             {
                 if (Input.GetKeyDown(KeyCode.R))
-                    StartProcScene();
+                    RespawnPlayer();
+                if (Input.GetKeyDown(KeyCode.K))
+                    KillPlayer();
+                if (Input.GetKeyDown(KeyCode.X))
+                    ScoringSystem.Instance.AddScore(-ScoringSystem.Instance.CurrentScore);
             
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if (LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop.Count <= 0)
+                    if (BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count <= 0)
                         return;
 
-                    for (int i = LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
+                    for (int i = BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
                     {
-                        var tile = LevelGenerator.Instance.spawnedMainBuildingLevels[0].tilesTop[i];
+                        var tile = BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop[i];
                         if (tile)
                             tile.Damage(1000, DamageSource.Environment);
                     }
                 }
             }
+        }
+
+        public void KillPlayer()
+        {
+            Game.Player.Health.Damage(10000000, DamageSource.Environment);
+        }
+        public void RespawnPlayer()
+        {
+            // change player's position
+            LevelTitlesManager.Instance.ShowIntro();
+            StartCoroutine(PartyController.Instance.RespawnPlayer());
         }
 
         public void StartProcScene()
@@ -116,6 +151,39 @@ namespace MrPink
             if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1)
                 inFov = true;
             return inFov;
+        }
+        
+        public string UppercaseRandomly(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (Random.value >= 0.5f)
+                    a[i] = char.ToUpper(a[i]);
+                else
+                    a[i] = char.ToLower(a[i]);
+            }
+            return new string(a);
+        }
+        public string RemoveRandomLetters(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (Random.value >= 0.5f)
+                    a[i] = Char.Parse(" ");
+                else
+                    a[i] = char.ToLower(a[i]);
+            }
+            return new string(a);
         }
     }
 }

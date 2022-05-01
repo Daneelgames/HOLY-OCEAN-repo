@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
 using MrPink.Health;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class InteractiveObject : MonoBehaviour
@@ -13,6 +14,9 @@ public class InteractiveObject : MonoBehaviour
     }
 
     public InteractableType type = InteractableType.ItemInteractable;
+
+    [ShowIf("type", InteractableType.NpcInteractable)]
+    public NpcDialoguesList npcDialoguesList;
     
     public string interactiveObjectName = "A THING";
     public List<ScriptedEvent> eventsOnInteraction;
@@ -26,5 +30,24 @@ public class InteractiveObject : MonoBehaviour
     private void OnDestroy()
     {
         InteractableEventsManager.Instance.RemoveInteractable(this);
+    }
+
+    public void PlayerInteraction()
+    {
+        CheckNpcDialogueList();
+        InteractableEventsManager.Instance.InteractWithIO(this);
+    }
+
+    public void CheckNpcDialogueList()
+    {
+        if (type == InteractableType.NpcInteractable && npcDialoguesList)
+        {
+            npcDialoguesList.TryToReplaceEventsBasedOnConditions(this);
+        }   
+    }
+
+    public void SetNewEvents(List<ScriptedEvent> newEvents)
+    {
+        eventsOnInteraction = new List<ScriptedEvent>(newEvents);
     }
 }

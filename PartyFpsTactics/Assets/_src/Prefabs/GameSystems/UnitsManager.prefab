@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8148589189638961708}
   - component: {fileID: 8148589189638961709}
+  - component: {fileID: 51837837256310702}
   m_Layer: 0
   m_Name: UnitsManager
   m_TagString: Untagged
@@ -51,12 +52,43 @@ MonoBehaviour:
   tileExplosionForcePlayer: 50
   corpsesMaterial: {fileID: 13400000, guid: d6ba6f66e3275da47a5412320824a69b, type: 2}
   redTeamUnitPrefabs:
-  - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+  - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+  - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
+  - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
   - {fileID: 8593919718095820095, guid: 9a9291cbf4c61cc43abc75cd735df212, type: 3}
   - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+  - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+  - {fileID: 8593919718095820095, guid: 5717246d33d65f7459b5f5b22517f7e0, type: 3}
+  - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+  - {fileID: 8593919718095820095, guid: ae26c0998db6791418d6a0136829f756, type: 3}
+  - {fileID: 8593919718095820095, guid: e4c9c5607a2f053478398a60fe80ccbb, type: 3}
   blueTeamUnitPrefabs:
   - {fileID: 8593919718095820095, guid: b317b1d06b013b249bcb69b1f8b933d0, type: 3}
   neutralUnitPrefabs:
   - {fileID: 5673859260790904911, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+  - {fileID: 1888395734998901733, guid: affad653461496343aa6aac937c7dd01, type: 3}
   desertBeastsPrefabs:
   - {fileID: 1876098499272473148, guid: da51e4d69a17c7448954ad50516eedee, type: 3}
+--- !u!114 &51837837256310702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148589189638961707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f33dfb95a252f40bbe88f6bd58fa3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TeamsRelationshipsList:
+  - team: 1
+    enemyTeams: 04000000
+  - team: 4
+    enemyTeams: 00000000010000000200000003000000
+  - team: 0
+    enemyTeams: 04000000
+  - team: 2
+    enemyTeams: 0400000003000000
+  - team: 3
+    enemyTeams: 0400000002000000

@@ -27,6 +27,8 @@ namespace MrPink.PlayerSystem
 
         [ShowInInspector, ReadOnly]
         private bool _isCollidingWithWall;
+        private float cooldownOnAttackInput = 0f;
+        private float cooldownOnAttackInputMax = 0.5f;
 
 #if UNITY_EDITOR
         
@@ -90,10 +92,12 @@ namespace MrPink.PlayerSystem
 
         public void UpdateState(bool isDead)
         {
-            IsAiming = false;
             
             if (_isAttacking)
+            {
+                IsAiming = false;
                 return;
+            }
             
             CurrentPosition = WeaponPosition.Idle;
             
@@ -109,20 +113,30 @@ namespace MrPink.PlayerSystem
 
             if (Weapon.OnCooldown || _isCollidingWithWall)
             {
+                IsAiming = false;
                 CurrentPosition = WeaponPosition.Reload;
                 return;
             }
             
+            /*
             if (!LevelGenerator.Instance.IsLevelReady)
+            {
+                IsAiming = false;
+                CurrentPosition = WeaponPosition.Reload;
                 return;
+            }*/
 
             if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)
             {
+                IsAiming = false;
                 CurrentPosition = WeaponPosition.Reload;
                 return;
             }
 
-            if (Input.GetMouseButton(_mouseButtonIndex) && Game.Player.Interactor.carryingPortableRb == null)
+            if (Game.Player.Interactor.carryingPortableRb != null || cooldownOnAttackInput > 0)
+                return;
+            
+            if (Input.GetMouseButton(_mouseButtonIndex))
             {
                 IsAiming = true;
                 CurrentPosition = Weapon.IsMelee
@@ -130,13 +144,31 @@ namespace MrPink.PlayerSystem
                     : WeaponPosition.Aim;
             }
 
-            if (Input.GetMouseButtonUp(_mouseButtonIndex))
+            if (Input.GetMouseButtonUp(_mouseButtonIndex) && IsAiming)
             {
                 HandleAttack().ForgetWithHandler();
             }
         }
 
+        public void CooldownOnAttack()
+        {
+            cooldownOnAttackInput = cooldownOnAttackInputMax;
+            if (_cooldownOnAttackCoroutine != null)
+                StopCoroutine(_cooldownOnAttackCoroutine);
+            _cooldownOnAttackCoroutine = StartCoroutine(CooldownOnAttackCoroutine());
+        }
 
+        private Coroutine _cooldownOnAttackCoroutine;
+
+        IEnumerator CooldownOnAttackCoroutine()
+        {
+            while (cooldownOnAttackInput > 0)
+            {
+                cooldownOnAttackInput -= Time.deltaTime;
+                yield return null;
+            }
+        }
+            
         private async UniTask HandleAttack()
         {
             _isAttacking = true;

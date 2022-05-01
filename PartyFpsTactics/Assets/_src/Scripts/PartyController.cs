@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _src.Scripts;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.Units;
 using UnityEngine;
 
 namespace MrPink
@@ -11,7 +13,7 @@ namespace MrPink
     {
         public static PartyController Instance;
     
-        public ControlledVehicle playerCar;
+        public ControlledMachine playerCar;
         public HealthController npcInParty;
 
         private void Awake()
@@ -44,17 +46,51 @@ namespace MrPink
                     playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
                 //captain.aiVehicleControls.PassengerSit(playerCar);
                 npcInParty = captain;
+                Game.Player.CommanderControls.unitsInParty.Add(captain);
             }
         
             Game.Player.Movement.gameObject.SetActive(true);
             Game.Player.Interactor.cam.gameObject.SetActive(true);
-            Game.Player.VehicleControls.RequestVehicleAction(playerCar);
+            //Game.Player.VehicleControls.RequestVehicleAction(playerCar);
         }
 
-        public void SetPlayerInCar(ControlledVehicle vehicle)
+        public void SetPlayerInCar(ControlledMachine machine)
         {
             if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.Player.Position) < 15)
-                npcInParty.aiVehicleControls.SetPassengerSit(vehicle);
+                npcInParty.aiVehicleControls.SetPassengerSit(machine);
+        }
+
+        public IEnumerator RespawnPlayer()
+        {
+            var pos = Respawner.Instance.MovePlayerToRandomRespawner();
+            ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
+            Game.Player.Inventory.DropRandomTools();
+
+            if (npcInParty)
+            {
+                if (npcInParty.health > 0)
+                {
+                    npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
+                }
+                else
+                {
+                    npcInParty.selfUnit.Resurrect();
+                    npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
+                }
+                if (npcInParty.npcInteraction && npcInParty.npcInteraction.npcDialoguesList)
+                {
+                    npcInParty.npcInteraction.CheckNpcDialogueList();
+                }
+
+            }
+
+            Game.Player.Resurrect();
+            UnitsManager.Instance.MoveUnitsToRespawnPoints(true, true);
+            yield return new WaitForSeconds(1f);
+            if (npcInParty && npcInParty.npcInteraction)
+            {
+                npcInParty.npcInteraction.PlayerInteraction();
+            }
         }
     }
 }

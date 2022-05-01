@@ -19,27 +19,25 @@ namespace MrPink.Units
 {
     public class UnitAiMovement : MonoBehaviour
     {
-        [SerializeField] 
-        private Team _team;
-        
         [SerializeField, ChildGameObjectsOnly, Required]
         private Unit _selfUnit;
         
         public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
         public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
-
+        public EnemiesBehaviour setDamagerBehaviour = EnemiesBehaviour.ApproachEnemy;
+        
+        public bool followClosestEnemyOnSpawn = false;
         public MovementOrder currentOrder = MovementOrder.FollowTarget;
 
         private bool inCover = false;
-        
+
         public HealthController enemyToLookAt;
         
         private CoverSpot _occupiedCoverSpot;
         private float _takeCoverCooldown = 0;
         
         private Vector3 _currentVelocity;
-        
-        
+
         private Coroutine _takeCoverCoroutine;
         private Coroutine _getInCoverCoroutine;
         private Coroutine _moveToPositionCoroutine;
@@ -51,14 +49,24 @@ namespace MrPink.Units
 
             Awareness().ForgetWithHandler();
 
-            if (_team == Team.Red && Random.value > 0.9f)
-                MoveToPositionOrder(Game.Player.GameObject.transform.position);
-            else
-                TakeCoverOrder();
+            if (followClosestEnemyOnSpawn)
+            {
+                var targetHc = TeamsManager.Instance.FindClosestEnemyInRange(_selfUnit.HealthController.team, transform.position).transform;
+                if (targetHc)
+                {
+                    FollowTargetOrder(targetHc.transform);
+                    return;
+                }
+            }
+            
+            TakeCoverOrder();
         }
 
         private void Update()
         {
+            if (_selfUnit.HealthController.health <= 0)
+                return;
+            
             if (enemyToLookAt != null && !inCover && enemyToLookAt)
                 _selfUnit.UnitMovement.LookAt(enemyToLookAt.transform.position);
 
@@ -66,12 +74,29 @@ namespace MrPink.Units
                 _takeCoverCooldown -= Time.deltaTime;
         }
 
-
+        private float lookForNewEnemyCooldown = 0;
+        public void SetDamager(HealthController hc)
+        {
+            if (setDamagerBehaviour == EnemiesBehaviour.ApproachEnemy)
+            {
+                FollowTargetOrder(hc.transform);
+            }
+            else if (setDamagerBehaviour == EnemiesBehaviour.HideFromEnemy)
+            {
+                TakeCoverOrder(true, false, hc);
+            }
+            enemyToLookAt = hc;
+            lookForNewEnemyCooldown = 1;
+        }
+        
         private async UniTask Awareness()
         {
             while (_selfUnit.HealthController.health > 0)
             {
-                enemyToLookAt = await _selfUnit.UnitVision.GetClosestVisibleEnemy();
+                if (lookForNewEnemyCooldown <= 0)
+                    enemyToLookAt = await _selfUnit.UnitVision.GetClosestVisibleEnemy();
+                else
+                    lookForNewEnemyCooldown -= Time.deltaTime;
                 
                 if (enemyToLookAt != null)
                     TryCoverFromClosest(enemyToLookAt);
@@ -140,6 +165,7 @@ namespace MrPink.Units
             
                 if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
                 {
+                    // TO DO - переделать на систему вейпойнтов / спавнеров
                     Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
 
                     _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
@@ -150,7 +176,10 @@ namespace MrPink.Units
                 yield break;
             }
         
-            // GOOD COVER FOUND
+            // GOOD COVER FOUND!
+            ///
+            ///
+            // TRY TO FOLLOW ENEMY
             if (enemy && coverFoundBehaviour == EnemiesBehaviour.ApproachEnemy)
             {
                 FollowTargetOrder(enemy.transform);
@@ -158,11 +187,12 @@ namespace MrPink.Units
                 yield break;
             }
         
-        
+            // TRY TO OCCUPY COVER SPOT
+            
             // CHOSEN SPOT occupied!
             SetOccupiedSpot(chosenCover, _selfUnit.HealthController);
         
-            //SET PATH
+            //SET PATH TO SPOT
             if (_selfUnit.UnitMovement != null)
                 _selfUnit.UnitMovement.AgentSetPath(chosenCover.transform.position, false);
             

@@ -41,5 +41,8 @@ namespace _src.Scripts.Data
         [ShowIf("answerOnPositive", true)]
         [Range(0.1f, 10)] 
         public float delayAfterReactionOnPositiveAnswer = 2;
+
+        [ShowIf("answerOnPositive", true)] 
+        public bool openShopOnPositive = false;
     }
 }

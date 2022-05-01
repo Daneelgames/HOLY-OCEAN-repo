@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
 using MrPink;
+using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -46,13 +47,18 @@ public class InteractableEventsManager : MonoBehaviour
 
     public void RunEvent(ScriptedEvent IOevent, GameObject gameObjectToDestroy = null)
     {
+        var npcHc = IOevent.ActorNpc; 
+        if (npcHc == null && IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
+        {
+            npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
+        }
         switch (IOevent.scriptedEventType)
         {
             case ScriptedEventType.StartDialogue:
-            
-                PhoneDialogueEvents.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, IOevent.NpcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted, IOevent.setNextLevelOnDialogueCompleted);
+
+                PhoneDialogueEvents.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, npcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted, IOevent.setNextLevelOnDialogueCompleted);
                 if (IOevent.maxDistanceToSpeaker > 0)
-                    DialogueWindowInterface.Instance.StartCheckingDistanceToSpeaker(IOevent.NpcHc, IOevent.maxDistanceToSpeaker);
+                    DialogueWindowInterface.Instance.StartCheckingDistanceToSpeaker(npcHc, IOevent.maxDistanceToSpeaker);
                 break;
             
             case ScriptedEventType.SpawnObject:
@@ -90,6 +96,20 @@ public class InteractableEventsManager : MonoBehaviour
                 ScoringSystem.Instance.AddScore(IOevent.scoreToAdd);
                 break;
             
+            
+            case ScriptedEventType.AddHealth:
+                npcHc.AddHealth(IOevent.addToStatAmount);
+                break;
+            case ScriptedEventType.AddToFood:
+                npcHc.needs.AddToNeed(Need.NeedType.Food,IOevent.addToStatAmount);
+                break;
+            case ScriptedEventType.AddWater:
+                npcHc.needs.AddToNeed(Need.NeedType.Water,IOevent.addToStatAmount);
+                break;
+            case ScriptedEventType.AddSleep:
+                npcHc.needs.AddToNeed(Need.NeedType.Sleep,IOevent.addToStatAmount);
+                break;
+            
             case ScriptedEventType.PlaySound:
                 var newGo = new GameObject("Sound " + IOevent.soundToPlay.name);
                 var au = newGo.AddComponent<AudioSource>();
@@ -103,7 +123,18 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.RideVehicle:
-                Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledVehicle);
+                Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledMachine);
+                break;
+            
+            case ScriptedEventType.AddTool:
+                // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
+                ScoringSystem.Instance.ItemFoundSound();
+                Game.Player.Inventory.AddTool(IOevent.toolToAdd);
+                break;
+            case ScriptedEventType.AddWeapon:
+                // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
+                ScoringSystem.Instance.ItemFoundSound();
+                Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
                 break;
         }
         

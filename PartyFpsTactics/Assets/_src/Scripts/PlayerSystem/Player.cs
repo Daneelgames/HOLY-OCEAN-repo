@@ -22,7 +22,7 @@ namespace MrPink.PlayerSystem
         private PlayerWeaponControls _weapon;
         
         [SerializeField, ChildGameObjectsOnly, Required]
-        private PlayerThrowablesControls _throwableControls;
+        private PlayerToolsControls toolControls;
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerInventory _inventory;
@@ -38,6 +38,8 @@ namespace MrPink.PlayerSystem
         
         [SerializeField, ChildGameObjectsOnly, Required]
         private PlayerVehicleControls _vehicleControls;
+        [SerializeField, ChildGameObjectsOnly, Required]
+        private CharacterNeeds _characterNeeds;
         
         
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
@@ -58,8 +60,8 @@ namespace MrPink.PlayerSystem
 
         public PlayerWeaponControls Weapon
             => _weapon;
-        public PlayerThrowablesControls ThrowableControls
-            => _throwableControls;
+        public PlayerToolsControls ToolControls
+            => toolControls;
 
         public PlayerInventory Inventory
             => _inventory;
@@ -75,15 +77,28 @@ namespace MrPink.PlayerSystem
             => _lookAround;
         public PlayerVehicleControls VehicleControls
             => _vehicleControls;
+        public CharacterNeeds CharacterNeeds
+            => _characterNeeds;
         
 
         public void Death(Transform killer)
         {
+            Game.Player.Interactor.SetInteractionText("R TO RESTART");
             Movement.Death(killer);
             LookAround.Death(killer);
             Weapon.Death();
+            VehicleControls.Death();
             ScoringSystem.Instance.CooldownToZero();
         }
-
+        
+        public void Resurrect()
+        {
+            Game.Player.Interactor.SetInteractionText("");
+            Health.Resurrect();
+            Movement.Resurrect();
+            LookAround.Resurrect();
+            Weapon.Resurrect();
+            CharacterNeeds.ResetNeeds();
+        }
     }
 }

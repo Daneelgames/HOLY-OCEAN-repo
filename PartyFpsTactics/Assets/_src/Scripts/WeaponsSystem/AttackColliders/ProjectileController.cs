@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Net.Sockets;
 using Brezg.Extensions.UniTaskExtensions;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
@@ -7,6 +9,7 @@ using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace MrPink.WeaponsSystem
 {
@@ -16,7 +19,18 @@ namespace MrPink.WeaponsSystem
         public float projectileSpeed = 100;
     
         public ToolType toolType = ToolType.Null;
+        [ShowIf("toolType", ToolType.FragGrenade)]
+        [SerializeField]
+        private FragGrenadeTool fragGrenadeTool;
+    
+        [ShowIf("toolType", ToolType.CustomLadder)]
+        [SerializeField]
+        private CustomLadderTool customLadderTool;
+        [SerializeField]
+        private ConsumableTool consumableTool;
 
+        [Space]
+        
         public float projectileRandomRotationMax = 0;
         public bool dieOnContact = true;
         public bool ricochetOnContact = false;
@@ -30,36 +44,56 @@ namespace MrPink.WeaponsSystem
         private Vector3 currentPosition;
         private Vector3 lastPosition;
         private float distanceBetweenPositions;
+        public Transform visual;
     
         public AudioSource shotAu;
         public AudioSource flyAu;
         private bool dead = false;
-    
-        [ShowIf("toolType", ToolType.FragGrenade)]
-        [SerializeField]
-        private FragGrenade _fragGrenade;
-    
-        [ShowIf("toolType", ToolType.CustomLadder)]
-        [SerializeField]
-        private CustomLadder _customLadder;
-    
-    
-        public override void Init(HealthController owner, DamageSource source, ScoringActionType action = ScoringActionType.NULL)
-        {
-            base.Init(owner, source, action);
 
-            lastPosition = transform.position;
+        private bool rbIsKinematicInit = false;
         
+        private void Awake()
+        {
+            rbIsKinematicInit = rb.isKinematic;
+        }
+
+        void OnEnable()
+        {
+            dead = false;
+            if (visual)
+                visual.gameObject.SetActive(true);
             PlaySound(shotAu);
             PlaySound(flyAu);
-        
-        
-            if (rb != null && !addVelocityEveryFrame)
-                rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
+        }
 
-            transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);
+        public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
+        {
+            base.Init(owner, source, shotHolder, action);
+
+            rb.isKinematic = rbIsKinematicInit;
+            lastPosition = transform.position;
+
+            if (!IsAttachedToShotHolder)
+            {
+                if (rb != null && !addVelocityEveryFrame)
+                    rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
+
+                transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);   
+            }
 
             StartCoroutine(UpdateLastPosition());
+
+            CheckConsumable(owner);
+        }
+
+        void CheckConsumable(HealthController owner)
+        {
+            if (consumableTool)
+            {
+                consumableTool.Consume(owner);
+                Death();
+            }
+            
         }
 
         private void OnDrawGizmosSelected()
@@ -99,11 +133,22 @@ namespace MrPink.WeaponsSystem
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
             var target = CollisionTarget.Self;
-            if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out var hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Collide))
+            if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.transform == null)
                     return;
             
+                if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
+                    return;
+                
+            
+                target = TryDoDamage(hit.collider);
+                PlayHitUnitFeedback(hit.point);
+            }
+            else if (Physics.Raycast(lastPosition, currentPosition - lastPosition, out hit, distanceBetweenPositions, solidsMask, QueryTriggerInteraction.Ignore))
+            {
+                if (hit.transform == null || (hit.collider.isTrigger && hit.transform.gameObject.layer == 11)) // ignore npc interaction colliders
+                    return;
                 
                 target = TryDoDamage(hit.collider);
             
@@ -117,18 +162,6 @@ namespace MrPink.WeaponsSystem
                         PlayHitUnitFeedback(hit.point);
                         break;
                 }
-            }
-            else if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Collide))
-            {
-                if (hit.transform == null)
-                    return;
-            
-                if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
-                    return;
-                
-            
-                target = TryDoDamage(hit.collider);
-                PlayHitUnitFeedback(hit.point);
             }
             else
                 return;
@@ -174,13 +207,14 @@ namespace MrPink.WeaponsSystem
             Debug.Log("Destroy projectile");
         
             if (toolType == ToolType.FragGrenade)
-                _fragGrenade.Explode();
+                fragGrenadeTool.Explode();
         
             dead = true;
             rb.isKinematic = true;
-            transform.GetChild(0).gameObject.SetActive(false);
+            if (visual)
+                visual.gameObject.SetActive(false);
             DeathCoroutine().ForgetWithHandler();
-            Destroy(gameObject, 3);
+            Release(3);
         }
 
         private void Ricochet(Vector3 hitNormal)
@@ -202,7 +236,7 @@ namespace MrPink.WeaponsSystem
             dead = true;
         
             if (toolType == ToolType.CustomLadder)
-                _customLadder.ConstructLadder(ownerHealth.transform.position - Vector3.up);
+                customLadderTool.ConstructLadder(ownerHealth.transform.position - Vector3.up);
         }
 
         private async UniTask DeathCoroutine()

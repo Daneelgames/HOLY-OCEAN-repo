@@ -35,35 +35,18 @@ namespace MrPink
             Cursor.lockState = CursorLockMode.None;
         }
 
-        IEnumerator Start()
+        void Start()
         {
             toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
             CloseShop();
-            yield break;
-        
-            switch (LevelGenerator.Instance.levelType)
-            {
-                case LevelGenerator.LevelType.Game:
-                    OpenShop(0);
-                    break;
-                case LevelGenerator.LevelType.Narrative:
-                    CloseShop();
-                    break;
-            }
-
-            while (isActive)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                    CloseShop();
-            
-                if (Input.GetKeyDown(KeyCode.F))
-                    BuyItem();
-            
-                yield return null;
-            }
         }
 
-        void OpenShop(int newSelectedItem)
+        public void SetToolsList(List<Tool> tools)
+        {
+            toolsList = new List<Tool>(tools);
+        }
+
+        public void OpenShop(int newSelectedItem)
         {
             ScoringSystem.Instance.UpdateScore();
             canvasAnim.gameObject.SetActive(true);
@@ -80,7 +63,7 @@ namespace MrPink
                 }
             
                 shopItemsIcons[i].ShowItem(toolsList[i].toolName);
-                if (toolsList[i].scoreCost > ScoringSystem.Instance.CurrentScore)
+                if (toolsList[i].baseCost > ScoringSystem.Instance.CurrentScore)
                     shopItemsIcons[i].raycastedSprite.color = Color.red;
                 else
                     shopItemsIcons[i].raycastedSprite.color = Color.white;
@@ -95,7 +78,7 @@ namespace MrPink
             IsActive = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            Game.Player.ThrowableControls.Init();    
+            Game.Player.ToolControls.Init();    
         }
     
         public void SelectItem(int index)
@@ -116,7 +99,7 @@ namespace MrPink
             }
             else
             {
-                if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore ||
+                if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore ||
                     Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
                 {
                     buyForText.text = "Not enough DOLAS";   
@@ -124,7 +107,7 @@ namespace MrPink
                 }
                 else
                 {
-                    buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].scoreCost + " DOLAS";
+                    buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].baseCost + " DOLAS";
                     buyButtonImage.color = Color.green;
                 }
             }
@@ -138,13 +121,13 @@ namespace MrPink
         public void BuyItem()
         {
             // buy selectedItemIndex item
-            if (toolsList[selectedItemIndex].scoreCost > ScoringSystem.Instance.CurrentScore)
+            if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore)
                 return;
             if (!Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
                 return;
             Game.Player.Inventory.AddTool(toolsList[selectedItemIndex]);
         
-            ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].scoreCost);
+            ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].baseCost);
             OpenShop(selectedItemIndex);
         }
     }

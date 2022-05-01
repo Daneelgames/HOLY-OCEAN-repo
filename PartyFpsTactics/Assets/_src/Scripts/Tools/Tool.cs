@@ -7,7 +7,7 @@ namespace MrPink.Tools
     public class Tool : ScriptableObject
     {
         public ToolType tool;
-        public int scoreCost = 1000;
+        public int baseCost = 1000;
         [Range(1, 99)]
         public int maxAmount = 1;
 

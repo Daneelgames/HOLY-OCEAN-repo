@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace MrPink.Units
@@ -43,29 +45,52 @@ namespace MrPink.Units
             StartCoroutine(UniTask.ToCoroutine(BodyPartsKillQueue));
         }
 
+        public HealthController SpawnUnit(HealthController prefab, Vector3 pos, Transform rotationTransform = null)
+        {
+            var rot = Quaternion.identity;
+            if (rotationTransform != null)
+                rot = rotationTransform.rotation;
+            return Instantiate(prefab, pos, rot, _spawnRoot);
+        }
+        
         public void SpawnBlueUnit(Vector3 pos)
         {
+            pos = SamplePos(pos);
             Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
-        public void SpawnRedUnit(Vector3 pos)
+        public HealthController SpawnRedUnit(Vector3 pos)
         {
-            Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            pos = SamplePos(pos);
+            return Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
         public void SpawnNeutralUnit(Vector3 pos)
         {
+            pos = SamplePos(pos);
             Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
         public void SpawnDesertBeast(Vector3 pos)
         {
+            pos = SamplePos(pos);
             Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
 
+        Vector3 SamplePos(Vector3 pos)
+        {
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(pos, out hit, 10, NavMesh.AllAreas))
+            {
+                pos = hit.position;
+            }
 
+            return pos;
+        }
+
+        
         public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1,
-            float playerForce = -1, ScoringActionType action = ScoringActionType.NULL)
+            float playerForce = -1, ScoringActionType action = ScoringActionType.NULL, int enduranceDamage = -1)
         {
             if (distance < 0)
                 distance = tileExplosionDistance;
@@ -76,6 +101,9 @@ namespace MrPink.Units
             if (playerForce < 0)
                 playerForce = tileExplosionForcePlayer;
 
+            if (enduranceDamage < 0)
+                enduranceDamage = defaultInduranceDamage;
+            
             // BUMP ENEMIES
             for (int i = 0; i < unitsInGame.Count; i++)
             {
@@ -104,7 +132,7 @@ namespace MrPink.Units
                         continue;
                     }
 
-                    if (unitsInGame[i].DamageEndurance(defaultInduranceDamage) <= 0)
+                    if (unitsInGame[i].DamageEndurance(enduranceDamage) <= 0)
                     {
                         if (unitsInGame[i].HumanVisualController)
                         {
@@ -124,21 +152,21 @@ namespace MrPink.Units
             // BUMP PROPS
             bool propBumped = false;
             
-            if (LevelGenerator.Instance != null)
-                for (int i = 0; i < LevelGenerator.Instance.spawnedProps.Count; i++)
+            if (BuildingGenerator.Instance != null)
+                for (int i = 0; i < BuildingGenerator.Instance.spawnedProps.Count; i++)
                 {
-                    if (Vector3.Distance(LevelGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) >
+                    if (Vector3.Distance(BuildingGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) >
                         distance)
                         continue;
 
-                    var rb = LevelGenerator.Instance.spawnedProps[i].Rigidbody;
+                    var rb = BuildingGenerator.Instance.spawnedProps[i].Rigidbody;
 
                     if (!rb) 
                         continue;
                 
                     propBumped = true;
                     rb.AddExplosionForce(tileExplosionForceBarrels * 30, explosionPosition, distance);
-                    LevelGenerator.Instance.spawnedProps[i].tileAttack.dangerous = true;
+                    BuildingGenerator.Instance.spawnedProps[i].tileAttack.dangerous = true;
                 }
 
             if (propBumped && action != ScoringActionType.NULL)
@@ -153,7 +181,35 @@ namespace MrPink.Units
             else
                 _bodyPartsQueueToKill.Add(part);
         }
-    
+
+        public void MoveUnitsToRespawnPoints(bool destroyDead, bool healAlive)
+        {
+            for (int i = 0; i < unitsInGame.Count; i++)
+            {
+                var unit = unitsInGame[i];
+                if (!unit)
+                    continue;
+
+                if (unit.health <= 0)
+                {
+                 if (destroyDead)
+                     Destroy(unit.gameObject);
+                
+                 continue;
+                }
+                
+                if (unit.health > 0)
+                {
+                    if (unit.health > 0 && unit.selfUnit && unit.selfUnit.UnitMovement)
+                        unit.selfUnit.UnitMovement.TeleportToRespawnPosition();
+                    
+                    if (healAlive)
+                        unit.AddHealth(unit.healthMax);
+                }
+
+            }
+        }
+        
         private async UniTask BodyPartsKillQueue()
         {
             int handledInFrame = 0;
