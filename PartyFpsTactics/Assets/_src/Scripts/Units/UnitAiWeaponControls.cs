@@ -60,7 +60,7 @@ namespace MrPink.Units
             if (activeWeapon.OnCooldown)
                 yield break;
             
-            var enemyToShoot = _selfUnit.HealthController.AiMovement.enemyToLookAt;
+            var enemyToShoot = _selfUnit.UnitAiMovement.enemyToLookAt;
             if (enemyToShoot == null)
                 yield break;
             

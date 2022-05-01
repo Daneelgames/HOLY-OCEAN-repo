@@ -17,8 +17,6 @@ namespace MrPink.Units.Behaviours
 
         public override TaskStatus OnUpdate()
         {
-            Debug.Log(_currentWeaponIndex);
-            
             var weaponCount = selfUnit.WeaponControls.activeWeapons.Count;
 
             if (_currentWeaponIndex >= weaponCount)
