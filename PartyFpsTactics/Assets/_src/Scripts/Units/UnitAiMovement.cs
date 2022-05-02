@@ -21,8 +21,8 @@ namespace MrPink.Units
     {
         [SerializeField, ChildGameObjectsOnly, Required]
         private Unit _selfUnit;
-        
-        public EnemiesBehaviour coverFoundBehaviour = EnemiesBehaviour.ApproachEnemy;
+
+        public bool isUsesCovers = false;
         public EnemiesBehaviour noCoverBehaviour = EnemiesBehaviour.ApproachEnemy;
         public EnemiesBehaviour setDamagerBehaviour = EnemiesBehaviour.ApproachEnemy;
         
@@ -59,7 +59,7 @@ namespace MrPink.Units
                 }
             }
             
-            TakeCoverOrder();
+            TakeCoverOrder(false, true, null);
         }
 
         private void Update()
@@ -94,13 +94,9 @@ namespace MrPink.Units
         public void SetDamager(HealthController hc)
         {
             if (setDamagerBehaviour == EnemiesBehaviour.ApproachEnemy)
-            {
                 FollowTargetOrder(hc.transform);
-            }
             else if (setDamagerBehaviour == EnemiesBehaviour.HideFromEnemy)
-            {
                 TakeCoverOrder(true, false, hc);
-            }
             enemyToLookAt = hc;
             lookForNewEnemyCooldown = 1;
         }
@@ -145,10 +141,14 @@ namespace MrPink.Units
         }
 
 
-        private void TakeCoverOrder(bool random = false, bool closest = true, HealthController takeCoverFrom = null)
+        private void TakeCoverOrder(bool random, bool closest, HealthController takeCoverFrom)
         {
             FreeSpot();
             StopAllBehaviorCoroutines();
+            
+            if (takeCoverFrom == null)
+                return;
+            
             currentOrder = MovementOrder.TakeCover;
             _takeCoverCooldown = CoverSystem.Instance.TakeCoverCooldown;
             
@@ -157,71 +157,63 @@ namespace MrPink.Units
 
         private IEnumerator TakeCover(bool randomCover, bool closest, HealthController enemy)
         {
-            bool isCoverAccepted = Cover(randomCover, closest, enemy);
+            if (!isUsesCovers)
+            {
+                FollowTargetOrder(enemy.transform);
+                yield break;
+            }
             
-            if (!isCoverAccepted)
+            bool isCovered = TryCover(randomCover, closest, enemy);
+            
+            if (!isCovered)
                 yield break;
             
-            yield return BeInCover();
+            yield return WaitForBeNearCover();
             
             FireWatchOrder();
         }
         
-        private bool Cover(bool randomCover, bool closest, HealthController enemy)
+        private bool TryCover(bool randomCover, bool closest, HealthController enemy)
         {
             CoverSpot chosenCover = GetCover(randomCover, closest);
             
             if (chosenCover == null)
             {
-                // CAN'T FIND COVER
-                Debug.Log(gameObject.name +  " can't find cover. takeCoverFrom " + enemy);
-                if (enemy == null)
-                    return false;
-            
-                if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
-                {
-                    // TO DO - переделать на систему вейпойнтов / спавнеров
-                    Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
-
-                    _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
-                }
-                else
-                    FollowTargetOrder(enemy.transform);
-                
+                BehaveWithoutCover(enemy);
                 return false;
             }
-        
-            // GOOD COVER FOUND!
-            ///
-            ///
-            // TRY TO FOLLOW ENEMY
-            if (enemy && coverFoundBehaviour == EnemiesBehaviour.ApproachEnemy)
-            {
-                FollowTargetOrder(enemy.transform);
-                //AgentSetPath(enemy.transform.position, stopDistanceFollow);
-                return false;
-            }
-        
-            // TRY TO OCCUPY COVER SPOT
             
-            // CHOSEN SPOT occupied!
             OccupySpot(chosenCover);
-        
-            //SET PATH TO SPOT
-            if (_selfUnit.UnitMovement != null)
-                _selfUnit.UnitMovement.AgentSetPath(chosenCover.transform.position, false);
 
             return true;
         }
 
-        private IEnumerator BeInCover()
+        private void BehaveWithoutCover(HealthController enemy)
+        {
+            Debug.Log(gameObject.name +  " can't find cover. takeCoverFrom " + enemy);
+            if (enemy == null)
+                return;
+            
+            if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
+            {
+                // TO DO - переделать на систему вейпойнтов / спавнеров
+                Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
+
+                _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
+            }
+            else
+                FollowTargetOrder(enemy.transform);
+        }
+
+        private IEnumerator WaitForBeNearCover()
         {
             var spotPosition = _occupiedCoverSpot.transform.position;
 
             while (Vector3.Distance(transform.position, spotPosition) > 0.33f)
             {
                 if (_occupiedCoverSpot.Occupator != _selfUnit.HealthController)
-                    yield break;
+                    break;
+                
                 yield return new WaitForSeconds(0.5f);
             }
         }
@@ -264,8 +256,12 @@ namespace MrPink.Units
         {
             //Spot occupied!
             _occupiedCoverSpot = spot;
+            
+            //SET PATH TO SPOT
+            if (_selfUnit.UnitMovement != null)
+                _selfUnit.UnitMovement.AgentSetPath(spot.transform.position, false);
 
-            _getInCoverCoroutine = StartCoroutine(CheckIfCloseToCover());
+            _getInCoverCoroutine = StartCoroutine(UpdateCoverVisualStateCoroutine());
 
             spot.Occupator = _selfUnit.HealthController;
         }
@@ -281,14 +277,10 @@ namespace MrPink.Units
             SetInCover(false);
         }
 
-        private void SetInCover(bool isInCover)
-        {
-            inCover = isInCover;
-            _selfUnit.HealthController.HumanVisualController.SetInCover(isInCover);
-        }
+        
 
         
-        private IEnumerator CheckIfCloseToCover()
+        private IEnumerator UpdateCoverVisualStateCoroutine()
         {
             while (_occupiedCoverSpot)
             {
@@ -303,6 +295,12 @@ namespace MrPink.Units
                 yield return null;
 
             }
+        }
+        
+        private void SetInCover(bool isInCover)
+        {
+            inCover = isInCover;
+            _selfUnit.HealthController.HumanVisualController.SetInCover(isInCover);
         }
     
         private void FireWatchOrder()
