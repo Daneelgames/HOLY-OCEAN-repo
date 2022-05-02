@@ -70,6 +70,7 @@ namespace MrPink.Units
             if (enemyToLookAt != null && !inCover && enemyToLookAt)
                 _selfUnit.UnitMovement.LookAt(enemyToLookAt.transform.position);
 
+            // TODO линкануть на дерево
             if (_takeCoverCooldown > 0)
                 _takeCoverCooldown -= Time.deltaTime;
         }
@@ -80,9 +81,7 @@ namespace MrPink.Units
             {
                 if (lookForNewEnemyCooldown <= 0)
                     enemyToLookAt = await _selfUnit.UnitVision.GetClosestVisibleEnemy();
-                else
-                    lookForNewEnemyCooldown -= Time.deltaTime;
-                
+
                 if (enemyToLookAt != null)
                     TryCoverFromClosest(enemyToLookAt);
                 
