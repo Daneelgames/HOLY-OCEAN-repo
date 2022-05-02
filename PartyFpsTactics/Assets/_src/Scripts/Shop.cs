@@ -38,9 +38,17 @@ namespace MrPink
         void Start()
         {
             toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
-            CloseShop();
+            OpenShop(0);
+            //CloseShop();
+
+            for (int i = 0; i < 5; i++)
+            {
+                Game.Player.Inventory.AddTool(toolsList[5]);   
+            }
         }
 
+        
+        
         public void SetToolsList(List<Tool> tools)
         {
             toolsList = new List<Tool>(tools);

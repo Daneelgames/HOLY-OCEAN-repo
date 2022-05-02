@@ -91,7 +91,9 @@ namespace MrPink.PlayerSystem
     
         void FollowLeader()
         {
-        
+            if (unitsInParty.Count <= 0)
+                return;
+            
             if (unitsInParty[unitToGiveOrder].AiMovement)
                 unitsInParty[unitToGiveOrder].AiMovement.FollowTargetOrder(transform);
             return;

@@ -12,5 +12,7 @@ namespace MrPink.PlayerSystem
         public bool IsRunning;
 
         public bool IsMoving;
+        
+        public bool IsClimbing;
     }
 }

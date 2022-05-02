@@ -35,6 +35,8 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private NavMeshAgent _agent;
 
+        [SerializeField, ChildGameObjectsOnly] private Rigidbody rb;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private Unit _selfUnit;
 
@@ -99,24 +101,49 @@ namespace MrPink.Units
         
         public void AgentSetPath(Vector3 target, bool isFollowing, bool cheap = true)
         {
-            if (this.enabled == false || _agent.enabled == false)
+            if (enabled == false)
+                return;
+            
+            if (moveRigidbodyCoroutine != null)
+                StopCoroutine(moveRigidbodyCoroutine);
+            moveRigidbodyCoroutine = StartCoroutine(MoveRigidbody(target));
+            // NO NAV MESH
+            return;
+            
+            if (_agent.enabled == false)
                 return;
             
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
+            Vector3 targetPos = SamplePos(target);
             if (cheap)
             {
-                _agent.SetDestination(SamplePos(target));
+                _agent.SetDestination(targetPos);
                 return;
             }
             
             var path = new NavMeshPath();
             transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
+            NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
             
             _agent.SetPath(path);
         }
 
+        private Coroutine moveRigidbodyCoroutine;
+        IEnumerator MoveRigidbody(Vector3 targetPos)
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.1f);
+                
+                if (Vector3.Distance(transform.position, targetPos) < _stopDistanceMove)
+                    continue;
+                
+                rb.AddForce((targetPos - transform.position).normalized * _moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+                
+            }
+        }
+        
         public void TeleportNearPosition(Vector3 pos)
         {
             if (_agent.enabled)

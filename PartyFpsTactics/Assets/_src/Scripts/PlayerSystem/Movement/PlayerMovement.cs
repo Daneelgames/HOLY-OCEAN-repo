@@ -32,6 +32,7 @@ namespace MrPink.PlayerSystem
         public float crouchRunSpeed = 3.5f;
         public float acceleration = 1;
         public float groundCheckRadius = 0.25f;
+        public float climbCheckRadius = 1;
         private Vector3 _targetVelocity;
         private Vector2 _movementInput;
         private Vector3 _moveVector;
@@ -46,6 +47,9 @@ namespace MrPink.PlayerSystem
         public float stamina = 100;
         [HideInInspector]
         public float staminaMax = 100;
+        [SerializeField] float climbStaminaCost = 5;
+        [SerializeField] float climbMoveStaminaCost = 10;
+        [SerializeField] float climbRunStaminaCost = 15;
         [SerializeField] float runStaminaCost = 10;
         [SerializeField] float runCrouchStaminaCost = 5;
         [SerializeField] private float jumpStaminaCost = 10; 
@@ -125,7 +129,6 @@ namespace MrPink.PlayerSystem
             if (ProceduralCutscenesManager.Instance.InCutScene)
                 return;*/
             
-            HandleStamina();
 
             if (Game.Player.VehicleControls.controlledMachine)
             {
@@ -137,6 +140,8 @@ namespace MrPink.PlayerSystem
             HandleJump();
             HandleCrouch();
             HandleMovement();
+            
+            HandleStamina();
         }
         
         private void FixedUpdate()
@@ -153,6 +158,7 @@ namespace MrPink.PlayerSystem
                 return;*/
             
             GroundCheck();
+            ClimbingCheck();
             SlopeCheck();
 
             
@@ -174,6 +180,26 @@ namespace MrPink.PlayerSystem
         private float targetStaminaScaler = 1;
         void HandleStamina()
         {
+            if (State.IsClimbing && !State.IsGrounded)
+            {
+                targetStaminaScaler = climbStaminaCost;
+                
+                if (State.IsRunning)
+                    targetStaminaScaler = climbRunStaminaCost;
+                else if (State.IsMoving)
+                    targetStaminaScaler = climbMoveStaminaCost;
+                
+                ChangeStamina(-1 * targetStaminaScaler * Time.deltaTime);
+                
+                return;
+            }
+
+            if (!State.IsGrounded)
+            {
+                // don't change stamina in air
+                return;
+            }
+            
             if (!State.IsRunning)
             {
                 // MOVE
@@ -192,7 +218,7 @@ namespace MrPink.PlayerSystem
                 targetStaminaScaler = runStaminaCost;
             else
                 targetStaminaScaler = runCrouchStaminaCost;
-            ChangeStamina(-targetStaminaScaler * Time.deltaTime);
+            ChangeStamina(-1 * targetStaminaScaler * Time.deltaTime);
         }
 
         public void ChangeStamina(float offset)
@@ -273,7 +299,11 @@ namespace MrPink.PlayerSystem
             bool moveInFrame = hor != 0 || vert != 0;
 
             _movementInput = new Vector2(hor, vert);
-            _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
+            
+            if (State.IsClimbing)
+                _moveVector = Game.Player._mainCamera.transform.right * _movementInput.x + Game.Player._mainCamera.transform.forward * _movementInput.y;
+            else
+                _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
         
             _moveVector.Normalize();
         
@@ -331,7 +361,8 @@ namespace MrPink.PlayerSystem
             rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce * jumpForce, ForceMode.Impulse);
             
             StartCoroutine(CoyoteTimeCooldown());
-            stamina = Mathf.Clamp(stamina - jumpStaminaCost * Time.deltaTime, 0, staminaMax);
+            ChangeStamina(-1 * jumpStaminaCost);
+            //stamina = Mathf.Clamp(stamina - jumpStaminaCost /** Time.deltaTime*/, 0, staminaMax);
             _coyoteTime = 0;
         }
         
@@ -406,14 +437,39 @@ namespace MrPink.PlayerSystem
                 }
             }
         }
-    
+
+        private RaycastHit[] hitInfoClimb;
+        void ClimbingCheck()
+        {
+            if (stamina <= 0)
+            {
+                State.IsClimbing = false;
+                return;
+            }
+
+            hitInfoClimb = Physics.SphereCastAll(
+                transform.position + Vector3.up * Game.Player.LookAround._playerHeadHeight, climbCheckRadius,
+                Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask);
+            State.IsClimbing = hitInfoClimb.Length > 0;
+            
+            if (State.IsClimbing)
+                heightToFallFrom = transform.position.y;
+        }
+        
         private void ApplyFreeMovement()
         {
             float resultGravity = 0;
-            if (!State.IsGrounded)
+            if (State.IsClimbing)
+            {
+                // dont apply gravity
+            }
+            else if (State.IsGrounded)
+            {
+                if (!onSlope)
+                    resultGravity = 1;
+            }
+            else // in the air
                 resultGravity = gravity * additinalFallForce;
-            else if (!onSlope)
-                resultGravity = 1;
 
             if (_resultVelocity.y < 0 || jumpTime <= 0)
             {

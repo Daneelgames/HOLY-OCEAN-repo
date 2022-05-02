@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
@@ -81,6 +80,15 @@ namespace MrPink.Health
             UnitsManager.Instance.unitsInGame.Add(this);
         }
         
+        public bool OwnCollider(Collider coll)
+        {
+            if (bodyPartsTransforms.Contains(coll.transform))
+                return true;
+            
+            return false;
+        }
+
+        
 #if UNITY_EDITOR
 
         [ContextMenu("Link Body Parts")]
@@ -100,14 +108,6 @@ namespace MrPink.Health
                 var bodyPart = obj.AddComponent<BodyPart>();
                 EditorUtility.SetDirty(bodyPart);
             }
-        }
-
-        public bool OwnCollider(Collider coll)
-        {
-            if (bodyPartsTransforms.Contains(coll.transform))
-                return true;
-            
-            return false;
         }
 
         [ContextMenu("SetupBodyPartsTransforms")]

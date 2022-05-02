@@ -22,6 +22,7 @@ public class IslandGenerator : MonoBehaviour
     [Header("Map")]
     public int mapWidth;
     public int mapHeight;
+    [Header("Less cell size - more pointsOfInterests?")]
     public int cellSize = 100;
     public float smooth = 0.5f;
     public float noiseScale;

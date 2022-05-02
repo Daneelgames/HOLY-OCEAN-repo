@@ -2817,6 +2817,8 @@ GameObject:
   - component: {fileID: 3933392161680639242}
   - component: {fileID: 5836779754647926112}
   - component: {fileID: 991114053960957157}
+  - component: {fileID: 5795806013010857810}
+  - component: {fileID: 7585498236319895167}
   m_Layer: 7
   m_Name: MotherBeast
   m_TagString: Untagged
@@ -3017,6 +3019,7 @@ MonoBehaviour:
   _stopDistanceFollow: 3
   _stopDistanceMove: 1
   _agent: {fileID: 9204816102268635184}
+  rb: {fileID: 7585498236319895167}
   _selfUnit: {fileID: 4184761829863390397}
   rememberRespawPoint: 1
 --- !u!195 &9204816102268635184
@@ -3173,6 +3176,36 @@ MonoBehaviour:
   globalCooldownTime: 60
   spawnedBeforeGlobalCooldown: 10
   maxDistanceToPlayerToSpawn: 75
+--- !u!136 &5795806013010857810
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6502528235097576629}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 0.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!54 &7585498236319895167
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6502528235097576629}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0.1
+  m_AngularDrag: 0.1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
 --- !u!1 &6858113482902834692
 GameObject:
   m_ObjectHideFlags: 0

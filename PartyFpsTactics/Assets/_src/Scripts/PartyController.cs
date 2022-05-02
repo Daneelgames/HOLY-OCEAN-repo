@@ -61,7 +61,6 @@ namespace MrPink
 
         public IEnumerator RespawnPlayer()
         {
-            
             //var pos = Respawner.Instance.MovePlayerToRandomRespawner();
             var pos = DynamicLevelGenerator.instance.TeleportPlayerToTarget();
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
@@ -99,6 +98,8 @@ namespace MrPink
             {
                 npcInParty.npcInteraction.PlayerInteraction();
             }
+            
+            LevelTitlesManager.Instance.HideIntro();
         }
     }
 }

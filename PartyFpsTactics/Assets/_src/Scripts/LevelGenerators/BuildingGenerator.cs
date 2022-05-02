@@ -130,6 +130,8 @@ public class BuildingGenerator : MonoBehaviour
 
     public void SpawnRandomBuilding(Vector3 buildingPos, Vector2Int buildingCoords)
     {
+        //return;
+        
         if (spawnedBuildings.Count > buildingsToSpawnSettings.Count)
             return;
         
@@ -303,6 +305,8 @@ public class BuildingGenerator : MonoBehaviour
 
     void ClearPlaceForBuilding(Vector3 levelPos, Quaternion levelRot, Vector3Int levelSize)
     {
+        return;
+        
         RaycastHit[] hit = Physics.BoxCastAll(levelPos + Vector3.up * levelSize.y / 2, levelSize, Vector3.up, levelRot, 1,   GameManager.Instance.AllSolidsMask);
         if (hit.Length > 0)
         {

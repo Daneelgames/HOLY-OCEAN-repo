@@ -10024,6 +10024,8 @@ GameObject:
   - component: {fileID: -1517983677754019025}
   - component: {fileID: 6385933416773639908}
   - component: {fileID: 1246593914576948072}
+  - component: {fileID: 898283775404610476}
+  - component: {fileID: 7380722583892912433}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
   m_TagString: Untagged
@@ -10231,6 +10233,7 @@ MonoBehaviour:
   _stopDistanceFollow: 1.5
   _stopDistanceMove: 0
   _agent: {fileID: 8074880395059046385}
+  rb: {fileID: 898283775404610476}
   _selfUnit: {fileID: 834634797964359098}
   rememberRespawPoint: 1
 --- !u!114 &-4915185774981738495
@@ -10474,7 +10477,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 2
@@ -10596,6 +10599,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90475cd7ea1ff1a479ded3fa88b5b563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &898283775404610476
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0.1
+  m_AngularDrag: 0.1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!136 &7380722583892912433
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 0.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

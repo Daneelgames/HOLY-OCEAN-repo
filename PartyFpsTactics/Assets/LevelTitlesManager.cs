@@ -15,6 +15,8 @@ public class LevelTitlesManager : MonoBehaviour
 
     public static LevelTitlesManager Instance;
 
+    private bool play = false;
+    
     private void Awake()
     {
         Instance = this;    
@@ -32,26 +34,29 @@ public class LevelTitlesManager : MonoBehaviour
 
     public void HideIntro()
     {
-        
+        play = false;
     }
     
     private IEnumerator ShowIntroCoroutine()
     {
-        levelTitlesAnim.SetTrigger("Intro");
+        play = true;
+        levelTitlesAnim.SetBool("Intro", true);
         levelNameText.text = String.Empty;
         
         yield return new WaitForSeconds(0.3f);
         
-        float t = 0;
-        while (t < levelNameTime)
+        while (play)
         {
             string newString = GameManager.Instance.UppercaseRandomly(ProgressionManager.Instance.CurrentLevel.levelName);
             levelNameText.text = newString;
             float r = Random.Range(0.05f, 0.75f);
-            t += r;
             yield return new WaitForSeconds(r);
         }
-        t = 0;
+        
+        levelTitlesAnim.SetBool("Intro", false); 
+        
+        float t = 0;
+        t = 0;  
         while (t < 1)
         {
             string newString = GameManager.Instance.RemoveRandomLetters(ProgressionManager.Instance.CurrentLevel.levelName);

@@ -63,11 +63,12 @@ public class DynamicLevelGenerator : MonoBehaviour
         tilesParent.name = "TilesParent";
 
         var spawnCoords = IslandGenerator.instance.playerSpawnPoint.coordinates;
-        playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize - Offset() + Vector3.up * 200;
+        //playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize - Offset() + Vector3.up * 200;
+        playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize + new Vector3(IslandGenerator.instance.mapWidth / 2, 0, IslandGenerator.instance.mapHeight / 2) * tileSize + Vector3.up * 200;
         playerTarget.isKinematic = false;
         
         Invoke(nameof(TeleportPlayerToTarget), 1);
-        StartCoroutine(UpdateLevelAroundPlayer());
+        StartCoroutine(UpdateLevelAroundPlayer(playerTarget.transform));
         StartCoroutine(DestroyTiles());
         
         BuildingGenerator.Instance.Init();
@@ -76,7 +77,9 @@ public class DynamicLevelGenerator : MonoBehaviour
     [ContextMenu("TeleportPlayerToTarget")]
     public Vector3 TeleportPlayerToTarget()
     {
-        Vector3 pos = playerTarget.position + Vector3.up * 1000;
+        var randomCoord = spawnedTilesPositions[Random.Range(0, spawnedTilesPositions.Count)];
+        playerTarget.position = spawnedTiles[randomCoord.x, randomCoord.y].spawnedTile.transform.position;
+        Vector3 pos = playerTarget.position + Vector3.up * 10;
         Game.Player.Movement.TeleportToPosition(pos);
         return pos;
     }
@@ -101,7 +104,7 @@ public class DynamicLevelGenerator : MonoBehaviour
     
     private Vector2Int playerCoords;
     
-    IEnumerator UpdateLevelAroundPlayer()
+    IEnumerator UpdateLevelAroundPlayer(Transform originTransform)
     {
         var ig = IslandGenerator.instance;
         while (IslandGenerator.instance.generationComplete == false)
@@ -111,10 +114,13 @@ public class DynamicLevelGenerator : MonoBehaviour
 
         int t = 0;
         
-        while (true)
+        //while (true)
         {
             //playerCoords = GetCoordinatesFromWorldPosition(playerTarget.transform.position);
-            playerCoords = GetCoordinatesFromWorldPosition(Game.Player.Position);
+            if (originTransform == null)
+                playerCoords = GetCoordinatesFromWorldPosition(Game.Player.Position);
+            else
+                playerCoords = GetCoordinatesFromWorldPosition(originTransform.position);
 
             // spawn new tiles around player
             for (int x = - viewDistance + playerCoords.x; x <= viewDistance + playerCoords.x; x++)
@@ -185,6 +191,7 @@ public class DynamicLevelGenerator : MonoBehaviour
             }
             yield return new WaitForSeconds(0.01f);
         }
+        LevelTitlesManager.Instance.HideIntro();
     }
 
     void SpawnTileGpu(Pooling.IslandTilePool.IslandTilePrefabTag prefabTag, Vector3 pos, Vector2Int coords)
@@ -207,6 +214,7 @@ public class DynamicLevelGenerator : MonoBehaviour
 
     IEnumerator DestroyTiles()
     {
+        yield break;
         while (IslandGenerator.instance.generationComplete == false)
         {
             yield return null;
@@ -372,7 +380,11 @@ public class DynamicLevelGenerator : MonoBehaviour
             
             //spawnedTiles[_x, _z].spawnedNpc = Instantiate(islandWalkerPrefab, go.transform.position, Quaternion.identity);
         }
-        
+
+        foreach (Transform child in transform)
+        {
+            child.parent = null;
+        }
         yield break;
         
         if (spawnedTiles[_x, _z].spawnedBuilding == null && IslandGenerator.instance.poisCoordinates.Contains(new Vector2Int(_x, _z)) && IslandGenerator.instance.poisCoordinates.IndexOf(new Vector2Int(_x, _z)) != 0)
