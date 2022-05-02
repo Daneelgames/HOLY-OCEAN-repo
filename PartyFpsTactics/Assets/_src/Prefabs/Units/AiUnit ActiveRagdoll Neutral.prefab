@@ -10064,7 +10064,6 @@ MonoBehaviour:
   _unitVision: {fileID: 622743779293351943}
   _unitAiMovement: {fileID: 6090508075434962156}
   _weaponControls: {fileID: 5371681404181358584}
-  _unitWeaponControls: {fileID: 0}
   _humanVisualController: {fileID: 3176254616865558108}
   _unitMovement: {fileID: 7767769086912786514}
   _followTarget: {fileID: -4915185774981738495}
@@ -10234,6 +10233,9 @@ MonoBehaviour:
   _agent: {fileID: 8074880395059046385}
   _selfUnit: {fileID: 834634797964359098}
   rememberRespawPoint: 1
+  OnTargetChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-4915185774981738495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10261,15 +10263,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeWeapons: []
-  handsIk:
-  - {fileID: 4916146062492788886}
-  - {fileID: 3900542015340425774}
   weaponsAttackSwitchCooldownMinMax: {x: 0.5, y: 1}
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
   maxDistanceToAttack: 50
-  updateRate: 0.1
   maxDistanceFromPlayerToShoot: 200
 --- !u!114 &3176254616865558108
 MonoBehaviour:
@@ -10509,36 +10507,17 @@ MonoBehaviour:
   logTaskChanges: 0
   group: 0
   resetValuesOnRestart: 0
-  externalBehavior: {fileID: 0}
+  externalBehavior: {fileID: 11400000, guid: 2bf03707b24c848ae82ad5af408c1088, type: 2}
   mBehaviorSource:
-    behaviorName: UnitBehavior
+    behaviorName: shooting
     behaviorDescription: 
     mTaskData:
       types: []
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(478.636963,28.52216)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-1.36303711,118.522156)"},"ID":1,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MrPink.Units.Behaviours.IsAlive","NodeData":{"Offset":"(-379.772156,168.522156)"},"ID":2,"Name":"Is
-        Alive","Instant":true},{"Type":"MrPink.Units.Behaviours.IsPlayerNearToPerformAttack","NodeData":{"Offset":"(-198.137665,165.476044)"},"ID":3,"Name":"Is
-        Player Near To Perform Attack","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-18.39103,168.522156)"},"ID":4,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MrPink.Units.Behaviours.SelectNextWeapon","NodeData":{"Offset":"(-93.80316,132.62088)"},"ID":5,"Name":"Select
-        Next Weapon","Instant":true,"SharedWeaponControllernextWeapon":{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true}},{"Type":"BehaviorDesigner.Runtime.Tasks.ReturnSuccess","NodeData":{"Offset":"(82.63363,127.122093)"},"ID":6,"Name":"Return
-        Success","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.47135448,111.875244)"},"ID":7,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(-179.741287,118.924622)"},"ID":8,"Name":"Inverter","Instant":true,"Children":[{"Type":"MrPink.Units.Behaviours.IsWeaponOnCooldown","NodeData":{"Offset":"(0,100)"},"ID":9,"Name":"Is
-        Weapon On Cooldown","Instant":true,"SharedWeaponControlleractiveWeapon":{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Interrupt","NodeData":{"Offset":"(5.751892,116.3454)","Comment":"\u0435\u0441\u043b\u0438
-        \u0446\u0435\u043b\u0438\u043c\u0441\u044f \u043f\u043e \u0438\u0433\u0440\u043e\u043a\u0443
-        \u0438 \u0438\u0433\u0440\u043e\u043a \u044d\u0442\u043e \u0432\u0438\u0434\u0438\u0442
-        - \u0441\u0442\u0440\u0435\u043b\u044f\u0435\u043c \u043d\u0435 \u0432\u0441\u0435\u0433\u0434\u0430"},"ID":10,"Name":"Interrupt","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.ReturnSuccess","NodeData":{"Offset":"(-4.49890137,107.6622)"},"ID":11,"Name":"Return
-        Success","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-1.890564,113.781128)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MrPink.Units.Behaviours.IsLookingAtPlayer","NodeData":{"Offset":"(-243.326538,125.943939)"},"ID":13,"Name":"Is
-        Looking At Player","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.RandomProbability","NodeData":{"Offset":"(-75.42543,132.770844)"},"ID":14,"Name":"Random
-        Probability","Instant":true,"SharedFloatsuccessProbability":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedIntseed":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBooluseSeed":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}},{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(67.26166,132.770264)"},"ID":15,"Name":"Inverter","Instant":true,"Children":[{"Type":"MrPink.Units.Behaviours.IsWeaponPositionInPlayerFov","NodeData":{"Offset":"(-3.781128,117.5625)"},"ID":16,"Name":"Is
-        Weapon Position In Player Fov","Instant":true,"SharedWeaponControlleractiveWeapon":{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.PerformInterruption","NodeData":{"Offset":"(209.842041,135.583862)","Comment":"failure"},"ID":17,"Name":"Perform
-        Interruption","Instant":true,"Interrupt[]interruptTasks":[10],"SharedBoolinterruptSuccess":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]}]}]},{"Type":"MrPink.Units.Behaviours.CalculateAngleToTarget","NodeData":{"Offset":"(445.351868,120.912292)"},"ID":18,"Name":"Calculate
-        Angle To Target","Instant":true,"SharedFloataimAngle":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}},{"Type":"BehaviorDesigner.Runtime.Tasks.ReturnSuccess","NodeData":{"Offset":"(627.847168,116.748779)"},"ID":19,"Name":"Return
-        Success","Instant":true,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(0,105.53566)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MrPink.Units.Behaviours.IsWeaponRotationNeeded","NodeData":{"Offset":"(-119.326263,131.454987)"},"ID":21,"Name":"Is
-        Weapon Rotation Needed","Instant":true},{"Type":"MrPink.Units.Behaviours.RotateWeaponTowardTarget","NodeData":{"Offset":"(104.934326,131.4552)"},"ID":22,"Name":"Rotate
-        Weapon Toward Target","Instant":true,"SharedWeaponControlleractiveWeapon":{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true},"SharedFloataimAngle":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(1064.77539,128.682)"},"ID":23,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"MrPink.Units.Behaviours.IsAimedToTarget","NodeData":{"Offset":"(-174.464874,106.226135)"},"ID":24,"Name":"Is
-        Aimed To Target","Instant":true,"SharedFloataimAngle":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}},{"Type":"MrPink.Units.Behaviours.ShotCurrentTarget","NodeData":{"Offset":"(3.89511013,106.226135)"},"ID":25,"Name":"Shot
-        Current Target","Instant":true,"SharedWeaponControlleractiveWeapon":{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true}},{"Type":"MrPink.Units.Behaviours.WaitWeaponSwitchCooldown","NodeData":{"Offset":"(207.525726,112.171326)"},"ID":26,"Name":"Wait
-        Weapon Switch Cooldown","Instant":true}]}]}]}]}]},"Variables":[{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}]}'
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(478.636963,28.52216)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.BehaviorTreeReference","NodeData":{"Offset":"(-1.95228767,126.219627)"},"ID":1,"Name":"Behavior
+        Tree Reference","Instant":true,"ExternalBehavior[]externalBehaviors":[],"SharedNamedVariable[]variables":[],"Booleancollapsed":false},"Variables":[{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
