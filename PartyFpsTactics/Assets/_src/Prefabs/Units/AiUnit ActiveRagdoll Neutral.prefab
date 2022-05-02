@@ -10020,10 +10020,11 @@ GameObject:
   - component: {fileID: 5371681404181358584}
   - component: {fileID: 3176254616865558108}
   - component: {fileID: 8074880395059046385}
-  - component: {fileID: 1937434427710141243}
   - component: {fileID: -1517983677754019025}
   - component: {fileID: 6385933416773639908}
   - component: {fileID: 1246593914576948072}
+  - component: {fileID: 1937434427710141243}
+  - component: {fileID: 6158344408711406039}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
   m_TagString: Untagged
@@ -10208,7 +10209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selfUnit: {fileID: 834634797964359098}
-  coverFoundBehaviour: 0
+  isUsesCovers: 0
   noCoverBehaviour: 0
   setDamagerBehaviour: 0
   followClosestEnemyOnSpawn: 0
@@ -10488,47 +10489,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &1937434427710141243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startWhenEnabled: 1
-  asynchronousLoad: 0
-  pauseWhenDisabled: 1
-  restartWhenComplete: 1
-  logTaskChanges: 0
-  group: 0
-  resetValuesOnRestart: 0
-  externalBehavior: {fileID: 11400000, guid: 2bf03707b24c848ae82ad5af408c1088, type: 2}
-  mBehaviorSource:
-    behaviorName: shooting
-    behaviorDescription: 
-    mTaskData:
-      types: []
-      parentIndex: 
-      startIndex: 
-      variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(478.636963,28.52216)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.BehaviorTreeReference","NodeData":{"Offset":"(-1.95228767,126.219627)"},"ID":1,"Name":"Behavior
-        Tree Reference","Instant":true,"ExternalBehavior[]externalBehaviors":[],"SharedNamedVariable[]variables":[],"Booleancollapsed":false},"Variables":[{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}]}'
-      fieldSerializationData:
-        typeName: []
-        fieldNameHash: 
-        startIndex: 
-        dataPosition: 
-        unityObjects: []
-        byteData: 
-        byteDataArray: 
-      Version: 1.7.2
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
 --- !u!114 &-1517983677754019025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10594,6 +10554,88 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90475cd7ea1ff1a479ded3fa88b5b563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1937434427710141243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 1
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 2bf03707b24c848ae82ad5af408c1088, type: 2}
+  mBehaviorSource:
+    behaviorName: shooting
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(478.636963,28.52216)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.BehaviorTreeReference","NodeData":{"Offset":"(-1.95228767,126.219627)"},"ID":1,"Name":"Behavior
+        Tree Reference","Instant":true,"ExternalBehavior[]externalBehaviors":[],"SharedNamedVariable[]variables":[],"Booleancollapsed":false},"Variables":[{"Type":"MrPink.Units.Behaviours.SharedWeaponController","Name":"next_shot_weapon","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"aim_angle","IsShared":true,"SinglemValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.2
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
+--- !u!114 &6158344408711406039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6002119186621381548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 0
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: d885c80bcc07646e38f6f80b947db669, type: 2}
+  mBehaviorSource:
+    behaviorName: moving
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(365,30)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.BehaviorTreeReference","NodeData":{"Offset":"(13.7628746,122.319809)"},"ID":1,"Name":"Behavior
+        Tree Reference","Instant":true,"Booleancollapsed":false}}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.2
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using BehaviorDesigner.Runtime.Tasks;
 namespace MrPink.Units.Behaviours
 {
     [TaskCategory("MrPink/Units/Movement")]
-    public class HideFromEnemy : BaseUnitAction
+    public class GetHideFromEnemyPosition : BaseUnitAction
     {
         public SharedHealthController inputEnemy;
         public SharedVector3 outputPosition;
