@@ -102,8 +102,6 @@ namespace MrPink.Units
             HealthController closestVisibleEnemy = null;
             for (int i = visibleEnemies.Count - 1; i >= 0; i--)
             {
-                await UniTask.DelayFrame(1);
-                    
                 if (i >= visibleEnemies.Count)
                     continue;
 
@@ -116,6 +114,8 @@ namespace MrPink.Units
                     distance = newDistance;
                     closestVisibleEnemy = visibleEnemies[i];
                 }
+                
+                await UniTask.DelayFrame(1);
             }
 
             return closestVisibleEnemy;

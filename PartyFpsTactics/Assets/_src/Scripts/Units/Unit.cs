@@ -7,6 +7,7 @@ namespace MrPink.Units
     public class Unit : MonoBehaviour
     {
         public Transform faceCam;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private HealthController _healthController;
         
@@ -19,9 +20,6 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitAiWeaponControls _weaponControls;
         
-        [SerializeField, ChildGameObjectsOnly]
-        private UnitAiWeaponControls _unitWeaponControls;
-        
         [SerializeField, ChildGameObjectsOnly, Required]
         private HumanVisualController _humanVisualController;
         
@@ -33,14 +31,12 @@ namespace MrPink.Units
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private CharacterNeeds _characterNeeds;
+        
         [SerializeField, ChildGameObjectsOnly, Required]
         private SpawnLootOnDeath _spawnLootOnDeath;
         
         [SerializeField, ChildGameObjectsOnly]
         private InteractiveObject _npcInteraction;
-        
-        
-
 
         public HealthController HealthController
             => _healthController;
@@ -50,9 +46,7 @@ namespace MrPink.Units
         
         public UnitAiMovement UnitAiMovement
             => _unitAiMovement;
-        public UnitAiWeaponControls UnitWeaponControls
-            => _unitWeaponControls;
-        
+
         public HumanVisualController HumanVisualController
             => _humanVisualController;
         

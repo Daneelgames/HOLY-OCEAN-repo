@@ -3,6 +3,7 @@ using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -45,6 +46,8 @@ namespace MrPink.Units
         public bool rememberRespawPoint = false;
         private Vector3 rememberedRespawnPoint;
 
+        public UnityEvent OnTargetChange = new UnityEvent();
+
         private void Start()
         {
             // TODO не делать этого в старте
@@ -65,6 +68,7 @@ namespace MrPink.Units
         public void Death()
         {
             _agent.enabled = false;
+            OnTargetChange.Invoke();
             //this.enabled = false;
         }
 
@@ -107,6 +111,7 @@ namespace MrPink.Units
             if (cheap)
             {
                 _agent.SetDestination(SamplePos(target));
+                OnTargetChange.Invoke();
                 return;
             }
             
@@ -115,6 +120,13 @@ namespace MrPink.Units
             NavMesh.CalculatePath(transform.position, SamplePos(target), NavMesh.AllAreas, path);
             
             _agent.SetPath(path);
+            OnTargetChange.Invoke();
+        }
+
+        public void ResetPath()
+        {
+            _agent.ResetPath();
+            OnTargetChange.Invoke();
         }
 
         public void TeleportNearPosition(Vector3 pos)

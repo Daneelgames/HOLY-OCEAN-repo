@@ -298,9 +298,6 @@ namespace MrPink.Health
         private IEnumerator Death(ScoringActionType action, Transform killer = null)
         {
             IsDead = true;
-            
-            if (AiMovement)
-                AiMovement.StopActivities();
 
             if (HumanVisualController)
                 HumanVisualController.Death();
