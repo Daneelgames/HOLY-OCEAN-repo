@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StreamableObject : MonoBehaviour
 {
+    public Rigidbody rb;
+    public float rbStreamingDistance = 50;
     void Start()
     {
         ObjectsStreamer.Instance.AddStreamable(this);

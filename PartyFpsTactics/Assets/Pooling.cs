@@ -268,6 +268,9 @@ public class Pooling : MonoBehaviour
 
     public void ReleaseCollider(BaseAttackCollider coll, AttackColliderPool list)
     {
+        if (list == null)
+            return;
+        
         for (int i = 0; i < AttackColliderPools.Count; i++)
         {
             if (AttackColliderPools[i].attackColliderPrefabTag == list.attackColliderPrefabTag)

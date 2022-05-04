@@ -28,6 +28,8 @@ namespace _src.Scripts.LevelGenerators
         {
             for (int levelIndex = 0; levelIndex < spawnedLevels.Count; levelIndex++)
             {
+                Debug.Log("GenerateRoomsCoroutine; spawnedLevels[levelIndex] " + spawnedLevels[levelIndex].gameObject.name +"; levelIndex " + levelIndex);
+                
                 if (spawnedLevels[levelIndex].spawnRooms == false)
                     continue;
                 

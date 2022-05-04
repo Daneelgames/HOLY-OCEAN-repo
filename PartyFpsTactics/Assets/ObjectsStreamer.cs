@@ -25,18 +25,29 @@ public class ObjectsStreamer : MonoBehaviour
     {
         int pauseCounter = 0;
         int pauseCounterMax = 30;
+        float distance = 0;
+        StreamableObject str;
         while (true)
         {
             for (int i = 0; i < StreamableObjects.Count; i++)
             {
-                var str = StreamableObjects[i];
-                if (Vector3.Distance(Game.Player._mainCamera.transform.position, str.transform.position) > cullDistance)
+                str = StreamableObjects[i];
+                distance = Vector3.Distance(Game.Player._mainCamera.transform.position, str.transform.position);
+                if (distance > cullDistance)
                 {
                     str.gameObject.SetActive(false);
                 }
                 else
                 {
                     str.gameObject.SetActive(true);
+
+                    if (str.rb)
+                    {
+                        if(distance > str.rbStreamingDistance)
+                            str.rb.isKinematic = true;
+                        else
+                            str.rb.isKinematic = false;
+                    }
                 }
 
                 if (pauseCounter < pauseCounterMax)

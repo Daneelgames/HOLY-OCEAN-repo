@@ -3016,6 +3016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 2
   _turnSpeed: 4
+  gravityForce: 13
   _stopDistanceFollow: 3
   _stopDistanceMove: 1
   _agent: {fileID: 9204816102268635184}
@@ -3029,7 +3030,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6502528235097576629}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -3122,6 +3123,10 @@ MonoBehaviour:
   joints: []
   bodyPartsVisuals: []
   allBones: []
+  rbNormalDrag: 1
+  rbNormalAngularDrag: 1
+  rbRagdollDrag: 1
+  rbRagdollAngularDrag: 1
   activePositionSpring: 1500
   activePositionDamper: 100
   activeAngularPositionSpring: 1500

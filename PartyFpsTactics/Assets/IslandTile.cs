@@ -13,6 +13,7 @@ public class IslandTile : MonoBehaviour
 
     public List<InteractiveObject> spawnedLoot = new List<InteractiveObject>();
     public List<HealthController> spawnedUnits = new List<HealthController>();
+    public List<GameObject> spawnedProps = new List<GameObject>();
     [ContextMenu("ClearSpawners")]
     void ClearSpawners()
     {
@@ -92,6 +93,14 @@ public class IslandTile : MonoBehaviour
             Destroy(spawnedLoot[i].gameObject);
             spawnedLoot.RemoveAt(i);
         }
+        for (int i = spawnedProps.Count - 1; i >= 0; i--)
+        {
+            if (spawnedProps[i] == null)
+                continue;   
+            
+            Destroy(spawnedProps[i]);
+            spawnedProps.RemoveAt(i);
+        }
         for (int i = spawnedUnits.Count - 1; i >= 0; i--)
         {
             if (spawnedUnits[i] == null)
@@ -103,6 +112,7 @@ public class IslandTile : MonoBehaviour
 
         spawnedLoot.Clear();
         spawnedUnits.Clear();
+        spawnedProps.Clear();
         contentLoaded = false;
     }
 
@@ -113,7 +123,7 @@ public class IslandTile : MonoBehaviour
         int t = 0;
         var tempList = new List<Vector3>(islandTileStaticSpawnersLocalPositions);
         int spawnAmount = 100;
-        
+
         for (int i = 0; i < spawnAmount; i++)
         {
             int r = Random.Range(0, tempList.Count);
@@ -140,11 +150,8 @@ public class IslandTile : MonoBehaviour
             }
             else
             {
-                var propsPrefabs = BuildingGenerator.Instance.propsPrefabs;
-                var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)]);
-                            
-                newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
-                newAdditionalTile.transform.localPosition = transform.TransformPoint(tempList[r]);
+                var newProp = DesertProps.Instance.SpawnRandomProp(transform.TransformPoint(tempList[r]));
+                spawnedProps.Add(newProp);
             }
             
             tempList.RemoveAt(r);

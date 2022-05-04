@@ -36,7 +36,6 @@ public class CharacterNeeds : MonoBehaviour
     
     IEnumerator Needs()
     {
-        yield break;
         // ADD A WAY FOR NPC TO RESTORE THEIR NEEDS
         // THEN UNBREAK IT
         ///////////////
