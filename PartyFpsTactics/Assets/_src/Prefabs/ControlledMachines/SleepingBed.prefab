@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  npcDialoguesList: {fileID: 0}
   interactiveObjectName: Sleep
   eventsOnInteraction:
   - scriptedEventType: 8
@@ -100,13 +101,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 0
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
-    NpcHc: {fileID: 0}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 6002964883643043357}
     toolToAdd: {fileID: 0}
     weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    actorId: -1
   rb: {fileID: 5221374690669736803}
   hc: {fileID: 0}
 --- !u!1 &2305797570145326163
@@ -167,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
-  _healthController: {fileID: 0}
+  _healthController: {fileID: 8452329197390470906}
   damageScaler: 1
 --- !u!1 &2785329034833338893
 GameObject:
@@ -288,7 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
-  _healthController: {fileID: 0}
+  _healthController: {fileID: 8452329197390470906}
   damageScaler: 1
 --- !u!1 &5221374690669736812
 GameObject:
@@ -343,6 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfUnit: {fileID: 0}
   health: 1000
   healthMax: 1000
   needs: {fileID: 0}
@@ -362,16 +366,19 @@ MonoBehaviour:
   AiMovement: {fileID: 0}
   aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
+  AiShop: {fileID: 0}
+  crimeLevel: {fileID: 0}
   controlledMachine: {fileID: 6002964883643043357}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 0}
-  objectsToSpawnOnDeath: []
   npcInteraction: {fileID: 4865144081956912036}
   deathOnHit: {fileID: 0}
+  unitsVisibleBy: []
   rb: {fileID: 5221374690669736803}
   bodyParts:
   - {fileID: 1454355892544949112}
   - {fileID: 5183572990672956924}
+  bodyPartsTransforms: []
   damageStates: []
   OnDeathEvent:
     m_PersistentCalls:
@@ -398,6 +405,7 @@ MonoBehaviour:
   - {fileID: 444312016674683835}
   carCrashDamageColliders: []
   rb: {fileID: 5221374690669736803}
+  controllingHc: {fileID: 0}
 --- !u!54 &5221374690669736803
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -484,6 +492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  npcDialoguesList: {fileID: 0}
   interactiveObjectName: Sleep
   eventsOnInteraction:
   - scriptedEventType: 8
@@ -496,13 +505,15 @@ MonoBehaviour:
     scoreToAddOnDialogueCompleted: 0
     setNextLevelOnDialogueCompleted: 0
     maxDistanceToSpeaker: 5
-    NpcHc: {fileID: 0}
     currentLevelToSet: 0
     soundToPlay: {fileID: 0}
     auPitchMinMax: {x: 1, y: 1}
     controlledMachine: {fileID: 6002964883643043357}
     toolToAdd: {fileID: 0}
     weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    actorId: -1
   rb: {fileID: 5221374690669736803}
   hc: {fileID: 0}
 --- !u!1001 &875653584355471095

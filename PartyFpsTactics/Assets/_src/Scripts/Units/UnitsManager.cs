@@ -65,20 +65,22 @@ namespace MrPink.Units
             return Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
-        public void SpawnNeutralUnit(Vector3 pos)
+        public HealthController SpawnNeutralUnit(Vector3 pos)
         {
             pos = SamplePos(pos);
-            Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            return Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
     
-        public void SpawnDesertBeast(Vector3 pos)
+        public HealthController SpawnDesertBeast(Vector3 pos)
         {
             pos = SamplePos(pos);
-            Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            return Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
         }
 
         Vector3 SamplePos(Vector3 pos)
         {
+            return pos;
+            
             NavMeshHit hit;
             if (NavMesh.SamplePosition(pos, out hit, 10, NavMesh.AllAreas))
             {

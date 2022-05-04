@@ -26,6 +26,7 @@ namespace MrPink.Units
         [Range(1,100)]
         private float _runSpeed = 4;
 
+        public float gravityForce = 13;
         [SerializeField]
         private float _stopDistanceFollow = 1.5f;
         
@@ -55,11 +56,27 @@ namespace MrPink.Units
             
             if (rememberRespawPoint)
                 rememberedRespawnPoint = transform.position;
+
+            StartCoroutine(UnitGravity());
+        }
+
+        IEnumerator UnitGravity()
+        {
+            while (true)
+            {
+                if (!Physics.Linecast(transform.position, transform.position + Vector3.down,
+                    GameManager.Instance.AllSolidsMask))
+                {
+                    rb.AddForce(Vector3.down * gravityForce, ForceMode.VelocityChange);
+                }
+                yield return new WaitForSeconds(0.5f);
+            }
         }
 
         private void Update()
         {
-            _currentVelocity = _agent.velocity;
+            //_currentVelocity = _agent.velocity;
+            _currentVelocity = rb.velocity;
             _selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
             _lookTransform.transform.position = transform.position;
         }
@@ -146,14 +163,15 @@ namespace MrPink.Units
         
         public void TeleportNearPosition(Vector3 pos)
         {
+            transform.position = SamplePos(pos);
+            return;
+            
             if (_agent.enabled)
             {
                 _agent.Warp(SamplePos(pos));
                 return;
             }
             
-            // if not enabled
-            transform.position = SamplePos(pos);
         }
 
         public void TeleportToRespawnPosition()

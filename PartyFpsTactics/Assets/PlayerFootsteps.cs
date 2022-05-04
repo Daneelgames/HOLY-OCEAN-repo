@@ -10,6 +10,7 @@ public class PlayerFootsteps : MonoBehaviour
 {
     public AudioSource stepsAu;
     public List<AudioClip> stepClips;
+    public List<AudioClip> climbClips;
 
     public float moveStepCooldown = 0.5f; 
     public float runStepCooldown = 0.7f; 
@@ -29,7 +30,7 @@ public class PlayerFootsteps : MonoBehaviour
         {
             yield return null;
             
-            if (!pm.State.IsGrounded || Game.Player.VehicleControls.controlledMachine)
+            if ((!pm.State.IsGrounded && !pm.State.IsClimbing) || Game.Player.VehicleControls.controlledMachine || Game.Player.Health.health <= 0)
                 continue;
 
             if (pm.State.IsMoving)
@@ -42,7 +43,7 @@ public class PlayerFootsteps : MonoBehaviour
             {
                 ttt = 1;
                 stepsAu.pitch = Random.Range(0.75f, 1.25f);
-                stepsAu.clip = stepClips[Random.Range(0, stepClips.Count)];
+                stepsAu.clip = pm.State.IsClimbing ? climbClips[Random.Range(0, climbClips.Count)] : stepClips[Random.Range(0, stepClips.Count)];
                 stepsAu.Play();
             }
         }

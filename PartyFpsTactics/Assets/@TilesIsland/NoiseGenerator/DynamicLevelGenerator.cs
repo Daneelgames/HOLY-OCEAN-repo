@@ -13,10 +13,13 @@ public class DynamicLevelGenerator : MonoBehaviour
 {
     public static DynamicLevelGenerator instance;
 
+    bool islandGenerated = false;
+    public bool IslandGenerated => islandGenerated;
+    
     public float tileSize = 20;
     public Rigidbody playerTarget;
-    public int viewDistance = 8;
-    public int distanceToDestroyTile = 8;
+    public int distanceToLoadTile = 8;
+    public int distanceToUnloadTile = 8;
     public float waterLevel = 250;
     public float maxBridgePartsHeightDiffrenece = 40;
     [Tooltip("Distance between bridge part and spawned tile")]
@@ -24,6 +27,7 @@ public class DynamicLevelGenerator : MonoBehaviour
 
     public TileCoordinate[,] spawnedTiles;
     public List<Vector2Int> spawnedTilesPositions = new List<Vector2Int>();
+    List<IslandTile> tilesLoadedContent = new List<IslandTile>();
     public GameObject islandWalkerPrefab;
     public GameObject poiChurchPrefab;
 
@@ -67,7 +71,6 @@ public class DynamicLevelGenerator : MonoBehaviour
         playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize + new Vector3(IslandGenerator.instance.mapWidth / 2, 0, IslandGenerator.instance.mapHeight / 2) * tileSize + Vector3.up * 200;
         playerTarget.isKinematic = false;
         
-        Invoke(nameof(TeleportPlayerToTarget), 1);
         StartCoroutine(UpdateLevelAroundPlayer(playerTarget.transform));
         StartCoroutine(DestroyTiles());
         
@@ -78,6 +81,7 @@ public class DynamicLevelGenerator : MonoBehaviour
     public Vector3 TeleportPlayerToTarget()
     {
         var randomCoord = spawnedTilesPositions[Random.Range(0, spawnedTilesPositions.Count)];
+        Debug.Log("TeleportPlayer; coords " + randomCoord);
         playerTarget.position = spawnedTiles[randomCoord.x, randomCoord.y].spawnedTile.transform.position;
         Vector3 pos = playerTarget.position + Vector3.up * 10;
         Game.Player.Movement.TeleportToPosition(pos);
@@ -114,84 +118,124 @@ public class DynamicLevelGenerator : MonoBehaviour
 
         int t = 0;
         
+        // GENERATE ONCE ON START
         //while (true)
         {
-            //playerCoords = GetCoordinatesFromWorldPosition(playerTarget.transform.position);
             if (originTransform == null)
                 playerCoords = GetCoordinatesFromWorldPosition(Game.Player.Position);
             else
                 playerCoords = GetCoordinatesFromWorldPosition(originTransform.position);
 
             // spawn new tiles around player
-            for (int x = - viewDistance + playerCoords.x; x <= viewDistance + playerCoords.x; x++)
+            for (int x = - IslandGenerator.instance.mapWidth + playerCoords.x; x <= IslandGenerator.instance.mapWidth + playerCoords.x; x++)
             {
-                for (int z = viewDistance + playerCoords.y; z > -viewDistance + playerCoords.y; z--)
+                for (int z = IslandGenerator.instance.mapHeight + playerCoords.y; z > -IslandGenerator.instance.mapHeight + playerCoords.y; z--)
                 {
-                    if (CoordinatesInBounds(x,z) && !TileOnCoordinates(x, z, false))
-                    {   
-                        bool isPath = ig.IsPath(x, z);
-                        float newHeight = noiseMap[x, z];
+                    if (!CoordinatesInBounds(x,z))
+                        continue;
 
-                        if (isPath) newHeight -= Random.Range(0.1f, 0.5f);
+                    if (TileOnCoordinates(x, z, false)) continue;
+                    
+                    bool isPath = ig.IsPath(x, z);
+                    float newHeight = noiseMap[x, z];
+
+                    if (isPath) newHeight -= Random.Range(0.1f, 0.5f);
                             
-                        int regionIndex = IslandGenerator.instance.GetRegionIndexByHeight(newHeight);
-                        if (regionIndex < 2 || IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count == 0)
-                            continue;
+                    int regionIndex = IslandGenerator.instance.GetRegionIndexByHeight(newHeight);
+                    if (regionIndex < 2 || IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count == 0)
+                        continue;
                             
-                        var reference = tileGpuPrefabsTags[regionIndex];
-                        //var reference = tileGpuPrefabs[regionIndex];
-                        //var reference = IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList[Random.Range(0, IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count)] ;
+                    var reference = tileGpuPrefabsTags[regionIndex];
+                    //var reference = tileGpuPrefabs[regionIndex];
+                    //var reference = IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList[Random.Range(0, IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count)] ;
                         
-                        if (reference == null)
-                            continue;
+                    if (reference == null)
+                        continue;
                         
-                        var newCoord = new TileCoordinate();
-                        newCoord.x = x;
-                        newCoord.z = z;
-                        spawnedTiles[x,z] = newCoord;
+                    var newCoord = new TileCoordinate();
+                    newCoord.x = x;
+                    newCoord.z = z;
+                    spawnedTiles[x,z] = newCoord;
 
-                        float newY = 0;
-                        switch (regionIndex)
-                        {
-                            case 0: // deep
-                                newY = Random.Range(0, 200);
-                                break;
-                            case 1: // water
-                                newY = Random.Range(200, 300);
-                                break;
-                            case 2: // sand
-                                newY = Random.Range(300, 400);
-                                break;
-                            case 3: // grass
-                                newY = Random.Range(400, 500);
-                                break;
-                            case 4: // jungles
-                                newY = Random.Range(500f, 800f);
-                                break;
-                            case 5: // rocks
-                                newY = Random.Range(700f, 1000f);
-                                break;
-                            case 6: // cliffs
-                                newY = Random.Range(800f, 1500f);
-                                break;
-                            case 7: // snows
-                                newY = 2000;
-                                break;
-                        }
+                    float newY = 0;
+                    switch (regionIndex)
+                    {
+                        case 0: // deep
+                            newY = Random.Range(0, 200);
+                            break;
+                        case 1: // water
+                            newY = Random.Range(200, 300);
+                            break;
+                        case 2: // sand
+                            newY = Random.Range(300, 400);
+                            break;
+                        case 3: // grass
+                            newY = Random.Range(400, 500);
+                            break;
+                        case 4: // jungles
+                            newY = Random.Range(500f, 800f);
+                            break;
+                        case 5: // rocks
+                            newY = Random.Range(700f, 1000f);
+                            break;
+                        case 6: // cliffs
+                            newY = Random.Range(800f, 1500f);
+                            break;
+                        case 7: // snows
+                            newY = 2000;
+                            break;
+                    }
 
-                        if (isPath) newY /= 10;
+                    if (isPath) newY /= 10;
                         
-                        //AssetSpawner.instance.SpawnTile(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize), 0, -1, -1, false, -1, false );
+                    //AssetSpawner.instance.SpawnTile(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize), 0, -1, -1, false, -1, false );
 
-                        SpawnTileGpu(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize) - Offset(), new Vector2Int(x, z));
+                    SpawnTileGpu(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize) - Offset(), new Vector2Int(x, z));
 
+                    t++;
+                    if (t > 100)
+                    {
+                        t = 0;
                         yield return new WaitForSeconds(0.01f);
                     }
                 }
             }
             yield return new WaitForSeconds(0.01f);
         }
+
+        islandGenerated = true;
+        TeleportPlayerToTarget();
         LevelTitlesManager.Instance.HideIntro();
+        StartCoroutine(ManageTilesContent());
+    }
+
+    IEnumerator ManageTilesContent()
+    {
+        while (true)
+        {
+            playerCoords = GetCoordinatesFromWorldPosition(Game.Player.Position);
+
+            // spawn new tiles around player
+            for (int x = -distanceToLoadTile + playerCoords.x; x <= distanceToLoadTile + playerCoords.x; x++)
+            {
+                for (int z = distanceToLoadTile + playerCoords.y; z > -distanceToLoadTile + playerCoords.y; z--)
+                {
+                    if (CoordinatesInBounds(x, z))
+                    {
+                        var tile = TileOnCoordinates(x, z, false);
+                        
+                        if (tile)
+                        {
+                            tile.LoadTileContent();
+                            tilesLoadedContent.Add(tile);
+                        }
+                    }
+                    
+                    yield return null;
+                }
+            }
+
+        }
     }
 
     void SpawnTileGpu(Pooling.IslandTilePool.IslandTilePrefabTag prefabTag, Vector3 pos, Vector2Int coords)
@@ -212,9 +256,8 @@ public class DynamicLevelGenerator : MonoBehaviour
         return false;
     }
 
-    IEnumerator DestroyTiles()
+    IEnumerator DestroyTiles(bool onlyUnloadContent = true)
     {
-        yield break;
         while (IslandGenerator.instance.generationComplete == false)
         {
             yield return null;
@@ -235,33 +278,42 @@ public class DynamicLevelGenerator : MonoBehaviour
                 int z = spawnedTilesPositions[i].y;
                 
                 
-                if (x < playerCoords.x - distanceToDestroyTile || x > playerCoords.x + distanceToDestroyTile ||
-                    z < playerCoords.y - distanceToDestroyTile || z > playerCoords.y + distanceToDestroyTile)
+                if (x < playerCoords.x - distanceToUnloadTile || x > playerCoords.x + distanceToUnloadTile ||
+                    z < playerCoords.y - distanceToUnloadTile || z > playerCoords.y + distanceToUnloadTile)
                 {
                     if (spawnedTiles[x, z] != null)
                     {
-                        if (spawnedTiles[x,z].spawnedTile)
+                        if (!onlyUnloadContent)
                         {
-                            Pooling.Instance.ReleaseIslandTile(spawnedTiles[x,z].spawnedTile);
-                            Destroy(spawnedTiles[x, z].spawnedTile);
-                        }
+                            // DESTROY
+                            if (spawnedTiles[x,z].spawnedTile)
+                            {
+                                Pooling.Instance.ReleaseIslandTile(spawnedTiles[x,z].spawnedTile);
+                                Destroy(spawnedTiles[x, z].spawnedTile);
+                            }
                     
-                        if (spawnedTiles[x,z].spawnedPath)
-                            Destroy(spawnedTiles[x,z].spawnedPath);
+                            if (spawnedTiles[x,z].spawnedPath)
+                                Destroy(spawnedTiles[x,z].spawnedPath);
                         
-                        if (spawnedTiles[x,z].spawnedBuilding)
-                            Destroy(spawnedTiles[x,z].spawnedBuilding);
+                            if (spawnedTiles[x,z].spawnedBuilding)
+                                Destroy(spawnedTiles[x,z].spawnedBuilding);
                         
-                        if (spawnedTiles[x,z].spawnedBridgePart)
-                            Destroy(spawnedTiles[x,z].spawnedBridgePart);
+                            if (spawnedTiles[x,z].spawnedBridgePart)
+                                Destroy(spawnedTiles[x,z].spawnedBridgePart);
 
-                        if (spawnedTiles[x, z].spawnedGpuTile)
-                        {
-                            Destroy(spawnedTiles[x,z].spawnedGpuTile);
-                        }
+                            if (spawnedTiles[x, z].spawnedGpuTile)
+                            {
+                                Destroy(spawnedTiles[x,z].spawnedGpuTile);
+                            }
                         
-                        spawnedTiles[x, z] = null;
-                        spawnedTilesPositions.RemoveAt(i);
+                            spawnedTiles[x, z] = null;
+                            spawnedTilesPositions.RemoveAt(i);
+                        }
+                        else if (spawnedTiles[x,z].spawnedTile)
+                        {
+                            spawnedTiles[x,z].spawnedTile.UnloadTileContent();
+                            tilesLoadedContent.Remove(spawnedTiles[x,z].spawnedTile);
+                        }
                     }
                 }
                 t++;
@@ -313,18 +365,20 @@ public class DynamicLevelGenerator : MonoBehaviour
         }
     }
 
-    bool TileOnCoordinates(int x, int z, bool remove)
+    IslandTile TileOnCoordinates(int x, int z, bool remove)
     {
+        IslandTile tile = null;
         if (spawnedTiles[x, z] != null && spawnedTiles[x,z].spawnedTile != null)
         {
+            tile = spawnedTiles[x, z].spawnedTile;
             if (remove)
             {
                 spawnedTiles[x, z] = null;
             }
-            return true;
+
         }
 
-        return false;
+        return tile;
     }
     
     bool TileOnCoordinates(Vector3 tilePos, bool remove)

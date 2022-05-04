@@ -8,60 +8,77 @@ using Random = UnityEngine.Random;
 
 public class ContentPlacer : MonoBehaviour
 {
+    public static ContentPlacer Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public List<Transform> proceedGameObjects = new List<Transform>();
     
     public List<InteractiveObject> lootToSpawnAround;
     private void Start()
     {
-        StartCoroutine(FollowPlayer());
+        StartCoroutine(SpawnAroundPlayer());
     }
 
-    IEnumerator FollowPlayer()
+    IEnumerator SpawnAroundPlayer()
     {
-        var player = Game.Player.Health;
         float cooldown = 5;
-        Collider[] hits;
         while (true)
         {
-            yield return null;
-            cooldown -= Time.deltaTime;
-            transform.position = player.transform.position;
+            yield return new WaitForSeconds(cooldown);
             
-            if (cooldown > 0)
+            if (!DynamicLevelGenerator.instance.IslandGenerated || Game.Player.Health.health <= 0)
                 continue;
             
-            // cooldown <= 0
-            cooldown = 5;
-
-            hits = Physics.OverlapSphere(transform.position, 100, GameManager.Instance.AllSolidsMask,
-                QueryTriggerInteraction.Ignore);
-            for (int i = 0; i < hits.Length; i++)
-            {
-                yield return new WaitForSeconds(0.01f);
-                
-                if (proceedGameObjects.Contains(hits[i].transform))
-                    continue;
-                
-
-                var spawnPos = hits[i].ClosestPoint(hits[i].transform.position + Vector3.up * 100);
-                if (Physics.Raycast(Game.Player._mainCamera.transform.position,
-                    spawnPos - Game.Player._mainCamera.transform.position,
-                    Vector3.Distance(Game.Player._mainCamera.transform.position, spawnPos),
-                    GameManager.Instance.AllSolidsMask))
-                {
-                    continue;
-                }
-                
-                proceedGameObjects.Add(hits[i].transform);
-                
-                if (Random.value > 0.5f)
-                {
-                    // mob
-                    UnitsManager.Instance.SpawnRedUnit(spawnPos);
-                    continue;
-                }
-                var newLoot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], spawnPos, Quaternion.Euler(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360)));
-            }
+            SpawnRedUnitAroundPlayer();
+            SpawnLootAroundPlayer();
         }
+    }
+
+    void SpawnRedUnitAroundPlayer()
+    {
+        Vector3 pos = RaycastedPosAroundPosition(Game.Player._mainCamera.transform.position, 100);
+            
+        if (Vector3.Distance(pos, Game.Player._mainCamera.transform.position) < 20)
+            return;
+
+        UnitsManager.Instance.SpawnRedUnit(pos);
+    }
+    
+    void SpawnLootAroundPlayer()
+    {
+        Vector3 pos = RaycastedPosAroundPosition(Game.Player._mainCamera.transform.position, 100);
+            
+        if (Vector3.Distance(pos, Game.Player._mainCamera.transform.position) < 10)
+            return;
+        SpawnRandomLoot(pos);
+    }
+
+    public InteractiveObject SpawnRandomLoot(Vector3 pos)
+    {
+        var loot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], pos,
+            Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
+        loot.rb.useGravity = false;
+        loot.rb.constraints = RigidbodyConstraints.FreezeAll;
+        loot.rb.isKinematic = false;
+        return loot;
+    }
+
+    Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)
+    {
+        Vector3 randomDir = Game.Player._mainCamera.transform.forward;
+        
+        randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
+        if (!Physics.Raycast(Game.Player._mainCamera.transform.position, randomDir, out var hit, maxDistance,
+            GameManager.Instance.AllSolidsMask))
+            return initPos;
+            
+        if (GameManager.Instance.IsPositionInPlayerFov(hit.point))
+            return initPos;
+        
+        return hit.point;
     }
 }

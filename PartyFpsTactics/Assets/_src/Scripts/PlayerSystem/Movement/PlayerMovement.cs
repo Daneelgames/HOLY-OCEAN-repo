@@ -401,7 +401,7 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded && Game.Player.VehicleControls.controlledMachine == null)
+                if (!State.IsGrounded && Game.Player.VehicleControls.controlledMachine == null && !State.IsClimbing)
                 {
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
@@ -416,9 +416,8 @@ namespace MrPink.PlayerSystem
                 if (canUseCoyoteTime)
                     _coyoteTime = 0;
             }
-            else
+            else if (!State.IsClimbing)
             {
-                
                 jumpTime -= Time.deltaTime;
                 if (lastVelocityInAirY >= 0 && rb.velocity.y < 0)
                 {
@@ -436,6 +435,10 @@ namespace MrPink.PlayerSystem
                     _coyoteTime -= Time.deltaTime;
                 }
             }
+            else
+            {
+                State.IsGrounded = false;
+            }
         }
 
         private RaycastHit[] hitInfoClimb;
@@ -447,8 +450,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            hitInfoClimb = Physics.SphereCastAll(
-                transform.position + Vector3.up * Game.Player.LookAround._playerHeadHeight, climbCheckRadius,
+            hitInfoClimb = Physics.SphereCastAll(Game.Player._mainCamera.transform.position, climbCheckRadius,
                 Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask);
             State.IsClimbing = hitInfoClimb.Length > 0;
             

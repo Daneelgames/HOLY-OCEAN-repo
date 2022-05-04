@@ -24,6 +24,10 @@ namespace MrPink.Units
         [Space]
         public List<Transform> allBones;
 
+        public float rbNormalDrag = 1;
+        public float rbNormalAngularDrag = 1;
+        public float rbRagdollDrag = 1;
+        public float rbRagdollAngularDrag = 1;
         public float activePositionSpring = 1500;
         public float activePositionDamper = 100;
         public float activeAngularPositionSpring = 1500;
@@ -60,6 +64,12 @@ namespace MrPink.Units
             ragdollOriginParent = ragdollOrigin.parent;
             for (int i = 0; i < joints.Count; i++)
                 initRotations.Add(animatedBones[i].localRotation);
+
+            for (int i = 0; i < rigidbodies.Count; i++)
+            {
+                rigidbodies[i].drag = rbNormalDrag;
+                rigidbodies[i].angularDrag = rbNormalAngularDrag;
+            }
 
             StartCoroutine(GetDistanceToPlayer());
         }
@@ -235,8 +245,12 @@ namespace MrPink.Units
         
             foreach (var rb in rigidbodies)
             {
+                rb.drag = rbRagdollDrag;
+                rb.angularDrag = rbRagdollAngularDrag;
+                /*
                 rb.drag = 0.5f;
                 rb.angularDrag = 0.5f;
+                */
                 rb.isKinematic = false;
                 rb.useGravity = true;
             }
@@ -306,8 +320,8 @@ namespace MrPink.Units
         
             for (int i = 0; i < rigidbodies.Count; i++)
             {
-                rigidbodies[i].drag = 0f;
-                rigidbodies[i].angularDrag = 0.05f;
+                rigidbodies[i].drag = rbNormalDrag;
+                rigidbodies[i].angularDrag = rbNormalAngularDrag;
             
                 if (i == 0)
                 {
@@ -347,7 +361,7 @@ namespace MrPink.Units
             while (true)
             {
                 yield return null;
-                transform.position = ragdollOrigin.position;
+                transform.position = ragdollOrigin.position + Vector3.up * 0.5f;
                 t += Time.deltaTime;
 
                 if (Physics.Linecast(prevPos, transform.position, out var hit,
