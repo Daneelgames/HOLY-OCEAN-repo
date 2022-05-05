@@ -20,7 +20,7 @@ public class DesertProps : MonoBehaviour
                             
         newProp.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
         newProp.transform.position = pos;
-        newProp.transform.localScale = Vector3.one * Random.Range(1,30);
+        newProp.transform.localScale = Vector3.one * Random.Range(1,10);
         return newProp;
     }
 }

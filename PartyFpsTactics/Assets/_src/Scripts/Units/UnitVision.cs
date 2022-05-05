@@ -33,10 +33,16 @@ namespace MrPink.Units
         public List<HealthController> visibleUnits = new List<HealthController>();
 
 
-        private void Start()
+        private void OnEnable()
         {
             _selfHealth = GetComponent<HealthController>();
-            StartCoroutine(CheckEnemies());
+            StartCoroutine(CheckingUnits());
+            StartCoroutine(CheckingPlayer());
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
         }
 
         public void SetDamager(HealthController damager, bool stack = false, bool tellToFriends = false)
@@ -65,7 +71,7 @@ namespace MrPink.Units
             for (int i = 0; i < visibleUnits.Count; i++) // tell all his friends
             {
                 var unit = visibleUnits[i];
-                if (unit == _selfHealth)
+                if (unit == _selfHealth || unit.health <= 0 || !unit.gameObject.activeInHierarchy)
                     continue;
                 
                 if (unit.UnitVision && unit.team == _selfHealth.team)
@@ -85,6 +91,9 @@ namespace MrPink.Units
         public void ForgiveUnit(HealthController unit, bool removeFromEnemies)
         {
             if (unit == null)
+                return;
+            
+            if (TeamsManager.Instance.IsUnitEnemyToMe(_selfHealth.team, unit.team))
                 return;
             
             for (int i = 0; i < _enemiesToRemember.Count; i++)
@@ -120,8 +129,17 @@ namespace MrPink.Units
 
             return closestVisibleEnemy;
         }
-    
-        private IEnumerator CheckEnemies()
+
+        IEnumerator CheckingPlayer()
+        {
+            while (true)
+            {
+                CheckUnit(Game.Player.Health);
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+        
+        private IEnumerator CheckingUnits()
         {
             while (true)
             {
@@ -155,27 +173,44 @@ namespace MrPink.Units
             visibleEnemies.Clear();
         }
 
-        private void CheckUnit(HealthController unit, bool ignoreTeams = false)
+        private void CheckUnit(HealthController unit, bool addVisibleAsEnemy = false)
         {
             if (unit.health <= 0)
             {
                 RemoveFromVisible(unit);
                 return;
             }
-                
-            if (!ignoreTeams)
-            {
-                if (TeamsManager.Instance.IsUnitEnemyToMe(_selfHealth.team, unit.team) == false)
-                {
-                    AddVisibleUnit(unit);
-                    return;
-                }
-            }
 
             if (IsInLineOfSight(unit.visibilityTrigger.transform))
-                AddVisibleEnemy(unit);
-            else
-                RemoveFromVisible(unit);
+            {
+                if (unit == Game.Player.Health)
+                {
+                    //Debug.Log("UnitVision UNIT " + gameObject.name + " SEES PLAYER");
+                }
+                
+                if (TeamsManager.Instance.IsUnitEnemyToMe(_selfHealth.team, unit.team) || addVisibleAsEnemy) // OR IF TEMPORAL ENEMY 
+                {
+                    if (unit == Game.Player.Health)
+                    {
+                        //Debug.Log("UnitVision UNIT " + gameObject.name + " ADDS PLAYER TO VISIBLE ENEMIES");
+                    }
+                    AddVisibleEnemy(unit);
+                    return;
+                }
+                
+                if (unit == Game.Player.Health)
+                {
+                    //Debug.Log("UnitVision UNIT " + gameObject.name + " ADDS PLAYER TO VISIBLE UNITS");
+                }
+                AddVisibleUnit(unit);
+                return;
+            }
+            
+            if (unit == Game.Player.Health)
+            {
+                //Debug.Log("UnitVision UNIT " + gameObject.name + " CANT SEE PLAYER");
+            }
+            RemoveFromVisible(unit);
         }
 
         private void AddVisibleEnemy(HealthController unit)
@@ -203,17 +238,22 @@ namespace MrPink.Units
             unit.RemoveFromVisibleByUnits(_selfHealth);
         }
 
-        private bool IsInLineOfSight(Transform target) 
+        private bool IsInLineOfSight(Transform target)
         {
+            if (Vector3.Distance(target.position, raycastOrigin.position) > visionDistance)
+                return false;
             if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov)
             {
-                if (Physics.Raycast(raycastOrigin.position, target.position - raycastOrigin.position, out _hit, visionDistance, raycastsLayerMask))
+                if (Physics.Linecast(target.position,  raycastOrigin.position, out _hit, GameManager.Instance.AllSolidsMask))
                 {
-                    if (_hit.collider.transform == target)
-                        return true;
-
                     lastRaycastedPoint = _hit.point;
+                    
+                    // collided with solid, can't see shit
+
+                    return false;
                 }
+
+                return true;
             }
             
             return false;

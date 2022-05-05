@@ -28,7 +28,7 @@ namespace MrPink.Units
             _selfUnit = GetComponent<Unit>();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             StartCoroutine(CheckIfNeedFireWeapon());
         }

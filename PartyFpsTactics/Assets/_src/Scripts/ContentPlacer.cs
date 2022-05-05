@@ -38,7 +38,7 @@ public class ContentPlacer : MonoBehaviour
         }
     }
 
-    void SpawnRedUnitAroundPlayer()
+    public void SpawnRedUnitAroundPlayer()
     {
         Vector3 pos = RaycastedPosAroundPosition(Game.Player._mainCamera.transform.position, 100);
             
@@ -61,9 +61,12 @@ public class ContentPlacer : MonoBehaviour
     {
         var loot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], pos,
             Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
-        loot.rb.useGravity = false;
-        loot.rb.constraints = RigidbodyConstraints.FreezeAll;
-        loot.rb.isKinematic = false;
+        if (loot.rb)
+        {
+            loot.rb.useGravity = false;
+            loot.rb.constraints = RigidbodyConstraints.FreezeAll;
+            loot.rb.isKinematic = false;
+        }
         return loot;
     }
 

@@ -116,6 +116,11 @@ public class Pooling : MonoBehaviour
         }
 
         pooledCollider = GetColliderFromPool(foundPool);
+        if (pooledCollider == null)
+        {
+            InstantiateCollider(foundPool);
+            pooledCollider = GetColliderFromPool(foundPool);
+        }
         pooledCollider.transform.parent = newParent;
         
         if (attackColliderPrefabTag == AttackColliderPool.AttackColliderPrefabTag.PlayerSword)

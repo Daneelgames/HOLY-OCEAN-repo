@@ -403,6 +403,7 @@ namespace MrPink.PlayerSystem
             {
                 if (!State.IsGrounded && Game.Player.VehicleControls.controlledMachine == null && !State.IsClimbing)
                 {
+                    PlayerFootsteps.Instance.PlayLanding();
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
                         Game.Player.Health.Damage(fallDamage, DamageSource.Environment);

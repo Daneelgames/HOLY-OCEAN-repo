@@ -75,9 +75,11 @@ namespace MrPink.Health
         
         private void Start()
         {
+            if (Game.Player.Health == this)
+                UnitsManager.Instance.unitsInGame.Add(this);
+            
             healthMax = health;
             enduranceMax = endurance;
-            UnitsManager.Instance.unitsInGame.Add(this);
         }
         
         public bool OwnCollider(Collider coll)
@@ -197,6 +199,9 @@ namespace MrPink.Health
 
         public void DrainHealth(int drainAmount)
         {
+            if (IsImmortal)
+                drainAmount = 0;
+            
             if (health <= 0)
                 return;
             health -= drainAmount;
@@ -219,7 +224,6 @@ namespace MrPink.Health
 
             if (IsImmortal)
                 damage = 0;
-            
             
             if (Game.Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
             {

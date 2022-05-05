@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Brezg.Extensions.UniTaskExtensions;
@@ -49,6 +50,10 @@ namespace MrPink.Units
 
             Awareness().ForgetWithHandler();
 
+        }
+
+        private void OnEnable()
+        {
             if (followClosestEnemyOnSpawn)
             {
                 var targetHc = TeamsManager.Instance.FindClosestEnemyInRange(_selfUnit.HealthController.team, transform.position).transform;

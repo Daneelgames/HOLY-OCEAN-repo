@@ -115,8 +115,7 @@ public class IslandTile : MonoBehaviour
         spawnedProps.Clear();
         contentLoaded = false;
     }
-
-
+    
     private Coroutine spawnCoroutine;
     IEnumerator SpawnCoroutine()
     {

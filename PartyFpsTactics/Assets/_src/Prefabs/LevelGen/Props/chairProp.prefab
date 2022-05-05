@@ -95,8 +95,6 @@ GameObject:
   - component: {fileID: -2596860956629557991}
   - component: {fileID: 8796013998840387594}
   - component: {fileID: 4836190851276480320}
-  - component: {fileID: -7339335058865973671}
-  - component: {fileID: 2756403468349696879}
   - component: {fileID: 893518442}
   - component: {fileID: 4580846623906001421}
   m_Layer: 12
@@ -139,7 +137,7 @@ MonoBehaviour:
   prop: 1
   colliders:
   - {fileID: -2596860956629557991}
-  rb: {fileID: -7339335058865973671}
+  rb: {fileID: 0}
   floorLevelTile: 0
   ceilingLevelTile: 0
   supporterTile: {fileID: 0}
@@ -185,38 +183,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
---- !u!54 &-7339335058865973671
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4694376958820584944}
-  serializedVersion: 2
-  m_Mass: 10
-  m_Drag: 1
-  m_AngularDrag: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!208 &2756403468349696879
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4694376958820584944}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &893518442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,7 +214,7 @@ MonoBehaviour:
   ownerHealth: {fileID: 0}
   prop: 0
   dangerous: 0
-  rb: {fileID: -7339335058865973671}
+  rb: {fileID: 0}
   minVelocityMagnitudeToAttack: 1
   unitMinimalDamageTimeMax: 1
 --- !u!114 &4580846623906001421
@@ -263,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3901d3f8759ceb048b9a2a4d24f562c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: -7339335058865973671}
+  rb: {fileID: 0}
   rbStreamingDistance: 50
 --- !u!1 &5230713404455007075
 GameObject:

@@ -39,7 +39,6 @@ namespace MrPink.Units
         private static readonly int InCover = Animator.StringToHash("InCover");
     
         private bool ragdoll = false;
-        private bool visibleToPlayer = false;
         private bool inVehicle = false;
         public Material aliveMaterial;
         public Material deadMaterial;
@@ -70,8 +69,6 @@ namespace MrPink.Units
                 rigidbodies[i].drag = rbNormalDrag;
                 rigidbodies[i].angularDrag = rbNormalAngularDrag;
             }
-
-            StartCoroutine(GetDistanceToPlayer());
         }
 
         [ContextMenu("SetAliveMaterial")]
@@ -81,34 +78,6 @@ namespace MrPink.Units
             {
                 bodyPartsVisuals[i].material = aliveMaterial;
             }
-        }
-
-        private IEnumerator GetDistanceToPlayer()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
-                if (Game.Player == null)
-                {
-                    visibleToPlayer = true;
-                    continue;
-                }
-
-                var isPlayerNear = Vector3.Distance(transform.position, Game.Player.MainCamera.transform.position) < 50;
-
-                SetVisibleState(isPlayerNear);
-            }
-        }
-
-        private void SetVisibleState(bool value)
-        {
-            if (visibleToPlayer == value)
-                return;
-        
-            foreach (var joint in joints)
-                joint.gameObject.SetActive(value);
-
-            visibleToPlayer = value;
         }
 
         public void SetMovementVelocity(Vector3 velocity)
@@ -129,9 +98,6 @@ namespace MrPink.Units
                 return;
         
             if (ragdoll)
-                return;
-        
-            if (!visibleToPlayer)
                 return;
         
             for (int i = 0; i < joints.Count; i++)
@@ -331,6 +297,8 @@ namespace MrPink.Units
                 }
                 rigidbodies[i].isKinematic = false;
                 rigidbodies[i].useGravity = false;
+                rigidbodies[i].velocity = Vector3.zero;
+                rigidbodies[i].angularVelocity = Vector3.zero;
             }
         
             foreach (var col in colliders)
@@ -361,7 +329,7 @@ namespace MrPink.Units
             while (true)
             {
                 yield return null;
-                transform.position = ragdollOrigin.position + Vector3.up * 0.5f;
+                transform.position = ragdollOrigin.position;
                 t += Time.deltaTime;
 
                 if (Physics.Linecast(prevPos, transform.position, out var hit,
@@ -395,10 +363,17 @@ namespace MrPink.Units
 
         public void Resurrect()
         {
+            if (Physics.Linecast(transform.position, transform.position + Vector3.up, out var hit,
+                GameManager.Instance.AllSolidsMask))
+            {
+                transform.position = hit.point + Vector3.up * 0.1f;
+            }
             ragdollOrigin.parent = ragdollOriginParent;
             DeactivateRagdoll();
+            
             _selfHealth.RestoreEndurance();
             _selfHealth.AiMovement.RestartActivities();
+            _selfHealth.selfUnit.UnitMovement.Resurrect();
         }
 
         public void ExplosionRagdoll(Vector3 pos, float force, float distance)

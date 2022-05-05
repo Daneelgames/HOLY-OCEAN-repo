@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Cysharp.Threading.Tasks;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -13,7 +15,14 @@ namespace MrPink.Units
     {
         public static UnitsManager Instance;
         public List<HealthController> unitsInGame = new List<HealthController>();
-
+        [Header("STREAMING")] 
+        public float streamingDistance = 200;
+        public float streamingDistanceMin = 20;
+        public int maxUnitsToShow = 30;
+        int currentShowAmount = 0;
+        
+        [Space]
+        
         public int defaultInduranceDamage = 100;
     
         public float tileExplosionDistance = 3;
@@ -43,38 +52,146 @@ namespace MrPink.Units
         private void Start()
         {
             StartCoroutine(UniTask.ToCoroutine(BodyPartsKillQueue));
+            StartCoroutine(StreamUnits());
         }
 
+        IEnumerator StreamUnits()
+        {
+            float distance;
+            while (true)
+            {
+                yield return null;
+                
+                if (unitsInGame.Count <= 0)
+                    continue;
+                
+                for (int i = unitsInGame.Count - 1; i >= 0; i--)
+                {
+                    yield return null;
+
+                    if (unitsInGame.Count <= i)
+                        continue;
+
+                    var unit = unitsInGame[i];
+                    if (unit == null)
+                    {
+                        unitsInGame.RemoveAt(i);
+                        continue;
+                    }
+
+                    if (unit == Game.Player.Health)
+                        continue;
+                    
+                    distance = Vector3.Distance(Game.Player._mainCamera.transform.position,
+                        unit.visibilityTrigger.transform.position);
+                    
+                    if (distance < streamingDistance)
+                    {
+                        bool inFov = GameManager.Instance.IsPositionInPlayerFov(unit.visibilityTrigger.transform.position);
+                        
+                        
+                        // show if max amount isnt reached and raycasted
+                        if (currentShowAmount >= maxUnitsToShow)
+                        {
+                            ShowUnit(unit, false);
+                            continue;
+                        }
+
+                        if (!inFov && distance < streamingDistanceMin)
+                        {
+                            ShowUnit(unit, true);
+                            continue;
+                        }
+                        
+                        if (Physics.Linecast(unit.visibilityTrigger.transform.position,
+                            Game.Player._mainCamera.transform.position, GameManager.Instance.AllSolidsMask))
+                        {
+                            // solid between unit and player
+                            // if obstacle is between them but distance is too small 
+                            if (distance < streamingDistanceMin)
+                            {
+                                ShowUnit(unit, true);
+                                continue;
+                            }
+                            
+                            ShowUnit(unit, false);
+                            continue;
+                        }
+                        if (!inFov)
+                        {
+                            ShowUnit(unit, true);
+                        }
+                    }
+                    else
+                    {
+                        // hide
+                        ShowUnit(unit, false);
+                    }
+
+                }
+            }
+        }
+
+
+        void ShowUnit(HealthController hc, bool show)
+        {
+            if (show)
+                currentShowAmount++;
+            else
+                currentShowAmount--;
+            
+            if (hc.health <= 0)
+            {
+                unitsInGame.Remove(hc);
+                Destroy(hc.gameObject);
+                return;
+            }
+            hc.gameObject.SetActive(show);
+        }
+        
         public HealthController SpawnUnit(HealthController prefab, Vector3 pos, Transform rotationTransform = null)
         {
             var rot = Quaternion.identity;
             if (rotationTransform != null)
                 rot = rotationTransform.rotation;
-            return Instantiate(prefab, pos, rot, _spawnRoot);
+            var inst = Instantiate(prefab, pos, rot, _spawnRoot);
+            unitsInGame.Add(inst);
+            inst.gameObject.SetActive(false);
+            return inst;
         }
         
         public void SpawnBlueUnit(Vector3 pos)
         {
             pos = SamplePos(pos);
-            Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            var unit = Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            unitsInGame.Add(unit);
+            unit.gameObject.SetActive(false);
         }
     
         public HealthController SpawnRedUnit(Vector3 pos)
         {
             pos = SamplePos(pos);
-            return Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            var unit =  Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            unitsInGame.Add(unit);
+            unit.gameObject.SetActive(false);
+            return unit;
         }
     
         public HealthController SpawnNeutralUnit(Vector3 pos)
         {
             pos = SamplePos(pos);
-            return Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            var unit =  Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            unitsInGame.Add(unit);
+            unit.gameObject.SetActive(false);
+            return unit;
         }
     
         public HealthController SpawnDesertBeast(Vector3 pos)
         {
             pos = SamplePos(pos);
-            return Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            var unit = Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            unitsInGame.Add(unit);
+            return unit;
         }
 
         Vector3 SamplePos(Vector3 pos)
@@ -109,6 +226,9 @@ namespace MrPink.Units
             // BUMP ENEMIES
             for (int i = 0; i < unitsInGame.Count; i++)
             {
+                if (i >= unitsInGame.Count || !unitsInGame[i].gameObject.activeInHierarchy)
+                    continue;
+                
                 if (Vector3.Distance(explosionPosition, unitsInGame[i].transform.position + Vector3.up) <= distance)
                 {
                     if (unitsInGame[i].playerMovement)

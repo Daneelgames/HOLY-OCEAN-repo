@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -29,7 +30,12 @@ namespace MrPink.Units
             
             StopCoroutine(_followCoroutine);
         }
-        
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+        }
+
         // TODO переписать на таске
         private IEnumerator FollowTargetCoroutine(Transform target)
         {

@@ -14,27 +14,29 @@ public class LookAtClosestBuilding : MonoBehaviour
 
     IEnumerator GetClosestBuilding()
     {
+        var buildings = BuildingGenerator.Instance.spawnedBuildings;
+        float distance = 10000;
+        
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return null;
             
             if (BuildingGenerator.Instance.spawnedBuildings.Count <= 0)
                 continue;
             
-            var buildings = BuildingGenerator.Instance.spawnedBuildings;
-            float distance = 10000;
-            
             for (int i = 0; i < buildings.Count; i++)
             {
+                yield return null;
+                
+                closestBuildingPosition = buildings[i].worldPos;
+                continue;
+                
                 float newDist = Vector3.Distance(transform.position, buildings[i].worldPos);
                 if (newDist < distance)
                 {
                     distance = newDist;
                     closestBuildingPosition = buildings[i].worldPos;
                 }
-
-                yield return null;
-
             }
         }
     }

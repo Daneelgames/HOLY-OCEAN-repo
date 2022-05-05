@@ -114,8 +114,6 @@ public class BuildingGenerator : MonoBehaviour
         LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
         //StartCoroutine(GenerateProcLevel());
         StartCoroutine(UpdateNavMesh());
-        
-        Respawner.Instance.StartRespawningBandits(Game.Player.Position);
     }
 
     

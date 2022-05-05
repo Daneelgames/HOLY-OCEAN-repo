@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 7839804669620758937}
   - component: {fileID: 2022942356190605989}
   - component: {fileID: 1318918479298980873}
-  - component: {fileID: 954633489589248169}
   - component: {fileID: -62902879235575574}
   - component: {fileID: 2058259131966086392}
   - component: {fileID: 9205280813239384822}
@@ -174,7 +173,7 @@ MonoBehaviour:
     ActorNpc: {fileID: 0}
     addToStatAmount: 0
     actorId: -1
-  rb: {fileID: 954633489589248169}
+  rb: {fileID: 0}
   hc: {fileID: 0}
 --- !u!135 &2022942356190605989
 SphereCollider:
@@ -202,22 +201,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.22992706, y: 0.52322674, z: 0.22937012}
   m_Center: {x: -0.00901413, y: 0.011613369, z: -0.025299072}
---- !u!54 &954633489589248169
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4533318020577912468}
-  serializedVersion: 2
-  m_Mass: 5
-  m_Drag: 3
-  m_AngularDrag: 3
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!114 &-62902879235575574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,6 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3901d3f8759ceb048b9a2a4d24f562c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  rbStreamingDistance: 50
 --- !u!114 &2058259131966086392
 MonoBehaviour:
   m_ObjectHideFlags: 0

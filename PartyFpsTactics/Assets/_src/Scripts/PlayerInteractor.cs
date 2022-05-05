@@ -105,7 +105,14 @@ namespace MrPink
             var rb = selectedPortable.GetComponent<Rigidbody>();
         
             if (!rb)
-                yield break;
+            {
+                TileAttack tileAttack = selectedPortable.GetComponent<TileAttack>();
+                if (tileAttack)
+                {
+                    rb = selectedPortable.AddComponent<Rigidbody>();
+                    tileAttack.rb = rb;
+                }
+            }
 
             carryingPortableRb = rb;
             carryingPortableRb.useGravity = false;

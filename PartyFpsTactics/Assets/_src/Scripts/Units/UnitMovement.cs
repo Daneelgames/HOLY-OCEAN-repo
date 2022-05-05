@@ -56,7 +56,10 @@ namespace MrPink.Units
             
             if (rememberRespawPoint)
                 rememberedRespawnPoint = transform.position;
+        }
 
+        private void OnEnable()
+        {
             StartCoroutine(UnitGravity());
         }
 
@@ -67,7 +70,11 @@ namespace MrPink.Units
                 if (!Physics.Linecast(transform.position, transform.position + Vector3.down,
                     GameManager.Instance.AllSolidsMask))
                 {
-                    rb.AddForce(Vector3.down * gravityForce, ForceMode.VelocityChange);
+                    var velocity = rb.velocity;
+                    velocity += Vector3.down * gravityForce;
+
+                    velocity = new Vector3(velocity.x, Mathf.Clamp(velocity.y, -10, 10), velocity.z);
+                    rb.velocity = velocity;
                 }
                 yield return new WaitForSeconds(0.5f);
             }
@@ -83,12 +90,20 @@ namespace MrPink.Units
 
         public void Death()
         {
-            _agent.enabled = false;
+            if (_agent)
+                _agent.enabled = false;
             //this.enabled = false;
         }
 
         public void Resurrect()
         {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            
+            this.enabled = true;
+            
+            return;
+            
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
                 transform.position = hit.position;
@@ -163,7 +178,9 @@ namespace MrPink.Units
         
         public void TeleportNearPosition(Vector3 pos)
         {
-            transform.position = SamplePos(pos);
+            rb.MovePosition(pos);
+            //transform.position = pos;
+            //transform.position = SamplePos(pos);
             return;
             
             if (_agent.enabled)
@@ -182,6 +199,7 @@ namespace MrPink.Units
         
         private Vector3 SamplePos(Vector3 startPos)
         {
+            
             if (NavMesh.SamplePosition(startPos, out var hit, 10f, NavMesh.AllAreas))
                 startPos = hit.position;
 
