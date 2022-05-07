@@ -84,8 +84,9 @@ public class DynamicLevelGenerator : MonoBehaviour
     {
         var randomCoord = spawnedTilesPositions[Random.Range(0, spawnedTilesPositions.Count)];
         Debug.Log("TeleportPlayer; coords " + randomCoord);
-        playerTarget.position = spawnedTiles[randomCoord.x, randomCoord.y].spawnedTile.transform.position;
-        Vector3 pos = playerTarget.position + Vector3.up * 10;
+        var tile = spawnedTiles[randomCoord.x, randomCoord.y].spawnedTile;
+        playerTarget.position = tile.transform.TransformPoint(tile.islandTileStaticSpawnersLocalPositions[Random.Range(0, tile.islandTileStaticSpawnersLocalPositions.Count)]);
+        Vector3 pos = playerTarget.position;
         Game.Player.Movement.TeleportToPosition(pos);
         return pos;
     }

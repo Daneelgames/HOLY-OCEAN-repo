@@ -123,7 +123,8 @@ namespace MrPink.WeaponsSystem
             for (int i = 0; i < bulletsPerShot; i++)
             {
                 BaseAttackCollider newProjectile;
-                if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword)
+                if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword || _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeast ||
+                    _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeastSmall)
                     newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, shotHolder, Vector3.zero,
                         Quaternion.identity);
                 else

@@ -38,7 +38,7 @@ namespace MrPink.WeaponsSystem
         private float _lifeTime = 2;
         [SerializeField] internal float currentLifeTime = 0;
         [SerializeField] internal float _dangerousTime = 2;
-
+        public ProjectileController projectileController;
         [SerializeField] private float ragdollExplosionDistance = 2;
         [SerializeField] private float ragdollExplosionForce = 500;
         [SerializeField] private float playerExplosionForce = 100;
@@ -104,6 +104,11 @@ namespace MrPink.WeaponsSystem
 
         public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
         {
+            if (projectileController)
+            {
+                projectileController.rb.velocity = Vector3.zero;
+                projectileController.rb.angularVelocity = Vector3.zero;
+            }
             currentLifeTime = 0;
             ownerHealth = owner;
             actionOnHit = action;

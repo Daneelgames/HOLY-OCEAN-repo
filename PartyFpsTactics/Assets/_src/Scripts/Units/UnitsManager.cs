@@ -197,6 +197,7 @@ namespace MrPink.Units
             pos = SamplePos(pos);
             var unit = Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
             unitsInGame.Add(unit);
+            unit.gameObject.SetActive(false);
             return unit;
         }
 

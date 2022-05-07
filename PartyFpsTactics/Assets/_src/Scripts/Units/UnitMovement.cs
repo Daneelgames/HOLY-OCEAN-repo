@@ -172,7 +172,6 @@ namespace MrPink.Units
                     continue;
                 
                 rb.AddForce((targetPos - transform.position).normalized * _moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
-                
             }
         }
         

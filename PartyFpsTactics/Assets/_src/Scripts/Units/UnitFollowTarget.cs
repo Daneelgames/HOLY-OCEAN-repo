@@ -39,7 +39,8 @@ namespace MrPink.Units
         // TODO переписать на таске
         private IEnumerator FollowTargetCoroutine(Transform target)
         {
-            while (_selfAgent && _selfAgent.enabled)
+            //while (_selfAgent && _selfAgent.enabled)
+            while (true)
             {
                 if (target == null)
                 {
