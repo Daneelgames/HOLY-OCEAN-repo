@@ -17,7 +17,7 @@ public class PhoneDialogueEvents : MonoBehaviour
     public bool CanAnswer => !playerAnswered;
     public bool InCutScene => inCutScene;
     private bool playerAnswered = false;
-    private HealthController currentTalknigNpc;
+    public HealthController currentTalknigNpc;
     
     enum LastPlayerAnswer
     {

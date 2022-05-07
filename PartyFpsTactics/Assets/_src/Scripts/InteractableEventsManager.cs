@@ -5,11 +5,13 @@ using _src.Scripts.Data;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.Units;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using Random = UnityEngine.Random;
 
 public class InteractableEventsManager : MonoBehaviour
 {
@@ -45,13 +47,21 @@ public class InteractableEventsManager : MonoBehaviour
         }
     }
 
-    public void RunEvent(ScriptedEvent IOevent, GameObject gameObjectToDestroy = null)
+    public void RunEvent(ScriptedEvent IOevent, Quest quest = null, GameObject gameObjectToDestroy = null)
     {
         var npcHc = IOevent.ActorNpc; 
-        if (npcHc == null && IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
+        if (npcHc == null)
         {
-            npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
+            if (quest != null && IOevent.spawnedQuestHcId >= 0)
+            {
+                npcHc = quest.spawnedQuestNpcs[IOevent.spawnedQuestHcId];
+            }
+            else if (IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
+                npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
         }
+        if (npcHc && !npcHc.gameObject.activeInHierarchy)
+            UnitsManager.Instance.ShowUnit(npcHc, true);
+        
         switch (IOevent.scriptedEventType)
         {
             case ScriptedEventType.StartDialogue:
@@ -135,6 +145,59 @@ public class InteractableEventsManager : MonoBehaviour
                 // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
                 ScoringSystem.Instance.ItemFoundSound();
                 Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
+                break;
+            
+            case ScriptedEventType.StartRandomQuest:
+                QuestManager.Instance.StartRandomQuest();
+                break;
+            case ScriptedEventType.AddQuestMarker:
+                int AddQuestMarkerHcIndex = IOevent.questMarkerTargetHcIndex;
+                QuestMarkers.Instance.AddMarker(quest.spawnedQuestNpcs[AddQuestMarkerHcIndex].visibilityTrigger.transform, quest);
+                break;
+            case ScriptedEventType.RemoveQuestMarker:
+                int RemoveQuestMarkerHcIndex = IOevent.questMarkerTargetHcIndex;
+                QuestMarkers.Instance.RemoveMarker(quest.spawnedQuestNpcs[RemoveQuestMarkerHcIndex].visibilityTrigger.transform);
+                
+                break;
+            case ScriptedEventType.SpawnQuestNpc:
+                
+                Debug.Log("ScriptedEventType.SpawnQuestNpc");
+                Vector3 pos = Game.Player.Position;
+                var tile = DynamicLevelGenerator.instance.GetRandomTile(pos, IOevent.minMaxDistanceToPlayer, IOevent.spawnInPoiCell);
+                List<Vector3> tempPositions = new List<Vector3>();
+                for (int i = 0; i < tile.islandTileStaticSpawnersLocalPositions.Count; i++)
+                {
+                    var dist = Vector3.Distance(pos, tile.islandTileStaticSpawnersLocalPositions[i]);
+                    if (dist > IOevent.minMaxDistanceToPlayer.x && dist < IOevent.minMaxDistanceToPlayer.y)
+                    {
+                        tempPositions.Add(tile.islandTileStaticSpawnersLocalPositions[i]);
+                    }
+                }
+
+                Vector3 newPos = pos;
+                if (tempPositions.Count <= 0)
+                {
+                    newPos = tile.islandTileStaticSpawnersLocalPositions[Random.Range(0, tile.islandTileStaticSpawnersLocalPositions.Count)];
+                }
+                else
+                {
+                    newPos = tempPositions[Random.Range(0, tempPositions.Count)];
+                }
+                pos = tile.transform.TransformPoint(newPos);
+                
+                
+                Debug.Log("ScriptedEventType.SpawnQuestNpc; pos found");
+                
+                var npc = UnitsManager.Instance.SpawnUnit(IOevent.NpcPrefabsToSpawn[Random.Range(0,IOevent.NpcPrefabsToSpawn.Count)], pos);
+                
+                if (quest != null)
+                {
+                    npc.name += ". QuestNpc";
+                    quest.AddSpawnedHc(npc);
+                }
+                
+                Debug.Log("ScriptedEventType.SpawnQuestNpc; " + npc.gameObject.name + "; quest is " + quest);
+                
                 break;
         }
         

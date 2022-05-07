@@ -22,8 +22,6 @@ MonoBehaviour:
   explosiveBarrelPrefab: {fileID: 8943623579927757030, guid: 5d2c0bd65a1f3534493166ecddb50a1f, type: 3}
   grindRailsPrefab: {fileID: 5147939674104939985, guid: fa6ec44f4708b9941b1df4c96f1f2139, type: 3}
   explosiveBarrelsAmount: 0
-  enemiesPerRoomMinMax: {x: 4, y: 4}
-  npcsPerMainBuildingRoomMinMax: {x: 1, y: 1}
   desertBeastsSpawnAmount: 0
   mrCaptainPrefabToSpawn: {fileID: 5832917521056044954, guid: 4a696f8305b77844693cd477b1bb68b1, type: 3}
   grindRailsPerLevelMinMax: {x: 1, y: 2}
@@ -42,14 +40,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75bd5108465f056409e2cc172068c288, type: 2}
   levelEvents:
   - conditions:
-    - conditionType: 3
+    - conditionType: 5
       transformA: {fileID: 0}
       actorIdA: -1
       transformB: {fileID: 0}
       actorIdB: -1
       distanceToCompare: 5
+      spawnedQuestNpcId: 0
     events:
-    - scriptedEventType: 0
+    - scriptedEventType: 18
       scoreToAdd: 0
       prefabToSpawn: {fileID: 0}
       spawnInsideCamera: 0
@@ -67,24 +66,21 @@ MonoBehaviour:
       weaponToAdd: {fileID: 0}
       ActorNpc: {fileID: 0}
       addToStatAmount: 0
-      actorId: 1
-  - conditions:
-    - conditionType: 1
-      transformA: {fileID: 0}
-      actorIdA: 1
-      transformB: {fileID: 0}
-      actorIdB: 3
-      distanceToCompare: 5
-    events:
-    - scriptedEventType: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
       scoreToAdd: 0
       prefabToSpawn: {fileID: 0}
       spawnInsideCamera: 0
       customSpawnPoint: {fileID: 0}
-      dialogueToStart: {fileID: 11400000, guid: abb4d33e9d101034a8b1e474a42d1c5e, type: 2}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
       destroyInteractorAfterDialogueCompleted: {fileID: 0}
-      scoreToAddOnDialogueCompleted: 10000
-      setNextLevelOnDialogueCompleted: 1
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
       maxDistanceToSpeaker: -1
       currentLevelToSet: 0
       soundToPlay: {fileID: 0}
@@ -94,4 +90,201 @@ MonoBehaviour:
       weaponToAdd: {fileID: 0}
       ActorNpc: {fileID: 0}
       addToStatAmount: 0
-      actorId: 1
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1
+    - scriptedEventType: 18
+      scoreToAdd: 0
+      prefabToSpawn: {fileID: 0}
+      spawnInsideCamera: 0
+      customSpawnPoint: {fileID: 0}
+      dialogueToStart: {fileID: 11400000, guid: 4bf0fb68101a9e142b1200485ab518b8, type: 2}
+      destroyInteractorAfterDialogueCompleted: {fileID: 0}
+      scoreToAddOnDialogueCompleted: 0
+      setNextLevelOnDialogueCompleted: 0
+      maxDistanceToSpeaker: -1
+      currentLevelToSet: 0
+      soundToPlay: {fileID: 0}
+      auPitchMinMax: {x: 1, y: 1}
+      controlledMachine: {fileID: 0}
+      toolToAdd: {fileID: 0}
+      weaponToAdd: {fileID: 0}
+      ActorNpc: {fileID: 0}
+      addToStatAmount: 0
+      questMarkerTargetHcIndex: 0
+      NpcPrefabsToSpawn: []
+      minMaxDistanceToPlayer: {x: 100, y: 300}
+      spawnInPoiCell: 0
+      actorId: -1
+      spawnedQuestHcId: -1

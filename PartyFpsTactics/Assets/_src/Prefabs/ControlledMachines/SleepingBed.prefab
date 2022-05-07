@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1654268489254292}
   m_LocalRotation: {x: -0.70710677, y: -0, z: -0.000000029802322, w: 0.7071068}
-  m_LocalPosition: {x: 0.036, y: 0.564, z: 0.51}
+  m_LocalPosition: {x: 0.036, y: 0.564, z: 0.95}
   m_LocalScale: {x: 0.56145096, y: 0.56145084, z: 0.5614509}
   m_Children: []
   m_Father: {fileID: 5221374690669736801}
@@ -109,7 +109,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: 0
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: -1
+    spawnedQuestHcId: -1
   rb: {fileID: 5221374690669736803}
   hc: {fileID: 0}
 --- !u!1 &2305797570145326163
@@ -493,7 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   npcDialoguesList: {fileID: 0}
-  interactiveObjectName: Sleep
+  interactiveObjectName: WAKE UP
   eventsOnInteraction:
   - scriptedEventType: 8
     scoreToAdd: 0
@@ -513,7 +518,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: 0
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: -1
+    spawnedQuestHcId: -1
   rb: {fileID: 5221374690669736803}
   hc: {fileID: 0}
 --- !u!1001 &875653584355471095

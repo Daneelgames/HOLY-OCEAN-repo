@@ -137,6 +137,11 @@ namespace MrPink
             scoreAddedAu.pitch = Random.Range(0.9f, 1.1f);
             scoreAddedAu.Play();
         }
+        public void ItemFoundSoundLowPitch()
+        {
+            scoreAddedAu.pitch = Random.Range(0.3f, 0.5f);
+            scoreAddedAu.Play();
+        }
         
         public void AddScore(int amount)
         {
@@ -145,19 +150,27 @@ namespace MrPink
             
             ItemFoundSound();
             CurrentScore += amount;
+            string text;
             if (amount > 0)
-                addedScoreFeedbackText.text = "+" + amount;
+                text = "+" + amount;
             else
-                addedScoreFeedbackText.text = amount.ToString();
-        
-            if (animateAddedScoreFeedback != null)
-                StopCoroutine(animateAddedScoreFeedback);
-        
-            StartCoroutine(AnimateAddedScoreFeedback());
+                text = amount.ToString();
+            
+            CustomTextMessage(text);
         
             PlayerPrefs.SetInt("currentScore", CurrentScore);
             currentScoreText.text = "DOLAS: " + CurrentScore;
             PlayerPrefs.Save();
+        }
+
+        public void CustomTextMessage(string text)
+        {
+            addedScoreFeedbackText.text = text;
+            
+            if (animateAddedScoreFeedback != null)
+                StopCoroutine(animateAddedScoreFeedback);
+        
+            StartCoroutine(AnimateAddedScoreFeedback());
         }
 
         private Coroutine animateAddedScoreFeedback;

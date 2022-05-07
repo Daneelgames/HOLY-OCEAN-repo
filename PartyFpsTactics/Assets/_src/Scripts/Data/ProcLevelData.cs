@@ -52,16 +52,23 @@ namespace _src.Scripts.Data
     {
         public enum ConditionType
         {
-            DistanceIsBigger, DistanceIsSmaller, PlayerIsDead, PlayerIsDriving
+            DistanceIsBigger, DistanceIsSmaller, PlayerIsDead, PlayerIsDriving, PlayerIsCloseToNpc, PlayerIsAlive
         }
 
         public ConditionType conditionType = ConditionType.DistanceIsSmaller;
 
-        [Header("Distance Comparing")]
+        [ShowIf("@(conditionType) == ConditionType.DistanceIsBigger || (conditionType) == ConditionType.DistanceIsSmaller")]
         public Transform transformA;
+        [ShowIf("@(conditionType) == ConditionType.DistanceIsBigger || (conditionType) == ConditionType.DistanceIsSmaller")]
         public int actorIdA = -1;
+        [ShowIf("@(conditionType) == ConditionType.DistanceIsBigger || (conditionType) == ConditionType.DistanceIsSmaller")]
         public Transform transformB;
+        [ShowIf("@(conditionType) == ConditionType.DistanceIsBigger || (conditionType) == ConditionType.DistanceIsSmaller")]
         public int actorIdB = -1;
+        [ShowIf("@(conditionType) == ConditionType.DistanceIsBigger || (conditionType) == ConditionType.DistanceIsSmaller || (conditionType) == ConditionType.PlayerIsCloseToNpc")]
         public float distanceToCompare = 5;
+
+        [ShowIf("conditionType", ConditionType.PlayerIsCloseToNpc)]
+        public int spawnedQuestNpcId;
     }
 }

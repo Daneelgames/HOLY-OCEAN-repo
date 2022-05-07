@@ -67,16 +67,18 @@ public class IslandTile : MonoBehaviour
     }
 
     private bool contentLoaded = false;
-    public void LoadTileContent()
+    public bool LoadTileContent()
     {
         if (contentLoaded)
-            return;
+            return false;
         
         if (spawnCoroutine != null)
             StopCoroutine(SpawnCoroutine());
         contentLoaded = true;
         
         spawnCoroutine = StartCoroutine(SpawnCoroutine());
+
+        return true;
     }
     public void UnloadTileContent()
     {
@@ -127,24 +129,29 @@ public class IslandTile : MonoBehaviour
         {
             int r = Random.Range(0, tempList.Count);
             float rr = Random.value; 
-            if (rr > 0.7f)
+            if (rr > 0.8f)
             {
                 var loot = ContentPlacer.Instance.SpawnRandomLoot(transform.TransformPoint(tempList[r]));
                 spawnedLoot.Add(loot);
             }
-            else if (rr > 0.6f)
+            else if (rr > 0.7f)
             {
                 HealthController unit = UnitsManager.Instance.SpawnNeutralUnit(transform.TransformPoint(tempList[r]));
                 spawnedUnits.Add(unit);
             }
-            else if (rr > 0.5f)
+            else if (rr > 0.6f)
             {
                 HealthController unit = UnitsManager.Instance.SpawnRedUnit(transform.TransformPoint(tempList[r]));
                 spawnedUnits.Add(unit);
             }
+            else if (rr > 0.5f)
+            {
+                HealthController unit = UnitsManager.Instance.SpawnBlueUnit(transform.TransformPoint(tempList[r]));
+                spawnedUnits.Add(unit);
+            }
             else if (rr > 0.3f)
             {
-                HealthController unit = UnitsManager.Instance.SpawnRedUnit(transform.TransformPoint(tempList[r]));
+                HealthController unit = UnitsManager.Instance.SpawnDesertBeast(transform.TransformPoint(tempList[r]));
                 spawnedUnits.Add(unit);
             }
             else

@@ -133,12 +133,17 @@ namespace MrPink.Units
         }
 
 
-        void ShowUnit(HealthController hc, bool show)
+        public void ShowUnit(HealthController hc, bool show)
         {
             if (show)
                 currentShowAmount++;
             else
+            {
+                if (PhoneDialogueEvents.Instance.currentTalknigNpc == hc)
+                    return;
+                
                 currentShowAmount--;
+            }
             
             if (hc.health <= 0)
             {
@@ -160,12 +165,13 @@ namespace MrPink.Units
             return inst;
         }
         
-        public void SpawnBlueUnit(Vector3 pos)
+        public HealthController SpawnBlueUnit(Vector3 pos)
         {
             pos = SamplePos(pos);
             var unit = Instantiate(blueTeamUnitPrefabs[Random.Range(0, blueTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
             unitsInGame.Add(unit);
             unit.gameObject.SetActive(false);
+            return unit;
         }
     
         public HealthController SpawnRedUnit(Vector3 pos)

@@ -66,17 +66,41 @@ namespace _src.Scripts.Data
         public Tool toolToAdd;
         [ShowIf("scriptedEventType", ScriptedEventType.AddWeapon)]
         public WeaponController weaponToAdd;
+        [ShowIf("@(scriptedEventType) == ScriptedEventType.StartDialogue || (scriptedEventType) == ScriptedEventType.AddTool || " +
+                "(scriptedEventType) == ScriptedEventType.AddWeapon || (scriptedEventType) == ScriptedEventType.AddHealth || " +
+                "(scriptedEventType) == ScriptedEventType.AddToFood || (scriptedEventType) == ScriptedEventType.AddWater|| " +
+                "(scriptedEventType) == ScriptedEventType.AddSleep")]
         public HealthController ActorNpc;
+        [ShowIf("@(scriptedEventType) == ScriptedEventType.AddHealth || " +
+                "(scriptedEventType) == ScriptedEventType.AddToFood || (scriptedEventType) == ScriptedEventType.AddWater|| " +
+                "(scriptedEventType) == ScriptedEventType.AddSleep")]
         public int addToStatAmount = 0;
 
+        [ShowIf("@(scriptedEventType) == ScriptedEventType.AddQuestMarker || (scriptedEventType) == ScriptedEventType.RemoveQuestMarker")]
+        public int questMarkerTargetHcIndex;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnQuestNpc)]
+        public List<HealthController> NpcPrefabsToSpawn;
+
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnQuestNpc)]
+        public Vector2 minMaxDistanceToPlayer = new Vector2(100, 300);
+
+        [ShowIf("scriptedEventType", ScriptedEventType.SpawnQuestNpc)]
+        public bool spawnInPoiCell = false;
+        
+        
+        
+        
         [Header("If Id >= 0, game will try to find NpcHc by Id")]
         public int actorId = -1;
-        
+        [Header("If Id >= 0, game will try to find spawned NpcHc by Id")]
+        public int spawnedQuestHcId = -1;
+
     }
     
     public enum ScriptedEventType
     {
         StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
-        AddHealth, AddToFood, AddWater, AddSleep
+        AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest
     }
 }

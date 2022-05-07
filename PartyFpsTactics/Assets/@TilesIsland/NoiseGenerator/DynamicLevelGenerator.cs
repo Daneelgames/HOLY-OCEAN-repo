@@ -5,6 +5,7 @@ using System.Linq;
 using GPUInstancer;
 using MrPink;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Random = UnityEngine.Random;
@@ -42,6 +43,7 @@ public class DynamicLevelGenerator : MonoBehaviour
     [Serializable]
     public class TileCoordinate
     {
+        public bool isPoi = false;
         public GameObject spawnedBuilding;
         public IslandTile spawnedTile;
         public GameObject spawnedNpc;
@@ -203,10 +205,18 @@ public class DynamicLevelGenerator : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
+        StartCoroutine(AllTilesSpawned());
+    }
+
+    IEnumerator AllTilesSpawned()
+    {
         islandGenerated = true;
         TeleportPlayerToTarget();
-        LevelTitlesManager.Instance.HideIntro();
+        yield return null;
         StartCoroutine(ManageTilesContent());
+        yield return new WaitForSeconds(1);
+        LevelTitlesManager.Instance.HideIntro();
+        LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
     }
 
     IEnumerator ManageTilesContent()
@@ -226,15 +236,14 @@ public class DynamicLevelGenerator : MonoBehaviour
                         
                         if (tile)
                         {
-                            tile.LoadTileContent();
-                            tilesLoadedContent.Add(tile);
+                            if (tile.LoadTileContent())
+                                tilesLoadedContent.Add(tile);
                         }
                     }
                     
                     yield return null;
                 }
             }
-
         }
     }
 
@@ -417,7 +426,12 @@ public class DynamicLevelGenerator : MonoBehaviour
             spawnedTiles[_x, _z].z = _z;
         }
         spawnedTiles[_x, _z].spawnedTile = tile;
-
+        
+        if (IslandGenerator.instance.poisCoordinates.Contains(coords))
+        {
+            spawnedTiles[_x, _z].isPoi = true;
+        }
+        
         tile.transform.parent = tilesParent.transform;
         yield return null;
         
@@ -448,7 +462,38 @@ public class DynamicLevelGenerator : MonoBehaviour
             spawnedTiles[_x, _z].spawnedBuilding = poi;
         }
         
-    } 
+    }
+
+    public IslandTile GetRandomTile(Vector3 aroundPos, Vector2 minMaxDistance, bool poiOnly)
+    {
+        minMaxDistance = new Vector2(Mathf.Clamp(minMaxDistance.x, 5, 10000), Mathf.Clamp(minMaxDistance.y, 5, 10000));
+        IslandTile tile = null;
+        List<IslandTile> tilesTemp = new List<IslandTile>();
+
+        for (int i = 0; i < spawnedTilesPositions.Count; i++)
+        {
+            tile = spawnedTiles[spawnedTilesPositions[i].x, spawnedTilesPositions[i].y].spawnedTile;
+            if (!tile)
+                continue;
+            
+            float d = Vector3.Distance(new Vector3(aroundPos.x, 0, aroundPos.z),
+                new Vector3(tile.transform.position.x, 0, tile.transform.position.z));
+            Debug.Log("GetRandomTile distance " + d + "; playerPos " + Game.Player.Position);
+            if (d > minMaxDistance.x &&  d < minMaxDistance.y)
+            {
+                Debug.Log("GetRandomTile tilesTemp.Add(tile) distance " + d + "; playerPos " + Game.Player.Position);
+                // tile is in range
+                // and is poi if needed
+                if (!poiOnly || IslandGenerator.instance.poisCoordinates.Contains(spawnedTilesPositions[i]))
+                    tilesTemp.Add(tile);
+            }
+        }
+        if (tilesTemp.Count <= 0)
+            Debug.LogError("No tiles in range!");
+        
+        tile = tilesTemp[Random.Range(0, tilesTemp.Count)];
+        return tile;
+    }
     
     public void ProceedPath(GameObject go)
     {

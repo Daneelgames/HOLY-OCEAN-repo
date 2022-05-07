@@ -15,7 +15,7 @@ public class EventOnPlayerEntersTrigger : MonoBehaviour
         {
             for (int i = 0; i < eventsToRunOnTriggerEnter.Count; i++)
             {
-                InteractableEventsManager.Instance.RunEvent(eventsToRunOnTriggerEnter[i], gameObject);   
+                InteractableEventsManager.Instance.RunEvent(eventsToRunOnTriggerEnter[i], null, gameObject);   
             }
         }
     }

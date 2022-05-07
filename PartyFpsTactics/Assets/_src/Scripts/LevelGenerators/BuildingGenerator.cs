@@ -111,7 +111,6 @@ public class BuildingGenerator : MonoBehaviour
         }
 
         PartyController.Instance.Init();
-        LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
         //StartCoroutine(GenerateProcLevel());
         StartCoroutine(UpdateNavMesh());
     }

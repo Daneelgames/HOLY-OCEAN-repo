@@ -1614,6 +1614,7 @@ Transform:
   - {fileID: 1575383448}
   - {fileID: 1570520628}
   - {fileID: 428916469}
+  - {fileID: 2067605861}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1838,6 +1839,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7529001614820252041, guid: 75cfde6fc0433164882c2b4da7caff54, type: 3}
   m_PrefabInstance: {fileID: 1976343352}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2067605860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2067605861}
+  - component: {fileID: 2067605862}
+  m_Layer: 0
+  m_Name: QuestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2067605861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067605860}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1663981897}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2067605862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067605860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9a639cb4c4dab242bd42fbd24dfec4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeQuests: []
+  generatedQuests: []
+  questTemplates: {fileID: 11400000, guid: 0a81ac19d14a210439b0d54df85f5450, type: 2}
+  questsToGenerate: 5
 --- !u!1001 &252119039780777089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2767,6 +2815,10 @@ PrefabInstance:
     - target: {fileID: 3799541973470530301, guid: 213fa4e6bf4ae8e41b2afe86ac0d6a5e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6558374067546864180, guid: 213fa4e6bf4ae8e41b2afe86ac0d6a5e, type: 3}
+      propertyPath: levelDatas.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 213fa4e6bf4ae8e41b2afe86ac0d6a5e, type: 3}
