@@ -27,6 +27,7 @@ public class DynamicLevelGenerator : MonoBehaviour
     public float bridgePlatformThreshold = 40;
 
     public TileCoordinate[,] spawnedTiles;
+    public List<RoadWaypoints> RoadWaypointsList = new List<RoadWaypoints>();
     public List<Vector2Int> spawnedTilesPositions = new List<Vector2Int>();
     List<IslandTile> tilesLoadedContent = new List<IslandTile>();
     public GameObject islandWalkerPrefab;
@@ -52,6 +53,13 @@ public class DynamicLevelGenerator : MonoBehaviour
         public GameObject spawnedBridgePart;
         public int x = 0;
         public int z = 0;
+        public Vector2 spawnedWorldPos;
+    }
+    
+    [Serializable]
+    public class RoadWaypoints
+    {
+        public List<Vector2Int> waypointsCoords = new List<Vector2Int>();
     }
     void Awake()
     {
@@ -59,6 +67,12 @@ public class DynamicLevelGenerator : MonoBehaviour
         //GPUInstancerAPI.InitializeGPUInstancer(prefabManager);
     }
 
+    public void AddRoadWaypoints(List<Vector2Int> roadWaypoints)
+    {
+        var newRoad = new RoadWaypoints();
+        newRoad.waypointsCoords = new List<Vector2Int>(roadWaypoints);
+        RoadWaypointsList.Add(newRoad);
+    }
     
     public void Init()
     {
@@ -73,7 +87,7 @@ public class DynamicLevelGenerator : MonoBehaviour
         playerTarget.transform.position = new Vector3(spawnCoords[0].x, 0, spawnCoords[0].y)  * tileSize + new Vector3(IslandGenerator.instance.mapWidth / 2, 0, IslandGenerator.instance.mapHeight / 2) * tileSize + Vector3.up * 200;
         playerTarget.isKinematic = false;
         
-        StartCoroutine(UpdateLevelAroundPlayer(playerTarget.transform));
+        StartCoroutine(GenerateIslandTiles(playerTarget.transform));
         StartCoroutine(DestroyTiles());
         
         BuildingGenerator.Instance.Init();
@@ -111,7 +125,7 @@ public class DynamicLevelGenerator : MonoBehaviour
     
     private Vector2Int playerCoords;
     
-    IEnumerator UpdateLevelAroundPlayer(Transform originTransform)
+    IEnumerator GenerateIslandTiles(Transform originTransform)
     {
         var ig = IslandGenerator.instance;
         while (IslandGenerator.instance.generationComplete == false)
@@ -142,11 +156,10 @@ public class DynamicLevelGenerator : MonoBehaviour
                     bool isPath = ig.IsPath(x, z);
                     float newHeight = noiseMap[x, z];
 
-                    if (isPath) newHeight -= Random.Range(0.1f, 0.5f);
+                    if (isPath) newHeight -= Random.Range(0.2f, 0.5f);
                             
                     int regionIndex = IslandGenerator.instance.GetRegionIndexByHeight(newHeight);
-                    if (regionIndex < 2 || IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count == 0)
-                        continue;
+                    
                             
                     var reference = tileGpuPrefabsTags[regionIndex];
                     //var reference = tileGpuPrefabs[regionIndex];
@@ -191,9 +204,14 @@ public class DynamicLevelGenerator : MonoBehaviour
 
                     if (isPath) newY /= 10;
                         
+                    Vector3 resultPos = new Vector3(x * tileSize, noiseMap[x, z] * newY, z * tileSize) - Offset();
+                    spawnedTiles[x, z].spawnedWorldPos = resultPos;
                     //AssetSpawner.instance.SpawnTile(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize), 0, -1, -1, false, -1, false );
-
-                    SpawnTileGpu(reference, new Vector3(x * tileSize, noiseMap[x,z] * newY, z * tileSize) - Offset(), new Vector2Int(x, z));
+                    
+                    if (regionIndex < 2 || IslandGenerator.instance.regions[regionIndex].tileAssetReferenceList.Count == 0) // DONT SPAWN IN WATER AND DEAPTHS
+                        continue;
+                    
+                    SpawnTileGpu(reference, resultPos, new Vector2Int(x, z));
 
                     t++;
                     if (t > 100)
@@ -215,11 +233,42 @@ public class DynamicLevelGenerator : MonoBehaviour
         TeleportPlayerToTarget();
         yield return null;
         StartCoroutine(ManageTilesContent());
+        StartCoroutine(SpawnRoads());
         yield return new WaitForSeconds(1);
         LevelTitlesManager.Instance.HideIntro();
         LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
     }
 
+    IEnumerator SpawnRoads()
+    {
+        for (int roadIndex = 0; roadIndex < RoadWaypointsList.Count; roadIndex++)
+        {
+            for (int i = 0; i < RoadWaypointsList[roadIndex].waypointsCoords.Count - 1; i++)
+            {
+                Vector2Int roadsCoords0 = RoadWaypointsList[roadIndex].waypointsCoords[i];
+                Vector2Int roadsCoords1 = RoadWaypointsList[roadIndex].waypointsCoords[i + 1];
+                Debug.Log("SpawnRoads; roadsCoords0 " + roadsCoords0 + "; roadsCoords1 " + roadsCoords1);
+                
+                Vector3 tilePos0 = Vector3.zero;
+                if (spawnedTiles[roadsCoords0.x, roadsCoords0.y].spawnedTile != null)
+                    tilePos0 = spawnedTiles[roadsCoords0.x, roadsCoords0.y].spawnedTile.transform.position;
+                else
+                    tilePos0 = spawnedTiles[roadsCoords0.x, roadsCoords0.y].spawnedWorldPos;   
+                    
+                Vector3 tilePos1 = Vector3.zero;
+                if (spawnedTiles[roadsCoords1.x, roadsCoords1.y].spawnedTile != null)
+                    tilePos1 = spawnedTiles[roadsCoords1.x, roadsCoords1.y].spawnedTile.transform.position;
+                else
+                    tilePos1 = spawnedTiles[roadsCoords1.x, roadsCoords1.y].spawnedWorldPos;
+
+                var testCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                testCube.transform.position = (tilePos0 + tilePos1) / 2;
+                testCube.transform.LookAt(tilePos1);
+                testCube.transform.localScale = new Vector3(10, 1,Vector3.Distance(tilePos0, tilePos1));
+            }
+            yield return null;
+        }    
+    }
     IEnumerator ManageTilesContent()
     {
         while (true)
@@ -516,7 +565,9 @@ public class DynamicLevelGenerator : MonoBehaviour
         go.transform.eulerAngles = new Vector3(Random.Range(80f,100f), Random.Range(0,180f), Random.Range(-10,10f));
         go.transform.localScale = new Vector3(1, 1, go.transform.position.y);
         go.transform.parent = tilesParent.transform;
-        return;
+        
+        //return;
+        
         //find neighbour bridges
         for (var _z = z - 1; _z <= z + 1; _z++)
         {

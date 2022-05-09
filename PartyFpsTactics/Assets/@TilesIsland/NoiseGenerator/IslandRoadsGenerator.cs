@@ -225,6 +225,7 @@ public class IslandRoadsGenerator : MonoBehaviour
             pathFound = waypoints.Count > 0;
         }
 
+        DynamicLevelGenerator.instance.AddRoadWaypoints(waypoints);
         if (colourRoads == null)
             callback(new PathResult(waypoints, pathFound, request.callback));
     }

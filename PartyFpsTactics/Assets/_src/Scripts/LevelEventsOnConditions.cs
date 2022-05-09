@@ -53,7 +53,18 @@ public class LevelEventsOnConditions : MonoBehaviour
             {
                 // IF ALL CONDITIONS MET - RUN EVENTS
                 var condition = levelEvent.conditions[j];
-                allConditionsMet = IsConditionMet(condition, quest);
+                var i = IsConditionMet(condition, quest);
+                switch (i)
+                {
+                    case 0:
+                        allConditionsMet = true;
+                        break;
+                    case 1:
+                        allConditionsMet = false;
+                        break;
+                    case -1:
+                        yield break;
+                }
                 
                 if (!allConditionsMet)
                     break;
@@ -82,7 +93,16 @@ public class LevelEventsOnConditions : MonoBehaviour
         for (int j = 0; j < levelEvent.conditions.Count; j++)
         {
             var condition = levelEvent.conditions[j];
-            allConditionsMet = IsConditionMet(condition, quest);
+            var i = IsConditionMet(condition, quest);
+            switch (i)
+            {
+                case 0:
+                    allConditionsMet = true;       
+                    break;
+                default:
+                    allConditionsMet = false;       
+                    break;
+            }
                 
             if (!allConditionsMet)
                 break;
@@ -91,7 +111,7 @@ public class LevelEventsOnConditions : MonoBehaviour
         return allConditionsMet;
     }
 
-    public bool IsConditionMet(Condition condition, Quest quest = null)
+    public int IsConditionMet(Condition condition, Quest quest = null)
     {
         if (condition.transformA == null || condition.transformB == null)
         {
@@ -149,17 +169,20 @@ public class LevelEventsOnConditions : MonoBehaviour
                 met =  Game.Player.VehicleControls.controlledMachine;
                 break;
             case Condition.ConditionType.PlayerIsCloseToNpc:
-                if (quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].health <= 0)
+                if (quest.spawnedQuestNpcs[condition.spawnedQuestNpcId] == null || quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].health <= 0)
                 {
                     QuestManager.Instance.FailQuest(quest);
                     met = false;
-                    break;
+                    return -1;
                 }
                 var dist = Vector3.Distance(Game.Player.Position, quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].transform.position);
                 met = dist < condition.distanceToCompare;
                 break;
         }
-        
-        return met;
+
+        if (met)
+            return 0;
+        else
+            return 1;
     }
 }

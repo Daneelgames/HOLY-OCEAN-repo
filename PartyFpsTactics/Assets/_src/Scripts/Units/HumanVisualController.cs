@@ -102,9 +102,10 @@ namespace MrPink.Units
         
             for (int i = 0; i < joints.Count; i++)
             {
+                /*
                 if (!inVehicle)
                     joints[i].targetRotation = CopyRotation(i);
-                else
+                else*/
                     joints[i].transform.rotation = animatedBones[i].rotation;
             
                 joints[i].transform.position = Vector3.Lerp(joints[i].transform.position, animatedBones[i].position, lerpToStand);

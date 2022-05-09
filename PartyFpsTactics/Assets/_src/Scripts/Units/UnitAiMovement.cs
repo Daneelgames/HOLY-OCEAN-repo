@@ -171,7 +171,7 @@ namespace MrPink.Units
                 if (noCoverBehaviour == EnemiesBehaviour.HideFromEnemy)
                 {
                     // TO DO - переделать на систему вейпойнтов / спавнеров
-                    Vector3 targetPos = transform.position + (enemy.transform.position - transform.position).normalized * 5;
+                    Vector3 targetPos = transform.position + (transform.position - enemy.transform.position).normalized * 5;
 
                     _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
                 }

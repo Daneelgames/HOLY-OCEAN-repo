@@ -65,7 +65,7 @@ namespace MrPink.Units
                 yield break;
 
             var enemyToShoot = _selfUnit.HealthController.AiMovement.enemyToLookAt;
-            if (enemyToShoot == null)
+            if (enemyToShoot == null || enemyToShoot.health <= 0)
                 yield break;
             
             if (Vector3.Distance(transform.position, enemyToShoot.visibilityTrigger.transform.position) > maxDistanceToAttack)

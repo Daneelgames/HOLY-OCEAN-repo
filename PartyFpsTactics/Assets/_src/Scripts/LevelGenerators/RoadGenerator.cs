@@ -50,6 +50,7 @@ public class RoadGenerator : MonoBehaviour
         Instance = this;
     }
 
+
     [ContextMenu("DestroyRoad")]
     public void DestroyRoad()
     {

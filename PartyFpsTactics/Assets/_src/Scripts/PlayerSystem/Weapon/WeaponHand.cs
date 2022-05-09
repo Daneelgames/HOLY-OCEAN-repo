@@ -92,7 +92,6 @@ namespace MrPink.PlayerSystem
 
         public void UpdateState(bool isDead)
         {
-            
             if (_isAttacking)
             {
                 IsAiming = false;

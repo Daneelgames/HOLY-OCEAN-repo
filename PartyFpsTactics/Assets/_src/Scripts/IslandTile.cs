@@ -134,6 +134,13 @@ public class IslandTile : MonoBehaviour
                 var loot = ContentPlacer.Instance.SpawnRandomLoot(transform.TransformPoint(tempList[r]));
                 spawnedLoot.Add(loot);
             }
+            else if (rr > 0.5f)
+            {
+                var newProp = DesertProps.Instance.SpawnRandomProp(transform.TransformPoint(tempList[r]));
+                spawnedProps.Add(newProp);
+            }
+            
+            /*
             else if (rr > 0.7f)
             {
                 HealthController unit = UnitsManager.Instance.SpawnNeutralUnit(transform.TransformPoint(tempList[r]));
@@ -159,6 +166,7 @@ public class IslandTile : MonoBehaviour
                 var newProp = DesertProps.Instance.SpawnRandomProp(transform.TransformPoint(tempList[r]));
                 spawnedProps.Add(newProp);
             }
+            */
             
             tempList.RemoveAt(r);
             

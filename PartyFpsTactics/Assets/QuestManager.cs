@@ -34,6 +34,7 @@ public class QuestManager : MonoBehaviour
 
             int r = Random.Range(0, questsTemplatesTemp.Count);
             var quest = new Quest(questsTemplatesTemp[r]);
+            quest.spawnedQuestNpcs.Clear();
             questsTemplatesTemp.RemoveAt(r);
             ShuffleQuest(quest);
             generatedQuests.Add(quest);
@@ -68,8 +69,11 @@ public class QuestManager : MonoBehaviour
         
         activeQuests.Add(randomQuest);
 
-        StartCoroutine(CheckingQuest(randomQuest));
+        var checkingQuestCoroutine = StartCoroutine(CheckingQuest(randomQuest));
+        checkingQuestCoroutines.Add(randomQuest, checkingQuestCoroutine);
     }
+
+    private Dictionary<Quest, Coroutine> checkingQuestCoroutines = new Dictionary<Quest, Coroutine>();
 
     IEnumerator CheckingQuest(Quest quest)
     {
@@ -82,11 +86,18 @@ public class QuestManager : MonoBehaviour
     public void FailQuest(Quest quest)
     {
         // feedback on level failed
+        Debug.Log("FailQuest");
+        StopCoroutine(checkingQuestCoroutines[quest]);
         ScoringSystem.Instance.CustomTextMessage("QUEST FAILED");
         ScoringSystem.Instance.ItemFoundSoundLowPitch();
         for (int i = 0; i < quest.spawnedQuestNpcs.Count; i++)
         {
-            QuestMarkers.Instance.RemoveMarker(quest.spawnedQuestNpcs[i].visibilityTrigger.transform);
+            if (quest.spawnedQuestNpcs[i].visibilityTrigger != null)
+                QuestMarkers.Instance.RemoveMarker(quest.spawnedQuestNpcs[i].visibilityTrigger.transform);
+            else
+            {
+                QuestMarkers.Instance.RemoveMarker(null);
+            }
         }
     }
 }

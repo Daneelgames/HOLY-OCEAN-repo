@@ -26,13 +26,12 @@ public class QuestMarkers : MonoBehaviour
 
     public void RemoveMarker(Transform markerTarget)
     {
-        for (int i = 0; i < activeMarks.Count; i++)
+        for (int i = activeMarks.Count - 1; i >= 0; i--)
         {
             if (activeMarks[i].target == markerTarget)
             {
                 Destroy(activeMarks[i].gameObject);
                 activeMarks.RemoveAt(i);
-                return;
             }
         }
     }

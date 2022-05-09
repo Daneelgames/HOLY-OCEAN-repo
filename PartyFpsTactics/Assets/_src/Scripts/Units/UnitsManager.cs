@@ -127,7 +127,6 @@ namespace MrPink.Units
                         // hide
                         ShowUnit(unit, false);
                     }
-
                 }
             }
         }
