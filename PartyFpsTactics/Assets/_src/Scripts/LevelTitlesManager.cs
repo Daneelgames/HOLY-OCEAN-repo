@@ -25,6 +25,7 @@ public class LevelTitlesManager : MonoBehaviour
     private void Start()
     {
         ShowIntro();
+        Invoke(nameof(HideIntro), 1);
     }
 
     public void ShowIntro()

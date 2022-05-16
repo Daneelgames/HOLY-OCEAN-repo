@@ -57,8 +57,6 @@ GameObject:
   - component: {fileID: 7057265401299245292}
   - component: {fileID: 2068544717774054767}
   - component: {fileID: 6343087948723722575}
-  - component: {fileID: 5461217829370304360}
-  - component: {fileID: 1306182560563846686}
   m_Layer: 11
   m_Name: Kaktus Eatable
   m_TagString: Untagged
@@ -116,7 +114,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: -50
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: 0
+    spawnedQuestHcId: -1
   - scriptedEventType: 12
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -135,7 +138,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: -50
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: 0
+    spawnedQuestHcId: -1
   - scriptedEventType: 13
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -154,7 +162,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: -50
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: 0
+    spawnedQuestHcId: -1
   - scriptedEventType: 14
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -173,7 +186,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: 50
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: 0
+    spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 0}
 --- !u!65 &7057265401299245292
@@ -217,32 +235,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   rbStreamingDistance: 50
---- !u!114 &5461217829370304360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5572176062682796657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabPrototype: {fileID: 11400000, guid: 54f467811f1ce50449dc11b4a47754d1, type: 2}
---- !u!114 &1306182560563846686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5572176062682796657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af364fdba3900e7439da4d2db3e16fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gpuiPrefab: {fileID: 0}
 --- !u!1001 &8349404931004096299
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 2567642779185909609}
   - component: {fileID: 7422235489244223048}
   - component: {fileID: 9002247223078494868}
-  - component: {fileID: 5220172376820730645}
-  - component: {fileID: 4168203712817413105}
   - component: {fileID: 400505693}
   - component: {fileID: -3811147611053237569}
   m_Layer: 12
@@ -75,32 +73,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.86853766, z: 1}
   m_Center: {x: 0, y: 0.42435026, z: 0}
---- !u!114 &5220172376820730645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9159615970426592225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabPrototype: {fileID: 11400000, guid: 3417505b72764f84a949471f6bd8c320, type: 2}
---- !u!114 &4168203712817413105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9159615970426592225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af364fdba3900e7439da4d2db3e16fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gpuiPrefab: {fileID: 0}
 --- !u!114 &400505693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +93,7 @@ MonoBehaviour:
   _lifeTime: 2
   currentLifeTime: 0
   _dangerousTime: 2
+  projectileController: {fileID: 0}
   ragdollExplosionDistance: 2
   ragdollExplosionForce: 500
   playerExplosionForce: 100

@@ -126,8 +126,6 @@ GameObject:
   - component: {fileID: -2958212832291290666}
   - component: {fileID: 6389766876289032058}
   - component: {fileID: 8856653000315603036}
-  - component: {fileID: 1848963827245277042}
-  - component: {fileID: 5077350040020621109}
   m_Layer: 11
   m_Name: SandWater PickUp
   m_TagString: Untagged
@@ -184,7 +182,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: 0
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: -1
+    spawnedQuestHcId: -1
   - scriptedEventType: 2
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -203,7 +206,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 0}
     addToStatAmount: 0
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: -1
+    spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 0}
 --- !u!135 &-2958212832291290666
@@ -246,29 +254,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   rbStreamingDistance: 50
---- !u!114 &1848963827245277042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8361261429759661543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabPrototype: {fileID: 11400000, guid: b7e1239e410d2cd4b91e546fe03c684d, type: 2}
---- !u!114 &5077350040020621109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8361261429759661543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af364fdba3900e7439da4d2db3e16fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gpuiPrefab: {fileID: 0}

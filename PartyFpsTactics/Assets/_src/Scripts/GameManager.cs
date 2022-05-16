@@ -85,7 +85,6 @@ namespace MrPink
                     Time.timeScale = 0.1f;
                     AudioListener.pause = true;
                 }
-            
             }
         
             if (Game.Player.Health.health <= 0 && Input.GetKeyDown(KeyCode.R))
@@ -129,6 +128,9 @@ namespace MrPink
         public void RespawnPlayer()
         {
             // change player's position
+            StartProcScene();
+            
+            return;
             LevelTitlesManager.Instance.ShowIntro();
             StartCoroutine(PartyController.Instance.RespawnPlayer());
         }

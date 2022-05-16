@@ -163,30 +163,6 @@ public class InteractableEventsManager : MonoBehaviour
                 
                 Debug.Log("ScriptedEventType.SpawnQuestNpc");
                 Vector3 pos = Game.Player.Position;
-                var tile = DynamicLevelGenerator.instance.GetRandomTile(pos, IOevent.minMaxDistanceToPlayer, IOevent.spawnInPoiCell);
-                List<Vector3> tempPositions = new List<Vector3>();
-                for (int i = 0; i < tile.islandTileStaticSpawnersLocalPositions.Count; i++)
-                {
-                    var dist = Vector3.Distance(pos, tile.islandTileStaticSpawnersLocalPositions[i]);
-                    if (dist > IOevent.minMaxDistanceToPlayer.x && dist < IOevent.minMaxDistanceToPlayer.y)
-                    {
-                        tempPositions.Add(tile.islandTileStaticSpawnersLocalPositions[i]);
-                    }
-                }
-
-                Vector3 newPos = pos;
-                if (tempPositions.Count <= 0)
-                {
-                    newPos = tile.islandTileStaticSpawnersLocalPositions[Random.Range(0, tile.islandTileStaticSpawnersLocalPositions.Count)];
-                }
-                else
-                {
-                    newPos = tempPositions[Random.Range(0, tempPositions.Count)];
-                }
-                pos = tile.transform.TransformPoint(newPos);
-                
-                
-                Debug.Log("ScriptedEventType.SpawnQuestNpc; pos found");
                 
                 var npc = UnitsManager.Instance.SpawnUnit(IOevent.NpcPrefabsToSpawn[Random.Range(0,IOevent.NpcPrefabsToSpawn.Count)], pos);
                 

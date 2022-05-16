@@ -3158,7 +3158,12 @@ MonoBehaviour:
     weaponToAdd: {fileID: 0}
     ActorNpc: {fileID: 7776875987276874606}
     addToStatAmount: 0
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
     actorId: -1
+    spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 7776875987276874606}
 --- !u!65 &2245774395499290434
@@ -10265,7 +10270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 30
+  _moveSpeed: 8
   _turnSpeed: 4
   gravityForce: 13
   _stopDistanceFollow: 1.5
@@ -10519,7 +10524,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8510489342978318477}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 2

@@ -66,17 +66,21 @@ public class BuildingGenerator : MonoBehaviour
     public class Building
     {
         public Vector3 worldPos;
-        public Vector2Int mapCoords;
         public List<Level> spawnedBuildingLevels = new List<Level>();
         public int localEntranceSide;
     }
 
-    [UnityEngine.Tooltip("More == buildings levels are more stable")]
+    [Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
     
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        Init();
     }
 
     public void Init()
@@ -112,6 +116,7 @@ public class BuildingGenerator : MonoBehaviour
 
         PartyController.Instance.Init();
         //StartCoroutine(GenerateProcLevel());
+        SpawnRandomBuilding(buildingsToSpawnSettings[Random.Range(0,buildingsToSpawnSettings.Count)].BuildingOriginTransform.position);
         StartCoroutine(UpdateNavMesh());
     }
 
@@ -125,22 +130,15 @@ public class BuildingGenerator : MonoBehaviour
         spawnedProps.Remove(prop);
     }
 
-    public void SpawnRandomBuilding(Vector3 buildingPos, Vector2Int buildingCoords)
+    public void SpawnRandomBuilding(Vector3 buildingPos)
     {
         //return;
         
         if (spawnedBuildings.Count > buildingsToSpawnSettings.Count)
             return;
-        
-        for (int i = 0; i < spawnedBuildings.Count; i++)
-        {
-            if (spawnedBuildings[i].mapCoords == buildingCoords)
-                return;
-        }
 
         Building newBuilding = new Building();
         newBuilding.worldPos = buildingPos;
-        newBuilding.mapCoords = buildingCoords;
         spawnedBuildings.Add(newBuilding);
         StartCoroutine(SpawnBuilding(newBuilding));
     }
@@ -154,7 +152,7 @@ public class BuildingGenerator : MonoBehaviour
             yield return StartCoroutine(SpawnNewBuildingLevel(building, j, buildingSettings));
         }
         
-        for (int i = 0; i < building.spawnedBuildingLevels.Count - 1; i++)
+        for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
             if (building.spawnedBuildingLevels[i].firstFloor)
                 yield return StartCoroutine(MakeLadderOnEntrance(building, building.spawnedBuildingLevels[0]));   
@@ -185,81 +183,6 @@ public class BuildingGenerator : MonoBehaviour
         yield return SpawnLoot(building);
         
         Respawner.Instance.SpawnEnemiesInBuilding(building);
-    }
-    
-    IEnumerator GenerateProcLevel()
-    {
-        yield break;
-        
-        /*
-        Game.Player.Movement.gameObject.SetActive(false);
-        Game.Player.Interactor.cam.gameObject.SetActive(false);
-        
-        // road is already generated
-        //yield return StartCoroutine(RoadGenerator.Instance.GenerateRoadCoroutine());
-
-        yield return null;
-        PartyController.Instance.Init(RoadGenerator.Instance.GetPlayerPosOnRoadEnd());
-
-        LevelEventsOnConditions.Instance.Init(ProgressionManager.Instance.CurrentLevel);
-        
-        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
-        {
-            var building = buildingsToSpawnSettings[i];
-            for (int j = 0; j < building.levelsSettings.Count; j++)
-            {
-                yield return StartCoroutine(SpawnNewBuildingLevel(j, building));
-            }
-        }
-
-        if (spawnLadders)
-        {
-            for (int i = 0; i < spawnedBuildingLevels.Count - 1; i++)
-            {
-                if (spawnedBuildingLevels[i].firstFloor)
-                    yield return StartCoroutine(MakeLadderOnEntrance(spawnedBuildingLevels[i]));   
-                
-                if (i != 0 && Random.value > 0.66f)
-                {
-                    yield return StartCoroutine(MakeLaddersBetweenLevels(i));
-                }
-
-                yield return StartCoroutine(MakeLaddersBetweenLevels(i));
-            }
-        }
-        
-        for (int i = 0; i < spawnedBuildingLevels.Count; i++)
-        {
-            SpawnNavmesh(spawnedBuildingLevels[i]);
-            yield return null;
-        }
-
-        for (int i = 0; i < spawnedBuildingLevels.Count; i++)
-        {
-            spawnedBuildingLevels[i].Init();
-        }
-        
-        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
-        {
-            navMeshSurfacesSpawned[i].BuildNavMesh();
-            yield return null;
-        }
-
-        StartCoroutine(UpdateNavMesh());
-        yield return null;
-        Respawner.Instance.Init();
-        IsLevelReady = true;
-        
-        // GOALS
-        yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(spawnedBuildingLevels));
-        yield return StartCoroutine(SpawnGoals());
-        
-        yield return StartCoroutine(SpawnExplosiveBarrels());
-        yield return SpawnLoot();
-
-        //yield return StartCoroutine(SpawnGrindRails());
-        */
-        
     }
 
 

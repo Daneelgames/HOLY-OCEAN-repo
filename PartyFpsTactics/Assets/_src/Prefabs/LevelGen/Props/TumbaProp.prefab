@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 1938138580085937903}
   - component: {fileID: 306994038918772167}
   - component: {fileID: 1877505377624061809}
-  - component: {fileID: 477422723233368455}
-  - component: {fileID: 3179537994599689377}
   - component: {fileID: 1422326500}
   - component: {fileID: -541394471096305393}
   m_Layer: 12
@@ -75,32 +73,6 @@ MonoBehaviour:
   supportedTile: {fileID: 0}
   objectsToDestroyOnClash: []
   tileAttack: {fileID: 1422326500}
---- !u!114 &477422723233368455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1743293280166790513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabPrototype: {fileID: 11400000, guid: 9b96cdcd7ed76f54e95028da5dc0e9be, type: 2}
---- !u!114 &3179537994599689377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1743293280166790513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af364fdba3900e7439da4d2db3e16fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gpuiPrefab: {fileID: 0}
 --- !u!114 &1422326500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +93,7 @@ MonoBehaviour:
   _lifeTime: 2
   currentLifeTime: 0
   _dangerousTime: 2
+  projectileController: {fileID: 0}
   ragdollExplosionDistance: 2
   ragdollExplosionForce: 500
   playerExplosionForce: 100

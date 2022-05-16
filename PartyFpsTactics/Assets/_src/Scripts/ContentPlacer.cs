@@ -30,7 +30,7 @@ public class ContentPlacer : MonoBehaviour
         {
             yield return new WaitForSeconds(cooldown);
             
-            if (!DynamicLevelGenerator.instance.IslandGenerated || Game.Player.Health.health <= 0)
+            if (Game.Player.Health.health <= 0)
                 continue;
             
             SpawnRedUnitAroundPlayer();

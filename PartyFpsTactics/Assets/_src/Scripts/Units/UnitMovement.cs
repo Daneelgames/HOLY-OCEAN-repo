@@ -65,6 +65,9 @@ namespace MrPink.Units
 
         IEnumerator UnitGravity()
         {
+            if (_agent.enabled)
+                yield break;
+            
             while (true)
             {
                 if (!Physics.Linecast(transform.position, transform.position + Vector3.down,
@@ -136,14 +139,14 @@ namespace MrPink.Units
             if (enabled == false)
                 return;
             
-            if (moveRigidbodyCoroutine != null)
-                StopCoroutine(moveRigidbodyCoroutine);
-            moveRigidbodyCoroutine = StartCoroutine(MoveRigidbody(target));
-            // NO NAV MESH
-            return;
-            
             if (_agent.enabled == false)
+            {
+                // NO NAV MESH
+                if (moveRigidbodyCoroutine != null)
+                    StopCoroutine(moveRigidbodyCoroutine);
+                moveRigidbodyCoroutine = StartCoroutine(MoveRigidbody(target));
                 return;
+            }
             
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
@@ -177,12 +180,14 @@ namespace MrPink.Units
         
         public void TeleportNearPosition(Vector3 pos)
         {
-            rb.MovePosition(pos);
             //transform.position = pos;
             //transform.position = SamplePos(pos);
-            return;
             
-            if (_agent.enabled)
+            if (_agent.enabled == false)
+            {
+                rb.MovePosition(pos);
+            }
+            else
             {
                 _agent.Warp(SamplePos(pos));
                 return;

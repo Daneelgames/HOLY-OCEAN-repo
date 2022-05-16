@@ -172,6 +172,10 @@ namespace MrPink.PlayerSystem
         {
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {
+                var vel = rb.velocity;
+                vel.y = 0;
+                rb.velocity = vel;
+                
                 jumpTime = jumpTimeMax;
                 Jump(Vector3.zero);
             }

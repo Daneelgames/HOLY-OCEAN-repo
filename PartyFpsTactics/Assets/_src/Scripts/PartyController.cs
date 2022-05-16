@@ -61,8 +61,7 @@ namespace MrPink
 
         public IEnumerator RespawnPlayer()
         {
-            //var pos = Respawner.Instance.MovePlayerToRandomRespawner();
-            var pos = DynamicLevelGenerator.instance.TeleportPlayerToTarget();
+            var pos = Game.Player.Position;
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
             Game.Player.Inventory.DropRandomTools();
 
