@@ -13,10 +13,6 @@ namespace _src.Scripts
     public class Respawner : MonoBehaviour
     {
         public float corpseShredderY = -25;
-        public float banditsSpawnCooldown = 60;
-        public float banditsSpawnDistanceMin = 30;
-        public float banditsSpawnDistanceMax = 200;
-        public int banditsMaxAmount = 30;
         List<TileHealth> tilesForSpawns = new List<TileHealth>();
 
         public static Respawner Instance;
@@ -40,8 +36,8 @@ namespace _src.Scripts
             for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
             {
                 var level = building.spawnedBuildingLevels[i];
-                if (level.spawnUnits == false)
-                    continue;
+                /*if (level.spawnUnits == false)
+                    continue;*/
                 
                 tilesForSpawns.Clear();
                 for (var index = level.tilesInside.Count - 1; index >= 0; index--)

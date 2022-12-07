@@ -13,7 +13,10 @@ namespace MrPink.Health
             //UnitsManager.Instance.RagdollTileExplosion(collisionPosition, actionOnHit);
 
             if (_healthController == null)
+            {
                 throw new Exception("BodyPart должен ссылаться на HealthController. Имя: " + gameObject.name);
+                return CollisionTarget.Self;
+            }
             
             _healthController.Damage(Mathf.RoundToInt(damage * damageScaler), source, actionOnHit, _healthController.transform);
             return CollisionTarget.Creature;

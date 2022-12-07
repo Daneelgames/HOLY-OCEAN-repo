@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Configuration;
 using MrPink.PlayerSystem;
 using MrPink.Tools;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,21 +39,16 @@ namespace MrPink
         void Start()
         {
             toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
-            CloseShop();
-
-            for (int i = 0; i < 5; i++)
-            {
-                Game.Player.Inventory.AddTool(toolsList[5]);   
-            }
+            OpenShop(0);
         }
 
-        
         
         public void SetToolsList(List<Tool> tools)
         {
             toolsList = new List<Tool>(tools);
         }
 
+        [Button]
         public void OpenShop(int newSelectedItem)
         {
             ScoringSystem.Instance.UpdateScore();
@@ -78,6 +74,7 @@ namespace MrPink
             SelectItem(newSelectedItem);
         }
 
+        [Button]
         public void CloseShop()
         {
             Debug.Log("CloseShop");

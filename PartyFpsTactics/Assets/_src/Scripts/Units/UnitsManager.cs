@@ -73,6 +73,8 @@ namespace MrPink.Units
                         continue;
 
                     var unit = unitsInGame[i];
+                    ShowUnit(unit, true);
+                    break;
                     if (unit == null)
                     {
                         unitsInGame.RemoveAt(i);
@@ -134,6 +136,8 @@ namespace MrPink.Units
 
         public void ShowUnit(HealthController hc, bool show)
         {
+            if (show == false) return;
+            
             if (show)
                 currentShowAmount++;
             else

@@ -174,7 +174,6 @@ public class BuildingGenerator : MonoBehaviour
             navMeshSurfacesSpawned[i].BuildNavMesh();
             yield return null;
         }
-
         
         // GOALS
         yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels));
@@ -549,6 +548,7 @@ public class BuildingGenerator : MonoBehaviour
 
             List<Vector3Int> positionsInThinWall = new List<Vector3Int>(); 
             positionsInThinWall.Add(currentWallCoord);
+            float thinWallHeightScaler = Random.Range(0.2f, 1f);
             int posIndex = 0;
             while (true)
             {
@@ -620,6 +620,8 @@ public class BuildingGenerator : MonoBehaviour
                 int buildWallUntillY = level.size.y;
                 if (hasRoof)
                     buildWallUntillY = level.size.y - 1;
+                else
+                    buildWallUntillY = Mathf.RoundToInt(buildWallUntillY * thinWallHeightScaler);
                 
                 for (int y = 1; y < buildWallUntillY;  y++)
                 {
@@ -699,14 +701,17 @@ public class BuildingGenerator : MonoBehaviour
 
     IEnumerator MakeLaddersBetweenLevels(Building building, int i)
     {
-        if (i == 0 || i - 1 <= 0)
+        if (i - 1 < 0)
             yield break;
         
         Level levelFrom = building.spawnedBuildingLevels[i - 1];
         Level levelTo = building.spawnedBuildingLevels[i];
         
         if (!levelFrom.spawnLadders || !levelTo.spawnLadders || levelTo.firstFloor)
+        {
+            Debug.Log("DONT SPAWN LADDERS");
             yield break;
+        }
         
         for (int j = levelFrom.tilesInside.Count - 1; j >= 0; j--)
         {

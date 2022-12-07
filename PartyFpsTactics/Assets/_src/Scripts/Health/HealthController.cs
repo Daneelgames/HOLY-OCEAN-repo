@@ -169,6 +169,8 @@ namespace MrPink.Health
 
         public void AddHealth(int hpToRegen)
         {
+            if (hpToRegen <= 0) return;
+            
             Debug.Log("AddHealth " + hpToRegen);
             health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
             if (Game.Player.Health == this)

@@ -362,6 +362,7 @@ namespace MrPink.PlayerSystem
         public void Jump(Vector3 additionalForce)
         {
             SetGrindRail(null);
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce * jumpForce, ForceMode.Impulse);
             
             StartCoroutine(CoyoteTimeCooldown());
@@ -449,7 +450,7 @@ namespace MrPink.PlayerSystem
         private RaycastHit[] hitInfoClimb;
         void ClimbingCheck()
         {
-            if (stamina <= 0)
+            if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
             {
                 State.IsClimbing = false;
                 return;

@@ -21,6 +21,13 @@ namespace MrPink.WeaponsSystem
         public float unitMinimalDamageTimeMax = 1;
 
         private float t = 1;
+
+        private void Start()
+        {
+            if (rb == null)
+                rb = gameObject.GetComponent<Rigidbody>();
+        }
+
         private void LateUpdate()
         {
             if (unitMinimalDamageTime > 0)
@@ -29,7 +36,7 @@ namespace MrPink.WeaponsSystem
                 return;
             }
             
-            if (!dangerous)
+            if (!dangerous || rb == null)
                 return;
             
             lastFrameVelocity = rb.velocity;

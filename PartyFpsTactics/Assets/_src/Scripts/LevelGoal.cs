@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink;
@@ -6,29 +7,15 @@ using UnityEngine;
 
 public class LevelGoal : MonoBehaviour
 {
-    private Transform rotateVisual;
-    private bool collected = false;
-    void Start()
-    {
-        rotateVisual = transform.GetChild(0);
-    }
+    public static LevelGoal Instance;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        rotateVisual.transform.localEulerAngles += Vector3.up * 100 * Time.deltaTime;
-    }
-
-    void OnTriggerEnter(Collider coll)
-    {
-        if (collected)
-            return;
-        
-        if (coll.gameObject == Game.Player.GameObject)
+        if (Instance != null)
         {
-            collected = true;
-            ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-            GameManager.Instance.StartProcScene();
+            Debug.LogError("TRYING TO ADD MORE LEVEL GOALS? DISCUSS THIS WITH A DIRECTOR");
         }
+
+        Instance = this;
     }
 }
