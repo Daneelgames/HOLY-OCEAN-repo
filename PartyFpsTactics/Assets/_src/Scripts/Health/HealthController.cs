@@ -227,6 +227,9 @@ namespace MrPink.Health
             if (IsImmortal)
                 damage = 0;
             
+            if (Shop.Instance.IsActive)
+                return;
+            
             if (Game.Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
             {
                 PlayerUi.Instance.RemoveShieldFeedback();
