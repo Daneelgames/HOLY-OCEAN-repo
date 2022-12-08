@@ -1170,7 +1170,7 @@ public class BuildingGenerator : MonoBehaviour
         t.parent = disconnectedTilesFolder;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
         {

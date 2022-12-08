@@ -21,6 +21,11 @@ namespace MrPink.WeaponsSystem
         {
             if (carCrashCollider)
             {
+                if (carRb == null)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
                 if (carRb.velocity.magnitude < minCarRbVelocityToDamage)
                     return;
             }

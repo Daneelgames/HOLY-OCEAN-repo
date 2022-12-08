@@ -32,7 +32,7 @@ namespace MrPink
             Building, Road
         }
 
-        [SerializeField] [ReadOnly] private LevelType _levelType = LevelType.Building;
+        [SerializeField] private LevelType _levelType = LevelType.Building;
         public LevelType GetLevelType => _levelType;
     
         private void Awake()
@@ -138,11 +138,15 @@ namespace MrPink
         public void RespawnPlayer()
         {
             // change player's position
-            StartBuildingScene();
-            
-            return;
-            LevelTitlesManager.Instance.ShowIntro();
-            StartCoroutine(PartyController.Instance.RespawnPlayer());
+            switch (_levelType)
+            {
+                case LevelType.Building:
+                    StartBuildingScene();
+                    break;
+                case LevelType.Road:
+                    StartRoadScene();
+                    break;
+            }
         }
 
         public void BuildingLevelCompleted()
@@ -153,7 +157,7 @@ namespace MrPink
         public void RoadLevelCompleted()
         {
             ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-            StartRoadScene();
+            StartBuildingScene();
         }
         
         public void StartBuildingScene()

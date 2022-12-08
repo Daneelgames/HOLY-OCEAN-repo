@@ -16,6 +16,7 @@ namespace MrPink
     public class AiVehicleControls : MonoBehaviour
     {
         public bool controllingVehicle = false;
+        public HealthController CarHc;
         public HealthController hc;
         public ControlledMachine controlledMachine;
         public Vector3 targetPosition;
@@ -116,6 +117,10 @@ namespace MrPink
         {
             NavMeshPath path = new NavMeshPath();
             Vector3 posToSample = Vector3.zero;
+            while (Game._instance == null || Game.Player == null)
+            {
+                yield return null;
+            }
             while (true)
             {
                 posToSample = Game.Player.Position;
@@ -123,7 +128,6 @@ namespace MrPink
                 if (NavMesh.CalculatePath(transform.position, Game.Player.Position, NavMesh.AllAreas, path))
                 {
                     cornersPath = path.corners;
-                    //targetPosition = cornersPath.Last();
                     targetPosition = cornersPath.Length > 1 ? cornersPath[1] : Game.Player.Position;
                 }
                 

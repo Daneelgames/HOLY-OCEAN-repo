@@ -74,6 +74,10 @@ namespace _src.Scripts
                 GameManager.Instance.RespawnPlayer();
                 return;
             }
+            
+            if (UnitsManager.Instance.unitsInGame.Count < 1)
+                return;
+            
             for (int i = UnitsManager.Instance.unitsInGame.Count - 1; i >= 0; i--)
             {
                 if (i >= UnitsManager.Instance.unitsInGame.Count)

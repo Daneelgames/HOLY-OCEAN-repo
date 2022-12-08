@@ -10,6 +10,7 @@ public class LevelExit : MonoBehaviour
 {
     [SerializeField] private Transform exitPoint;
     [SerializeField] private float maxPlayerDistanceToExit = 2;
+    [Header("IF GOAL DISTANCE < 0 - IT WILL NOT CHECK FOR GOAL")]
     [SerializeField] private float maxGoalDistanceToExit = 2;
     private void OnEnable()
     {
@@ -19,20 +20,27 @@ public class LevelExit : MonoBehaviour
 
     IEnumerator CheckDistances()
     {
+        bool goalInRange = false;
+        bool playerInRange = false;
+        
         while (true)
         {
             yield return new WaitForSeconds(0.33f);
             
-            if (LevelGoal.Instance == null)
-                continue;
-            
-            float distanceToPlayer = Vector3.Distance(exitPoint.position, Game.Player.Position);
+            playerInRange = Vector3.Distance(exitPoint.position, Game.Player.Position) < maxPlayerDistanceToExit;
             yield return null;
-            float distanceToGoal = Vector3.Distance(exitPoint.position, LevelGoal.Instance.transform.position);
+            if (maxGoalDistanceToExit > 0)
+                goalInRange = Vector3.Distance(exitPoint.position, LevelGoal.Instance.transform.position) < maxGoalDistanceToExit;
+            else
+                goalInRange = true;
             
-            if (distanceToPlayer < maxPlayerDistanceToExit && distanceToGoal < maxGoalDistanceToExit)
+            if (playerInRange && goalInRange)
             {
-                GameManager.Instance.BuildingLevelCompleted();
+                if (LevelGoal.Instance)
+                    GameManager.Instance.BuildingLevelCompleted();
+                else
+                    GameManager.Instance.RoadLevelCompleted();
+                
                 yield break;
             }
         }

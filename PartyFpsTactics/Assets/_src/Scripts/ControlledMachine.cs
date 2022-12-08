@@ -188,4 +188,9 @@ public class ControlledMachine : MonoBehaviour
         if (wheelVehicle)
             wheelVehicle.SetInput(hor, ver, brake);
     }
+
+    private void OnDestroy()
+    {
+        Destroy(Visual.gameObject);
+    }
 }
