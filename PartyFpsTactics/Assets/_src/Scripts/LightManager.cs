@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using AtmosphericHeightFog;
 using MrPink;
 using UnityEngine;
 using FogMode = UnityEngine.FogMode;
