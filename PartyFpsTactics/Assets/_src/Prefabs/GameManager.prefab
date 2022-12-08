@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 466.5, y: 262.5, z: 0}
   m_LocalScale: {x: 0.875, y: 0.875, z: 0.875}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3799541973470530301}
   m_RootOrder: 0
@@ -60,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -107,6 +109,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3542786914916945264}
   m_Father: {fileID: 0}
@@ -124,12 +127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7c3de22ffab3a4b9e0c9cd6af634b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSleepTimeScale: 10
   portableObjectTag: PortableObject
   terrainAndIslandsColliders: []
   AllSolidsMask:
     serializedVersion: 2
     m_Bits: 4160
   rockDefaultMaterial: {fileID: 2100000, guid: b5df0d0c5fdf17849add10dec913d0ce, type: 2}
+  currentTimeScale: 1
 --- !u!114 &6558374067546864180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,4 +151,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d7cc81a9d9a72a5448cb8b2f0838079c, type: 2}
   - {fileID: 11400000, guid: 7832d02e0188a4f45ae5f9dd339b58b1, type: 2}
   - {fileID: 11400000, guid: 94747afe2434c5b4489663aafa0a84de, type: 2}
+  - {fileID: 11400000, guid: 4fc2e843e0b33444f85e7fc4ef3d423e, type: 2}
+  - {fileID: 11400000, guid: 27082f25cb523604899b098c867b1181, type: 2}
   currentLevelIndex: 0

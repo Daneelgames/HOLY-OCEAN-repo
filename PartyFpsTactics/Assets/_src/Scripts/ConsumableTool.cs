@@ -6,11 +6,14 @@ using UnityEngine;
 
 public class ConsumableTool : MonoBehaviour
 {
+    public int heal = 100;
     public float addSleepNeed = -500;
     public float addFoodNeed = -500;
     public float addWaterNeed = -500;
     public void Consume(HealthController hc)
     {
+        if (heal > 0)
+            hc.AddHealth(heal);
         var needs = hc.needs;
         if (needs)
         {

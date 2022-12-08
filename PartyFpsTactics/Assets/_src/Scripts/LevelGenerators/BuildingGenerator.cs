@@ -61,7 +61,6 @@ public class BuildingGenerator : MonoBehaviour
     public GameObject tileDestroyedParticles;
     public PhysicMaterial tilePhysicsMaterial;
 
-
     [Serializable]
     public class Building
     {
@@ -86,6 +85,17 @@ public class BuildingGenerator : MonoBehaviour
     public void Init()
     {
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
+
+        //buildingsToSpawnSettings[0] = currentLevel.BuildingSettings;
+        buildingsToSpawnSettings[0].levelsSettings = new List<BuildingSettings.LevelSetting>(currentLevel.BuildingSettings.levelsSettings);
+        buildingsToSpawnSettings[0].spawnLadders = currentLevel.BuildingSettings.spawnLadders;
+        buildingsToSpawnSettings[0].spawnLoot = currentLevel.BuildingSettings.spawnLoot;
+        buildingsToSpawnSettings[0].spawnProps = currentLevel.BuildingSettings.spawnProps;
+        buildingsToSpawnSettings[0].spawnRooms = currentLevel.BuildingSettings.spawnRooms;
+        buildingsToSpawnSettings[0].spawnUnits = currentLevel.BuildingSettings.spawnUnits;
+        buildingsToSpawnSettings[0].spawnNavMesh = currentLevel.BuildingSettings.spawnNavMesh;
+        buildingsToSpawnSettings[0].levelsScaleMinMaxX = currentLevel.BuildingSettings.levelsScaleMinMaxX;
+        buildingsToSpawnSettings[0].levelsScaleMinMaxZ = currentLevel.BuildingSettings.levelsScaleMinMaxZ;
         
         levelGoalPrefab = currentLevel.levelGoalPrefab;
         tilePrefab = currentLevel.tilePrefab;
@@ -102,7 +112,7 @@ public class BuildingGenerator : MonoBehaviour
         distanceToCutCeilingUnderStairsMinMax = currentLevel.distanceToCutCeilingUnderStairsMinMax;
         spawnWalls = currentLevel.spawnWalls;
         spawnLadders = currentLevel.spawnLadders;
-        
+
         if (generatedBuildingFolder == null)
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
@@ -1194,8 +1204,8 @@ public class BuildingSettings
     public List<LevelSetting> levelsSettings = new List<LevelSetting>();
     public Transform BuildingOriginTransform;
     
-    public Vector2Int offsetPosMinMaxX = new Vector2Int(-10, 10);
-    public Vector2Int offsetPosMinMaxZ = new Vector2Int(-10, 10);
+    [HideInInspector] public Vector2Int offsetPosMinMaxX = new Vector2Int(0, 0);
+    [HideInInspector] public Vector2Int offsetPosMinMaxZ = new Vector2Int(0, 0);
     [Header("scaled by 2 in code")]
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);

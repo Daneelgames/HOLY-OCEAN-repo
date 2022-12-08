@@ -19,13 +19,12 @@ public class LevelExit : MonoBehaviour
 
     IEnumerator CheckDistances()
     {
-        while (LevelGoal.Instance == null || Game.Player == null)
-        {
-            yield return null;
-        }
         while (true)
         {
             yield return new WaitForSeconds(0.33f);
+            
+            if (LevelGoal.Instance == null)
+                continue;
             
             float distanceToPlayer = Vector3.Distance(exitPoint.position, Game.Player.Position);
             yield return null;

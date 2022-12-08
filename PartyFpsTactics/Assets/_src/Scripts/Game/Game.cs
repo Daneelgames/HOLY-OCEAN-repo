@@ -7,7 +7,7 @@ namespace MrPink
 {
     public class Game : MonoBehaviour
     {
-        private static Game _instance;
+        public static Game _instance;
         [SerializeField]
         private GlobalFlags _flags = new GlobalFlags();
         

@@ -14,7 +14,7 @@ namespace MrPink.Health
 
             if (_healthController == null)
             {
-                throw new Exception("BodyPart должен ссылаться на HealthController. Имя: " + gameObject.name);
+                //throw new Exception("BodyPart должен ссылаться на HealthController. Имя: " + gameObject.name);
                 return CollisionTarget.Self;
             }
             

@@ -14,6 +14,14 @@ namespace _src.Scripts.Data
     {
         [Header("Settings used in game")]
         public string levelName = "GOLDENDOLA";
+
+        [Header("Fog")]
+        public Color fogColor;
+        [Tooltip("Default it 0.3")]
+        public float fogIntensity = 0.3f;
+
+        [Header("Level settings")] 
+        public BuildingSettings BuildingSettings;
         
         public bool spawnWalls = true;
         public bool spawnLadders = true;

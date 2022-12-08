@@ -132,6 +132,10 @@ namespace MrPink.Units
 
         IEnumerator CheckingPlayer()
         {
+            while (Game._instance == false || Game.Player == null)
+            {
+                yield return null;
+            }
             while (true)
             {
                 CheckUnit(Game.Player.Health);
