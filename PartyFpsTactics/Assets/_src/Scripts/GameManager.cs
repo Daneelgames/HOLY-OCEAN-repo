@@ -4,6 +4,7 @@ using _src.Scripts;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -24,6 +25,15 @@ namespace MrPink
         public Material rockDefaultMaterial;
 
         public float currentTimeScale = 1;
+
+        [Serializable]
+        public enum LevelType
+        {
+            Building, Road
+        }
+
+        [SerializeField] [ReadOnly] private LevelType _levelType = LevelType.Building;
+        public LevelType GetLevelType => _levelType;
     
         private void Awake()
         {
@@ -128,16 +138,33 @@ namespace MrPink
         public void RespawnPlayer()
         {
             // change player's position
-            StartProcScene();
+            StartBuildingScene();
             
             return;
             LevelTitlesManager.Instance.ShowIntro();
             StartCoroutine(PartyController.Instance.RespawnPlayer());
         }
 
-        public void StartProcScene()
+        public void BuildingLevelCompleted()
         {
+            ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
+            StartRoadScene();
+        } 
+        public void RoadLevelCompleted()
+        {
+            ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
+            StartRoadScene();
+        }
+        
+        public void StartBuildingScene()
+        {
+            _levelType = LevelType.Building;
             SceneManager.LoadScene(0);
+        }
+        public void StartRoadScene()
+        {
+            _levelType = LevelType.Road;
+            SceneManager.LoadScene(1);
         }
     
         public void StartFlatScene()

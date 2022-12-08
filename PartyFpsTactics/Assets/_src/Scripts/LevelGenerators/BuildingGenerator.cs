@@ -125,12 +125,14 @@ public class BuildingGenerator : MonoBehaviour
         }
 
         PartyController.Instance.Init();
-        //StartCoroutine(GenerateProcLevel());
+        
+        if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building)
+            return;
+        
         SpawnRandomBuilding(buildingsToSpawnSettings[Random.Range(0,buildingsToSpawnSettings.Count)].BuildingOriginTransform.position);
         StartCoroutine(UpdateNavMesh());
     }
 
-    
     public void AddProp(TileHealth prop)
     {
         spawnedProps.Add(prop);

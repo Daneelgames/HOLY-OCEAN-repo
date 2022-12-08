@@ -25,7 +25,7 @@ namespace MrPink
         public float maxReverseDistance = 100;
         public float stoppingSpeed = 50;
 
-        private void Start()
+        private void OnEnable()
         {
             if (controllingVehicle)
                 DriverSit(controlledMachine);

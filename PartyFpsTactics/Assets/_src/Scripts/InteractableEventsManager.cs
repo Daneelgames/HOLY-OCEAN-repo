@@ -95,7 +95,7 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
                 
             case ScriptedEventType.StartProcScene:
-                GameManager.Instance.StartProcScene();
+                GameManager.Instance.StartBuildingScene();
                 break;
                 
             case ScriptedEventType.StartFlatScene:

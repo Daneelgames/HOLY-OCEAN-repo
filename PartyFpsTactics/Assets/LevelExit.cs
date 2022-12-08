@@ -30,12 +30,9 @@ public class LevelExit : MonoBehaviour
             yield return null;
             float distanceToGoal = Vector3.Distance(exitPoint.position, LevelGoal.Instance.transform.position);
             
-            Debug.Log("LEVEL EXIT CHECK DISTANCE 0");
             if (distanceToPlayer < maxPlayerDistanceToExit && distanceToGoal < maxGoalDistanceToExit)
             {
-                Debug.Log("LEVEL EXIT CHECK DISTANCE 1");
-                ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-                GameManager.Instance.StartProcScene();
+                GameManager.Instance.BuildingLevelCompleted();
                 yield break;
             }
         }
