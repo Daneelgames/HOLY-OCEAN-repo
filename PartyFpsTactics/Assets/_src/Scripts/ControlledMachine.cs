@@ -20,6 +20,7 @@ public class ControlledMachine : MonoBehaviour
     public float visualFollowSpeed = 10;
     public Transform sitTransform;
     public Transform sitTransformNpc;
+    public float DamageToControllingHcScaler = 0.33f;
     public List<Collider> collidersEnabledWhenPlayerInside;
     public List<Collider> carCrashDamageColliders;
     List<Transform> carCrashCollidersParents = new List<Transform>();

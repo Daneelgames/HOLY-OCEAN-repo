@@ -152,13 +152,17 @@ namespace MrPink.Units
             SetOccupiedSpot(_occupiedCoverSpot, null);
             StopAllBehaviorCoroutines();
             currentOrder = MovementOrder.TakeCover;
-            _takeCoverCooldown = CoverSystem.Instance.TakeCoverCooldown;
+            _takeCoverCooldown = CoverSystem.Instance? CoverSystem.Instance.TakeCoverCooldown : 5;
             _takeCoverCoroutine = StartCoroutine(TakeCover(random, closest, takeCoverFrom));
         }
 
         
         private IEnumerator TakeCover(bool randomCover, bool closest, HealthController enemy = null)
         {
+            while (CoverSystem.Instance == null)
+            {
+                yield return null;
+            }
             CoverSpot chosenCover = GetCover(randomCover, closest);
             
             if (chosenCover == null)

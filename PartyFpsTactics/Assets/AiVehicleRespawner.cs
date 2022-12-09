@@ -26,9 +26,6 @@ public class AiVehicleRespawner : MonoBehaviour
         {
             yield return new WaitForSeconds(respawnCooldown);
             
-            if (spawnedVehicles.Count >= maxAliveAiVehicles)
-                continue;
-
             if (spawnedVehicles.Count > 0)
             {
                 for (var index = spawnedVehicles.Count - 1; index >= 0; index--)
@@ -43,6 +40,9 @@ public class AiVehicleRespawner : MonoBehaviour
                         spawnedVehicles.Remove(spawnedVehicle);
                 }
             }
+
+            if (spawnedVehicles.Count >= maxAliveAiVehicles)
+                continue;
 
             List<Transform> spawnersTemp = new List<Transform>();
             foreach (var roadSpawnPosition in roadSpawnPositions)

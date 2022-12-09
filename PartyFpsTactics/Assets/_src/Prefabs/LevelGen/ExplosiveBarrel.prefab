@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3664669614464395266}
   m_RootOrder: 0
@@ -4782,6 +4783,7 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 3
+  m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
@@ -4805,6 +4807,10 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
+  m_MeshWeighting: 1
+  m_MeshWeighting1: 1
+  m_MeshWeighting2: 1
+  m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!1 &7949528175303355261
 GameObject:
@@ -4834,6 +4840,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3664669614464395266}
   m_RootOrder: 1
@@ -4920,6 +4927,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 383759117570996381}
   - {fileID: 3267150933252966831}
@@ -4938,8 +4946,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 300
+  selfUnit: {fileID: 0}
+  health: 100
   healthMax: 100
+  needs: {fileID: 0}
+  endurance: 100
+  enduranceRegenSpeed: 100
+  UnitRagdollStandupCooldown: 1
   destroyOnDeath: 1
   visibilityTrigger: {fileID: 1211562686235662036}
   proceduralDamageShake: 1
@@ -4948,18 +4961,27 @@ MonoBehaviour:
   shakeZ: 1
   maxShakeOffset: 0.1
   transformToShake: {fileID: 3664669614464395266}
+  team: 2
+  UnitVision: {fileID: 0}
   AiMovement: {fileID: 0}
+  aiVehicleControls: {fileID: 0}
   HumanVisualController: {fileID: 0}
+  AiShop: {fileID: 0}
+  crimeLevel: {fileID: 0}
+  controlledMachine: {fileID: 0}
   playerMovement: {fileID: 0}
   explosionOnDeath: {fileID: 6857697932595898852, guid: 1354d180a93e6ac45b98c239b3570cc7, type: 3}
-  objectsToSpawnOnDeath: []
   npcInteraction: {fileID: 0}
   deathOnHit: {fileID: 4607643709088218880}
+  unitsVisibleBy: []
   rb: {fileID: 8922779236127297447}
-  team: 2
   bodyParts:
   - {fileID: 0}
+  bodyPartsTransforms: []
   damageStates: []
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1211562686235662036
 BoxCollider:
   m_ObjectHideFlags: 0

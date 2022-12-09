@@ -1147,7 +1147,15 @@ public class BuildingGenerator : MonoBehaviour
             for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
             {
                 if (Vector3.Distance(Game.Player.Position, navMeshSurfacesSpawned[i].transform.position) < updateNavMeshDistance)
-                    navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
+                {
+                    if (navMeshSurfacesSpawned[i].navMeshData)
+                        navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
+                    else
+                    {
+                        continue;
+                        navMeshSurfacesSpawned[i].BuildNavMesh();
+                    }
+                }
                 
                 yield return new WaitForSecondsRealtime(1f);
             }

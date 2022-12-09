@@ -242,6 +242,10 @@ namespace MrPink.Health
             {
                 PlayerUi.Instance.UpdateHealthBar();
             }
+            
+            if (controlledMachine && controlledMachine.controllingHc)
+                controlledMachine.controllingHc.Damage(Mathf.RoundToInt(damage * controlledMachine.DamageToControllingHcScaler), DamageSource.Environment);
+                
 
             if (health <= 0)
             {
@@ -253,7 +257,7 @@ namespace MrPink.Health
                 
                 return;
             }
-        
+
             if (deathOnHit)
                 deathOnHit.Hit(this);
         

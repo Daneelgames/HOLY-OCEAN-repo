@@ -18,9 +18,13 @@ namespace MrPink
         public AudioSource au;
         private List<GameObject> collidedGameObjects = new List<GameObject>();
         private ScoringActionType scoringAction = ScoringActionType.NULL;
-    
+        private bool playerDamaged = false;
+
+        
         public void Init(ScoringActionType action)
         {
+            collidedGameObjects = new List<GameObject>();
+            playerDamaged = false;
             scoringAction = action;
             au.pitch = Random.Range(0.75f, 1.25f);
             au.Play();
@@ -41,17 +45,17 @@ namespace MrPink
         {
             if (lifeTime <= 0)
                 return;
-            if (collidedGameObjects.Contains(other.gameObject))
-                return;
-        
-            collidedGameObjects.Add(other.gameObject);
-        
-            if (Vector3.Distance(transform.position,Game.Player.Position) <= explosionDistance)
+            if (!playerDamaged && Vector3.Distance(transform.position,Game.Player.Position) <= explosionDistance)
             {
+                playerDamaged = true;
                 collidedGameObjects.Add(Game.Player.GameObject);
                 Game.Player.Health.Damage(damage, DamageSource.Environment);
                 return;
             }
+            if (collidedGameObjects.Contains(other.gameObject))
+                return;
+        
+            collidedGameObjects.Add(other.gameObject);
         
             var health = other.gameObject.GetComponent<BasicHealth>();
             if (health == null || health.IsDead) 

@@ -22,6 +22,18 @@ public class LevelExit : MonoBehaviour
     {
         bool goalInRange = false;
         bool playerInRange = false;
+
+        while (GameManager.Instance == null)
+        {
+            yield return null;
+        }
+        if (GameManager.Instance.GetLevelType == GameManager.LevelType.Building)
+        {
+            while (LevelGoal.Instance == null)
+            {
+                yield return null;
+            }
+        }
         
         while (true)
         {
