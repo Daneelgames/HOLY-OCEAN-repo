@@ -182,7 +182,7 @@ namespace MrPink.Units
             pos = SamplePos(pos);
             var unit =  Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
             unitsInGame.Add(unit);
-            unit.gameObject.SetActive(false);
+            //unit.gameObject.SetActive(false);
             return unit;
         }
     

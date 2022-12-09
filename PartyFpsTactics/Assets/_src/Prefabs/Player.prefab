@@ -2595,8 +2595,8 @@ MonoBehaviour:
   gravity: 2
   fallMultiplayer: 2.5
   lowJumpMultiplayer: 2.5
-  jumpForce: 100
-  jumpTime: 0
+  jumpForce: 75
+  jumpTime: 0.25
   jumpTimeMax: 0.66
   fallForceAcceleration: 15
   fallDamageThreshold: 10
@@ -2611,6 +2611,7 @@ MonoBehaviour:
   _coyoteTimeMax: 0.5
   stamina: 100
   staminaMax: 100
+  staminaMin: -20
   climbStaminaCost: 5
   climbMoveStaminaCost: 10
   climbRunStaminaCost: 15
@@ -2821,10 +2822,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa469efe28ea794b95ca139ee4f5258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  needs: []
+  needs:
+  - needType: 0
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1
+    needRegenBase: 3
+  - needType: 1
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1
+    needRegenBase: 3
+  - needType: 2
+    needCurrent: 0
+    needMaxBase: 1000
+    needCostBase: 1
+    needRegenBase: 3
   ownHealth: {fileID: 5394631482521842026}
   healthRegenOnNeeds: 0
-  healthDrainOnNeeds: 0
+  healthDrainOnNeeds: 1
 --- !u!114 &3492592130743418543
 MonoBehaviour:
   m_ObjectHideFlags: 0

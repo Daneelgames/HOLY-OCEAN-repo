@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 4890726433194174976}
   - component: {fileID: -1534099197927810747}
   - component: {fileID: 2480771041185101840}
-  m_Layer: 10
+  - component: {fileID: 8676711313192980352}
+  m_Layer: 11
   m_Name: CarCrashAttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +29,8 @@ Transform:
   m_GameObject: {fileID: 6244528441209416264}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2136532, y: 0.6103454, z: 1.6853514}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1953406154808274539}
   m_Father: {fileID: 0}
@@ -50,10 +52,11 @@ MonoBehaviour:
   damage: 50
   _isSelfCollisionAvailable: 0
   _isPlayerCollisionAvailable: 1
-  _isAttachedToShotHolder: 1
+  _isAttachedToShotHolder: 0
   _lifeTime: -100
   currentLifeTime: -100
   _dangerousTime: -1
+  projectileController: {fileID: 0}
   ragdollExplosionDistance: 1.5
   ragdollExplosionForce: 300
   playerExplosionForce: 100
@@ -63,10 +66,11 @@ MonoBehaviour:
   _debrisParticlesTag: 1
   _bloodParticlesTag: 0
   ownerHealth: {fileID: 0}
-  playerMeleeAttack: 0
+  canDeflectBullets: 0
   carCrashCollider: 1
   carRb: {fileID: 0}
-  minCarRbVelocityToDamage: 50
+  minCarRbVelocityToDamage: 5
+  ownRb: {fileID: -1534099197927810747}
 --- !u!54 &-1534099197927810747
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -94,8 +98,24 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
+  m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &8676711313192980352
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6244528441209416264}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.6, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7399819766588998531
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1953406154808274539}
   - component: {fileID: 4193444789845026959}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Audio Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,6 +143,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5530083849147367425}
   m_RootOrder: 0

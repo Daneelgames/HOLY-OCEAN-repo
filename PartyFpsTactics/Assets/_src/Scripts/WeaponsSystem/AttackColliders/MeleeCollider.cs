@@ -16,6 +16,15 @@ namespace MrPink.WeaponsSystem
         [ShowIf("carCrashCollider", true)]
         public float minCarRbVelocityToDamage = 50;
 
+        [SerializeField] private Rigidbody ownRb;
+
+
+        public void FollowDetachedTransform(Transform detachedParent)
+        {
+            Debug.Log("FollowDetachedTransform");
+            ownRb.MovePosition(detachedParent.position);
+            ownRb.MoveRotation(detachedParent.rotation);
+        }
 
         private void OnTriggerEnter(Collider other)
         {

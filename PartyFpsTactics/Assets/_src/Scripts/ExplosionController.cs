@@ -11,6 +11,7 @@ namespace MrPink
     public class ExplosionController : MonoBehaviour
     {
         public float lifeTime = 0.2f;
+        public float deathAfter = 5f;
         public int damage = 1000;
         public float explosionDistance = 5;
         public float explosionForce = 200;
@@ -35,6 +36,9 @@ namespace MrPink
         {
             if (lifeTime > 0)
                 lifeTime -= Time.deltaTime;
+            
+            if (deathAfter > 0)
+                deathAfter -= Time.deltaTime;
             else
             {
                 Destroy(gameObject);

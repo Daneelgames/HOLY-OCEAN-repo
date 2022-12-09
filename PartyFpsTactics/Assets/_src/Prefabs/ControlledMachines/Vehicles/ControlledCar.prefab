@@ -15702,12 +15702,13 @@ MonoBehaviour:
   visualFollowSpeed: 10
   sitTransform: {fileID: 2531613661374642798}
   sitTransformNpc: {fileID: 172027917554723367}
+  DamageToControllingHcScaler: 0.33
   collidersEnabledWhenPlayerInside:
   - {fileID: 7240075633178216295}
   carCrashDamageColliders:
-  - {fileID: 8962453072978881422}
-  - {fileID: 3676565673249486911}
-  - {fileID: 8838141839634738439}
+  - {fileID: 2149103557558450590}
+  - {fileID: 5960488650648136239}
+  - {fileID: 1951539629798539031}
   rb: {fileID: 5752542937177413564}
   controllingHc: {fileID: 0}
 --- !u!114 &5299485256075476146
@@ -20366,50 +20367,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2776147559950723903}
     m_Modifications:
-    - target: {fileID: -1534099197927810747, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 217714811140591635, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.x
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.z
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Center.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Center.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Center.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727742951479756480, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 4358164921027895612, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: carRb
       value: 
@@ -20419,32 +20376,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8282009008432151077}
     - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: carCrashCollider
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: playerMeleeAttack
+      propertyPath: _isPlayerCollisionAvailable
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: minCarRbVelocityToDamage
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2136532
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6103454
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.6853514
       objectReference: {fileID: 0}
     - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20490,46 +20427,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarCrashAttackCollider (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 6244528441209416264, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7058554679775874080, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7399819766588998531, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
---- !u!65 &3676565673249486911 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
+--- !u!114 &5960488650648136239 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
   m_PrefabInstance: {fileID: 1254447240333213743}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5170612404301310567 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6244528441209416264, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-  m_PrefabInstance: {fileID: 1254447240333213743}
-  m_PrefabAsset: {fileID: 0}
---- !u!208 &8676711313192980352
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5170612404301310567}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.6, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.1, z: 0}
-  m_TimeToStationary: 0.5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d6745112154f7a843be283a1239ff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6761729228213452846 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
@@ -20542,50 +20452,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2776147559950723903}
     m_Modifications:
-    - target: {fileID: -1534099197927810747, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 217714811140591635, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.x
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.z
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Center.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Center.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Center.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727742951479756480, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 4358164921027895612, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: carRb
       value: 
@@ -20594,33 +20460,9 @@ PrefabInstance:
       propertyPath: ownerHealth
       value: 
       objectReference: {fileID: 8282009008432151077}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: carCrashCollider
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: minCarRbVelocityToDamage
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: _isPlayerCollisionAvailable
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_RootOrder
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2136532
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.103331484
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.92113024
       objectReference: {fileID: 0}
     - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20666,51 +20508,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarCrashAttackCollider (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 6244528441209416264, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7058554679775874080, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7399819766588998531, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
---- !u!1 &1036706128656318303 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6244528441209416264, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-  m_PrefabInstance: {fileID: 6397956128623023383}
-  m_PrefabAsset: {fileID: 0}
---- !u!208 &673786392363085005
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1036706128656318303}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 1.075, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.62, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!4 &1474039121559557398 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
   m_PrefabInstance: {fileID: 6397956128623023383}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &8838141839634738439 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
+--- !u!114 &1951539629798539031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
   m_PrefabInstance: {fileID: 6397956128623023383}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d6745112154f7a843be283a1239ff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6776931778388710302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20718,41 +20533,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2776147559950723903}
     m_Modifications:
-    - target: {fileID: 217714811140591635, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Size.x
-      value: 1.46
-      objectReference: {fileID: 0}
     - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_Size.y
-      value: 1.199649
+      value: 1.1369177
       objectReference: {fileID: 0}
     - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_Size.z
-      value: 1.2867335
+      value: 1.0102327
       objectReference: {fileID: 0}
     - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_Center.x
-      value: -5.8211036e-10
+      value: -0.0000000039888732
       objectReference: {fileID: 0}
     - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_Center.y
-      value: 0.025478993
+      value: -0.031540804
       objectReference: {fileID: 0}
     - target: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_Center.z
-      value: 0.04336623
-      objectReference: {fileID: 0}
-    - target: {fileID: 3727742951479756480, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 4358164921027895612, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
+      value: 0.09488403
       objectReference: {fileID: 0}
     - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: carRb
@@ -20762,29 +20561,9 @@ PrefabInstance:
       propertyPath: ownerHealth
       value: 
       objectReference: {fileID: 8282009008432151077}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: minCarRbVelocityToDamage
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: _isPlayerCollisionAvailable
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2136532
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6103454
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.1747884
       objectReference: {fileID: 0}
     - target: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20830,48 +20609,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarCrashAttackCollider
       objectReference: {fileID: 0}
-    - target: {fileID: 6244528441209416264, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7058554679775874080, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7399819766588998531, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
---- !u!1 &623038279951202774 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6244528441209416264, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
-  m_PrefabInstance: {fileID: 6776931778388710302}
-  m_PrefabAsset: {fileID: 0}
---- !u!208 &3111841845948338265
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623038279951202774}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.6, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: -0.1, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!4 &1347335492695724959 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5530083849147367425, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
   m_PrefabInstance: {fileID: 6776931778388710302}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &8962453072978881422 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 2480771041185101840, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
+--- !u!114 &2149103557558450590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4890726433194174976, guid: 521dff60ef8854e4d8dec06c38c7a98b, type: 3}
   m_PrefabInstance: {fileID: 6776931778388710302}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d6745112154f7a843be283a1239ff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -108,6 +108,7 @@ namespace MrPink
         {
             controlledMachine = machine;
             controllingVehicle = true;
+            controlledMachine.StartInput(hc);
             updateNavMeshPathCoroutine = StartCoroutine(UpdateNavmeshPath());
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
         }

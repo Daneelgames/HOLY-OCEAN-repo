@@ -124,7 +124,7 @@ public class BuildingGenerator : MonoBehaviour
             disconnectedTilesFolder.position = Vector3.zero;
         }
 
-        PartyController.Instance.Init();
+        StartCoroutine(PartyController.Instance.Init());
         
         if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building)
             return;

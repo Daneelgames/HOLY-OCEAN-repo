@@ -78,9 +78,10 @@ public class ContentPlacer : MonoBehaviour
         if (!Physics.Raycast(Game.Player._mainCamera.transform.position, randomDir, out var hit, maxDistance,
             GameManager.Instance.AllSolidsMask))
             return initPos;
-            
+        
+        /*    
         if (GameManager.Instance.IsPositionInPlayerFov(hit.point))
-            return initPos;
+            return initPos;*/
         
         return hit.point;
     }

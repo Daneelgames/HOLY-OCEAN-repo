@@ -38,7 +38,7 @@ public class AiVehicleRespawner : MonoBehaviour
                         continue;
                     }
 
-                    if (spawnedVehicle.transform.position.y < Respawner.Instance.corpseShredderY)
+                    if (Respawner.Instance && spawnedVehicle.transform.position.y < Respawner.Instance.corpseShredderY)
                         spawnedVehicle.CarHc.Kill();
                     
                     if (spawnedVehicle.CarHc.IsDead)

@@ -22,7 +22,7 @@ public class ControlledMachine : MonoBehaviour
     public Transform sitTransformNpc;
     public float DamageToControllingHcScaler = 0.33f;
     public List<Collider> collidersEnabledWhenPlayerInside;
-    public List<Collider> carCrashDamageColliders;
+    public List<MeleeCollider> carCrashDamageColliders;
     List<Transform> carCrashCollidersParents = new List<Transform>();
     public Rigidbody rb;
     private float rbDrag = 1;
@@ -44,9 +44,9 @@ public class ControlledMachine : MonoBehaviour
         }
     }
 
-    public void StartPlayerInput()
+    public void StartInput(HealthController driverHc)
     {
-        controllingHc = Game.Player.Health;
+        controllingHc = driverHc;
         if (wheelVehicle)
         {
             wheelVehicle.IsPlayer = true;
@@ -63,12 +63,15 @@ public class ControlledMachine : MonoBehaviour
         if (rotateVehicleStraight != null)
             StopCoroutine(rotateVehicleStraight);
         
-        if (Vector3.Angle(transform.up, Vector3.down) < 120)
-            rotateVehicleStraight = StartCoroutine(RotateVehicleStraight());
-        
-        for (int i = 0; i < collidersEnabledWhenPlayerInside.Count; i++)
+        if (driverHc == Game.Player.Health)
         {
-            collidersEnabledWhenPlayerInside[i].gameObject.SetActive(true);    
+            if (Vector3.Angle(transform.up, Vector3.down) < 120)
+                rotateVehicleStraight = StartCoroutine(RotateVehicleStraight());
+
+            for (int i = 0; i < collidersEnabledWhenPlayerInside.Count; i++)
+            {
+                collidersEnabledWhenPlayerInside[i].gameObject.SetActive(true);
+            }
         }
 
         if (visualFollowCoroutine != null)
@@ -125,8 +128,10 @@ public class ControlledMachine : MonoBehaviour
                 if (carCrashCollidersParents.Count <= index)
                     break;
                 
+                col.FollowDetachedTransform(carCrashCollidersParents[index]);
+                /*
                 col.transform.position = carCrashCollidersParents[index].position;
-                col.transform.rotation = carCrashCollidersParents[index].rotation;
+                col.transform.rotation = carCrashCollidersParents[index].rotation;*/
             }
 
             yield return null;
@@ -192,6 +197,6 @@ public class ControlledMachine : MonoBehaviour
 
     private void OnDestroy()
     {
-        Destroy(Visual.gameObject);
+        if (Visual) Destroy(Visual.gameObject);
     }
 }

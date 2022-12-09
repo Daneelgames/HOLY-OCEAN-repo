@@ -21,7 +21,7 @@ namespace MrPink
             Instance = this;
         }    
     
-        public void Init(Transform roadPartToSpawnOn = null)
+        public IEnumerator Init(Transform roadPartToSpawnOn = null)
         {
             /*
             if (roadPartToSpawnOn == null)
@@ -40,6 +40,10 @@ namespace MrPink
             playerCar.transform.rotation = newCarRot;
             */
 
+            while (ProgressionManager.Instance == null)
+            {
+                yield return null;
+            }
             if (ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn)
             {
                 var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,

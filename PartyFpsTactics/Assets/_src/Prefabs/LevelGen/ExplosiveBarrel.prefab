@@ -4910,6 +4910,7 @@ GameObject:
   - component: {fileID: 1778691473734447936}
   - component: {fileID: 4607643709088218880}
   - component: {fileID: 5473310076994681561}
+  - component: {fileID: 3713385740783791883}
   m_Layer: 12
   m_Name: ExplosiveBarrel
   m_TagString: Untagged
@@ -4976,7 +4977,7 @@ MonoBehaviour:
   unitsVisibleBy: []
   rb: {fileID: 8922779236127297447}
   bodyParts:
-  - {fileID: 0}
+  - {fileID: 3713385740783791883}
   bodyPartsTransforms: []
   damageStates: []
   OnDeathEvent:
@@ -5055,3 +5056,18 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &3713385740783791883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943623579927757030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 10
+  _healthController: {fileID: 8318412091301529756}
+  damageScaler: 1

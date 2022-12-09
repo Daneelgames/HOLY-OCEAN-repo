@@ -103,7 +103,7 @@ namespace MrPink
         private Coroutine controlVehicleCoroutine;
         IEnumerator ControlVehicle()
         {
-            controlledMachine.StartPlayerInput();
+            controlledMachine.StartInput(Game.Player.Health);
             float resultMoveScaler = 1;
             float resultRotScaler = 1;
             while (true)
