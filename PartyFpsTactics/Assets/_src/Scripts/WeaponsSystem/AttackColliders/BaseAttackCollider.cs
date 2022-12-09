@@ -161,6 +161,8 @@ namespace MrPink.WeaponsSystem
                 Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
+            
+            
 
             if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
             {
@@ -206,6 +208,11 @@ namespace MrPink.WeaponsSystem
                 UnitsExplosion();
                 return CollisionTarget.Solid;
             }
+
+            // IF UNIT HITS ITS OWN CAR
+            if (targetHealth.HealthController && targetHealth.HealthController.controlledMachine &&
+                targetHealth.HealthController.controlledMachine.controllingHc == ownerHealth)
+                return CollisionTarget.Self;
 
             if (ownerHealth && ownerHealth != Game.Player.Health)
             {

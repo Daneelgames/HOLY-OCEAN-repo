@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _src.Scripts;
 using MrPink;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -36,6 +37,10 @@ public class AiVehicleRespawner : MonoBehaviour
                         spawnedVehicles.RemoveAt(index);
                         continue;
                     }
+
+                    if (spawnedVehicle.transform.position.y < Respawner.Instance.corpseShredderY)
+                        spawnedVehicle.CarHc.Kill();
+                    
                     if (spawnedVehicle.CarHc.IsDead)
                         spawnedVehicles.Remove(spawnedVehicle);
                 }

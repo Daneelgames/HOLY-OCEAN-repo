@@ -47,6 +47,7 @@ namespace MrPink.PlayerSystem
         public float stamina = 100;
         [HideInInspector]
         public float staminaMax = 100;
+        public float staminaMin = -20;
         [SerializeField] float climbStaminaCost = 5;
         [SerializeField] float climbMoveStaminaCost = 10;
         [SerializeField] float climbRunStaminaCost = 15;
@@ -170,7 +171,7 @@ namespace MrPink.PlayerSystem
 
         void HandleJump()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
+            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0) && stamina > 0)
             {
                 var vel = rb.velocity;
                 vel.y = 0;
@@ -227,7 +228,7 @@ namespace MrPink.PlayerSystem
 
         public void ChangeStamina(float offset)
         {
-            stamina = Mathf.Clamp(stamina + offset, 0, staminaMax);
+            stamina = Mathf.Clamp(stamina + offset, staminaMin, staminaMax);
         }
         
 
@@ -323,7 +324,7 @@ namespace MrPink.PlayerSystem
                 scaler = 0.66f;
             
             // RUNNING
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
             {
                 State.IsRunning = moveInFrame;
                 State.IsMoving = false;

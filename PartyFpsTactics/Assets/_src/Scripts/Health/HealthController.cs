@@ -50,6 +50,7 @@ namespace MrPink.Health
         public AiShop AiShop;
         public CrimeLevel crimeLevel;
         public ControlledMachine controlledMachine;
+        public ControlledMachine GetControlledMachine => controlledMachine;
         public PlayerMovement playerMovement;
         public ExplosionController explosionOnDeath;
         public InteractiveObject npcInteraction;
@@ -217,6 +218,11 @@ namespace MrPink.Health
             {
                 StartCoroutine(Death(ScoringActionType.NULL, null));
             }
+        }
+
+        public void Kill()
+        {
+            Damage(healthMax, DamageSource.Environment);
         }
         
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
