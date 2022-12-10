@@ -48,10 +48,7 @@ public class LevelExit : MonoBehaviour
             
             if (playerInRange && goalInRange)
             {
-                if (LevelGoal.Instance)
-                    GameManager.Instance.BuildingLevelCompleted();
-                else
-                    GameManager.Instance.RoadLevelCompleted();
+                GameManager.Instance.LevelCompleted();
                 
                 yield break;
             }

@@ -29,7 +29,7 @@ namespace MrPink
         [Serializable]
         public enum LevelType
         {
-            Building, Road
+            Building, Road, Train
         }
 
         [SerializeField] private LevelType _levelType = LevelType.Building;
@@ -146,18 +146,35 @@ namespace MrPink
                 case LevelType.Road:
                     StartRoadScene();
                     break;
+                case LevelType.Train:
+                    StartTrainScene();
+                    break;
             }
         }
 
-        public void BuildingLevelCompleted()
+        public void LevelCompleted()
         {
-            ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-            StartRoadScene();
-        } 
-        public void RoadLevelCompleted()
-        {
-            ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-            StartBuildingScene();
+            if (ProgressionManager.Instance.currentLevelIndex >= ProgressionManager.Instance.levelDatas.Count)
+                ProgressionManager.Instance.SetCurrentLevel(Random.Range(0, ProgressionManager.Instance.levelDatas.Count));
+            else
+                ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
+
+            switch (_levelType)
+            {
+                case LevelType.Building when Random.value > 0.5f:
+                    StartRoadScene();
+                    break;
+                case LevelType.Building:
+                    StartTrainScene();
+                    break;
+                
+                case LevelType.Road:
+                    StartBuildingScene();
+                    break;
+                case LevelType.Train:
+                    StartBuildingScene();
+                    break;
+            }
         }
         
         public void StartBuildingScene()
@@ -169,6 +186,10 @@ namespace MrPink
         {
             _levelType = LevelType.Road;
             SceneManager.LoadScene(1);
+        } public void StartTrainScene()
+        {
+            _levelType = LevelType.Train;
+            SceneManager.LoadScene(2);
         }
     
         public void StartFlatScene()
