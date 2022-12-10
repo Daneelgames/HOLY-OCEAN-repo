@@ -126,9 +126,9 @@ public class BuildingGenerator : MonoBehaviour
 
         StartCoroutine(PartyController.Instance.Init());
         
-        if (GameManager.Instance.GetLevelType == GameManager.LevelType.Road)
+        if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building)
         {
-            Debug.LogError("DONT SPAWN BUILDING ON ROAD LEVEL TYPE");
+            Debug.LogError("DONT SPAWN BUILDING ON THIS LEVEL TYPE");
             return;
         }
         

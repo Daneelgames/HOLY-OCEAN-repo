@@ -122,6 +122,11 @@ namespace MrPink.PlayerSystem
                 State.IsLeaning = false;
                 return;
             }
+
+            if (Shop.Instance && Shop.Instance.IsActive)
+            {
+                return;
+            }
         
             /*
             if (!LevelGenerator.Instance.levelIsReady)
@@ -150,6 +155,10 @@ namespace MrPink.PlayerSystem
             if (_isDead)
                 return;
             
+            if (Shop.Instance && Shop.Instance.IsActive)
+            {
+                return;
+            }
             /*
             if (!LevelGenerator.Instance.levelIsReady)
                 return;*/

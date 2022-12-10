@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class EnvironmentVisualManager : MonoBehaviour
 {
     [SerializeField] private bool randomizeFog = true;
+    [SerializeField] private List<Color> randomColorsList = new List<Color>();
     private void OnEnable()
     {
         StartCoroutine(Init());
@@ -22,11 +23,18 @@ public class EnvironmentVisualManager : MonoBehaviour
         }
 
         Color clr = ProgressionManager.Instance.CurrentLevel.fogColor;
-        clr = new Color(clr.r + Random.Range(-100, 100), clr.g + Random.Range(-100, 100), clr.b + Random.Range(-100, 100), clr.a);
+        
         var fogColor = clr;
         var camBackColor = clr;
         var fogIntensity = ProgressionManager.Instance.CurrentLevel.fogIntensity;
-        fogIntensity *= Random.Range(0.2f, 2f);
+        
+        if (randomizeFog)
+        {
+            fogIntensity *= Random.Range(0.2f, 2f);
+            if (randomColorsList.Count > 1)
+                fogColor = randomColorsList[Random.Range(0, randomColorsList.Count)];
+            camBackColor = fogColor;
+        }
 
         RenderSettings.fogColor = fogColor;
         RenderSettings.fogDensity = fogIntensity;
