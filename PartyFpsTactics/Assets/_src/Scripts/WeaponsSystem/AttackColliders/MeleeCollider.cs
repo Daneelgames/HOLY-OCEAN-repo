@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using System.Threading.Tasks;
 
 namespace MrPink.WeaponsSystem
 {
@@ -19,6 +21,22 @@ namespace MrPink.WeaponsSystem
         [SerializeField] private Rigidbody ownRb;
 
 
+        private void OnEnable()
+        {
+            ResetCollidedList();
+        }
+        
+        private List<Collider> collidedList = new List<Collider>();
+
+        async void ResetCollidedList()
+        {
+            while (true)
+            {
+                await Task.Delay(500);
+                collidedList.Clear();
+            }
+        }
+
         public void FollowDetachedTransform(Transform detachedParent)
         {
             Debug.Log("FollowDetachedTransform");
@@ -26,8 +44,13 @@ namespace MrPink.WeaponsSystem
             ownRb.MoveRotation(detachedParent.rotation);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
+            if (collidedList.Contains(other))
+                return;
+            
+            collidedList.Add(other);
+            
             if (carCrashCollider)
             {
                 if (carRb == null)
@@ -64,15 +87,15 @@ namespace MrPink.WeaponsSystem
                 }
             }
             
-            //Debug.Log($"Коллизия с {other.gameObject.name}");
+            Debug.Log($" car  Коллизия с {other.gameObject.name}");
             
             var target = TryDoDamage(other);
             
-            Debug.Log("melee tryDoDamage target: " + target);
+            Debug.Log("car melee tryDoDamage target: " + target);
             switch (target)
             {
                 case CollisionTarget.Solid:
-                    PlayHitSolidFeedback(other.transform.position);
+                    PlayHitSolidFeedback(/*other.*/transform.position);
                     break;
                 
                 case CollisionTarget.Creature:

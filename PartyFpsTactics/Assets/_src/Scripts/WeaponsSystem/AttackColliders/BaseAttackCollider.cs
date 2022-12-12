@@ -153,19 +153,19 @@ namespace MrPink.WeaponsSystem
             
             if (currentLifeTime > _dangerousTime)
             {
-                Debug.Log("return CollisionTarget.Self;");
+                Debug.Log("car return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
             
             if (!_isSelfCollisionAvailable && ownerHealth && (ownerHealth.gameObject == targetCollider.gameObject || ownerHealth.OwnCollider(targetCollider)))
             {
-                Debug.Log("return CollisionTarget.Self;");
+                Debug.Log("car return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
             
             if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
             {
-                Debug.Log("return CollisionTarget.Self;");
+                Debug.Log("car return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
             
@@ -176,7 +176,7 @@ namespace MrPink.WeaponsSystem
                 if (ownerHealth.controlledMachine &&
                     ownerHealth.controlledMachine == Game.Player.VehicleControls.controlledMachine)
                 {
-                    Debug.Log("return CollisionTarget.Self;");
+                    Debug.Log("car return CollisionTarget.Self;");
                     return CollisionTarget.Self;
                 }
                 
@@ -193,7 +193,7 @@ namespace MrPink.WeaponsSystem
             {
                 if (targetCollider.isTrigger)
                 {
-                    Debug.Log("return CollisionTarget.Self;");
+                    Debug.Log("car return CollisionTarget.Self;");
                     return CollisionTarget.Self;
                 }
                 
