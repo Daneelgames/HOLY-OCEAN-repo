@@ -7,5 +7,4 @@ public class QuestMark : MonoBehaviour
 {
     public Transform target;
     public Text markerName;
-    public Image markerSprite;
 }

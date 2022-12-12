@@ -75,15 +75,15 @@ namespace _src.Scripts
                 return;
             }
             
-            if (UnitsManager.Instance.unitsInGame.Count < 1)
+            if (UnitsManager.Instance.HcInGame.Count < 1)
                 return;
             
-            for (int i = UnitsManager.Instance.unitsInGame.Count - 1; i >= 0; i--)
+            for (int i = UnitsManager.Instance.HcInGame.Count - 1; i >= 0; i--)
             {
-                if (i >= UnitsManager.Instance.unitsInGame.Count)
+                if (i >= UnitsManager.Instance.HcInGame.Count)
                     continue;
             
-                var corpse = UnitsManager.Instance.unitsInGame[i];
+                var corpse = UnitsManager.Instance.HcInGame[i];
                 
                 if (corpse.transform.position.y < corpseShredderY)
                 {

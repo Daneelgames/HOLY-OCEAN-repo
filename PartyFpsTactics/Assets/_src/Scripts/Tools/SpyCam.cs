@@ -23,11 +23,11 @@ namespace MrPink
             while (true)
             {
                 yield return null;
-                for (int i = 0; i < UnitsManager.Instance.unitsInGame.Count; i++)
+                for (int i = 0; i < UnitsManager.Instance.HcInGame.Count; i++)
                 {
-                    if (i >= UnitsManager.Instance.unitsInGame.Count)
+                    if (i >= UnitsManager.Instance.HcInGame.Count)
                         continue;
-                    var unit = UnitsManager.Instance.unitsInGame[i];
+                    var unit = UnitsManager.Instance.HcInGame[i];
                     if (unit == null)
                         continue;
                     if (unit == Game.Player.Health)

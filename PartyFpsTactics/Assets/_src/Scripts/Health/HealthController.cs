@@ -76,8 +76,8 @@ namespace MrPink.Health
         
         private void Start()
         {
-            if (Game.Player.Health == this)
-                UnitsManager.Instance.unitsInGame.Add(this);
+            if (Game.Player.Health != this)
+                UnitsManager.Instance.AddUnit(this);
             
             healthMax = health;
             enduranceMax = endurance;
@@ -369,8 +369,7 @@ namespace MrPink.Health
         {
             // TODO инкапсулировать логику в сами классы
             
-            if (UnitsManager.Instance.unitsInGame.Contains(this))
-                UnitsManager.Instance.unitsInGame.Remove(this);
+            UnitsManager.Instance.RemoveUnit(this);
             if (Game.Player.CommanderControls.unitsInParty.Contains(this))
                 Game.Player.CommanderControls.unitsInParty.Remove(this);
         }

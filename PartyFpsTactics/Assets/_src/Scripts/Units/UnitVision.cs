@@ -162,9 +162,9 @@ namespace MrPink.Units
                     yield return new WaitForSeconds(0.1f);
                 }
 
-                for (int i = 0; i < UnitsManager.Instance.unitsInGame.Count; i++)
+                for (int i = 0; i < UnitsManager.Instance.HcInGame.Count; i++)
                 {
-                    var unit = UnitsManager.Instance.unitsInGame[i];
+                    var unit = UnitsManager.Instance.HcInGame[i];
                     if (unit == null)
                         continue;
                 

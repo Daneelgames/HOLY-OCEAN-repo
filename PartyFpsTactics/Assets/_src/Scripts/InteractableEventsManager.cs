@@ -17,11 +17,25 @@ public class InteractableEventsManager : MonoBehaviour
 {
     public static InteractableEventsManager Instance;
     public List<InteractiveObject> InteractiveObjects = new List<InteractiveObject>();
+    private List<PropBump> _propBumps = new List<PropBump>();
     void Awake()
     {
         Instance = this;
     }
 
+
+    public void AddPropBump(PropBump propBump)
+    {
+        if (_propBumps.Contains(propBump))
+            return;
+        
+        _propBumps.Add(propBump);
+    }
+    public void RemovePropBump(PropBump propBump)
+    {
+        if (_propBumps.Contains(propBump))
+            _propBumps.Remove(propBump);
+    }
     public void AddInteractable(InteractiveObject obj)
     {
         InteractiveObjects.Add(obj);
@@ -188,6 +202,9 @@ public class InteractableEventsManager : MonoBehaviour
             if (InteractiveObjects[i].type != InteractiveObject.InteractableType.ItemInteractable)
                 continue;
             
+            if (Vector3.Distance(InteractiveObjects[i].gameObject.transform.position, explosionPosition) > distance)
+                continue;
+            
             if (InteractiveObjects[i].rb == null)
             {
                 var rb = InteractiveObjects[i].gameObject.AddComponent<Rigidbody>();
@@ -197,9 +214,19 @@ public class InteractableEventsManager : MonoBehaviour
                 rb.angularDrag = 1;
 
                 InteractiveObjects[i].rb = rb;
-                
-                rb.AddExplosionForce(force, explosionPosition, distance);
             }
+            InteractiveObjects[i].rb.AddExplosionForce(force, explosionPosition, distance);
+        }
+        for (int i = 0; i < _propBumps.Count; i++)
+        {
+            if (Vector3.Distance(_propBumps[i].gameObject.transform.position, explosionPosition) > distance)
+                continue;
+            
+            if (_propBumps[i].RB == null)
+            {
+                _propBumps[i].SetRb();
+            }
+            _propBumps[i].RB.AddExplosionForce(force, explosionPosition, distance);
         }
     }
 }

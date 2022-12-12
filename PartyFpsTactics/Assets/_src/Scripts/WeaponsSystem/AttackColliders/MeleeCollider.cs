@@ -40,9 +40,8 @@ namespace MrPink.WeaponsSystem
             }
             if (currentLifeTime > _dangerousTime)
                 return;
-            if (ownerHealth == null)
-                return;
-            if (ownerHealth.gameObject == other.gameObject)
+            
+            if (ownerHealth && ownerHealth.gameObject == other.gameObject)
                 return;
             
             // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR

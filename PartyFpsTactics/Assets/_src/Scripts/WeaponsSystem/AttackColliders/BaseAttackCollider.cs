@@ -134,6 +134,7 @@ namespace MrPink.WeaponsSystem
         {
             if (!unitsExplosionCompleted)
             {
+                Debug.Log("UNITS EXPLOSION");
                 InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
                     ragdollExplosionForce, playerExplosionForce);
@@ -162,21 +163,13 @@ namespace MrPink.WeaponsSystem
                 return CollisionTarget.Self;
             }
             
-            
-
             if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
             {
                 Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
-
             
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
-                
-            /*
-            if (damageScaler > 1)
-                Debug.Log("TileAttack damageScaler " + damageScaler);*/
-            
             
             if (targetCollider.gameObject == Game.Player.GameObject && IsPlayerEnemyToOwner())
             {
@@ -191,7 +184,6 @@ namespace MrPink.WeaponsSystem
                 if (ownerHealth.UnitVision/* && (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL)*/)
                     ownerHealth.UnitVision.ForgiveUnit(Game.Player.Health, ownerHealth.team == Game.Player.Health.team);
                 UnitsExplosion();
-                Debug.Log("return CollisionTarget.Creature;");
                 return CollisionTarget.Creature;
             }
 
@@ -251,7 +243,10 @@ namespace MrPink.WeaponsSystem
                 if (damagedHealthControllers.Count > 0 && damagedHealthControllers.Contains(targetHealth.HealthController))
                 {
                     Debug.Log("return CollisionTarget.Creature;");
-                    return CollisionTarget.Creature;
+                    {
+                        UnitsExplosion();
+                        return CollisionTarget.Creature;
+                    }
                 }
 
                 if (ownerHealth && damage > 0)

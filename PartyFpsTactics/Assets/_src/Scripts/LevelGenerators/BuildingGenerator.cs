@@ -125,6 +125,7 @@ public class BuildingGenerator : MonoBehaviour
         }
 
         StartCoroutine(PartyController.Instance.Init());
+        StartCoroutine(UpdateNavMesh());
         
         if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building)
         {
@@ -133,7 +134,6 @@ public class BuildingGenerator : MonoBehaviour
         }
         
         SpawnRandomBuilding(buildingsToSpawnSettings[Random.Range(0,buildingsToSpawnSettings.Count)].BuildingOriginTransform.position);
-        StartCoroutine(UpdateNavMesh());
     }
 
     public void AddProp(TileHealth prop)
@@ -1155,7 +1155,6 @@ public class BuildingGenerator : MonoBehaviour
                         navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
                     else
                     {
-                        continue;
                         navMeshSurfacesSpawned[i].BuildNavMesh();
                     }
                 }
