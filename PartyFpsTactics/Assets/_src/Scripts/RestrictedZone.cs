@@ -77,7 +77,8 @@ public class RestrictedZone : MonoBehaviour
         if (stopAfterChangingVolume)
             entruderInsideAu.Stop();
     }
-    
+    [SerializeField] private bool setFollowIntruder = false;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 7) // units
@@ -91,6 +92,11 @@ public class RestrictedZone : MonoBehaviour
                     hcInside.Add(hc);
                 }
 
+                if (allowedTeams.Contains(hc.team) == false)
+                {
+                    if (hc.crimeLevel)
+                        hc.crimeLevel.CrimeCommitedAgainstTeam(ownerTeam, false, false, setFollowIntruder);
+                }
             }   
         }
     }

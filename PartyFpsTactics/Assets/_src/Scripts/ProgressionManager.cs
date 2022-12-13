@@ -11,6 +11,7 @@ public class ProgressionManager : MonoBehaviour
     public int currentLevelIndex = 0;
     
     public ProcLevelData CurrentLevel => levelDatas[currentLevelIndex];
+    public ProcLevelData RandomLevel => levelDatas[Random.Range(0, levelDatas.Count)];
     void Awake()
     {
         if (Instance != null)

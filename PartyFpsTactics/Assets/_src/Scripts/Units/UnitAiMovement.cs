@@ -93,6 +93,13 @@ namespace MrPink.Units
             enemyToLookAt = hc;
             lookForNewEnemyCooldown = 1;
         }
+
+        public void FollowIntruder(HealthController hc)
+        {
+            FollowTargetOrder(hc.transform);
+            enemyToLookAt = hc;
+            lookForNewEnemyCooldown = 1;
+        }
         
         private async UniTask Awareness()
         {

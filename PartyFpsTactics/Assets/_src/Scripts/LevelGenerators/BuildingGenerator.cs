@@ -27,6 +27,7 @@ public class BuildingGenerator : MonoBehaviour
 
     public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
     
+    public bool spawnGoals = true;
     public bool spawnWalls = true;
     public bool spawnLadders = true;
     public LayerMask allSolidsLayerMask;
@@ -86,16 +87,22 @@ public class BuildingGenerator : MonoBehaviour
     {
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
 
+        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
+        {
+            buildingsToSpawnSettings[i].levelsSettings = new List<BuildingSettings.LevelSetting>(currentLevel.BuildingSettings.levelsSettings);
+            buildingsToSpawnSettings[i].spawnLadders = currentLevel.BuildingSettings.spawnLadders;
+            buildingsToSpawnSettings[i].spawnLoot = currentLevel.BuildingSettings.spawnLoot;
+            buildingsToSpawnSettings[i].spawnProps = currentLevel.BuildingSettings.spawnProps;
+            buildingsToSpawnSettings[i].spawnRooms = currentLevel.BuildingSettings.spawnRooms;
+            buildingsToSpawnSettings[i].spawnUnits = currentLevel.BuildingSettings.spawnUnits;
+            buildingsToSpawnSettings[i].spawnNavMesh = currentLevel.BuildingSettings.spawnNavMesh;
+            buildingsToSpawnSettings[i].levelsScaleMinMaxX = currentLevel.BuildingSettings.levelsScaleMinMaxX;
+            buildingsToSpawnSettings[i].levelsScaleMinMaxZ = currentLevel.BuildingSettings.levelsScaleMinMaxZ;
+
+            currentLevel = ProgressionManager.Instance.RandomLevel;
+
+        }
         //buildingsToSpawnSettings[0] = currentLevel.BuildingSettings;
-        buildingsToSpawnSettings[0].levelsSettings = new List<BuildingSettings.LevelSetting>(currentLevel.BuildingSettings.levelsSettings);
-        buildingsToSpawnSettings[0].spawnLadders = currentLevel.BuildingSettings.spawnLadders;
-        buildingsToSpawnSettings[0].spawnLoot = currentLevel.BuildingSettings.spawnLoot;
-        buildingsToSpawnSettings[0].spawnProps = currentLevel.BuildingSettings.spawnProps;
-        buildingsToSpawnSettings[0].spawnRooms = currentLevel.BuildingSettings.spawnRooms;
-        buildingsToSpawnSettings[0].spawnUnits = currentLevel.BuildingSettings.spawnUnits;
-        buildingsToSpawnSettings[0].spawnNavMesh = currentLevel.BuildingSettings.spawnNavMesh;
-        buildingsToSpawnSettings[0].levelsScaleMinMaxX = currentLevel.BuildingSettings.levelsScaleMinMaxX;
-        buildingsToSpawnSettings[0].levelsScaleMinMaxZ = currentLevel.BuildingSettings.levelsScaleMinMaxZ;
         
         levelGoalPrefab = currentLevel.levelGoalPrefab;
         tilePrefab = currentLevel.tilePrefab;
@@ -127,13 +134,17 @@ public class BuildingGenerator : MonoBehaviour
         StartCoroutine(PartyController.Instance.Init());
         StartCoroutine(UpdateNavMesh());
         
-        if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building)
+        if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building && GameManager.Instance.GetLevelType != GameManager.LevelType.Stealth)
         {
             Debug.LogError("DONT SPAWN BUILDING ON THIS LEVEL TYPE");
             return;
         }
-        
-        SpawnRandomBuilding(buildingsToSpawnSettings[Random.Range(0,buildingsToSpawnSettings.Count)].BuildingOriginTransform.position);
+
+        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
+        {
+            if (buildingsToSpawnSettings[i].BuildingOriginTransform)
+                SpawnRandomBuilding(buildingsToSpawnSettings[i].BuildingOriginTransform.position);   
+        }
     }
 
     public void AddProp(TileHealth prop)
@@ -192,7 +203,8 @@ public class BuildingGenerator : MonoBehaviour
         
         // GOALS
         yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels));
-        yield return StartCoroutine(SpawnGoals(building));
+        if (spawnGoals)
+            yield return StartCoroutine(SpawnGoals(building));
         yield return StartCoroutine(SpawnExplosiveBarrels(building));
         yield return SpawnLoot(building);
         
@@ -273,8 +285,8 @@ public class BuildingGenerator : MonoBehaviour
         newLevel.floorWorldHeight = pos.y + 0.5f;
 
         newLevel.roomTilesMatrix = new TileHealth[size.x,size.y,size.z];
-        bool hasRoof = levelIndexInBuilding == levelSettings.Count - 1;
-
+        //bool hasRoof = levelIndexInBuilding == levelSettings.Count - 1;
+        bool hasRoof = true;
 
         int spaceBetweenWindows = Random.Range(2, size.x);
         int currentSpaceBetweenWindows = spaceBetweenWindows;
@@ -1023,6 +1035,7 @@ public class BuildingGenerator : MonoBehaviour
     {
         Vector3 spawnPosition = building.spawnedBuildingLevels[building.spawnedBuildingLevels.Count - 1].position + Vector3.up * 2;
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
+        
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
             for (int j = 0; j < building.spawnedBuildingLevels[i].spawnedRooms.Count; j++)

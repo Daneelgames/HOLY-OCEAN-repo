@@ -37,6 +37,7 @@ namespace MrPink
             StartCoroutine(UpdateSelectedNameFeedback());
         }
     
+        
         private void Update()
         {
             if (Game.Player.Health.health <= 0)
@@ -51,9 +52,9 @@ namespace MrPink
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                
                 if (selectedPortable && !carryingPortableRb)
                 {
+                    
                     CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
                     return;
                 }
@@ -62,6 +63,7 @@ namespace MrPink
                 {
                     StopCoroutine(CarryPortableObjectCoroutine);
                 
+                    carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer;
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
@@ -87,6 +89,8 @@ namespace MrPink
                     var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
                     if (tileAttack)
                         tileAttack.dangerous = true;
+                    
+                    carryingPortableRb.gameObject.layer = 10;
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
@@ -99,6 +103,7 @@ namespace MrPink
             }
         }
 
+        private int lastCarryingPortableInitLayer;
         private Coroutine CarryPortableObjectCoroutine;
         IEnumerator CarryPortableObject()
         {
@@ -115,6 +120,8 @@ namespace MrPink
             }
 
             carryingPortableRb = rb;
+            lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
+            carryingPortableRb.gameObject.layer = 9;
             carryingPortableRb.useGravity = false;
             var dragInit = carryingPortableRb.drag; 
             carryingPortableRb.drag = 10;

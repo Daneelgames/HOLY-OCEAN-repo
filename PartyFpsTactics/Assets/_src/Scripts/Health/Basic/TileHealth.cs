@@ -163,7 +163,7 @@ namespace MrPink.Health
 
             if (IsAlive)
             {
-                if ( ! rb)
+                if (!rb)
                     BuildingGenerator.Instance.TileDamagedFeedback(this);
             }
             else

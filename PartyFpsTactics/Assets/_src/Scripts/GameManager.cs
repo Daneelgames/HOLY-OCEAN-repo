@@ -18,6 +18,7 @@ namespace MrPink
 
         public float playerSleepTimeScale = 10;
         public string portableObjectTag = "PortableObject";
+        [Header("THIS LIST IS USED WHEN MAKING A ROAD PRE RUNTIME")]
         public List<Collider> terrainAndIslandsColliders = new List<Collider>();
         public LayerMask AllSolidsMask;
         private bool cursorVisible = false;
@@ -29,7 +30,7 @@ namespace MrPink
         [Serializable]
         public enum LevelType
         {
-            Building, Road, Train, Bridge
+            Building, Road, Train, Bridge, Stealth
         }
 
         [SerializeField] private LevelType _levelType = LevelType.Building;
@@ -152,6 +153,9 @@ namespace MrPink
                 case LevelType.Bridge:
                     StartBridgeScene();
                     break;
+                case LevelType.Stealth:
+                    StartStealthScene();
+                    break;
             }
         }
 
@@ -171,6 +175,7 @@ namespace MrPink
                         case 1: StartRoadScene(); break;
                         case 2: StartTrainScene(); break;
                         case 3: StartBridgeScene(); break;
+                        //case 4: StartStealthScene(); break;
                         
                         default: StartTrainScene(); break;
                     }
@@ -200,6 +205,11 @@ namespace MrPink
         {
             _levelType = LevelType.Bridge;
             SceneManager.LoadScene(3);
+        }
+        public void StartStealthScene()
+        {
+            _levelType = LevelType.Stealth;
+            SceneManager.LoadScene(4);
         }
     
         public void StartFlatScene()
