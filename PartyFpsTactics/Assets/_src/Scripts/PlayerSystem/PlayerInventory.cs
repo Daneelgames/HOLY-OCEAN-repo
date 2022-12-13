@@ -16,6 +16,8 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, AssetsOnly, Required]
         private WeaponController startingPistolWeapon;
+        [SerializeField, AssetsOnly, Required]
+        private WeaponController shotterWeapon;
 
         [SerializeField, AssetsOnly, Required] 
         private WeaponController _startingSwordWeapon;
@@ -35,11 +37,11 @@ namespace MrPink.PlayerSystem
     
     
         // TODO стороны - через enum
-        public void SpawnPlayerWeapon(WeaponController weaponPrefab, int side = 0) // 0- left, 1 - right
+        public void SpawnPlayerWeapon(WeaponController weaponPrefab, int side = 0, bool forceHand = false) // 0- left, 1 - right
         {
             var wpn = Instantiate(weaponPrefab, Game.Player.Position, Quaternion.identity);
             
-            if (Game.Player.Weapon.Hands[0].Weapon != null)
+            if (Game.Player.Weapon.Hands[0].Weapon != null && forceHand == false)
                 side = 1;
             
             switch (side)
@@ -65,6 +67,8 @@ namespace MrPink.PlayerSystem
         {
             if (tool.tool == ToolType.DualWeilder)
                 SpawnPlayerWeapon(startingPistolWeapon, 1);
+            if (tool.tool == ToolType.Shotter)
+                SpawnPlayerWeapon(shotterWeapon, 1);
             
             if (tool.tool == ToolType.OneTimeShield)
                 

@@ -46,13 +46,13 @@ public class InteractableEventsManager : MonoBehaviour
             InteractiveObjects.Remove(obj);
     }
 
-    public void InteractWithIO(InteractiveObject IO)
+    public void InteractWithIO(InteractiveObject IO, bool qPressed = false, bool ePressed = false)
     {
         for (int i = 0; i < IO.eventsOnInteraction.Count; i++)
         {
             var IOevent = IO.eventsOnInteraction[i];
             
-            RunEvent(IOevent);
+            RunEvent(IOevent, null, null, qPressed, ePressed);
 
             if (IOevent.scriptedEventType == ScriptedEventType.DestroyOnInteraction)
             {
@@ -61,7 +61,7 @@ public class InteractableEventsManager : MonoBehaviour
         }
     }
 
-    public void RunEvent(ScriptedEvent IOevent, Quest quest = null, GameObject gameObjectToDestroy = null)
+    public void RunEvent(ScriptedEvent IOevent, Quest quest = null, GameObject gameObjectToDestroy = null, bool qPressed = false, bool ePressed = false)
     {
         var npcHc = IOevent.ActorNpc; 
         if (npcHc == null)
@@ -158,7 +158,12 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.AddWeapon:
                 // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
                 ScoringSystem.Instance.ItemFoundSound();
-                Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
+                if (qPressed)
+                    Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 0, true);
+                else if (ePressed)
+                    Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 1, true);
+                else
+                    Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
                 break;
             
             case ScriptedEventType.StartRandomQuest:

@@ -23,12 +23,10 @@ public class PropBump : MonoBehaviour
 
     public void SetRb()
     {
-        var _rb = gameObject.AddComponent<Rigidbody>();
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-        _rb.drag = 1;
-        _rb.angularDrag = 1;
-
-        rb = _rb;
+        rb = gameObject.AddComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.drag = 1;
+        rb.angularDrag = 1;
     }
 }

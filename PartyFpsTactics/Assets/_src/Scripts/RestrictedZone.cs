@@ -92,7 +92,7 @@ public class RestrictedZone : MonoBehaviour
                     hcInside.Add(hc);
                 }
 
-                if (allowedTeams.Contains(hc.team) == false)
+                if (hc && allowedTeams.Contains(hc.team) == false)
                 {
                     if (hc.crimeLevel)
                         hc.crimeLevel.CrimeCommitedAgainstTeam(ownerTeam, false, false, setFollowIntruder);

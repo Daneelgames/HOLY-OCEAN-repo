@@ -35,7 +35,7 @@ namespace MrPink.PlayerSystem
             
             // TODO роутить управление централизованно
             
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.R))
             {
                 SelectNextTool();
             }

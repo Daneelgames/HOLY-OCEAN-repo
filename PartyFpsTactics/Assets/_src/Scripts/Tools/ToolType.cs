@@ -11,6 +11,7 @@ namespace MrPink.Tools
         BugMeat,
         SandWater,
         OilCoffee,
-        CheckpointTicket
+        CheckpointTicket,
+        Shotter
     }
 }

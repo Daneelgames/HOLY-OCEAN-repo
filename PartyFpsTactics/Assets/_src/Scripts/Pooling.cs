@@ -24,7 +24,7 @@ public class Pooling : MonoBehaviour
         [Serializable]
         public enum AttackColliderPrefabTag
         {
-            DesertBeast, DesertBeastSmall, AiPistol, AiSmg, AiShotgun, PlayerPistol, PlayerSword 
+            DesertBeast, DesertBeastSmall, AiPistol, AiSmg, AiShotgun, PlayerPistol, PlayerSword, PlayerShotgun 
         }
 
         public AttackColliderPrefabTag attackColliderPrefabTag;

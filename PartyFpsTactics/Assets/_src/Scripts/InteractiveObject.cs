@@ -32,10 +32,10 @@ public class InteractiveObject : MonoBehaviour
         InteractableEventsManager.Instance.RemoveInteractable(this);
     }
 
-    public void PlayerInteraction()
+    public void PlayerInteraction(bool qPressed = false, bool ePressed = false)
     {
         CheckNpcDialogueList();
-        InteractableEventsManager.Instance.InteractWithIO(this);
+        InteractableEventsManager.Instance.InteractWithIO(this, qPressed, ePressed);
     }
 
     public void CheckNpcDialogueList()

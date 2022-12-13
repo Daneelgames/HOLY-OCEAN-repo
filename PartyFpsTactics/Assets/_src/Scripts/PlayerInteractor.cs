@@ -50,11 +50,12 @@ namespace MrPink
             else if (selectedPortable)
                 uiItemNameFeedbackOutline.transform.position = cam.WorldToScreenPoint(selectedPortable.transform.position);
 
-            if (Input.GetKeyDown(KeyCode.E))
+            bool ePressed = Input.GetKeyDown(KeyCode.E); 
+            bool qPressed = Input.GetKeyDown(KeyCode.Q); 
+            if (ePressed || qPressed)
             {
                 if (selectedPortable && !carryingPortableRb)
                 {
-                    
                     CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
                     return;
                 }
@@ -75,7 +76,7 @@ namespace MrPink
             
                 if (selectedIO)
                 {
-                    selectedIO.PlayerInteraction();
+                    selectedIO.PlayerInteraction(qPressed, ePressed);
                     return;
                 }
             
