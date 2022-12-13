@@ -29,7 +29,7 @@ namespace MrPink
         [Serializable]
         public enum LevelType
         {
-            Building, Road, Train
+            Building, Road, Train, Bridge
         }
 
         [SerializeField] private LevelType _levelType = LevelType.Building;
@@ -149,6 +149,9 @@ namespace MrPink
                 case LevelType.Train:
                     StartTrainScene();
                     break;
+                case LevelType.Bridge:
+                    StartBridgeScene();
+                    break;
             }
         }
 
@@ -161,17 +164,18 @@ namespace MrPink
 
             switch (_levelType)
             {
-                case LevelType.Building when Random.value > 0.5f:
-                    StartRoadScene();
-                    break;
                 case LevelType.Building:
-                    StartTrainScene();
+                    int r = Random.Range(1, SceneManager.sceneCountInBuildSettings);
+                    switch (r)
+                    {
+                        case 1: StartRoadScene(); break;
+                        case 2: StartTrainScene(); break;
+                        case 3: StartBridgeScene(); break;
+                        
+                        default: StartTrainScene(); break;
+                    }
                     break;
-                
-                case LevelType.Road:
-                    StartBuildingScene();
-                    break;
-                case LevelType.Train:
+                default:
                     StartBuildingScene();
                     break;
             }
@@ -186,10 +190,16 @@ namespace MrPink
         {
             _levelType = LevelType.Road;
             SceneManager.LoadScene(1);
-        } public void StartTrainScene()
+        } 
+        public void StartTrainScene()
         {
             _levelType = LevelType.Train;
             SceneManager.LoadScene(2);
+        } 
+        public void StartBridgeScene()
+        {
+            _levelType = LevelType.Bridge;
+            SceneManager.LoadScene(3);
         }
     
         public void StartFlatScene()
