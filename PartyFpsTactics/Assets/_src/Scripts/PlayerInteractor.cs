@@ -64,7 +64,7 @@ namespace MrPink
                 {
                     StopCoroutine(CarryPortableObjectCoroutine);
                 
-                    //carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer;
+                    carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer;
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
@@ -93,7 +93,7 @@ namespace MrPink
                         tileAttack.SetTempOwnerHc(Game.Player.Health, 10);
                     }
                     
-                    //carryingPortableRb.gameObject.layer = 10;
+                    carryingPortableRb.gameObject.layer = 10;
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
@@ -124,8 +124,8 @@ namespace MrPink
 
             carryingPortableRb = rb;
             carryingPortableRb.velocity = Vector3.zero;
-            /*lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
-            carryingPortableRb.gameObject.layer = 9;*/
+            lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
+            carryingPortableRb.gameObject.layer = 9;
             carryingPortableRb.useGravity = false;
             var dragInit = carryingPortableRb.drag; 
             carryingPortableRb.drag = 10;
