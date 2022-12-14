@@ -69,7 +69,17 @@ namespace MrPink
         private void Update()
         {
             if (Game._instance == null || Game.Player == null)
+            {
+                if (cursorVisible == false)
+                {
+                    cursorVisible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    Time.timeScale = 1;
+                    AudioListener.pause = false;
+                }
                 return;
+            }
             
             if (Input.GetKeyDown(KeyCode.O))
                 AudioListener.volume = Mathf.Clamp(AudioListener.volume - 0.1f, 0, 1);
@@ -80,7 +90,8 @@ namespace MrPink
                 Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity + 50, 5, 1000);
             if (Input.GetKeyDown(KeyCode.Alpha9))
                 Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity - 50, 5, 1000);
-
+            
+            
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (cursorVisible)
@@ -202,7 +213,7 @@ namespace MrPink
             switch (levelType)
             {
                 case LevelType.Building:
-                    StartBridgeScene();
+                    StartBuildingScene();
                     break;
                 case LevelType.Road:
                     StartRoadScene();

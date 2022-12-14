@@ -353,13 +353,14 @@ GameObject:
   - component: {fileID: 1691523767}
   - component: {fileID: 1691523766}
   - component: {fileID: 1691523765}
+  - component: {fileID: 7951073564990526158}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1691523764
 RectTransform:
   m_ObjectHideFlags: 0
@@ -374,6 +375,7 @@ RectTransform:
   m_Children:
   - {fileID: 391039378}
   - {fileID: 560859437}
+  - {fileID: 3578564228822906998}
   m_Father: {fileID: 4081011893066873260}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -443,6 +445,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4087
+--- !u!114 &7951073564990526158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691523763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0832d305b05289f4b98dc0ad25b08a8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeWhenTimeScaleLessTanOne: {fileID: 8981217553419592494}
 --- !u!1 &9372439022117404
 GameObject:
   m_ObjectHideFlags: 0
@@ -3132,6 +3147,107 @@ Transform:
   m_Father: {fileID: 4081011893066873260}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8981217553419592494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3578564228822906998}
+  - component: {fileID: 2388038261461457340}
+  - component: {fileID: 130300077949376636}
+  m_Layer: 5
+  m_Name: CONTROLS IN PAUSE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &3578564228822906998
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981217553419592494}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1691523764}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 43.602528, y: 29.4956}
+  m_SizeDelta: {x: 6596.9365, y: 2980.101}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2388038261461457340
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981217553419592494}
+  m_CullTransparentMesh: 1
+--- !u!114 &130300077949376636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981217553419592494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 03d51c8cf8160d241864366a8621c9b2, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 300
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: '- LMB/RMB - HOLD AND ATTACK
+
+
+    - CLIMB WALLS HOLDING LEFT SHIFT
+
+
+    -
+    LEFT CTRL TO CROUCH
+
+
+    - Q/E - TAKE WEAPON IN LEFT/RIGHT HAND
+
+
+    - YOU
+    CAN THROW PROPS TO DAMAGE
+
+
+    - R TO SELECT A TOOL ON A TOOLBAR [ON TOP]
+
+
+    -
+    F TO USE A SELECTED TOOL'
 --- !u!1001 &101013422384446060
 PrefabInstance:
   m_ObjectHideFlags: 0
