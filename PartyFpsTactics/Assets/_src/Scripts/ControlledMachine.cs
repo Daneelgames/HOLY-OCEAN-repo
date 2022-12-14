@@ -188,11 +188,11 @@ public class ControlledMachine : MonoBehaviour
         }
     }
     
-    public void SetCarInput(float hor, float ver, bool brake)
+    public void SetCarInput(float hor, float ver, bool brake, bool boost = false)
     {
         // перекинуть в общий прием инпута от юнитов
         if (wheelVehicle)
-            wheelVehicle.SetInput(hor, ver, brake);
+            wheelVehicle.SetInput(hor, ver, brake, boost);
     }
 
     private void OnDestroy()

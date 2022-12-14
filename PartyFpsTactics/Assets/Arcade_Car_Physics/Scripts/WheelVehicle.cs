@@ -260,7 +260,7 @@ namespace VehicleBehaviour {
             }
         }
 
-        public void SetInput(float _hor, float _ver, bool _brake)
+        public void SetInput(float _hor, float _ver, bool _brake, bool boost)
         {
             //var brake = GetInput(brakeInput)
             float brake = 0;
@@ -274,6 +274,7 @@ namespace VehicleBehaviour {
             // Turn
             steering = turnInputCurve.Evaluate(_hor) * steerAngle;
             
+            boosting = boost;
             /*
             // Boost
             boosting = (GetInput(boostInput) > 0.5f);

@@ -16,6 +16,7 @@ namespace MrPink
         public ControlledMachine controlledMachine;
         public float playerFollowMoveScaler = 10;
         public float playerFollowRotScaler = 10;
+        [SerializeField] private float staminaChangeOnBoost = -30;
         private void Awake()
         {
             Instance = this;
@@ -106,6 +107,7 @@ namespace MrPink
             controlledMachine.StartInput(Game.Player.Health);
             float resultMoveScaler = 1;
             float resultRotScaler = 1;
+            bool boosting = false;
             while (true)
             {
                 if (Game.Player.Health.health <= 0)
@@ -123,7 +125,11 @@ namespace MrPink
                 
                 float hor = Input.GetAxis("Horizontal");
                 float ver = Input.GetAxis("Vertical");
-                controlledMachine.SetCarInput(hor,ver, brake);
+
+                boosting = Input.GetKey(KeyCode.LeftShift) && Game.Player.Movement.stamina > 0;
+                if (boosting)
+                    Game.Player.Movement.ChangeStamina(staminaChangeOnBoost);
+                controlledMachine.SetCarInput(hor,ver, brake, boosting);
                 yield return null;
             }
         }

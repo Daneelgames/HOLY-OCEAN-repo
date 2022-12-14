@@ -136,6 +136,7 @@ namespace MrPink.PlayerSystem
                 return;*/
             
 
+            HandleStamina();
             if (Game.Player.VehicleControls.controlledMachine)
             {
                 State.IsRunning = false;
@@ -147,7 +148,6 @@ namespace MrPink.PlayerSystem
             HandleCrouch();
             HandleMovement();
             
-            HandleStamina();
         }
         
         private void FixedUpdate()
@@ -194,6 +194,11 @@ namespace MrPink.PlayerSystem
         private float targetStaminaScaler = 1;
         void HandleStamina()
         {
+            if (Game.Player.VehicleControls.controlledMachine)
+            {
+                ChangeStamina(idleStaminaRegen * Time.deltaTime);
+                return;
+            }
             if (State.IsClimbing && !State.IsGrounded)
             {
                 targetStaminaScaler = climbStaminaCost;
