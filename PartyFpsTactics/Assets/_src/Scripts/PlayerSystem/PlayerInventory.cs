@@ -12,8 +12,13 @@ namespace MrPink.PlayerSystem
     {
         public static PlayerInventory Instance;
         
-        public Dictionary<ToolType, int> amountOfEachTool = new Dictionary<ToolType, int>();
+        public List<ToolAmount> amountOfEachTool = new List<ToolAmount>();
 
+        public class ToolAmount
+        {
+            public ToolType _toolType;
+            public int amount;
+        }
         [SerializeField, AssetsOnly, Required]
         private WeaponController startingPistolWeapon;
         [SerializeField, AssetsOnly, Required]
@@ -22,6 +27,19 @@ namespace MrPink.PlayerSystem
         [SerializeField, AssetsOnly, Required] 
         private WeaponController _startingSwordWeapon;
 
+        public int GetCurrentSelectedIndex(ToolType toolType)
+        {
+            for (var index = 0; index < amountOfEachTool.Count; index++)
+            {
+                var toolAmount = amountOfEachTool[index];
+                if (toolAmount._toolType == toolType)
+                {
+                    return index;
+                }
+            }
+
+            return 0;
+        }
         private void Awake()
         {
             Instance = this;
@@ -57,8 +75,11 @@ namespace MrPink.PlayerSystem
 
         public bool HasTool(ToolType toolType)
         {
-            if (amountOfEachTool.ContainsKey(toolType) && amountOfEachTool[toolType] > 0)
-                return true;
+            foreach (var toolAmount in amountOfEachTool)
+            {
+                if (toolAmount._toolType == toolType)
+                    return toolAmount.amount > 0;
+            }
 
             return false;
         }
@@ -73,14 +94,21 @@ namespace MrPink.PlayerSystem
             if (tool.tool == ToolType.OneTimeShield)
                 
                 PlayerUi.Instance.AddShieldFeedback();
-            
-            if (amountOfEachTool.ContainsKey(tool.tool))
+
+            foreach (var toolAmount in amountOfEachTool)
             {
-                amountOfEachTool[tool.tool]++;
+                if (toolAmount._toolType != tool.tool)
+                    continue;
+             
+                toolAmount.amount++;
                 Game.Player.ToolControls.UpdateSelectedToolFeedback();
                 return;
-            }   
-            amountOfEachTool.Add(tool.tool, 1);
+            }
+
+            ToolAmount newAmount = new ToolAmount();
+            newAmount.amount = 1;
+            newAmount._toolType = tool.tool;
+            amountOfEachTool.Add(newAmount);
             
             Game.Player.ToolControls.SelectNextTool();
             Game.Player.ToolControls.UpdateSelectedToolFeedback();
@@ -88,20 +116,27 @@ namespace MrPink.PlayerSystem
     
         public void RemoveTool(ToolType tool)
         {
-            if (amountOfEachTool.ContainsKey(tool))
+            foreach (var toolAmount in amountOfEachTool)
             {
-                amountOfEachTool[tool]--;
-                if (amountOfEachTool[tool] <= 0)
-                    amountOfEachTool.Remove(tool);
-            }   
+                if (toolAmount._toolType != tool)
+                    continue;
+
+                toolAmount.amount--;
+                if (toolAmount.amount <= 0)
+                    amountOfEachTool.Remove(toolAmount);
+                return;
+            }
         }
     
         public bool CanFitTool(Tool tool)
         {
-            if (amountOfEachTool.ContainsKey(tool.tool))
+            
+            foreach (var toolAmount in amountOfEachTool)
             {
-                if (amountOfEachTool[tool.tool] >= tool.maxAmount)
-                    return false;
+                if (toolAmount._toolType != tool.tool)
+                    continue;
+
+                return toolAmount.amount < tool.maxAmount;
             }
 
             return true;
@@ -109,9 +144,12 @@ namespace MrPink.PlayerSystem
     
         public int GetAmount(ToolType toolType)
         {
-            if (amountOfEachTool.ContainsKey(toolType))
+            foreach (var toolAmount in amountOfEachTool)
             {
-                return amountOfEachTool[toolType];
+                if (toolAmount._toolType != toolType)
+                    continue;
+
+                return toolAmount.amount;
             }
 
             return 0;
