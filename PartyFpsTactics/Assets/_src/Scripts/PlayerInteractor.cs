@@ -64,7 +64,7 @@ namespace MrPink
                 {
                     StopCoroutine(CarryPortableObjectCoroutine);
                 
-                    carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer;
+                    //carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer;
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
@@ -79,7 +79,6 @@ namespace MrPink
                     selectedIO.PlayerInteraction(qPressed, ePressed);
                     return;
                 }
-            
             }
 
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
@@ -89,9 +88,12 @@ namespace MrPink
                     StopCoroutine(CarryPortableObjectCoroutine);
                     var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
                     if (tileAttack)
+                    {
                         tileAttack.dangerous = true;
+                        tileAttack.SetTempOwnerHc(Game.Player.Health, 10);
+                    }
                     
-                    carryingPortableRb.gameObject.layer = 10;
+                    //carryingPortableRb.gameObject.layer = 10;
                     carryingPortableRb.interpolation = RigidbodyInterpolation.None;
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
@@ -109,24 +111,25 @@ namespace MrPink
         IEnumerator CarryPortableObject()
         {
             var rb = selectedPortable.GetComponent<Rigidbody>();
+            TileAttack tileAttack = selectedPortable.GetComponent<TileAttack>();
         
             if (!rb)
             {
-                TileAttack tileAttack = selectedPortable.GetComponent<TileAttack>();
-                if (tileAttack)
-                {
-                    rb = selectedPortable.AddComponent<Rigidbody>();
-                    tileAttack.rb = rb;
-                }
+                rb = selectedPortable.AddComponent<Rigidbody>();
+            }
+            if (tileAttack)
+            {
+                tileAttack.rb = rb;
             }
 
             carryingPortableRb = rb;
-            lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
-            carryingPortableRb.gameObject.layer = 9;
+            carryingPortableRb.velocity = Vector3.zero;
+            /*lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
+            carryingPortableRb.gameObject.layer = 9;*/
             carryingPortableRb.useGravity = false;
             var dragInit = carryingPortableRb.drag; 
             carryingPortableRb.drag = 10;
-        
+            
             carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
             carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 

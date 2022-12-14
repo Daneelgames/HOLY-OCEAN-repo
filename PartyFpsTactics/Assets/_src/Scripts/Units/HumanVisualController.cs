@@ -82,6 +82,9 @@ namespace MrPink.Units
 
         public void SetMovementVelocity(Vector3 velocity)
         {
+            if(velocity.magnitude < 0.2f)
+                velocity = Vector3.zero;
+            
             float velocityX = Vector3.Dot(velocity.normalized, transform.right);
             float velocityZ = Vector3.Dot(velocity.normalized, transform.forward);
         

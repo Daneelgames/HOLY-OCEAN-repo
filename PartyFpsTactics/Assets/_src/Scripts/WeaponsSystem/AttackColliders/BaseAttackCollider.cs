@@ -225,7 +225,6 @@ namespace MrPink.WeaponsSystem
                     return CollisionTarget.Self;
                 }
 
-
                 if (targetHealth.HealthController && ownerHealth.team == targetHealth.HealthController.team)
                 {
                     resultDmg /= 3;
@@ -430,6 +429,29 @@ namespace MrPink.WeaponsSystem
             
             Pooling.Instance.ReleaseCollider(this, pool);
             releaseCoroutine = null;
+        }
+
+        public void SetTempOwnerHc(HealthController hc, float time)
+        {
+            ownerHealth = hc;
+            
+            if (releaseTempHcCoroutine != null)
+                StopCoroutine(releaseTempHcCoroutine);
+            
+            releaseTempHcCoroutine = StartCoroutine(ReleaseTempHc(time));
+        }
+
+        private Coroutine releaseTempHcCoroutine;
+        IEnumerator ReleaseTempHc(float time)
+        {
+            float t = 0;
+            while (t < time)
+            {
+                yield return null;
+                t += Time.deltaTime;
+            }
+
+            ownerHealth = null;
         }
     }
 }

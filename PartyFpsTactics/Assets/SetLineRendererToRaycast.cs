@@ -6,24 +6,27 @@ using UnityEngine;
 public class SetLineRendererToRaycast : MonoBehaviour
 {
     [SerializeField] private float rayDistance = 100;
-    [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private Transform pointVisual;
     [SerializeField] private LayerMask raycastMask;
-    private Vector3 rayPoint;
-    private Vector3 rayPointCloser;
-    private Vector3 rayPointFar;
-    void FixedUpdate()
+    [SerializeField] private Vector2 scaleMinMax = new Vector2(0.01f, 0.3f);
+    private float currentDistance;
+    private void OnEnable()
+    {
+        pointVisual.parent = null;
+    }
+
+    void Update()
     {
         if (Physics.Raycast(transform.position, transform.forward, out var hit, rayDistance, raycastMask))
         {
-            rayPoint = hit.point;
-            rayPointCloser = rayPoint - transform.forward * 0.5f;
-            rayPointFar = rayPoint + transform.forward * 0.5f;
+            pointVisual.position = hit.point;
+            currentDistance = Vector3.Distance(pointVisual.position, transform.position);
+            var scaler = currentDistance / rayDistance;
+            pointVisual.localScale = Vector3.Lerp(Vector3.one * scaleMinMax.x, Vector3.one * scaleMinMax.y, scaler);
         }
-    }
-
-    private void Update()
-    {
-        _lineRenderer.SetPosition(0, rayPointCloser);
-        _lineRenderer.SetPosition(1, rayPointFar);
+        else
+        {
+            pointVisual.position = transform.position + transform.forward * 10000;
+        }
     }
 }

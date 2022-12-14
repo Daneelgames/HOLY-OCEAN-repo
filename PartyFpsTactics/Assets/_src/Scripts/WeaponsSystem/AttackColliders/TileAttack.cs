@@ -59,7 +59,7 @@ namespace MrPink.WeaponsSystem
             if (!dangerous && prop)
                 return;
             
-            if (coll.gameObject.layer != 7 /*&& coll.gameObject.layer != 6 && coll.gameObject.layer != 12*/)
+            if (coll.gameObject.layer != 7 && coll.gameObject.layer != 6 && coll.gameObject.layer != 12 && coll.gameObject.layer != 11)
                 return;
             
             if (rb.velocity.magnitude < minVelocityMagnitudeToAttack)
