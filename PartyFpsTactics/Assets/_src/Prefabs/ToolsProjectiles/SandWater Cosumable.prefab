@@ -34,6 +34,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8686916175610722370}
   m_Father: {fileID: 0}
@@ -59,6 +60,7 @@ MonoBehaviour:
   _lifeTime: -1
   currentLifeTime: 0
   _dangerousTime: 0
+  projectileController: {fileID: 0}
   ragdollExplosionDistance: 2
   ragdollExplosionForce: 500
   playerExplosionForce: 100
@@ -102,8 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4ebcb2a2c5bb2488a2ba6e1d4c2c06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heal: 100
   addSleepNeed: 0
-  addFoodNeed: -100
+  addFoodNeed: 100
   addWaterNeed: -500
 --- !u!135 &8831351853180130487
 SphereCollider:
@@ -463,6 +466,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0.54555, y: -0.245, z: 0.4443}
   m_LocalScale: {x: 1.80978, y: 1.80978, z: 1.80978}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8686916175610722370}
   m_RootOrder: 0
@@ -543,6 +547,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8894320997137406929}
   m_Father: {fileID: 7706236279808264294}
