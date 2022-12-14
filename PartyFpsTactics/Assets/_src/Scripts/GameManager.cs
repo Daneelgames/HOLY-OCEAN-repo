@@ -30,7 +30,7 @@ namespace MrPink
         [Serializable]
         public enum LevelType
         {
-            Building, Road, Train, Bridge, Stealth
+            Building, Road, Train, Bridge, Stealth, Intermission
         }
 
         [SerializeField] private LevelType _levelType = LevelType.Building;
@@ -166,6 +166,8 @@ namespace MrPink
             else
                 ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
 
+            StartIntermissionScene();
+            return;
             switch (_levelType)
             {
                 case LevelType.Building:
@@ -186,36 +188,40 @@ namespace MrPink
             }
         }
         
+        public void StartIntermissionScene()
+        {
+            _levelType = LevelType.Intermission;
+            SceneManager.LoadScene(0);
+        }
         public void StartBuildingScene()
         {
             _levelType = LevelType.Building;
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
         public void StartRoadScene()
         {
             _levelType = LevelType.Road;
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         } 
         public void StartTrainScene()
         {
             _levelType = LevelType.Train;
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(3);
         } 
         public void StartBridgeScene()
         {
             _levelType = LevelType.Bridge;
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(4);
         }
         public void StartStealthScene()
         {
             _levelType = LevelType.Stealth;
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene(5);
         }
     
         public void StartFlatScene()
         {
-            ScreenshotSaver.Instance.SaveScreenshot();
-            SceneManager.LoadScene(1);
+            return;
         }
 
 
