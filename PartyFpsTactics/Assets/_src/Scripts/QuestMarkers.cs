@@ -49,14 +49,12 @@ public class QuestMarkers : MonoBehaviour
     {
         if (this != Instance)
         {
-            Debug.LogError("DOUBLE QUESTMARKERS");
             return;
         }
         for (int i = 0; i < activeMarks.Count; i++)
         {
             var marker = activeMarks[i];
             
-            Debug.Log("QUEST MARKER 1");
             if (marker == null || marker.target == null)
                 continue;
             var textUI = marker.markerName;
@@ -70,7 +68,6 @@ public class QuestMarkers : MonoBehaviour
             Vector2 pos = Game.Player.MainCamera.WorldToScreenPoint(target.position);
 
             
-            Debug.Log("QUEST MARKER 2");
             // Check if the target is behind us, to only show the icon once the target is in front
             if (Vector3.Dot((target.position - Game.Player.MainCamera.transform.position),
                 Game.Player.MainCamera.transform.forward) < 0)
@@ -93,7 +90,6 @@ public class QuestMarkers : MonoBehaviour
             pos.x = Mathf.Clamp(pos.x, minX, maxX);
             pos.y = Mathf.Clamp(pos.y, minY, maxY);
 
-            Debug.Log("QUEST MARKER 3");
             marker.transform.position =
                 Vector3.Lerp(marker.transform.position, pos, markerSpeed * Time.unscaledDeltaTime);
         }

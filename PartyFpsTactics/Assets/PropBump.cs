@@ -27,6 +27,8 @@ public class PropBump : MonoBehaviour
             return;
         
         if (rb == null)
+            rb = gameObject.GetComponent<Rigidbody>();
+        if (rb == null)
             rb = gameObject.AddComponent<Rigidbody>();
         
         rb.isKinematic = false;
