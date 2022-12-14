@@ -12,6 +12,8 @@ namespace MrPink.Tools
         SandWater,
         OilCoffee,
         CheckpointTicket,
-        Shotter
+        Shotter,
+        PistolLaserPoint,
+        Knife
     }
 }

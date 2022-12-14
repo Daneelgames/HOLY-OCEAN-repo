@@ -30,7 +30,7 @@ namespace MrPink
         [Serializable]
         public enum LevelType
         {
-            Building, Road, Train, Bridge, Stealth, Intermission
+            Intermission, Building, Road, Train, Bridge, Stealth
         }
 
         [SerializeField] private LevelType _levelType = LevelType.Building;
@@ -68,6 +68,9 @@ namespace MrPink
     
         private void Update()
         {
+            if (Game._instance == null || Game.Player == null)
+                return;
+            
             if (Input.GetKeyDown(KeyCode.O))
                 AudioListener.volume = Mathf.Clamp(AudioListener.volume - 0.1f, 0, 1);
             if (Input.GetKeyDown(KeyCode.P))
@@ -193,6 +196,28 @@ namespace MrPink
             _levelType = LevelType.Intermission;
             SceneManager.LoadScene(0);
         }
+
+        public void StartLevel(LevelType levelType)
+        {
+            switch (levelType)
+            {
+                case LevelType.Building:
+                    StartBridgeScene();
+                    break;
+                case LevelType.Road:
+                    StartRoadScene();
+                    break;
+                case LevelType.Train:
+                    StartTrainScene();
+                    break;
+                case LevelType.Stealth:
+                    StartStealthScene();
+                    break;
+                case LevelType.Bridge:
+                    StartBridgeScene();
+                    break;
+            }
+        }
         public void StartBuildingScene()
         {
             _levelType = LevelType.Building;
@@ -215,6 +240,9 @@ namespace MrPink
         }
         public void StartStealthScene()
         {
+            StartBuildingScene();
+            return;
+            
             _levelType = LevelType.Stealth;
             SceneManager.LoadScene(5);
         }

@@ -36,7 +36,9 @@ public class ConstructCovers : MonoBehaviour
     {
         foreach (var tileHealth in tilesList)
         {
-            var newCover = tileHealth.gameObject.AddComponent<Cover>();
+            var newCover = tileHealth.gameObject.GetComponent<Cover>();
+            if (!newCover)
+                newCover = tileHealth.gameObject.AddComponent<Cover>();
             newCover.ConstructSpots();
         }
     }

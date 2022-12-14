@@ -22,6 +22,8 @@ namespace MrPink.PlayerSystem
         [SerializeField, AssetsOnly, Required]
         private WeaponController startingPistolWeapon;
         [SerializeField, AssetsOnly, Required]
+        private WeaponController startingPistolLaserPointWeapon;
+        [SerializeField, AssetsOnly, Required]
         private WeaponController shotterWeapon;
 
         [SerializeField, AssetsOnly, Required] 
@@ -50,7 +52,7 @@ namespace MrPink.PlayerSystem
             if (BuildingGenerator.Instance == null)
                 return;
             
-            SpawnPlayerWeapon(_startingSwordWeapon, 0);
+            //SpawnPlayerWeapon(_startingSwordWeapon, 0);
         }
     
     
@@ -86,10 +88,14 @@ namespace MrPink.PlayerSystem
         
         public void AddTool(Tool tool)
         {
+            if (tool.tool == ToolType.Knife)
+                SpawnPlayerWeapon(_startingSwordWeapon);
+            if (tool.tool == ToolType.PistolLaserPoint)
+                SpawnPlayerWeapon(startingPistolLaserPointWeapon);
             if (tool.tool == ToolType.DualWeilder)
-                SpawnPlayerWeapon(startingPistolWeapon, 1);
+                SpawnPlayerWeapon(startingPistolWeapon);
             if (tool.tool == ToolType.Shotter)
-                SpawnPlayerWeapon(shotterWeapon, 1);
+                SpawnPlayerWeapon(shotterWeapon);
             
             if (tool.tool == ToolType.OneTimeShield)
                 
