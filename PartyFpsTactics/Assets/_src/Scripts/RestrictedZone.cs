@@ -13,6 +13,7 @@ public class RestrictedZone : MonoBehaviour
     private List<GameObject> unitsInsideGO = new List<GameObject>();
     private bool intruderInside = false;
     private bool sirenPlaying = false;
+    [SerializeField] private bool stack = false;
     public AudioSource entruderInsideAu;
     private void Start()
     {
@@ -32,7 +33,7 @@ public class RestrictedZone : MonoBehaviour
                     if (hc.crimeLevel)
                     {
                         enemyInside = true;
-                        hc.crimeLevel.CrimeCommitedAgainstTeam(ownerTeam, false, false);
+                        hc.crimeLevel.CrimeCommitedAgainstTeam(ownerTeam, stack, false);
                     }
                 }
             }
