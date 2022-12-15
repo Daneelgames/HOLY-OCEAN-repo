@@ -32,7 +32,7 @@ namespace MrPink.WeaponsSystem
         {
             while (true)
             {
-                await Task.Delay(500);
+                await Task.Delay(1000);
                 collidedList.Clear();
             }
         }

@@ -236,6 +236,8 @@ namespace MrPink
         }
         public void StartRoadScene()
         {
+            StartTrainScene();  
+            return;
             _levelType = LevelType.Road;
             SceneManager.LoadScene(2);
         } 
