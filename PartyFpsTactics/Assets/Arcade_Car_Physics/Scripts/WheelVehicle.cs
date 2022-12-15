@@ -171,7 +171,7 @@ namespace VehicleBehaviour {
 
         [Header("Boost")]
         // Disable boost
-        [HideInInspector] public bool allowBoost = true;
+        public bool allowBoost = true;
 
         // Maximum boost available
         [SerializeField] float maxBoost = 10f;
@@ -273,7 +273,7 @@ namespace VehicleBehaviour {
             
             // Turn
             steering = turnInputCurve.Evaluate(_hor) * steerAngle;
-            
+            Debug.Log("CAR SET INPUT BOOST " + boost);
             boosting = boost;
             /*
             // Boost

@@ -126,9 +126,7 @@ namespace MrPink
                 float hor = Input.GetAxis("Horizontal");
                 float ver = Input.GetAxis("Vertical");
 
-                boosting = Input.GetKey(KeyCode.LeftShift) && Game.Player.Movement.stamina > 0;
-                if (boosting)
-                    Game.Player.Movement.ChangeStamina(staminaChangeOnBoost);
+                boosting = Input.GetKey(KeyCode.LeftShift);
                 controlledMachine.SetCarInput(hor,ver, brake, boosting);
                 yield return null;
             }

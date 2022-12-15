@@ -125,7 +125,8 @@ namespace MrPink.Units
         public HealthController SpawnRedUnit(Vector3 pos)
         {
             pos = SamplePos(pos);
-            var unit =  Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            //var unit =  Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
+            var unit =  Instantiate(redTeamUnitPrefabs[0], pos, Quaternion.identity, _spawnRoot); // spawn only easy one for now
             //hcInGame.Add(unit);
             //unit.gameObject.SetActive(false);
             return unit;
