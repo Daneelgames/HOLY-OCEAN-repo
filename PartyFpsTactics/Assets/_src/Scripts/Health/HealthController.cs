@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
@@ -15,7 +16,7 @@ using UnityEditor;
 
 namespace MrPink.Health
 {
-    public class HealthController : MonoBehaviour
+    public class HealthController : NetworkBehaviour
     {
         public Unit selfUnit;
         public int health = 100;

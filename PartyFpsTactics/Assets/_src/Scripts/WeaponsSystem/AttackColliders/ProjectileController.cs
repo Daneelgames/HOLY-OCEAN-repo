@@ -31,7 +31,6 @@ namespace MrPink.WeaponsSystem
 
         [Space]
         
-        public float projectileRandomRotationMax = 0;
         public bool dieOnContact = true;
         public bool ricochetOnContact = false;
         public bool stickOnContact = false;
@@ -66,7 +65,7 @@ namespace MrPink.WeaponsSystem
             PlaySound(flyAu);
         }
 
-        public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
+        public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0)
         {
             base.Init(owner, source, shotHolder, action);
 
@@ -78,7 +77,7 @@ namespace MrPink.WeaponsSystem
                 if (rb != null && !addVelocityEveryFrame)
                     rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
 
-                transform.localEulerAngles += new Vector3(Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax),Random.Range(-projectileRandomRotationMax, projectileRandomRotationMax), 0);   
+                transform.localEulerAngles += new Vector3(offsetX,offsetY, 0);   
             }
 
             StartCoroutine(UpdateLastPosition());

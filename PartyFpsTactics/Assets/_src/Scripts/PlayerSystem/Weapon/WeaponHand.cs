@@ -175,7 +175,10 @@ namespace MrPink.PlayerSystem
             if (Weapon.IsMelee)
                 CurrentPosition = WeaponPosition.MeleeAttack;
 
-            var attackTime = await Weapon.Shot(Game.LocalPlayer.Health);
+            //var attackTime = await Weapon.Shot(Game.LocalPlayer.Health);
+            var attackTime = Weapon.cooldown;
+            
+            Weapon.Shot(Game.LocalPlayer.Health);
 
             if (Weapon.IsMelee)
                 await UniTask.Delay((int) (attackTime * 1000));

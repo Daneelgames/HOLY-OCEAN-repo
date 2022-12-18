@@ -28,7 +28,7 @@ public class GameVoxelModifier : NetworkBehaviour
         else
         {
             // tell server to tell other clients
-            RpcModifyOnServer(pos);
+            //RpcModifyOnServer(pos);
         }
     }
 
@@ -41,6 +41,7 @@ public class GameVoxelModifier : NetworkBehaviour
     [ObserversRpc]
     void RpcModifyLocally(Vector3 pos)
     {
+        Debug.Log("MODIFIER MODIFY");
         Modifier.ModifyAtPos(pos);
     }
 }

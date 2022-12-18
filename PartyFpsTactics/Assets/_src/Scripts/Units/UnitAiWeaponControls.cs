@@ -110,7 +110,7 @@ namespace MrPink.Units
                 
             if (angle < minAngleToShoot)
             {
-                activeWeapon.Shot(_selfUnit.HealthController, enemyToShoot.visibilityTrigger.transform).ForgetWithHandler();
+                activeWeapon.Shot(_selfUnit.HealthController, enemyToShoot.visibilityTrigger.transform);
                 
                 yield return new WaitForSeconds(Random.Range(weaponsAttackSwitchCooldownMinMax.x, weaponsAttackSwitchCooldownMinMax.y));
             }

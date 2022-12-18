@@ -19,8 +19,7 @@ namespace MrPink.WeaponsSystem
 
         [Header("Attacking")]
         public float cooldown = 1;
-
-
+        
         [SerializeField]
         [FormerlySerializedAs("delay")]
         private float _delay = 0f;
@@ -40,6 +39,8 @@ namespace MrPink.WeaponsSystem
         [SerializeField, ChildGameObjectsOnly, CanBeNull]
         private BaseWeaponAnimation _animation;
 
+        public float projectileRandomRotationMax = 0;
+        
         [Header("Only for Player Weapon")]
         
         public float attackStaminaCost = 0;
@@ -63,7 +64,7 @@ namespace MrPink.WeaponsSystem
         [Range(0,1000)]
         public float WeaponRotationZScaler = 3f;
 
-
+        private HealthController _ownerHc;
         public Quaternion InitLocalRotation { get; private set; }
     
         public bool OnCooldown { get; set; } = false;
@@ -79,15 +80,23 @@ namespace MrPink.WeaponsSystem
         }
     
     
-        [Button]
-        public async UniTask<float> Shot(HealthController ownerHc, Transform aiAimTransform = null)
+        //[Button]
+        // ReSharper disable Unity.PerformanceAnalysis
+        public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
         {
-            return await Shot(shotHolder.forward, ownerHc, aiAimTransform);
+            ShotAsync(shotHolder.forward, ownerHc, aiAimTransform);
         }
 
-    
-        public async UniTask<float> Shot(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
+        void SetOwnHc(HealthController hc)
         {
+            _ownerHc = hc;
+        }
+    
+        async void ShotAsync(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
+        {
+            if (_ownerHc == null)
+                SetOwnHc(ownerHc);
+            
             OnCooldown = true;
             if (_attackSignalAudioSource != null)
             {
@@ -103,8 +112,8 @@ namespace MrPink.WeaponsSystem
                 attackAu.Play();
             }
             
-            if (ownerHc.health <= 0)
-                return 0;
+            if (_ownerHc.health <= 0)
+                return;
             
             // AI is aiming
             if (aiAimTransform != null)
@@ -113,29 +122,9 @@ namespace MrPink.WeaponsSystem
                 direction = (aiAimTransform.position - shotHolder.position).normalized;
             }
             
-            bool isPlayer = ownerHc == Game.LocalPlayer.Health;
-            
-            ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
-            DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
+            bool isPlayer = _ownerHc == Game.LocalPlayer.Health;   
 
-            float projectileLifeTime = 0;
-            
-            for (int i = 0; i < bulletsPerShot; i++)
-            {
-                BaseAttackCollider newProjectile;
-                if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword || _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeast ||
-                    _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeastSmall)
-                    newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, shotHolder, Vector3.zero,
-                        Quaternion.identity);
-                else
-                    newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, null, shotHolder.position,
-                        Quaternion.LookRotation(direction));
-
-                newProjectile.Init(ownerHc, source, shotHolder, action);
-
-                if (projectileLifeTime < newProjectile.LifeTime)
-                    projectileLifeTime = newProjectile.LifeTime;
-            }
+            SpawnProjectileInDirection(direction, isPlayer, _ownerHc);
 
             if (isPlayer)
                 Game.LocalPlayer.Movement.ChangeStamina(-attackStaminaCost);
@@ -144,9 +133,22 @@ namespace MrPink.WeaponsSystem
             
             if (_animation != null)
                 _animation.Play().ForgetWithHandler();
-
-            return projectileLifeTime;
         }
+
+        void SpawnProjectileInDirection(Vector3 direction, bool isPlayer, HealthController ownerHc)
+        {
+            //ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
+            DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
+
+            for (int i = 0; i < bulletsPerShot; i++)
+            {
+                float offsetX = Random.Range(0, projectileRandomRotationMax);
+                float offsetY = Random.Range(0, projectileRandomRotationMax);
+                
+                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(_attackColliderTag, shotHolder, direction, _ownerHc, source, offsetX, offsetY);
+            }
+        }
+
     
         private async UniTask Cooldown()
         {

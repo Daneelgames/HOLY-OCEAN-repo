@@ -1869,6 +1869,7 @@ GameObject:
   - component: {fileID: 2099900846646390429}
   - component: {fileID: 4075464650987322544}
   - component: {fileID: 5201198674905340780}
+  - component: {fileID: 8911922951318658635}
   m_Layer: 7
   m_Name: Player Prefab
   m_TagString: Untagged
@@ -1909,6 +1910,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 4075464650987322544}
+  _networkObjectCache: {fileID: 4075464650987322544}
   selfUnit: {fileID: 0}
   health: 300
   healthMax: 300
@@ -1956,7 +1960,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675e7dbad8eb8144db59d3923eac2dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  narrativePlayer: 0
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 4075464650987322544}
+  _networkObjectCache: {fileID: 4075464650987322544}
   WalkableLayerMask:
     serializedVersion: 2
     m_Bits: 6209
@@ -2010,7 +2016,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a52810b21e14306a0ce9cfd2aff7131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 4075464650987322544}
   _networkObjectCache: {fileID: 4075464650987322544}
   _headTransform: {fileID: 5596697988226418836}
@@ -2389,6 +2395,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f9f4a6006d4379ae2159dad8fbc0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 3
+  _addedNetworkObject: {fileID: 4075464650987322544}
+  _networkObjectCache: {fileID: 4075464650987322544}
   _mainCamera: {fileID: 1129616927199495341}
   _health: {fileID: 9066321015931522152}
   _movement: {fileID: 5596697987043485628}
@@ -2397,7 +2406,6 @@ MonoBehaviour:
   toolControls: {fileID: 6793749382420050761}
   _inventory: {fileID: 3117134100572245634}
   _interactor: {fileID: 7740393335213311656}
-  _positionableObject: {fileID: 5596697987043485631}
   _lookAround: {fileID: 5596697987043485630}
   _vehicleControls: {fileID: 3967563716606119907}
   _characterNeeds: {fileID: 3533183313552294035}
@@ -2445,8 +2453,12 @@ MonoBehaviour:
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
+  - {fileID: 9066321015931522152}
+  - {fileID: 5596697987043485628}
   - {fileID: 5596697987043485630}
+  - {fileID: 8799871737509889761}
   - {fileID: 5201198674905340780}
+  - {fileID: 8911922951318658635}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -2470,7 +2482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: 4075464650987322544}
   _networkObjectCache: {fileID: 4075464650987322544}
   _synchronizeParent: 0
@@ -2500,6 +2512,22 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!114 &8911922951318658635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596697987043485619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303e6bba9c1a01341a98512f031c4c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 4075464650987322544}
+  _networkObjectCache: {fileID: 4075464650987322544}
+  networkVisual: {fileID: 6141397245279354897}
 --- !u!1 &5596697988226418837
 GameObject:
   m_ObjectHideFlags: 0
@@ -2590,8 +2618,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6115276576261760312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9135, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.44752002, z: 0.4}
+  m_LocalPosition: {x: 0, y: 1.196, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.7300394, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5596697987043485631}

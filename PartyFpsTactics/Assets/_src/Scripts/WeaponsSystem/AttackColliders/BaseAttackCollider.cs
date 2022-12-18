@@ -102,7 +102,7 @@ namespace MrPink.WeaponsSystem
             }
         }
 
-        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL)
+        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0)
         {
             if (projectileController)
             {
