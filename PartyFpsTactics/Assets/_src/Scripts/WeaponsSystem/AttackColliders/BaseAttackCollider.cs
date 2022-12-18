@@ -136,9 +136,12 @@ namespace MrPink.WeaponsSystem
             {
                 Debug.Log("UNITS EXPLOSION");
                 InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
+                GameVoxelModifier.Instance?.DestructionInWorld(transform.position);
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
                     ragdollExplosionForce, playerExplosionForce);
                 unitsExplosionCompleted = true;
+                
+                // ReSharper disable once Unity.NoNullPropagation
             }
         }
         

@@ -14,6 +14,9 @@ public class ContentPlacer : MonoBehaviour
     {
         Instance = this;
     }
+    
+    [SerializeField] private float respawnDelay = 5;
+    [SerializeField] private float minMobSpawnDistance = 20;
 
     public List<Transform> proceedGameObjects = new List<Transform>();
     
@@ -25,7 +28,7 @@ public class ContentPlacer : MonoBehaviour
 
     IEnumerator SpawnAroundPlayer()
     {
-        float cooldown = 5;
+        float cooldown = respawnDelay;
         while (true)
         {
             yield return new WaitForSeconds(cooldown);
@@ -42,7 +45,7 @@ public class ContentPlacer : MonoBehaviour
     {
         Vector3 pos = RaycastedPosAroundPosition(Game.Player._mainCamera.transform.position, 100);
             
-        if (Vector3.Distance(pos, Game.Player._mainCamera.transform.position) < 20)
+        if (Vector3.Distance(pos, Game.Player._mainCamera.transform.position) < minMobSpawnDistance)
             return;
 
         UnitsManager.Instance.SpawnRedUnit(pos);

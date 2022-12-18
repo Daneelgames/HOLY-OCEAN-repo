@@ -30,7 +30,7 @@ public class EnvironmentVisualManager : MonoBehaviour
         
         if (randomizeFog)
         {
-            fogIntensity *= Random.Range(0.2f, 2f);
+            fogIntensity *= Random.Range(0.2f, 1.75f);
             if (randomColorsList.Count > 1)
                 fogColor = randomColorsList[Random.Range(0, randomColorsList.Count)];
             camBackColor = fogColor;

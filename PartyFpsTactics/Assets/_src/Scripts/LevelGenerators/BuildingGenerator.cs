@@ -1095,6 +1095,8 @@ public class BuildingGenerator : MonoBehaviour
 
                 //Debug.Log("Tile Destroyed AddRigidbody");
                 UnitsManager.Instance.RagdollTileExplosion(tile.transform.position);
+                InteractableEventsManager.Instance.ExplosionNearInteractables(tile.transform.position);
+                GameVoxelModifier.Instance?.DestructionInWorld(tile.transform.position);
                 tile.ActivateRigidbody(100, tilePhysicsMaterial);
                 level.roomTilesMatrix[x, YYY, z] = null;
             }

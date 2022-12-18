@@ -109,7 +109,8 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
                 
             case ScriptedEventType.StartProcScene:
-                GameManager.Instance.StartBuildingScene();
+                // restart
+                GameManager.Instance.RespawnPlayer();
                 break;
                 
             case ScriptedEventType.StartFlatScene:

@@ -125,6 +125,8 @@ namespace MrPink
                     ContentPlacer.Instance.SpawnRedUnitAroundPlayer();
                 if (Input.GetKeyDown(KeyCode.R))
                     RespawnPlayer();
+                if (Input.GetKeyDown(KeyCode.F))
+                    ScoringSystem.Instance.AddScore(1000);
                 if (Input.GetKeyDown(KeyCode.K))
                     KillPlayer();
                 if (Input.GetKeyDown(KeyCode.X))
@@ -253,11 +255,13 @@ namespace MrPink
         }
         public void StartStealthScene()
         {
+            /*
             StartBuildingScene();
             return;
+            */
             
             _levelType = LevelType.Stealth;
-            SceneManager.LoadScene(5);
+            SceneManager.LoadScene(0);
         }
     
         public void StartFlatScene()

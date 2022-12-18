@@ -338,7 +338,7 @@ namespace MrPink.PlayerSystem
                 scaler = 0.66f;
             
             // RUNNING
-            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
+            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && (State.IsGrounded || State.IsClimbing == false))
             {
                 State.IsRunning = moveInFrame;
                 State.IsMoving = false;
@@ -476,7 +476,14 @@ namespace MrPink.PlayerSystem
             State.IsClimbing = hitInfoClimb.Length > 0;
             
             if (State.IsClimbing)
+            {
+                if (State.IsGrounded == false)
+                {
+                    if (crouching == false)
+                        SetCrouch(true);
+                }
                 heightToFallFrom = transform.position.y;
+            }
         }
         
         private void ApplyFreeMovement()

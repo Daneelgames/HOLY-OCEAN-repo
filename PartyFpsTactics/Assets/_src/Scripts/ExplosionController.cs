@@ -29,6 +29,9 @@ namespace MrPink
             scoringAction = action;
             au.pitch = Random.Range(0.75f, 1.25f);
             au.Play();
+            
+            InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
+            GameVoxelModifier.Instance?.DestructionInWorld(transform.position);
             UnitsManager.Instance.RagdollTileExplosion(transform.position, explosionDistance, explosionForce, explosionForcePlayer);
         }
 
