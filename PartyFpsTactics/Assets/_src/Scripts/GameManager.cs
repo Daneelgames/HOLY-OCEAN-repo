@@ -123,8 +123,6 @@ namespace MrPink
             // CHEATS
             if (Input.GetKey(KeyCode.G) && Input.GetKey(KeyCode.Z))
             {
-                if (Input.GetKeyDown(KeyCode.T))
-                    ContentPlacer.Instance.SpawnRedUnitAroundPlayer();
                 if (Input.GetKeyDown(KeyCode.R))
                     RespawnPlayer();
                 if (Input.GetKeyDown(KeyCode.F))

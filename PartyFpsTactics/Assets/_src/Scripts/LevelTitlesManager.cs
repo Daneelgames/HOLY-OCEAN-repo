@@ -24,11 +24,13 @@ public class LevelTitlesManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(ShowIntroCoroutine());
+        return;
         ShowIntro();
         Invoke(nameof(HideIntro), 1);
     }
 
-    public void ShowIntro()
+    void ShowIntro()
     {
         StartCoroutine(ShowIntroCoroutine());
     }
@@ -40,18 +42,20 @@ public class LevelTitlesManager : MonoBehaviour
     
     private IEnumerator ShowIntroCoroutine()
     {
+        float time = 1f;
         play = true;
         levelTitlesAnim.SetBool("Intro", true);
         levelNameText.text = String.Empty;
         
         yield return new WaitForSeconds(0.3f);
         
-        while (play)
+        while (time > 0)
         {
             string newString = GameManager.Instance.UppercaseRandomly(ProgressionManager.Instance.CurrentLevel.levelName);
             levelNameText.text = newString;
             float r = Random.Range(0.05f, 0.75f);
             yield return new WaitForSeconds(r);
+            time -= r;
         }
         
         levelTitlesAnim.SetBool("Intro", false); 

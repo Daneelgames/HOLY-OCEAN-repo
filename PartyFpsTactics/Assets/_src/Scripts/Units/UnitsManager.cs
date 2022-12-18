@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Cysharp.Threading.Tasks;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Unity.AI.Navigation;
@@ -42,6 +43,7 @@ namespace MrPink.Units
         private readonly List<BasicHealth> _bodyPartsQueueToKillCombo = new List<BasicHealth>();
 
         private Transform _spawnRoot;
+        public Transform SpawnRoot => _spawnRoot;
     
         private void Awake()
         {
@@ -121,16 +123,6 @@ namespace MrPink.Units
             inst.gameObject.SetActive(false);
             return inst;
         }
-        
-        public HealthController SpawnRedUnit(Vector3 pos)
-        {
-            pos = SamplePos(pos);
-            //var unit =  Instantiate(redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
-            var unit =  Instantiate(redTeamUnitPrefabs[0], pos, Quaternion.identity, _spawnRoot); // spawn only easy one for now
-            //hcInGame.Add(unit);
-            //unit.gameObject.SetActive(false);
-            return unit;
-        }
     
         public HealthController SpawnNeutralUnit(Vector3 pos)
         {
@@ -150,7 +142,7 @@ namespace MrPink.Units
             return unit;
         }
 
-        Vector3 SamplePos(Vector3 pos)
+        public Vector3 SamplePos(Vector3 pos)
         {
             return pos;
             

@@ -84,16 +84,20 @@ namespace MrPink.PlayerSystem
 
         public override void OnStartClient() { 
             base.OnStartClient();
-            Init();
+          
+            if (IsOwner)
+                Init();
         }
         private void Init()
         {
-            SetLocalPlayer();
+            if (IsOwner)
+                SetLocalPlayer();
         }
 
         [Client(RequireOwnership = true)]
         void SetLocalPlayer()
         {
+            Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
             Game._instance.SetLocalPlayer(this);
         }
 

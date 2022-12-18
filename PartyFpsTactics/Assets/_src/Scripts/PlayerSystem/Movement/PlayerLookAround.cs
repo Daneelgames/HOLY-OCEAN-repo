@@ -54,11 +54,13 @@ namespace MrPink.PlayerSystem
         {
             if (base.IsOwner)
             {
+                Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
                 _headTransform.gameObject.SetActive(true);
                 _headTransform.parent = null;
             }
             else
             {
+                Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS NON LOCAL PLAYER");
                 _headTransform.gameObject.SetActive(false);
                 return;
             }

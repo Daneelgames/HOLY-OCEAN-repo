@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using MrPink;
 using MrPink.Units;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ContentPlacer : MonoBehaviour
+public class ContentPlacer : NetworkBehaviour
 {
     public static ContentPlacer Instance;
 
@@ -21,10 +22,14 @@ public class ContentPlacer : MonoBehaviour
     public List<Transform> proceedGameObjects = new List<Transform>();
     
     public List<InteractiveObject> lootToSpawnAround;
-    private void Start()
-    {
+    
+    public override void OnStartClient() { 
+        base.OnStartClient();
+        
+
         StartCoroutine(SpawnAroundPlayer());
     }
+    
 
     IEnumerator SpawnAroundPlayer()
     {
@@ -40,12 +45,15 @@ public class ContentPlacer : MonoBehaviour
             if (Game.LocalPlayer.Health.health <= 0)
                 continue;
             
-            SpawnRedUnitAroundPlayer();
+            if (IsServer)
+                SpawnRedUnitAroundPlayer();
+            
             SpawnLootAroundPlayer();
         }
     }
 
-    public void SpawnRedUnitAroundPlayer()
+    [Server]
+    void SpawnRedUnitAroundPlayer()
     {
         if (UnitsManager.Instance.HcInGame.Count > 30)
             return;
@@ -55,9 +63,17 @@ public class ContentPlacer : MonoBehaviour
         if (Vector3.Distance(pos, Game.LocalPlayer._mainCamera.transform.position) < minMobSpawnDistance)
             return;
 
-        UnitsManager.Instance.SpawnRedUnit(pos);
+        SpawnRedUnit(pos);
     }
     
+        
+    [Server]
+    void SpawnRedUnit(Vector3 pos)
+    {
+        pos = UnitsManager.Instance.SamplePos(pos);
+        var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+        ServerManager.Spawn(unit.gameObject);
+    }
     void SpawnLootAroundPlayer()
     {
         Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer._mainCamera.transform.position, 100);
