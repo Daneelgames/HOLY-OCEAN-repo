@@ -149,7 +149,6 @@ namespace MrPink.WeaponsSystem
             }
         }
 
-    
         private async UniTask Cooldown()
         {
             OnCooldown = true;
