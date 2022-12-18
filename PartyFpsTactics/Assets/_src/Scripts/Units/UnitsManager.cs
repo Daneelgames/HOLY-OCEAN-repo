@@ -190,6 +190,7 @@ namespace MrPink.Units
                 
                 if (hcInGame[i].playerMovement)
                 {
+                    continue;
                     hcInGame[i].playerMovement.rb.AddForce((hcInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                               playerForce, ForceMode.VelocityChange);
                     continue;

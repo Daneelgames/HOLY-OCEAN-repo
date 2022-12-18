@@ -114,6 +114,14 @@ namespace MrPink.PlayerSystem
             SetCrouch(false);
         }
 
+        public override void OnStartClient() { 
+            base.OnStartClient();
+            if (IsOwner == false)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+            }
+        }
         
         private void Update()
         {

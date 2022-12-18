@@ -32,7 +32,7 @@ public class GameVoxelModifier : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     void RpcModifyOnServer(Vector3 pos)
     {
         RpcModifyLocally(pos);
