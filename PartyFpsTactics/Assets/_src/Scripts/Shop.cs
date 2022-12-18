@@ -91,7 +91,7 @@ namespace MrPink
             selectedItemIndex = index;
             selectedInfoNameText.text = toolsList[selectedItemIndex].toolName;
             selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription;
-            int amount = Game.LocalPlayer.Inventory.GetAmount(toolsList[selectedItemIndex].tool);
+            int amount = Game._instance && Game.LocalPlayer ? Game.LocalPlayer.Inventory.GetAmount(toolsList[selectedItemIndex].tool) : 0;
             selectedInfoDescriptionText.text += ". " + amount + " / " + toolsList[selectedItemIndex].maxAmount;
         
             // TODO перенести текстовые штуки в систему локализации
@@ -124,6 +124,8 @@ namespace MrPink
 
         public void BuyItem()
         {
+            if (Game._instance == null || Game.LocalPlayer == null)
+                return;
             // buy selectedItemIndex item
             if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore)
                 return;
