@@ -12,5 +12,7 @@ public class PlayerVisual : NetworkBehaviour
 
         if (base.IsOwner)
             networkVisual.gameObject.SetActive(false);
+        else
+            networkVisual.gameObject.SetActive(true);
     }
 }

@@ -2856,6 +2856,7 @@ GameObject:
   - component: {fileID: 991114053960957157}
   - component: {fileID: 5795806013010857810}
   - component: {fileID: 7585498236319895167}
+  - component: {fileID: 5639291339320031447}
   m_Layer: 7
   m_Name: MotherBeast
   m_TagString: Untagged
@@ -2916,7 +2917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
+  _addedNetworkObject: {fileID: 5639291339320031447}
   _networkObjectCache: {fileID: 0}
   selfUnit: {fileID: 4184761829863390397}
   health: 10000
@@ -3055,6 +3056,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 5639291339320031447}
+  _networkObjectCache: {fileID: 0}
   _moveSpeed: 2
   _turnSpeed: 4
   gravityForce: 13
@@ -3191,8 +3195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da030c9638e719468202567e4578531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 0}
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 5639291339320031447}
   _networkObjectCache: {fileID: 0}
   activeWeapons:
   - {fileID: 3490070832389180094}
@@ -3255,6 +3259,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &5639291339320031447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6502528235097576629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours: []
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: -1
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 6305516720254844796
+  _sceneNetworkObjects: []
 --- !u!1 &6858113482902834692
 GameObject:
   m_ObjectHideFlags: 0
