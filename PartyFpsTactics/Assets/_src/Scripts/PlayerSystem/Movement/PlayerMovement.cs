@@ -430,11 +430,16 @@ namespace MrPink.PlayerSystem
         private float lastVelocityInAirY = 0;
         private void GroundCheck()
         {
+            if (Game._instance == null || Game.LocalPlayer == null)
+                return;
+            
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 if (!State.IsGrounded && Game.LocalPlayer.VehicleControls.controlledMachine == null && !State.IsClimbing)
                 {
-                    PlayerFootsteps.Instance.PlayLanding();
+                    if (PlayerFootsteps.Instance)
+                        PlayerFootsteps.Instance.PlayLanding();
+                    
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
                         Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
