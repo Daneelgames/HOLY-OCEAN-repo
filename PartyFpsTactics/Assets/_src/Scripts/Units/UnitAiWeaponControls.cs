@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Brezg.Extensions.UniTaskExtensions;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.WeaponsSystem;
@@ -9,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace MrPink.Units
 {
-    public class UnitAiWeaponControls : MonoBehaviour
+    public class UnitAiWeaponControls : NetworkBehaviour
     {
         public List<WeaponController> activeWeapons;
         public List<Transform> handsIk;
@@ -37,6 +38,11 @@ namespace MrPink.Units
         {
             while (_selfUnit.HealthController.health > 0)
             {
+                if (IsServer == false)
+                {
+                    yield return new WaitForSeconds(1);
+                    continue;
+                }
                 if (updateRate > 0)
                     yield return new WaitForSeconds(updateRate);
                 else

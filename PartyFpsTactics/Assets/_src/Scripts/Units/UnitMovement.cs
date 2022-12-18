@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using FishNet.Object;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,7 +12,7 @@ using UnityEditor;
 
 namespace MrPink.Units
 {
-    public class UnitMovement : MonoBehaviour
+    public class UnitMovement : NetworkBehaviour
     {
         // TODO вынести конфиги передвижения в SO
         
@@ -136,6 +137,9 @@ namespace MrPink.Units
         
         public void AgentSetPath(Vector3 target, bool isFollowing, bool cheap = true)
         {
+            if (IsServer == false)
+                return;
+            
             if (enabled == false)
                 return;
             

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Brezg.Extensions.UniTaskExtensions;
 using Cysharp.Threading.Tasks;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
