@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using _src.Scripts;
+using FishNet.Component.Spawning;
+using FishNet.Managing;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
@@ -154,6 +156,11 @@ namespace MrPink
         }
         public void RespawnPlayer()
         {
+            Game.LocalPlayer.Movement.TeleportToPosition(ContentPlacer.Instance.RaycastedPosAroundPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position,1000f));
+            Game.LocalPlayer.Resurrect();
+            Shop.Instance.OpenShop(0);
+            
+            return;
             // change player's position
             switch (_levelType)
             {

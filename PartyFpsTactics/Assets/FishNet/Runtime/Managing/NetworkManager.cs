@@ -69,6 +69,7 @@ namespace FishNet.Managing
         /// True if this instance of the NetworkManager is initialized.
         /// </summary>
         public bool Initialized { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>

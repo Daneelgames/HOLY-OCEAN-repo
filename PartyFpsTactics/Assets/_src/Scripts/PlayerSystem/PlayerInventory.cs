@@ -195,10 +195,22 @@ namespace MrPink.PlayerSystem
         public void SetWeapon(WeaponController weapon, Hand hand)
         {
             if (hand == Hand.Left)
+            {
+                if (leftWeapon != null)
+                {
+                    Destroy(leftWeapon.gameObject);
+                }
                 leftWeapon = weapon;
+            }
             
             if (hand == Hand.Right)
+            {
+                if (rightWeapon != null)
+                {
+                    Destroy(rightWeapon.gameObject);
+                }
                 rightWeapon = weapon;
+            }
         }
     }
 }

@@ -97,6 +97,7 @@ namespace MrPink.PlayerSystem
             _hands[hand].Weapon = weapon;
         }
 
+
         public void CooldownOnAttackInput()
         {
             foreach (var weaponHand in _hands)

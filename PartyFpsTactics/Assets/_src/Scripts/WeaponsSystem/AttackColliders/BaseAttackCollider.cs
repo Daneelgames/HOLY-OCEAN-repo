@@ -174,7 +174,7 @@ namespace MrPink.WeaponsSystem
             
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
             
-            if (targetCollider.gameObject == Game.LocalPlayer.GameObject && IsPlayerEnemyToOwner())
+            if (targetCollider.gameObject == Game.LocalPlayer.GameObject /*&& IsPlayerEnemyToOwner()*/)
             {
                 if (ownerHealth.controlledMachine &&
                     ownerHealth.controlledMachine == Game.LocalPlayer.VehicleControls.controlledMachine)

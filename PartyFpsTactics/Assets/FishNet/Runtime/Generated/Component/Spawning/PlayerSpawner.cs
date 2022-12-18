@@ -15,6 +15,13 @@ namespace FishNet.Component.Spawning
     [AddComponentMenu("FishNet/Component/PlayerSpawner")]
     public class PlayerSpawner : MonoBehaviour
     {
+        public static PlayerSpawner Instance;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         #region Public.
         /// <summary>
         /// Called on the server when a player is spawned.

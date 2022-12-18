@@ -109,6 +109,7 @@ namespace MrPink.PlayerSystem
         
         public void Resurrect()
         {
+            Game.LocalPlayer.Inventory.DropRandomTools();
             Game.LocalPlayer.Interactor.SetInteractionText("");
             Health.Resurrect();
             Movement.Resurrect();

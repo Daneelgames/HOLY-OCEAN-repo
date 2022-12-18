@@ -47,6 +47,9 @@ public class ContentPlacer : MonoBehaviour
 
     public void SpawnRedUnitAroundPlayer()
     {
+        if (UnitsManager.Instance.HcInGame.Count > 30)
+            return;
+        
         Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer._mainCamera.transform.position, 100);
             
         if (Vector3.Distance(pos, Game.LocalPlayer._mainCamera.transform.position) < minMobSpawnDistance)
@@ -77,7 +80,7 @@ public class ContentPlacer : MonoBehaviour
         return loot;
     }
 
-    Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)
+    public Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)
     {
         Vector3 randomDir = Game.LocalPlayer._mainCamera.transform.forward;
         
