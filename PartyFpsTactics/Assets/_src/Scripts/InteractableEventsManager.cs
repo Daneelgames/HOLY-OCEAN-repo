@@ -23,7 +23,6 @@ public class InteractableEventsManager : MonoBehaviour
         Instance = this;
     }
 
-
     public void AddPropBump(PropBump propBump)
     {
         if (_propBumps.Contains(propBump))

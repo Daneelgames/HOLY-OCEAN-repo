@@ -544,12 +544,16 @@ namespace MrPink.PlayerSystem
             activeGrindRail = rail;
         }
 
-        public void TeleportToPosition(Vector3 pos)
+        public IEnumerator TeleportToPosition(Vector3 pos)
         {
             Debug.Log("TeleportToPosition " + pos);
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            yield return null;
             rb.MovePosition(pos);
+            yield return null;
+            rb.isKinematic = false;
         }
         
         public void Death(Transform killer = null)

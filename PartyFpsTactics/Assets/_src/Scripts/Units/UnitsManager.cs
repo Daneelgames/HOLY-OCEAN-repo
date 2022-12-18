@@ -95,6 +95,7 @@ namespace MrPink.Units
         {
             if (show == false) return;
             
+            /*
             if (show)
                 currentShowAmount++;
             else
@@ -102,7 +103,7 @@ namespace MrPink.Units
                 if (PhoneDialogueEvents.Instance.currentTalknigNpc == hc)
                     return;
                 currentShowAmount--;
-            }
+            }*/
             
             if (hc.health <= 0)
             {
