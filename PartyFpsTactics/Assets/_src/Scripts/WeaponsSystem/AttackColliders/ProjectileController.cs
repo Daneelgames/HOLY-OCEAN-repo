@@ -110,7 +110,7 @@ namespace MrPink.WeaponsSystem
             if (other.gameObject.layer != 6 && other.gameObject.layer != 11) 
                 return;
         
-            if (toolType != ToolType.Null && other.gameObject == Game.Player.Movement.gameObject)
+            if (toolType != ToolType.Null && other.gameObject == Game.LocalPlayer.Movement.gameObject)
                 return;
 
             if (stickOnContact)

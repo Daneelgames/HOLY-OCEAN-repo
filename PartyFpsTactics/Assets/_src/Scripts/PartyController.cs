@@ -23,22 +23,10 @@ namespace MrPink
     
         public IEnumerator Init(Transform roadPartToSpawnOn = null)
         {
-            /*
-            if (roadPartToSpawnOn == null)
+            while (Game._instance == null || Game.LocalPlayer == null)
             {
-                //Debug.LogError("NO STRAIGHT ROADS HERE");
+                yield return null;
             }
-            Vector3 newCarPos = roadPartToSpawnOn.position + roadPartToSpawnOn.forward * 5;
-            Quaternion newCarRot = roadPartToSpawnOn.rotation;
-            newCarRot.eulerAngles = new Vector3(newCarRot.eulerAngles.x, newCarRot.eulerAngles.y + 180, newCarRot.eulerAngles.z);
-        
-            // PLACE PLAYER INSIDE THE CAR
-            // PLACE NPC INSIDE THE CAR
-            // MOVE THE CAR TO NEW TRANSFORM
-
-            playerCar.transform.position = newCarPos;
-            playerCar.transform.rotation = newCarRot;
-            */
 
             while (ProgressionManager.Instance == null)
             {
@@ -50,24 +38,24 @@ namespace MrPink
                     playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
                 //captain.aiVehicleControls.PassengerSit(playerCar);
                 npcInParty = captain;
-                Game.Player.CommanderControls.unitsInParty.Add(captain);
+                Game.LocalPlayer.CommanderControls.unitsInParty.Add(captain);
             }
         
-            Game.Player.Movement.gameObject.SetActive(true);
-            Game.Player.Interactor.cam.gameObject.SetActive(true);
+            Game.LocalPlayer.Movement.gameObject.SetActive(true);
+            Game.LocalPlayer.Interactor.cam.gameObject.SetActive(true);
         }
 
         public void SetPlayerInCar(ControlledMachine machine)
         {
-            if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.Player.Position) < 15)
+            if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.LocalPlayer.Position) < 15)
                 npcInParty.aiVehicleControls.SetPassengerSit(machine);
         }
 
         public IEnumerator RespawnPlayer()
         {
-            var pos = Game.Player.Position;
+            var pos = Game.LocalPlayer.Position;
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
-            Game.Player.Inventory.DropRandomTools();
+            Game.LocalPlayer.Inventory.DropRandomTools();
 
             if (npcInParty)
             {
@@ -94,7 +82,7 @@ namespace MrPink
                 playerCar.transform.rotation = Quaternion.identity;
                 playerCar.transform.position = pos;
             }
-            Game.Player.Resurrect();
+            Game.LocalPlayer.Resurrect();
             UnitsManager.Instance.MoveUnitsToRespawnPoints(true, true);
             yield return new WaitForSeconds(1f);
             if (npcInParty && npcInParty.npcInteraction)

@@ -89,7 +89,7 @@ public class InteractableEventsManager : MonoBehaviour
                 GameObject newObj;
                 if (IOevent.spawnInsideCamera)
                 {
-                    newObj = Instantiate(IOevent.prefabToSpawn, Game.Player.Interactor.cam.transform);
+                    newObj = Instantiate(IOevent.prefabToSpawn, Game.LocalPlayer.Interactor.cam.transform);
                     newObj.transform.localPosition = Vector3.zero;
                     newObj.transform.localRotation = quaternion.identity;
                 }
@@ -148,23 +148,23 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.RideVehicle:
-                Game.Player.VehicleControls.RequestVehicleAction(IOevent.controlledMachine);
+                Game.LocalPlayer.VehicleControls.RequestVehicleAction(IOevent.controlledMachine);
                 break;
             
             case ScriptedEventType.AddTool:
                 // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
                 ScoringSystem.Instance.ItemFoundSound();
-                Game.Player.Inventory.AddTool(IOevent.toolToAdd);
+                Game.LocalPlayer.Inventory.AddTool(IOevent.toolToAdd);
                 break;
             case ScriptedEventType.AddWeapon:
                 // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
                 ScoringSystem.Instance.ItemFoundSound();
                 if (qPressed)
-                    Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 0, true);
+                    Game.LocalPlayer.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 0, true);
                 else if (ePressed)
-                    Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 1, true);
+                    Game.LocalPlayer.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 1, true);
                 else
-                    Game.Player.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
+                    Game.LocalPlayer.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
                 break;
             
             case ScriptedEventType.StartRandomQuest:
@@ -182,7 +182,7 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.SpawnQuestNpc:
                 
                 Debug.Log("ScriptedEventType.SpawnQuestNpc");
-                Vector3 pos = Game.Player.Position;
+                Vector3 pos = Game.LocalPlayer.Position;
                 
                 var npc = UnitsManager.Instance.SpawnUnit(IOevent.NpcPrefabsToSpawn[Random.Range(0,IOevent.NpcPrefabsToSpawn.Count)], pos);
                 

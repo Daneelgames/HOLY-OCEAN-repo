@@ -68,7 +68,11 @@ namespace _src.Scripts
 
         void Update()
         {
-            if (Game.Player.Position.y < corpseShredderY)
+            if (Game._instance == null || Game.LocalPlayer == null)
+            {
+                return;
+            }
+            if (Game.LocalPlayer.Position.y < corpseShredderY)
             {
                 GameManager.Instance.KillPlayer();
                 GameManager.Instance.RespawnPlayer();
@@ -87,7 +91,7 @@ namespace _src.Scripts
                 
                 if (corpse.transform.position.y < corpseShredderY)
                 {
-                    if (corpse == Game.Player.Health)
+                    if (corpse == Game.LocalPlayer.Health)
                     {
                         GameManager.Instance.KillPlayer();
                         GameManager.Instance.RespawnPlayer();

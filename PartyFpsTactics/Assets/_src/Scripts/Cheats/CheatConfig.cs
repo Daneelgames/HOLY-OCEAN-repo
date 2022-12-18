@@ -1,3 +1,4 @@
+using System.Collections;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -16,8 +17,12 @@ namespace MrPink.Cheats
         private bool _isMuted;
         
         
-        public void ApplyAll()
+        public IEnumerator ApplyAll()
         {
+            while (Game._instance == null || Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
             SetImmortalState(_isImmortal);
             SetMuteState(_isMuted);
         }
@@ -30,7 +35,7 @@ namespace MrPink.Cheats
             var status = value ? "activated" : "deactivated";
             Debug.Log($"Immortality cheat {status}");
 
-            Game.Player.Health.IsImmortal = value;
+            Game.LocalPlayer.Health.IsImmortal = value;
         }
 
         private static void SetMuteState(bool value)

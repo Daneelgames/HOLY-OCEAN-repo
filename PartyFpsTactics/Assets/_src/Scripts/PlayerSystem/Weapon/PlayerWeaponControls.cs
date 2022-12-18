@@ -35,7 +35,7 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
             
-            if (Game.Flags.IsPlayerInputBlocked || Game.Player.Interactor.carryingPortableRb)
+            if (Game.Flags.IsPlayerInputBlocked || Game.LocalPlayer.Interactor.carryingPortableRb)
             {
                 Debug.Log("Game.Flags.IsPlayerInputBlocked");
                 _hands[Hand.Left].UpdateState(true);
@@ -81,7 +81,7 @@ namespace MrPink.PlayerSystem
             _hands[Hand.Left].UpdateWeaponPosition();
             _hands[Hand.Right].UpdateWeaponPosition();
 
-            Game.Player.MainCamera.fieldOfView = Mathf.Lerp(Game.Player.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
+            Game.LocalPlayer.MainCamera.fieldOfView = Mathf.Lerp(Game.LocalPlayer.MainCamera.fieldOfView, targetFov, fovChangeSpeed * Time.deltaTime);
         }
 
         public void SetWeapon(WeaponController weapon, Hand hand)

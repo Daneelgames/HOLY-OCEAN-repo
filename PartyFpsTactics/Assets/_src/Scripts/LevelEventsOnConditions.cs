@@ -160,13 +160,13 @@ public class LevelEventsOnConditions : MonoBehaviour
                 }
                 break;
             case Condition.ConditionType.PlayerIsDead:
-                met =  Game.Player.Health.IsDead;
+                met =  Game.LocalPlayer.Health.IsDead;
                 break;
             case Condition.ConditionType.PlayerIsAlive:
-                met =  !Game.Player.Health.IsDead;
+                met =  !Game.LocalPlayer.Health.IsDead;
                 break;
             case Condition.ConditionType.PlayerIsDriving:
-                met =  Game.Player.VehicleControls.controlledMachine;
+                met =  Game.LocalPlayer.VehicleControls.controlledMachine;
                 break;
             case Condition.ConditionType.PlayerIsCloseToNpc:
                 if (quest.spawnedQuestNpcs[condition.spawnedQuestNpcId] == null || quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].health <= 0)
@@ -175,7 +175,7 @@ public class LevelEventsOnConditions : MonoBehaviour
                     met = false;
                     return -1;
                 }
-                var dist = Vector3.Distance(Game.Player.Position, quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].transform.position);
+                var dist = Vector3.Distance(Game.LocalPlayer.Position, quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].transform.position);
                 met = dist < condition.distanceToCompare;
                 break;
         }

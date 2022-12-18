@@ -11,7 +11,7 @@ public class EventOnPlayerEntersTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == Game.Player.Health.gameObject)
+        if (other.gameObject == Game.LocalPlayer.Health.gameObject)
         {
             for (int i = 0; i < eventsToRunOnTriggerEnter.Count; i++)
             {

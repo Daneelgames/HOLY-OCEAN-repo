@@ -52,11 +52,11 @@ namespace MrPink
         {
             if (lifeTime <= 0)
                 return;
-            if (!playerDamaged && Vector3.Distance(transform.position,Game.Player.Position) <= explosionDistance)
+            if (!playerDamaged && Vector3.Distance(transform.position,Game.LocalPlayer.Position) <= explosionDistance)
             {
                 playerDamaged = true;
-                collidedGameObjects.Add(Game.Player.GameObject);
-                Game.Player.Health.Damage(damage, DamageSource.Environment);
+                collidedGameObjects.Add(Game.LocalPlayer.GameObject);
+                Game.LocalPlayer.Health.Damage(damage, DamageSource.Environment);
                 return;
             }
             if (collidedGameObjects.Contains(other.gameObject))

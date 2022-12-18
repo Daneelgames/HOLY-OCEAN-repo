@@ -68,7 +68,7 @@ namespace MrPink
     
         private void Update()
         {
-            if (Game._instance == null || Game.Player == null)
+            if (Game._instance == null || Game.LocalPlayer == null)
             {
                 if (cursorVisible == false)
                 {
@@ -87,9 +87,9 @@ namespace MrPink
                 AudioListener.volume = Mathf.Clamp(AudioListener.volume + 0.1f, 0, 1);
 
             if (Input.GetKeyDown(KeyCode.Alpha0))
-                Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity + 50, 5, 1000);
+                Game.LocalPlayer.LookAround._mouseSensitivity = Mathf.Clamp(Game.LocalPlayer.LookAround._mouseSensitivity + 50, 5, 1000);
             if (Input.GetKeyDown(KeyCode.Alpha9))
-                Game.Player.LookAround._mouseSensitivity = Mathf.Clamp(Game.Player.LookAround._mouseSensitivity - 50, 5, 1000);
+                Game.LocalPlayer.LookAround._mouseSensitivity = Mathf.Clamp(Game.LocalPlayer.LookAround._mouseSensitivity - 50, 5, 1000);
             
             
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -112,7 +112,7 @@ namespace MrPink
                 }
             }
         
-            if (Game.Player.Health.health <= 0 && Input.GetKeyDown(KeyCode.R))
+            if (Game.LocalPlayer.Health.health <= 0 && Input.GetKeyDown(KeyCode.R))
             {
                 // player died
                 // restart at different place
@@ -150,7 +150,7 @@ namespace MrPink
 
         public void KillPlayer()
         {
-            Game.Player.Health.Damage(10000000, DamageSource.Environment);
+            Game.LocalPlayer.Health.Damage(10000000, DamageSource.Environment);
         }
         public void RespawnPlayer()
         {
@@ -273,7 +273,7 @@ namespace MrPink
         public bool IsPositionInPlayerFov(Vector3 pos)
         {
             bool inFov = false;
-            var viewportPoint = Game.Player.MainCamera.WorldToViewportPoint(pos);
+            var viewportPoint = Game.LocalPlayer.MainCamera.WorldToViewportPoint(pos);
             if (viewportPoint.x > 0 && viewportPoint.x < 1 && viewportPoint.y > 0 && viewportPoint.y < 1)
                 inFov = true;
             return inFov;

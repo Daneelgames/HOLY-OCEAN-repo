@@ -166,7 +166,7 @@ namespace MrPink.WeaponsSystem
                 return CollisionTarget.Self;
             }
             
-            if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.Player.Movement.gameObject)
+            if (!_isPlayerCollisionAvailable && targetCollider.gameObject == Game.LocalPlayer.Movement.gameObject)
             {
                 Debug.Log("car return CollisionTarget.Self;");
                 return CollisionTarget.Self;
@@ -174,18 +174,18 @@ namespace MrPink.WeaponsSystem
             
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
             
-            if (targetCollider.gameObject == Game.Player.GameObject && IsPlayerEnemyToOwner())
+            if (targetCollider.gameObject == Game.LocalPlayer.GameObject && IsPlayerEnemyToOwner())
             {
                 if (ownerHealth.controlledMachine &&
-                    ownerHealth.controlledMachine == Game.Player.VehicleControls.controlledMachine)
+                    ownerHealth.controlledMachine == Game.LocalPlayer.VehicleControls.controlledMachine)
                 {
                     Debug.Log("car return CollisionTarget.Self;");
                     return CollisionTarget.Self;
                 }
                 
-                Game.Player.Health.Damage(resultDmg, _damageSource, actionOnHit);
+                Game.LocalPlayer.Health.Damage(resultDmg, _damageSource, actionOnHit);
                 if (ownerHealth.UnitVision/* && (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL)*/)
-                    ownerHealth.UnitVision.ForgiveUnit(Game.Player.Health, ownerHealth.team == Game.Player.Health.team);
+                    ownerHealth.UnitVision.ForgiveUnit(Game.LocalPlayer.Health, ownerHealth.team == Game.LocalPlayer.Health.team);
                 UnitsExplosion();
                 return CollisionTarget.Creature;
             }
@@ -209,7 +209,7 @@ namespace MrPink.WeaponsSystem
                 targetHealth.HealthController.controlledMachine.controllingHc == ownerHealth)
                 return CollisionTarget.Self;
 
-            if (ownerHealth && ownerHealth != Game.Player.Health)
+            if (ownerHealth && ownerHealth != Game.LocalPlayer.Health)
             {
                 // if vehicle tries to damage unit inside
                 if (ownerHealth.controlledMachine && targetHealth.HealthController && targetHealth.HealthController.aiVehicleControls &&
@@ -288,11 +288,11 @@ namespace MrPink.WeaponsSystem
             if (!ownerHealth)
                 return true; // damage anyway
 
-            if (ownerHealth.team != Game.Player.Health.team)
+            if (ownerHealth.team != Game.LocalPlayer.Health.team)
                 return true;
             
             
-            if (ownerHealth.UnitVision && ownerHealth.UnitVision._enemiesToRemember.Contains(Game.Player.Health))
+            if (ownerHealth.UnitVision && ownerHealth.UnitVision._enemiesToRemember.Contains(Game.LocalPlayer.Health))
                 return true;
 
             return false;

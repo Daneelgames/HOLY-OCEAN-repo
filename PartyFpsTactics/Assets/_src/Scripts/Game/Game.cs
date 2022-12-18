@@ -11,16 +11,16 @@ namespace MrPink
         [SerializeField]
         private GlobalFlags _flags = new GlobalFlags();
         
-        [SerializeField, SceneObjectsOnly, Required]
-        private Player _player;
+        [SerializeField]
+        private Player _localPlayer;
         [SerializeField, SceneObjectsOnly]
         
         private LightManager _lightManager;
 
         public static LightManager LightManager => _instance._lightManager;
 
-        public static Player Player
-            => _instance._player;
+        public static Player LocalPlayer
+            => _instance._localPlayer;
 
         public static GlobalFlags Flags
             => _instance._flags;
@@ -29,6 +29,11 @@ namespace MrPink
         private void Awake()
         {
             _instance = this;
+        }
+
+        public void SetLocalPlayer(Player p)
+        {
+            _localPlayer = p;
         }
     }
 }

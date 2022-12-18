@@ -30,7 +30,7 @@ namespace MrPink
                     var unit = UnitsManager.Instance.HcInGame[i];
                     if (unit == null)
                         continue;
-                    if (unit == Game.Player.Health)
+                    if (unit == Game.LocalPlayer.Health)
                         continue;
                     if (unit.health <= 0)
                     {

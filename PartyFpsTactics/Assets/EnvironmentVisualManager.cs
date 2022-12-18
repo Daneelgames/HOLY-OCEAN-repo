@@ -17,7 +17,7 @@ public class EnvironmentVisualManager : MonoBehaviour
 
     IEnumerator Init()
     {
-        while (ProgressionManager.Instance == null ||Game._instance == false || Game.Player == null)
+        while (ProgressionManager.Instance == null ||Game._instance == false || Game.LocalPlayer == null)
         {
             yield return null;
         }
@@ -39,6 +39,6 @@ public class EnvironmentVisualManager : MonoBehaviour
         RenderSettings.fogColor = fogColor;
         RenderSettings.fogDensity = fogIntensity;
 
-        Game.Player._mainCamera.backgroundColor = camBackColor;
+        Game.LocalPlayer._mainCamera.backgroundColor = camBackColor;
     }
 }

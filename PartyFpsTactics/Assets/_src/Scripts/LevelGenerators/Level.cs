@@ -92,7 +92,7 @@ namespace _src.Scripts.LevelGenerators
         {
             while (true)
             {
-                if (Vector3.Distance(position, Game.Player.Position) > 200)
+                if (Vector3.Distance(position, Game.LocalPlayer.Position) > 200)
                 {
                     yield return new WaitForSecondsRealtime(1);
                     continue;

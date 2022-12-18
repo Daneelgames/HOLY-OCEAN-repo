@@ -30,14 +30,18 @@ public class PlayerFootsteps : MonoBehaviour
     
     private IEnumerator GetSteps()
     {
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
         yield return null;
         
-        var pm = Game.Player.Movement;
+        var pm = Game.LocalPlayer.Movement;
         while (true)
         {
             yield return null;
             
-            if ((!pm.State.IsGrounded && !pm.State.IsClimbing) || Game.Player.VehicleControls.controlledMachine || Game.Player.Health.health <= 0)
+            if ((!pm.State.IsGrounded && !pm.State.IsClimbing) || Game.LocalPlayer.VehicleControls.controlledMachine || Game.LocalPlayer.Health.health <= 0)
                 continue;
 
             if (pm.State.IsMoving)

@@ -42,7 +42,7 @@ namespace MrPink.Units
                 else
                     yield return null;
                 
-                if (Vector3.Distance(transform.position, Game.Player.MainCamera.transform.position) > maxDistanceFromPlayerToShoot)
+                if (Vector3.Distance(transform.position, Game.LocalPlayer.MainCamera.transform.position) > maxDistanceFromPlayerToShoot)
                     continue;
 
                 for (var index = 0; index < activeWeapons.Count; index++)
@@ -71,7 +71,7 @@ namespace MrPink.Units
             if (Vector3.Distance(transform.position, enemyToShoot.visibilityTrigger.transform.position) > maxDistanceToAttack)
                 yield break;
 
-            if (enemyToShoot.gameObject == Game.Player.GameObject)
+            if (enemyToShoot.gameObject == Game.LocalPlayer.GameObject)
             {
                 var isNotInPlayerPov = !GameManager.Instance.IsPositionInPlayerFov(activeWeapon.transform.position);
                 var isCoinFlippedRight = Random.value > 0.5f;

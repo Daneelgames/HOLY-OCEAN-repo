@@ -81,7 +81,7 @@ namespace MrPink.WeaponsSystem
                     if (proj /*&& proj.OwnerHealth && proj.OwnerHealth !=  Game.Player.Health*/)
                     {
                         Debug.Log("DEFLECT PROJECTILE 1");
-                        proj.OwnerHealth = Game.Player.Health;
+                        proj.OwnerHealth = Game.LocalPlayer.Health;
                         other.transform.Rotate(0, 180, 0, Space.Self);
                     }
                 }

@@ -85,12 +85,12 @@ namespace MrPink
             nodesInOrderOfRide = new List<Transform>(nodes);
             currentTargetNode = 1;
         
-            Game.Player.Movement.SetGrindRail(this);
+            Game.LocalPlayer.Movement.SetGrindRail(this);
         }
 
         public Transform GetTargetNode()
         {
-            if (Vector3.Distance(Game.Player.Position, nodesInOrderOfRide[currentTargetNode].position) < 0.5f)
+            if (Vector3.Distance(Game.LocalPlayer.Position, nodesInOrderOfRide[currentTargetNode].position) < 0.5f)
                 currentTargetNode++;
         
             if (currentTargetNode < nodesInOrderOfRide.Count)

@@ -43,7 +43,7 @@ public class LightManager : MonoBehaviour
 
             if (windLifeTime > 0)
             {
-                rustWind.transform.parent.position = Game.Player.Position;
+                rustWind.transform.parent.position = Game.LocalPlayer.Position;
                 rustWindEmission.rateOverTime = Mathf.Lerp(rustWindEmission.rateOverTime.constant, windActiveRate, 10 *Time.deltaTime);
                 windAu.volume = Mathf.Lerp(windAu.volume, 1, 0.1f *Time.deltaTime);
                 windLifeTime -= Time.deltaTime;

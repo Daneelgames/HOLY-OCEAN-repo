@@ -9,7 +9,11 @@ namespace MrPink
     {
         void Update()
         {
-            transform.LookAt(Game.Player.MainCamera.transform.position);
+            if (Game._instance == null || Game.LocalPlayer == null)
+            {
+                return;
+            }
+            transform.LookAt(Game.LocalPlayer.MainCamera.transform.position);
         }
     }
 }

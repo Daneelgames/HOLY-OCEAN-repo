@@ -1,4 +1,5 @@
 using System.Collections;
+using FishNet.Object;
 using MrPink.Health;
 using Pathfinding;
 using Sirenix.OdinInspector;
@@ -7,9 +8,8 @@ using UnityEngine;
 
 namespace MrPink.PlayerSystem
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : NetworkBehaviour
     {
-        public bool narrativePlayer = false;
         [Header("Movement")]
         public LayerMask WalkableLayerMask;
 
@@ -114,8 +114,11 @@ namespace MrPink.PlayerSystem
             SetCrouch(false);
         }
 
+        
         private void Update()
         {
+            if (IsOwner == false)
+                return;
             if (_isDead)
             {
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
@@ -137,7 +140,7 @@ namespace MrPink.PlayerSystem
             
 
             HandleStamina();
-            if (Game.Player.VehicleControls.controlledMachine)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine)
             {
                 State.IsRunning = false;
                 _resultVelocity = Vector3.zero;
@@ -152,6 +155,9 @@ namespace MrPink.PlayerSystem
         
         private void FixedUpdate()
         {
+            if (IsOwner == false)
+                return;
+            
             if (_isDead)
                 return;
             
@@ -194,7 +200,7 @@ namespace MrPink.PlayerSystem
         private float targetStaminaScaler = 1;
         void HandleStamina()
         {
-            if (Game.Player.VehicleControls.controlledMachine)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine)
             {
                 ChangeStamina(idleStaminaRegen * Time.deltaTime);
                 return;
@@ -260,9 +266,6 @@ namespace MrPink.PlayerSystem
 
         public void SetCrouch(bool crouch)
         {
-            if (narrativePlayer)
-                return;
-            
             if (crouching == crouch)
                 return;
 
@@ -293,7 +296,7 @@ namespace MrPink.PlayerSystem
                 bottomCollider.height = bottomColliderHeightStanding;
             }
             
-            Game.Player.LookAround.SetCrouch(crouching);
+            Game.LocalPlayer.LookAround.SetCrouch(crouching);
         }
         
         private void HandleMovement()
@@ -320,7 +323,7 @@ namespace MrPink.PlayerSystem
             _movementInput = new Vector2(hor, vert);
             
             if (State.IsClimbing)
-                _moveVector = Game.Player._mainCamera.transform.right * _movementInput.x + Game.Player._mainCamera.transform.forward * _movementInput.y;
+                _moveVector = Game.LocalPlayer._mainCamera.transform.right * _movementInput.x + Game.LocalPlayer._mainCamera.transform.forward * _movementInput.y;
             else
                 _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
         
@@ -334,7 +337,7 @@ namespace MrPink.PlayerSystem
             
             if (stamina < 0.1f && State.IsGrounded)
                 scaler = 0.66f;
-            else if (Game.Player.Interactor.carryingPortableRb)
+            else if (Game.LocalPlayer.Interactor.carryingPortableRb)
                 scaler = 0.66f;
             
             // RUNNING
@@ -421,12 +424,12 @@ namespace MrPink.PlayerSystem
         {
             if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded && Game.Player.VehicleControls.controlledMachine == null && !State.IsClimbing)
+                if (!State.IsGrounded && Game.LocalPlayer.VehicleControls.controlledMachine == null && !State.IsClimbing)
                 {
                     PlayerFootsteps.Instance.PlayLanding();
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
-                        Game.Player.Health.Damage(fallDamage, DamageSource.Environment);
+                        Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
                     }
                 }
 
@@ -471,7 +474,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            hitInfoClimb = Physics.SphereCastAll(Game.Player._mainCamera.transform.position, climbCheckRadius,
+            hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer._mainCamera.transform.position, climbCheckRadius,
                 Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask);
             State.IsClimbing = hitInfoClimb.Length > 0;
             

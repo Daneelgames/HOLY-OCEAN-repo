@@ -137,7 +137,7 @@ namespace MrPink
         {
             while (true)
             {
-                if (Vector3.Distance(Game.Player.Movement.transform.position, hc.npcInteraction.transform.position) > maxDistance)
+                if (Vector3.Distance(Game.LocalPlayer.Movement.transform.position, hc.npcInteraction.transform.position) > maxDistance)
                 {
                     ToggleDialogueWindow(false);
                     yield break;

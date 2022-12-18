@@ -74,9 +74,13 @@ namespace MrPink.Health
 
         public UnityEvent OnDeathEvent = new UnityEvent();
         
-        private void Start()
+        private IEnumerator Start()
         {
-            if (Game.Player.Health != this)
+            while (Game._instance == null || Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
+            if (Game.LocalPlayer.Health != this)
                 UnitsManager.Instance.AddUnit(this);
             
             healthMax = health;
@@ -174,7 +178,7 @@ namespace MrPink.Health
             
             Debug.Log("AddHealth " + hpToRegen);
             health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
-            if (Game.Player.Health == this)
+            if (Game.LocalPlayer.Health == this)
             {
                 PlayerUi.Instance.UpdateHealthBar();
             }
@@ -209,7 +213,7 @@ namespace MrPink.Health
                 return;
             health -= drainAmount;
             
-            if (Game.Player.Health == this)
+            if (Game.LocalPlayer.Health == this)
             {
                 PlayerUi.Instance.UpdateHealthBar();
             }
@@ -236,7 +240,7 @@ namespace MrPink.Health
             if (Shop.Instance.IsActive)
                 return;
             
-            if (Game.Player.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
+            if (Game.LocalPlayer.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
             {
                 PlayerUi.Instance.RemoveShieldFeedback();
                 PlayerInventory.Instance.RemoveTool(ToolType.OneTimeShield);
@@ -244,7 +248,7 @@ namespace MrPink.Health
             else
                 health -= damage;
 
-            if (Game.Player.Health == this)
+            if (Game.LocalPlayer.Health == this)
             {
                 PlayerUi.Instance.UpdateHealthBar();
             }
@@ -277,7 +281,7 @@ namespace MrPink.Health
             float t = 0f;
             var originalPos = transformToShake.localPosition;
             
-            if (Game.Player.Health == this)
+            if (Game.LocalPlayer.Health == this)
                 originalPos = Vector3.up;
             
             while (t < 0.5f)
@@ -335,10 +339,10 @@ namespace MrPink.Health
             if (selfUnit)
                 selfUnit.SpawnLootOnDeath.SpawnLoot();
         
-            if (Game.Player.Health == this)
+            if (Game.LocalPlayer.Health == this)
             {
                 GameManager.Instance.SetPlayerSleepTimeScale(false);
-                Game.Player.Death(killer);
+                Game.LocalPlayer.Death(killer);
             }
 
             if (npcInteraction)
@@ -370,8 +374,8 @@ namespace MrPink.Health
             // TODO инкапсулировать логику в сами классы
             
             UnitsManager.Instance.RemoveUnit(this);
-            if (Game.Player.CommanderControls.unitsInParty.Contains(this))
-                Game.Player.CommanderControls.unitsInParty.Remove(this);
+            if (Game.LocalPlayer.CommanderControls.unitsInParty.Contains(this))
+                Game.LocalPlayer.CommanderControls.unitsInParty.Remove(this);
         }
 
         public void Resurrect()

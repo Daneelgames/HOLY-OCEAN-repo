@@ -34,7 +34,7 @@ public class UnitsLocalRespawner : MonoBehaviour
                     spawnedUnits.RemoveAt(i);
             }
             
-            if (Vector3.Distance(transform.position, Game.Player.Position) < maxDistanceToPlayerToSpawn && spawnedUnits.Count < maxAliveUnits)
+            if (Vector3.Distance(transform.position, Game.LocalPlayer.Position) < maxDistanceToPlayerToSpawn && spawnedUnits.Count < maxAliveUnits)
             {
                 var newUnit = UnitsManager.Instance.SpawnUnit(unitsToRespawnPrefabs[Random.Range(0, unitsToRespawnPrefabs.Count)], respawnTransform.position, respawnTransform);
                 spawnedUnits.Add(newUnit);

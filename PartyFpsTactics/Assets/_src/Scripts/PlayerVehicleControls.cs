@@ -31,11 +31,11 @@ namespace MrPink
             while (t < tt)
             {
                 t += Time.deltaTime;
-                Game.Player.Movement.rb.MovePosition(Vector3.Lerp(controlledMachine.sitTransform.position, 
+                Game.LocalPlayer.Movement.rb.MovePosition(Vector3.Lerp(controlledMachine.sitTransform.position, 
                     controlledMachine.sitTransform.position - controlledMachine.sitTransform.right * 1.5f, t/tt));
                 yield return null;
             }
-            Game.Player.Movement.SetCollidersTrigger(false);
+            Game.LocalPlayer.Movement.SetCollidersTrigger(false);
             controlledMachine.StopMachine();
             controlledMachine = null;
             TogglePlayerInside(null);
@@ -63,7 +63,7 @@ namespace MrPink
             if (this.controlledMachine == null && controlledMachine != null)
             {
                 // зайти в тачку
-                Game.Player.Movement.SetCollidersTrigger(true);
+                Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 this.controlledMachine = controlledMachine;
                 TogglePlayerInside(this.controlledMachine);
                 controlVehicleCoroutine = StartCoroutine(ControlVehicle());
@@ -73,7 +73,7 @@ namespace MrPink
             if (this.controlledMachine != null && this.controlledMachine != controlledMachine)
             {
                 // зайти в новую тачку
-                Game.Player.Movement.SetCollidersTrigger(true);
+                Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 StopCoroutine(controlVehicleCoroutine);
                 this.controlledMachine.StopMachine();
                 this.controlledMachine = controlledMachine;
@@ -88,15 +88,15 @@ namespace MrPink
         
             if (machine)
             {
-                Game.Player.Movement.SetCrouch(false);
-                Game.Player.Movement.rb.isKinematic = true;
-                Game.Player.Movement.rb.useGravity = false;
+                Game.LocalPlayer.Movement.SetCrouch(false);
+                Game.LocalPlayer.Movement.rb.isKinematic = true;
+                Game.LocalPlayer.Movement.rb.useGravity = false;
                 //Player.Movement.transform.parent = controlledVehicle.sitTransform;
             }
             else
             {
-                Game.Player.Movement.rb.isKinematic = false;
-                Game.Player.Movement.rb.useGravity = true;
+                Game.LocalPlayer.Movement.rb.isKinematic = false;
+                Game.LocalPlayer.Movement.rb.useGravity = true;
                 //Player.Movement.transform.parent = null;
             }
         }
@@ -104,13 +104,13 @@ namespace MrPink
         private Coroutine controlVehicleCoroutine;
         IEnumerator ControlVehicle()
         {
-            controlledMachine.StartInput(Game.Player.Health);
+            controlledMachine.StartInput(Game.LocalPlayer.Health);
             float resultMoveScaler = 1;
             float resultRotScaler = 1;
             bool boosting = false;
             while (true)
             {
-                if (Game.Player.Health.health <= 0)
+                if (Game.LocalPlayer.Health.health <= 0)
                     yield break;
             
                 bool brake = Input.GetKey(KeyCode.Space);
@@ -120,8 +120,8 @@ namespace MrPink
                 if (resultRotScaler < playerFollowRotScaler)
                     resultRotScaler += 50 * Time.deltaTime;
             
-                Game.Player.Movement.transform.position = Vector3.Lerp(Game.Player.Movement.transform.position, controlledMachine.sitTransform.position, resultMoveScaler * Time.fixedUnscaledDeltaTime);
-                Game.Player.Movement.transform.rotation = Quaternion.Slerp(Game.Player.Movement.transform.rotation, controlledMachine.sitTransform.rotation, resultRotScaler * Time.fixedUnscaledDeltaTime);
+                Game.LocalPlayer.Movement.transform.position = Vector3.Lerp(Game.LocalPlayer.Movement.transform.position, controlledMachine.sitTransform.position, resultMoveScaler * Time.fixedUnscaledDeltaTime);
+                Game.LocalPlayer.Movement.transform.rotation = Quaternion.Slerp(Game.LocalPlayer.Movement.transform.rotation, controlledMachine.sitTransform.rotation, resultRotScaler * Time.fixedUnscaledDeltaTime);
                 
                 float hor = Input.GetAxis("Horizontal");
                 float ver = Input.GetAxis("Vertical");

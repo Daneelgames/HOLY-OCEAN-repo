@@ -1158,13 +1158,17 @@ public class BuildingGenerator : MonoBehaviour
     
     IEnumerator UpdateNavMesh()
     {
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
         while (true)
         {
             yield return null;
             
             for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
             {
-                if (Vector3.Distance(Game.Player.Position, navMeshSurfacesSpawned[i].transform.position) < updateNavMeshDistance)
+                if (Vector3.Distance(Game.LocalPlayer.Position, navMeshSurfacesSpawned[i].transform.position) < updateNavMeshDistance)
                 {
                     if (navMeshSurfacesSpawned[i].navMeshData)
                         navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);

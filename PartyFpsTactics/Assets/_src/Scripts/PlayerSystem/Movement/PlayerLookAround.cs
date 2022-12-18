@@ -1,12 +1,14 @@
+using System.Collections;
+using FishNet.Object;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
 {
-    public class PlayerLookAround : MonoBehaviour
+    public class PlayerLookAround : NetworkBehaviour
     {
-        [SerializeField, SceneObjectsOnly, Required]
+        [SerializeField, Required]
         private Transform _headTransform;
         
         [SerializeField]
@@ -39,16 +41,42 @@ namespace MrPink.PlayerSystem
 
         Transform vehicleHeadDummyTransform;
 
+        public override void OnStartClient() { 
+            base.OnStartClient();
+            Init();
+        }
         private void Awake()
         {
+            _headTransform.gameObject.SetActive(false);
+        }
+
+        void Init()
+        {
+            if (base.IsOwner)
+            {
+                _headTransform.gameObject.SetActive(true);
+                _headTransform.parent = null;
+            }
+            else
+            {
+                _headTransform.gameObject.SetActive(false);
+                return;
+            }
             SetCrouch(false);
+            
+            if (vehicleHeadDummyTransform != null) return;
             
             vehicleHeadDummyTransform = new GameObject("VehicleHeadDummy").transform;
             vehicleHeadDummyTransform.parent = transform.parent;
         }
 
+        [Client(RequireOwnership = true)]
         private void LateUpdate()
-        {/*
+        {
+            if (base.IsOwner == false)
+                return;
+            
+            /*
             if (LevelGenerator.Instance.levelIsReady == false)
                 return;*/
             /*if (ProceduralCutscenesManager.Instance.InCutScene)
@@ -100,7 +128,7 @@ namespace MrPink.PlayerSystem
             _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.unscaledDeltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
-            if (Game.Player.VehicleControls.controlledMachine == null)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine == null)
             {
                 transform.localRotation = Quaternion.Euler(newRotation);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
@@ -115,7 +143,7 @@ namespace MrPink.PlayerSystem
 
             float resultFollowSpeed = _cameraFollowBodySmooth;
             
-            if (Game.Player.VehicleControls.controlledMachine)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine)
                 resultFollowSpeed *= 10;
             
             _headTransform.transform.position = 

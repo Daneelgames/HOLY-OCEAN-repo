@@ -132,13 +132,13 @@ namespace MrPink.Units
 
         IEnumerator CheckingPlayer()
         {
-            while (Game._instance == false || Game.Player == null)
+            while (Game._instance == false || Game.LocalPlayer == null)
             {
                 yield return null;
             }
             while (true)
             {
-                CheckUnit(Game.Player.Health);
+                CheckUnit(Game.LocalPlayer.Health);
                 yield return new WaitForSeconds(0.1f);
             }
         }
@@ -187,14 +187,14 @@ namespace MrPink.Units
 
             if (IsInLineOfSight(unit.visibilityTrigger.transform))
             {
-                if (unit == Game.Player.Health)
+                if (unit == Game.LocalPlayer.Health)
                 {
                     //Debug.Log("UnitVision UNIT " + gameObject.name + " SEES PLAYER");
                 }
                 
                 if (TeamsManager.Instance.IsUnitEnemyToMe(_selfHealth.team, unit.team) || addVisibleAsEnemy) // OR IF TEMPORAL ENEMY 
                 {
-                    if (unit == Game.Player.Health)
+                    if (unit == Game.LocalPlayer.Health)
                     {
                         //Debug.Log("UnitVision UNIT " + gameObject.name + " ADDS PLAYER TO VISIBLE ENEMIES");
                     }
@@ -202,7 +202,7 @@ namespace MrPink.Units
                     return;
                 }
                 
-                if (unit == Game.Player.Health)
+                if (unit == Game.LocalPlayer.Health)
                 {
                     //Debug.Log("UnitVision UNIT " + gameObject.name + " ADDS PLAYER TO VISIBLE UNITS");
                 }
@@ -210,7 +210,7 @@ namespace MrPink.Units
                 return;
             }
             
-            if (unit == Game.Player.Health)
+            if (unit == Game.LocalPlayer.Health)
             {
                 //Debug.Log("UnitVision UNIT " + gameObject.name + " CANT SEE PLAYER");
             }

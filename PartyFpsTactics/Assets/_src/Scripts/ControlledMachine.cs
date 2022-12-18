@@ -63,7 +63,7 @@ public class ControlledMachine : MonoBehaviour
         if (rotateVehicleStraight != null)
             StopCoroutine(rotateVehicleStraight);
         
-        if (driverHc == Game.Player.Health)
+        if (driverHc == Game.LocalPlayer.Health)
         {
             if (Vector3.Angle(transform.up, Vector3.down) < 120)
                 rotateVehicleStraight = StartCoroutine(RotateVehicleStraight());

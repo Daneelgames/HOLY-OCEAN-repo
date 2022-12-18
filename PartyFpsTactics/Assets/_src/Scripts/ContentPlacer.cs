@@ -28,12 +28,16 @@ public class ContentPlacer : MonoBehaviour
 
     IEnumerator SpawnAroundPlayer()
     {
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
         float cooldown = respawnDelay;
         while (true)
         {
             yield return new WaitForSeconds(cooldown);
             
-            if (Game.Player.Health.health <= 0)
+            if (Game.LocalPlayer.Health.health <= 0)
                 continue;
             
             SpawnRedUnitAroundPlayer();
@@ -43,9 +47,9 @@ public class ContentPlacer : MonoBehaviour
 
     public void SpawnRedUnitAroundPlayer()
     {
-        Vector3 pos = RaycastedPosAroundPosition(Game.Player._mainCamera.transform.position, 100);
+        Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer._mainCamera.transform.position, 100);
             
-        if (Vector3.Distance(pos, Game.Player._mainCamera.transform.position) < minMobSpawnDistance)
+        if (Vector3.Distance(pos, Game.LocalPlayer._mainCamera.transform.position) < minMobSpawnDistance)
             return;
 
         UnitsManager.Instance.SpawnRedUnit(pos);
@@ -53,9 +57,9 @@ public class ContentPlacer : MonoBehaviour
     
     void SpawnLootAroundPlayer()
     {
-        Vector3 pos = RaycastedPosAroundPosition(Game.Player._mainCamera.transform.position, 100);
+        Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer._mainCamera.transform.position, 100);
             
-        if (Vector3.Distance(pos, Game.Player._mainCamera.transform.position) < 10)
+        if (Vector3.Distance(pos, Game.LocalPlayer._mainCamera.transform.position) < 10)
             return;
         SpawnRandomLoot(pos);
     }
@@ -75,10 +79,10 @@ public class ContentPlacer : MonoBehaviour
 
     Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)
     {
-        Vector3 randomDir = Game.Player._mainCamera.transform.forward;
+        Vector3 randomDir = Game.LocalPlayer._mainCamera.transform.forward;
         
         randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
-        if (!Physics.Raycast(Game.Player._mainCamera.transform.position, randomDir, out var hit, maxDistance,
+        if (!Physics.Raycast(Game.LocalPlayer._mainCamera.transform.position, randomDir, out var hit, maxDistance,
             GameManager.Instance.AllSolidsMask))
             return initPos;
         

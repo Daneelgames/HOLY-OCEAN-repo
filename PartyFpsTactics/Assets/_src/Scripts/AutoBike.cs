@@ -13,11 +13,11 @@ namespace MrPink
         private float currentYTorque = 0;
         IEnumerator Start()
         {
-            Game.Player.Movement.transform.parent.position = transform.position;
-            Game.Player.Movement.transform.parent.parent = transform;
+            Game.LocalPlayer.Movement.transform.parent.position = transform.position;
+            Game.LocalPlayer.Movement.transform.parent.parent = transform;
         
 
-            transform.position = Game.Player.Movement.transform.position;
+            transform.position = Game.LocalPlayer.Movement.transform.position;
             rb.drag = 1;
             rb.angularDrag = 1;
             yield break;

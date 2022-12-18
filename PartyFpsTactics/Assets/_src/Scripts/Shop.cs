@@ -82,7 +82,7 @@ namespace MrPink
             IsActive = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            Game.Player.ToolControls.Init();    
+            Game.LocalPlayer.ToolControls.Init();    
         }
     
         public void SelectItem(int index)
@@ -91,12 +91,12 @@ namespace MrPink
             selectedItemIndex = index;
             selectedInfoNameText.text = toolsList[selectedItemIndex].toolName;
             selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription;
-            int amount = Game.Player.Inventory.GetAmount(toolsList[selectedItemIndex].tool);
+            int amount = Game.LocalPlayer.Inventory.GetAmount(toolsList[selectedItemIndex].tool);
             selectedInfoDescriptionText.text += ". " + amount + " / " + toolsList[selectedItemIndex].maxAmount;
         
             // TODO перенести текстовые штуки в систему локализации
         
-            if (!Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
+            if (!Game.LocalPlayer.Inventory.CanFitTool(toolsList[selectedItemIndex]))
             {
                 buyForText.text = "Max Amount";
                 buyButtonImage.color = Color.red;
@@ -104,7 +104,7 @@ namespace MrPink
             else
             {
                 if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore ||
-                    Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
+                    Game.LocalPlayer.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
                 {
                     buyForText.text = "Not enough DOLAS";   
                     buyButtonImage.color = Color.red;
@@ -127,9 +127,9 @@ namespace MrPink
             // buy selectedItemIndex item
             if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore)
                 return;
-            if (!Game.Player.Inventory.CanFitTool(toolsList[selectedItemIndex]))
+            if (!Game.LocalPlayer.Inventory.CanFitTool(toolsList[selectedItemIndex]))
                 return;
-            Game.Player.Inventory.AddTool(toolsList[selectedItemIndex]);
+            Game.LocalPlayer.Inventory.AddTool(toolsList[selectedItemIndex]);
         
             ScoringSystem.Instance.RemoveScore(toolsList[selectedItemIndex].baseCost);
             OpenShop(selectedItemIndex);

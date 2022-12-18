@@ -59,7 +59,7 @@ namespace MrPink
         public void RegisterAction(ScoringActionType scoringAction, float addToCooldown = 5)
         {
             return;
-            if (Game.Player.Health.health <= 0)
+            if (Game.LocalPlayer.Health.health <= 0)
                 return;
         
             for (int i = 0; i < Scores.Count; i++)

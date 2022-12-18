@@ -40,7 +40,7 @@ namespace MrPink
         
         private void Update()
         {
-            if (Game.Player.Health.health <= 0)
+            if (Game._instance == null || Game.LocalPlayer == null || Game.LocalPlayer.Health.health <= 0)
                 return;
 
             if (selectedIOTransform)
@@ -90,7 +90,7 @@ namespace MrPink
                     if (tileAttack)
                     {
                         tileAttack.dangerous = true;
-                        tileAttack.SetTempOwnerHc(Game.Player.Health, 10);
+                        tileAttack.SetTempOwnerHc(Game.LocalPlayer.Health, 10);
                     }
                     
                     carryingPortableRb.gameObject.layer = 10;
@@ -101,7 +101,7 @@ namespace MrPink
                     carryingPortableRb.transform.parent = null;
                     carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
-                    Game.Player.Weapon.CooldownOnAttackInput();
+                    Game.LocalPlayer.Weapon.CooldownOnAttackInput();
                 }
             }
         }
@@ -152,12 +152,15 @@ namespace MrPink
 
         IEnumerator RaycastInteractables()
         {
-            //Debug.Log("RAYCAST START ");
+            while (Game._instance == null || Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
             while (true)
             {
                 yield return null;
 
-                if (Game.Player.Health.health <= 0 || carryingPortableRb)
+                if (Game.LocalPlayer.Health.health <= 0 || carryingPortableRb)
                 {
                     //Debug.Log("RAYCAST NULL ");
                     if (selectedIO == null && selectedPortable == null)

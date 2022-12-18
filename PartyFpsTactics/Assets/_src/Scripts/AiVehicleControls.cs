@@ -118,18 +118,18 @@ namespace MrPink
         {
             NavMeshPath path = new NavMeshPath();
             Vector3 posToSample = Vector3.zero;
-            while (Game._instance == null || Game.Player == null)
+            while (Game._instance == null || Game.LocalPlayer == null)
             {
                 yield return null;
             }
             while (true)
             {
-                posToSample = Game.Player.Position;
+                posToSample = Game.LocalPlayer.Position;
                 NavMesh.SamplePosition(posToSample, out var hit, 10, NavMesh.AllAreas);
-                if (NavMesh.CalculatePath(transform.position, Game.Player.Position, NavMesh.AllAreas, path))
+                if (NavMesh.CalculatePath(transform.position, Game.LocalPlayer.Position, NavMesh.AllAreas, path))
                 {
                     cornersPath = path.corners;
-                    targetPosition = cornersPath.Length > 1 ? cornersPath[1] : Game.Player.Position;
+                    targetPosition = cornersPath.Length > 1 ? cornersPath[1] : Game.LocalPlayer.Position;
                 }
                 
                 yield return new WaitForSeconds(0.1f);

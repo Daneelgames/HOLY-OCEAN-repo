@@ -1,50 +1,52 @@
+using System;
+using System.Collections;
+using FishNet.Object;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.PlayerSystem
 {
-    public class Player : MonoBehaviour
+    public class Player : NetworkBehaviour
     {
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         public Camera _mainCamera;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private HealthController _health;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerMovement _movement;
 
-        [SerializeField, ChildGameObjectsOnly, Required]
+        
+        [SerializeField, Required]
         private CommanderControls _commanderControls;
 
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerWeaponControls _weapon;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerToolsControls toolControls;
 
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerInventory _inventory;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerInteractor _interactor;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
-        private Transform _positionableObject;
 
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerLookAround _lookAround;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private PlayerVehicleControls _vehicleControls;
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, Required]
         private CharacterNeeds _characterNeeds;
         
         
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
         public GameObject GameObject
-            => _positionableObject.gameObject;
+            => gameObject;
         
         public Camera MainCamera
             => _mainCamera;
@@ -70,7 +72,7 @@ namespace MrPink.PlayerSystem
             => _interactor;
 
         public Vector3 Position
-            => _positionableObject.position;
+            => transform.position;
 
 
         public PlayerLookAround LookAround
@@ -79,11 +81,25 @@ namespace MrPink.PlayerSystem
             => _vehicleControls;
         public CharacterNeeds CharacterNeeds
             => _characterNeeds;
-        
+
+        public override void OnStartClient() { 
+            base.OnStartClient();
+            Init();
+        }
+        private void Init()
+        {
+            SetLocalPlayer();
+        }
+
+        [Client(RequireOwnership = true)]
+        void SetLocalPlayer()
+        {
+            Game._instance.SetLocalPlayer(this);
+        }
 
         public void Death(Transform killer)
         {
-            Game.Player.Interactor.SetInteractionText("R TO RESTART");
+            Game.LocalPlayer.Interactor.SetInteractionText("R TO RESTART");
             Movement.Death(killer);
             LookAround.Death(killer);
             Weapon.Death();
@@ -93,7 +109,7 @@ namespace MrPink.PlayerSystem
         
         public void Resurrect()
         {
-            Game.Player.Interactor.SetInteractionText("");
+            Game.LocalPlayer.Interactor.SetInteractionText("");
             Health.Resurrect();
             Movement.Resurrect();
             LookAround.Resurrect();

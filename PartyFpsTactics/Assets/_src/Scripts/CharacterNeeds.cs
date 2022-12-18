@@ -39,6 +39,10 @@ public class CharacterNeeds : MonoBehaviour
         // ADD A WAY FOR NPC TO RESTORE THEIR NEEDS
         // THEN UNBREAK IT
         ///////////////
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
         
         while (true)
         {
@@ -47,7 +51,7 @@ public class CharacterNeeds : MonoBehaviour
             if (ownHealth.health <= 0)
                 continue;
             
-            if (ownHealth != Game.Player.Health) // AI units only regen for now
+            if (ownHealth != Game.LocalPlayer.Health) // AI units only regen for now
             {
                 ownHealth.AddHealth(healthRegenOnNeeds);
                 continue;

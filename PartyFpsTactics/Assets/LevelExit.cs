@@ -20,6 +20,11 @@ public class LevelExit : MonoBehaviour
 
     IEnumerator CheckDistances()
     {
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
+        
         bool goalInRange = false;
         bool playerInRange = false;
 
@@ -39,7 +44,7 @@ public class LevelExit : MonoBehaviour
         {
             yield return new WaitForSeconds(0.33f);
             
-            playerInRange = Vector3.Distance(exitPoint.position, Game.Player.Position) < maxPlayerDistanceToExit;
+            playerInRange = Vector3.Distance(exitPoint.position, Game.LocalPlayer.Position) < maxPlayerDistanceToExit;
             yield return null;
             if (maxGoalDistanceToExit > 0)
                 goalInRange = Vector3.Distance(exitPoint.position, LevelGoal.Instance.transform.position) < maxGoalDistanceToExit;

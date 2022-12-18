@@ -59,18 +59,18 @@ namespace MrPink.PlayerSystem
         // TODO стороны - через enum
         public void SpawnPlayerWeapon(WeaponController weaponPrefab, int side = 0, bool forceHand = false) // 0- left, 1 - right
         {
-            var wpn = Instantiate(weaponPrefab, Game.Player.Position, Quaternion.identity);
+            var wpn = Instantiate(weaponPrefab, Game.LocalPlayer.Position, Quaternion.identity);
             
-            if (Game.Player.Weapon.Hands[0].Weapon != null && forceHand == false)
+            if (Game.LocalPlayer.Weapon.Hands[0].Weapon != null && forceHand == false)
                 side = 1;
             
             switch (side)
             {
                 case 0:
-                    Game.Player.Weapon.SetWeapon(wpn, Hand.Left);
+                    Game.LocalPlayer.Weapon.SetWeapon(wpn, Hand.Left);
                     break;
                 case 1:
-                    Game.Player.Weapon.SetWeapon(wpn, Hand.Right);
+                    Game.LocalPlayer.Weapon.SetWeapon(wpn, Hand.Right);
                     break;
             }
         }
@@ -107,7 +107,7 @@ namespace MrPink.PlayerSystem
                     continue;
              
                 toolAmount.amount++;
-                Game.Player.ToolControls.UpdateSelectedToolFeedback();
+                Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();
                 return;
             }
 
@@ -116,8 +116,8 @@ namespace MrPink.PlayerSystem
             newAmount._toolType = tool.tool;
             amountOfEachTool.Add(newAmount);
             
-            Game.Player.ToolControls.SelectNextTool();
-            Game.Player.ToolControls.UpdateSelectedToolFeedback();
+            Game.LocalPlayer.ToolControls.SelectNextTool();
+            Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();
         }
     
         public void RemoveTool(ToolType tool)
@@ -163,9 +163,9 @@ namespace MrPink.PlayerSystem
 
         public void DropRandomTools()
         {
-            for (int i = 0; i < Game.Player.ToolControls.toolsProjectilesPrefabs.Count; i++)
+            for (int i = 0; i < Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs.Count; i++)
             {
-                var toolPrefab = Game.Player.ToolControls.toolsProjectilesPrefabs[i];
+                var toolPrefab = Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs[i];
                 var amount = GetAmount(toolPrefab.toolType);
                 if (amount > 0)
                 {
@@ -180,13 +180,13 @@ namespace MrPink.PlayerSystem
             
             if (rightWeapon != null)
             {
-                Game.Player.Weapon.SetWeapon(null, Hand.Right);
+                Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Right);
                 SetWeapon(null, Hand.Right);
                 return;
             }
 
             if (leftWeapon != null)
-                Game.Player.Weapon.SetWeapon(null, Hand.Left);
+                Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Left);
 
         }
 

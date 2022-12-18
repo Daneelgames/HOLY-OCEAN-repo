@@ -47,6 +47,10 @@ public class QuestMarkers : MonoBehaviour
 
     private void Update()
     {
+        if (Game._instance == null || Game.LocalPlayer == null)
+        {
+            return;
+        }
         if (this != Instance)
         {
             return;
@@ -65,12 +69,12 @@ public class QuestMarkers : MonoBehaviour
             float minY = textUI.GetPixelAdjustedRect().height / 2;   
             float maxY = Screen.height - minY;
 
-            Vector2 pos = Game.Player.MainCamera.WorldToScreenPoint(target.position);
+            Vector2 pos = Game.LocalPlayer.MainCamera.WorldToScreenPoint(target.position);
 
             
             // Check if the target is behind us, to only show the icon once the target is in front
-            if (Vector3.Dot((target.position - Game.Player.MainCamera.transform.position),
-                Game.Player.MainCamera.transform.forward) < 0)
+            if (Vector3.Dot((target.position - Game.LocalPlayer.MainCamera.transform.position),
+                Game.LocalPlayer.MainCamera.transform.forward) < 0)
             {
                 // Check if the target is on the left side of the screen
                 if (pos.x < Screen.width / 2)

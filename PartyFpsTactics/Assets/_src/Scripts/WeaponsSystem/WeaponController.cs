@@ -113,7 +113,7 @@ namespace MrPink.WeaponsSystem
                 direction = (aiAimTransform.position - shotHolder.position).normalized;
             }
             
-            bool isPlayer = ownerHc == Game.Player.Health;
+            bool isPlayer = ownerHc == Game.LocalPlayer.Health;
             
             ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
@@ -138,7 +138,7 @@ namespace MrPink.WeaponsSystem
             }
 
             if (isPlayer)
-                Game.Player.Movement.ChangeStamina(-attackStaminaCost);
+                Game.LocalPlayer.Movement.ChangeStamina(-attackStaminaCost);
 
             Cooldown().ForgetWithHandler();
             
@@ -173,7 +173,7 @@ namespace MrPink.WeaponsSystem
         
         private static ScoringActionType GetPlayerScoringAction()
         {
-            var state = Game.Player.Movement.State;
+            var state = Game.LocalPlayer.Movement.State;
             
             if (state.IsLeaning)
             {

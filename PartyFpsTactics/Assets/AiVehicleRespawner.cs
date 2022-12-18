@@ -52,7 +52,7 @@ public class AiVehicleRespawner : MonoBehaviour
             List<Transform> spawnersTemp = new List<Transform>();
             foreach (var roadSpawnPosition in roadSpawnPositions)
             {
-                var distance = Vector3.Distance(roadSpawnPosition.position, Game.Player.Position);
+                var distance = Vector3.Distance(roadSpawnPosition.position, Game.LocalPlayer.Position);
                 if (distance > playerDistanceToRespawnMinMax.y || distance < playerDistanceToRespawnMinMax.x)
                     continue;
                 
@@ -65,7 +65,7 @@ public class AiVehicleRespawner : MonoBehaviour
                 continue;
             }
             Vector3 spawnPos = spawnersTemp[Random.Range(0, spawnersTemp.Count)].position;
-            var newVeh = Instantiate(vehiclePrefabs[Random.Range(0, vehiclePrefabs.Count)], spawnPos, Quaternion.LookRotation(Game.Player.Position - spawnPos, Vector3.up));
+            var newVeh = Instantiate(vehiclePrefabs[Random.Range(0, vehiclePrefabs.Count)], spawnPos, Quaternion.LookRotation(Game.LocalPlayer.Position - spawnPos, Vector3.up));
             spawnedVehicles.Add(newVeh);
         }
     }

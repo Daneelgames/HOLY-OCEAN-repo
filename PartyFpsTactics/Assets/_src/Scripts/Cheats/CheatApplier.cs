@@ -16,7 +16,7 @@ namespace MrPink.Cheats
         private void Start()
         {
             if (_isApplied)
-                _config.ApplyAll();
+                StartCoroutine(_config.ApplyAll());
         }
     }
 }

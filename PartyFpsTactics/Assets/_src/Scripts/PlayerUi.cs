@@ -50,6 +50,10 @@ namespace MrPink
         
         IEnumerator Start()
         {
+            while (Game._instance == null || Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
             while (true)
             {
                 List<HealthController> unitsToRemove = new List<HealthController>();
@@ -71,14 +75,14 @@ namespace MrPink
                     markedEnemies.Remove(unit);
                 }
 
-                staminaBar.fillAmount = Game.Player.Movement.stamina / Game.Player.Movement.staminaMax;
-                for (int i = 0; i < Game.Player.CharacterNeeds.needs.Count; i++)
+                staminaBar.fillAmount = Game.LocalPlayer.Movement.stamina / Game.LocalPlayer.Movement.staminaMax;
+                for (int i = 0; i < Game.LocalPlayer.CharacterNeeds.needs.Count; i++)
                 {
                     // 0 is sleep
                     // 1 is hunger
                     // 2 is water
-                    float d = Game.Player.CharacterNeeds.needs[i].needCurrent /
-                              Game.Player.CharacterNeeds.needs[i].needMaxBase;
+                    float d = Game.LocalPlayer.CharacterNeeds.needs[i].needCurrent /
+                              Game.LocalPlayer.CharacterNeeds.needs[i].needMaxBase;
                     characterNeedsBars[i].fillAmount = d;
                     characterNeedsBars[i].transform.parent.localScale = Vector3.Lerp(Vector3.one * 0.5f, Vector3.one * 1.25f, d);
                 }
@@ -88,7 +92,7 @@ namespace MrPink
 
         public void UpdateHealthBar()
         {
-            healthBar.fillAmount = (float)Game.Player.Health.health / (float)Game.Player.Health.healthMax;
+            healthBar.fillAmount = (float)Game.LocalPlayer.Health.health / (float)Game.LocalPlayer.Health.healthMax;
         }
 
         public void AddShieldFeedback()
