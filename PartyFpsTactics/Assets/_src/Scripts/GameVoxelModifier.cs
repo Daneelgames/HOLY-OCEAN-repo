@@ -62,7 +62,10 @@ public class GameVoxelModifier : NetworkBehaviour
     [TargetRpc]
     void RpcSendVoxelDataToClient(NetworkConnection networkConnection, byte[] data)
     {
-        SaveModule_ByteBuffer_V2.VoxelDictionary[_voxelSaveSystem.ModuleByteBuffer_V2.Key] = data;
+        if (SaveModule_ByteBuffer_V2.VoxelDictionary.ContainsKey(_voxelSaveSystem.ModuleByteBuffer_V2.Key))
+            SaveModule_ByteBuffer_V2.VoxelDictionary[_voxelSaveSystem.ModuleByteBuffer_V2.Key] = data;
+        else
+            SaveModule_ByteBuffer_V2.VoxelDictionary.Add(_voxelSaveSystem.ModuleByteBuffer_V2.Key, data);
         _voxelSaveSystem.Load();
     }
 

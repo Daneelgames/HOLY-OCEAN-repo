@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Configuration;
@@ -77,6 +78,8 @@ namespace MrPink
         [Button]
         public void CloseShop()
         {
+            if (Game.LocalPlayer == null) return;
+            
             Debug.Log("CloseShop");
             canvasAnim.gameObject.SetActive(false);
             IsActive = false;
@@ -95,7 +98,15 @@ namespace MrPink
             selectedInfoDescriptionText.text += ". " + amount + " / " + toolsList[selectedItemIndex].maxAmount;
         
             // TODO перенести текстовые штуки в систему локализации
-        
+
+            if (Game.LocalPlayer == null)
+            {
+                buyForText.text = "F: Buy for " + toolsList[selectedItemIndex].baseCost + " DOLAS";
+                buyForText.text = buyForText.text.ToUpper();
+                selectedInfoNameText.text = selectedInfoNameText.text.ToUpper();
+                selectedInfoDescriptionText.text = selectedInfoDescriptionText.text.ToUpper(); 
+                return;
+            }
             if (!Game.LocalPlayer.Inventory.CanFitTool(toolsList[selectedItemIndex]))
             {
                 buyForText.text = "Max Amount";
@@ -119,7 +130,6 @@ namespace MrPink
             buyForText.text = buyForText.text.ToUpper();
             selectedInfoNameText.text = selectedInfoNameText.text.ToUpper();
             selectedInfoDescriptionText.text = selectedInfoDescriptionText.text.ToUpper(); 
-
         }
 
         public void BuyItem()
