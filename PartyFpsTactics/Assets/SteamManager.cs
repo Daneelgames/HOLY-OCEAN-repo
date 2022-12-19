@@ -25,6 +25,7 @@ public class SteamManager : MonoBehaviour {
 	protected static bool s_EverInitialized = false;
 
 	protected static SteamManager s_instance;
+	public static SteamManager GetInstance => s_instance;
 	protected static SteamManager Instance {
 		get {
 			if (s_instance == null) {

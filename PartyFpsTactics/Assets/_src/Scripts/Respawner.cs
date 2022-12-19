@@ -72,10 +72,9 @@ namespace _src.Scripts
             {
                 return;
             }
-            if (Game.LocalPlayer.Position.y < corpseShredderY)
+            if (Game.LocalPlayer.Position.y < corpseShredderY && Game.LocalPlayer.Health.health > 0)
             {
                 GameManager.Instance.KillPlayer();
-                GameManager.Instance.RespawnPlayer();
                 return;
             }
             
@@ -91,10 +90,9 @@ namespace _src.Scripts
                 
                 if (corpse.transform.position.y < corpseShredderY)
                 {
-                    if (corpse == Game.LocalPlayer.Health)
+                    if (corpse == Game.LocalPlayer.Health && Game.LocalPlayer.Health.health > 0)
                     {
                         GameManager.Instance.KillPlayer();
-                        GameManager.Instance.RespawnPlayer();
                         return;
                     }
                     Destroy(corpse.gameObject);

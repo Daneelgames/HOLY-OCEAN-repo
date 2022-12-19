@@ -39,6 +39,8 @@ public class GameVoxelModifier : NetworkBehaviour
     [Server]
     void CheckIfNewPlayerConnected(NetworkConnection networkConnection, RemoteConnectionStateArgs remoteConnectionStateArgs)
     {
+        if (networkConnection == null)
+            return;
         if (remoteConnectionStateArgs.ConnectionState == RemoteConnectionState.Stopped)
             return;
         
@@ -68,8 +70,6 @@ public class GameVoxelModifier : NetworkBehaviour
             SaveModule_ByteBuffer_V2.VoxelDictionary.Add(_voxelSaveSystem.ModuleByteBuffer_V2.Key, data);
         _voxelSaveSystem.Load();
     }
-
-    
 
     public void DestructionInWorld(Vector3 pos)
     {

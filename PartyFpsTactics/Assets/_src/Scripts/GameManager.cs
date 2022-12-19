@@ -156,6 +156,7 @@ namespace MrPink
         }
         public void RespawnPlayer()
         {
+            if (Game._instance && Game.LocalPlayer.Health.health > 0) return;
             StartCoroutine(RespawnPlayerOverTime());
             
             return;

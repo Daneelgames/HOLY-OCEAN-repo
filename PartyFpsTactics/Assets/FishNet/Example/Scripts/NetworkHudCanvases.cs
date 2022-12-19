@@ -1,6 +1,9 @@
-﻿using FishNet.Managing;
+﻿using System;
+using FishNet.Managing;
+using FishNet.Managing.Transporting;
 using FishNet.Transporting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -57,6 +60,10 @@ public class NetworkHudCanvases : MonoBehaviour
     [Tooltip("Indicator for client state.")]
     [SerializeField]
     private Image _clientIndicator;
+
+    [SerializeField] private InputField clientAddressInputField;
+    [SerializeField] private Transform uiParent;
+    
     #endregion
 
     #region Private.
@@ -156,6 +163,14 @@ public class NetworkHudCanvases : MonoBehaviour
             OnClick_Client();
     }
 
+    private void Update()
+    {
+        if (_networkManager.IsClient && uiParent.gameObject.activeInHierarchy)
+            uiParent.gameObject.SetActive(false);
+        else if (_networkManager.IsClient == false && uiParent.gameObject.activeInHierarchy == false)
+            uiParent.gameObject.SetActive(true);
+    }
+
 
     private void OnDestroy()
     {
@@ -198,17 +213,34 @@ public class NetworkHudCanvases : MonoBehaviour
         UpdateColor(obj.ConnectionState, ref _serverIndicator);
     }
 
+    public void SetClientAddress(int id)
+    {
+        var address = id.ToString();
+        _networkManager.TransportManager.Transport.SetClientAddress(address);
+        clientAddressInputField.text = address;
+    }
 
+    public void SetClientAddressFromInputField()
+    {
+        var address = clientAddressInputField.text;
+        _networkManager.TransportManager.Transport.SetClientAddress(address);
+    }
+
+    public UnityEvent OnClickServer;
+    public UnityEvent OnClickClient;
+    public UnityEvent OnClickCopyOwnId;
     public void OnClick_Server()
     {
         if (_networkManager == null)
             return;
 
+        OnClickServer?.Invoke();
         if (_serverState != LocalConnectionState.Stopped)
             _networkManager.ServerManager.StopConnection(true);
         else
             _networkManager.ServerManager.StartConnection();
 
+        
         DeselectButtons();
     }
 
@@ -218,12 +250,18 @@ public class NetworkHudCanvases : MonoBehaviour
         if (_networkManager == null)
             return;
 
+        OnClickClient?.Invoke();
         if (_clientState != LocalConnectionState.Stopped)
             _networkManager.ClientManager.StopConnection();
         else
             _networkManager.ClientManager.StartConnection();
 
         DeselectButtons();
+    }
+
+    public void CopyOwnId()
+    {
+        OnClickCopyOwnId?.Invoke();
     }
 
 
