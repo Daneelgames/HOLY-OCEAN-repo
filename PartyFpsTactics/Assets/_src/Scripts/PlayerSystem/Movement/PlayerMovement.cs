@@ -349,7 +349,7 @@ namespace MrPink.PlayerSystem
                 scaler = 0.66f;
             
             // RUNNING
-            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 /*&& (State.IsGrounded || State.IsClimbing == false)*/)
+            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && (State.IsGrounded || State.IsClimbing == false))
             {
                 State.IsRunning = moveInFrame;
                 State.IsMoving = false;

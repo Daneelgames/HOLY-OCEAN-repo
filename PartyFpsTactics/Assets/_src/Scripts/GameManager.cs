@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using FishNet.Component.Spawning;
@@ -154,9 +155,7 @@ namespace MrPink
         }
         public void RespawnPlayer()
         {
-            Game.LocalPlayer.Movement.TeleportToPosition(ContentPlacer.Instance.RaycastedPosAroundPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position,1000f));
-            Game.LocalPlayer.Resurrect();
-            Shop.Instance.OpenShop(0);
+            StartCoroutine(RespawnPlayerOverTime());
             
             return;
             // change player's position
@@ -178,6 +177,14 @@ namespace MrPink
                     StartStealthScene();
                     break;
             }
+        }
+
+        IEnumerator RespawnPlayerOverTime()
+        {
+            yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(ContentPlacer.Instance.RaycastedPosAroundPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position,1000f)));
+            Game.LocalPlayer.Resurrect();
+            yield return null;
+            Shop.Instance.OpenShop(0);
         }
 
         public void LevelCompleted()

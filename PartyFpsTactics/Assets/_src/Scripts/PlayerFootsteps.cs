@@ -68,9 +68,12 @@ public class PlayerFootsteps : MonoBehaviour
         if (currentLandingCooldown > 0)
             return;
         
-        stepsAu.pitch = Random.Range(0.75f, 1.25f);
-        stepsAu.clip = stepClips[Random.Range(0, stepClips.Count)];
-        stepsAu.Play();
+        if (stepsAu)
+        {
+            stepsAu.pitch = Random.Range(0.75f, 1.25f);
+            stepsAu.clip = stepClips[Random.Range(0, stepClips.Count)];
+            stepsAu.Play();
+        }
         currentLandingCooldown = Random.Range(landingCooldown.x, landingCooldown.y);
         StartCoroutine(CooldownCoroutine());
     }

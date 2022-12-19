@@ -1028,6 +1028,7 @@ GameObject:
   - component: {fileID: 384814122}
   - component: {fileID: 384814121}
   - component: {fileID: 384814120}
+  - component: {fileID: 384814124}
   m_Layer: 6
   m_Name: WorldGenerator_Sample
   m_TagString: Untagged
@@ -1127,7 +1128,7 @@ MonoBehaviour:
   InitialValue: 0
   RestrictDimension: 0000
   LockHullUpdates: 0
-  savesystem: {fileID: 0}
+  savesystem: {fileID: 384814124}
   worldgenerator: {fileID: 384814120}
   LODDistance: 0
   ChunkHash: {x: 0, y: 0, z: 0}
@@ -1136,7 +1137,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 90716
+  instanceID: 34180
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -1160,6 +1161,100 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &384814124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384814119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74fc1170045fab94194de54a6fa0b5cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AutoLoad: 0
+  LoadOnStart: 0
+  __migrated: 1
+  SceneVoxelData:
+    IsValid: 0
+    SubdivisionPower: 0
+    RootSize: 0
+    VoxelCount: 0
+    VoxelData: []
+    DimensionCount: 0
+    AdditionalData: []
+  EditorSaveMode: 9
+  DynamicLoadSpeed: 100
+  _VoxelMap: {fileID: 0}
+  nativevoxelengine: {fileID: 384814122}
+  WorldFolder: 
+  WorldToSceneLocation: 1
+  WorldChunk: {x: 0, y: 0, z: 0}
+  WorldRegionSize: 32
+  WorldLoadingRule: 0
+  VoxelName: 
+  DuplicateMapOnClone: 0
+  SaveInSceneSubFolder: 1
+  RemoveVoxelmapOnDelete: 0
+  IsDirty: 1
+  ModuleScene:
+    saveSystem: {fileID: 0}
+    SceneVoxelData:
+      IsValid: 0
+      SubdivisionPower: 0
+      RootSize: 0
+      VoxelCount: 0
+      VoxelData: []
+      DimensionCount: 0
+      AdditionalData: []
+  ModuleScriptableObject:
+    saveSystem: {fileID: 384814124}
+    _VoxelMap: {fileID: 0}
+    DuplicateMapOnClone: 0
+    SaveInSceneSubFolder: 1
+    RemoveVoxelmapOnDelete: 0
+  ModulePersistent:
+    saveSystem: {fileID: 0}
+    VoxelName: 
+  ModuleWorld:
+    saveSystem: {fileID: 0}
+    VoxelName: 
+    WorldChunk: {x: 0, y: 0, z: 0}
+    WorldToSceneLocation: 1
+    WorldFolder: 
+    WorldLoadingRule: 0
+  ModuleRegion:
+    saveSystem: {fileID: 0}
+    VoxelName: 
+    WorldRegionSize: 32
+    WorldChunk: {x: 0, y: 0, z: 0}
+    WorldToSceneLocation: 1
+    WorldFolder: 
+    WorldLoadingRule: 0
+  ModulePersistent_V2:
+    saveSystem: {fileID: 0}
+    VoxelName: 
+  ModuleWorld_V2:
+    saveSystem: {fileID: 0}
+    VoxelName: 
+    WorldChunk: {x: 0, y: 0, z: 0}
+    WorldToSceneLocation: 1
+    WorldFolder: 
+    WorldLoadingRule: 0
+  ModulePath_V2:
+    saveSystem: {fileID: 0}
+    CurrentPath: 
+  ModuleByteBuffer_V2:
+    saveSystem: {fileID: 384814124}
+    Key: savedVoxelMap
+  eventsfoldout: 0
+  OnDataSaved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDataLoaded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &404830433
 GameObject:
   m_ObjectHideFlags: 0
@@ -5541,7 +5636,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   VoxelMeshes: []
-  instanceID: 32872
+  instanceID: 34522
   width: 8
   Cell_Subdivision: 8
   NumCores: 8

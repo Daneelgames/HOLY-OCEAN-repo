@@ -49,6 +49,15 @@ namespace MrPink.Units
         public bool rememberRespawPoint = false;
         private Vector3 rememberedRespawnPoint;
 
+        public override void OnStartClient() { 
+            base.OnStartClient();
+            if (IsServer == false)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                _agent.enabled = false;
+            }
+        }
         private void Start()
         {
             // TODO не делать этого в старте
