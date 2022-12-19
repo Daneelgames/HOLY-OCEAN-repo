@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -10,7 +11,7 @@ using Random = UnityEngine.Random;
 
 namespace _src.Scripts
 {
-    public class Respawner : MonoBehaviour
+    public class Respawner : NetworkBehaviour
     {
         public float corpseShredderY = -25;
         List<TileHealth> tilesForSpawns = new List<TileHealth>();
@@ -72,9 +73,11 @@ namespace _src.Scripts
             {
                 return;
             }
-            if (Game.LocalPlayer.Position.y < corpseShredderY && Game.LocalPlayer.Health.health > 0)
+            if (Game.LocalPlayer.Position.y < corpseShredderY)
             {
-                GameManager.Instance.KillPlayer();
+                if (Game.LocalPlayer.Health.health > 0)
+                    GameManager.Instance.KillPlayer();
+                Game.LocalPlayer.transform.position = new Vector3(Game.LocalPlayer.transform.position.x, corpseShredderY + 5, Game.LocalPlayer.transform.position.z);
                 return;
             }
             
@@ -87,15 +90,25 @@ namespace _src.Scripts
                     continue;
             
                 var corpse = UnitsManager.Instance.HcInGame[i];
-                
                 if (corpse.transform.position.y < corpseShredderY)
                 {
-                    if (corpse == Game.LocalPlayer.Health && Game.LocalPlayer.Health.health > 0)
+                    if (corpse == Game.LocalPlayer.Health) // corpse is local owner
                     {
-                        GameManager.Instance.KillPlayer();
+                        if (Game.LocalPlayer.Health.health > 0)
+                            GameManager.Instance.KillPlayer();
+                        Game.LocalPlayer.transform.position = new Vector3(Game.LocalPlayer.transform.position.x, corpseShredderY + 5, Game.LocalPlayer.transform.position.z);
                         return;
                     }
-                    Destroy(corpse.gameObject);
+
+                    if (corpse.IsPlayer) // but not local owner
+                    {
+                        // nothing
+                    }
+                    else if (base.IsServer) // destroy mob on server
+                    {
+                        ServerManager.Despawn(corpse.gameObject, DespawnType.Destroy);
+                        Destroy(corpse.gameObject);   
+                    }
                 }
             }
         }

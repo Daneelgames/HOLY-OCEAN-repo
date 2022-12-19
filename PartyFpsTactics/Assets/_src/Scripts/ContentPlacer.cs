@@ -42,12 +42,12 @@ public class ContentPlacer : NetworkBehaviour
         {
             yield return new WaitForSeconds(cooldown);
             
-            if (Game.LocalPlayer.Health.health <= 0)
-                continue;
-            
             if (IsServer)
                 SpawnRedUnitAroundPlayer();
             
+            if (Game.LocalPlayer.Health.health <= 0)
+                continue;
+
             SpawnLootAroundPlayer();
         }
     }
@@ -57,10 +57,12 @@ public class ContentPlacer : NetworkBehaviour
     {
         if (UnitsManager.Instance.HcInGame.Count > 30)
             return;
+        var players = Game._instance.PlayerInGame;
+        var randomPlayer = players[Random.Range(0, players.Count)];
         
-        Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer._mainCamera.transform.position, 100);
+        Vector3 pos = RaycastedPosAroundPosition(randomPlayer._mainCamera.transform.position, 100);
             
-        if (Vector3.Distance(pos, Game.LocalPlayer._mainCamera.transform.position) < minMobSpawnDistance)
+        if (Vector3.Distance(pos, randomPlayer._mainCamera.transform.position) < minMobSpawnDistance)
             return;
 
         SpawnRedUnit(pos);

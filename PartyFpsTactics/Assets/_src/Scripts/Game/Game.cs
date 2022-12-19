@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,6 +14,9 @@ namespace MrPink
         
         [SerializeField]
         private Player _localPlayer;
+
+        [ReadOnly] [SerializeField] private List<Player> playersInGame = new List<Player>();
+        public List<Player> PlayerInGame => playersInGame;
         [SerializeField, SceneObjectsOnly]
         
         private LightManager _lightManager;
@@ -31,6 +35,17 @@ namespace MrPink
             _instance = this;
         }
 
+        public void AddPlayer(Player p)
+        {
+            playersInGame.Add(p);
+        }
+        public void RemovePlayer(Player p)
+        {
+            if (playersInGame.Contains(p)) return;
+            
+            playersInGame.Remove(p);
+        }
+        
         public void SetLocalPlayer(Player p)
         {
             _localPlayer = p;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using MrPink.Tools;
@@ -18,6 +19,14 @@ namespace MrPink.Health
 {
     public class HealthController : NetworkBehaviour
     {
+        [SerializeField] [ReadOnly] [SyncVar] private bool isPlayer = false;
+        public bool IsPlayer => isPlayer;
+
+        public void SetIsPlayerTrue()
+        {
+            isPlayer = true;
+        }
+        
         public Unit selfUnit;
         public int health = 100;
         public int healthMax = 100;

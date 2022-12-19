@@ -14,6 +14,7 @@ namespace MrPink.PlayerSystem
         
         public List<ToolAmount> amountOfEachTool = new List<ToolAmount>();
 
+        [Serializable]
         public class ToolAmount
         {
             public ToolType _toolType;
@@ -136,7 +137,6 @@ namespace MrPink.PlayerSystem
     
         public bool CanFitTool(Tool tool)
         {
-            
             foreach (var toolAmount in amountOfEachTool)
             {
                 if (toolAmount._toolType != tool.tool)
@@ -161,20 +161,16 @@ namespace MrPink.PlayerSystem
             return 0;
         }
 
-        public void DropRandomTools()
+        public void DropAll()
         {
             for (int i = 0; i < Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs.Count; i++)
             {
                 var toolPrefab = Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs[i];
                 var amount = GetAmount(toolPrefab.toolType);
-                if (amount > 0)
+                
+                for (int j = 0; j < amount; j++)
                 {
-                    int dropAmount = Random.Range(0, amount);
-                    
-                    for (int j = 0; j < dropAmount; j++)
-                    {
-                        RemoveTool(toolPrefab.toolType);
-                    }
+                    RemoveTool(toolPrefab.toolType);
                 }
             }
             
@@ -186,8 +182,16 @@ namespace MrPink.PlayerSystem
             }
 
             if (leftWeapon != null)
+            {
                 Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Left);
-
+                SetWeapon(null, Hand.Left);
+            }
+            
+            foreach (var toolAmount in amountOfEachTool)
+            {
+                toolAmount.amount = 0;
+            }
+            amountOfEachTool.Clear();
         }
 
         WeaponController leftWeapon;

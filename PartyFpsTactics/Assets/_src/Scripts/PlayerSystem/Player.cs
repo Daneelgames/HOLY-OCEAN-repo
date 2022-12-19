@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using FishNet.Connection;
 using FishNet.Object;
 using MrPink.Health;
+using MrPink.Units;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -85,17 +87,29 @@ namespace MrPink.PlayerSystem
         public override void OnStartClient() { 
             base.OnStartClient();
           
-            if (IsOwner)
                 Init();
+        }
+        public override void OnOwnershipClient(NetworkConnection prevOwner)
+        {
+            base.OnOwnershipClient(prevOwner);
+            /* Current owner can be found by using base.Owner. prevOwner
+            * contains the connection which lost ownership. Value will be
+            * -1 if there was no previous owner. */
+            
+            SetLocalPlayerInstance();
         }
         private void Init()
         {
+            /*
             if (IsOwner)
-                SetLocalPlayer();
+                SetLocalPlayer();*/
+
+            Game._instance.AddPlayer(this);
+            _health.SetIsPlayerTrue();
         }
 
         [Client(RequireOwnership = true)]
-        void SetLocalPlayer()
+        void SetLocalPlayerInstance()
         {
             Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
             Game._instance.SetLocalPlayer(this);
@@ -113,13 +127,18 @@ namespace MrPink.PlayerSystem
         
         public void Resurrect()
         {
-            Game.LocalPlayer.Inventory.DropRandomTools();
+            Game.LocalPlayer.Inventory.DropAll();
             Game.LocalPlayer.Interactor.SetInteractionText("");
             Health.Resurrect();
             Movement.Resurrect();
             LookAround.Resurrect();
             Weapon.Resurrect();
             CharacterNeeds.ResetNeeds();
+        }
+
+        void OnDestroy()
+        {
+            Game._instance.RemovePlayer(this);
         }
     }
 }

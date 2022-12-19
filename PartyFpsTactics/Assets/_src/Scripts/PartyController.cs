@@ -55,7 +55,7 @@ namespace MrPink
         {
             var pos = Game.LocalPlayer.Position;
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
-            Game.LocalPlayer.Inventory.DropRandomTools();
+            Game.LocalPlayer.Inventory.DropAll();
 
             if (npcInParty)
             {
