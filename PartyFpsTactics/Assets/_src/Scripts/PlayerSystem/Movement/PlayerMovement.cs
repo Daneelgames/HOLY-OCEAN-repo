@@ -335,7 +335,7 @@ namespace MrPink.PlayerSystem
             _movementInput = new Vector2(hor, vert);
             
             if (State.IsClimbing)
-                _moveVector = Game.LocalPlayer._mainCamera.transform.right * _movementInput.x + Game.LocalPlayer._mainCamera.transform.forward * _movementInput.y;
+                _moveVector = Game.LocalPlayer.MainCamera.transform.right * _movementInput.x + Game.LocalPlayer.MainCamera.transform.forward * _movementInput.y;
             else
                 _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
         
@@ -491,7 +491,7 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer._mainCamera.transform.position, climbCheckRadius,
+            hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
                 Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask);
             State.IsClimbing = hitInfoClimb.Length > 0;
             

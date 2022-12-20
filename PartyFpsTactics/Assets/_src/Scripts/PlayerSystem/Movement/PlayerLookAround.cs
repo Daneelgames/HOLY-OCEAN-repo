@@ -10,6 +10,9 @@ namespace MrPink.PlayerSystem
     {
         [SerializeField, Required]
         private Transform _headTransform;
+
+        public Vector3 HeadPos => _headTransform.position;
+        public Quaternion HeadRot => _headTransform.rotation;
         
         [SerializeField]
         public float _mouseSensitivity = 5;

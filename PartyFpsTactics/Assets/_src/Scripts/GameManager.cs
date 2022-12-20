@@ -116,7 +116,7 @@ namespace MrPink
                 }
             }
         
-            if (Game.LocalPlayer.Health.health <= 0 /*&& Input.GetKeyDown(KeyCode.R)*/)
+            if (Game.LocalPlayer.Health.IsDead /*&& Input.GetKeyDown(KeyCode.R)*/)
             {
                 // player died
                 // restart at different place
@@ -157,11 +157,7 @@ namespace MrPink
         public void RespawnPlayer()
         {
             if (Game._instance && Game.LocalPlayer.Health.health > 0) return;
-            
-            if (respawnCoroutine != null)
-                return;
-            respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
-            
+            Game.LocalPlayer.Respawn();            
             return;
             // change player's position
             switch (_levelType)
@@ -183,18 +179,8 @@ namespace MrPink
                     break;
             }
         }
-
-        private Coroutine respawnCoroutine;
-
-        IEnumerator RespawnPlayerOverTime()
-        {
-            yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position + Vector3.up * 0.5f));
-            yield return null;
-            Game.LocalPlayer.Resurrect();
-            yield return null;
-            Shop.Instance.OpenShop(0);
-            respawnCoroutine = null;
-        }
+        
+        
 
         public void LevelCompleted()
         {

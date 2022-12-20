@@ -263,6 +263,7 @@ public class ActionScore
     public int score = 100;
 }
 
+[Serializable]
 public enum ScoringActionType
 {
     NULL,

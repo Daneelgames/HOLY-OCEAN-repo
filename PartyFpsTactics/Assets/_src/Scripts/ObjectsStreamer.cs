@@ -32,7 +32,7 @@ public class ObjectsStreamer : MonoBehaviour
             for (int i = 0; i < StreamableObjects.Count; i++)
             {
                 str = StreamableObjects[i];
-                distance = Vector3.Distance(Game.LocalPlayer._mainCamera.transform.position, str.transform.position);
+                distance = Vector3.Distance(Game.LocalPlayer.MainCamera.transform.position, str.transform.position);
                 if (distance > cullDistance)
                 {
                     str.gameObject.SetActive(false);

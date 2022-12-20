@@ -28,30 +28,43 @@ public class ContentPlacer : NetworkBehaviour
         
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        if (respawnDelay > -1)
-            StartCoroutine(SpawnAroundPlayer());
+        if (respawnDelay <= 0)
+            return;
+        
+        if (spawnAroundPlayer != null)
+            StopCoroutine(spawnAroundPlayer);
+        
+        spawnAroundPlayer = StartCoroutine(SpawnAroundPlayer());
     }
-    
 
+
+    private Coroutine spawnAroundPlayer;
+    
     IEnumerator SpawnAroundPlayer()
     {
         while (Game._instance == null || Game.LocalPlayer == null)
         {
-            yield return null;
+            Debug.Log("SpawnAroundPlayer wait");
+            yield return new WaitForSeconds(1);
         }
         float cooldown = respawnDelay;
         while (true)
         {
             yield return new WaitForSeconds(cooldown);
             
+                Debug.Log("SpawnAroundPlayer 0");
             if (IsServer)
+            {
+                Debug.Log("SpawnAroundPlayer SpawnRedUnitAroundPlayer");
                 SpawnRedUnitAroundPlayer();
+            }
             
-            if (Game.LocalPlayer.Health.health <= 0)
+            if (Game.LocalPlayer == null || Game.LocalPlayer.Health.health <= 0)
                 continue;
 
+            Debug.Log("SpawnAroundPlayer SpawnLootAroundPlayer");
             SpawnLootAroundPlayer();
         }
     }
@@ -64,9 +77,9 @@ public class ContentPlacer : NetworkBehaviour
         var players = Game._instance.PlayerInGame;
         var randomPlayer = players[Random.Range(0, players.Count)];
         
-        Vector3 pos = RaycastedPosAroundPosition(randomPlayer._mainCamera.transform.position, 100);
+        Vector3 pos = RaycastedPosAroundPosition(randomPlayer.MainCamera.transform.position, 100);
             
-        if (Vector3.Distance(pos, randomPlayer._mainCamera.transform.position) < minMobSpawnDistance)
+        if (Vector3.Distance(pos, randomPlayer.MainCamera.transform.position) < minMobSpawnDistance)
             return;
 
         SpawnRedUnit(pos);
@@ -82,9 +95,9 @@ public class ContentPlacer : NetworkBehaviour
     }
     void SpawnLootAroundPlayer()
     {
-        Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer._mainCamera.transform.position, 100);
+        Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, 100);
             
-        if (Vector3.Distance(pos, Game.LocalPlayer._mainCamera.transform.position) < 10)
+        if (Vector3.Distance(pos, Game.LocalPlayer.MainCamera.transform.position) < 10)
             return;
         SpawnRandomLoot(pos);
     }
@@ -104,10 +117,10 @@ public class ContentPlacer : NetworkBehaviour
 
     public Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)
     {
-        Vector3 randomDir = Game.LocalPlayer._mainCamera.transform.forward;
+        Vector3 randomDir = Game.LocalPlayer.MainCamera.transform.forward;
         
         randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
-        if (!Physics.Raycast(Game.LocalPlayer._mainCamera.transform.position, randomDir, out var hit, maxDistance,
+        if (!Physics.Raycast(Game.LocalPlayer.MainCamera.transform.position, randomDir, out var hit, maxDistance,
             GameManager.Instance.AllSolidsMask))
             return initPos;
         

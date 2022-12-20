@@ -39,6 +39,6 @@ public class EnvironmentVisualManager : MonoBehaviour
         RenderSettings.fogColor = fogColor;
         RenderSettings.fogDensity = fogIntensity;
 
-        Game.LocalPlayer._mainCamera.backgroundColor = camBackColor;
+        Game.LocalPlayer.MainCamera.backgroundColor = camBackColor;
     }
 }

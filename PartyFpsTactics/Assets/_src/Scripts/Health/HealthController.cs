@@ -80,7 +80,8 @@ namespace MrPink.Health
         public bool IsImmortal { get; set; } = false;
 
         [ShowInInspector, ReadOnly] 
-        public bool IsDead { get; private set; } = false;
+        [SyncVar] public bool IsDead = false;
+        //public bool IsDead { get; private set; } = false;
 
         public UnityEvent OnDeathEvent = new UnityEvent();
         
@@ -285,6 +286,8 @@ namespace MrPink.Health
                 StartCoroutine(DamageShake());
             SetDamageState();
         }
+        
+        
 
         private IEnumerator DamageShake()
         {
@@ -332,8 +335,33 @@ namespace MrPink.Health
 
         private IEnumerator Death(ScoringActionType action, Transform killer = null)
         {
-            IsDead = true;
+            if (IsServer)
+            {
+                RpcDeathOnClient(action);
+            }
+            else
+            {
+                RpcDeathOnServer(action);
+            }
+            yield break;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        void RpcDeathOnServer(ScoringActionType action)
+        {
+            if (IsDead) return;
+            // isdead is syncvar
+            IsDead = true;   
+            RpcDeathOnClient(action);
+        }
+        
+        [ObserversRpc]
+        void RpcDeathOnClient(ScoringActionType action)
+        {
+            if (IsDead)
+                return;
             
+            IsDead = true;
             if (AiMovement)
                 AiMovement.StopActivities();
 
@@ -352,7 +380,7 @@ namespace MrPink.Health
             if (Game.LocalPlayer.Health == this)
             {
                 GameManager.Instance.SetPlayerSleepTimeScale(false);
-                Game.LocalPlayer.Death(killer);
+                Game.LocalPlayer.Death(null);
             }
 
             if (npcInteraction)
@@ -363,7 +391,6 @@ namespace MrPink.Health
             
             OnDeathEvent.Invoke();
 
-            yield return null;
             if (destroyOnDeath)
                 Destroy(gameObject);
         }
