@@ -1,20 +1,21 @@
-﻿using FishNet.Connection;
+﻿using System;
+using FishNet.Connection;
 using FishNet.Managing.Logging;
 using FishNet.Managing.Scened;
 using FishNet.Object;
 using System.Collections.Generic;
+using FishNet;
+using MrPink;
 using UnityEngine;
 
-namespace FishNet.Example.Scened
-{
 
     /// <summary>
     /// Loads a single scene, additive scenes, or both when a client
     /// enters or exits this trigger.
     /// </summary>
-    public class SceneLoaderExample : MonoBehaviour
+    public class SceneLoader : MonoBehaviour
     {
-        
+        public static SceneLoader Instance;
         /// <summary>
         /// True to move the triggering object.
         /// </summary>
@@ -67,6 +68,11 @@ namespace FishNet.Example.Scened
         private Dictionary<NetworkConnection, float> _triggeredTimes = new Dictionary<NetworkConnection, float>();
 
 
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         [Server(Logging = LoggingType.Off)]
         private void OnTriggerEnter(Collider other)
         {
@@ -93,10 +99,13 @@ namespace FishNet.Example.Scened
             //NetworkObject isn't necessarily needed but to ensure its the player only run if found.
             if (triggeringIdentity == null)
                 return;
-
-            if (triggeringIdentity.IsOwner == false)
+            
+            if (triggeringIdentity.IsOwner == false || triggeringIdentity.IsServer == false)
                 return;
             
+            if (Game._instance == null || Game.LocalPlayer.NetworkObject != triggeringIdentity)
+                return;
+
             /* Dont let trigger hit twice by same connection too frequently
              * See _triggeredTimes field for more info. */
             if (_triggeredTimes.TryGetValue(triggeringIdentity.Owner, out float time))
@@ -148,4 +157,3 @@ namespace FishNet.Example.Scened
 
 
 
-}

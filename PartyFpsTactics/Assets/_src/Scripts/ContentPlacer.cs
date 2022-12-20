@@ -23,11 +23,15 @@ public class ContentPlacer : NetworkBehaviour
     
     public List<InteractiveObject> lootToSpawnAround;
     
-    public override void OnStartClient() { 
+    public override void OnStartClient() { // THIS CALLS ONLY IN LOBBY 
         base.OnStartClient();
         
+    }
 
-        StartCoroutine(SpawnAroundPlayer());
+    private void Start()
+    {
+        if (respawnDelay > -1)
+            StartCoroutine(SpawnAroundPlayer());
     }
     
 

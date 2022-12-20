@@ -29,7 +29,7 @@ public class GameVoxelModifier : NetworkBehaviour
 
         if (IsServer)
         {
-            _voxelSaveSystem.OnDataSaved.AddListener(OnDataSaved);
+            //_voxelSaveSystem.OnDataSaved.AddListener(OnDataSaved);
                 
             // on spawn, client asks server for saved voxel data
             ServerManager.OnRemoteConnectionState += CheckIfNewPlayerConnected;
@@ -41,15 +41,28 @@ public class GameVoxelModifier : NetworkBehaviour
     {
         if (networkConnection == null)
         {
-            Debug.Log("VOXEL null connection");
+            Debug.Log("SOMEONE TRIED TO CONNET null connection");
             return;
         }
         if (remoteConnectionStateArgs.ConnectionState == RemoteConnectionState.Stopped)
         {
-            Debug.Log("VOXEL connection stopped");
+            Debug.Log("SOMEONE STOPPED CONNECTION connection stopped");
             return;
         }
+        if (remoteConnectionStateArgs.ConnectionState == RemoteConnectionState.Started)
+        {
+            if (Modifier != null)
+            {
+                networkConnection.Disconnect(true);
+                Debug.Log("SOMEONE STARTED CONNECTION DURING THE GAME connection stopped");
+                return;
+            }
+        }
         
+        return;
+        
+        if (_voxelSaveSystem == null)
+            return;
         
         Debug.Log("VOXEL new connection");
         // new client connected 
@@ -58,6 +71,7 @@ public class GameVoxelModifier : NetworkBehaviour
         _voxelSaveSystem.Save();
     }
 
+    /*
     [Server]
     void OnDataSaved()
     {
@@ -93,6 +107,7 @@ public class GameVoxelModifier : NetworkBehaviour
         }
         _voxelSaveSystem.Load();
     }
+    */
 
     public void DestructionInWorld(Vector3 pos)
     {
@@ -117,7 +132,10 @@ public class GameVoxelModifier : NetworkBehaviour
     [ObserversRpc]
     void RpcModifyLocally(Vector3 pos)
     {
-        Debug.Log("MODIFIER MODIFY");
-        Modifier.ModifyAtPos(pos);
+        if (Modifier)
+        {
+            //Debug.Log("MODIFIER MODIFY");
+            Modifier.ModifyAtPos(pos);
+        }
     }
 }

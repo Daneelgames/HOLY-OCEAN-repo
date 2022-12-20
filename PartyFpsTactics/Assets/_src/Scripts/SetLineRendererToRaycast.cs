@@ -17,6 +17,9 @@ public class SetLineRendererToRaycast : MonoBehaviour
 
     void Update()
     {
+        if (pointVisual == null)
+            return;
+        
         if (Physics.Raycast(transform.position, transform.forward, out var hit, rayDistance, raycastMask))
         {
             pointVisual.position = hit.point;

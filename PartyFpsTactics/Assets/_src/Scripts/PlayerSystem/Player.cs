@@ -89,6 +89,12 @@ namespace MrPink.PlayerSystem
           
                 Init();
         }
+        private void Init()
+        {
+            Game._instance.AddPlayer(this);
+            _health.SetIsPlayerTrue();
+        }
+        
         public override void OnOwnershipClient(NetworkConnection prevOwner)
         {
             base.OnOwnershipClient(prevOwner);
@@ -98,20 +104,18 @@ namespace MrPink.PlayerSystem
             
             SetLocalPlayerInstance();
         }
-        private void Init()
-        {
-            /*
-            if (IsOwner)
-                SetLocalPlayer();*/
-
-            Game._instance.AddPlayer(this);
-            _health.SetIsPlayerTrue();
-        }
 
         [Client(RequireOwnership = true)]
         void SetLocalPlayerInstance()
         {
             Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
+            
+            if (base.IsHost == false)
+            {
+                SceneLoader.Instance.gameObject.SetActive(false);
+            }
+            
+            
             Game._instance.SetLocalPlayer(this);
         }
 

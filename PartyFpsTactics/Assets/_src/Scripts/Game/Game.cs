@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -32,7 +33,14 @@ namespace MrPink
 
         private void Awake()
         {
+            if (_instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
             _instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
         public void AddPlayer(Player p)

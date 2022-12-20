@@ -56,7 +56,7 @@ namespace MrPink.PlayerSystem
             {
                 Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
                 _headTransform.gameObject.SetActive(true);
-                _headTransform.parent = null;
+                //_headTransform.parent = null;
             }
             else
             {
@@ -66,10 +66,11 @@ namespace MrPink.PlayerSystem
             }
             SetCrouch(false);
             
-            if (vehicleHeadDummyTransform != null) return;
-            
-            vehicleHeadDummyTransform = new GameObject("VehicleHeadDummy").transform;
-            vehicleHeadDummyTransform.parent = transform.parent;
+            if (vehicleHeadDummyTransform == null)
+            {
+                vehicleHeadDummyTransform = new GameObject("VehicleHeadDummy").transform;
+            }
+            vehicleHeadDummyTransform.parent = transform/*.parent*/;
         }
 
         [Client(RequireOwnership = true)]
