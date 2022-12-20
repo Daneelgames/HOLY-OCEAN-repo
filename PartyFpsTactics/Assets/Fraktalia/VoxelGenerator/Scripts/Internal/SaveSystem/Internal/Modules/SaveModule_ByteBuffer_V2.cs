@@ -55,8 +55,6 @@ namespace Fraktalia.VoxelGen.SaveSystem.Modules
 
 		public override IEnumerator Load()
 		{
-		
-
 			if(!VoxelDictionary.ContainsKey(Key) || VoxelDictionary[Key] == null)
 			{
 				yield break;

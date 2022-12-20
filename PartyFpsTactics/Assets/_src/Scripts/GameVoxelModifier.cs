@@ -40,10 +40,18 @@ public class GameVoxelModifier : NetworkBehaviour
     void CheckIfNewPlayerConnected(NetworkConnection networkConnection, RemoteConnectionStateArgs remoteConnectionStateArgs)
     {
         if (networkConnection == null)
+        {
+            Debug.Log("VOXEL null connection");
             return;
+        }
         if (remoteConnectionStateArgs.ConnectionState == RemoteConnectionState.Stopped)
+        {
+            Debug.Log("VOXEL connection stopped");
             return;
+        }
         
+        
+        Debug.Log("VOXEL new connection");
         // new client connected 
         newPlayers.Add(networkConnection);
         
@@ -53,9 +61,17 @@ public class GameVoxelModifier : NetworkBehaviour
     [Server]
     void OnDataSaved()
     {
+        Debug.Log("VOXEL OnDataSaved. NewPlayers: " + newPlayers.Count);
         var voxelData = SaveModule_ByteBuffer_V2.VoxelDictionary[_voxelSaveSystem.ModuleByteBuffer_V2.Key];
         foreach (var networkConnection in newPlayers)
         {
+            if (networkConnection == null || networkConnection.IsValid == false)
+            {
+                Debug.Log("VOXEL null or invalid connection");
+                continue;
+            }
+            
+            Debug.Log("VOXEL send target rpc. voxelData length is " + voxelData.Length);
             RpcSendVoxelDataToClient(networkConnection, voxelData);
         }
         newPlayers.Clear();
@@ -65,9 +81,16 @@ public class GameVoxelModifier : NetworkBehaviour
     void RpcSendVoxelDataToClient(NetworkConnection networkConnection, byte[] data)
     {
         if (SaveModule_ByteBuffer_V2.VoxelDictionary.ContainsKey(_voxelSaveSystem.ModuleByteBuffer_V2.Key))
+        {
+            Debug.Log("VOXEL contains key");
             SaveModule_ByteBuffer_V2.VoxelDictionary[_voxelSaveSystem.ModuleByteBuffer_V2.Key] = data;
+        }
         else
+        {
             SaveModule_ByteBuffer_V2.VoxelDictionary.Add(_voxelSaveSystem.ModuleByteBuffer_V2.Key, data);
+            
+            Debug.Log("VOXEL add new key");
+        }
         _voxelSaveSystem.Load();
     }
 
