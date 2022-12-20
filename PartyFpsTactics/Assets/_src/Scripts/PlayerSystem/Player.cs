@@ -126,7 +126,7 @@ namespace MrPink.PlayerSystem
         public void Respawn()
         {
             if (respawnCoroutine != null)
-                StopCoroutine(respawnCoroutine);
+                return;
             respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
         }
 
