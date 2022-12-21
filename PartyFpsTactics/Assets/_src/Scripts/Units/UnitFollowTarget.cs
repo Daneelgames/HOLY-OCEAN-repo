@@ -60,7 +60,6 @@ namespace MrPink.Units
             Gizmos.DrawWireCube(_currentTargetPosition , Vector3.one);
         }
         
-        
 #if UNITY_EDITOR
 
         public void TransferData()

@@ -97,7 +97,7 @@ namespace MrPink.WeaponsSystem
             if (_ownerHc == null)
                 SetOwnHc(ownerHc);
             
-            OnCooldown = true;
+            //OnCooldown = true;
             if (_attackSignalAudioSource != null)
             {
                 _attackSignalAudioSource.pitch = Random.Range(0.75f, 1.25f);
@@ -124,7 +124,7 @@ namespace MrPink.WeaponsSystem
             
             bool isPlayer = _ownerHc == Game.LocalPlayer.Health;   
 
-            SpawnProjectileInDirection(direction, isPlayer, _ownerHc);
+            SpawnProjectileInDirection(aiAimTransform ? aiAimTransform.position : transform.position + transform.forward, direction, isPlayer, _ownerHc);
 
             if (isPlayer)
                 Game.LocalPlayer.Movement.ChangeStamina(-attackStaminaCost);
@@ -135,7 +135,7 @@ namespace MrPink.WeaponsSystem
                 _animation.Play().ForgetWithHandler();
         }
 
-        void SpawnProjectileInDirection(Vector3 direction, bool isPlayer, HealthController ownerHc)
+        void SpawnProjectileInDirection(Vector3 targetPos, Vector3 direction, bool isPlayer, HealthController ownerHc)
         {
             //ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
@@ -145,7 +145,7 @@ namespace MrPink.WeaponsSystem
                 float offsetX = Random.Range(0, projectileRandomRotationMax);
                 float offsetY = Random.Range(0, projectileRandomRotationMax);
                 
-                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(_attackColliderTag, shotHolder, direction, _ownerHc, source, offsetX, offsetY);
+                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(_attackColliderTag, shotHolder, targetPos, direction, _ownerHc, source, offsetX, offsetY);
             }
         }
 

@@ -174,17 +174,16 @@ namespace MrPink.WeaponsSystem
             
             var resultDmg = Mathf.RoundToInt(damage * damageScaler);
             
-            if (targetCollider.gameObject == Game.LocalPlayer.GameObject /*&& IsPlayerEnemyToOwner()*/)
+            if (targetCollider.gameObject == Game.LocalPlayer.GameObject)
             {
-                if (ownerHealth.controlledMachine &&
+                if (ownerHealth && ownerHealth.controlledMachine &&
                     ownerHealth.controlledMachine == Game.LocalPlayer.VehicleControls.controlledMachine)
                 {
-                    Debug.Log("car return CollisionTarget.Self;");
                     return CollisionTarget.Self;
                 }
                 
                 Game.LocalPlayer.Health.Damage(resultDmg, _damageSource, actionOnHit);
-                if (ownerHealth.UnitVision/* && (ownerHealth.team == Game.Player.Health.team || ownerHealth.team == Team.NULL)*/)
+                if (ownerHealth != null & ownerHealth.UnitVision)
                     ownerHealth.UnitVision.ForgiveUnit(Game.LocalPlayer.Health, ownerHealth.team == Game.LocalPlayer.Health.team);
                 UnitsExplosion();
                 return CollisionTarget.Creature;

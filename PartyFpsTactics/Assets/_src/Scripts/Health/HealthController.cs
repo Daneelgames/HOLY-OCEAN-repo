@@ -326,7 +326,7 @@ namespace MrPink.Health
                     damageStates[i].visual.SetActive(false);
                 }
                 else
-                {
+                {   
                     damageStates[i].visual.SetActive(true);
                     break;
                 }
@@ -335,32 +335,40 @@ namespace MrPink.Health
 
         private IEnumerator Death(ScoringActionType action, Transform killer = null)
         {
+            if (IsDead) 
+                yield break;
+            
             if (IsServer)
             {
+                
+                Debug.Log("DEATH on server start " + gameObject.name);
                 RpcDeathOnClient(action);
             }
             else
             {
+                Debug.Log("DEATH on client start " + gameObject.name);
                 RpcDeathOnServer(action);
             }
-            yield break;
         }
 
         [ServerRpc(RequireOwnership = false)]
         void RpcDeathOnServer(ScoringActionType action)
         {
-            if (IsDead) return;
-            // isdead is syncvar
-            IsDead = true;   
+            Debug.Log("DEATH RpcDeathOnServer " + gameObject.name);
+            DeathOnClient(action);
             RpcDeathOnClient(action);
         }
         
         [ObserversRpc]
         void RpcDeathOnClient(ScoringActionType action)
         {
-            if (IsDead)
-                return;
-            
+            Debug.Log("DEATH RpcDeathOnClient " + gameObject.name);
+            DeathOnClient(action);
+        }
+
+        void DeathOnClient(ScoringActionType action)
+        {
+            Debug.Log("DEATH DeathOnClient " + gameObject.name);
             IsDead = true;
             if (AiMovement)
                 AiMovement.StopActivities();
@@ -394,7 +402,7 @@ namespace MrPink.Health
             if (destroyOnDeath)
                 Destroy(gameObject);
         }
-
+        
         public void AddToVisibleByUnits(HealthController unit)
         {
             if (!unitsVisibleBy.Contains(unit))

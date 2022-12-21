@@ -37,7 +37,7 @@ namespace MrPink.Units
         {
             _selfHealth = GetComponent<HealthController>();
             StartCoroutine(CheckingUnits());
-            StartCoroutine(CheckingPlayer());
+            StartCoroutine(CheckingPlayers());
         }
 
         private void OnDisable()
@@ -71,7 +71,7 @@ namespace MrPink.Units
             for (int i = 0; i < visibleUnits.Count; i++) // tell all his friends
             {
                 var unit = visibleUnits[i];
-                if (unit == _selfHealth || unit.health <= 0 || !unit.gameObject.activeInHierarchy)
+                if (unit == null || unit == _selfHealth || unit.health <= 0 || !unit.gameObject.activeInHierarchy)
                     continue;
                 
                 if (unit.UnitVision && unit.team == _selfHealth.team)
@@ -130,7 +130,7 @@ namespace MrPink.Units
             return closestVisibleEnemy;
         }
 
-        IEnumerator CheckingPlayer()
+        IEnumerator CheckingPlayers()
         {
             while (Game._instance == false || Game.LocalPlayer == null)
             {
@@ -138,7 +138,15 @@ namespace MrPink.Units
             }
             while (true)
             {
-                CheckUnit(Game.LocalPlayer.Health);
+                for (int i = 0; i < Game._instance.PlayerInGame.Count; i++)
+                {
+                    if (i > Game._instance.PlayerInGame.Count - 1 || Game._instance.PlayerInGame[i] == null)
+                        continue;
+                    
+                    CheckUnit(Game._instance.PlayerInGame[i].Health);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                //CheckUnit(Game.LocalPlayer.Health);
                 yield return new WaitForSeconds(0.1f);
             }
         }

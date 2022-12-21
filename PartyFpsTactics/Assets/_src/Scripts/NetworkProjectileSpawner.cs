@@ -15,7 +15,7 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         Instance = this;
     }
 
-    public void SpawnProjectileOnEveryClient(Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
+    public void SpawnProjectileOnEveryClient(Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 targetPos, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
     {
         if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword ||
             _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeast ||

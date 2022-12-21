@@ -237,6 +237,9 @@ namespace MrPink.Units
             if (isClosestNeeded)
                 return GetClosestCover(goodCoverSpots);
             
+            if (goodCoverSpots.Count < 1) 
+                return null;
+            
             return goodCoverSpots[Random.Range(0, goodCoverSpots.Count)];
 
         }

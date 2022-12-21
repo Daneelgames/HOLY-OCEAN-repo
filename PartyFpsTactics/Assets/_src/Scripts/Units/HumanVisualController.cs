@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
@@ -69,6 +70,13 @@ namespace MrPink.Units
                 rigidbodies[i].drag = rbNormalDrag;
                 rigidbodies[i].angularDrag = rbNormalAngularDrag;
             }
+        }
+
+
+        private void OnDestroy()
+        {
+            Destroy(ragdollOrigin.gameObject);
+            Destroy(anim.gameObject);
         }
 
         [ContextMenu("SetAliveMaterial")]

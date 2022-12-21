@@ -36,8 +36,6 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly]
         private InteractiveObject _npcInteraction;
         
-        
-
 
         public HealthController HealthController
             => _healthController;

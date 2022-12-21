@@ -111,7 +111,7 @@ public class GameVoxelModifier : NetworkBehaviour
 
     public void DestructionInWorld(Vector3 pos)
     {
-        if (IsServer)
+        if (IsServer || IsHost)
         {
             // tell other clients
             RpcModifyLocally(pos);
@@ -119,7 +119,7 @@ public class GameVoxelModifier : NetworkBehaviour
         else
         {
             // tell server to tell other clients
-            //RpcModifyOnServer(pos);
+            RpcModifyOnServer(pos);
         }
     }
 

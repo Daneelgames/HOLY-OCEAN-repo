@@ -108,11 +108,12 @@ namespace MrPink.Units
             if (hc.health <= 0)
             {
                 hcInGame.Remove(hc);
-                Destroy(hc.gameObject);
+                //Destroy(hc.gameObject);
                 return;
             }
-            hc.gameObject.SetActive(show);
+            //hc.gameObject.SetActive(show);
         }
+        
         
         public HealthController SpawnUnit(HealthController prefab, Vector3 pos, Transform rotationTransform = null)
         {
