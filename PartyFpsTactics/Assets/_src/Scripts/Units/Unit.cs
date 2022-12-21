@@ -92,6 +92,12 @@ namespace MrPink.Units
             _unitAiMovement.SetUnit(this);
             _unitMovement.SetUnit(this);
         }
+
+        public void Death()
+        {
+            _unitWeaponControls?.Death();
+            _healthController.health = 0;
+        }
         
         #endif
     }

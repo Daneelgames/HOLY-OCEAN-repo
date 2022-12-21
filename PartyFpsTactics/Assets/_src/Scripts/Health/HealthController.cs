@@ -340,7 +340,6 @@ namespace MrPink.Health
             
             if (IsServer)
             {
-                
                 Debug.Log("DEATH on server start " + gameObject.name);
                 RpcDeathOnClient(action);
             }
@@ -355,11 +354,11 @@ namespace MrPink.Health
         void RpcDeathOnServer(ScoringActionType action)
         {
             Debug.Log("DEATH RpcDeathOnServer " + gameObject.name);
-            DeathOnClient(action);
+            //DeathOnClient(action);
             RpcDeathOnClient(action);
         }
         
-        [ObserversRpc]
+        [ObserversRpc(/*IncludeOwner = false*/)]
         void RpcDeathOnClient(ScoringActionType action)
         {
             Debug.Log("DEATH RpcDeathOnClient " + gameObject.name);
@@ -373,6 +372,9 @@ namespace MrPink.Health
             if (AiMovement)
                 AiMovement.StopActivities();
 
+            if (selfUnit)
+                selfUnit.Death();
+            
             if (HumanVisualController)
                 HumanVisualController.Death();
         

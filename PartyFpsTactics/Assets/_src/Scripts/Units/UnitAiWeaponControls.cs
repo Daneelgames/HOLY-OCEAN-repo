@@ -31,8 +31,13 @@ namespace MrPink.Units
 
         private void OnEnable()
         {
-            StartCoroutine(CheckIfNeedFireWeapon());
+            if (checkIfNeedFireWeaponCoroutine != null)
+                StopCoroutine(checkIfNeedFireWeaponCoroutine);
+            
+            checkIfNeedFireWeaponCoroutine = StartCoroutine(CheckIfNeedFireWeapon());
         }
+
+        private Coroutine checkIfNeedFireWeaponCoroutine;
 
         private IEnumerator CheckIfNeedFireWeapon()
         {
@@ -120,6 +125,12 @@ namespace MrPink.Units
                 
                 yield return new WaitForSeconds(Random.Range(weaponsAttackSwitchCooldownMinMax.x, weaponsAttackSwitchCooldownMinMax.y));
             }
+        }
+
+        public void Death()
+        {
+            if (checkIfNeedFireWeaponCoroutine != null)
+                StopCoroutine(checkIfNeedFireWeaponCoroutine);
         }
     }
 }
