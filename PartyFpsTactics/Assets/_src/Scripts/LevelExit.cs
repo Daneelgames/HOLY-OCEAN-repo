@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using MrPink;
 using MrPink.PlayerSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class LevelExit : MonoBehaviour
+public class LevelExit : NetworkBehaviour
 {
     [SerializeField] private Transform exitPoint;
     [SerializeField] private float maxPlayerDistanceToExit = 2;
@@ -17,12 +18,19 @@ public class LevelExit : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(CheckDistances());
     }
+    
 
     IEnumerator CheckDistances()
     {
         while (Game._instance == null || Game.LocalPlayer == null)
         {
             yield return null;
+        }
+        
+        if (IsServer == false)
+        {
+            Debug.Log("LEVEL EXIT: dont check distance on client");
+            yield break;
         }
         
         bool goalInRange = false;

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Connection;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.WeaponsSystem;
@@ -10,7 +12,7 @@ using Random = UnityEngine.Random;
 
 namespace MrPink
 {
-    public class PlayerInteractor : MonoBehaviour
+    public class PlayerInteractor : NetworkBehaviour
     {
         public Camera cam;
         public LayerMask raycastMask;
@@ -69,7 +71,7 @@ namespace MrPink
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
                     carryingPortableRb.drag = 1;
-                    carryingPortableRb.transform.parent = null;
+                    //carryingPortableRb.transform.parent = null;
                     carryingPortableRb = null;
                     return;
                 }
@@ -98,12 +100,18 @@ namespace MrPink
                     carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     carryingPortableRb.useGravity = true;
                     carryingPortableRb.drag = 1; 
-                    carryingPortableRb.transform.parent = null;
+                    //carryingPortableRb.transform.parent = null;
                     carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
                     Game.LocalPlayer.Weapon.CooldownOnAttackInput();
                 }
             }
+        }
+
+        [ServerRpc(RequireOwnership = true)]
+        void RpcSetOwnership(NetworkObject networkObject, NetworkConnection owner)
+        {
+            networkObject.GiveOwnership(owner);
         }
 
         private int lastCarryingPortableInitLayer;
@@ -113,6 +121,10 @@ namespace MrPink
             var rb = selectedPortable.GetComponent<Rigidbody>();
             TileAttack tileAttack = selectedPortable.GetComponent<TileAttack>();
         
+            var networkObject = selectedPortable.gameObject.GetComponent<NetworkObject>();
+            if (networkObject)
+                RpcSetOwnership(networkObject, base.Owner);
+            
             if (!rb)
             {
                 rb = selectedPortable.AddComponent<Rigidbody>();
@@ -122,6 +134,7 @@ namespace MrPink
                 tileAttack.rb = rb;
             }
 
+            
             carryingPortableRb = rb;
             carryingPortableRb.velocity = Vector3.zero;
             lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
@@ -133,16 +146,16 @@ namespace MrPink
             carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
             carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
-            carryingPortableRb.transform.parent = portableParent;
+            //carryingPortableRb.transform.parent = portableParent;
             while (true)
             {
                 Vector3 dir = (portableParent.position - carryingPortableRb.position);
-                carryingPortableRb.AddForce(dir * carryingPortablePower * Time.deltaTime, ForceMode.Acceleration);
+                carryingPortableRb.AddForce(dir * carryingPortablePower * Time.fixedDeltaTime, ForceMode.Acceleration);
                 if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
                 {
                     carryingPortableRb.useGravity = true;
                     carryingPortableRb.drag = dragInit;
-                    carryingPortableRb.transform.parent = null;
+                    //carryingPortableRb.transform.parent = null;
                     carryingPortableRb = null;
                     yield break;
                 }
