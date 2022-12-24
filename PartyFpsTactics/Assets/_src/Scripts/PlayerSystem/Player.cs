@@ -137,7 +137,9 @@ namespace MrPink.PlayerSystem
         {
             yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position + Vector3.up * 0.5f));
             yield return null;
+            yield return new WaitForFixedUpdate();
             Game.LocalPlayer.Resurrect();
+            yield return new WaitForFixedUpdate();
             yield return null;
             Shop.Instance.OpenShop(0);
             Game.LocalPlayer.Resurrect();

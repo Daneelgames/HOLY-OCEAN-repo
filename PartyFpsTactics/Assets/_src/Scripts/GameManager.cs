@@ -156,7 +156,7 @@ namespace MrPink
         }
         public void RespawnPlayer()
         {
-            if (Game._instance && Game.LocalPlayer.Health.health > 0) return;
+            //if (Game._instance && Game.LocalPlayer.Health.health > 0) return;
             Game.LocalPlayer.Respawn();            
             return;
             // change player's position

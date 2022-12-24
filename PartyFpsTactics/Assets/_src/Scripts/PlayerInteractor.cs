@@ -134,7 +134,6 @@ namespace MrPink
                 tileAttack.rb = rb;
             }
 
-            
             carryingPortableRb = rb;
             carryingPortableRb.velocity = Vector3.zero;
             lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 

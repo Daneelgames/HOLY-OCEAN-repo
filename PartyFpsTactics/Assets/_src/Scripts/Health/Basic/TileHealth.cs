@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _src.Scripts.LevelGenerators;
+using FishNet.Object;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -174,14 +175,29 @@ namespace MrPink.Health
         {
             if (source == DamageSource.Player)
                 ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
-            
-            DestroyTile(source, deathParticles);
-            
-            if (parentLevel != null && sendToLevelgen)
-                BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
-            Destroy(gameObject);
+
+            RpcTileDeathOnServer();
         }
 
+        [ServerRpc(RequireOwnership = false)] 
+        void RpcTileDeathOnServer()
+        {
+            RpcTileDeathOnClients();
+        }
+        
+        [ObserversRpc]
+        void RpcTileDeathOnClients()
+        {
+            DestroyTile(DamageSource.Environment, true);
+            
+            if (parentLevel != null)
+                BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
+            
+            if (IsServer) // host
+                ServerManager.Despawn(gameObject, DespawnType.Destroy);
+            Destroy(gameObject);
+        }
+        
         public override CollisionTarget HandleDamageCollision(Vector3 collisionPosition, DamageSource source, int damage, ScoringActionType actionOnHit)
         {
             if (IsAlive)

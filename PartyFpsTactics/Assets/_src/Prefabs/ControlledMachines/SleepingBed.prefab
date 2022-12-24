@@ -177,6 +177,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 4505148110121347329}
+  _networkObjectCache: {fileID: 4505148110121347329}
   _health: 100
   _healthController: {fileID: 8452329197390470906}
   damageScaler: 1
@@ -300,6 +303,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 4505148110121347329}
+  _networkObjectCache: {fileID: 4505148110121347329}
   _health: 100
   _healthController: {fileID: 8452329197390470906}
   damageScaler: 1
@@ -316,6 +322,7 @@ GameObject:
   - component: {fileID: 6002964883643043357}
   - component: {fileID: 5221374690669736803}
   - component: {fileID: 8662635123858379306}
+  - component: {fileID: 4505148110121347329}
   m_Layer: 11
   m_Name: SleepingBed
   m_TagString: Untagged
@@ -358,8 +365,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _addedNetworkObject: {fileID: 4505148110121347329}
+  _networkObjectCache: {fileID: 4505148110121347329}
   isPlayer: 0
   selfUnit: {fileID: 0}
   health: 1000
@@ -451,6 +458,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5869f988b043d45a837e9405d876f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4505148110121347329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221374690669736812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 8452329197390470906}
+  - {fileID: 1454355892544949112}
+  - {fileID: 5183572990672956924}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 2
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 9690786415296433796
+  _sceneNetworkObjects: []
 --- !u!1 &5867004000933628753
 GameObject:
   m_ObjectHideFlags: 0

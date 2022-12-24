@@ -559,9 +559,10 @@ namespace MrPink.PlayerSystem
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
             yield return null;
+            yield return new WaitForFixedUpdate();
             rb.MovePosition(pos);
             rb.transform.position = pos;
-            yield return null;
+            yield return new WaitForFixedUpdate();
             rb.isKinematic = false;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;

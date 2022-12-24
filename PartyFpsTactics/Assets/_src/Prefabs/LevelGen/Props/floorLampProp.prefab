@@ -299,6 +299,7 @@ GameObject:
   - component: {fileID: 475759627}
   - component: {fileID: -8795021549525698568}
   - component: {fileID: 5785875288784543019}
+  - component: {fileID: -1732642388434714056}
   m_Layer: 12
   m_Name: floorLampProp
   m_TagString: PortableObject
@@ -334,6 +335,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: -1732642388434714056}
+  _networkObjectCache: {fileID: -1732642388434714056}
   _health: 300
   _healthController: {fileID: 0}
   ImmuneToDamage: 0
@@ -449,3 +453,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1650b9cd6f1046d428d099d012b51d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1732642388434714056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943844518363093458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: -6444434528068832751}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 68
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 13243297101620898403
+  _sceneNetworkObjects: []

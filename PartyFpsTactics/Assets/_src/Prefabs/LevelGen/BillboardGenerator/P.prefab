@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6566655764445989388}
   - component: {fileID: 1484746862246852077}
   - component: {fileID: 4491891276883381255}
+  - component: {fileID: -8825127654149614573}
   m_Layer: 12
   m_Name: P
   m_TagString: Untagged
@@ -30,6 +31,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -5.076051, y: 1.3870002, z: -0.0000010711541}
   m_LocalScale: {x: 150, y: 150, z: 150}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -110,8 +112,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: -8825127654149614573}
+  _networkObjectCache: {fileID: -8825127654149614573}
   _health: 300
   _healthController: {fileID: 0}
+  ImmuneToDamage: 0
   prop: 0
   colliders:
   - {fileID: 1484746862246852077}
@@ -120,5 +126,32 @@ MonoBehaviour:
   ceilingLevelTile: 0
   supporterTile: {fileID: 0}
   supportedTile: {fileID: 0}
-  objectsToClashOnClash: []
+  objectsToDestroyOnClash: []
   tileAttack: {fileID: 0}
+--- !u!114 &-8825127654149614573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577953905263791968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 4491891276883381255}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 48
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 2384263283613071541
+  _sceneNetworkObjects: []

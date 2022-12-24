@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8635171417957279498}
   - component: {fileID: 2312435586139528552}
   - component: {fileID: 3274361358872632859}
+  - component: {fileID: 2879694509315299598}
   m_Layer: 12
   m_Name: R
   m_TagString: Untagged
@@ -30,6 +31,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -8.735857, y: 1.0604953, z: -0.0000012379852}
   m_LocalScale: {x: 150, y: 150, z: 150}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -110,8 +112,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 2879694509315299598}
+  _networkObjectCache: {fileID: 2879694509315299598}
   _health: 300
   _healthController: {fileID: 0}
+  ImmuneToDamage: 0
   prop: 0
   colliders:
   - {fileID: 2312435586139528552}
@@ -120,5 +126,32 @@ MonoBehaviour:
   ceilingLevelTile: 0
   supporterTile: {fileID: 0}
   supportedTile: {fileID: 0}
-  objectsToClashOnClash: []
+  objectsToDestroyOnClash: []
   tileAttack: {fileID: 0}
+--- !u!114 &2879694509315299598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546487234507207575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 3274361358872632859}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 50
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 2891961317187311685
+  _sceneNetworkObjects: []

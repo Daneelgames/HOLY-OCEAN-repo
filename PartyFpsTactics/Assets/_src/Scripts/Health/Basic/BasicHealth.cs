@@ -1,3 +1,4 @@
+using FishNet.Object;
 using JetBrains.Annotations;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace MrPink.Health
 {
-    public abstract class BasicHealth : MonoBehaviour
+    public abstract class BasicHealth : NetworkBehaviour
     {
         [SerializeField]
         [PreviouslySerializedAs("localHealth")]

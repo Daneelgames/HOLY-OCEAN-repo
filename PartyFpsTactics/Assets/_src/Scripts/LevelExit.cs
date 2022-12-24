@@ -34,7 +34,7 @@ public class LevelExit : NetworkBehaviour
         }
         
         bool goalInRange = false;
-        bool playerInRange = false;
+        bool playerInRange = true;
 
         while (GameManager.Instance == null)
         {
@@ -52,7 +52,7 @@ public class LevelExit : NetworkBehaviour
         {
             yield return new WaitForSeconds(0.33f);
             
-            playerInRange = Vector3.Distance(exitPoint.position, Game.LocalPlayer.Position) < maxPlayerDistanceToExit;
+            //playerInRange = Vector3.Distance(exitPoint.position, Game.LocalPlayer.Position) < maxPlayerDistanceToExit;
             yield return null;
             if (maxGoalDistanceToExit > 0)
                 goalInRange = Vector3.Distance(exitPoint.position, LevelGoal.Instance.transform.position) < maxGoalDistanceToExit;

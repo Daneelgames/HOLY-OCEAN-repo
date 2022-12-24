@@ -4911,6 +4911,7 @@ GameObject:
   - component: {fileID: 4607643709088218880}
   - component: {fileID: 5473310076994681561}
   - component: {fileID: 3713385740783791883}
+  - component: {fileID: -4479586652306346031}
   m_Layer: 12
   m_Name: ExplosiveBarrel
   m_TagString: Untagged
@@ -4948,8 +4949,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _addedNetworkObject: {fileID: -4479586652306346031}
+  _networkObjectCache: {fileID: -4479586652306346031}
   isPlayer: 0
   selfUnit: {fileID: 0}
   health: 100
@@ -5073,6 +5074,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: -4479586652306346031}
+  _networkObjectCache: {fileID: -4479586652306346031}
   _health: 10
   _healthController: {fileID: 8318412091301529756}
   damageScaler: 1
+--- !u!114 &-4479586652306346031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943623579927757030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 8318412091301529756}
+  - {fileID: 3713385740783791883}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 10
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 8326653980009100096
+  _sceneNetworkObjects: []

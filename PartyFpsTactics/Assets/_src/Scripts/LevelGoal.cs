@@ -14,6 +14,7 @@ public class LevelGoal : MonoBehaviour
         if (Instance != null)
         {
             Debug.LogError("TRYING TO ADD MORE LEVEL GOALS? DISCUSS THIS WITH A DIRECTOR");
+            return;
         }
 
         Instance = this;

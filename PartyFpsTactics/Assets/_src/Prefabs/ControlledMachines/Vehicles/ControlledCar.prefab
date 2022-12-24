@@ -488,6 +488,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: -8326159213359802851}
+  _networkObjectCache: {fileID: -8326159213359802851}
   _health: 100
   _healthController: {fileID: 8282009008432151077}
   damageScaler: 1
@@ -612,6 +615,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 3
+  _addedNetworkObject: {fileID: -8326159213359802851}
+  _networkObjectCache: {fileID: -8326159213359802851}
   _health: 100
   _healthController: {fileID: 8282009008432151077}
   damageScaler: 1
@@ -762,6 +768,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: -8326159213359802851}
+  _networkObjectCache: {fileID: -8326159213359802851}
   _health: 100
   _healthController: {fileID: 8282009008432151077}
   damageScaler: 1
@@ -15649,6 +15658,7 @@ GameObject:
   - component: {fileID: 5276125940412642872}
   - component: {fileID: 5276175365757361654}
   - component: {fileID: 7990633548758845319}
+  - component: {fileID: -8326159213359802851}
   m_Layer: 11
   m_Name: ControlledCar
   m_TagString: Untagged
@@ -15693,8 +15703,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
-  _networkObjectCache: {fileID: 0}
+  _addedNetworkObject: {fileID: -8326159213359802851}
+  _networkObjectCache: {fileID: -8326159213359802851}
   isPlayer: 0
   selfUnit: {fileID: 0}
   health: 5000
@@ -16121,6 +16131,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actorId: 2
+--- !u!114 &-8326159213359802851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5752542937177413555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 8282009008432151077}
+  - {fileID: 1409001292525907879}
+  - {fileID: 4633341881628952867}
+  - {fileID: 7793127672758220256}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 29
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 9449877095421382094
+  _sceneNetworkObjects: []
 --- !u!1 &6789756717549195801
 GameObject:
   m_ObjectHideFlags: 0

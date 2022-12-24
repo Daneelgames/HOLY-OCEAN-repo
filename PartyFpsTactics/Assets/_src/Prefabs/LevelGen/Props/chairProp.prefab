@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 893518442}
   - component: {fileID: 4580846623906001421}
   - component: {fileID: 4570093264837328632}
+  - component: {fileID: -5482614185618693140}
   m_Layer: 12
   m_Name: chairProp
   m_TagString: PortableObject
@@ -132,6 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: -5482614185618693140}
+  _networkObjectCache: {fileID: -5482614185618693140}
   _health: 300
   _healthController: {fileID: 0}
   ImmuneToDamage: 0
@@ -219,6 +223,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1650b9cd6f1046d428d099d012b51d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5482614185618693140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4694376958820584944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: -8476235690217332669}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 67
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 5734856731206624347
+  _sceneNetworkObjects: []
 --- !u!1 &5230713404455007075
 GameObject:
   m_ObjectHideFlags: 0
