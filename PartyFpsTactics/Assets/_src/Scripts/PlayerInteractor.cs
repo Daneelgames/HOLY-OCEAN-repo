@@ -35,6 +35,7 @@ namespace MrPink
         public float selectedNameUpdateTime = 0.1f;
         private void OnEnable()
         {
+            cam = Game._instance.PlayerCamera;
             StartCoroutine(RaycastInteractables());
             StartCoroutine(UpdateSelectedNameFeedback());
         }

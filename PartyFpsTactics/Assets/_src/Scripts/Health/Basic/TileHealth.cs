@@ -194,8 +194,10 @@ namespace MrPink.Health
                 BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
             
             if (IsServer) // host
-                ServerManager.Despawn(gameObject, DespawnType.Destroy);
-            Destroy(gameObject);
+            {
+                //ServerManager.Despawn(gameObject, DespawnType.Destroy);
+                Destroy(gameObject);
+            }
         }
         
         public override CollisionTarget HandleDamageCollision(Vector3 collisionPosition, DamageSource source, int damage, ScoringActionType actionOnHit)

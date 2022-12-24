@@ -1,6 +1,7 @@
 using System.Collections;
 using FishNet.Object;
 using JetBrains.Annotations;
+using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -39,7 +40,19 @@ namespace MrPink.PlayerSystem
         private float _verticalRotation = 0.0f;
         private float _horizontalRotation = 0.0f;
 
-        private bool _isDead = false;
+        private HealthController localPlayerHealth;
+
+        private bool _isDead
+        {
+            get
+            {
+                if (localPlayerHealth)
+                    return localPlayerHealth.health <= 0;
+
+                localPlayerHealth = gameObject.GetComponent<HealthController>();
+                return localPlayerHealth.health <= 0;
+            }
+        }
         private Transform currentCutsceneTargetTransform;
 
         Transform vehicleHeadDummyTransform;
@@ -160,12 +173,10 @@ namespace MrPink.PlayerSystem
 
         public void Death(Transform killer = null)
         {
-            _isDead = true;
             _killerToLookAt = killer;
         }
         public void Resurrect()
         {
-            _isDead = false;
         }
         
     }

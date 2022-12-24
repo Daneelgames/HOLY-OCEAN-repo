@@ -1,4 +1,5 @@
 using Brezg.Serialization;
+using MrPink.Health;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -27,8 +28,19 @@ namespace MrPink.PlayerSystem
 
         float targetFov = 90;
         
-        private bool _isDead = false;
-        
+        private HealthController localPlayerHealth;
+
+        private bool _isDead
+        {
+            get
+            {
+                if (localPlayerHealth)
+                    return localPlayerHealth.health <= 0;
+
+                localPlayerHealth = gameObject.GetComponent<HealthController>();
+                return localPlayerHealth.health <= 0;
+            }
+        }
 
         private void Update()
         {
@@ -108,11 +120,9 @@ namespace MrPink.PlayerSystem
 
         public void Death()
         {
-            _isDead = true;
         }
         public void Resurrect()
         {
-            _isDead = false;
         }
     }
 }

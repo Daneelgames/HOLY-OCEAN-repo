@@ -282,7 +282,7 @@ namespace MrPink.Health
             if (deathOnHit)
                 deathOnHit.Hit(this);
         
-            if (proceduralDamageShake)
+            if (proceduralDamageShake && transformToShake)
                 StartCoroutine(DamageShake());
             SetDamageState();
         }

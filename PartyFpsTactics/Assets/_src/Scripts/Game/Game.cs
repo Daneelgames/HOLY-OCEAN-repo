@@ -54,10 +54,25 @@ namespace MrPink
         {
             if (_localPlayer == null) return;
             
+            /*
             _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.deltaTime);
             _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation,_localPlayer.LookAround.HeadRot, camRotSmooth * Time.deltaTime);
+            */
+            
+            _gameCamera.transform.position =  _localPlayer.LookAround.HeadPos;
+            _gameCamera.transform.rotation = _localPlayer.LookAround.HeadRot;
         }
 
+        
+        public void RespawnAllPlayers()
+        {
+            // called on server
+            foreach (var player in playersInGame)
+            {
+                player.Respawn();
+            }
+        }
+        
         public void AddPlayer(Player p)
         {
             playersInGame.Add(p);

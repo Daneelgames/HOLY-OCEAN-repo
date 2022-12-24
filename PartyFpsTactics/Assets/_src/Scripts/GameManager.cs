@@ -154,10 +154,15 @@ namespace MrPink
         {
             Game.LocalPlayer.Health.Damage(10000000, DamageSource.Environment);
         }
+
+        
         public void RespawnPlayer()
         {
+            // player died and he'll be dead until: someone pick him up, level restarted or level completed
+            
+            return;
             //if (Game._instance && Game.LocalPlayer.Health.health > 0) return;
-            Game.LocalPlayer.Respawn();            
+            //Game.LocalPlayer.Respawn();            
             return;
             // change player's position
             switch (_levelType)

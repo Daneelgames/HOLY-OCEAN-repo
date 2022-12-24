@@ -123,18 +123,31 @@ namespace MrPink.PlayerSystem
             ScoringSystem.Instance.CooldownToZero();
         }
 
+        [Server]
         public void Respawn()
         {
-            if (respawnCoroutine != null)
-                return;
-            respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
+            _health.Resurrect();
+            RpcRespawnOnClient();
         }
 
+        [ObserversRpc(IncludeOwner = true)]
+        void RpcRespawnOnClient()
+        {
+            // should be done locally on each player
+            if (respawnCoroutine != null)
+                StopCoroutine(respawnCoroutine);
+            respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
+        }
+        
 
         private Coroutine respawnCoroutine;
 
         IEnumerator RespawnPlayerOverTime()
         {
+            while (PlayerSpawner.Instance == null)
+            {
+                yield return null;
+            }
             yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position + Vector3.up * 0.5f));
             yield return null;
             yield return new WaitForFixedUpdate();

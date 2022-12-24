@@ -37,9 +37,15 @@ public class QuestMarkers : MonoBehaviour
     {
         for (int i = activeMarks.Count - 1; i >= 0; i--)
         {
+            if (activeMarks[i] == null)
+            {
+                activeMarks.RemoveAt(i);
+                continue;
+            }
             if (activeMarks[i].target == markerTarget)
             {
-                Destroy(activeMarks[i].gameObject);
+                if (activeMarks[i].gameObject != null)
+                    Destroy(activeMarks[i].gameObject);
                 activeMarks.RemoveAt(i);
             }
         }

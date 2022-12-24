@@ -90,7 +90,20 @@ namespace MrPink.PlayerSystem
         public float rotatorSpeed = 10;
         public float minMaxRotatorAngle = 90;
 
-        private bool _isDead = false;
+        private HealthController localPlayerHealth;
+
+        private bool _isDead
+        {
+            get
+            {
+                if (localPlayerHealth)
+                    return localPlayerHealth.health <= 0;
+
+                localPlayerHealth = gameObject.GetComponent<HealthController>();
+                return localPlayerHealth.health <= 0;
+            }
+        }
+
         private bool canUseCoyoteTime = true;
         private float additinalFallForce;
 
@@ -130,11 +143,21 @@ namespace MrPink.PlayerSystem
         {
             if (IsOwner == false)
                 return;
-            if (_isDead)
+            if (_isDead || Shop.Instance.IsActive)
             {
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
                 rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
                 State.IsLeaning = false;
                 return;
+            }
+            
+            if (rb.isKinematic || rb.useGravity == false)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = false;
             }
 
             if (Shop.Instance && Shop.Instance.IsActive)
@@ -168,10 +191,9 @@ namespace MrPink.PlayerSystem
             if (IsOwner == false)
                 return;
             
-            /*
-            if (_isDead)
-                return;*/
-            
+            if (_isDead || Shop.Instance.IsActive)
+                return;
+
             /*
             if (Shop.Instance && Shop.Instance.IsActive)
             {
@@ -575,7 +597,6 @@ namespace MrPink.PlayerSystem
             //rb.useGravity = true;
             rb.drag = 1;
             rb.angularDrag = 10;
-            _isDead = true;
         }
 
         public void Resurrect()
@@ -585,7 +606,6 @@ namespace MrPink.PlayerSystem
             //rb.useGravity = true;
             rb.drag = rbInitDrag;
             rb.angularDrag = rbInitAngularDrag;
-            _isDead = false;
         }
     }
 }
