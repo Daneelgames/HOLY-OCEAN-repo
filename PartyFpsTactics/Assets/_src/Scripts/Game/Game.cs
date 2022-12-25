@@ -50,17 +50,12 @@ namespace MrPink
         }
 
         
-        private void LateUpdate()
+        //private void LateUpdate()
+        private void Update()
         {
             if (_localPlayer == null) return;
-            
-            /*
-            _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.deltaTime);
-            _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation,_localPlayer.LookAround.HeadRot, camRotSmooth * Time.deltaTime);
-            */
-            
-            _gameCamera.transform.position =  _localPlayer.LookAround.HeadPos;
-            _gameCamera.transform.rotation = _localPlayer.LookAround.HeadRot;
+            _gameCamera.transform.position =  Vector3.Lerp(_gameCamera.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.deltaTime);
+            _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.deltaTime);
         }
 
         

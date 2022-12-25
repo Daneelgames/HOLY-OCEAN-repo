@@ -106,7 +106,7 @@ namespace _src.Scripts
                     }
                     else if (base.IsServer) // destroy mob on server
                     {
-                        ServerManager.Despawn(corpse.gameObject, DespawnType.Destroy);
+                        //ServerManager.Despawn(corpse.gameObject, DespawnType.Destroy);
                         Destroy(corpse.gameObject);   
                     }
                 }

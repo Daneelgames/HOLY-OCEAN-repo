@@ -178,7 +178,6 @@ namespace MrPink.PlayerSystem
             {
                 Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Right);
                 SetWeapon(null, Hand.Right);
-                return;
             }
 
             if (leftWeapon != null)

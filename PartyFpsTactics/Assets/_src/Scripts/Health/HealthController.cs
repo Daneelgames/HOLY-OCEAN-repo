@@ -28,7 +28,7 @@ namespace MrPink.Health
         }
         
         public Unit selfUnit;
-        public int health = 100;
+        [SyncVar] public int health = 100;
         public int healthMax = 100;
         public CharacterNeeds needs;
         public float endurance = 100;
@@ -427,7 +427,7 @@ namespace MrPink.Health
 
         public void Resurrect()
         {
-            AddHealth(healthMax/2);
+            AddHealth(healthMax);
             IsDead = false;
         }
     }

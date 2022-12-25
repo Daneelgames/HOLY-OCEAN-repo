@@ -14,5 +14,7 @@ namespace MrPink.PlayerSystem
         public bool IsMoving;
         
         public bool IsClimbing;
+        
+        public bool CanVault;
     }
 }

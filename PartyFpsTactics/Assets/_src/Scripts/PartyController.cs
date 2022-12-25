@@ -53,6 +53,8 @@ namespace MrPink
 
         public IEnumerator RespawnPlayer()
         {
+            yield break;
+            /*
             var pos = Game.LocalPlayer.Position;
             ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
             Game.LocalPlayer.Inventory.DropAll();
@@ -90,7 +92,7 @@ namespace MrPink
                 npcInParty.npcInteraction.PlayerInteraction();
             }
             
-            LevelTitlesManager.Instance.HideIntro();
+            LevelTitlesManager.Instance.HideIntro();*/
         }
     }
 }

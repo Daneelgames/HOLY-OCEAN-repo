@@ -351,7 +351,7 @@ Transform:
   m_Children:
   - {fileID: 7081219686211484133}
   m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2289170774130909382
 GameObject:
@@ -611,7 +611,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3117134100572245634
 MonoBehaviour:
@@ -690,7 +690,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3967563715184240561
 GameObject:
@@ -1771,12 +1771,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5458055721696668510}
   - {fileID: 726977809535213728}
   - {fileID: 5175310124883067704}
   - {fileID: 1803459367718789170}
   - {fileID: 6141397245279354897}
   - {fileID: 5596697988226418836}
+  - {fileID: 5458055721696668510}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1881,6 +1881,10 @@ MonoBehaviour:
   moveStaminaRegen: 20
   _slopeRayHeight: 0.25
   _slopeRayDistance: 0.5
+  vaultRaycastDistance: 0.6
+  middleRaycastHeight: 1.2
+  bottomRaycastHeight: 0.2
+  autoVaultPower: 10
   crouching: 0
   topCollider: {fileID: 5596697987043485618}
   bottomCollider: {fileID: 4864691832468757254}
@@ -2446,7 +2450,7 @@ Transform:
   - {fileID: 2996664407138911022}
   - {fileID: 2926822677281190941}
   m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5918081030042533152
 GameObject:
@@ -2477,7 +2481,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6115276576261760312
 GameObject:
@@ -2497,7 +2501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6141397245279354897
 Transform:
   m_ObjectHideFlags: 0
@@ -2511,7 +2515,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2642448490451101327
 MeshFilter:

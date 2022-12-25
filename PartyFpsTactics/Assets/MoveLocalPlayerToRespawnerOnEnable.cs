@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet;
 using FishNet.Component.Spawning;
 using MrPink;
 using UnityEngine;
@@ -19,11 +20,15 @@ public class MoveLocalPlayerToRespawnerOnEnable : MonoBehaviour
             yield return null;
         }
 
-        while (PlayerSpawner.Instance == null)
+        var spawner = InstanceFinder.NetworkManager.gameObject.GetComponent<PlayerSpawner>(); 
+        while (spawner == null)
         {
+            Debug.Log("RespawnPlayerOverTime WAIT PlayerSpawner.Instance == null RESPAWN");
+            spawner = InstanceFinder.NetworkManager.gameObject.GetComponent<PlayerSpawner>();
             yield return null;
         }
-
-        StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(PlayerSpawner.Instance.Spawns[Random.Range(0, PlayerSpawner.Instance.Spawns.Length)].position));
+        
+        StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(spawner.Spawns[Random.Range(0, spawner.Spawns.Length)].position));
+        Game.LocalPlayer.Health.Resurrect();
     }
 }

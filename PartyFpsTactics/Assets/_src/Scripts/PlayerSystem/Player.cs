@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using FishNet;
 using FishNet.Component.Spawning;
 using FishNet.Connection;
 using FishNet.Object;
@@ -126,40 +127,61 @@ namespace MrPink.PlayerSystem
         [Server]
         public void Respawn()
         {
-            _health.Resurrect();
+            Debug.Log("SERVER RESPAWN. base isowner " + base.IsOwner);
+           
+            /*
+             if (base.IsOwner)
+            {
+                if (respawnCoroutine != null)
+                    StopCoroutine(respawnCoroutine);
+                respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
+                return;
+            }
+            */
+            
+            if (respawnCoroutine != null)
+                StopCoroutine(respawnCoroutine);
+            respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
+            
+            // this is for everyone else
             RpcRespawnOnClient();
         }
 
-        [ObserversRpc(IncludeOwner = true)]
+        [ObserversRpc(IncludeOwner = false)]
         void RpcRespawnOnClient()
         {
+            Debug.Log("RpcRespawnOnClient RESPAWN");
             // should be done locally on each player
             if (respawnCoroutine != null)
                 StopCoroutine(respawnCoroutine);
             respawnCoroutine = StartCoroutine(RespawnPlayerOverTime());
         }
         
-
         private Coroutine respawnCoroutine;
 
         IEnumerator RespawnPlayerOverTime()
         {
-            while (PlayerSpawner.Instance == null)
+            var spawner = InstanceFinder.NetworkManager.gameObject.GetComponent<PlayerSpawner>(); 
+            while (spawner == null)
             {
+                Debug.Log("RespawnPlayerOverTime WAIT PlayerSpawner.Instance == null RESPAWN");
+                spawner = InstanceFinder.NetworkManager.gameObject.GetComponent<PlayerSpawner>();
                 yield return null;
             }
-            yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(PlayerSpawner.Instance.Spawns[Random.Range(0,PlayerSpawner.Instance.Spawns.Length)].position + Vector3.up * 0.5f));
+            Debug.Log("RespawnPlayerOverTime RESPAWN");
+            yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(spawner.Spawns[Random.Range(0,spawner.Spawns.Length)].position + Vector3.up * 0.5f));
             yield return null;
             yield return new WaitForFixedUpdate();
-            Game.LocalPlayer.Resurrect();
+            //Game.LocalPlayer.Resurrect();
             yield return new WaitForFixedUpdate();
             yield return null;
             Shop.Instance.OpenShop(0);
             Game.LocalPlayer.Resurrect();
             respawnCoroutine = null;
         }
-        public void Resurrect()
+        void Resurrect()
         {
+            Debug.Log("PLAYER RESURRECT RESPAWN");
             Game.LocalPlayer.Inventory.DropAll();
             Game.LocalPlayer.Interactor.SetInteractionText("");
             Health.Resurrect();

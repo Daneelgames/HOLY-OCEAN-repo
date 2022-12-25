@@ -1,3 +1,4 @@
+using System;
 using Brezg.Serialization;
 using MrPink.Health;
 using MrPink.WeaponsSystem;
@@ -40,6 +41,13 @@ namespace MrPink.PlayerSystem
                 localPlayerHealth = gameObject.GetComponent<HealthController>();
                 return localPlayerHealth.health <= 0;
             }
+        }
+
+        private void OnEnable()
+        {
+            _weaponsParent.parent = Game._instance.PlayerCamera.transform;
+            _weaponsParent.localPosition = Vector3.zero;
+            _weaponsParent.localRotation = Quaternion.identity;
         }
 
         private void Update()

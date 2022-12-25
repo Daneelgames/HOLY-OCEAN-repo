@@ -10,22 +10,21 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerMovement : NetworkBehaviour
     {
-        [Header("Movement")]
-        public LayerMask WalkableLayerMask;
+        [Header("Movement")] public LayerMask WalkableLayerMask;
 
         public Rigidbody rb;
         public float gravity = 5;
-        public float fallMultiplayer = 2.5f; 
-        public float lowJumpMultiplayer = 2.5f; 
-            
+        public float fallMultiplayer = 2.5f;
+        public float lowJumpMultiplayer = 2.5f;
+
         public float jumpForce = 300;
         public float jumpTime = 0;
         public float jumpTimeMax = 0.5f;
-        
+
         public float fallForceAcceleration = 20;
         public float fallDamageThreshold = 10;
         public int fallDamage = 100;
-        
+
         public float walkSpeed = 5;
         public float runSpeed = 8;
         public float crouchSpeed = 2;
@@ -38,38 +37,37 @@ namespace MrPink.PlayerSystem
         private Vector3 _moveVector;
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
-        
-        [SerializeField]
-        private float _coyoteTimeMax = 0.5f;
+
+        [SerializeField] private float _coyoteTimeMax = 0.5f;
         private float _coyoteTime = 0;
 
-        [Header("Stamina")]
-        public float stamina = 100;
-        [HideInInspector]
-        public float staminaMax = 100;
+        [Header("Stamina")] public float stamina = 100;
+        [HideInInspector] public float staminaMax = 100;
         public float staminaMin = -20;
         [SerializeField] float climbStaminaCost = 5;
         [SerializeField] float climbMoveStaminaCost = 10;
         [SerializeField] float climbRunStaminaCost = 15;
         [SerializeField] float runStaminaCost = 10;
         [SerializeField] float runCrouchStaminaCost = 5;
-        [SerializeField] private float jumpStaminaCost = 10; 
+        [SerializeField] private float jumpStaminaCost = 10;
         [SerializeField] private float idleStaminaRegen = 33;
-        [SerializeField] private float moveStaminaRegen = 25; 
-        
-        [Header("Slopes")] 
-        bool onSlope = false;
+        [SerializeField] private float moveStaminaRegen = 25;
+
+        [Header("Slopes")] bool onSlope = false;
         private Vector3 slopeMoveDirection;
         private Vector3 slopeNormal;
-        
-        [SerializeField]
-        private float _slopeRayHeight = 0.25f;
-        
-        [SerializeField]
-        private float _slopeRayDistance = 0.5f;
 
-        [Header("Crouching")] 
-        public bool crouching = false;
+        [SerializeField] private float _slopeRayHeight = 0.25f;
+
+        [SerializeField] private float _slopeRayDistance = 0.5f;
+
+        [Header("VAULTING")] 
+        [SerializeField] private float vaultRaycastDistance = 0.75f;
+        [SerializeField] private float middleRaycastHeight = 1f;
+        [SerializeField] private float bottomRaycastHeight = 0.5f;
+        [SerializeField] private float autoVaultPower = 5;
+
+        [Header("Crouching")] public bool crouching = false;
         public CapsuleCollider topCollider;
         public CapsuleCollider bottomCollider;
 
@@ -77,14 +75,14 @@ namespace MrPink.PlayerSystem
         private float topColliderHeightStanding = 1.55731f;
         private Vector3 topColliderCenterCrouching = new Vector3(0, 0.3424235f, 0);
         private float topColliderHeightCrouching = 0.6848469f;
-        
+
         private Vector3 bottomColliderCenterStanding = new Vector3(0, 0.5f, 0);
         private float bottomColliderHeightStanding = 1;
         private Vector3 bottomColliderCenterCrouching = new Vector3(0, 0.25f, 0);
         private float bottomColliderHeightCrouching = 0.5f;
-        
+
         public Transform headTransform;
-        
+
         private bool goingUpHill = false;
         public Transform rotator;
         public float rotatorSpeed = 10;
@@ -109,13 +107,12 @@ namespace MrPink.PlayerSystem
 
         private GrindRail activeGrindRail;
 
-        [ShowInInspector, ReadOnly]
-        public MovementsState State { get; private set; } = new MovementsState();
-        
+        [ShowInInspector, ReadOnly] public MovementsState State { get; private set; } = new MovementsState();
+
         public Vector3 MoveVector => _moveVector;
 
         private float heightToFallFrom = 0;
-        
+
         private float rbInitAngularDrag;
         private float rbInitDrag;
 
@@ -123,22 +120,23 @@ namespace MrPink.PlayerSystem
         {
             staminaMax = stamina;
             rbInitDrag = rb.drag;
-            rbInitAngularDrag = rb.angularDrag; 
+            rbInitAngularDrag = rb.angularDrag;
             SetCrouch(false);
         }
 
-        public override void OnStartClient() { 
+        public override void OnStartClient()
+        {
             base.OnStartClient();
             if (IsOwner == false)
             {
                 rb.isKinematic = true;
                 rb.useGravity = false;
             }
-            
+
             //temp?
             rb.useGravity = false;
         }
-        
+
         private void Update()
         {
             if (IsOwner == false)
@@ -149,11 +147,12 @@ namespace MrPink.PlayerSystem
                 rb.useGravity = false;
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
+                rotator.localEulerAngles = new Vector3(0, 0,
+                    Mathf.LerpAngle(rotator.localEulerAngles.z, 0, rotatorSpeed * Time.deltaTime));
                 State.IsLeaning = false;
                 return;
             }
-            
+
             if (rb.isKinematic || rb.useGravity == false)
             {
                 rb.isKinematic = false;
@@ -164,14 +163,14 @@ namespace MrPink.PlayerSystem
             {
                 return;
             }
-        
+
             /*
             if (!LevelGenerator.Instance.levelIsReady)
                 return;*/
             /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
                 return;*/
-            
+
 
             HandleStamina();
             if (Game.LocalPlayer.VehicleControls.controlledMachine)
@@ -185,12 +184,12 @@ namespace MrPink.PlayerSystem
             HandleCrouch();
             HandleMovement();
         }
-        
+
         private void FixedUpdate()
         {
             if (IsOwner == false)
                 return;
-            
+
             if (_isDead || Shop.Instance.IsActive)
                 return;
 
@@ -206,12 +205,13 @@ namespace MrPink.PlayerSystem
             /*
             if (ProceduralCutscenesManager.Instance.InCutScene)
                 return;*/
-            
+
             GroundCheck();
+            AutoVaultCheck();
             ClimbingCheck();
             SlopeCheck();
 
-            
+
             if (activeGrindRail == null)
                 ApplyFreeMovement();
             else
@@ -225,13 +225,14 @@ namespace MrPink.PlayerSystem
                 var vel = rb.velocity;
                 vel.y = 0;
                 rb.velocity = vel;
-                
+
                 jumpTime = jumpTimeMax;
                 Jump(Vector3.zero);
             }
         }
 
         private float targetStaminaScaler = 1;
+
         void HandleStamina()
         {
             if (Game.LocalPlayer.VehicleControls.controlledMachine)
@@ -239,17 +240,18 @@ namespace MrPink.PlayerSystem
                 ChangeStamina(idleStaminaRegen * Time.deltaTime);
                 return;
             }
+
             if (State.IsClimbing && !State.IsGrounded)
             {
                 targetStaminaScaler = climbStaminaCost;
-                
+
                 if (State.IsRunning)
                     targetStaminaScaler = climbRunStaminaCost;
                 else if (State.IsMoving)
                     targetStaminaScaler = climbMoveStaminaCost;
-                
+
                 ChangeStamina(-1 * targetStaminaScaler * Time.deltaTime);
-                
+
                 return;
             }
 
@@ -258,7 +260,7 @@ namespace MrPink.PlayerSystem
                 // don't change stamina in air
                 return;
             }
-            
+
             if (!State.IsRunning)
             {
                 // MOVE
@@ -269,9 +271,10 @@ namespace MrPink.PlayerSystem
                 {
                     ChangeStamina(targetStaminaScaler * Time.deltaTime);
                 }
+
                 return;
             }
-            
+
             // IF RUN
             if (!crouching)
                 targetStaminaScaler = runStaminaCost;
@@ -284,7 +287,7 @@ namespace MrPink.PlayerSystem
         {
             stamina = Mathf.Clamp(stamina + offset, staminaMin, staminaMax);
         }
-        
+
 
         private void HandleCrouch()
         {
@@ -305,75 +308,81 @@ namespace MrPink.PlayerSystem
 
             if (!crouch)
             {
-                if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.up, out var hit, 1f, WalkableLayerMask))
+                if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.up, out var hit, 1f,
+                    WalkableLayerMask))
                 {
                     // found obstacle, can't stand
                     Debug.Log(hit.collider.name);
                     return;
                 }
             }
-            
+
             crouching = crouch;
 
             if (crouching)
             {
-                topCollider.center =  topColliderCenterCrouching;
+                topCollider.center = topColliderCenterCrouching;
                 topCollider.height = topColliderHeightCrouching;
                 bottomCollider.center = bottomColliderCenterCrouching;
                 bottomCollider.height = bottomColliderHeightCrouching;
             }
             else
             {
-                topCollider.center =  topColliderCenterStanding;
+                topCollider.center = topColliderCenterStanding;
                 topCollider.height = topColliderHeightStanding;
                 bottomCollider.center = bottomColliderCenterStanding;
                 bottomCollider.height = bottomColliderHeightStanding;
             }
-            
+
             Game.LocalPlayer.LookAround.SetCrouch(crouching);
         }
-        
-        private void HandleMovement()
+
+    private void HandleMovement()
         {
             float targetAngle;
             State.IsLeaning = true;
-            
-            if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f, WalkableLayerMask))
+
+            if (Input.GetKey(KeyCode.D) && !Physics.CheckSphere(headTransform.position + headTransform.right * 1, 0.25f,
+                WalkableLayerMask))
                 targetAngle = -minMaxRotatorAngle;
-            else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1, 0.25f, WalkableLayerMask))
+            else if (Input.GetKey(KeyCode.A) && !Physics.CheckSphere(headTransform.position + headTransform.right * -1,
+                0.25f, WalkableLayerMask))
                 targetAngle = minMaxRotatorAngle;
             else
             {
                 targetAngle = 0;
                 State.IsLeaning = false;
             }
-            rotator.localEulerAngles = new Vector3(0, 0, Mathf.LerpAngle(rotator.localEulerAngles.z, targetAngle, rotatorSpeed * Time.deltaTime));
+
+            rotator.localEulerAngles = new Vector3(0, 0,
+                Mathf.LerpAngle(rotator.localEulerAngles.z, targetAngle, rotatorSpeed * Time.deltaTime));
 
             int hor = (int)Input.GetAxisRaw("Horizontal");
             int vert = (int)Input.GetAxisRaw("Vertical");
-        
+
             bool moveInFrame = hor != 0 || vert != 0;
 
             _movementInput = new Vector2(hor, vert);
-            
+
             if (State.IsClimbing)
-                _moveVector = Game.LocalPlayer.MainCamera.transform.right * _movementInput.x + Game.LocalPlayer.MainCamera.transform.forward * _movementInput.y;
+                _moveVector = Game.LocalPlayer.MainCamera.transform.right * _movementInput.x +
+                              Game.LocalPlayer.MainCamera.transform.forward * _movementInput.y;
             else
                 _moveVector = transform.right * _movementInput.x + transform.forward * _movementInput.y;
-        
+
             _moveVector.Normalize();
-        
+
             if (onSlope)
                 _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
-        
-        
+
+
             float scaler = 1;
-            
+
             if (stamina < 0.1f && State.IsGrounded)
                 scaler = 0.66f;
             else if (Game.LocalPlayer.Interactor.carryingPortableRb)
                 scaler = 0.66f;
-            
+
             // RUNNING
             if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && (State.IsGrounded || State.IsClimbing == false))
             {
@@ -389,23 +398,23 @@ namespace MrPink.PlayerSystem
             {
                 State.IsMoving = moveInFrame;
                 State.IsRunning = false;
-            
+
                 if (!crouching)
                     _targetVelocity = _moveVector * walkSpeed * scaler;
                 else
                     _targetVelocity = _moveVector * crouchSpeed * scaler;
-            }    
-        
+            }
+
             // JUMP
             /*
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
             {
                 Jump(Vector3.zero, ForceMode.Force);
             }*/
-            
+
             if (goingUpHill)
                 _targetVelocity += Vector3.up * 2;
-        
+
             _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
             _prevVelocity = _resultVelocity;
         }
@@ -416,13 +425,13 @@ namespace MrPink.PlayerSystem
             SetGrindRail(null);
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce * jumpForce, ForceMode.Impulse);
-            
+
             StartCoroutine(CoyoteTimeCooldown());
             ChangeStamina(-1 * jumpStaminaCost);
             //stamina = Mathf.Clamp(stamina - jumpStaminaCost /** Time.deltaTime*/, 0, staminaMax);
             _coyoteTime = 0;
         }
-        
+
         private void SlopeCheck()
         {
             if (!State.IsGrounded)
@@ -430,8 +439,9 @@ namespace MrPink.PlayerSystem
                 onSlope = false;
                 return;
             }
-        
-            if (Physics.Raycast(transform.position + Vector3.up * _slopeRayHeight, Vector3.down, out var hit, _slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
+
+            if (Physics.Raycast(transform.position + Vector3.up * _slopeRayHeight, Vector3.down, out var hit,
+                _slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.normal != Vector3.up)
                 {
@@ -449,23 +459,26 @@ namespace MrPink.PlayerSystem
         {
             canUseCoyoteTime = false;
             yield return new WaitForSeconds(_coyoteTimeMax);
-            
+
             canUseCoyoteTime = true;
         }
 
         private float lastVelocityInAirY = 0;
+
         private void GroundCheck()
         {
             if (Game._instance == null || Game.LocalPlayer == null)
                 return;
-            
-            if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask, QueryTriggerInteraction.Ignore))
+
+            if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask,
+                QueryTriggerInteraction.Ignore))
             {
-                if (!State.IsGrounded && Game.LocalPlayer.VehicleControls.controlledMachine == null && !State.IsClimbing)
+                if (!State.IsGrounded && Game.LocalPlayer.VehicleControls.controlledMachine == null &&
+                    !State.IsClimbing)
                 {
                     if (PlayerFootsteps.Instance)
                         PlayerFootsteps.Instance.PlayLanding();
-                    
+
                     if (transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
                         Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
@@ -487,12 +500,13 @@ namespace MrPink.PlayerSystem
                     lastVelocityInAirY = rb.velocity.y;
                     heightToFallFrom = transform.position.y;
                 }
+
                 if (State.IsGrounded && canUseCoyoteTime)
                     _coyoteTime = _coyoteTimeMax;
 
                 additinalFallForce += fallForceAcceleration * Time.deltaTime;
                 State.IsGrounded = false;
-                
+
                 if (canUseCoyoteTime && _coyoteTime > 0)
                 {
                     _coyoteTime -= Time.deltaTime;
@@ -504,7 +518,34 @@ namespace MrPink.PlayerSystem
             }
         }
 
-        private RaycastHit[] hitInfoClimb;
+    void AutoVaultCheck()
+    {
+        if (Physics.Raycast(transform.position + Vector3.up * bottomRaycastHeight, _moveVector.normalized, vaultRaycastDistance, WalkableLayerMask))
+        {
+            // has an obstacle on bottom
+            Debug.DrawLine(transform.position + Vector3.up * bottomRaycastHeight, transform.position + Vector3.up * bottomRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.cyan);
+            
+            if (Physics.Raycast(transform.position + Vector3.up * middleRaycastHeight, _moveVector.normalized, vaultRaycastDistance, WalkableLayerMask))
+            {
+                // has an obstacle on the middle
+                // too high for auto climbing
+                
+                State.CanVault = false;
+                Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight +_moveVector.normalized* vaultRaycastDistance, Color.red);
+                return;
+            }
+            State.CanVault = true;
+            Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.cyan);
+            return;
+        }
+        
+        State.CanVault = false;
+        
+        Debug.DrawLine(transform.position + Vector3.up * bottomRaycastHeight, transform.position + Vector3.up * bottomRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.red);
+        Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.red);
+    }
+
+    private RaycastHit[] hitInfoClimb;
         void ClimbingCheck()
         {
             if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
@@ -551,6 +592,11 @@ namespace MrPink.PlayerSystem
             else if (_resultVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
             {    
                 _resultVelocity += Vector3.down * resultGravity * (lowJumpMultiplayer - 1);
+            }
+
+            if (State.CanVault)
+            {
+                _resultVelocity += Vector3.up * autoVaultPower;
             }
             
             //rb.velocity = _resultVelocity + Vector3.down * resultGravity;
