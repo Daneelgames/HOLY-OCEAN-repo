@@ -174,17 +174,11 @@ namespace MrPink.PlayerSystem
                 }
             }
             
-            if (rightWeapon != null)
-            {
-                Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Right);
-                SetWeapon(null, Hand.Right);
-            }
-
-            if (leftWeapon != null)
-            {
-                Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Left);
-                SetWeapon(null, Hand.Left);
-            }
+            Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Right);
+            SetWeapon(null, Hand.Right);
+            
+            Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Left);
+            SetWeapon(null, Hand.Left);
             
             foreach (var toolAmount in amountOfEachTool)
             {

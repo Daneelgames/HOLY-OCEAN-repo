@@ -102,6 +102,9 @@ public class SceneLoader : MonoBehaviour
             bool restart = true;
             foreach (var player in Game._instance.PlayerInGame)
             {
+                if (player == null)
+                    continue;
+                
                 if (player.Health.IsDead == false)
                 {
                     restart = false;

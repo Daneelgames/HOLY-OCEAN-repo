@@ -105,18 +105,19 @@ namespace MrPink.PlayerSystem
         {
             Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
 
-            if (base.IsHost == false)
+            /*if (base.IsHost == false)
             {
                 SceneLoader.Instance.gameObject.SetActive(false);
-            }
-
+            }*/
 
             Game._instance.SetLocalPlayer(this);
         }
 
         public void Death(Transform killer)
         {
-            Game.LocalPlayer.Interactor.SetInteractionText("R TO RESTART");
+            Debug.Log("PLAYER DEATH, SHOULD DROP SHIT");
+            Game.LocalPlayer.Inventory.DropAll();
+            Game.LocalPlayer.Interactor.SetInteractionText(String.Empty);
             Movement.Death(killer);
             LookAround.Death(killer);
             Weapon.Death();

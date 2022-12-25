@@ -70,6 +70,9 @@ namespace MrPink
         
         public void AddPlayer(Player p)
         {
+            if (playersInGame.Contains(p))
+                return;
+            
             playersInGame.Add(p);
         }
         public void RemovePlayer(Player p)

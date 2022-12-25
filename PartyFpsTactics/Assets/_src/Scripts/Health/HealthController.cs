@@ -367,7 +367,8 @@ namespace MrPink.Health
 
         void DeathOnClient(ScoringActionType action)
         {
-            Debug.Log("DEATH DeathOnClient " + gameObject.name);
+            bool isLocalPlayer = Game.LocalPlayer.Health == this;
+            Debug.Log("DEATH DeathOnClient " + gameObject.name + "; isLocalPlayer + " + isLocalPlayer);
             IsDead = true;
             if (AiMovement)
                 AiMovement.StopActivities();
@@ -386,8 +387,9 @@ namespace MrPink.Health
 
             if (selfUnit)
                 selfUnit.SpawnLootOnDeath.SpawnLoot();
-        
-            if (Game.LocalPlayer.Health == this)
+
+
+            if (isLocalPlayer)
             {
                 GameManager.Instance.SetPlayerSleepTimeScale(false);
                 Game.LocalPlayer.Death(null);
