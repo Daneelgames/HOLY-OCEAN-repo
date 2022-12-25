@@ -61,7 +61,8 @@ public class LevelExit : NetworkBehaviour
             
             if (playerInRange && goalInRange)
             {
-                GameManager.Instance.LevelCompleted();
+                SceneLoader.Instance.LevelCompleted();
+                //GameManager.Instance.LevelCompleted();
                 
                 yield break;
             }

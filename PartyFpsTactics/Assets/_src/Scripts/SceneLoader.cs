@@ -138,6 +138,11 @@ public class SceneLoader : MonoBehaviour
         LoadScene(other.GetComponent<NetworkObject>());
     }
 
+    public void LevelCompleted()
+    {
+        LoadScene(Game.LocalPlayer.NetworkObject);
+    }
+    
     private void LoadScene(NetworkObject triggeringIdentity)
     {
         if (!InstanceFinder.NetworkManager.IsServer)
