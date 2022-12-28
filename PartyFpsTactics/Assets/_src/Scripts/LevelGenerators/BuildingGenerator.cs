@@ -8,6 +8,7 @@ using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
+using Sirenix.OdinInspector;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;

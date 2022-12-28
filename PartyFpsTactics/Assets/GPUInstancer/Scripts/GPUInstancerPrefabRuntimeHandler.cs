@@ -11,8 +11,11 @@ namespace GPUInstancer
         private GPUInstancerPrefabManager _prefabManager;
         private static Dictionary<GPUInstancerPrefabPrototype, GPUInstancerPrefabManager> _managerDictionary;
 
-        private void Awake()
+        private bool initialized = false;
+        
+        void Init()
         {
+            initialized = true;
             gpuiPrefab = GetComponent<GPUInstancerPrefab>();
             if (_managerDictionary == null)
             {
@@ -30,11 +33,24 @@ namespace GPUInstancer
                         }
                     }
                 }
-            }
+            }   
         }
 
+        public void InitOnClient()
+        {
+            EnableOnClient();   
+        }
+        
         private void OnEnable()
         {
+            EnableOnClient();
+        }
+
+        void EnableOnClient()
+        {
+            if (!initialized)
+                Init();
+            
             if (gpuiPrefab.state == PrefabInstancingState.None)
             {
                 if (_prefabManager == null)
@@ -45,7 +61,7 @@ namespace GPUInstancer
                         _prefabManager.InitializeRuntimeDataAndBuffers();
                     _prefabManager.AddPrefabInstance(gpuiPrefab, true);
                 }
-            }
+            }   
         }
 
         private void OnDisable()
