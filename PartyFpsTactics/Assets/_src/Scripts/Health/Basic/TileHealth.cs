@@ -220,6 +220,9 @@ namespace MrPink.Health
             float angularDrag
         )
         {
+            if (rigidbody == null)
+                return;
+            
             rigidbody.isKinematic = isKinematic;
             rigidbody.useGravity = useGravity;
             rigidbody.mass = mass;

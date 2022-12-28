@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using _src.Scripts.LevelGenerators;
+using FishNet.Object;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -12,7 +13,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class BuildingGenerator : MonoBehaviour
+public class BuildingGenerator : NetworkBehaviour
 {
     public static BuildingGenerator Instance;
     public List<Building> spawnedBuildings = new List<Building>();
@@ -78,8 +79,10 @@ public class BuildingGenerator : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+
         Init();
     }
 
@@ -156,6 +159,7 @@ public class BuildingGenerator : MonoBehaviour
         spawnedProps.Remove(prop);
     }
 
+    [Server]
     public void SpawnRandomBuilding(Vector3 buildingPos)
     {
         //return;
@@ -169,6 +173,7 @@ public class BuildingGenerator : MonoBehaviour
         StartCoroutine(SpawnBuilding(newBuilding));
     }
 
+    [Server]
     IEnumerator SpawnBuilding(Building building)
     {
         var buildingSettings = buildingsToSpawnSettings[Random.Range(0, buildingsToSpawnSettings.Count)];
@@ -212,6 +217,7 @@ public class BuildingGenerator : MonoBehaviour
     }
 
 
+    [Server]
     IEnumerator SpawnNewBuildingLevel(Building building, int levelIndexInBuilding,  BuildingSettings buildingSettings)
     {
         var levelHeights = buildingSettings.levelsSettings;
@@ -264,6 +270,7 @@ public class BuildingGenerator : MonoBehaviour
         }
     }
     
+    [Server]
     IEnumerator SpawnBaseTiles(Building building, int levelIndexInBuilding, Vector3 pos, Vector3Int size, Quaternion rot, List<BuildingSettings.LevelSetting> levelSettings, BuildingSettings buildingSettings)
     {
         GameObject newLevelGameObject = new GameObject();
@@ -305,6 +312,9 @@ public class BuildingGenerator : MonoBehaviour
                 newFloorTile.transform.localRotation = Quaternion.identity;
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
+                
+                ServerManager.Spawn(newFloorTile.gameObject);
+                
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
                 //newLevel.tilesWalls.Add(newFloorTile);
                 newLevel.allTiles.Add(newFloorTile);
@@ -393,6 +403,9 @@ public class BuildingGenerator : MonoBehaviour
                             newWallTile.transform.localEulerAngles = new Vector3(0, 90, 0);
                             
                         newWallTile.transform.position = newFloorTile.transform.position + Vector3.up * y;
+
+                        ServerManager.Spawn(newWallTile.gameObject);
+                        
                         newLevel.roomTilesMatrix[x, y, z] = newWallTile;
                         newLevel.tilesWalls.Add(newWallTile);
                         newLevel.allTiles.Add(newWallTile);
@@ -422,6 +435,9 @@ public class BuildingGenerator : MonoBehaviour
                         newCeilingTile.transform.localPosition = new Vector3(x - size.x / 2, size.y - 1, z - size.z / 2);
                         newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x, size.y - 1, z), newLevel);
                         newCeilingTile.ceilingLevelTile = true;
+                        
+                        ServerManager.Spawn(newCeilingTile.gameObject);
+                        
                         newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
                         newLevel.allTiles.Add(newCeilingTile);
                         //newLevel.tilesInside.Add(newCeilingTile);
@@ -439,6 +455,10 @@ public class BuildingGenerator : MonoBehaviour
                         newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
                         newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
                         newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
+                        
+                        
+                        ServerManager.Spawn(newAdditionalTile.gameObject);
+                        
                         newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
                         /*newLevel.tilesInside.Add(newAdditionalTile);
                         newLevel.allTiles.Add(newAdditionalTile);*/
@@ -530,6 +550,9 @@ public class BuildingGenerator : MonoBehaviour
                         var newRoomWallTile = Instantiate(thinColorPrefab, level.spawnedTransform);
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
                         newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
+                        
+                        ServerManager.Spawn(newRoomWallTile.gameObject);
+                        
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
                         //level.tilesInside.Add(newRoomWallTile);
                         level.allTiles.Add(newRoomWallTile);
@@ -655,6 +678,9 @@ public class BuildingGenerator : MonoBehaviour
                     var newWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
                     newWallTile.transform.localRotation = Quaternion.identity;
                     newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
+                    
+                    ServerManager.Spawn(newWallTile.gameObject);
+                    
                     level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
                     level.allTiles.Add(newWallTile);
                     if (y == buildWallUntillY - 1)
@@ -833,6 +859,9 @@ public class BuildingGenerator : MonoBehaviour
             newStairsTile.transform.localScale = transformLocalScale;
             newStairsTile.transform.parent = parent;
             
+            
+            ServerManager.Spawn(newStairsTile.gameObject);
+            
             // ПОРУЧНИ
             for (int k = 0; k < 2; k++)
             {
@@ -899,7 +928,8 @@ public class BuildingGenerator : MonoBehaviour
 
             Vector3 pos = randomTile.transform.position + Vector3.up;
             randomLevel.tilesInside.Remove(randomTile);
-            Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+            var barrel = Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+            ServerManager.Spawn(barrel);
             yield return null;
         }
     }
@@ -1035,7 +1065,7 @@ public class BuildingGenerator : MonoBehaviour
     {
         Vector3 spawnPosition = building.spawnedBuildingLevels[building.spawnedBuildingLevels.Count - 1].position + Vector3.up * 2;
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
-        
+        ServerManager.Spawn(levelGoalSpawned);
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
             for (int j = 0; j < building.spawnedBuildingLevels[i].spawnedRooms.Count; j++)
