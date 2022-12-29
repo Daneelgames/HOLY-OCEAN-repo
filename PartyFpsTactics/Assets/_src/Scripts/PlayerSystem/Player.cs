@@ -87,6 +87,17 @@ namespace MrPink.PlayerSystem
 
             Init();
         }
+        
+        public override void OnOwnershipClient(NetworkConnection prevOwner)
+        {
+            base.OnOwnershipClient(prevOwner);
+            /* Current owner can be found by using base.Owner. prevOwner
+            * contains the connection which lost ownership. Value will be
+            * -1 if there was no previous owner. */
+
+            SetLocalPlayerInstance();
+        }
+
 
         private void Init()
         {
@@ -109,16 +120,6 @@ namespace MrPink.PlayerSystem
             gameSceneLoaded = loaded;
         }
         
-        public override void OnOwnershipClient(NetworkConnection prevOwner)
-        {
-            base.OnOwnershipClient(prevOwner);
-            /* Current owner can be found by using base.Owner. prevOwner
-            * contains the connection which lost ownership. Value will be
-            * -1 if there was no previous owner. */
-
-            SetLocalPlayerInstance();
-        }
-
         [Client(RequireOwnership = true)]
         void SetLocalPlayerInstance()
         {

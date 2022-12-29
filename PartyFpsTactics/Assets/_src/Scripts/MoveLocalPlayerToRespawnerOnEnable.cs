@@ -29,6 +29,9 @@ public class MoveLocalPlayerToRespawnerOnEnable : MonoBehaviour
         }
         
         StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(spawner.Spawns[Random.Range(0, spawner.Spawns.Length)].position));
-        Game.LocalPlayer.Health.Resurrect();
+        foreach (var player in Game._instance.PlayersInGame)
+        {
+            player.Health.Resurrect();   
+        }
     }
 }

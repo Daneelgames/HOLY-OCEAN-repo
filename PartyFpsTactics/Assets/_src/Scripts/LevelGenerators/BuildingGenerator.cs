@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
 using _src.Scripts.LevelGenerators;
+using FishNet.Connection;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
@@ -17,6 +19,9 @@ using Random = UnityEngine.Random;
 public class BuildingGenerator : NetworkBehaviour
 {
     public static BuildingGenerator Instance;
+    
+    [SyncVar][SerializeField] [ReadOnly] int currentSeed;
+    
     public List<Building> spawnedBuildings = new List<Building>();
     [HideInInspector]
     public List<TileHealth> spawnedProps = new List<TileHealth>();
@@ -75,11 +80,11 @@ public class BuildingGenerator : NetworkBehaviour
     [Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
     
-    [SerializeField] [ReadOnly] int currentSeed;
     
     private void Awake()
     {
         Instance = this;
+        //currentSeed = (int)DateTime.Now.Ticks;
     }
 
     public override void OnStartClient()
@@ -87,37 +92,38 @@ public class BuildingGenerator : NetworkBehaviour
         base.OnStartClient();
 
         if (base.IsServer)
-        {
-            StartCoroutine(ServerWaitClients());
-        }
+            currentSeed = Random.Range(1,100) * Random.Range(1,100) * Random.Range(1,100);
+        StartCoroutine(WaitClients());
+    }
+        
+    public override void OnOwnershipClient(NetworkConnection prevOwner)
+    {
+        base.OnOwnershipClient(prevOwner);
+        /* Current owner can be found by using base.Owner. prevOwner
+        * contains the connection which lost ownership. Value will be
+        * -1 if there was no previous owner. */
+        
+        /*
+        if (base.IsServer)
+            currentSeed = (int)DateTime.Now.Ticks;*/
     }
 
-    [Server]
-    IEnumerator ServerWaitClients()
+    IEnumerator WaitClients()
     {
         while (Game._instance.AllPlayersLoadedGameScene() == false)
         {
             Debug.LogWarning("WAIT: Game._instance.AllPlayersLoadedGameScene() == false");
             yield return null;
         }
-        // get random info
-        GenerateRandomSeed();
-        // send rpc for generating
-        RpcInitOnClient(currentSeed);
+
+        InitOnClient();
     }
 
-    
-    void GenerateRandomSeed()
-    {
-        currentSeed = DateTime.Now.Second;
-    }
 
-    [ObserversRpc(IncludeOwner = true)]
-    void RpcInitOnClient(int seed)
+    void InitOnClient()
     {
-        currentSeed = seed;
         Random.InitState(currentSeed);
-        
+        Debug.Log("BUILDING GENERATOR START GENERATING WITH SEED " + currentSeed +"; Random.state " + Random.state + "; hashCode " + Random.state.GetHashCode());
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
 
         for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
@@ -190,10 +196,6 @@ public class BuildingGenerator : NetworkBehaviour
 
     IEnumerator SpawnBuilding(Vector3 buildingPos)
     {
-        if (base.IsServer == false)
-            yield break;
-
-        
         if (GameManager.Instance.GetLevelType != GameManager.LevelType.Game)
         {
             Debug.LogError("DONT SPAWN BUILDING ON THIS LEVEL TYPE");
@@ -218,6 +220,7 @@ public class BuildingGenerator : NetworkBehaviour
         {
             yield return StartCoroutine(SpawnNewBuildingLevel(building, j, buildingSettings));
         }
+        
         
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
@@ -244,6 +247,8 @@ public class BuildingGenerator : NetworkBehaviour
         
         // GOALS
         yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels));
+        
+        DestroyTilesForLadders();
         
         if (base.IsServer)
         {
@@ -277,19 +282,30 @@ public class BuildingGenerator : NetworkBehaviour
             levelY += levelHeights[i].levelHeight;
         }
         
+        Debug.Log("BUILDING GENERATOR CURRENT state " + Random.state + "; hashCode " + Random.state.GetHashCode());
+        
+        Random.InitState(currentSeed);
         Vector3 levelPosition = new Vector3(buildingOrigin.position.x + Random.Range(buildingSettings.offsetPosMinMaxX.x, buildingSettings.offsetPosMinMaxX.y), levelY,
             buildingOrigin.position.z + Random.Range(buildingSettings.offsetPosMinMaxZ.x, buildingSettings.offsetPosMinMaxZ.y));
-        /*if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
-            GameManager.Instance.AllSolidsMask))
-        {
-            levelPosition = new Vector3(levelPosition.x, levelPosition.y + hit.point.y, levelPosition.z);
-        }*/
-        Vector3Int levelSize = new Vector3Int(Random.Range(buildingSettings.levelsScaleMinMaxX.x, buildingSettings.levelsScaleMinMaxX.y) * 2,
-            levelHeights[levelIndexInBuilding].levelHeight,Random.Range(buildingSettings.levelsScaleMinMaxZ.x, buildingSettings.levelsScaleMinMaxZ.y) * 2);
         
+        Random.InitState(currentSeed);
+        var randomSizeX = Mathf.RoundToInt(Random.Range(buildingSettings.levelsScaleMinMaxX.x * 1f, buildingSettings.levelsScaleMinMaxX.y * 1f));
+        Random.InitState(currentSeed);
+        var randomSizeZ = Mathf.RoundToInt(Random.Range(buildingSettings.levelsScaleMinMaxZ.x * 1f, buildingSettings.levelsScaleMinMaxZ.y * 1f));
+        
+        Random.InitState(currentSeed);
+        randomSizeX += Random.Range(-randomSizeX / 5 * levelIndexInBuilding, randomSizeX / 5 * levelIndexInBuilding);
+        Random.InitState(currentSeed);
+        randomSizeZ += Random.Range(-randomSizeZ / 5 * levelIndexInBuilding, randomSizeZ / 5 * levelIndexInBuilding);
+        
+        Vector3Int levelSize = new Vector3Int( randomSizeX * 2, levelHeights[levelIndexInBuilding].levelHeight,randomSizeZ * 2);
+        Debug.Log("BUILDING GENERATOR LEVEL SIZE " + levelSize + "; randomSizeX " + randomSizeX  +"; randomSizeZ " + randomSizeZ + "; buildingSettings.levelsScaleMinMaxX " + buildingSettings.levelsScaleMinMaxX + "; buildingSettings.levelsScaleMinMaxZ" + buildingSettings.levelsScaleMinMaxZ);
         Quaternion levelRotation = Quaternion.identity;
         if (randomLevelRotation)
-            levelRotation = Quaternion.Euler(0, Random.Range(0,360), 0);
+        {
+            Random.InitState(currentSeed);
+            levelRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+        }
 
         ClearPlaceForBuilding(levelPosition, levelRotation, levelSize);
         
@@ -335,9 +351,16 @@ public class BuildingGenerator : NetworkBehaviour
         //bool hasRoof = levelIndexInBuilding == levelSettings.Count - 1;
         bool hasRoof = true;
 
-        int spaceBetweenWindows = Random.Range(2, size.x);
+        Random.InitState(currentSeed);
+        var offset = Random.Range(-levelIndexInBuilding, levelIndexInBuilding);
+        Random.InitState(currentSeed);
+        int spaceBetweenWindows = Random.Range(2, size.x + offset);
         int currentSpaceBetweenWindows = spaceBetweenWindows;
-        Vector2Int windowStartEndY = new Vector2Int(Random.Range(1, size.y/2 -1 ), Random.Range(size.y / 2 + 1, size.y -1 ));
+        Random.InitState(currentSeed);
+        var xxx = Random.Range(1, size.y / 2 - 1);
+        Random.InitState(currentSeed);
+        var yyy = Random.Range(size.y / 2 + 1, size.y -1 );
+        Vector2Int windowStartEndY = new Vector2Int(xxx, yyy);
         
         List<Vector3Int> availableStarPositionsForThinWalls = new List<Vector3Int>();
 
@@ -477,27 +500,25 @@ public class BuildingGenerator : NetworkBehaviour
                         
                         newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
                         newLevel.allTiles.Add(newCeilingTile);
-                        //newLevel.tilesInside.Add(newCeilingTile);
                         newLevel.tilesTop.Add(newFloorTile);
                     }
 
+                    Random.InitState(currentSeed);
                     if (newLevel.spawnProps && Random.value > 0.95f)
                     {
                         // SPAWN PROPS TILES ON FLOOR
                         
+                        Random.InitState(currentSeed);
                         var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
                             
                         StartCoroutine(ConstructCover(newAdditionalTile.gameObject, 0));
                             
+                        Random.InitState(currentSeed);
                         newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
                         newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
                         newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
                         
-                        
-                        
                         newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
-                        /*newLevel.tilesInside.Add(newAdditionalTile);
-                        newLevel.allTiles.Add(newAdditionalTile);*/
                     }
                 }
             }
@@ -514,20 +535,29 @@ public class BuildingGenerator : NetworkBehaviour
         
         List<Vector2Int> RoomsOccupiedTilesPositions = new List<Vector2Int>(); // this will make sure rooms dont intersect
         
-        for (int i = 0; i < Random.Range(1, 4); i++) // ROOMS AMOUNT
+        
+        int max = level.size.x / 10;
+        for (int i = 0; i < max; i++) // ROOMS AMOUNT
         {
+            Random.InitState(currentSeed);
+            int buildWallUntillY = level.size.y - Mathf.Clamp(Random.Range(0, level.size.x / level.size.y), 0, level.size.y);
+            
             // SPAWN INNER ROOMS
+            Random.InitState(currentSeed);
             int leftSidePosition = Random.Range(1, level.size.x - 1);
             int rightSidePosition = 0;
+            Random.InitState(currentSeed);
             int backSidePosition = Random.Range(1, level.size.z - 1);
             int frontSidePosition = 0;
 
             if (leftSidePosition < level.size.x / 2)
             {
+                Random.InitState(currentSeed);
                 rightSidePosition = leftSidePosition + Random.Range(2, level.size.x / 2);
             }
             else
             {
+                Random.InitState(currentSeed);
                 var tempPos = leftSidePosition - Random.Range(2, level.size.x / 2);
                 rightSidePosition = leftSidePosition;
                 leftSidePosition = tempPos;
@@ -535,21 +565,16 @@ public class BuildingGenerator : NetworkBehaviour
 
             if (backSidePosition < level.size.z / 2)
             {
+                Random.InitState(currentSeed);
                 frontSidePosition = backSidePosition + Random.Range(2, level.size.z / 2);
             }
             else
             {
+                Random.InitState(currentSeed);
                 var tempPos = backSidePosition - Random.Range(2, level.size.z / 2);
                 frontSidePosition = backSidePosition;
                 backSidePosition = tempPos;
             }
-
-            /*
-            leftSidePosition = Mathf.Clamp(leftSidePosition, 1, level.size.x - 1);
-            frontSidePosition = Mathf.Clamp(frontSidePosition, 1, level.size.y - 1);
-            rightSidePosition = Mathf.Clamp(rightSidePosition, 1, level.size.x - 1);
-            backSidePosition = Mathf.Clamp(backSidePosition, 1, level.size.y - 1);
-            */
 
             var thinColorPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
             var newRoom = new Room();
@@ -574,7 +599,6 @@ public class BuildingGenerator : NetworkBehaviour
                     
                     RoomsOccupiedTilesPositions.Add(new Vector2Int(x,z));
                     
-                    int buildWallUntillY = level.size.y;
                     if (hasRoof)
                         buildWallUntillY = level.size.y - 1;
 
@@ -611,7 +635,11 @@ public class BuildingGenerator : NetworkBehaviour
         // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
         int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
         Vector3Int roomSize = new Vector3Int(level.size.x / 5, level.size.y, level.size.z / 5);
-        Vector3Int roomLocalCoords = new Vector3Int(Random.Range(0, level.size.x / 2), 0, Random.Range(0, level.size.z / 2));
+        Random.InitState(currentSeed);
+        var xxx = Random.Range(0, level.size.x / 2);
+        Random.InitState(currentSeed);
+        var yyy = Random.Range(0, level.size.z / 2);
+        Vector3Int roomLocalCoords = new Vector3Int(xxx, 0, yyy);
         for (int x = 0; x < roomSize.x; x++)
         {
             for (int z = 0; z < roomSize.z; z++)
@@ -623,9 +651,11 @@ public class BuildingGenerator : NetworkBehaviour
             }
         }
         // RANDOM WALLS
+        Random.InitState(currentSeed);
         int wallsAmount = Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y);
         for (int i = 0; i < wallsAmount; i++)
         {
+            Random.InitState(currentSeed);
             var currentWallCoord = availableStarPositionsForThinWalls[Random.Range(0, availableStarPositionsForThinWalls.Count)];
             var prevWallCoord = currentWallCoord;
             availableStarPositionsForThinWalls.Remove(currentWallCoord);
@@ -633,6 +663,7 @@ public class BuildingGenerator : NetworkBehaviour
 
             List<Vector3Int> positionsInThinWall = new List<Vector3Int>(); 
             positionsInThinWall.Add(currentWallCoord);
+            Random.InitState(currentSeed);
             float thinWallHeightScaler = Random.Range(0.2f, 1f);
             int posIndex = 0;
             while (true)
@@ -698,6 +729,7 @@ public class BuildingGenerator : NetworkBehaviour
                 {
                     break;
                 }
+                Random.InitState(currentSeed);
                 var nextPos = nextAvailablePositions[Random.Range(0, nextAvailablePositions.Count)];
                 prevWallCoord = currentWallCoord;
                 currentWallCoord = nextPos;
@@ -810,6 +842,7 @@ public class BuildingGenerator : NetworkBehaviour
                 levelTo.tilesInside.RemoveAt(j);
         }
         
+        Random.InitState(currentSeed);
         Transform levelFromClosestTile = levelFrom.tilesInside[Random.Range(0, levelFrom.tilesInside.Count)].transform;
         Transform levelToClosestTile = levelTo.tilesInside[levelTo.tilesInside.Count/2].transform;
         float distance = 10000;
@@ -833,6 +866,7 @@ public class BuildingGenerator : NetworkBehaviour
         Vector3 toPosition = Vector3.zero;
         Transform targetTileToConnect = null;
 
+        Random.InitState(currentSeed);
         int randomSide = Random.Range(0, 4); // 0 - left, 1 - front, 2 - right, 3 - back
         Vector3 offsetVector = Vector3.zero;
 
@@ -841,21 +875,25 @@ public class BuildingGenerator : NetworkBehaviour
         switch (randomSide)
         {
             case 0: // LEFT
+                Random.InitState(currentSeed);
                 var tile = level.roomTilesMatrix[0, 0, Random.Range(0, level.size.z)];
                 targetTileToConnect = tile.transform;
                 offsetVector = -tile.transform.right;
                 break;
             case 1: // FRONT
+                Random.InitState(currentSeed);
                 var tileF = level.roomTilesMatrix[Random.Range(0, level.size.x), 0, level.size.z - 1];
                 targetTileToConnect = tileF.transform;
                 offsetVector = tileF.transform.forward;
                 break;
             case 2: // RIGHT
+                Random.InitState(currentSeed);
                 var tileR = level.roomTilesMatrix[level.size.x - 1, 0, Random.Range(0, level.size.z)];
                 targetTileToConnect = tileR.transform;
                 offsetVector = tileR.transform.right;
                 break;
             case 3: // BACK
+                Random.InitState(currentSeed);
                 var tileB = level.roomTilesMatrix[Random.Range(0, level.size.x), 0, 0];
                 targetTileToConnect = tileB.transform;
                 offsetVector = -tileB.transform.forward;
@@ -910,6 +948,7 @@ public class BuildingGenerator : NetworkBehaviour
             
             if (destroyTilesAround)
             {
+                Random.InitState(currentSeed);
                 var hit = Physics.OverlapSphere(newStairsTile.transform.position + Vector3.up, Random.Range(distanceToCutCeilingUnderStairsMinMax.x, distanceToCutCeilingUnderStairsMinMax.y), allSolidsLayerMask);
                 
                 for (int i = 0; i < hit.Length; i++)
@@ -929,7 +968,10 @@ public class BuildingGenerator : NetworkBehaviour
 
                     var bodyPart = hit[i].transform.gameObject.GetComponent<TileHealth>();
                     if (bodyPart)
-                        bodyPart.DestroyTileFromGenerator();
+                    {
+                        tilesToDestroyForLadders.Add(bodyPart);
+                        //bodyPart.DestroyTileFromGenerator();
+                    }
                 }
             }
             yield return null;
@@ -937,6 +979,15 @@ public class BuildingGenerator : NetworkBehaviour
         yield return null;
     }
 
+    private List<TileHealth> tilesToDestroyForLadders = new List<TileHealth>();
+    void DestroyTilesForLadders()
+    {
+        foreach (var bodyPart in tilesToDestroyForLadders)
+        {
+            bodyPart.DestroyTileFromGenerator();
+        }
+    }
+    
     void SpawnNavmesh(Level spawnedLevel)
     {
         if (!spawnedLevel.spawnNavMesh)
@@ -955,7 +1006,9 @@ public class BuildingGenerator : NetworkBehaviour
     {
         for (int i = 0; i < explosiveBarrelsAmount; i++)
         {
+            Random.InitState(currentSeed);
             var randomLevel = building.spawnedBuildingLevels[Random.Range(1, building.spawnedBuildingLevels.Count)];
+            Random.InitState(currentSeed);
             var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
 
             Vector3 pos = randomTile.transform.position + Vector3.up;
@@ -973,6 +1026,7 @@ public class BuildingGenerator : NetworkBehaviour
             if (!building.spawnedBuildingLevels[i].spawnLoot)
                 continue;
             
+            Random.InitState(currentSeed);
             int amount = Random.Range(lootPerLevelMinMax.x, lootPerLevelMinMax.y);
             
             // get all available tiles
@@ -995,6 +1049,7 @@ public class BuildingGenerator : NetworkBehaviour
             for (int j = 0; j < amount; j++)
             {
                 // choose tile to spawn on
+                Random.InitState(currentSeed);
                 var randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
                 while (randomTile == null)
                 {
@@ -1010,6 +1065,7 @@ public class BuildingGenerator : NetworkBehaviour
                     if (tilesForSpawn.Count <= 0)
                         break;
                     
+                    Random.InitState(currentSeed);
                     randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
                     yield return null;
                 }
@@ -1018,6 +1074,7 @@ public class BuildingGenerator : NetworkBehaviour
                     break;
                 
                 Vector3 randomOffset = Vector3.forward * 0.5f;
+                Random.InitState(currentSeed);
                 float r = Random.value;
                 if (r < 0.1)
                     randomOffset = Vector3.down * 0.5f;
@@ -1032,7 +1089,15 @@ public class BuildingGenerator : NetworkBehaviour
                 else
                     randomOffset = Vector3.up * 0.5f;
                 Vector3 spawnPos = randomTile.transform.position + randomOffset; 
-                var newLoot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], spawnPos, Quaternion.Euler(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360)));
+                Random.InitState(currentSeed);
+                var prefab = lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)]; 
+                Random.InitState(currentSeed);
+                float xxx = Random.Range(0, 360); 
+                Random.InitState(currentSeed);
+                float yyy = Random.Range(0, 360); 
+                Random.InitState(currentSeed);
+                float zzz = Random.Range(0, 360);
+                var newLoot = Instantiate(prefab, spawnPos, Quaternion.Euler(xxx,yyy,zzz));
             }
             yield return null;
         }
