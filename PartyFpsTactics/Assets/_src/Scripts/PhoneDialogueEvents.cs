@@ -111,7 +111,6 @@ public class PhoneDialogueEvents : MonoBehaviour
         if (setNextLevelOnCompletion)
         {
             ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-            GameManager.Instance.StartBuildingScene();
         }    
         
         DialogueWindowInterface.Instance.ToggleDialogueWindow(false);

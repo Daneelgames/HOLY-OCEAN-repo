@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2928318158893908098}
-  m_Layer: 12
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4285591427665000727}
-  m_Layer: 12
+  m_Layer: 6
   m_Name: Block_Brick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,9 +83,7 @@ GameObject:
   - component: {fileID: -8775735303132914872}
   - component: {fileID: 138821813567458997}
   - component: {fileID: 9156595738611088229}
-  - component: {fileID: 6130498825992677227}
-  - component: {fileID: -6816568823006261710}
-  m_Layer: 12
+  m_Layer: 6
   m_Name: BoardsTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,8 +132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 6130498825992677227}
-  _networkObjectCache: {fileID: 6130498825992677227}
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
   _health: 150
   _healthController: {fileID: 0}
   ImmuneToDamage: 0
@@ -191,50 +189,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
---- !u!114 &6130498825992677227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943623579927757030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 0
-  _networkBehaviours:
-  - {fileID: 5237696207237465462}
-  <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
-  _isNetworked: 1
-  _isGlobal: 0
-  _defaultDespawnType: 0
-  NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 6
-  _scenePathHash: 0
-  <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 1148179188749297016
-  _sceneNetworkObjects: []
---- !u!114 &-6816568823006261710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943623579927757030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14be6723ef154774ab36b7631e755032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 6130498825992677227}
-  _networkObjectCache: {fileID: 0}
-  _gpuInstancerPrefab: {fileID: 138821813567458997}
-  _gpuInstancerPrefabRuntimeHandler: {fileID: 9156595738611088229}
 --- !u!1001 &2756737273255103795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -304,7 +258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
@@ -382,7 +336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
@@ -460,7 +414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
@@ -538,7 +492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
@@ -616,7 +570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
@@ -694,7 +648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed87124f7dd1a19459021bf40b2076c8, type: 3}

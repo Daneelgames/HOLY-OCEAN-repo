@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink;
 using UnityEngine;
 
 public class ActivateIfTimeScale : MonoBehaviour
@@ -18,10 +19,12 @@ public class ActivateIfTimeScale : MonoBehaviour
         {
             yield return null;
             
-            if (Time.timeScale < 1)
-                activeWhenTimeScaleLessTanOne.SetActive(true);
-            else
+            if (GameManager.Instance == null || Shop.Instance.IsActive)
+            {
                 activeWhenTimeScaleLessTanOne.SetActive(false);
+                continue;
+            }
+            activeWhenTimeScaleLessTanOne.SetActive(GameManager.Instance.CurrentTimeScale < 1);
         }
     }
 }

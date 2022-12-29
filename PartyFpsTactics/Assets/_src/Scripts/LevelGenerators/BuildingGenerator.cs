@@ -75,6 +75,8 @@ public class BuildingGenerator : NetworkBehaviour
     [Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
     
+    [SerializeField] [ReadOnly] int currentSeed;
+    
     private void Awake()
     {
         Instance = this;
@@ -84,11 +86,38 @@ public class BuildingGenerator : NetworkBehaviour
     {
         base.OnStartClient();
 
-        Init();
+        if (base.IsServer)
+        {
+            StartCoroutine(ServerWaitClients());
+        }
     }
 
-    public void Init()
+    [Server]
+    IEnumerator ServerWaitClients()
     {
+        while (Game._instance.AllPlayersLoadedGameScene() == false)
+        {
+            Debug.LogWarning("WAIT: Game._instance.AllPlayersLoadedGameScene() == false");
+            yield return null;
+        }
+        // get random info
+        GenerateRandomSeed();
+        // send rpc for generating
+        RpcInitOnClient(currentSeed);
+    }
+
+    
+    void GenerateRandomSeed()
+    {
+        currentSeed = DateTime.Now.Second;
+    }
+
+    [ObserversRpc(IncludeOwner = true)]
+    void RpcInitOnClient(int seed)
+    {
+        currentSeed = seed;
+        Random.InitState(currentSeed);
+        
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
 
         for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
@@ -136,37 +165,43 @@ public class BuildingGenerator : NetworkBehaviour
         }
 
         StartCoroutine(PartyController.Instance.Init());
-        StartCoroutine(UpdateNavMesh());
-        
-        if (GameManager.Instance.GetLevelType != GameManager.LevelType.Building && GameManager.Instance.GetLevelType != GameManager.LevelType.Stealth)
-        {
-            Debug.LogError("DONT SPAWN BUILDING ON THIS LEVEL TYPE");
-            return;
-        }
 
-        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
+
+        if (base.IsServer)
         {
-            if (buildingsToSpawnSettings[i].BuildingOriginTransform)
-                SpawnRandomBuilding(buildingsToSpawnSettings[i].BuildingOriginTransform.position);   
+            StartCoroutine(UpdateNavMesh());
         }
+        if (buildingsToSpawnSettings[0].BuildingOriginTransform)
+            StartCoroutine(SpawnBuilding(buildingsToSpawnSettings[0].BuildingOriginTransform.position));
     }
 
     public void AddProp(TileHealth prop)
     {
+        if (spawnedProps.Contains(prop))
+            return;
         spawnedProps.Add(prop);
     }
     public void RemoveProp(TileHealth prop)
     {
+        if (!spawnedProps.Contains(prop))
+            return;
         spawnedProps.Remove(prop);
     }
 
-    [Server]
-    public void SpawnRandomBuilding(Vector3 buildingPos)
+    IEnumerator SpawnBuilding(Vector3 buildingPos)
     {
-        //return;
+        if (base.IsServer == false)
+            yield break;
+
         
+        if (GameManager.Instance.GetLevelType != GameManager.LevelType.Game)
+        {
+            Debug.LogError("DONT SPAWN BUILDING ON THIS LEVEL TYPE");
+            yield break;
+        }
+
         if (spawnedBuildings.Count > buildingsToSpawnSettings.Count)
-            return;
+            yield break;
 
         Building newBuilding = new Building();
         newBuilding.worldPos = buildingPos;
@@ -174,10 +209,10 @@ public class BuildingGenerator : NetworkBehaviour
         StartCoroutine(SpawnBuilding(newBuilding));
     }
 
-    [Server]
     IEnumerator SpawnBuilding(Building building)
     {
-        var buildingSettings = buildingsToSpawnSettings[Random.Range(0, buildingsToSpawnSettings.Count)];
+        //var buildingSettings = buildingsToSpawnSettings[Random.Range(0, buildingsToSpawnSettings.Count)];
+        var buildingSettings = buildingsToSpawnSettings[0];
         buildingSettings.BuildingOriginTransform.position = building.worldPos;
         for (int j = 0; j < buildingSettings.levelsSettings.Count; j++)
         {
@@ -189,7 +224,7 @@ public class BuildingGenerator : NetworkBehaviour
             if (building.spawnedBuildingLevels[i].firstFloor)
                 yield return StartCoroutine(MakeLadderOnEntrance(building, building.spawnedBuildingLevels[0]));   
                 
-            if (i != 0 && Random.value > 0.66f)
+            if (i != 0 && i%2 == 1) // if not first and if even
             {
                 yield return StartCoroutine(MakeLaddersBetweenLevels(building, i));
             }
@@ -209,16 +244,20 @@ public class BuildingGenerator : NetworkBehaviour
         
         // GOALS
         yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels));
-        if (spawnGoals)
-            yield return StartCoroutine(SpawnGoals(building));
-        yield return StartCoroutine(SpawnExplosiveBarrels(building));
+        
+        if (base.IsServer)
+        {
+            if (spawnGoals)
+                yield return StartCoroutine(SpawnGoalsOnServer(building));
+        }
+        
+        yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
         yield return SpawnLoot(building);
         
         Respawner.Instance.SpawnEnemiesInBuilding(building);
     }
 
 
-    [Server]
     IEnumerator SpawnNewBuildingLevel(Building building, int levelIndexInBuilding,  BuildingSettings buildingSettings)
     {
         var levelHeights = buildingSettings.levelsSettings;
@@ -238,7 +277,8 @@ public class BuildingGenerator : NetworkBehaviour
             levelY += levelHeights[i].levelHeight;
         }
         
-        Vector3 levelPosition = new Vector3(buildingOrigin.position.x + Random.Range(buildingSettings.offsetPosMinMaxX.x, buildingSettings.offsetPosMinMaxX.y), levelY, buildingOrigin.position.z + Random.Range(buildingSettings.offsetPosMinMaxZ.x, buildingSettings.offsetPosMinMaxZ.y));
+        Vector3 levelPosition = new Vector3(buildingOrigin.position.x + Random.Range(buildingSettings.offsetPosMinMaxX.x, buildingSettings.offsetPosMinMaxX.y), levelY,
+            buildingOrigin.position.z + Random.Range(buildingSettings.offsetPosMinMaxZ.x, buildingSettings.offsetPosMinMaxZ.y));
         /*if (Physics.Raycast(levelPosition + Vector3.up * 1000, Vector3.down, out var hit, Mathf.Infinity,
             GameManager.Instance.AllSolidsMask))
         {
@@ -271,7 +311,6 @@ public class BuildingGenerator : NetworkBehaviour
         }
     }
     
-    [Server]
     IEnumerator SpawnBaseTiles(Building building, int levelIndexInBuilding, Vector3 pos, Vector3Int size, Quaternion rot, List<BuildingSettings.LevelSetting> levelSettings, BuildingSettings buildingSettings)
     {
         GameObject newLevelGameObject = new GameObject();
@@ -313,8 +352,7 @@ public class BuildingGenerator : NetworkBehaviour
                 newFloorTile.transform.localRotation = Quaternion.identity;
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
-                
-                ServerManager.Spawn(newFloorTile.gameObject);
+               
                 
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
                 //newLevel.tilesWalls.Add(newFloorTile);
@@ -404,8 +442,7 @@ public class BuildingGenerator : NetworkBehaviour
                             newWallTile.transform.localEulerAngles = new Vector3(0, 90, 0);
                             
                         newWallTile.transform.position = newFloorTile.transform.position + Vector3.up * y;
-
-                        ServerManager.Spawn(newWallTile.gameObject);
+                        
                         
                         newLevel.roomTilesMatrix[x, y, z] = newWallTile;
                         newLevel.tilesWalls.Add(newWallTile);
@@ -437,7 +474,6 @@ public class BuildingGenerator : NetworkBehaviour
                         newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x, size.y - 1, z), newLevel);
                         newCeilingTile.ceilingLevelTile = true;
                         
-                        ServerManager.Spawn(newCeilingTile.gameObject);
                         
                         newLevel.roomTilesMatrix[x, size.y - 1, z] = newCeilingTile;
                         newLevel.allTiles.Add(newCeilingTile);
@@ -458,7 +494,6 @@ public class BuildingGenerator : NetworkBehaviour
                         newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
                         
                         
-                        ServerManager.Spawn(newAdditionalTile.gameObject);
                         
                         newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
                         /*newLevel.tilesInside.Add(newAdditionalTile);
@@ -552,7 +587,6 @@ public class BuildingGenerator : NetworkBehaviour
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
                         newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                         
-                        ServerManager.Spawn(newRoomWallTile.gameObject);
                         
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
                         //level.tilesInside.Add(newRoomWallTile);
@@ -679,8 +713,6 @@ public class BuildingGenerator : NetworkBehaviour
                     var newWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
                     newWallTile.transform.localRotation = Quaternion.identity;
                     newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
-                    
-                    ServerManager.Spawn(newWallTile.gameObject);
                     
                     level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
                     level.allTiles.Add(newWallTile);
@@ -861,8 +893,6 @@ public class BuildingGenerator : NetworkBehaviour
             newStairsTile.transform.parent = parent;
             
             
-            ServerManager.Spawn(newStairsTile.gameObject);
-            
             // ПОРУЧНИ
             for (int k = 0; k < 2; k++)
             {
@@ -920,7 +950,8 @@ public class BuildingGenerator : NetworkBehaviour
         navMeshSurfacesSpawned.Add(newNavMesh);
     }
     
-    IEnumerator SpawnExplosiveBarrels(Building building)
+    [Server]
+    IEnumerator SpawnExplosiveBarrelsOnServer(Building building)
     {
         for (int i = 0; i < explosiveBarrelsAmount; i++)
         {
@@ -1062,7 +1093,8 @@ public class BuildingGenerator : NetworkBehaviour
         }
     }
 
-    IEnumerator SpawnGoals(Building building)
+    [Server]
+    IEnumerator SpawnGoalsOnServer(Building building)
     {
         Vector3 spawnPosition = building.spawnedBuildingLevels[building.spawnedBuildingLevels.Count - 1].position + Vector3.up * 2;
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);

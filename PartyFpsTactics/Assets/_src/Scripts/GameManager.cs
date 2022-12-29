@@ -29,21 +29,22 @@ namespace MrPink
 
         public Material rockDefaultMaterial;
 
-        public float currentTimeScale = 1;
+        public float CurrentTimeScale = 1;
 
         [Serializable]
         public enum LevelType
         {
-            Intermission, Building, Road, Train, Bridge, Stealth
+            Lobby, Game
         }
 
-        [SerializeField] private LevelType _levelType = LevelType.Building;
+        [SerializeField] private LevelType _levelType = LevelType.Lobby;
         public LevelType GetLevelType => _levelType;
     
         private void Awake()
         {
             if (Instance != null)
             {
+                Instance.SetLevelType(_levelType);
                 Destroy(gameObject);
                 return;
             }
@@ -52,6 +53,13 @@ namespace MrPink
             Random.InitState((int)DateTime.Now.Ticks);
             DontDestroyOnLoad(gameObject);
             Physics.autoSyncTransforms = false;
+        }
+
+        public void SetLevelType(LevelType levelType)
+        {
+            _levelType = levelType;
+
+            Game.LocalPlayer.SetLevelType(_levelType);
         }
 
         public void SetPlayerSleepTimeScale(bool sleep)
@@ -64,9 +72,8 @@ namespace MrPink
         
         void SetCurrentTimeScale(float t)
         {
-            currentTimeScale = t;
-            currentTimeScale = Mathf.Clamp(currentTimeScale, 0.1f, 100);
-            Time.timeScale = currentTimeScale;
+            CurrentTimeScale = t;
+            CurrentTimeScale = Mathf.Clamp(CurrentTimeScale, 0.1f, 100);
         }
         
     
@@ -79,7 +86,7 @@ namespace MrPink
                     cursorVisible = true;
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    Time.timeScale = 1;
+                    SetCurrentTimeScale(0);
                     AudioListener.pause = false;
                 }
                 return;
@@ -103,7 +110,7 @@ namespace MrPink
                     cursorVisible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
-                    Time.timeScale = currentTimeScale;
+                    SetCurrentTimeScale(1);
                     AudioListener.pause = false;
                 }
                 else
@@ -111,7 +118,7 @@ namespace MrPink
                     cursorVisible = true;
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    Time.timeScale = 0.1f;
+                    SetCurrentTimeScale(0);
                     AudioListener.pause = true;
                 }
             }
@@ -160,29 +167,6 @@ namespace MrPink
         {
             // player died and he'll be dead until: someone pick him up, level restarted or level completed
             
-            return;
-            //if (Game._instance && Game.LocalPlayer.Health.health > 0) return;
-            //Game.LocalPlayer.Respawn();            
-            return;
-            // change player's position
-            switch (_levelType)
-            {
-                case LevelType.Building:
-                    StartBuildingScene();
-                    break;
-                case LevelType.Road:
-                    StartRoadScene();
-                    break;
-                case LevelType.Train:
-                    StartTrainScene();
-                    break;
-                case LevelType.Bridge:
-                    StartBridgeScene();
-                    break;
-                case LevelType.Stealth:
-                    StartStealthScene();
-                    break;
-            }
         }
         
         
@@ -194,91 +178,17 @@ namespace MrPink
             else
                 ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
 
-            StartIntermissionScene();
-            return;
-            switch (_levelType)
-            {
-                case LevelType.Building:
-                    int r = Random.Range(1, SceneManager.sceneCountInBuildSettings);
-                    switch (r)
-                    {
-                        case 1: StartRoadScene(); break;
-                        case 2: StartTrainScene(); break;
-                        case 3: StartBridgeScene(); break;
-                        //case 4: StartStealthScene(); break;
-                        
-                        default: StartTrainScene(); break;
-                    }
-                    break;
-                default:
-                    StartBuildingScene();
-                    break;
-            }
+            StartLobbyScene();
         }
         
-        public void StartIntermissionScene()
+        public void StartLobbyScene()
         {
-            _levelType = LevelType.Intermission;
+            _levelType = LevelType.Lobby;
             SceneManager.LoadScene(0);
         }
 
         public void StartLevel(LevelType levelType)
         {
-            switch (levelType)
-            {
-                case LevelType.Building:
-                    StartBuildingScene();
-                    break;
-                case LevelType.Road:
-                    StartRoadScene();
-                    break;
-                case LevelType.Train:
-                    StartTrainScene();
-                    break;
-                case LevelType.Stealth:
-                    StartStealthScene();
-                    break;
-                case LevelType.Bridge:
-                    StartBridgeScene();
-                    break;
-            }
-        }
-        public void StartBuildingScene()
-        {
-            _levelType = LevelType.Building;
-            SceneManager.LoadScene(1);
-        }
-        public void StartRoadScene()
-        {
-            StartTrainScene();  
-            return;
-            _levelType = LevelType.Road;
-            SceneManager.LoadScene(2);
-        } 
-        public void StartTrainScene()
-        {
-            _levelType = LevelType.Train;
-            SceneManager.LoadScene(3);
-        } 
-        public void StartBridgeScene()
-        {
-            _levelType = LevelType.Bridge;
-            SceneManager.LoadScene(4);
-        }
-        public void StartStealthScene()
-        {
-            /*
-            StartBuildingScene();
-            return;
-            */
-            
-            _levelType = LevelType.Stealth;
-            SceneManager.LoadScene(0);
-        }
-    
-        public void StartFlatScene()
-        {
-            return;
         }
 
 

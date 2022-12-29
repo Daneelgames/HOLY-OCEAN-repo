@@ -113,7 +113,7 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
                 
             case ScriptedEventType.StartFlatScene:
-                GameManager.Instance.StartFlatScene();
+                
                 break;
             
             case ScriptedEventType.AddScore:

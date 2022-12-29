@@ -138,12 +138,12 @@ namespace MrPink.Units
             }
             while (true)
             {
-                for (int i = 0; i < Game._instance.PlayerInGame.Count; i++)
+                for (int i = 0; i < Game._instance.PlayersInGame.Count; i++)
                 {
-                    if (i > Game._instance.PlayerInGame.Count - 1 || Game._instance.PlayerInGame[i] == null)
+                    if (i > Game._instance.PlayersInGame.Count - 1 || Game._instance.PlayersInGame[i] == null)
                         continue;
                     
-                    CheckUnit(Game._instance.PlayerInGame[i].Health);
+                    CheckUnit(Game._instance.PlayersInGame[i].Health);
                     yield return new WaitForSeconds(0.1f);
                 }
                 //CheckUnit(Game.LocalPlayer.Health);

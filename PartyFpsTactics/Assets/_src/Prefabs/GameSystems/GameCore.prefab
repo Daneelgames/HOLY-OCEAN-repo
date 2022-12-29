@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _localPlayer: {fileID: 0}
-  playersInGame: []
+  playersesInGame: []
   _lightManager: {fileID: 0}
   _gameCamera: {fileID: 1353563323056243550}
   camMoveSmooth: 10
@@ -318,7 +318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1494997401252115661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -433,7 +433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8446794630898668291
 RectTransform:
   m_ObjectHideFlags: 0
@@ -443,7 +443,7 @@ RectTransform:
   m_GameObject: {fileID: 2417381294110324888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.13801001, y: 0.13801001, z: 0.13801001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1494997401252115661}
@@ -451,8 +451,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 188.092, y: -56.651}
-  m_SizeDelta: {x: 16183.105, y: 9667.6}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 3333, y: 5935.884}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8804608491289701728
 CanvasRenderer:
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -495,28 +495,28 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '- LMB/RMB - HOLD AND ATTACK
+  m_Text: '- LMB/RMB - HOLD AND RELEASE TO ATTACK
 
 
-    - CLIMB WALLS HOLDING LEFT SHIFT
+    - CLIMB WALLS HOLDING LEFT
+    SHIFT
 
 
-    -
-    LEFT CTRL TO CROUCH
+    - LEFT CTRL TO CROUCH
 
 
-    - Q/E - TAKE WEAPON IN LEFT/RIGHT HAND
+    - Q/E - PICK UP WEAPON IN LEFT/RIGHT
+    HAND
 
 
-    - YOU
-    CAN THROW PROPS TO DAMAGE
+    - YOU CAN THROW PROPS TO DAMAGE
 
 
-    - R TO SELECT A TOOL ON A TOOLBAR [ON TOP]
+    - R TO SELECT A TOOL ON A TOOLBAR
+    [ON TOP]
 
 
-    -
-    F TO USE A SELECTED TOOL'
+    - F TO USE A SELECTED TOOL'
 --- !u!1 &2892644769406621582
 GameObject:
   m_ObjectHideFlags: 0

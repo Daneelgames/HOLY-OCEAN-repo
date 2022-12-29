@@ -4,6 +4,7 @@ using FishNet;
 using FishNet.Component.Spawning;
 using FishNet.Connection;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MrPink.Health;
 using MrPink.Units;
 using Sirenix.OdinInspector;
@@ -14,6 +15,9 @@ namespace MrPink.PlayerSystem
 {
     public class Player : NetworkBehaviour
     {
+        [ReadOnly] [SerializeField] [SyncVar] private bool gameSceneLoaded = false;
+        public bool GameSceneLoaded => gameSceneLoaded;
+
         [SerializeField, Required] private HealthController _health;
 
         [SerializeField, Required] private PlayerMovement _movement;
@@ -90,6 +94,21 @@ namespace MrPink.PlayerSystem
             _health.SetIsPlayerTrue();
         }
 
+        public void SetLevelType(GameManager.LevelType levelType)
+        {
+            bool _gameSceneLoaded = levelType == GameManager.LevelType.Game;
+            if (IsServer)
+                gameSceneLoaded = _gameSceneLoaded;
+            else
+                RpcSetGameSceneLoaded(_gameSceneLoaded);
+        }
+
+        [ServerRpc]
+        void RpcSetGameSceneLoaded(bool loaded)
+        {
+            gameSceneLoaded = loaded;
+        }
+        
         public override void OnOwnershipClient(NetworkConnection prevOwner)
         {
             base.OnOwnershipClient(prevOwner);

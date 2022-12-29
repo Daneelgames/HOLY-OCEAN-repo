@@ -498,8 +498,6 @@ GameObject:
   - component: {fileID: 1567761268291774263}
   - component: {fileID: 4811224891885460357}
   - component: {fileID: 3324739561401989224}
-  - component: {fileID: -940070103082005447}
-  - component: {fileID: -4988412221810449376}
   m_Layer: 12
   m_Name: WallInsideTileYellow
   m_TagString: Untagged
@@ -549,8 +547,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: -940070103082005447}
-  _networkObjectCache: {fileID: -940070103082005447}
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 0}
   _health: 100
   _healthController: {fileID: 0}
   ImmuneToDamage: 0
@@ -606,50 +604,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &-940070103082005447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943623579927757030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 0
-  _networkBehaviours:
-  - {fileID: 5237696207237465462}
-  <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
-  _isNetworked: 1
-  _isGlobal: 0
-  _defaultDespawnType: 0
-  NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 60
-  _scenePathHash: 0
-  <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 12692957926087915206
-  _sceneNetworkObjects: []
---- !u!114 &-4988412221810449376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8943623579927757030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14be6723ef154774ab36b7631e755032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: -940070103082005447}
-  _networkObjectCache: {fileID: 0}
-  _gpuInstancerPrefab: {fileID: 4811224891885460357}
-  _gpuInstancerPrefabRuntimeHandler: {fileID: 1567761268291774263}
 --- !u!1 &8964101285921246057
 GameObject:
   m_ObjectHideFlags: 0

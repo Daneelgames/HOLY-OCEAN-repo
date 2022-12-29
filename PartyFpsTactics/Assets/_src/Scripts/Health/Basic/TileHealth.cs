@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _src.Scripts.LevelGenerators;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -41,9 +42,12 @@ namespace MrPink.Health
             => rb;
 
 
+
+
         [ContextMenu("GetColliders")]
         public void GetColliders()
         {
+            
             colliders.Clear();
             var _colliders = GetComponents<Collider>();
             foreach (var collider1 in _colliders)
@@ -52,11 +56,12 @@ namespace MrPink.Health
             }
         }
         
-        private void Start()
-        {
+        void Start()
+        {   
             if (prop)
                 BuildingGenerator.Instance.AddProp(this);
         }
+
 
         private void OnDestroy()
         {
@@ -135,7 +140,7 @@ namespace MrPink.Health
 		public void DestroyTileFromGenerator()
         {
             // no death effects
-            Death(DamageSource.Environment ,false, false); 
+            Death(DamageSource.Environment ,false, false, false); 
         }
         private void DestroyTile(DamageSource source, bool deathParticles = true)
         {
@@ -171,34 +176,22 @@ namespace MrPink.Health
                 Death(source);
         }
 
-        private void Death(DamageSource source, bool sendToLevelgen = true, bool deathParticles = true)
+        public void Death(DamageSource source, bool sendToLevelgen = true, bool deathParticles = true, bool rpcSync = true)
         {
             if (source == DamageSource.Player)
                 ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
 
-            RpcTileDeathOnServer();
-        }
-
-        [ServerRpc(RequireOwnership = false)] 
-        void RpcTileDeathOnServer()
-        {
-            RpcTileDeathOnClients();
-        }
-        
-        [ObserversRpc]
-        void RpcTileDeathOnClients()
-        {
             DestroyTile(DamageSource.Environment, true);
             
             if (parentLevel != null)
                 BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
             
-            if (IsServer) // host
-            {
-                //ServerManager.Despawn(gameObject, DespawnType.Destroy);
-                Destroy(gameObject);
-            }
+            // sync tile destruction by ehhh position?
+            if (rpcSync)
+                GameVoxelModifier.Instance.TileDestroyedInWorld(transform.position);
+            Destroy(gameObject);
         }
+
         
         public override CollisionTarget HandleDamageCollision(Vector3 collisionPosition, DamageSource source, int damage, ScoringActionType actionOnHit)
         {

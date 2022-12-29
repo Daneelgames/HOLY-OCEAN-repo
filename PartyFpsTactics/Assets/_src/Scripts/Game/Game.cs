@@ -16,8 +16,8 @@ namespace MrPink
         [SerializeField]
         private Player _localPlayer;
 
-        [ReadOnly] [SerializeField] private List<Player> playersInGame = new List<Player>();
-        public List<Player> PlayerInGame => playersInGame;
+        [ReadOnly] [SerializeField] private List<Player> playersesInGame = new List<Player>();
+        public List<Player> PlayersInGame => playersesInGame;
         [SerializeField, SceneObjectsOnly]
         
         private LightManager _lightManager;
@@ -62,7 +62,7 @@ namespace MrPink
         public void RespawnAllPlayers()
         {
             // called on server
-            foreach (var player in playersInGame)
+            foreach (var player in playersesInGame)
             {
                 player.Respawn();
             }
@@ -70,21 +70,34 @@ namespace MrPink
         
         public void AddPlayer(Player p)
         {
-            if (playersInGame.Contains(p))
+            if (playersesInGame.Contains(p))
                 return;
             
-            playersInGame.Add(p);
+            playersesInGame.Add(p);
         }
         public void RemovePlayer(Player p)
         {
-            if (playersInGame.Contains(p)) return;
+            if (playersesInGame.Contains(p)) return;
             
-            playersInGame.Remove(p);
+            playersesInGame.Remove(p);
         }
         
         public void SetLocalPlayer(Player p)
         {
             _localPlayer = p;
+        }
+
+        public bool AllPlayersLoadedGameScene()
+        {
+            foreach (var player in PlayersInGame)
+            {
+                if (player == null)
+                    continue;
+
+                if (player.GameSceneLoaded == false) return false;
+            }
+
+            return true;
         }
     }
 }

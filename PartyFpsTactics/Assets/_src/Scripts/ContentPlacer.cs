@@ -74,7 +74,7 @@ public class ContentPlacer : NetworkBehaviour
     {
         if (UnitsManager.Instance.HcInGame.Count > 30)
             return;
-        var players = Game._instance.PlayerInGame;
+        var players = Game._instance.PlayersInGame;
         var randomPlayer = players[Random.Range(0, players.Count)];
         
         Vector3 pos = RaycastedPosAroundPosition(randomPlayer.MainCamera.transform.position, 100);

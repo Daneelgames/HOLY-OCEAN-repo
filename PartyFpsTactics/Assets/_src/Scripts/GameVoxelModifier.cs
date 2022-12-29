@@ -7,6 +7,7 @@ using FishNet.Transporting;
 using Fraktalia.VoxelGen;
 using Fraktalia.VoxelGen.Modify;
 using Fraktalia.VoxelGen.SaveSystem.Modules;
+using MrPink.Health;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,11 +16,6 @@ public class GameVoxelModifier : NetworkBehaviour
     public static GameVoxelModifier Instance;
     
     [SerializeField] VoxelModifier Modifier;
-    [SerializeField] private VoxelSaveSystem _voxelSaveSystem;
-
-    private List<NetworkConnection> newPlayers = new List<NetworkConnection>();
-
-    private UnityAction onDataSavedOnServer;
 
     public override void OnStartClient() { 
         base.OnStartClient();
@@ -58,57 +54,45 @@ public class GameVoxelModifier : NetworkBehaviour
                 return;
             }
         }
-        
-        return;
-        
-        if (_voxelSaveSystem == null)
-            return;
-        
-        Debug.Log("VOXEL new connection");
-        // new client connected 
-        newPlayers.Add(networkConnection);
-        
-        _voxelSaveSystem.Save();
     }
 
-    /*
-    [Server]
-    void OnDataSaved()
+    public void TileDestroyedInWorld(Vector3 tilePos)
     {
-        Debug.Log("VOXEL OnDataSaved. NewPlayers: " + newPlayers.Count);
-        var voxelData = SaveModule_ByteBuffer_V2.VoxelDictionary[_voxelSaveSystem.ModuleByteBuffer_V2.Key];
-        foreach (var networkConnection in newPlayers)
+        if (base.IsServer)
         {
-            if (networkConnection == null || networkConnection.IsValid == false)
-            {
-                Debug.Log("VOXEL null or invalid connection");
-                continue;
-            }
-            
-            Debug.Log("VOXEL send target rpc. voxelData length is " + voxelData.Length);
-            RpcSendVoxelDataToClient(networkConnection, voxelData);
-        }
-        newPlayers.Clear();
-    }
-
-    [TargetRpc]
-    void RpcSendVoxelDataToClient(NetworkConnection networkConnection, byte[] data)
-    {
-        if (SaveModule_ByteBuffer_V2.VoxelDictionary.ContainsKey(_voxelSaveSystem.ModuleByteBuffer_V2.Key))
-        {
-            Debug.Log("VOXEL contains key");
-            SaveModule_ByteBuffer_V2.VoxelDictionary[_voxelSaveSystem.ModuleByteBuffer_V2.Key] = data;
+            RpcTileDestroyedInWorldClient(tilePos);
         }
         else
         {
-            SaveModule_ByteBuffer_V2.VoxelDictionary.Add(_voxelSaveSystem.ModuleByteBuffer_V2.Key, data);
-            
-            Debug.Log("VOXEL add new key");
+            RpcTileDestroyedInWorldServer(tilePos);
         }
-        _voxelSaveSystem.Load();
     }
-    */
 
+    [ServerRpc(RequireOwnership = false)]
+    void RpcTileDestroyedInWorldServer(Vector3 tilePos)
+    {
+        RpcTileDestroyedInWorldClient(tilePos);
+    }
+
+    private Collider[] tileDestroyedInWorld = new Collider[1];
+    
+    [SerializeField] private LayerMask tilesLayerMask;
+    
+    [ObserversRpc(IncludeOwner = true)]
+    void RpcTileDestroyedInWorldClient(Vector3 tilePos)
+    {
+        tileDestroyedInWorld[0] = null;
+        Physics.OverlapSphereNonAlloc(tilePos, 0.25f, tileDestroyedInWorld, tilesLayerMask);
+        
+        if (tileDestroyedInWorld[0] == null)
+            return;
+
+        var tileHealth = tileDestroyedInWorld[0].gameObject.GetComponent<TileHealth>();
+        
+        if (tileHealth) 
+            tileHealth.Death(DamageSource.Environment, true, true, false);
+    }
+    
     public void DestructionInWorld(Vector3 pos)
     {
         if (IsServer || IsHost)

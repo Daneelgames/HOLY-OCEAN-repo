@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MrPink.Health
 {
-    public abstract class BasicHealth : NetworkBehaviour
+    public abstract class BasicHealth : MonoBehaviour
     {
         [SerializeField]
         [PreviouslySerializedAs("localHealth")]

@@ -40,7 +40,7 @@ public class LevelExit : NetworkBehaviour
         {
             yield return null;
         }
-        if (GameManager.Instance.GetLevelType == GameManager.LevelType.Building)
+        if (GameManager.Instance.GetLevelType == GameManager.LevelType.Game)
         {
             while (LevelGoal.Instance == null)
             {

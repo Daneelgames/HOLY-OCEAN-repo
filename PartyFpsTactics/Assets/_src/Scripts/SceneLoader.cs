@@ -100,7 +100,7 @@ public class SceneLoader : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             bool restart = true;
-            foreach (var player in Game._instance.PlayerInGame)
+            foreach (var player in Game._instance.PlayersInGame)
             {
                 if (player == null)
                     continue;

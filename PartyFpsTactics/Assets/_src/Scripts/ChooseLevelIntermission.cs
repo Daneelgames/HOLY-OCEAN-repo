@@ -31,6 +31,5 @@ public class ChooseLevelIntermission : MonoBehaviour
     public void LevelChosen(int index)
     {
         var levelToLoad = _levelTypesPool[index];
-        GameManager.Instance.StartLevel(levelToLoad);
     }
 }
