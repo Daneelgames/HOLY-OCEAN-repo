@@ -40,6 +40,7 @@ namespace _src.Scripts.LevelGenerators
                 
                 // spawn unique npc and spawn controlled machines
 
+                int t = 0;
                 for (int i = 0; i < level.controlledMachinesToSpawn.Count; i++)
                 {
                     var room = spawnedLevels[levelIndex].spawnedRooms[Random.Range(0,spawnedLevels[levelIndex].spawnedRooms.Count)];
@@ -48,7 +49,12 @@ namespace _src.Scripts.LevelGenerators
                     Vector3 worldSpawnPosition = new Vector3(randomTileCoords.x - level.size.x / 2, level.floorWorldHeight + 0.5f, randomTileCoords.z - level.size.z / 2);
 
                     Instantiate(level.controlledMachinesToSpawn[Random.Range(0, level.controlledMachinesToSpawn.Count)], worldSpawnPosition, Quaternion.identity);
-                    yield return null;
+                    t++;
+                    if (t > 10)
+                    {
+                        t = 0;
+                        yield return null;
+                    }
                 }
             }
         }

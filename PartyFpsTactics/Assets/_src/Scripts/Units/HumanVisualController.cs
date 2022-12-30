@@ -344,7 +344,7 @@ namespace MrPink.Units
                 t += Time.deltaTime;
 
                 if (Physics.Linecast(prevPos, transform.position, out var hit,
-                    GameManager.Instance.AllSolidsMask))
+                    GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
                 {
                     transform.position = hit.point;
                 }
@@ -375,7 +375,7 @@ namespace MrPink.Units
         public void Resurrect()
         {
             if (Physics.Linecast(transform.position, transform.position + Vector3.up, out var hit,
-                GameManager.Instance.AllSolidsMask))
+                GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
             {
                 transform.position = hit.point + Vector3.up * 0.1f;
             }

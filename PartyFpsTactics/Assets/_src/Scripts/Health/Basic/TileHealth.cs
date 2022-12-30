@@ -147,7 +147,7 @@ namespace MrPink.Health
             if (deathParticles)
                 BuildingGenerator.Instance.DebrisParticles(transform.position);
             
-            var hit = Physics.OverlapSphere(transform.position, 1, GameManager.Instance.AllSolidsMask);
+            var hit = Physics.OverlapSphere(transform.position, 1, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < hit.Length; i++)
             {
                 if (hit[i].transform == transform || hit[i].gameObject.isStatic)
@@ -189,6 +189,13 @@ namespace MrPink.Health
             // sync tile destruction by ehhh position?
             if (rpcSync)
                 GameVoxelModifier.Instance.TileDestroyedInWorld(transform.position);
+
+            if (gameObject.layer == 6) // if SOLIDS - it counts in navmesh.
+            {
+                // spawn nav obstacle cuz we dont update navmeshes anymore
+                GameManager.Instance.SpawnTileNavObstacle(transform);
+            }
+            
             Destroy(gameObject);
         }
 

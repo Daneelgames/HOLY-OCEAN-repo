@@ -91,7 +91,7 @@ public class BuildingGenerator : NetworkBehaviour
     {
         base.OnStartClient();
 
-        if (base.IsServer)
+        if (base.IsHost)
             currentSeed = Random.Range(1,100) * Random.Range(1,100) * Random.Range(1,100);
         StartCoroutine(WaitClients());
     }
@@ -110,6 +110,7 @@ public class BuildingGenerator : NetworkBehaviour
 
     IEnumerator WaitClients()
     {
+        Debug.Log("WAIT CLIENTS BUILDING WTF");
         while (Game._instance.AllPlayersLoadedGameScene() == false)
         {
             Debug.LogWarning("WAIT: Game._instance.AllPlayersLoadedGameScene() == false");
@@ -173,10 +174,6 @@ public class BuildingGenerator : NetworkBehaviour
         StartCoroutine(PartyController.Instance.Init());
 
 
-        if (base.IsServer)
-        {
-            StartCoroutine(UpdateNavMesh());
-        }
         if (buildingsToSpawnSettings[0].BuildingOriginTransform)
             StartCoroutine(SpawnBuilding(buildingsToSpawnSettings[0].BuildingOriginTransform.position));
     }
@@ -239,13 +236,6 @@ public class BuildingGenerator : NetworkBehaviour
             building.spawnedBuildingLevels[i].Init();
         }
         
-        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
-        {
-            navMeshSurfacesSpawned[i].BuildNavMesh();
-            yield return null;
-        }
-        
-        // GOALS
         yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels));
         
         DestroyTilesForLadders();
@@ -254,6 +244,8 @@ public class BuildingGenerator : NetworkBehaviour
         {
             if (spawnGoals)
                 yield return StartCoroutine(SpawnGoalsOnServer(building));
+            
+            StartCoroutine(UpdateNavMesh());
         }
         
         yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
@@ -316,7 +308,7 @@ public class BuildingGenerator : NetworkBehaviour
     {
         return;
         
-        RaycastHit[] hit = Physics.BoxCastAll(levelPos + Vector3.up * levelSize.y / 2, levelSize, Vector3.up, levelRot, 1,   GameManager.Instance.AllSolidsMask);
+        RaycastHit[] hit = Physics.BoxCastAll(levelPos + Vector3.up * levelSize.y / 2, levelSize, Vector3.up, levelRot, 1,   GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
         if (hit.Length > 0)
         {
             for (int i = 0; i < hit.Length; i++)
@@ -327,6 +319,7 @@ public class BuildingGenerator : NetworkBehaviour
         }
     }
     
+    //. this method spawns building level "bounds"
     IEnumerator SpawnBaseTiles(Building building, int levelIndexInBuilding, Vector3 pos, Vector3Int size, Quaternion rot, List<BuildingSettings.LevelSetting> levelSettings, BuildingSettings buildingSettings)
     {
         GameObject newLevelGameObject = new GameObject();
@@ -348,7 +341,6 @@ public class BuildingGenerator : NetworkBehaviour
         newLevel.floorWorldHeight = pos.y + 0.5f;
 
         newLevel.roomTilesMatrix = new TileHealth[size.x,size.y,size.z];
-        //bool hasRoof = levelIndexInBuilding == levelSettings.Count - 1;
         bool hasRoof = true;
 
         Random.InitState(currentSeed);
@@ -522,7 +514,7 @@ public class BuildingGenerator : NetworkBehaviour
                     }
                 }
             }
-            yield return null;   
+            //yield return null;   
         }
 
         yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
@@ -666,6 +658,9 @@ public class BuildingGenerator : NetworkBehaviour
             Random.InitState(currentSeed);
             float thinWallHeightScaler = Random.Range(0.2f, 1f);
             int posIndex = 0;
+
+            int t = 0;
+            
             while (true)
             {
                 List<Vector3Int> nextAvailablePositions = new List<Vector3Int>(); 
@@ -754,7 +749,13 @@ public class BuildingGenerator : NetworkBehaviour
                     var coords = new Vector3Int(nextPos.x, y, nextPos.z);
                     newWallTile.SetTileRoomCoordinates(coords, level);
                 }
-                yield return null;
+
+                t++;
+                if (t > 10)
+                {
+                    t = 0;
+                    yield return null;
+                }
             }
         }
     }
@@ -976,7 +977,6 @@ public class BuildingGenerator : NetworkBehaviour
             }
             yield return null;
         }
-        yield return null;
     }
 
     private List<TileHealth> tilesToDestroyForLadders = new List<TileHealth>();
@@ -1290,6 +1290,12 @@ public class BuildingGenerator : NetworkBehaviour
         {
             yield return null;
         }
+        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
+        {
+            yield return new WaitForSecondsRealtime(0.25f);
+            navMeshSurfacesSpawned[i].BuildNavMesh();
+        }
+        yield break;
         while (true)
         {
             yield return null;
@@ -1396,7 +1402,7 @@ public static class LevelgenTransforms
         if (tile == null)
             return null;
 
-        if (Physics.Raycast(tile.transform.position, Vector3.down, out var hit, 1,  GameManager.Instance.AllSolidsMask))
+        if (Physics.Raycast(tile.transform.position, Vector3.down, out var hit, 1,  GameManager.Instance.AllSolidsMask,QueryTriggerInteraction.Ignore))
         {
             TileHealth supporter = hit.transform.gameObject.GetComponent<TileHealth>();
             if (supporter && supporter != tile)

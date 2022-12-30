@@ -81,7 +81,7 @@ namespace MrPink.Units
             while (true)
             {
                 if (!Physics.Linecast(transform.position, transform.position + Vector3.down,
-                    GameManager.Instance.AllSolidsMask))
+                    GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
                 {
                     var velocity = rb.velocity;
                     velocity += Vector3.down * gravityForce;

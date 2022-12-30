@@ -555,7 +555,7 @@ namespace MrPink.PlayerSystem
             }
 
             hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
-                Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask);
+                Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             State.IsClimbing = hitInfoClimb.Length > 0;
             
             if (State.IsClimbing)

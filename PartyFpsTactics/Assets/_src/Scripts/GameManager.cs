@@ -26,6 +26,7 @@ namespace MrPink
         public List<Collider> terrainAndIslandsColliders = new List<Collider>();
         public LayerMask AllSolidsMask;
         private bool cursorVisible = false;
+        [SerializeField] private GameObject tileNavMeshObstaclePrefab;
 
         public Material rockDefaultMaterial;
 
@@ -44,21 +45,26 @@ namespace MrPink
         {
             if (Instance != null)
             {
-                Instance.SetLevelType(_levelType);
+                StartCoroutine(Instance.SetLevelType(_levelType));
                 Destroy(gameObject);
                 return;
             }
         
             Instance = this;
+            StartCoroutine(Instance.SetLevelType(_levelType));
             Random.InitState((int)DateTime.Now.Ticks);
             DontDestroyOnLoad(gameObject);
             Physics.autoSyncTransforms = false;
         }
 
-        public void SetLevelType(LevelType levelType)
+        public IEnumerator SetLevelType(LevelType levelType)
         {
             _levelType = levelType;
 
+            while (Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
             Game.LocalPlayer.SetLevelType(_levelType);
         }
 
@@ -189,6 +195,12 @@ namespace MrPink
 
         public void StartLevel(LevelType levelType)
         {
+        }
+
+        public void SpawnTileNavObstacle(Transform _transform)
+        {
+            var newObst = Instantiate(tileNavMeshObstaclePrefab, _transform.position, _transform.rotation);
+            newObst.transform.parent = _transform.parent;
         }
 
 

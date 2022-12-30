@@ -108,7 +108,7 @@ public class BillboardGenerator : MonoBehaviour
         {
             var letter = spawnedLetters[i];
             var colliders = Physics.SphereCastAll(letter.transform.position + transform.forward, 0.5f,
-                -transform.forward, 2, GameManager.Instance.AllSolidsMask);
+                -transform.forward, 2, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             for (int j = 0; j < colliders.Length; j++)
             {
                 if (colliders[j].transform == letter.transform)

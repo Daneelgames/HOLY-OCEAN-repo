@@ -108,7 +108,7 @@ namespace MrPink.PlayerSystem
         public void SetLevelType(GameManager.LevelType levelType)
         {
             bool _gameSceneLoaded = levelType == GameManager.LevelType.Game;
-            if (IsServer)
+            if (base.IsHost)
                 gameSceneLoaded = _gameSceneLoaded;
             else
                 RpcSetGameSceneLoaded(_gameSceneLoaded);

@@ -121,7 +121,7 @@ public class ContentPlacer : NetworkBehaviour
         
         randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
         if (!Physics.Raycast(Game.LocalPlayer.MainCamera.transform.position, randomDir, out var hit, maxDistance,
-            GameManager.Instance.AllSolidsMask))
+            GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
             return initPos;
         
         /*    

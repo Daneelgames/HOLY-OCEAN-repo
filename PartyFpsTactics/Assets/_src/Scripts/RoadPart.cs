@@ -30,7 +30,7 @@ public class RoadPart : MonoBehaviour
         visualGo.SetActive(false);
         for (int i = 0; i < collidersToCheck.Count; i++)
         {
-            var hits = Physics.OverlapBox(collidersToCheck[i].transform.position, collidersToCheck[i].size, collidersToCheck[i].transform.rotation, GameManager.Instance.AllSolidsMask);
+            var hits = Physics.OverlapBox(collidersToCheck[i].transform.position, collidersToCheck[i].size, collidersToCheck[i].transform.rotation, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             
             for (int j = hits.Length - 1; j >= 0; j--)
             {

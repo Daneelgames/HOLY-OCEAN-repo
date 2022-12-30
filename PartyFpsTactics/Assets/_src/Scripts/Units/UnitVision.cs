@@ -256,7 +256,7 @@ namespace MrPink.Units
                 return false;
             if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov)
             {
-                if (Physics.Linecast(target.position,  raycastOrigin.position, out _hit, GameManager.Instance.AllSolidsMask))
+                if (Physics.Linecast(target.position,  raycastOrigin.position, out _hit, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
                 {
                     lastRaycastedPoint = _hit.point;
                     
