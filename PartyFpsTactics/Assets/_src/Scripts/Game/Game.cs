@@ -35,6 +35,8 @@ namespace MrPink
             float distance = 100000;
             foreach (var player in playersesInGame)
             {
+                if (player == null)
+                    continue;
                 var newDist = Vector3.Distance(pos, player.transform.position);
                 if (newDist < distance)
                     distance = newDist;
