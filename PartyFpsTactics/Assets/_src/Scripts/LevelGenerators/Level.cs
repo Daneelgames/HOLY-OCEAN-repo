@@ -60,6 +60,8 @@ namespace _src.Scripts.LevelGenerators
         
         public void Init()
         {
+            return;
+            
             if (updateClash)
                 StartCoroutine(CheckTiles());
         }

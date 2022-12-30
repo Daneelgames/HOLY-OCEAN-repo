@@ -30,7 +30,18 @@ namespace MrPink
         public static GlobalFlags Flags
             => _instance._flags;
 
+        public float DistanceToClosestPlayer(Vector3 pos)
+        {
+            float distance = 100000;
+            foreach (var player in playersesInGame)
+            {
+                var newDist = Vector3.Distance(pos, player.transform.position);
+                if (newDist < distance)
+                    distance = newDist;
+            }
 
+            return distance;
+        }
 
         [Header("CAMERA")]
         [SerializeField] private GameCamera _gameCamera;

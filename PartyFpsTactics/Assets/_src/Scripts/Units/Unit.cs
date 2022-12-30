@@ -75,9 +75,15 @@ namespace MrPink.Units
                 _humanVisualController.Resurrect();
         }
         
-        
-        #if UNITY_EDITOR
+        public void Death()
+        {
+            if (_unitWeaponControls)
+                _unitWeaponControls.Death();
+            _healthController.health = 0;
+        }
 
+        
+#if UNITY_EDITOR
         [ContextMenu("Set Self Links")]
         private void SetSelf()
         {
@@ -92,13 +98,7 @@ namespace MrPink.Units
             _unitAiMovement.SetUnit(this);
             _unitMovement.SetUnit(this);
         }
-
-        public void Death()
-        {
-            _unitWeaponControls?.Death();
-            _healthController.health = 0;
-        }
+#endif
         
-        #endif
     }
 }

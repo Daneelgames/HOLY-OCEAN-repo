@@ -130,16 +130,20 @@ namespace MrPink.WeaponsSystem
             StartCoroutine(LifetimeCoroutine());
         }
 
-        void UnitsExplosion()
+        void UnitsExplosion(HealthController owner)
         {
             if (!unitsExplosionCompleted)
             {
                 Debug.Log("UNITS EXPLOSION");
                 InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
-                GameVoxelModifier.Instance?.DestructionInWorld(transform.position);
-                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance,
-                    ragdollExplosionForce, playerExplosionForce);
+                UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance, ragdollExplosionForce, playerExplosionForce);
                 unitsExplosionCompleted = true;
+
+                if (owner && owner.IsPlayer || Game._instance.DistanceToClosestPlayer(transform.position) < 10) 
+                {
+                    if (GameVoxelModifier.Instance)
+                        GameVoxelModifier.Instance.DestructionInWorld(transform.position);
+                }
                 
                 // ReSharper disable once Unity.NoNullPropagation
             }
@@ -185,7 +189,7 @@ namespace MrPink.WeaponsSystem
                 Game.LocalPlayer.Health.Damage(resultDmg, _damageSource, actionOnHit);
                 if (ownerHealth != null & ownerHealth.UnitVision)
                     ownerHealth.UnitVision.ForgiveUnit(Game.LocalPlayer.Health, ownerHealth.team == Game.LocalPlayer.Health.team);
-                UnitsExplosion();
+                UnitsExplosion(ownerHealth);
                 return CollisionTarget.Creature;
             }
 
@@ -199,7 +203,7 @@ namespace MrPink.WeaponsSystem
                     return CollisionTarget.Self;
                 }
                 
-                UnitsExplosion();
+                UnitsExplosion(ownerHealth);
                 return CollisionTarget.Solid;
             }
 
@@ -245,7 +249,7 @@ namespace MrPink.WeaponsSystem
                 {
                     Debug.Log("return CollisionTarget.Creature;");
                     {
-                        UnitsExplosion();
+                        UnitsExplosion(ownerHealth);
                         return CollisionTarget.Creature;
                     }
                 }
@@ -275,7 +279,7 @@ namespace MrPink.WeaponsSystem
             }
             
             
-            UnitsExplosion();
+            UnitsExplosion(ownerHealth);
             
             if (targetHealth.HealthController && targetHealth.HealthController.team == Team.Red)
                 Debug.Log("DAMAGE RED FOR " + resultDmg + " DAMAGE");

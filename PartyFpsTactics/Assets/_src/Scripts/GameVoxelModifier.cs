@@ -97,6 +97,8 @@ public class GameVoxelModifier : NetworkBehaviour
     
     public void DestructionInWorld(Vector3 pos)
     {
+        
+        
         if (IsServer || IsHost)
         {
             // tell other clients

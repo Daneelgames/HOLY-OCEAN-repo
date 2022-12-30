@@ -251,8 +251,13 @@ public class BuildingGenerator : NetworkBehaviour
         }
         
         generated = true;
-        yield return StartCoroutine(SpawnPropsOnServer(building));
-        yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
+        
+        if (base.IsHost)
+        {
+            yield return StartCoroutine(SpawnPropsOnServer(building));
+            yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
+        }
+        
         yield return SpawnLoot(building);
         
         ContentPlacer.Instance.SpawnEnemiesInBuilding(building);
