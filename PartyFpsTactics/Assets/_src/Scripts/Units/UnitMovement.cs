@@ -100,7 +100,7 @@ namespace MrPink.Units
             _currentVelocity = _agent.velocity + rb.velocity;
             //_currentVelocity = _agent.velocity;
             //_currentVelocity = rb.velocity;
-            _selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
+            //_selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
             _lookTransform.transform.position = transform.position;
         }
 

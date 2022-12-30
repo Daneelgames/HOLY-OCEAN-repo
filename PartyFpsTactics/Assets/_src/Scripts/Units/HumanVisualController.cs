@@ -72,14 +72,15 @@ namespace MrPink.Units
             }
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            if (_selfHealth.selfUnit.UnitMovement.Agent.enabled == false && ragdoll == false)
-            {
-                ActivateRagdoll();
-            }
+            if (getMovementAnimCoroutine != null)
+                StopCoroutine(getMovementAnimCoroutine);
+            
+            getMovementAnimCoroutine = StartCoroutine(GetMovementAnim());
         }
 
+        private Coroutine getMovementAnimCoroutine;
 
         private void OnDestroy()
         {
@@ -93,6 +94,31 @@ namespace MrPink.Units
             for (int i = 0; i < bodyPartsVisuals.Count; i++)
             {
                 bodyPartsVisuals[i].material = aliveMaterial;
+            }
+        }
+
+        private Vector3 lastPos;
+        private IEnumerator GetMovementAnim()
+        {
+            while (_selfHealth== null)
+            {
+                yield return null;
+            }
+            Vector3 vector = Vector3.zero;
+            float velocityX;
+            float velocityZ;
+            lastPos = ragdollOrigin.position;
+            while (_selfHealth.IsDead == false)
+            {
+                yield return new WaitForSeconds(0.5f);
+                var curPos = ragdollOrigin.position;
+                vector = (curPos - lastPos).normalized;
+                velocityX = Vector3.Dot(vector, transform.right);
+                velocityZ = Vector3.Dot(vector, transform.forward);
+                
+                anim.SetFloat("VelocityX", velocityX, 0.1f, 0.1f);
+                anim.SetFloat("VelocityZ", velocityZ, 0.1f, 0.1f);
+                lastPos = ragdollOrigin.position;
             }
         }
 
