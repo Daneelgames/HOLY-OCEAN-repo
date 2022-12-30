@@ -50,7 +50,7 @@ namespace _src.Scripts.LevelGenerators
 
                     Instantiate(level.controlledMachinesToSpawn[Random.Range(0, level.controlledMachinesToSpawn.Count)], worldSpawnPosition, Quaternion.identity);
                     t++;
-                    if (t > 10)
+                    if (t > 5)
                     {
                         t = 0;
                         yield return null;

@@ -13,12 +13,20 @@ public class LevelExit : NetworkBehaviour
     [SerializeField] private float maxPlayerDistanceToExit = 2;
     [Header("IF GOAL DISTANCE < 0 - IT WILL NOT CHECK FOR GOAL")]
     [SerializeField] private float maxGoalDistanceToExit = 2;
-    private void OnEnable()
+    /*private void OnEnable()
     {
         StopAllCoroutines();
         StartCoroutine(CheckDistances());
     }
+    */
     
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        StopAllCoroutines();
+        StartCoroutine(CheckDistances());
+    }
 
     IEnumerator CheckDistances()
     {

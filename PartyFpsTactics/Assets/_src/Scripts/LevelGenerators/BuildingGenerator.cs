@@ -250,11 +250,11 @@ public class BuildingGenerator : NetworkBehaviour
             StartCoroutine(UpdateNavMesh());
         }
         
+        generated = true;
         yield return StartCoroutine(SpawnPropsOnServer(building));
         yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
         yield return SpawnLoot(building);
         
-        generated = true;
         ContentPlacer.Instance.SpawnEnemiesInBuilding(building);
     }
 
@@ -499,30 +499,9 @@ public class BuildingGenerator : NetworkBehaviour
                         newLevel.tilesTop.Add(newFloorTile);
                     }
                     
-                    /*
-                    Random.InitState(currentSeed);
-                    float offsetttt = Random.Range(-levelIndexInBuilding * 2, levelIndexInBuilding * 2);
-                    if (newLevel.spawnProps && Random.Range(0,100 + offsetttt) > (100 + offsetttt) * 0.95f)
-                    {
-                        // SPAWN PROPS TILES ON FLOOR
-                        
-                        Random.InitState(Mathf.RoundToInt(currentSeed + offsetttt));
-                        //Random.InitState(currentSeed);
-                        var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
-                            
-                        StartCoroutine(ConstructCover(newAdditionalTile.gameObject, 0));
-                        
-                        Random.InitState(Mathf.RoundToInt(currentSeed + offsetttt));
-                        //Random.InitState(currentSeed);
-                        newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
-                        newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
-                        newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
-                        
-                        newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
-                    }*/
                 }
             }
-            //yield return null;   
+            yield return null;   
         }
 
         Debug.LogError("SPAWN INSIDE WALLS IS TURNED OFF FOR NOW");
@@ -1290,6 +1269,9 @@ public class BuildingGenerator : NetworkBehaviour
 
     IEnumerator TileDamagedFeedbackCoroutine(Transform tile)
     {
+        Debug.LogWarning("TILES SHAKE DAMAGE FEEDBACK IS DISABLED");
+        yield break;
+        
         if (tile.gameObject.isStatic)
             yield break;
         
@@ -1424,8 +1406,8 @@ public class BuildingSettings
     public List<LevelSetting> levelsSettings = new List<LevelSetting>();
     public Transform BuildingOriginTransform;
     
-    [HideInInspector] public Vector2Int offsetPosMinMaxX = new Vector2Int(0, 0);
-    [HideInInspector] public Vector2Int offsetPosMinMaxZ = new Vector2Int(0, 0);
+    public Vector2Int offsetPosMinMaxX = new Vector2Int(0, 0);
+    public Vector2Int offsetPosMinMaxZ = new Vector2Int(0, 0);
     [Header("scaled by 2 in code")]
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);

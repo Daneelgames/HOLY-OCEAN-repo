@@ -72,6 +72,14 @@ namespace MrPink.Units
             }
         }
 
+        private void Update()
+        {
+            if (_selfHealth.selfUnit.UnitMovement.Agent.enabled == false && ragdoll == false)
+            {
+                ActivateRagdoll();
+            }
+        }
+
 
         private void OnDestroy()
         {

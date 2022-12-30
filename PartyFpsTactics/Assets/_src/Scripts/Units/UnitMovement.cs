@@ -37,6 +37,8 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private NavMeshAgent _agent;
 
+        public NavMeshAgent Agent => _agent;
+
         [SerializeField, ChildGameObjectsOnly] private Rigidbody rb;
         
         [SerializeField, ChildGameObjectsOnly, Required]
@@ -95,8 +97,9 @@ namespace MrPink.Units
 
         private void Update()
         {
+            _currentVelocity = _agent.velocity + rb.velocity;
             //_currentVelocity = _agent.velocity;
-            _currentVelocity = rb.velocity;
+            //_currentVelocity = rb.velocity;
             _selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
             _lookTransform.transform.position = transform.position;
         }

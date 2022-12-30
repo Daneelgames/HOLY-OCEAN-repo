@@ -142,7 +142,7 @@ namespace MrPink.Health
             // no death effects
             Death(DamageSource.Environment ,false, false, false); 
         }
-        private void DestroyTile(DamageSource source, bool deathParticles = true)
+        private void DestroyTileParticlesAndShake(DamageSource source, bool deathParticles = true)
         {
             if (deathParticles)
                 BuildingGenerator.Instance.DebrisParticles(transform.position);
@@ -180,10 +180,11 @@ namespace MrPink.Health
         {
             if (source == DamageSource.Player)
                 ScoringSystem.Instance.RegisterAction(ScoringActionType.TileDestroyed, 1);
-
-            DestroyTile(DamageSource.Environment, true);
             
-            if (parentLevel != null)
+            if (deathParticles)
+                DestroyTileParticlesAndShake(DamageSource.Environment, true);
+            
+            if (sendToLevelgen && parentLevel != null)
                 BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
             
             // sync tile destruction by ehhh position?
