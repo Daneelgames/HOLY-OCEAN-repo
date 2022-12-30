@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using MrPink;
+using MrPink.Health;
 using MrPink.Units;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,15 +19,9 @@ public class ContentPlacer : NetworkBehaviour
     
     [SerializeField] private float respawnDelay = 5;
     [SerializeField] private float minMobSpawnDistance = 20;
-
-    public List<Transform> proceedGameObjects = new List<Transform>();
     
     public List<InteractiveObject> lootToSpawnAround;
     
-    public override void OnStartClient() { // THIS CALLS ONLY IN LOBBY 
-        base.OnStartClient();
-        
-    }
 
     private void OnEnable()
     {
@@ -55,7 +50,7 @@ public class ContentPlacer : NetworkBehaviour
             yield return new WaitForSeconds(cooldown);
             
                 Debug.Log("SpawnAroundPlayer 0");
-            if (IsServer)
+            if (base.IsHost)
             {
                 Debug.Log("SpawnAroundPlayer SpawnRedUnitAroundPlayer");
                 SpawnRedUnitAroundPlayer();
@@ -85,6 +80,48 @@ public class ContentPlacer : NetworkBehaviour
         SpawnRedUnit(pos);
     }
     
+    [Server]
+    public void SpawnEnemiesInBuilding(BuildingGenerator.Building building)
+    {
+        StartCoroutine(SpawnEnemiesInBuildingCoroutine(building));
+    }
+
+    [Server]
+    IEnumerator SpawnEnemiesInBuildingCoroutine(BuildingGenerator.Building building)
+    {
+        var tilesForSpawns = new List<TileHealth>();
+
+        for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
+        {
+            var level = building.spawnedBuildingLevels[i];
+                
+            tilesForSpawns.Clear();
+            for (var index = level.tilesInside.Count - 1; index >= 0; index--)
+            {
+                var tile = level.tilesInside[index];
+                if (tile == null)
+                {
+                    level.tilesInside.RemoveAt(index);
+                    continue;
+                }
+                tilesForSpawns.Add(tile);
+            }
+
+            for (int j = 0; j < level.unitsToSpawn.Count; j++)
+            {
+                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                var unit =  Instantiate(level.unitsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                ServerManager.Spawn(unit.gameObject);
+            }
+            for (int j = 0; j < level.uniqueNpcToSpawn.Count; j++)
+            {
+                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                var unit =  Instantiate(level.uniqueNpcToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                ServerManager.Spawn(unit.gameObject);
+            }
+            yield return null;
+        }
+    }
         
     [Server]
     void SpawnRedUnit(Vector3 pos)
@@ -95,6 +132,11 @@ public class ContentPlacer : NetworkBehaviour
     }
     void SpawnLootAroundPlayer()
     {
+        float distanceToClosestPickup = InteractableEventsManager.Instance.GetDistanceFromClosestPickUpToPosition(Game.LocalPlayer.transform.position);
+
+        if (distanceToClosestPickup < 50)
+            return;
+
         Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, 100);
             
         if (Vector3.Distance(pos, Game.LocalPlayer.MainCamera.transform.position) < 10)
@@ -102,7 +144,7 @@ public class ContentPlacer : NetworkBehaviour
         SpawnRandomLoot(pos);
     }
 
-    public InteractiveObject SpawnRandomLoot(Vector3 pos)
+    public void SpawnRandomLoot(Vector3 pos)
     {
         var loot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], pos,
             Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
@@ -112,7 +154,6 @@ public class ContentPlacer : NetworkBehaviour
             loot.rb.constraints = RigidbodyConstraints.FreezeAll;
             loot.rb.isKinematic = false;
         }
-        return loot;
     }
 
     public Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)

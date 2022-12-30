@@ -78,7 +78,7 @@ public class GameVoxelModifier : NetworkBehaviour
     
     [SerializeField] private LayerMask tilesLayerMask;
     
-    [ObserversRpc(IncludeOwner = true)]
+    [ObserversRpc(IncludeOwner = false)]
     void RpcTileDestroyedInWorldClient(Vector3 tilePos)
     {
         tileDestroyedInWorld[0] = null;
@@ -89,8 +89,10 @@ public class GameVoxelModifier : NetworkBehaviour
 
         var tileHealth = tileDestroyedInWorld[0].gameObject.GetComponent<TileHealth>();
         
-        if (tileHealth) 
-            tileHealth.Death(DamageSource.Environment, true, true, false);
+        if (tileHealth == null || tileHealth.IsDead)
+            return;
+            
+        tileHealth.Death(DamageSource.Environment, true, true, false);
     }
     
     public void DestructionInWorld(Vector3 pos)

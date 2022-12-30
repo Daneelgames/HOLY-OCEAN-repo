@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1422326500}
   - component: {fileID: -541394471096305393}
   - component: {fileID: -978727393986521702}
-  - component: {fileID: 8874651685515816014}
+  - component: {fileID: -5920948078497762600}
+  - component: {fileID: -1390939194311795887}
   m_Layer: 12
   m_Name: TumbaProp
   m_TagString: PortableObject
@@ -63,9 +64,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 8874651685515816014}
-  _networkObjectCache: {fileID: 8874651685515816014}
   _health: 300
   _healthController: {fileID: 0}
   ImmuneToDamage: 0
@@ -140,7 +138,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1650b9cd6f1046d428d099d012b51d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8874651685515816014
+--- !u!114 &-5920948078497762600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743293280166790513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: -1390939194311795887}
+  _networkObjectCache: {fileID: -1390939194311795887}
+  _synchronizeParent: 0
+  _packing:
+    Position: 1
+    Rotation: 1
+    Scale: 0
+  _interpolation: 1
+  _extrapolation: 0
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  _clientAuthoritative: 1
+  _sendToOwner: 1
+  _interval: 10
+  _synchronizePosition: 1
+  _positionSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeRotation: 1
+  _rotationSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeScale: 0
+  _scaleSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+--- !u!114 &-1390939194311795887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,18 +195,26 @@ MonoBehaviour:
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
-  - {fileID: 1877505377624061809}
+  - {fileID: -5920948078497762600}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 70
-  _scenePathHash: 0
+  <PrefabId>k__BackingField: -1
+  _scenePathHash: 1623153859
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 9854978836837099259
-  _sceneNetworkObjects: []
+  _sceneNetworkObjects:
+  - {fileID: -1390939194311795887}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &3952610193731302189
 PrefabInstance:
   m_ObjectHideFlags: 0

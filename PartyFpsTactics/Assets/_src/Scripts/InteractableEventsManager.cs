@@ -17,7 +17,23 @@ public class InteractableEventsManager : MonoBehaviour
 {
     public static InteractableEventsManager Instance;
     public List<InteractiveObject> InteractiveObjects = new List<InteractiveObject>();
+    public List<InteractiveObject> InteractivePickUps = new List<InteractiveObject>();
     private List<PropBump> _propBumps = new List<PropBump>();
+
+    public float GetDistanceFromClosestPickUpToPosition(Vector3 askingPos)
+    {
+        float distance = 10000;
+        foreach (var pickUp in InteractivePickUps)
+        {
+            float d = Vector3.Distance(askingPos, pickUp.transform.position);
+            if (d < distance)
+            {
+                distance = d;
+            }
+        }
+
+        return distance;
+    }
     void Awake()
     {
         Instance = this;
@@ -38,11 +54,22 @@ public class InteractableEventsManager : MonoBehaviour
     public void AddInteractable(InteractiveObject obj)
     {
         InteractiveObjects.Add(obj);
+        switch (obj.type)
+        {
+            case InteractiveObject.InteractableType.ItemInteractable:
+                InteractivePickUps.Add(obj);
+                break;
+        }
+        
     }
     public void RemoveInteractable(InteractiveObject obj)
     {
         if (InteractiveObjects.Contains(obj))
+        {
+            if (obj.type == InteractiveObject.InteractableType.ItemInteractable)
+                InteractivePickUps.Remove(obj);
             InteractiveObjects.Remove(obj);
+        }
     }
 
     public void InteractWithIO(InteractiveObject IO, bool qPressed = false, bool ePressed = false)
@@ -181,18 +208,6 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.SpawnQuestNpc:
                 
                 Debug.Log("ScriptedEventType.SpawnQuestNpc");
-                Vector3 pos = Game.LocalPlayer.Position;
-                
-                var npc = UnitsManager.Instance.SpawnUnit(IOevent.NpcPrefabsToSpawn[Random.Range(0,IOevent.NpcPrefabsToSpawn.Count)], pos);
-                
-                if (quest != null)
-                {
-                    npc.name += ". QuestNpc";
-                    quest.AddSpawnedHc(npc);
-                }
-                
-                Debug.Log("ScriptedEventType.SpawnQuestNpc; " + npc.gameObject.name + "; quest is " + quest);
-                
                 break;
         }
         
@@ -202,25 +217,25 @@ public class InteractableEventsManager : MonoBehaviour
 
     public void ExplosionNearInteractables(Vector3 explosionPosition, float distance = 10, float force = 10)
     {
-        for (int i = 0; i < InteractiveObjects.Count; i++)
+        for (int i = 0; i < InteractivePickUps.Count; i++)
         {
-            if (InteractiveObjects[i].type != InteractiveObject.InteractableType.ItemInteractable)
+            if (InteractivePickUps[i].type != InteractiveObject.InteractableType.ItemInteractable)
                 continue;
             
-            if (Vector3.Distance(InteractiveObjects[i].gameObject.transform.position, explosionPosition) > distance)
+            if (Vector3.Distance(InteractivePickUps[i].gameObject.transform.position, explosionPosition) > distance)
                 continue;
             
-            if (InteractiveObjects[i].rb == null)
+            if (InteractivePickUps[i].rb == null)
             {
-                var rb = InteractiveObjects[i].gameObject.AddComponent<Rigidbody>();
+                var rb = InteractivePickUps[i].gameObject.AddComponent<Rigidbody>();
                 rb.isKinematic = false;
                 rb.useGravity = true;
                 rb.drag = 1;
                 rb.angularDrag = 1;
 
-                InteractiveObjects[i].rb = rb;
+                InteractivePickUps[i].rb = rb;
             }
-            InteractiveObjects[i].rb.AddExplosionForce(force, explosionPosition, distance);
+            InteractivePickUps[i].rb.AddExplosionForce(force, explosionPosition, distance);
         }
         for (int i = 0; i < _propBumps.Count; i++)
         {

@@ -49,12 +49,16 @@ public class LevelTitlesManager : MonoBehaviour
         
         yield return new WaitForSeconds(0.3f);
         
+        
         while (time > 0)
         {
             string newString = GameManager.Instance.UppercaseRandomly(ProgressionManager.Instance.CurrentLevel.levelName);
             levelNameText.text = newString;
             float r = Random.Range(0.05f, 0.75f);
             yield return new WaitForSeconds(r);
+            if (GameManager.Instance.GetLevelType == GameManager.LevelType.Game && BuildingGenerator.Instance.Generated == false)
+                continue;
+            
             time -= r;
         }
         

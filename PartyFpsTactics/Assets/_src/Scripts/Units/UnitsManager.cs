@@ -115,35 +115,6 @@ namespace MrPink.Units
         }
         
         
-        public HealthController SpawnUnit(HealthController prefab, Vector3 pos, Transform rotationTransform = null)
-        {
-            var rot = Quaternion.identity;
-            if (rotationTransform != null)
-                rot = rotationTransform.rotation;
-            var inst = Instantiate(prefab, pos, rot, _spawnRoot);
-            hcInGame.Add(inst);
-            inst.gameObject.SetActive(false);
-            return inst;
-        }
-    
-        public HealthController SpawnNeutralUnit(Vector3 pos)
-        {
-            pos = SamplePos(pos);
-            var unit =  Instantiate(neutralUnitPrefabs[Random.Range(0, neutralUnitPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
-            //hcInGame.Add(unit);
-            //unit.gameObject.SetActive(false);
-            return unit;
-        }
-    
-        public HealthController SpawnDesertBeast(Vector3 pos)
-        {
-            pos = SamplePos(pos);
-            var unit = Instantiate(desertBeastsPrefabs[Random.Range(0, desertBeastsPrefabs.Count)], pos, Quaternion.identity, _spawnRoot);
-            //hcInGame.Add(unit);
-            //unit.gameObject.SetActive(false);
-            return unit;
-        }
-
         public Vector3 SamplePos(Vector3 pos)
         {
             return pos;

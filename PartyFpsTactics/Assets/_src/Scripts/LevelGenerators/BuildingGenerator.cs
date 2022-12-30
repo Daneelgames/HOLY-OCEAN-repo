@@ -53,7 +53,6 @@ public class BuildingGenerator : NetworkBehaviour
 
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
-    public Vector2Int propsPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
@@ -69,6 +68,9 @@ public class BuildingGenerator : NetworkBehaviour
     public GameObject tileDestroyedParticles;
     public PhysicMaterial tilePhysicsMaterial;
 
+    private bool generated = false;
+    public bool Generated => generated;
+    
     [Serializable]
     public class Building
     {
@@ -150,7 +152,6 @@ public class BuildingGenerator : NetworkBehaviour
         tileWallThinPrefab = currentLevel.tileWallThinPrefab;
         explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
         explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
-        propsPerLevelMinMax = currentLevel.propsPerLevelMinMax;
         lootPerLevelMinMax = currentLevel.lootPerLevelMinMax;
         grindRailsMinMax = currentLevel.grindRailsPerLevelMinMax;
         grindRailsPrefab = currentLevel.grindRailsPrefab;
@@ -210,6 +211,7 @@ public class BuildingGenerator : NetworkBehaviour
 
     IEnumerator SpawnBuilding(Building building)
     {
+        generated = false;
         //var buildingSettings = buildingsToSpawnSettings[Random.Range(0, buildingsToSpawnSettings.Count)];
         var buildingSettings = buildingsToSpawnSettings[0];
         buildingSettings.BuildingOriginTransform.position = building.worldPos;
@@ -240,7 +242,7 @@ public class BuildingGenerator : NetworkBehaviour
         
         DestroyTilesForLadders();
         
-        if (base.IsServer)
+        if (base.IsHost)
         {
             if (spawnGoals)
                 yield return StartCoroutine(SpawnGoalsOnServer(building));
@@ -248,10 +250,12 @@ public class BuildingGenerator : NetworkBehaviour
             StartCoroutine(UpdateNavMesh());
         }
         
+        yield return StartCoroutine(SpawnPropsOnServer(building));
         yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
         yield return SpawnLoot(building);
         
-        Respawner.Instance.SpawnEnemiesInBuilding(building);
+        generated = true;
+        ContentPlacer.Instance.SpawnEnemiesInBuilding(building);
     }
 
 
@@ -415,7 +419,7 @@ public class BuildingGenerator : NetworkBehaviour
                 // SPAWN BUILDING'S OUTSIDE WALLS 
                 
                 
-                if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) 
+                if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) // OUTER WALLS
                 {
                     if (!spawnWalls)
                         continue;
@@ -474,7 +478,7 @@ public class BuildingGenerator : NetworkBehaviour
                             availableStarPositionsForThinWalls.Add(new Vector3Int(x,1,z));
                     }
                 }
-                else // TILES INSIDE 
+                else // TILES INSIDE: GROUND AND CEILING
                 {
                     newLevel.tilesInside.Add(newFloorTile);
                     newLevel.allTiles.Add(newFloorTile);
@@ -494,29 +498,36 @@ public class BuildingGenerator : NetworkBehaviour
                         newLevel.allTiles.Add(newCeilingTile);
                         newLevel.tilesTop.Add(newFloorTile);
                     }
-
+                    
+                    /*
                     Random.InitState(currentSeed);
-                    if (newLevel.spawnProps && Random.value > 0.95f)
+                    float offsetttt = Random.Range(-levelIndexInBuilding * 2, levelIndexInBuilding * 2);
+                    if (newLevel.spawnProps && Random.Range(0,100 + offsetttt) > (100 + offsetttt) * 0.95f)
                     {
                         // SPAWN PROPS TILES ON FLOOR
                         
-                        Random.InitState(currentSeed);
+                        Random.InitState(Mathf.RoundToInt(currentSeed + offsetttt));
+                        //Random.InitState(currentSeed);
                         var newAdditionalTile = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], newLevel.spawnedTransform);
                             
                         StartCoroutine(ConstructCover(newAdditionalTile.gameObject, 0));
-                            
-                        Random.InitState(currentSeed);
+                        
+                        Random.InitState(Mathf.RoundToInt(currentSeed + offsetttt));
+                        //Random.InitState(currentSeed);
                         newAdditionalTile.transform.localEulerAngles = new Vector3(0, Random.Range(0,360), 0);
                         newAdditionalTile.transform.localPosition = newFloorTile.transform.localPosition + Vector3.up * 0.5f;
                         newAdditionalTile.SetTileRoomCoordinates(new Vector3Int(x,1,z), newLevel);
                         
                         newLevel.roomTilesMatrix[x, 1, z] = newAdditionalTile;
-                    }
+                    }*/
                 }
             }
             //yield return null;   
         }
 
+        Debug.LogError("SPAWN INSIDE WALLS IS TURNED OFF FOR NOW");
+        yield break;
+        
         yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
     }
     
@@ -1006,9 +1017,7 @@ public class BuildingGenerator : NetworkBehaviour
     {
         for (int i = 0; i < explosiveBarrelsAmount; i++)
         {
-            Random.InitState(currentSeed);
             var randomLevel = building.spawnedBuildingLevels[Random.Range(1, building.spawnedBuildingLevels.Count)];
-            Random.InitState(currentSeed);
             var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
 
             Vector3 pos = randomTile.transform.position + Vector3.up;
@@ -1016,6 +1025,28 @@ public class BuildingGenerator : NetworkBehaviour
             var barrel = Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
             ServerManager.Spawn(barrel);
             yield return null;
+        }
+    }
+    [Server]
+    IEnumerator SpawnPropsOnServer(Building building)
+    {
+        for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
+        {
+            var level = building.spawnedBuildingLevels[i];
+
+            int propsAmount = Random.Range(level.size.x / 3, level.size.y);
+            for (int j = 0; j < propsAmount; j++)
+            {
+                var randomTile = level.tilesInside[Random.Range(0, level.tilesInside.Count)];
+                if (randomTile == null)
+                    continue;
+                
+                Vector3 pos = randomTile.transform.position + Vector3.up;
+                level.tilesInside.Remove(randomTile);
+                var prop = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], pos, Quaternion.identity);
+                ServerManager.Spawn(prop.gameObject);
+                yield return null;   
+            }
         }
     }
 
@@ -1158,10 +1189,32 @@ public class BuildingGenerator : NetworkBehaviour
         }
     }
 
+
+    [Serializable]
+    enum DolaSpawnWhere
+    {
+        TopFloor, BottomFloor, Random
+    }
+
+    [SerializeField] private DolaSpawnWhere _dolaSpawnWhere = DolaSpawnWhere.TopFloor;
     [Server]
     IEnumerator SpawnGoalsOnServer(Building building)
     {
-        Vector3 spawnPosition = building.spawnedBuildingLevels[building.spawnedBuildingLevels.Count - 1].position + Vector3.up * 2;
+        // dola goldendola
+        int index = 0;
+        switch (_dolaSpawnWhere)
+        {
+            case DolaSpawnWhere.BottomFloor:
+                index = 0;
+                break;
+            case DolaSpawnWhere.TopFloor:
+                index = building.spawnedBuildingLevels.Count - 1;
+                break;
+            case DolaSpawnWhere.Random:
+                index = Random.Range(0, building.spawnedBuildingLevels.Count);
+                break;
+        }
+        Vector3 spawnPosition = building.spawnedBuildingLevels[index].position + Vector3.up;
         levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
         ServerManager.Spawn(levelGoalSpawned);
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)

@@ -30,6 +30,7 @@ namespace MrPink.Health
         public Unit selfUnit;
         [SyncVar] public int health = 100;
         public int healthMax = 100;
+        
         public CharacterNeeds needs;
         public float endurance = 100;
         float enduranceMax = 100;
@@ -403,6 +404,8 @@ namespace MrPink.Health
             
             OnDeathEvent.Invoke();
 
+            UnitsManager.Instance.RemoveUnit(this);
+            
             if (destroyOnDeath)
                 Destroy(gameObject);
         }

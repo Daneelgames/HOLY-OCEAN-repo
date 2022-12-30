@@ -467,7 +467,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: -993489102018205758}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: -993489102018205758}
+  currentSeed: 0
   spawnedBuildings: []
   spawnedProps: []
   levelGoalSpawned: {fileID: 0}
@@ -563,13 +564,15 @@ MonoBehaviour:
   - {fileID: 2750620269132520170, guid: 79c6fdf6837ec634fa1c8178208af1f5, type: 3}
   - {fileID: 2750620269132520170, guid: c128627186e070b479f2fb08ad08efe4, type: 3}
   - {fileID: 2750620269132520170, guid: ed5c68905bba0c04bbc74c0beff70286, type: 3}
+  - {fileID: 2750620269132520170, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
+  - {fileID: 2750620269132520170, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
+  - {fileID: 2750620269132520170, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
   distanceToCutCeilingUnderStairsMinMax: {x: 1, y: 5}
   grindRailsMinMax: {x: 1, y: 2}
-  propsPerLevelMinMax: {x: 1, y: 10}
   lootPerLevelMinMax: {x: 1, y: 10}
   stairsDistanceMinMax: {x: 2, y: 10}
   thinWallsPerLevelMinMax: {x: 1, y: 10}
-  randomLevelRotation: 0
+  randomLevelRotation: 1
   explosiveBarrelsAmount: 2
   navMeshesParent: {fileID: 6538700428712461366}
   navMeshSurfacePrefab: {fileID: 6956949357138436707, guid: 471861b7920b8d742b363f11e9f39967, type: 3}
@@ -578,6 +581,7 @@ MonoBehaviour:
   tileDestroyedParticles: {fileID: 5759254466563253604, guid: d890a91fa5c68d341ab3abc978cf32d6, type: 3}
   tilePhysicsMaterial: {fileID: 13400000, guid: 00b141c113e623a4a99d5637946bbbdf, type: 2}
   islandSupportsScalerToClash: 50
+  _dolaSpawnWhere: 1
 --- !u!114 &4867740379949603590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,14 +608,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 6538700427162571402}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 34
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 9337949437106085962

@@ -137,8 +137,10 @@ namespace MrPink
 
             carryingPortableRb = rb;
             carryingPortableRb.velocity = Vector3.zero;
+            carryingPortableRb.angularVelocity = Vector3.zero;
             lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
-            carryingPortableRb.gameObject.layer = 9;
+            //carryingPortableRb.gameObject.layer = 9;
+            carryingPortableRb.gameObject.layer = 10;
             carryingPortableRb.useGravity = false;
             var dragInit = carryingPortableRb.drag; 
             carryingPortableRb.drag = 10;
@@ -156,6 +158,7 @@ namespace MrPink
                     carryingPortableRb.useGravity = true;
                     carryingPortableRb.drag = dragInit;
                     //carryingPortableRb.transform.parent = null;
+                    carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer; 
                     carryingPortableRb = null;
                     yield break;
                 }
