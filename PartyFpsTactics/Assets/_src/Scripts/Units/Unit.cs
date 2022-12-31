@@ -66,6 +66,8 @@ namespace MrPink.Units
 
         public void Resurrect()
         {
+            if (_healthController.health > 0)
+                return;
             _healthController.Resurrect();
             
             if (_unitMovement)

@@ -49,6 +49,7 @@ namespace MrPink.WeaponsSystem
         public AudioClip reloadingClip;
         public AudioClip reloadingEndClip;
         public float gunsMoveDistanceScaler = 0.2f;
+        [SerializeField] private ParticleSystem shotParticles;
         
         [Header("Player Weapon Movement")] 
         [Range(0.1f,100)]
@@ -124,6 +125,9 @@ namespace MrPink.WeaponsSystem
             
             bool isPlayer = _ownerHc == Game.LocalPlayer.Health;   
 
+            if (shotParticles)
+                shotParticles.Play();
+            
             SpawnProjectileInDirection(aiAimTransform ? aiAimTransform.position : transform.position + transform.forward, direction, isPlayer, _ownerHc);
 
             if (isPlayer)

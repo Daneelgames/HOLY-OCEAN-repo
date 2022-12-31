@@ -388,7 +388,8 @@ namespace MrPink.Units
         [SerializeField] private float moveRbToOriginIfPlayerForce = 5;
         private IEnumerator FollowTheRagdoll()
         {
-            ragdollOrigin.parent = null;
+            if (hc.IsPlayer == false) // only for mobs
+                ragdollOrigin.parent = null;
             float standupCooldown = hc.UnitRagdollStandupCooldown;
             float t = 0;
             Vector3 prevPos = rigidbodies[0].transform.position;

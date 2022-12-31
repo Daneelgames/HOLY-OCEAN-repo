@@ -38,6 +38,7 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, Required] private PlayerVehicleControls _vehicleControls;
         [SerializeField, Required] private CharacterNeeds _characterNeeds;
+        [SerializeField, Required] private HumanVisualController _visualController;
 
 
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
@@ -80,6 +81,8 @@ namespace MrPink.PlayerSystem
 
         public CharacterNeeds CharacterNeeds
             => _characterNeeds;
+        public HumanVisualController Visual
+            => _visualController;
 
         public override void OnStartClient()
         {
@@ -136,6 +139,7 @@ namespace MrPink.PlayerSystem
         public void Death(Transform killer)
         {
             Debug.Log("PLAYER DEATH, SHOULD DROP SHIT");
+            Visual.Death();
             Game.LocalPlayer.Inventory.DropAll();
             Game.LocalPlayer.Interactor.SetInteractionText(String.Empty);
             Movement.Death(killer);
@@ -207,6 +211,8 @@ namespace MrPink.PlayerSystem
         // on a machine who fired up the interaction
         public void ResurrectByOtherPlayerInteraction()
         {
+            if (_health.health > 0)
+                return;
             if (base.IsHost)
             {
                 ResurrectPlayerOnClientRpc(false);        
@@ -239,6 +245,8 @@ namespace MrPink.PlayerSystem
             LookAround.Resurrect();
             Weapon.Resurrect();
             CharacterNeeds.ResetNeeds();
+            if (Visual.gameObject.activeInHierarchy)
+                Visual.Resurrect();
         }
 
         void OnDestroy()
