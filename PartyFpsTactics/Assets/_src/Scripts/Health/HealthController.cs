@@ -369,6 +369,7 @@ namespace MrPink.Health
         void DeathOnClient(ScoringActionType action)
         {
             bool isLocalPlayer = Game.LocalPlayer.Health == this;
+            health = 0;
             Debug.Log("DEATH DeathOnClient " + gameObject.name + "; isLocalPlayer + " + isLocalPlayer);
             IsDead = true;
             if (AiMovement)

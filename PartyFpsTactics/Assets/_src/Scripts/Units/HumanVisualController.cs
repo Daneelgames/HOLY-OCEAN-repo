@@ -47,16 +47,15 @@ namespace MrPink.Units
         public LayerMask tilesLayerMask;
         private float lerpToStand = 1;
     
-        private HealthController _selfHealth;
-    
         private Coroutine _changeLerpToStandCoroutine;
         private Coroutine _followRagdollCoroutine;
         private static readonly int Passenger = Animator.StringToHash("Passenger");
-
+        [SerializeField] private List<Collider> extraCollidersToIgnore;
 
         private void Start()
         {
-            _selfHealth = gameObject.GetComponent<HealthController>();
+            if (hc == null)
+                hc = gameObject.GetComponent<HealthController>();
             
             if (noRagdoll)
                 return;
@@ -69,6 +68,27 @@ namespace MrPink.Units
             {
                 rigidbodies[i].drag = rbNormalDrag;
                 rigidbodies[i].angularDrag = rbNormalAngularDrag;
+            }
+
+            IgnoreOwnCollision();
+        }
+
+        void IgnoreOwnCollision()
+        {
+            foreach (var collider1 in colliders)
+            {
+                foreach (var collider2 in colliders)
+                {
+                    if (collider1 == collider2)
+                        continue;
+                    
+                    Physics.IgnoreCollision(collider1, collider2);
+                }
+
+                foreach (var collider2 in extraCollidersToIgnore)
+                {
+                    Physics.IgnoreCollision(collider1, collider2);
+                }
             }
         }
 
@@ -100,7 +120,7 @@ namespace MrPink.Units
         private Vector3 lastPos;
         private IEnumerator GetMovementAnim()
         {
-            while (_selfHealth== null)
+            while (hc == null)
             {
                 yield return null;
             }
@@ -108,7 +128,7 @@ namespace MrPink.Units
             float velocityX;
             float velocityZ;
             lastPos = ragdollOrigin.position;
-            while (_selfHealth.IsDead == false)
+            while (hc.IsDead == false)
             {
                 yield return new WaitForSeconds(0.5f);
                 var curPos = ragdollOrigin.position;
@@ -139,7 +159,7 @@ namespace MrPink.Units
             if (noRagdoll)
                 return;
             
-            if (_selfHealth.health <= 0)
+            if (hc.health <= 0)
                 return;
         
             if (ragdoll)
@@ -364,16 +384,25 @@ namespace MrPink.Units
 
             lerpToStand = 1;
         }
-    
+
+        [SerializeField] private float moveRbToOriginIfPlayerForce = 5;
         private IEnumerator FollowTheRagdoll()
         {
             ragdollOrigin.parent = null;
-            float standupCooldown = _selfHealth.UnitRagdollStandupCooldown;
+            float standupCooldown = hc.UnitRagdollStandupCooldown;
             float t = 0;
             Vector3 prevPos = rigidbodies[0].transform.position;
+            var pelvisRb = rigidbodies[0];
             while (true)
             {
                 yield return null;
+                if (hc.IsPlayer)
+                {
+                    if( Vector3.Distance(pelvisRb.transform.position, transform.position) > 2)
+                        pelvisRb.AddForce((transform.position - pelvisRb.transform.position).normalized * moveRbToOriginIfPlayerForce, ForceMode.Acceleration);
+                    continue;
+                }
+                
                 transform.position = ragdollOrigin.position;
                 t += Time.deltaTime;
 
@@ -388,7 +417,7 @@ namespace MrPink.Units
                 if (t < standupCooldown)
                     continue;
             
-                if (_selfHealth.health <= 0)
+                if (hc.health <= 0)
                 {
                     ragdollOrigin.parent = ragdollOriginParent;
                     yield break;
@@ -396,7 +425,7 @@ namespace MrPink.Units
             
                 t = 0;
             
-                if (Physics.CheckSphere(ragdollOrigin.position, 1f, tilesLayerMask, QueryTriggerInteraction.Ignore))
+                if (Physics.CheckSphere(ragdollOrigin.position, 1f, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
                 {
                     break;
                 }
@@ -408,6 +437,9 @@ namespace MrPink.Units
 
         public void Resurrect()
         {
+            if (hc.health <= 0)
+                return;
+            
             if (Physics.Linecast(transform.position, transform.position + Vector3.up, out var hit,
                 GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
             {
@@ -416,9 +448,13 @@ namespace MrPink.Units
             ragdollOrigin.parent = ragdollOriginParent;
             DeactivateRagdoll();
             
-            _selfHealth.RestoreEndurance();
-            _selfHealth.AiMovement.RestartActivities();
-            _selfHealth.selfUnit.UnitMovement.Resurrect();
+            hc.RestoreEndurance();
+            // AI
+            if (hc.AiMovement)
+            {
+                hc.AiMovement.RestartActivities();
+                hc.selfUnit.UnitMovement.Resurrect();
+            }
         }
 
         public void ExplosionRagdoll(Vector3 pos, float force, float distance)
