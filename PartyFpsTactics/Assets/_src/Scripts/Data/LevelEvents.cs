@@ -88,6 +88,9 @@ namespace _src.Scripts.Data
         [ShowIf("scriptedEventType", ScriptedEventType.SpawnQuestNpc)]
         public bool spawnInPoiCell = false;
         
+        [ShowIf("scriptedEventType", ScriptedEventType.Resurrect)]
+        public HealthController hcToResurrect;
+        
         
         
         
@@ -101,6 +104,6 @@ namespace _src.Scripts.Data
     public enum ScriptedEventType
     {
         StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
-        AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest
+        AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest, Resurrect
     }
 }

@@ -431,9 +431,9 @@ namespace MrPink.Health
                 Game.LocalPlayer.CommanderControls.unitsInParty.Remove(this);
         }
 
-        public void Resurrect()
+        public void Resurrect(bool fullHeal = true)
         {
-            AddHealth(healthMax);
+            AddHealth(fullHeal ? healthMax : healthMax / 10);
             IsDead = false;
         }
     }

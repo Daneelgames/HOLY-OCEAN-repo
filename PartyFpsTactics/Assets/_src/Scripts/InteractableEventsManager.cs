@@ -12,6 +12,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using Random = UnityEngine.Random;
+using Unit = MrPink.Units.Unit;
 
 public class InteractableEventsManager : MonoBehaviour
 {
@@ -208,6 +209,20 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.SpawnQuestNpc:
                 
                 Debug.Log("ScriptedEventType.SpawnQuestNpc");
+                break;
+            case ScriptedEventType.Resurrect:
+                if (IOevent.hcToResurrect.IsPlayer)
+                {
+                    var player = IOevent.hcToResurrect.gameObject.GetComponent<Player>();
+                    if (player)
+                        player.ResurrectByOtherPlayerInteraction();
+                }
+                else
+                {
+                    var unit = IOevent.hcToResurrect.gameObject.GetComponent<Unit>(); 
+                    if (unit)
+                        unit.Resurrect();
+                }
                 break;
         }
         

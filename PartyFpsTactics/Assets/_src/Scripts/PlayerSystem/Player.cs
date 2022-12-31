@@ -197,15 +197,44 @@ namespace MrPink.PlayerSystem
             yield return new WaitForFixedUpdate();
             yield return null;
             Shop.Instance.OpenShop(0);
-            Game.LocalPlayer.Resurrect();
+            Game.LocalPlayer.Resurrect(true);
             respawnCoroutine = null;
         }
-        void Resurrect()
+
+        // called on client by player who interacted
+        // with a dead friend
+        // but this method actually runs on this non local player
+        // on a machine who fired up the interaction
+        public void ResurrectByOtherPlayerInteraction()
+        {
+            if (base.IsHost)
+            {
+                ResurrectPlayerOnClientRpc(false);        
+            }
+            else
+            {
+                ResurrectPlayerOnServerRpc(false);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        void ResurrectPlayerOnServerRpc(bool fullHeal)
+        {
+            ResurrectPlayerOnClientRpc(fullHeal);
+        }
+        
+        [ObserversRpc(IncludeOwner = true)]
+        void ResurrectPlayerOnClientRpc(bool fullHeal)
+        {
+            Resurrect(fullHeal);
+        }
+        
+        void Resurrect(bool fullHeal)
         {
             Debug.Log("PLAYER RESURRECT RESPAWN");
-            Game.LocalPlayer.Inventory.DropAll();
+            //Game.LocalPlayer.Inventory.DropAll();
             Game.LocalPlayer.Interactor.SetInteractionText("");
-            Health.Resurrect();
+            Health.Resurrect(fullHeal);
             Movement.Resurrect();
             LookAround.Resurrect();
             Weapon.Resurrect();
