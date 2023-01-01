@@ -85,7 +85,6 @@ namespace MrPink
             IsActive = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            Game.LocalPlayer.ToolControls.Init();    
         }
     
         public void SelectItem(int index)

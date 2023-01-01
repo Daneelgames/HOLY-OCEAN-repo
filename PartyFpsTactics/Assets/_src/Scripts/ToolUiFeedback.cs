@@ -8,20 +8,26 @@ using UnityEngine.UI;
 public class ToolUiFeedback : MonoBehaviour
 {
     [SerializeField] private Text nameText;
-    [SerializeField] private Image back;
+    [SerializeField] private Image Icon;
     [SerializeField] private Image selectedFeedback;
 
-    public void SetTool(ToolType tool, int amount)
+    public void SetTool(ToolType tool, int amount, Sprite sprite)
     {
         if (tool != ToolType.Null && amount > 0)
-            nameText.text = tool + " X" + amount;
+        {
+            if (nameText)
+                nameText.text = tool + " X" + amount;
+            Icon.sprite = sprite;
+        }
         else
             SetEmpty();
     }
     
     public void SetEmpty()
     {
-        nameText.text = String.Empty;
+        if (nameText)
+            nameText.text = String.Empty;
+        Icon.sprite = null;
         //back.enabled = false;
     }
     public void SetSelected(bool selected)

@@ -22,17 +22,28 @@ namespace MrPink.PlayerSystem
 
         [SerializeField] private List<ToolUiFeedback> spawnedToolFeedbacks;
         //public Text toolsControlsHintText;
-
-        public void Init()
+        [SerializeField] private List<ToolSprite> _toolSprites;
+        [Serializable]
+        class ToolSprite
         {
-            SelectNextTool();
-            UpdateSelectedToolFeedback();
-
+            public ToolType ToolType;
+            public Sprite Sprite;
+        }
+        
+        void Start()
+        {
             StartCoroutine(UpdateToolBar());
         }
 
         IEnumerator UpdateToolBar()
         {
+            while (Game._instance == null || Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
+            
+            SelectNextTool();
+            UpdateSelectedToolFeedback();
             while (true)
             {
                 yield return null;
@@ -42,12 +53,12 @@ namespace MrPink.PlayerSystem
                 {
                     if (i >= toolsInInventory.Count)
                     {
-                        spawnedToolFeedbacks[i].SetTool(ToolType.Null, 0);
+                        spawnedToolFeedbacks[i].SetTool(ToolType.Null, 0, null);
                         spawnedToolFeedbacks[i].SetSelected(false);
                         continue;
                     }
                     
-                    spawnedToolFeedbacks[i].SetTool(toolsInInventory[i]._toolType, toolsInInventory[i].amount);
+                    spawnedToolFeedbacks[i].SetTool(toolsInInventory[i]._toolType, toolsInInventory[i].amount, GetToolSprite(toolsInInventory[i]._toolType));
                     if (i != selectedToolInInventorySlot)
                         spawnedToolFeedbacks[i].SetSelected(false);
                     else
@@ -55,12 +66,24 @@ namespace MrPink.PlayerSystem
                 }
             }
         }
+
+        Sprite GetToolSprite(ToolType tool)
+        {
+            foreach (var toolSprite in _toolSprites)
+            {
+                if (toolSprite.ToolType == tool)
+                    return toolSprite.Sprite;
+            }
+
+            return null;
+        }
         
         private void Update()
         {
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
-
+            if (Game.LocalPlayer == null)
+                return;
             if (Game.Flags.IsPlayerInputBlocked)
                 return;
         
