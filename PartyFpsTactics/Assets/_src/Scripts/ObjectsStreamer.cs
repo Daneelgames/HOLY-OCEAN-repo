@@ -23,6 +23,10 @@ public class ObjectsStreamer : MonoBehaviour
 
     IEnumerator Stream()
     {
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
         int pauseCounter = 0;
         int pauseCounterMax = 30;
         float distance = 0;

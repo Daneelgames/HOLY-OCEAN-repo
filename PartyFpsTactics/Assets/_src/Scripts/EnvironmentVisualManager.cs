@@ -24,22 +24,19 @@ public class EnvironmentVisualManager : MonoBehaviour
 
         Color clr = ProgressionManager.Instance.CurrentLevel.fogColor;
         
-        var fogColor = clr;
-        var camBackColor = clr;
         var fogIntensity = ProgressionManager.Instance.CurrentLevel.fogIntensity;
         
         if (randomizeFog)
         {
-            //fogIntensity *= Random.Range(0.2f, 1.75f);
+            fogIntensity *= Random.Range(0.2f, 1.75f);
             
             if (randomColorsList.Count > 1)
-                fogColor = randomColorsList[Random.Range(0, randomColorsList.Count)];
-            camBackColor = fogColor;
+                clr = randomColorsList[Random.Range(0, randomColorsList.Count)];
         }
 
-        RenderSettings.fogColor = fogColor;
+        RenderSettings.fogColor = clr;
         RenderSettings.fogDensity = fogIntensity;
 
-        Game.LocalPlayer.MainCamera.backgroundColor = camBackColor;
+        Game.LocalPlayer.MainCamera.backgroundColor = clr;
     }
 }
