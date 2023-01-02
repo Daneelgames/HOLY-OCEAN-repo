@@ -32,6 +32,11 @@ namespace MrPink
         }
         private void Awake()
         {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
             Instance = this;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;

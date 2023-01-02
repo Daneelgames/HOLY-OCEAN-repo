@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using UnityEngine;
@@ -24,6 +25,11 @@ namespace MrPink
 
         private void Awake()
         {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
             Instance = this;
         }
 

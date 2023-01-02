@@ -12,6 +12,7 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerToolsControls : MonoBehaviour
     {
+        public static PlayerToolsControls Instance;
         // TODO подрубить UnityDictionary, сделать UnityDictionary<Enum, ProjectileController>
         // 0 - spycam; 1 - ladder; 2 - fragGrenade
         public List<ProjectileController> toolsProjectilesPrefabs;
@@ -29,7 +30,18 @@ namespace MrPink.PlayerSystem
             public ToolType ToolType;
             public Sprite Sprite;
         }
-        
+
+        private void Awake()
+        {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
+            Instance = this;
+        }
+
         void Start()
         {
             StartCoroutine(UpdateToolBar());

@@ -27,7 +27,6 @@ namespace MrPink.PlayerSystem
 
         [SerializeField, Required] private PlayerWeaponControls _weapon;
 
-        [SerializeField, Required] private PlayerToolsControls toolControls;
 
         [SerializeField, Required] private PlayerInventory _inventory;
 
@@ -61,7 +60,7 @@ namespace MrPink.PlayerSystem
             => _weapon;
 
         public PlayerToolsControls ToolControls
-            => toolControls;
+            => PlayerToolsControls.Instance;
 
         public PlayerInventory Inventory
             => _inventory;

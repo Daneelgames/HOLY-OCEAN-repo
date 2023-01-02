@@ -378,7 +378,7 @@ namespace MrPink.Health
             if (selfUnit)
                 selfUnit.Death();
             
-            if (HumanVisualController)
+            if (HumanVisualController && HumanVisualController.gameObject.activeInHierarchy)
                 HumanVisualController.Death();
         
             if (explosionOnDeath)

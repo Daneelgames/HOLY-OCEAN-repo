@@ -43,6 +43,11 @@ namespace MrPink
         public Text addedScoreFeedbackText;
         private void Awake()
         {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
             Instance = this;
         
             if (PlayerPrefs.HasKey("currentScore"))
