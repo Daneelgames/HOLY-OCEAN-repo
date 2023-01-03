@@ -175,7 +175,7 @@ public class BuildingGenerator : NetworkBehaviour
         StartCoroutine(PartyController.Instance.Init());
 
 
-        if (buildingsToSpawnSettings[0].BuildingOriginTransform)
+        if (buildingsToSpawnSettings.Count > 0 && buildingsToSpawnSettings[0].BuildingOriginTransform)
             StartCoroutine(SpawnBuilding(buildingsToSpawnSettings[0].BuildingOriginTransform.position));
     }
 
@@ -1003,7 +1003,10 @@ public class BuildingGenerator : NetworkBehaviour
         {
             var randomLevel = building.spawnedBuildingLevels[Random.Range(1, building.spawnedBuildingLevels.Count)];
             var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
-
+            if (randomTile == null)
+            {
+                continue;
+            }
             Vector3 pos = randomTile.transform.position + Vector3.up;
             randomLevel.tilesInside.Remove(randomTile);
             var barrel = Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);

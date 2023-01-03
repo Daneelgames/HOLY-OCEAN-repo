@@ -56,8 +56,9 @@ public class LevelTitlesManager : MonoBehaviour
             levelNameText.text = newString;
             float r = Random.Range(0.05f, 0.75f);
             yield return new WaitForSeconds(r);
+            /*
             if (GameManager.Instance.GetLevelType == GameManager.LevelType.Game && BuildingGenerator.Instance.Generated == false)
-                continue;
+                continue;*/
             
             time -= r;
         }

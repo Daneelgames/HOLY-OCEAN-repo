@@ -12,9 +12,6 @@ public class EnvironmentVisualManager : MonoBehaviour
     [SerializeField] private List<Color> randomColorsList = new List<Color>();
     private void OnEnable()
     {
-        RenderSettings.fog = false;
-        Game.LocalPlayer.MainCamera.clearFlags = CameraClearFlags.Skybox;
-        return;        
         StartCoroutine(Init());
     }
 
@@ -25,6 +22,11 @@ public class EnvironmentVisualManager : MonoBehaviour
             yield return null;
         }
 
+        Game.LocalPlayer.MainCamera.clearFlags = CameraClearFlags.Skybox;
+        RenderSettings.fog = false;
+
+        yield break;
+        
         Color clr = ProgressionManager.Instance.CurrentLevel.fogColor;
         
         var fogIntensity = ProgressionManager.Instance.CurrentLevel.fogIntensity;
