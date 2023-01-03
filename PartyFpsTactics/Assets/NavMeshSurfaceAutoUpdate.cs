@@ -7,6 +7,7 @@ using UnityEngine;
 public class NavMeshSurfaceAutoUpdate : MonoBehaviour
 {
     [SerializeField] private NavMeshSurface _navMeshSurface;
+    [SerializeField] private float delay = 10;
     [SerializeField] private float updateCooldown = 1;
     void Start()
     {
@@ -16,6 +17,7 @@ public class NavMeshSurfaceAutoUpdate : MonoBehaviour
 
     IEnumerator UpdateNavmesh()
     {
+        yield return new WaitForSeconds(delay);
         while (Game._instance == null || Game.LocalPlayer == null)
         {
             yield return null;
@@ -28,6 +30,7 @@ public class NavMeshSurfaceAutoUpdate : MonoBehaviour
             yield break;
         }
         
+        _navMeshSurface.BuildNavMesh();
         
         while (true)
         {

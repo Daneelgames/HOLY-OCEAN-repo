@@ -38,7 +38,7 @@ public class AiVehicleRespawner : MonoBehaviour
                         continue;
                     }
 
-                    if (Respawner.Instance && spawnedVehicle.transform.position.y < Respawner.Instance.corpseShredderY)
+                    if (BloodOcean.Instance && spawnedVehicle.transform.position.y < BloodOcean.Instance.waterLevel)
                         spawnedVehicle.CarHc.Kill();
                     
                     if (spawnedVehicle.CarHc.IsDead)

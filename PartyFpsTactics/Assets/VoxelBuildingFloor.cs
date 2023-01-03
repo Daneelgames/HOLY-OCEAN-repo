@@ -14,12 +14,12 @@ public class VoxelBuildingFloor : MonoBehaviour
     [SerializeField] private ColliderToVoxel holesColliders;
 
     [Header("SETTINGS")] 
-    [BoxGroup("Size")][Range(6,20)][SerializeField] private int floorHeight = 7;
+    [BoxGroup("Size")][Range(6,15)][SerializeField] private int floorHeight = 7;
     public int GetHeight => floorHeight;
     [BoxGroup("Size")][Range(10,50)][SerializeField] private int floorSizeX = 7;
     [BoxGroup("Size")][Range(10,50)][SerializeField] private int floorSizeZ = 7;
-    [BoxGroup("Inner Walls")] [Range(0,5)][SerializeField] private int innerWallsAmountX = 1;
-    [BoxGroup("Inner Walls")] [Range(0,5)][SerializeField] private int innerWallsAmountZ = 1;
+    [BoxGroup("Inner Walls")] [Range(0,3)][SerializeField] private int innerWallsAmountX = 1;
+    [BoxGroup("Inner Walls")] [Range(0,3)][SerializeField] private int innerWallsAmountZ = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountF = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountR = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountB = 1;
@@ -42,7 +42,9 @@ public class VoxelBuildingFloor : MonoBehaviour
     [SerializeField] private List<GameObject> holesL = new List<GameObject>();
     
     [SerializeField] private List<GameObject> innerWallsX = new List<GameObject>();
+    [SerializeField] private List<GameObject> innerHolesX = new List<GameObject>();
     [SerializeField] private List<GameObject> innerWallsZ = new List<GameObject>();
+    [SerializeField] private List<GameObject> innerHolesZ = new List<GameObject>();
     public void CutVoxels(VoxelGenerator voxelGenerator)
     {
         wallsColliders.TargetGenerator = voxelGenerator;
@@ -87,8 +89,8 @@ public class VoxelBuildingFloor : MonoBehaviour
 
         
         ValidateInnerWallsAmount();
-        ValidateInnerWalls(innerWallsX, 0);
-        ValidateInnerWalls(innerWallsZ, 1);
+        ValidateInnerWalls(innerWallsX, innerHolesX, 0);
+        ValidateInnerWalls(innerWallsZ, innerHolesZ,1);
         
         ValidateHolesAmount();
         ValidateHoles(holesF,0);
@@ -97,7 +99,7 @@ public class VoxelBuildingFloor : MonoBehaviour
         ValidateHoles(holesL,3);
     }
 
-    void ValidateInnerWalls(List<GameObject> innerWalls, int side) // 0f; 1r; 2f; 3f
+    void ValidateInnerWalls(List<GameObject> innerWalls, List<GameObject> innerHoles , int side) // 0f; 1r; 2f; 3f
     {
         float spaceBetweenWalls = 1;
         for (var i = 0; i < innerWalls.Count; i++)
@@ -112,6 +114,9 @@ public class VoxelBuildingFloor : MonoBehaviour
             if (side == 0)
             {
                 newScaleX = floorSizeX;
+                
+                newScaleX /= i+2;
+                
                 newPosX = 0;
                 spaceBetweenWalls = floorSizeZ / innerWalls.Count;
                 if (innerWalls.Count > 1)
@@ -123,6 +128,9 @@ public class VoxelBuildingFloor : MonoBehaviour
             else if (side == 1)
             {
                 newScaleZ = floorSizeZ;
+                
+                newScaleZ /= i+2;
+                
                 newPosZ = 0;
                 spaceBetweenWalls = floorSizeX / innerWalls.Count;
                 if (innerWalls.Count > 1)
@@ -134,6 +142,21 @@ public class VoxelBuildingFloor : MonoBehaviour
             wall.transform.localScale = new Vector3(newScaleX, floorHeight, newScaleZ);
             wall.transform.localRotation = Quaternion.identity;
             wall.transform.localPosition = new Vector3(newPosX, floorHeight/2, newPosZ);
+            var hole = innerHoles[i];
+            int iii = i; /*if (iii == 0) iii = 1;*/
+            
+            if (side == 0)
+            {
+                hole.transform.localScale = new Vector3(3, wall.transform.localScale.y, wall.transform.localScale.z);
+                hole.transform.localPosition = wall.transform.localPosition + new Vector3(-wall.transform.localScale.x/2, 0, 0) + Vector3.right * spaceBetweenWalls * (iii);
+            }
+            else if (side == 1)
+            {
+                hole.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, 3);
+                
+                hole.transform.localPosition = wall.transform.localPosition + new Vector3(0, 0, -wall.transform.localScale.z/2) + Vector3.forward * spaceBetweenWalls * (iii);
+            }
+            hole.transform.localRotation = Quaternion.identity;
         }
     }
     void ValidateHoles(List<GameObject> holes, int side) // 0f; 1r; 2f; 3f
@@ -207,6 +230,14 @@ public class VoxelBuildingFloor : MonoBehaviour
             newWall.GetComponent<Collider>().isTrigger = true;
             
             innerWallsX.Add(newWall);
+            
+            var newHole = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            newHole.transform.parent = holesColliders.transform;
+            newHole.name = "Inner Hole";
+            newHole.layer = 2;
+            newHole.GetComponent<Collider>().isTrigger = true;
+
+            innerHolesX.Add(newHole);
         }
         while (innerWallsAmountZ > innerWallsZ.Count)
         {
@@ -218,25 +249,49 @@ public class VoxelBuildingFloor : MonoBehaviour
             newWall.GetComponent<Collider>().isTrigger = true;
             
             innerWallsZ.Add(newWall);
+            
+            var newHole = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            newHole.transform.parent = holesColliders.transform;
+            newHole.name = "Inner Hole";
+            newHole.layer = 2;
+            newHole.GetComponent<Collider>().isTrigger = true;
+
+            innerHolesZ.Add(newHole);
         }
 
         while (innerWallsAmountX < innerWallsX.Count)
         {
             var last = innerWallsX[^1];
+            var lastHole = innerHolesX[^1];
+            innerHolesX.Remove(lastHole);
             innerWallsX.Remove(last);
             if (Application.isEditor && Application.isPlaying == false)
+            {
                 DestroyImmediate(last);
+                DestroyImmediate(lastHole);
+            }
             else
+            {
                 Destroy(last);
+                Destroy(lastHole);
+            }
         }
         while (innerWallsAmountZ < innerWallsZ.Count)
         {
             var last = innerWallsZ[^1];
+            var lastHole = innerHolesZ[^1];
+            innerHolesZ.Remove(lastHole);
             innerWallsZ.Remove(last);
             if (Application.isEditor && Application.isPlaying == false)
+            {
                 DestroyImmediate(last);
+                DestroyImmediate(lastHole);
+            }
             else
+            {
                 Destroy(last);
+                Destroy(lastHole);
+            }
         }
     }
     void ValidateHolesAmount()

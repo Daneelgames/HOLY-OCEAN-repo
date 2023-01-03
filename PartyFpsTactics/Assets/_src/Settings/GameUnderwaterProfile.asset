@@ -40,7 +40,7 @@ MonoBehaviour:
     m_Value: 20
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 0.8632076, g: 1, b: 0.9877623, a: 1}
+    m_Value: {r: 1, g: 0.017761739, b: 0, a: 1}
   hueShift:
     m_OverrideState: 0
     m_Value: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: SampleSceneProfile
+  m_Name: GameUnderwaterProfile
   m_EditorClassIdentifier: 
   components:
   - {fileID: 849379129802519247}
@@ -65,6 +65,7 @@ MonoBehaviour:
   - {fileID: -6886499046650717101}
   - {fileID: 6149611259848886687}
   - {fileID: 8804139880130949368}
+  - {fileID: 5669912186788044252}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -81,6 +82,38 @@ MonoBehaviour:
   mode:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &5669912186788044252
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1f83681ef12547498b362aa7adec64e, type: 3}
+  m_Name: Ripples
+  m_EditorClassIdentifier: 
+  active: 1
+  mode:
+    m_OverrideState: 1
+    m_Value: 0
+  strength:
+    m_OverrideState: 1
+    m_Value: 7.15
+  distance:
+    m_OverrideState: 1
+    m_Value: 5
+  speed:
+    m_OverrideState: 1
+    m_Value: 3
+  width:
+    m_OverrideState: 1
+    m_Value: 1.5
+  height:
+    m_OverrideState: 1
+    m_Value: 1
+  shader: {fileID: 4800000, guid: cc32764044bcef746970dca5bb25a328, type: 3}
 --- !u!114 &6149611259848886687
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -66,6 +66,7 @@ namespace MrPink.PlayerSystem
         [SerializeField] private float middleRaycastHeight = 1f;
         [SerializeField] private float bottomRaycastHeight = 0.5f;
         [SerializeField] private float autoVaultPower = 5;
+        [SerializeField] private float underwaterPushPower = 100;
 
         [Header("Crouching")] public bool crouching = false;
         public CapsuleCollider topCollider;
@@ -291,6 +292,13 @@ namespace MrPink.PlayerSystem
 
         private void HandleCrouch()
         {
+            if (State.IsUnderWater)
+            {
+                if (crouching == false)
+                    SetCrouch(true);
+                return;
+            }
+            
             if (Input.GetKeyDown(KeyCode.LeftControl))
                 SetCrouch(!crouching);
         }
@@ -545,6 +553,11 @@ namespace MrPink.PlayerSystem
         Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.red);
     }
 
+    public void SetUnderWater(bool under)
+    {
+        State.IsUnderWater = under;
+    }
+    
     private RaycastHit[] hitInfoClimb;
         void ClimbingCheck()
         {
@@ -582,6 +595,8 @@ namespace MrPink.PlayerSystem
                 if (!onSlope)
                     resultGravity = 1;
             }
+            else if (State.IsUnderWater)
+                _resultVelocity += Vector3.up * underwaterPushPower;
             else // in the air
                 resultGravity = gravity * additinalFallForce;
 
@@ -598,6 +613,7 @@ namespace MrPink.PlayerSystem
             {
                 _resultVelocity += Vector3.up * autoVaultPower;
             }
+            
             
             //rb.velocity = _resultVelocity + Vector3.down * resultGravity;
             rb.velocity = _resultVelocity;
