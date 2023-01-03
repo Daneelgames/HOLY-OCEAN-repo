@@ -1,62 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8139665309385865992
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8ca37f13bb89c144a71832585b7a6ac, type: 3}
-  m_Name: EdgeDetection
-  m_EditorClassIdentifier: 
-  active: 0
-  debug:
-    m_OverrideState: 0
-    m_Value: 0
-  mode:
-    m_OverrideState: 1
-    m_Value: 2
-  invertFadeDistance:
-    m_OverrideState: 0
-    m_Value: 0
-  distanceFade:
-    m_OverrideState: 1
-    m_Value: 0
-  startFadeDistance:
-    m_OverrideState: 0
-    m_Value: 0
-  endFadeDistance:
-    m_OverrideState: 0
-    m_Value: 1000
-  sensitivityDepth:
-    m_OverrideState: 0
-    m_Value: 0
-  sensitivityNormals:
-    m_OverrideState: 0
-    m_Value: 1
-  lumThreshold:
-    m_OverrideState: 0
-    m_Value: 0.01
-  edgeColor:
-    m_OverrideState: 0
-    m_Value: {r: 0, g: 0, b: 0, a: 1}
-  edgeExp:
-    m_OverrideState: 1
-    m_Value: 1
-  edgeSize:
-    m_OverrideState: 0
-    m_Value: 1
-  edgeOpacity:
-    m_OverrideState: 1
-    m_Value: 1
-  sobelThin:
-    m_OverrideState: 1
-    m_Value: 1
-  DepthNormalsShader: {fileID: 4800000, guid: 516d67fad41db074ca871164dfde9e71, type: 3}
-  shader: {fileID: 4800000, guid: 3d6327a8c88b3714793200af974474fc, type: 3}
 --- !u!114 &-6886499046650717101
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -69,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
   m_Name: PaniniProjection
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   distance:
     m_OverrideState: 1
     m_Value: 0.5
@@ -97,7 +40,7 @@ MonoBehaviour:
     m_Value: 20
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 0.9523712, b: 0.9198113, a: 1}
+    m_Value: {r: 0.8632076, g: 1, b: 0.9877623, a: 1}
   hueShift:
     m_OverrideState: 0
     m_Value: 0
@@ -121,7 +64,6 @@ MonoBehaviour:
   - {fileID: -5355503672465615963}
   - {fileID: -6886499046650717101}
   - {fileID: 6149611259848886687}
-  - {fileID: -8139665309385865992}
   - {fileID: 8804139880130949368}
 --- !u!114 &849379129802519247
 MonoBehaviour:
@@ -138,7 +80,7 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 1
 --- !u!114 &6149611259848886687
 MonoBehaviour:
   m_ObjectHideFlags: 3

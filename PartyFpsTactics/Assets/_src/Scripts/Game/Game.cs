@@ -68,7 +68,7 @@ namespace MrPink
         {
             if (_localPlayer == null) return;
             _gameCamera.transform.position =  Vector3.Lerp(_gameCamera.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.unscaledDeltaTime);
-            _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.unscaledDeltaTime);
+            _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth/* * Time.unscaledDeltaTime*/);
         }
 
         
