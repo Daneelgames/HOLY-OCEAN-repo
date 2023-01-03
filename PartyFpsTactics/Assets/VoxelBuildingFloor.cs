@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Fraktalia.VoxelGen;
 using Fraktalia.VoxelGen.Modify.Procedural;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class VoxelBuildingFloor : MonoBehaviour
 {
@@ -12,15 +14,17 @@ public class VoxelBuildingFloor : MonoBehaviour
     [SerializeField] private ColliderToVoxel holesColliders;
 
     [Header("SETTINGS")] 
-    [SerializeField] private float floorHeight = 7;
-    [SerializeField] private float floorSizeX = 7;
-    [SerializeField] private float floorSizeZ = 7;
+    [BoxGroup("Size")][Range(6,20)][SerializeField] private int floorHeight = 7;
+    public int GetHeight => floorHeight;
+    [BoxGroup("Size")][Range(10,50)][SerializeField] private int floorSizeX = 7;
+    [BoxGroup("Size")][Range(10,50)][SerializeField] private int floorSizeZ = 7;
+    [BoxGroup("Inner Walls")] [Range(0,5)][SerializeField] private int innerWallsAmountX = 1;
+    [BoxGroup("Inner Walls")] [Range(0,5)][SerializeField] private int innerWallsAmountZ = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountF = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountR = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountB = 1;
     [BoxGroup("Holes")] [Range(1,10)][SerializeField] private int holesAmountL = 1;
-    [BoxGroup("Inner Walls")] [Range(0,10)][SerializeField] private int innerWallsAmountX = 1;
-    [BoxGroup("Inner Walls")] [Range(0,10)][SerializeField] private int innerWallsAmountZ = 1;
+    
 
     [Header("RUNTIME")] 
     [SerializeField] private GameObject floor;
@@ -39,16 +43,33 @@ public class VoxelBuildingFloor : MonoBehaviour
     
     [SerializeField] private List<GameObject> innerWallsX = new List<GameObject>();
     [SerializeField] private List<GameObject> innerWallsZ = new List<GameObject>();
-    public void CutVoxels()
+    public void CutVoxels(VoxelGenerator voxelGenerator)
     {
+        wallsColliders.TargetGenerator = voxelGenerator;
+        innerWallsColliders.TargetGenerator = voxelGenerator;
+        holesColliders.TargetGenerator = voxelGenerator;
+        
         wallsColliders.ApplyProceduralModifier();
         innerWallsColliders.ApplyProceduralModifier();
         
-        
-        
         holesColliders.ApplyProceduralModifier(true);
     }
- 
+
+    [Button]
+    public void RandomizeSettings()
+    {
+        floorHeight = Random.Range(6, 20);
+        floorSizeX = Random.Range(10, 50);
+        floorSizeZ = Random.Range(10, 50);
+        innerWallsAmountX = Random.Range(1, 5);
+        innerWallsAmountZ = Random.Range(1, 5);
+        holesAmountF = Random.Range(1, 10);
+        holesAmountR = Random.Range(1, 10);
+        holesAmountB = Random.Range(1, 10);
+        holesAmountL = Random.Range(1, 10);
+        OnValidate();
+    }
+    
     private void OnValidate()
     {
         ceiling.transform.localPosition = Vector3.up * floorHeight;
@@ -92,19 +113,26 @@ public class VoxelBuildingFloor : MonoBehaviour
             {
                 newScaleX = floorSizeX;
                 newPosX = 0;
-                spaceBetweenWalls = floorSizeX / innerWalls.Count;
-                newPosZ = -floorSizeZ / 2 +  spaceBetweenWalls * (i + 1);
+                spaceBetweenWalls = floorSizeZ / innerWalls.Count;
+                if (innerWalls.Count > 1)
+                    newPosZ = -floorSizeZ / 2 + spaceBetweenWalls * (i + 1);
+                else
+                    newPosZ = 0;
 
             }
             else if (side == 1)
             {
                 newScaleZ = floorSizeZ;
                 newPosZ = 0;
-                spaceBetweenWalls = floorSizeZ / innerWalls.Count;
-                newPosX = -floorSizeX / 2 +  spaceBetweenWalls * (i + 1);
+                spaceBetweenWalls = floorSizeX / innerWalls.Count;
+                if (innerWalls.Count > 1)
+                    newPosX = -floorSizeX / 2 +  spaceBetweenWalls * (i + 1);
+                else
+                    newPosX = 0;
             }
             
             wall.transform.localScale = new Vector3(newScaleX, floorHeight, newScaleZ);
+            wall.transform.localRotation = Quaternion.identity;
             wall.transform.localPosition = new Vector3(newPosX, floorHeight/2, newPosZ);
         }
     }
@@ -161,6 +189,7 @@ public class VoxelBuildingFloor : MonoBehaviour
             else
                 newScaleZ = directionSize / (holes.Count + 2);
             
+            hole.transform.localRotation = Quaternion.identity;
             hole.transform.localScale = new Vector3(newScaleX, floorHeight / 3, newScaleZ);
             hole.transform.localPosition = targetWall.transform.localPosition - spreadHolesDirection * directionSize / 2 + spreadHolesDirection * spaceBetweenWindows * i;
         }
