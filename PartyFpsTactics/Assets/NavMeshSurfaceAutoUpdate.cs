@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using MrPink;
 using Unity.AI.Navigation;
+using UnityEditor.AI;
 using UnityEngine;
+using NavMeshBuilder = UnityEngine.AI.NavMeshBuilder;
 
 public class NavMeshSurfaceAutoUpdate : MonoBehaviour
 {

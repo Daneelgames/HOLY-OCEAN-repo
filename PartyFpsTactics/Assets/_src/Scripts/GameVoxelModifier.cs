@@ -15,7 +15,7 @@ public class GameVoxelModifier : NetworkBehaviour
 {
     public static GameVoxelModifier Instance;
     
-    [SerializeField] VoxelModifier Modifier;
+    [SerializeField] List<VoxelModifier> modifiers = new List<VoxelModifier>();
 
     public override void OnStartClient() { 
         base.OnStartClient();
@@ -47,7 +47,7 @@ public class GameVoxelModifier : NetworkBehaviour
         }
         if (remoteConnectionStateArgs.ConnectionState == RemoteConnectionState.Started)
         {
-            if (Modifier != null)
+            if (modifiers.Count > 0)
             {
                 networkConnection.Disconnect(true);
                 Debug.Log("SOMEONE STARTED CONNECTION DURING THE GAME connection stopped");
@@ -118,10 +118,9 @@ public class GameVoxelModifier : NetworkBehaviour
     [ObserversRpc]
     void RpcModifyLocally(Vector3 pos)
     {
-        if (Modifier)
+        foreach (var modifier in modifiers)
         {
-            //Debug.Log("MODIFIER MODIFY");
-            Modifier.ModifyAtPos(pos);
+            modifier.ModifyAtPos(pos);
         }
     }
 }

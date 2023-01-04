@@ -6,6 +6,7 @@ using MrPink;
 using MrPink.Health;
 using MrPink.Units;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class ContentPlacer : NetworkBehaviour
@@ -17,6 +18,7 @@ public class ContentPlacer : NetworkBehaviour
         Instance = this;
     }
     
+    [SerializeField] private int maxEnemiesAlive = 30;
     [SerializeField] private float respawnDelay = 5;
     [SerializeField] private float minMobSpawnDistance = 20;
     
@@ -67,12 +69,12 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     void SpawnRedUnitAroundPlayer()
     {
-        if (UnitsManager.Instance.HcInGame.Count > 30)
+        if (UnitsManager.Instance.HcInGame.Count > maxEnemiesAlive)
             return;
         var players = Game._instance.PlayersInGame;
         var randomPlayer = players[Random.Range(0, players.Count)];
         
-        Vector3 pos = RaycastedPosAroundPosition(randomPlayer.MainCamera.transform.position, 100);
+        Vector3 pos = NavMeshPosAroundPosition(randomPlayer.MainCamera.transform.position, 100);
             
         if (Vector3.Distance(pos, randomPlayer.MainCamera.transform.position) < minMobSpawnDistance)
             return;
@@ -137,7 +139,7 @@ public class ContentPlacer : NetworkBehaviour
         if (distanceToClosestPickup < 50)
             return;
 
-        Vector3 pos = RaycastedPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, 100);
+        Vector3 pos = NavMeshPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, 100);
             
         if (Vector3.Distance(pos, Game.LocalPlayer.MainCamera.transform.position) < 10)
             return;
@@ -156,19 +158,13 @@ public class ContentPlacer : NetworkBehaviour
         }
     }
 
-    public Vector3 RaycastedPosAroundPosition(Vector3 initPos, float maxDistance)
+    public Vector3 NavMeshPosAroundPosition(Vector3 initPos, float maxDistance)
     {
         Vector3 randomDir = Game.LocalPlayer.MainCamera.transform.forward;
         
         randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
-        if (!Physics.Raycast(Game.LocalPlayer.MainCamera.transform.position, randomDir, out var hit, maxDistance,
-            GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
-            return initPos;
         
-        /*    
-        if (GameManager.Instance.IsPositionInPlayerFov(hit.point))
-            return initPos;*/
-        
-        return hit.point;
+        NavMesh.SamplePosition(initPos + randomDir * maxDistance, out var hit, Mathf.Infinity, NavMesh.AllAreas);
+        return hit.position;
     }
 }
