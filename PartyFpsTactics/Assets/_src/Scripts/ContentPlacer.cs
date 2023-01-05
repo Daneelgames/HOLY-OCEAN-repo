@@ -24,7 +24,6 @@ public class ContentPlacer : NetworkBehaviour
     
     public List<InteractiveObject> lootToSpawnAround;
     
-
     private void OnEnable()
     {
         if (respawnDelay <= 0)
@@ -35,7 +34,6 @@ public class ContentPlacer : NetworkBehaviour
         
         spawnAroundPlayer = StartCoroutine(SpawnAroundPlayer());
     }
-
 
     private Coroutine spawnAroundPlayer;
     
@@ -88,6 +86,52 @@ public class ContentPlacer : NetworkBehaviour
         StartCoroutine(SpawnEnemiesInBuildingCoroutine(building));
     }
 
+    [Server]
+    public IEnumerator SpawnEnemiesInVoxelBuilding(List<VoxelBuildingFloor> floors)
+    {
+        for (int i = 0; i < floors.Count; i++)
+        {
+            bool noPlaceOnFloor = false;
+            var floor = floors[i];
+            var size = floor.LevelSize;
+            int mobsAmount = ((size.x * size.z) / 50) / 3;
+            for (int j = 0; j < mobsAmount; j++)
+            {
+                Vector3 pos = floor.transform.position;
+
+                int attempts = 0;
+                while (true)
+                {
+                    yield return null;
+                    
+                    pos = floor.GetRandomWorldPosOnFloor();
+                    
+                    NavMesh.SamplePosition(pos, out var hit, Mathf.Infinity, NavMesh.AllAreas);
+                    if (hit.hit)
+                    {
+                        pos = hit.position;
+                        break;
+                    }
+
+                    attempts++;
+                    if (attempts > 60)
+                    {
+                        noPlaceOnFloor = true;
+                        break;
+                    }
+                }
+
+                if (noPlaceOnFloor)
+                {
+                    break;
+                }
+                
+                var unit =  Instantiate(UnitsManager.Instance.GetRandomRedUnit, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                ServerManager.Spawn(unit.gameObject);
+            }
+        }
+    }
+    
     [Server]
     IEnumerator SpawnEnemiesInBuildingCoroutine(BuildingGenerator.Building building)
     {
@@ -167,4 +211,5 @@ public class ContentPlacer : NetworkBehaviour
         NavMesh.SamplePosition(initPos + randomDir * maxDistance, out var hit, Mathf.Infinity, NavMesh.AllAreas);
         return hit.position;
     }
+
 }

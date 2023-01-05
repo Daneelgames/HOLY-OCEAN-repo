@@ -12,11 +12,11 @@ public class VoxelBuildingFloor : MonoBehaviour
     [SerializeField] private ColliderToVoxel wallsColliders;
     [SerializeField] private ColliderToVoxel innerWallsColliders;
     [SerializeField] private ColliderToVoxel holesColliders;
-
     [Header("SETTINGS")] 
     [BoxGroup("Size")][Range(6,15)][SerializeField] private int floorHeight = 7;
     public int GetHeight => floorHeight;
     [BoxGroup("Size")][Range(10,50)][SerializeField] private int floorSizeX = 7;
+    public Vector3Int LevelSize => new Vector3Int(floorSizeX, floorHeight, floorSizeZ);
     [BoxGroup("Size")][Range(10,50)][SerializeField] private int floorSizeZ = 7;
     [BoxGroup("Inner Walls")] [Range(0,3)][SerializeField] private int innerWallsAmountX = 1;
     [BoxGroup("Inner Walls")] [Range(0,3)][SerializeField] private int innerWallsAmountZ = 1;
@@ -58,16 +58,25 @@ public class VoxelBuildingFloor : MonoBehaviour
     }
 
     [Button]
-    public void RandomizeSettings()
+    public void RandomizeSettings(int floorIndex, int seed)
     {
+        Random.InitState(seed); seed++;
         floorHeight = Random.Range(6, 20);
+        Random.InitState(seed); seed++;
         floorSizeX = Random.Range(10, 50);
+        Random.InitState(seed); seed++;
         floorSizeZ = Random.Range(10, 50);
+        Random.InitState(seed); seed++;
         innerWallsAmountX = Random.Range(1, 5);
+        Random.InitState(seed); seed++;
         innerWallsAmountZ = Random.Range(1, 5);
+        Random.InitState(seed); seed++;
         holesAmountF = Random.Range(1, 10);
+        Random.InitState(seed); seed++;
         holesAmountR = Random.Range(1, 10);
+        Random.InitState(seed); seed++;
         holesAmountB = Random.Range(1, 10);
+        Random.InitState(seed); seed++;
         holesAmountL = Random.Range(1, 10);
         OnValidate();
     }
@@ -383,5 +392,12 @@ public class VoxelBuildingFloor : MonoBehaviour
             else
                 Destroy(last);
         }
+    }
+
+    public Vector3 GetRandomWorldPosOnFloor()
+    {
+        Vector3 localPos = new Vector3(Random.Range(-floorSizeX/2, floorSizeX/2), 1, Random.Range(-floorSizeZ/2, floorSizeZ/2));
+        Vector3 worldPos = transform.TransformPoint(localPos);
+        return worldPos;
     }
 }

@@ -52,6 +52,12 @@ public class NavMeshSurfaceUpdate : MonoBehaviour
         {
             yield return null;
         }
+        
+        if (Game.LocalPlayer.IsHost == false)
+        {
+            Debug.Log("DONT UPDATE NAVMESH IF NOT HOST");
+            yield break;
+        }
         while (true)
         {
             yield return Wait;
@@ -112,7 +118,7 @@ public class NavMeshSurfaceUpdate : MonoBehaviour
             }
 
             // Ensure player and enemies are not on the layers considered for NavMesh and we don't need this!
-            //Sources.RemoveAll(RemoveNavMeshAgentPredicate);
+            // Sources.RemoveAll(RemoveNavMeshAgentPredicate);
 
             if (Async)
             {

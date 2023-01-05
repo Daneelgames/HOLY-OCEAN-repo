@@ -144,8 +144,6 @@ namespace MrPink.WeaponsSystem
                     if (GameVoxelModifier.Instance)
                         GameVoxelModifier.Instance.DestructionInWorld(transform.position);
                 }
-                
-                // ReSharper disable once Unity.NoNullPropagation
             }
         }
         

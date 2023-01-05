@@ -126,6 +126,7 @@ public class BuildingGenerator : NetworkBehaviour
     void InitOnClient()
     {
         Random.InitState(currentSeed);
+        if (VoxelBuildingGenerator.Instance) VoxelBuildingGenerator.Instance.SaveRandomSeedOnEachClient(currentSeed);
         Debug.Log("BUILDING GENERATOR START GENERATING WITH SEED " + currentSeed +"; Random.state " + Random.state + "; hashCode " + Random.state.GetHashCode());
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
 

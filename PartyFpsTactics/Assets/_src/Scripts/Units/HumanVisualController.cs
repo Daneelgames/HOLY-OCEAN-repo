@@ -97,6 +97,8 @@ namespace MrPink.Units
             if (getMovementAnimCoroutine != null)
                 StopCoroutine(getMovementAnimCoroutine);
             
+            DeactivateRagdoll();
+            
             getMovementAnimCoroutine = StartCoroutine(GetMovementAnim());
         }
 
@@ -167,7 +169,7 @@ namespace MrPink.Units
         
             for (int i = 0; i < joints.Count; i++)
             {
-                if (!inVehicle)
+                if (!inVehicle && rigidbodies[i].isKinematic == false)
                     joints[i].targetRotation = CopyRotation(i);
                 else
                     joints[i].transform.rotation = animatedBones[i].rotation;
@@ -356,11 +358,13 @@ namespace MrPink.Units
             
                 if (i == 0)
                 {
-                    rigidbodies[i].isKinematic = false;
+                    rigidbodies[i].isKinematic = true;
+                    //rigidbodies[i].isKinematic = false;
                     rigidbodies[i].useGravity = false;
                     continue;
                 }
-                rigidbodies[i].isKinematic = false;
+                rigidbodies[i].isKinematic = true;
+                //rigidbodies[i].isKinematic = false;
                 rigidbodies[i].useGravity = false;
                 rigidbodies[i].velocity = Vector3.zero;
                 rigidbodies[i].angularVelocity = Vector3.zero;

@@ -44,6 +44,8 @@ namespace MrPink.Units
 
         private Transform _spawnRoot;
         public Transform SpawnRoot => _spawnRoot;
+
+        public HealthController GetRandomRedUnit => redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)];
     
         private void Awake()
         {
