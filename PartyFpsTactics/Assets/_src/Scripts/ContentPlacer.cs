@@ -107,8 +107,11 @@ public class ContentPlacer : NetworkBehaviour
                     yield return null;
                     
                     pos = floor.GetRandomWorldPosOnFloor();
-                    
-                    NavMesh.SamplePosition(pos, out var hit, Mathf.Infinity, NavMesh.AllAreas);
+
+                    if (NavMesh.SamplePosition(pos, out var hit, Mathf.Infinity, NavMesh.AllAreas) == false)
+                    {
+                        continue;
+                    }
                     if (hit.hit)
                     {
                         pos = hit.position;
