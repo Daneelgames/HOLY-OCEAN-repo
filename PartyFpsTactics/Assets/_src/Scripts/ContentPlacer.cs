@@ -44,6 +44,7 @@ public class ContentPlacer : NetworkBehaviour
             Debug.Log("SpawnAroundPlayer wait");
             yield return new WaitForSeconds(1);
         }
+        yield return new WaitForSeconds(5);
         float cooldown = respawnDelay;
         while (true)
         {
@@ -94,7 +95,7 @@ public class ContentPlacer : NetworkBehaviour
             bool noPlaceOnFloor = false;
             var floor = floors[i];
             var size = floor.LevelSize;
-            int mobsAmount = ((size.x * size.z) / 50) / 2;
+            int mobsAmount = ((size.x * size.z) / 50) / 3;
             //int mobsAmount = 0;
             for (int j = 0; j < mobsAmount; j++)
             {

@@ -294,8 +294,8 @@ namespace MrPink.PlayerSystem
         {
             if (State.IsUnderWater)
             {
-                if (crouching == false)
-                    SetCrouch(true);
+                if (crouching)
+                    SetCrouch(false);
                 return;
             }
             

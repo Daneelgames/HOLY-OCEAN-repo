@@ -48,7 +48,7 @@ namespace GPUInstancer
 
         void EnableOnClient()
         {
-            if (!initialized)
+            //if (!initialized)
                 Init();
             
             if (gpuiPrefab.state == PrefabInstancingState.None)

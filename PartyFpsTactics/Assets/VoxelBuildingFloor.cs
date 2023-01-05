@@ -156,12 +156,12 @@ public class VoxelBuildingFloor : MonoBehaviour
             
             if (side == 0)
             {
-                hole.transform.localScale = new Vector3(3, wall.transform.localScale.y, wall.transform.localScale.z);
+                hole.transform.localScale = new Vector3(3, wall.transform.localScale.y/2, wall.transform.localScale.z);
                 hole.transform.localPosition = wall.transform.localPosition + new Vector3(-wall.transform.localScale.x/3, 0, 0) + Vector3.right * 1.2f * (iii);
             }
             else if (side == 1)
             {
-                hole.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y, 3);
+                hole.transform.localScale = new Vector3(wall.transform.localScale.x, wall.transform.localScale.y/2, 3);
                 hole.transform.localPosition = wall.transform.localPosition + new Vector3(0, 0, -wall.transform.localScale.z/3) + Vector3.forward * 1.2f * (iii);
             }
             hole.transform.localRotation = Quaternion.identity;
