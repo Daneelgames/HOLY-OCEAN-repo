@@ -88,6 +88,58 @@ public class ContentPlacer : NetworkBehaviour
     }
 
     [Server]
+    public IEnumerator SpawnPropsInVoxelBuilding(List<VoxelBuildingFloor> floors)
+    {
+        var propsPrefabs = BuildingGenerator.Instance.PropsPrefabs;
+        
+        for (int i = 0; i < floors.Count; i++)
+        {
+            bool noPlaceOnFloor = false;
+            var floor = floors[i];
+            var size = floor.LevelSize;
+            int propsAmount = ((size.x * size.z) / 50) / 3;
+            for (int j = 0; j < propsAmount; j++)
+            {
+                Vector3 pos = floor.transform.position;
+
+                int attempts = 0;
+                while (true)
+                {
+                    yield return null;
+                    
+                    pos = floor.GetRandomWorldPosOnFloor();
+
+                    if (NavMesh.SamplePosition(pos, out var hit, Mathf.Infinity, NavMesh.AllAreas) == false)
+                    {
+                        continue;
+                    }
+                    if (hit.hit)
+                    {
+                        pos = hit.position;
+                        break;
+                    }
+
+                    attempts++;
+                    if (attempts > 60)
+                    {
+                        noPlaceOnFloor = true;
+                        break;
+                    }
+                }
+
+                if (noPlaceOnFloor)
+                {
+                    break;
+                }
+                
+                
+                var prop = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], pos, Quaternion.Euler(0,Random.Range(0,360), 0));
+                ServerManager.Spawn(prop.gameObject);
+            }
+        }
+    }
+    
+    [Server]
     public IEnumerator SpawnEnemiesInVoxelBuilding(List<VoxelBuildingFloor> floors)
     {
         for (int i = 0; i < floors.Count; i++)

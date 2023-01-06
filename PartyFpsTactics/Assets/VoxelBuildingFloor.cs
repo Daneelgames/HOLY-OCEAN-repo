@@ -45,6 +45,36 @@ public class VoxelBuildingFloor : MonoBehaviour
     [SerializeField] private List<GameObject> innerHolesX = new List<GameObject>();
     [SerializeField] private List<GameObject> innerWallsZ = new List<GameObject>();
     [SerializeField] private List<GameObject> innerHolesZ = new List<GameObject>();
+    
+    
+    [Serializable] 
+    public class VoxelFloorRandomSettings
+    {
+        public int floorHeight;
+        public int floorSizeX;
+        public int floorSizeZ;
+        public int innerWallsAmountX;
+        public int innerWallsAmountZ;
+        public int holesAmountF;
+        public int holesAmountR;
+        public int holesAmountB;
+        public int holesAmountL;
+    }
+
+    public void SetSettings(VoxelFloorRandomSettings voxelFloorRandomSettings)
+    {
+        floorHeight = voxelFloorRandomSettings.floorHeight;
+        floorSizeX = voxelFloorRandomSettings.floorSizeX;
+        floorSizeZ = voxelFloorRandomSettings.floorSizeZ;
+        innerWallsAmountX = voxelFloorRandomSettings.innerWallsAmountX;
+        innerWallsAmountZ = voxelFloorRandomSettings.innerWallsAmountZ;
+        holesAmountF = voxelFloorRandomSettings.holesAmountF;
+        holesAmountR = voxelFloorRandomSettings.holesAmountR;
+        holesAmountB = voxelFloorRandomSettings.holesAmountB;
+        holesAmountL = voxelFloorRandomSettings.holesAmountL;
+        
+        OnValidate();
+    }
     public void CutVoxels(VoxelGenerator voxelGenerator)
     {
         wallsColliders.TargetGenerator = voxelGenerator;
@@ -57,29 +87,6 @@ public class VoxelBuildingFloor : MonoBehaviour
         holesColliders.ApplyProceduralModifier(true);
     }
 
-    [Button]
-    public void RandomizeSettings(int floorIndex, int seed)
-    {
-        Random.InitState(seed); seed++;
-        floorHeight = Random.Range(6, 20);
-        Random.InitState(seed); seed++;
-        floorSizeX = Random.Range(10, 50);
-        Random.InitState(seed); seed++;
-        floorSizeZ = Random.Range(10, 50);
-        Random.InitState(seed); seed++;
-        innerWallsAmountX = Random.Range(1, 5);
-        Random.InitState(seed); seed++;
-        innerWallsAmountZ = Random.Range(1, 5);
-        Random.InitState(seed); seed++;
-        holesAmountF = Random.Range(1, 10);
-        Random.InitState(seed); seed++;
-        holesAmountR = Random.Range(1, 10);
-        Random.InitState(seed); seed++;
-        holesAmountB = Random.Range(1, 10);
-        Random.InitState(seed); seed++;
-        holesAmountL = Random.Range(1, 10);
-        OnValidate();
-    }
     
     private void OnValidate()
     {

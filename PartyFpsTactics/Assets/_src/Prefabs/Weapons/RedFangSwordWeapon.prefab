@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.0466, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 543450651867254492}
   - {fileID: 2642470501910343548}
@@ -60,6 +61,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 6}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2642470501686540893}
   m_Father: {fileID: 0}
@@ -85,12 +87,14 @@ MonoBehaviour:
   bulletsPerShot: 1
   _attackColliderTag: 6
   _animation: {fileID: 0}
+  projectileRandomRotationMax: 0
   attackStaminaCost: 20
   attackAu: {fileID: 5972828274118483080}
   reloadingAu: {fileID: 0}
   reloadingClip: {fileID: 0}
   reloadingEndClip: {fileID: 0}
-  gunsMoveDistanceScaler: 0.3
+  gunsMoveDistanceScaler: 0.1
+  shotParticles: {fileID: 0}
   gunMoveSpeedScaler: 2
   gunRotSpeedScaler: 2
   gunMoveSpeed: 2
@@ -219,6 +223,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2642470501686540893}
   m_RootOrder: 1

@@ -48,8 +48,8 @@ public class BuildingGenerator : NetworkBehaviour
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
     public List<TileHealth> propsPrefabs;
+    public List<TileHealth> PropsPrefabs => propsPrefabs;
     public List<InteractiveObject> lootToSpawnAround;
-    
 
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
@@ -81,8 +81,7 @@ public class BuildingGenerator : NetworkBehaviour
 
     [Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
-    
-    
+
     private void Awake()
     {
         Instance = this;
@@ -94,8 +93,20 @@ public class BuildingGenerator : NetworkBehaviour
         base.OnStartClient();
 
         if (base.IsHost)
-            currentSeed = Random.Range(1,100) * Random.Range(1,100) * Random.Range(1,100);
-        StartCoroutine(WaitClients());
+        {
+            currentSeed = Random.Range(1, 100) * Random.Range(1, 100) * Random.Range(1, 100);
+
+            List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings = new List<VoxelBuildingFloor.VoxelFloorRandomSettings>();
+            if (VoxelBuildingGenerator.Instance)
+                voxelFloorsRandomSettings = VoxelBuildingGenerator.Instance.RandomizeSettingsOnHost();
+            RpcWaitClients(voxelFloorsRandomSettings);
+        }
+    }
+
+    [ObserversRpc(IncludeOwner = true)]
+    void RpcWaitClients(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
+    {
+        StartCoroutine(WaitClients(voxelFloorRandomSettings));
     }
         
     public override void OnOwnershipClient(NetworkConnection prevOwner)
@@ -110,7 +121,7 @@ public class BuildingGenerator : NetworkBehaviour
             currentSeed = (int)DateTime.Now.Ticks;*/
     }
 
-    IEnumerator WaitClients()
+    IEnumerator WaitClients(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings)
     {
         Debug.Log("WAIT CLIENTS BUILDING WTF");
         while (Game._instance.AllPlayersLoadedGameScene() == false)
@@ -119,14 +130,17 @@ public class BuildingGenerator : NetworkBehaviour
             yield return null;
         }
 
-        InitOnClient();
+        InitOnClient(voxelFloorsRandomSettings);
     }
 
 
-    void InitOnClient()
+    void InitOnClient(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings)
     {
         Random.InitState(currentSeed);
-        if (VoxelBuildingGenerator.Instance) VoxelBuildingGenerator.Instance.SaveRandomSeedOnEachClient(currentSeed);
+        if (VoxelBuildingGenerator.Instance)
+        {
+            VoxelBuildingGenerator.Instance.SaveRandomSeedOnEachClient(currentSeed, voxelFloorsRandomSettings);
+        }
         Debug.Log("BUILDING GENERATOR START GENERATING WITH SEED " + currentSeed +"; Random.state " + Random.state + "; hashCode " + Random.state.GetHashCode());
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
 

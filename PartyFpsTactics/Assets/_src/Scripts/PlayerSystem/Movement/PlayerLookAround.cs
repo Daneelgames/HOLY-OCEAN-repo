@@ -90,7 +90,7 @@ namespace MrPink.PlayerSystem
         }
 
         [Client(RequireOwnership = true)]
-        private void LateUpdate()
+        private void Update()
         {
             if (base.IsOwner == false)
                 return;

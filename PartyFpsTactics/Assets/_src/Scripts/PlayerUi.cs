@@ -65,8 +65,12 @@ namespace MrPink
                 List<HealthController> unitsToRemove = new List<HealthController>();
                 foreach (var enemy in markedEnemies)
                 {
-                    if (enemy.Key == null)
+                    if (enemy.Key == null || enemy.Key.IsDead)
+                    {
+                        if (enemy.Value.gameObject.activeInHierarchy)
+                            enemy.Value.gameObject.SetActive(false);
                         continue;
+                    }
 
                     if (enemy.Key.health <= 0)
                     {
@@ -125,7 +129,7 @@ namespace MrPink
             float maxY = Screen.height - minY;
 
             // Temporary variable to store the converted position from 3D world point to 2D screen point
-            Vector2 pos = Camera.main.WorldToScreenPoint(targetPos + enemyMarkerOffset);
+            Vector2 pos = Game._instance.PlayerCamera.WorldToScreenPoint(targetPos + enemyMarkerOffset);
 
             // Check if the target is behind us, to only show the icon once the target is in front
             if(Vector3.Dot((targetPos - transform.position), transform.forward) < 0)
@@ -141,6 +145,8 @@ namespace MrPink
                     // Place it on the left side
                     pos.x = minX;
                 }
+
+                pos.y = 0;
             }
 
             // Limit the X and Y positions
