@@ -1,5 +1,6 @@
 using UnityEngine;
 using Fraktalia.Core.FraktaliaAttributes;
+using Sirenix.OdinInspector;
 
 namespace Fraktalia.VoxelGen.Modify.Procedural
 {
@@ -159,5 +160,11 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			return issave;
 		}
 
+
+		public void GetActiveCollidersAndApply()
+		{
+			colliders = GetComponentsInChildren<Collider>();
+			ApplyProceduralModifier();
+		}
 	}
 }
