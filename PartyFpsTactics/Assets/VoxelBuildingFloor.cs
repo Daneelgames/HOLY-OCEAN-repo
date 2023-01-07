@@ -77,6 +77,7 @@ public class VoxelBuildingFloor : MonoBehaviour
     }
     public void CutVoxels(VoxelGenerator voxelGenerator)
     {
+        Debug.Log("CutVoxels building floor");
         wallsColliders.TargetGenerator = voxelGenerator;
         innerWallsColliders.TargetGenerator = voxelGenerator;
         holesColliders.TargetGenerator = voxelGenerator;

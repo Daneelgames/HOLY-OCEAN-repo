@@ -30,6 +30,7 @@ public class VoxelBuildingGenerator : MonoBehaviour
     
     private IEnumerator StartGenerating(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
     {
+        Debug.Log("StartGenerating voxelFloorRandomSettings " + voxelFloorRandomSettings.Count);
         SpawnFloors(voxelFloorRandomSettings);
         yield return null;
         Generate();

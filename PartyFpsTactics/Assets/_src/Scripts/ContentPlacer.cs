@@ -90,6 +90,7 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     public IEnumerator SpawnPropsInVoxelBuilding(List<VoxelBuildingFloor> floors)
     {
+        yield return new WaitForSeconds(5);
         var propsPrefabs = BuildingGenerator.Instance.PropsPrefabs;
         
         for (int i = 0; i < floors.Count; i++)
@@ -142,6 +143,7 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     public IEnumerator SpawnEnemiesInVoxelBuilding(List<VoxelBuildingFloor> floors)
     {
+        yield return new WaitForSeconds(5);
         for (int i = 0; i < floors.Count; i++)
         {
             bool noPlaceOnFloor = false;

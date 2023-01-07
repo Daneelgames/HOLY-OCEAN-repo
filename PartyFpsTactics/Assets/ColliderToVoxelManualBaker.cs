@@ -48,6 +48,6 @@ public class ColliderToVoxelManualBaker : MonoBehaviour
     [BoxGroup("BAKING")][Button]
     public void Clear()
     {
-        _colliderToVoxel.TargetGenerator.CleanUp();
+        _colliderToVoxel.TargetGenerator.CleanUp(); 
     }
 }
