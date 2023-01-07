@@ -19,6 +19,7 @@ public class ControlledMachine : MonoBehaviour
     public Transform Visual;
     public float visualFollowSpeed = 10;
     public Transform sitTransform;
+    public Transform CameraTransform;
     public Transform sitTransformNpc;
     public float DamageToControllingHcScaler = 0.33f;
     public List<Collider> collidersEnabledWhenPlayerInside;
@@ -107,6 +108,7 @@ public class ControlledMachine : MonoBehaviour
     private Coroutine visualFollowCoroutine;
     IEnumerator VisualFollow()
     {
+        yield break;
         if (Visual == null)
             yield break;
         

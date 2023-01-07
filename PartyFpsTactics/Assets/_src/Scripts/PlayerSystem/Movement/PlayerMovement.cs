@@ -142,6 +142,37 @@ namespace MrPink.PlayerSystem
         {
             if (IsOwner == false)
                 return;
+
+            if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
+            {
+                if (rb.isKinematic == false || rb.useGravity)
+                {
+                    rb.isKinematic = true;
+                    rb.useGravity = false;
+                }       
+            }
+            else
+            {
+                if (rb.isKinematic || rb.useGravity == false)
+                {
+                    rb.isKinematic = false;
+                    rb.useGravity = false;
+                }          
+            }
+
+            HandleStamina();
+            if (Game.LocalPlayer.VehicleControls.controlledMachine)
+            {
+                State.IsRunning = false;
+                _resultVelocity = Vector3.zero;
+                /*
+                rb.MovePosition(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.position);
+                rb.MoveRotation(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.rotation);
+                */
+
+                return;
+            }
+
             if (_isDead || Shop.Instance.IsActive)
             {
                 rb.isKinematic = true;
@@ -153,34 +184,6 @@ namespace MrPink.PlayerSystem
                 State.IsLeaning = false;
                 return;
             }
-
-            if (rb.isKinematic || rb.useGravity == false)
-            {
-                rb.isKinematic = false;
-                rb.useGravity = false;
-            }
-
-            if (Shop.Instance && Shop.Instance.IsActive)
-            {
-                return;
-            }
-
-            /*
-            if (!LevelGenerator.Instance.levelIsReady)
-                return;*/
-            /*
-            if (ProceduralCutscenesManager.Instance.InCutScene)
-                return;*/
-
-
-            HandleStamina();
-            if (Game.LocalPlayer.VehicleControls.controlledMachine)
-            {
-                State.IsRunning = false;
-                _resultVelocity = Vector3.zero;
-                return;
-            }
-
             HandleJump();
             HandleCrouch();
             HandleMovement();
@@ -191,9 +194,19 @@ namespace MrPink.PlayerSystem
             if (IsOwner == false)
                 return;
 
-            if (_isDead || Shop.Instance.IsActive)
+            if (_isDead)
                 return;
 
+            if (Game.LocalPlayer.VehicleControls.controlledMachine)
+            {
+                rb.MovePosition(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.position);
+                rb.MoveRotation(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.rotation);
+                return;
+            }
+
+            if (Shop.Instance.IsActive)
+                return;
+            
             /*
             if (Shop.Instance && Shop.Instance.IsActive)
             {

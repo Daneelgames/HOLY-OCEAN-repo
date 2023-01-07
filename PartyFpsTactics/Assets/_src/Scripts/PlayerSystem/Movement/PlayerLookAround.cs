@@ -147,7 +147,7 @@ namespace MrPink.PlayerSystem
             _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.unscaledDeltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
-            if (Game.LocalPlayer.VehicleControls.controlledMachine == null)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine == null) // ЕСЛИ В ТАЧКЕ ИЛИ ЛОДКЕ
             {
                 transform.localRotation = Quaternion.Euler(newRotation);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;

@@ -29,7 +29,12 @@ public class ColliderToVoxelManualBaker : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             var child = transform.GetChild(i);
-				
+            var collider = child.gameObject.GetComponent<Collider>();
+            if (collider == null)
+            {
+                Debug.LogError("PUT COLLIDERS RIGHT UNDER THIS PARENT");
+                return;
+            }
             if (i < lastPieceIndex)
             {
                 child.gameObject.SetActive(false);

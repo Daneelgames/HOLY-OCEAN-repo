@@ -89,6 +89,8 @@ namespace MrPink
             if (machine)
             {
                 Game.LocalPlayer.Movement.SetCrouch(false);
+                Game.LocalPlayer.Movement.rb.velocity = Vector3.zero;
+                Game.LocalPlayer.Movement.rb.angularVelocity = Vector3.zero;
                 Game.LocalPlayer.Movement.rb.isKinematic = true;
                 Game.LocalPlayer.Movement.rb.useGravity = false;
                 //Player.Movement.transform.parent = controlledVehicle.sitTransform;
@@ -120,8 +122,9 @@ namespace MrPink
                 if (resultRotScaler < playerFollowRotScaler)
                     resultRotScaler += 50 * Time.deltaTime;
             
+                /*
                 Game.LocalPlayer.Movement.transform.position = Vector3.Lerp(Game.LocalPlayer.Movement.transform.position, controlledMachine.sitTransform.position, resultMoveScaler * Time.fixedUnscaledDeltaTime);
-                Game.LocalPlayer.Movement.transform.rotation = Quaternion.Slerp(Game.LocalPlayer.Movement.transform.rotation, controlledMachine.sitTransform.rotation, resultRotScaler * Time.fixedUnscaledDeltaTime);
+                Game.LocalPlayer.Movement.transform.rotation = Quaternion.Slerp(Game.LocalPlayer.Movement.transform.rotation, controlledMachine.sitTransform.rotation, resultRotScaler * Time.fixedUnscaledDeltaTime);*/
                 
                 float hor = Input.GetAxis("Horizontal");
                 float ver = Input.GetAxis("Vertical");
