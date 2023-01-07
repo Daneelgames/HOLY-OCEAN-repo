@@ -23,7 +23,7 @@ public class ColliderToVoxelManualBaker : MonoBehaviour
     }
 
     [BoxGroup("BAKING")] [Button]
-    public void Bake(int amount)
+    public void Bake(int amount, bool cut = false)
     {
         int t = 0;
         for (int i = 0; i < transform.childCount; i++)
@@ -42,7 +42,7 @@ public class ColliderToVoxelManualBaker : MonoBehaviour
             if (t >= amount)
                 break;
         }
-        _colliderToVoxel.GetActiveCollidersAndApply();
+        _colliderToVoxel.GetActiveCollidersAndApply(cut);
     }
 
     [BoxGroup("BAKING")][Button]

@@ -161,10 +161,10 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		}
 
 
-		public void GetActiveCollidersAndApply()
+		public void GetActiveCollidersAndApply(bool cut)
 		{
 			colliders = GetComponentsInChildren<Collider>();
-			ApplyProceduralModifier();
+			ApplyProceduralModifier(cut);
 		}
 	}
 }

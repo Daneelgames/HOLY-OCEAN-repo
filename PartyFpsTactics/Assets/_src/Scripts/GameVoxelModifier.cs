@@ -122,7 +122,5 @@ public class GameVoxelModifier : NetworkBehaviour
         {
             modifier.ModifyAtPos(pos);
         }
-        
-        
     }
 }
