@@ -108,13 +108,16 @@ namespace MrPink.Units
         {
             if (_agent)
                 _agent.enabled = false;
+            rb.isKinematic = false;
             //this.enabled = false;
         }
 
         public void Resurrect()
         {
+            _agent.enabled = true;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
             
             this.enabled = true;
             

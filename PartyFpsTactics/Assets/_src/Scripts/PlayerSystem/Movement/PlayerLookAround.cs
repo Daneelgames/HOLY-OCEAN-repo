@@ -72,7 +72,7 @@ namespace MrPink.PlayerSystem
             {
                 Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
                 _headTransform.gameObject.SetActive(true);
-                //_headTransform.parent = null;
+                _headTransform.parent = null;
             }
             else
             {
@@ -175,10 +175,11 @@ namespace MrPink.PlayerSystem
         public void Death(Transform killer = null)
         {
             _killerToLookAt = killer;
+            _headTransform.parent = transform;
         }
         public void Resurrect()
         {
+            _headTransform.parent = null;
         }
-        
     }
 }

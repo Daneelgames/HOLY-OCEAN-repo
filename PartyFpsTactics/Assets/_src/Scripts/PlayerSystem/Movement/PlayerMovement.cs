@@ -1,6 +1,8 @@
 using System.Collections;
+using Crest;
 using FishNet.Object;
 using MrPink.Health;
+using NWH.DWP2.WaterObjects;
 using Pathfinding;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
@@ -14,12 +16,7 @@ namespace MrPink.PlayerSystem
 
         public Rigidbody rb;
         public float gravity = 5;
-        public float fallMultiplayer = 2.5f;
-        public float lowJumpMultiplayer = 2.5f;
-
         public float jumpForce = 300;
-        public float jumpTime = 0;
-        public float jumpTimeMax = 0.5f;
 
         public float fallForceAcceleration = 20;
         public float fallDamageThreshold = 10;
@@ -30,10 +27,12 @@ namespace MrPink.PlayerSystem
         public float crouchSpeed = 2;
         public float crouchRunSpeed = 3.5f;
         public float acceleration = 1;
+        [SerializeField] private float slowDownModifier = 1;
+        
         public float groundCheckRadius = 0.25f;
         public float climbCheckRadius = 1;
         private Vector3 _targetVelocity;
-        private Vector2 _movementInput;
+        private Vector2Int _movementInput;
         private Vector3 _moveVector;
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
@@ -184,6 +183,7 @@ namespace MrPink.PlayerSystem
                 State.IsLeaning = false;
                 return;
             }
+            GetUnderwater();
             HandleJump();
             HandleCrouch();
             HandleMovement();
@@ -207,19 +207,6 @@ namespace MrPink.PlayerSystem
             if (Shop.Instance.IsActive)
                 return;
             
-            /*
-            if (Shop.Instance && Shop.Instance.IsActive)
-            {
-                return;
-            }*/
-            /*
-            if (!LevelGenerator.Instance.levelIsReady)
-                return;*/
-
-            /*
-            if (ProceduralCutscenesManager.Instance.InCutScene)
-                return;*/
-
             GroundCheck();
             AutoVaultCheck();
             ClimbingCheck();
@@ -232,6 +219,20 @@ namespace MrPink.PlayerSystem
                 ApplyGrindRailMovement();
         }
 
+        void GetUnderwater()
+        {
+            bool underwater = false;
+            foreach (var resultState in playerWaterObject.ResultStates)
+            {
+                if (resultState < 2)
+                {
+                    underwater = true;
+                    break;
+                }
+            }
+            State.IsUnderwater = underwater;
+        }
+        
         void HandleJump()
         {
             if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0) && stamina > 0)
@@ -240,7 +241,6 @@ namespace MrPink.PlayerSystem
                 vel.y = 0;
                 rb.velocity = vel;
 
-                jumpTime = jumpTimeMax;
                 Jump(Vector3.zero);
             }
         }
@@ -376,7 +376,7 @@ namespace MrPink.PlayerSystem
 
             bool moveInFrame = hor != 0 || vert != 0;
 
-            _movementInput = new Vector2(hor, vert);
+            _movementInput = new Vector2Int(hor, vert);
 
             if (State.IsClimbing || State.IsGrounded == false)
                 _moveVector = Game.LocalPlayer.MainCamera.transform.right * _movementInput.x +
@@ -419,17 +419,22 @@ namespace MrPink.PlayerSystem
                     _targetVelocity = _moveVector * crouchSpeed * scaler;
             }
 
-            // JUMP
-            /*
-            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0))
-            {
-                Jump(Vector3.zero, ForceMode.Force);
-            }*/
-
             if (goingUpHill)
                 _targetVelocity += Vector3.up * 2;
 
             _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
+            
+            if (State.IsClimbing)
+                resultGravity = 0;
+            else if (State.IsUnderwater)
+                resultGravity = 1f;
+            else if (State.IsGrounded)
+                resultGravity = 1f;
+            else
+                resultGravity = gravity/* * additinalFallForce*/;
+
+            _resultVelocity += Vector3.down * resultGravity;
+
             if (State.CanVault)
             {
                 _resultVelocity += Vector3.up * autoVaultPower;
@@ -446,7 +451,6 @@ namespace MrPink.PlayerSystem
 
             StartCoroutine(CoyoteTimeCooldown());
             ChangeStamina(-1 * jumpStaminaCost);
-            //stamina = Mathf.Clamp(stamina - jumpStaminaCost /** Time.deltaTime*/, 0, staminaMax);
             _coyoteTime = 0;
         }
 
@@ -512,7 +516,6 @@ namespace MrPink.PlayerSystem
             }
             else if (!State.IsClimbing)
             {
-                jumpTime -= Time.deltaTime;
                 if (lastVelocityInAirY >= 0 && rb.velocity.y < 0)
                 {
                     lastVelocityInAirY = rb.velocity.y;
@@ -590,30 +593,30 @@ namespace MrPink.PlayerSystem
                 heightToFallFrom = transform.position.y;
             }
         }
+
+        [SerializeField] private WaterObject playerWaterObject;
+        float resultGravity = 0;
         
         private void ApplyFreeMovement()
         {
-            float resultGravity = 0;
             //rb.useGravity = false;
-            
-            
-            if (State.IsClimbing == false)
-                resultGravity = gravity/* * additinalFallForce*/;
 
-            /*
-            if (_resultVelocity.y < 0 || jumpTime <= 0)
+            if (State.IsUnderwater) // IN WATER
             {
-                _resultVelocity += Vector3.down * resultGravity * (fallMultiplayer - 1);
+                rb.AddForce(_resultVelocity);   
             }
-            else if (_resultVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
-            {    
-                _resultVelocity += Vector3.down * resultGravity * (lowJumpMultiplayer - 1);
-            }*/
-
-            
-            
-            _resultVelocity += Vector3.down * resultGravity;
-            rb.AddForce(_resultVelocity);
+            else
+            {
+                if (State.IsMoving == false && State.IsRunning == false && State.IsGrounded)
+                {
+                    rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, slowDownModifier * Time.unscaledDeltaTime);   
+                }
+                else
+                {
+                    //rb.AddForce(_resultVelocity, ForceMode.VelocityChange);   
+                    rb.velocity = _resultVelocity;   
+                }
+            }
             //rb.velocity = _resultVelocity;
         }
 

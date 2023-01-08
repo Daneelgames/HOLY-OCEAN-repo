@@ -149,6 +149,9 @@ namespace MrPink.WeaponsSystem
         
         protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
         {
+            if (Game.LocalPlayer == null)
+                return CollisionTarget.Self;
+            
             // DONT DAMAGE INTERACTABLE TRIGGERS AS THEY ARE ONLY FOR PLAYER INTERACTOR
             if (targetCollider.gameObject.layer == 11 && targetCollider.isTrigger)
             {

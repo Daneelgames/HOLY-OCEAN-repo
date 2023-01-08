@@ -361,6 +361,7 @@ namespace MrPink.Units
 
         public void RestartActivities()
         {
+            
             _selfUnit.UnitMovement.Resurrect();
             
             HealthController enemy = null;

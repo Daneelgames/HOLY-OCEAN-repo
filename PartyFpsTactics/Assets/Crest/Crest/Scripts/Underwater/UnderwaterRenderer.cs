@@ -365,7 +365,7 @@ namespace Crest
             if (s_PrimaryCamera != OceanRenderer.Instance.ViewCameraExcludingSceneCamera)
             {
                 s_PrimaryCamera = OceanRenderer.Instance.ViewCameraExcludingSceneCamera;
-                if (s_PrimaryCamera.TryGetComponent<UnderwaterRenderer>(out var instance))
+                    if (s_PrimaryCamera.TryGetComponent<UnderwaterRenderer>(out var instance))
                 {
 #if UNITY_EDITOR
                     if (Instance != null) Instance.DisableEditMode();

@@ -17,6 +17,7 @@ public class EnvironmentVisualManager : MonoBehaviour
 
     IEnumerator Init()
     {
+        yield break;
         while (ProgressionManager.Instance == null ||Game._instance == false || Game.LocalPlayer == null)
         {
             yield return null;

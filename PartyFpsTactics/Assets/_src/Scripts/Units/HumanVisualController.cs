@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink.Units
@@ -71,8 +72,30 @@ namespace MrPink.Units
             }
 
             IgnoreOwnCollision();
+
+            if (hc.IsPlayer == false)
+                StartCoroutine(GetGroundedAi());
         }
 
+        [SerializeField] [ReadOnly] private bool grounded = true;
+        [SerializeField]  private float groundedCheckSphereRadius = 2.5f;
+        IEnumerator GetGroundedAi()
+        {
+            while (hc.IsDead == false)
+            {
+                yield return new WaitForSeconds(1f);
+
+                grounded = Physics.CheckSphere(ragdollOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+                if (!grounded && ragdoll == false)
+                {
+                    if (hc.AiMovement)
+                        hc.AiMovement.StopActivities();
+                    
+                    ActivateRagdoll();
+                }
+            }
+        }
+        
         void IgnoreOwnCollision()
         {
             foreach (var collider1 in colliders)
@@ -430,10 +453,8 @@ namespace MrPink.Units
             
                 t = 0;
             
-                if (Physics.CheckSphere(ragdollOrigin.position, 1f, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
-                {
+                if (grounded)
                     break;
-                }
             }
             
             Resurrect();

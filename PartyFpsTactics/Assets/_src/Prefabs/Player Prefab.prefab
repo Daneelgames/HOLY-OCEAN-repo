@@ -11145,6 +11145,8 @@ MonoBehaviour:
   extraCollidersToIgnore:
   - {fileID: 5596697987043485618}
   - {fileID: 4864691832468757254}
+  grounded: 1
+  groundedCheckSphereRadius: 2.5
   moveRbToOriginIfPlayerForce: 5
 --- !u!1 &5431838109475776298
 GameObject:
@@ -11388,8 +11390,6 @@ GameObject:
   - component: {fileID: 2099900846646390429}
   - component: {fileID: 4075464650987322544}
   - component: {fileID: 5201198674905340780}
-  - component: {fileID: 2844969818483107935}
-  - component: {fileID: 2241473194739674161}
   m_Layer: 7
   m_Name: Player Prefab
   m_TagString: Untagged
@@ -11536,7 +11536,7 @@ MonoBehaviour:
   gravity: 20
   fallMultiplayer: 2.5
   lowJumpMultiplayer: 2.5
-  jumpForce: 5
+  jumpForce: 10
   jumpTime: 0.25
   jumpTimeMax: 0.66
   fallForceAcceleration: 15
@@ -11547,6 +11547,7 @@ MonoBehaviour:
   crouchSpeed: 1
   crouchRunSpeed: 2
   acceleration: 10
+  slowDownModifier: 5
   groundCheckRadius: 0.15
   climbCheckRadius: 1
   _coyoteTimeMax: 0.5
@@ -11575,6 +11576,7 @@ MonoBehaviour:
   rotator: {fileID: 2996664407138911022}
   rotatorSpeed: 1
   minMaxRotatorAngle: 15
+  playerWaterObject: {fileID: 1693171365648859788}
 --- !u!114 &5596697987043485630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12048,21 +12050,56 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
---- !u!33 &2844969818483107935
+--- !u!1 &5596697988226418837
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5596697988226418836}
+  - component: {fileID: 2444061020573421003}
+  - component: {fileID: 1693171365648859788}
+  m_Layer: 7
+  m_Name: Player Head WaterObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5596697988226418836
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5596697988226418837}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2996664407138911022}
+  - {fileID: 2926822677281190941}
+  m_Father: {fileID: 5596697987043485631}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &2444061020573421003
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5596697987043485619}
+  m_GameObject: {fileID: 5596697988226418837}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2241473194739674161
+--- !u!114 &1693171365648859788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5596697987043485619}
+  m_GameObject: {fileID: 5596697988226418837}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9118365f988afd4419c64e108a8bbc64, type: 3}
@@ -12076,7 +12113,7 @@ MonoBehaviour:
   calculateWaterHeights: 1
   calculateWaterNormals: 0
   calculateWaterFlows: 0
-  fluidDensity: 2
+  fluidDensity: 10
   buoyantForceCoefficient: 1
   slamForceCoefficient: 1
   suctionForceCoefficient: 1
@@ -12129,39 +12166,6 @@ MonoBehaviour:
   triangleCount: 0
   vertexCount: 0
   targetRigidbody: {fileID: 5596697987043485629}
---- !u!1 &5596697988226418837
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5596697988226418836}
-  m_Layer: 7
-  m_Name: Player Head
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5596697988226418836
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5596697988226418837}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2996664407138911022}
-  - {fileID: 2926822677281190941}
-  m_Father: {fileID: 5596697987043485631}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5685074076322357206
 GameObject:
   m_ObjectHideFlags: 0

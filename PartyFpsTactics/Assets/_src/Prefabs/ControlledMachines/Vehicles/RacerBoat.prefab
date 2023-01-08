@@ -3670,8 +3670,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7640090839470546734}
   - component: {fileID: 7640090839470546735}
-  - component: {fileID: 7640090839470546732}
-  - component: {fileID: 7640090839470546733}
   - component: {fileID: 7640090839470546729}
   - component: {fileID: 7640090839470546730}
   - component: {fileID: 7640090839470546731}
@@ -3705,64 +3703,6 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7640090839470546726}
-  m_Mesh: {fileID: 4300012, guid: 5fb3beab9b5283142b01998ba7f07f48, type: 3}
---- !u!23 &7640090839470546732
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7640090839470546726}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 4656080f940601f43b1436b3f2a7e6cd, type: 2}
-  - {fileID: 2100000, guid: 4656080f940601f43b1436b3f2a7e6cd, type: 2}
-  - {fileID: 2100000, guid: 4656080f940601f43b1436b3f2a7e6cd, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7640090839470546733
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7640090839470546726}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: -1
   m_Mesh: {fileID: 4300012, guid: 5fb3beab9b5283142b01998ba7f07f48, type: 3}
 --- !u!114 &7640090839470546729
 MonoBehaviour:
@@ -10390,6 +10330,7 @@ GameObject:
   - component: {fileID: 5814401810986288733}
   - component: {fileID: 491974670934978258}
   - component: {fileID: 4265975499692379777}
+  - component: {fileID: 4542526552691383230}
   m_Layer: 11
   m_Name: PlayerControlsInteractor
   m_TagString: Untagged
@@ -10468,6 +10409,19 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 7492870915056160710, guid: c376c6d91bd76934ca9c650afd6259ea, type: 3}
+--- !u!114 &4542526552691383230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271367503618253966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  markColor: {r: 0, g: 0.940083, b: 1, a: 1}
 --- !u!1 &8697115350818877617
 GameObject:
   m_ObjectHideFlags: 0

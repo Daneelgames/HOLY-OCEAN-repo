@@ -12,7 +12,8 @@ public class UiMarkWorldObject : MonoBehaviour
     }
     void OnEnable()
     {
-        QuestMarkers.Instance.AddMarker(transform, markColor);    
+        if (QuestMarkers.Instance)
+            QuestMarkers.Instance.AddMarker(transform, markColor);    
     }
 
     private void OnDestroy()
