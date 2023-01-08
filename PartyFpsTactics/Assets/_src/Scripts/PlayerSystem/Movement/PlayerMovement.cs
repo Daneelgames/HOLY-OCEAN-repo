@@ -175,7 +175,7 @@ namespace MrPink.PlayerSystem
 
             if (_isDead || Shop.Instance.IsActive)
             {
-                rb.isKinematic = true;
+                rb.isKinematic = false;
                 rb.useGravity = false;
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
@@ -305,13 +305,6 @@ namespace MrPink.PlayerSystem
 
         private void HandleCrouch()
         {
-            if (State.IsUnderWater)
-            {
-                if (crouching)
-                    SetCrouch(false);
-                return;
-            }
-            
             if (Input.GetKeyDown(KeyCode.LeftControl))
                 SetCrouch(!crouching);
         }
@@ -385,7 +378,7 @@ namespace MrPink.PlayerSystem
 
             _movementInput = new Vector2(hor, vert);
 
-            if (State.IsClimbing)
+            if (State.IsClimbing || State.IsGrounded == false)
                 _moveVector = Game.LocalPlayer.MainCamera.transform.right * _movementInput.x +
                               Game.LocalPlayer.MainCamera.transform.forward * _movementInput.y;
             else
@@ -437,6 +430,10 @@ namespace MrPink.PlayerSystem
                 _targetVelocity += Vector3.up * 2;
 
             _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
+            if (State.CanVault)
+            {
+                _resultVelocity += Vector3.up * autoVaultPower;
+            }
             _prevVelocity = _resultVelocity;
         }
 
@@ -566,10 +563,6 @@ namespace MrPink.PlayerSystem
         Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.red);
     }
 
-    public void SetUnderWater(bool under)
-    {
-        State.IsUnderWater = under;
-    }
     
     private RaycastHit[] hitInfoClimb;
         void ClimbingCheck()
@@ -582,8 +575,10 @@ namespace MrPink.PlayerSystem
 
             hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
                 Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
-            State.IsClimbing = hitInfoClimb.Length > 0;
-            
+            var newClimbing = hitInfoClimb.Length > 0;
+            if (newClimbing && State.IsClimbing == false)
+                rb.velocity = Vector3.zero;
+            State.IsClimbing = newClimbing;
             if (State.IsClimbing)
             {
                 /*
@@ -599,20 +594,13 @@ namespace MrPink.PlayerSystem
         private void ApplyFreeMovement()
         {
             float resultGravity = 0;
-            if (State.IsClimbing)
-            {
-                // dont apply gravity
-            }
-            else if (State.IsGrounded)
-            {
-                if (!onSlope)
-                    resultGravity = 1;
-            }
-            else if (State.IsUnderWater)
-                _resultVelocity += Vector3.up * underwaterPushPower;
-            else // in the air
-                resultGravity = gravity * additinalFallForce;
+            //rb.useGravity = false;
+            
+            
+            if (State.IsClimbing == false)
+                resultGravity = gravity/* * additinalFallForce*/;
 
+            /*
             if (_resultVelocity.y < 0 || jumpTime <= 0)
             {
                 _resultVelocity += Vector3.down * resultGravity * (fallMultiplayer - 1);
@@ -620,16 +608,13 @@ namespace MrPink.PlayerSystem
             else if (_resultVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
             {    
                 _resultVelocity += Vector3.down * resultGravity * (lowJumpMultiplayer - 1);
-            }
+            }*/
 
-            if (State.CanVault)
-            {
-                _resultVelocity += Vector3.up * autoVaultPower;
-            }
             
             
-            //rb.velocity = _resultVelocity + Vector3.down * resultGravity;
-            rb.velocity = _resultVelocity;
+            _resultVelocity += Vector3.down * resultGravity;
+            rb.AddForce(_resultVelocity);
+            //rb.velocity = _resultVelocity;
         }
 
         private void ApplyGrindRailMovement()

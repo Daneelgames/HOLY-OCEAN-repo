@@ -1,3 +1,15 @@
+2.3.1
+
+Changed:
+- Fog, distance density parameter is now unclamped in the inspector.
+- Tilt Shift effect no longer requires an intermediate render pass.
+
+Fixed:
+- (Built-in RP) Shader compile error about "Luminance" function redefinition when using the Metal or Vulkan graphics API
+- (URP) Tilt Shift no longer appearing to have an effect since last update (when HDR is enabled).
+- Script compile error when both the Universal RP and Post Processing packages were installed, preventing a proper installation error from being displayed.
+- Fog turning black if the skybox shader in use was not double-sided.
+
 2.3.0
 Minimum supported version is now Unity 2020.3, and URP 10.3.2.
 

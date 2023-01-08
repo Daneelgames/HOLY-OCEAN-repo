@@ -5,12 +5,15 @@ using MrPink;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.WeaponsSystem;
+using NWH.DWP2.ShipController;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using VehicleBehaviour;
 
 public class ControlledMachine : MonoBehaviour
 {
+    [BoxGroup]
+    public AdvancedShipController AdvancedShipController;
     [BoxGroup]
     public WheelVehicle wheelVehicle;
     [BoxGroup]
@@ -48,6 +51,10 @@ public class ControlledMachine : MonoBehaviour
     public void StartInput(HealthController driverHc)
     {
         controllingHc = driverHc;
+        if (AdvancedShipController)
+        {
+            AdvancedShipController.Wake();
+        }
         if (wheelVehicle)
         {
             wheelVehicle.IsPlayer = true;
@@ -59,8 +66,9 @@ public class ControlledMachine : MonoBehaviour
             sleepMachine.PlayerInside(true);
         }
 
+        /*
         rb.drag = rbDrag;
-        rb.angularDrag = rbAngularDrag;
+        rb.angularDrag = rbAngularDrag;*/
         if (rotateVehicleStraight != null)
             StopCoroutine(rotateVehicleStraight);
         
@@ -149,6 +157,10 @@ public class ControlledMachine : MonoBehaviour
 
             Visual.transform.parent = transform;
             visualFollowCoroutine = StartCoroutine(ResetVisualTransform());
+        }
+        if (AdvancedShipController)
+        {
+            AdvancedShipController.Sleep();
         }
         if (wheelVehicle)
         {

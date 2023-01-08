@@ -55,7 +55,10 @@ namespace SCPE
 
                             if (Installer.ScriptPackages.PACKAGE_VERSION_STATE == ScriptPackages.PackageVersionState.Outdated)
                             {
-                                EditorUtility.DisplayDialog(SCPE.ASSET_NAME, "You are updating this asset.\n\nThe console may display shader errors, these will be automatically resolved after using the \"Update files\" option", "Ok");
+                                if (EditorUtility.DisplayDialog(SCPE.ASSET_NAME, "You are updating this asset.\n\nThe console may display shader errors, these will be automatically resolved after using the \"Update files\" option", "Ok"))
+                                {
+                                    Installer.Shaders.ClearConsoleLog();
+                                }
                             }
                             
                             return;
@@ -79,7 +82,7 @@ namespace SCPE
 
             ScriptPackages.Initialize();
         }
-       
+        
 #if SCPE_DEV
         [MenuItem("SCPE/Installer/Add layer")]
 #endif
@@ -523,7 +526,11 @@ namespace SCPE
                 
                 AssetDatabase.Refresh();
 
-                if(counter > 0) EditorUtility.DisplayDialog(SCPE.ASSET_NAME, $"Successfully moved {counter} shaders out of their \'Resources\' folder.\n\nOnly shaders for effects added to volume profiles will now be included in a build.", "OK");
+                if (counter > 0)
+                {
+                    ClearConsoleLog();
+                    EditorUtility.DisplayDialog(SCPE.ASSET_NAME, $"Successfully moved {counter} shaders out of their \'Resources\' folder.\n\nOnly shaders for effects added to volume profiles will now be included in a build.", "OK");
+                }
             }
             
             #if SCPE_DEV
@@ -531,6 +538,8 @@ namespace SCPE
             #endif
             public static void CheckShaderReferences()
             {
+                //Some users use URP but still have the Post-Processing package installed, this throws a compile error
+                #if !(URP && PPS)
                 string profileType = "PostProcessProfile";
                 #if URP
                 profileType = "VolumeProfile";
@@ -544,29 +553,29 @@ namespace SCPE
                 {
                     string path = AssetDatabase.GUIDToAssetPath(guids[i]);
                     
-                    int settingsCountCount = 0;
+                    int settingsCount = 0;
 
                     #if PPS
                     PostProcessProfile profile = (PostProcessProfile)AssetDatabase.LoadAssetAtPath(path, typeof(PostProcessProfile));
-                    settingsCountCount = profile.settings.Count;
+                    settingsCount = profile.settings.Count;
                     #endif
                     
                     #if URP
                     VolumeProfile profile = (VolumeProfile)AssetDatabase.LoadAssetAtPath(path, typeof(VolumeProfile));
-                    settingsCountCount = profile.components.Count;
+                    settingsCount = profile.components.Count;
                     #endif
                     
                     ScriptableObject s = null;
                     
                     //Go over every settings type on the profile
                     //Execute the 'SerializeShader' method on the class if it's present
-                    for (int j = 0; j < settingsCountCount; j++)
+                    for (int j = 0; j < settingsCount; j++)
                     {
                         #if PPS
                         s = profile.settings[j];
                         #endif
                         
-                        #if URP
+                        #if URP && !PPS
                         s = profile.components[j];
                         #endif
                         
@@ -597,6 +606,7 @@ namespace SCPE
                 #if SCPE_DEV
                 else Debug.Log("[CheckShaderReferences] All shaders referenced on profile assets");
                 #endif
+                #endif //Not both URP && PPS
             }
 
             private static void UpdateIncludePaths(string shaderFilePath)
@@ -606,6 +616,17 @@ namespace SCPE
                 fileContents = fileContents.Replace("#include \"../", "#include \"");
                 
                 File.WriteAllText(shaderFilePath, fileContents);
+            }
+            
+            //The console may show shader compile errors even after they've been fixed by updating. 
+            //Unlike script compile errors, these won't automatically clear.
+            //Instead, for the console to clear
+            public static void ClearConsoleLog()
+            {
+                Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+                Type type = assembly.GetType("UnityEditor.LogEntries");
+                MethodInfo clearMethod = type.GetMethod("Clear");
+                clearMethod.Invoke(new object(), null);
             }
         }
     }

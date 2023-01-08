@@ -135,7 +135,7 @@ float EdgeMask(float2 uv, float size, float smoothness)
 	return pow(saturate(dot(d, d)), smoothness);
 }
 
-#ifndef URP //Already defined
+#if !defined(URP) && !SHADER_API_METAL && !SHADER_API_VULKAN //Already defined
 float Luminance(float3 color)
 {
 	return (color.r * 0.3 + color.g * 0.59 + color.b * 0.11);

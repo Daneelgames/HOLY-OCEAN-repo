@@ -22,25 +22,5 @@ namespace _src.Scripts
             Instance = this;
         }
 
-        void Update()
-        {
-            if (Game._instance == null || Game.LocalPlayer == null)
-            {
-                return;
-            }
-            if (Game.LocalPlayer.Position.y < waterLevel)
-            {
-                if (Game.LocalPlayer.Health.health > 0)
-                {
-                    if (Game.LocalPlayer.Movement.State.IsUnderWater == false)
-                        Game.LocalPlayer.Movement.SetUnderWater(true);
-                    Game.LocalPlayer.CharacterNeeds.AddToNeed(Need.NeedType.Water, suckWaterNeedPerSecond * Time.deltaTime);
-                }
-            }
-            else if (Game.LocalPlayer.Movement.State.IsUnderWater)
-            {
-                Game.LocalPlayer.Movement.SetUnderWater(false);
-            }
-        }
     }
 }

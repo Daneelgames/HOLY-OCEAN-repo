@@ -139,20 +139,21 @@ namespace MrPink.PlayerSystem
                 _headTransform.rotation = Quaternion.Lerp(_headTransform.rotation, Quaternion.LookRotation(_killerToLookAt.position - _headTransform.position), Time.unscaledDeltaTime);
                 return;
             }
-        
-            Vector3 newRotation = new Vector3(0, _horizontalRotation, 0);
+
             _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.unscaledDeltaTime;
-            newRotation = new Vector3(transform.localRotation.x, _horizontalRotation, transform.localRotation.z);
+            
+            var newRotation = new Vector3(0, _horizontalRotation, 0);
+            //newRotation = new Vector3(transform.localRotation.x, _horizontalRotation, transform.localRotation.z);
             
             _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.unscaledDeltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
-            if (Game.LocalPlayer.VehicleControls.controlledMachine == null) // ЕСЛИ В ТАЧКЕ ИЛИ ЛОДКЕ
+            if (Game.LocalPlayer.VehicleControls.controlledMachine == null) 
             {
                 transform.localRotation = Quaternion.Euler(newRotation);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
             }
-            else
+            else // ЕСЛИ В ТАЧКЕ ИЛИ ЛОДКЕ
             {
                 vehicleHeadDummyTransform.localRotation = Quaternion.Slerp( Quaternion.Euler(new Vector3(transform.localEulerAngles.x, newRotation.y, transform.localEulerAngles.z)), Quaternion.Euler(newRotation), Time.unscaledDeltaTime);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + vehicleHeadDummyTransform.eulerAngles;

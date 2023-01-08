@@ -40,8 +40,10 @@ namespace SCPE
             EditorWindow editorWindow = GetWindow<HelpWindow>(true, "Asset Window", true);
 
             //Open somewhat in the center of the screen
-            editorWindow.position = new Rect((Screen.currentResolution.width / 2) - (width * 0.5f), 150f, width, height);
-
+            #if !UNITY_EDITOR_OSX //DPI Scaling prevents this from properly working
+            editorWindow.position = new Rect((Screen.currentResolution.width / 2f) - (width * 0.5f), (Screen.currentResolution.height / 2f)  - (height * 0.7f), width, height);
+            #endif
+            
             //Fixed size
             editorWindow.maxSize = new Vector2(width, height);
             editorWindow.minSize = new Vector2(width, height);
