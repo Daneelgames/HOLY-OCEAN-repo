@@ -116,7 +116,6 @@ public class ControlledMachine : MonoBehaviour
     private Coroutine visualFollowCoroutine;
     IEnumerator VisualFollow()
     {
-        yield break;
         if (Visual == null)
             yield break;
         
@@ -139,9 +138,6 @@ public class ControlledMachine : MonoBehaviour
                     break;
                 
                 col.FollowDetachedTransform(carCrashCollidersParents[index]);
-                /*
-                col.transform.position = carCrashCollidersParents[index].position;
-                col.transform.rotation = carCrashCollidersParents[index].rotation;*/
             }
 
             yield return null;

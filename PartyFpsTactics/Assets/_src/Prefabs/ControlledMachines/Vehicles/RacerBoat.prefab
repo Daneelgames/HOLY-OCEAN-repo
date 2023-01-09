@@ -1,5 +1,79 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &332306451444376211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6833375660357406652}
+  - component: {fileID: 3795506382437255630}
+  - component: {fileID: 8463044254754045524}
+  - component: {fileID: 4011149936367754368}
+  m_Layer: 2
+  m_Name: MovingPlatform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6833375660357406652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332306451444376211}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.100000165, y: 4.05, z: 1.6100007}
+  m_LocalScale: {x: 6.6461015, y: 7.6430163, z: 6.6461015}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3513282992730015300}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!136 &3795506382437255630
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332306451444376211}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8463044254754045524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332306451444376211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a21e7d01165d354b8af872b3cb6af87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownRigidbody: {fileID: 7640090839627383698}
+--- !u!65 &4011149936367754368
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332306451444376211}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8491486, y: 1.0846202, z: 0.5031337}
+  m_Center: {x: -0.008885148, y: -0.4808214, z: 0.24843842}
 --- !u!1 &1234904997645804471
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,8 +368,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2645307044595996840}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.482, y: 3.311, z: -0.456}
+  m_LocalRotation: {x: 0.024835758, y: 0.06961459, z: -0.0017351413, w: 0.9972633}
+  m_LocalPosition: {x: -0.6530102, y: 3.6661932, z: -0.53388464}
   m_LocalScale: {x: 0.5614509, y: 0.5614508, z: 0.5614509}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -312,7 +386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3513282992730015300}
   m_Layer: 11
-  m_Name: ControlledBoat
+  m_Name: VISUAL & COLLIDERS
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -332,6 +406,7 @@ Transform:
   m_Children:
   - {fileID: 4859162229535668482}
   - {fileID: 6454300833903442629}
+  - {fileID: 6833375660357406652}
   m_Father: {fileID: 7640090839627383700}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -525,7 +600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648704111072}
   - component: {fileID: 6032145648704111079}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -570,7 +645,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648705972279}
   - component: {fileID: 6032145648705972278}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -615,7 +690,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648717342758}
   - component: {fileID: 6032145648717342757}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -660,7 +735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648756422852}
   - component: {fileID: 6032145648756422875}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -705,7 +780,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648756923003}
   - component: {fileID: 6032145648756923002}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -750,7 +825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648771365821}
   - component: {fileID: 6032145648771365820}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -795,7 +870,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648781451217}
   - component: {fileID: 6032145648781451216}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,7 +915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648805438906}
   - component: {fileID: 6032145648805438905}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -884,7 +959,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6032145648851893603}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: CollidersLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -920,7 +995,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648877308244}
   - component: {fileID: 6032145648877308075}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -965,7 +1040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145648877586521}
   - component: {fileID: 6032145648877586520}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1010,7 +1085,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649053053309}
   - component: {fileID: 6032145649053053308}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1142,7 +1217,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6032145649116798447}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1204,7 +1279,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649140555070}
   - component: {fileID: 6032145649140555069}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1282,7 +1357,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649272545902}
   - component: {fileID: 6032145649272545901}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1327,7 +1402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649287218926}
   - component: {fileID: 6032145649287218925}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1372,7 +1447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649403293481}
   - component: {fileID: 6032145649403293480}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1417,7 +1492,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649454119864}
   - component: {fileID: 6032145649454119871}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1462,7 +1537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649526663036}
   - component: {fileID: 6032145649526663027}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1507,7 +1582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649570788412}
   - component: {fileID: 6032145649570788403}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1552,7 +1627,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649663255499}
   - component: {fileID: 6032145649663255498}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1597,7 +1672,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649674836118}
   - component: {fileID: 6032145649674836117}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1641,7 +1716,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6032145649897794795}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: CollidersRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1677,7 +1752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145649926170472}
   - component: {fileID: 6032145649926170479}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1722,7 +1797,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650033548297}
   - component: {fileID: 6032145650033548296}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1767,7 +1842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650100082511}
   - component: {fileID: 6032145650100082510}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1812,7 +1887,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650100821782}
   - component: {fileID: 6032145650100821781}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1857,7 +1932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650143190798}
   - component: {fileID: 6032145650143190797}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1902,7 +1977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650170358949}
   - component: {fileID: 6032145650170358948}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2037,7 +2112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650235277778}
   - component: {fileID: 6032145650235277777}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2082,7 +2157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650254306063}
   - component: {fileID: 6032145650254306062}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2127,7 +2202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650308777898}
   - component: {fileID: 6032145650308777897}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2172,7 +2247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650352196005}
   - component: {fileID: 6032145650352196004}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2217,7 +2292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650516269029}
   - component: {fileID: 6032145650516269028}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2262,7 +2337,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650526521169}
   - component: {fileID: 6032145650526521168}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2307,7 +2382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650710084242}
   - component: {fileID: 6032145650710084241}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2352,7 +2427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650787357564}
   - component: {fileID: 6032145650787357555}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2397,7 +2472,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650813821080}
   - component: {fileID: 6032145650813821087}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2442,7 +2517,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032145650814439368}
   - component: {fileID: 6032145650814439375}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3675,7 +3750,7 @@ GameObject:
   - component: {fileID: 7640090839470546731}
   - component: {fileID: 7640090839470546728}
   m_Layer: 12
-  m_Name: Hull
+  m_Name: Hull WATER OBJ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3689,7 +3764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7640090839470546726}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.52, y: 0.52, z: 0.85}
+  m_LocalPosition: {x: 0.51, y: 1.22, z: 1.74}
   m_LocalScale: {x: 2.6617, y: 2.6617, z: 2.6617}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8863,7 +8938,7 @@ MonoBehaviour:
   isAwake: 1
   ReferenceWaterObject: {fileID: 7640090839470546729}
   input:
-    autoSetInput: 0
+    autoSetInput: 1
     states:
       steering: 0
       throttle: 0
@@ -8880,7 +8955,7 @@ MonoBehaviour:
   engines:
   - throttleBinding: 0
     name: Left Outboard
-    startOnThrottle: 1
+    startOnThrottle: 0
     isOn: 0
     minRPM: 800
     maxRPM: 5000
@@ -8889,7 +8964,7 @@ MonoBehaviour:
     startingRPM: 300
     startDuration: 0.8
     stopDuration: 0.5
-    thrustPosition: {x: -0.4, y: -0.7, z: -2.4}
+    thrustPosition: {x: -1.78, y: -0.7, z: 0}
     thrustDirection: {x: 0, y: 0, z: 1}
     applyThrustWhenAboveWater: 0
     reverseThrustCoefficient: 0.5
@@ -8940,7 +9015,7 @@ MonoBehaviour:
     pitchRange: 1
   - throttleBinding: 0
     name: Right Outboard
-    startOnThrottle: 1
+    startOnThrottle: 0
     isOn: 0
     minRPM: 800
     maxRPM: 5000
@@ -8949,7 +9024,7 @@ MonoBehaviour:
     startingRPM: 300
     startDuration: 0.8
     stopDuration: 0.5
-    thrustPosition: {x: 0.4, y: -0.7, z: -2.4}
+    thrustPosition: {x: 1.78, y: -0.7, z: 0}
     thrustDirection: {x: 0, y: 0, z: 1}
     applyThrustWhenAboveWater: 0
     reverseThrustCoefficient: 0.5
@@ -9001,12 +9076,12 @@ MonoBehaviour:
   rudders:
   - name: Left Rudder
     rudderTransform: {fileID: 7640090840297205521}
-    maxAngle: 33
+    maxAngle: 66
     rotationSpeed: 53
     localRotationAxis: {x: 0, y: 1, z: 0}
   - name: Right Rudder
     rudderTransform: {fileID: 7640090839828752857}
-    maxAngle: 33
+    maxAngle: 66
     rotationSpeed: 53
     localRotationAxis: {x: 0, y: 1, z: 0}
   thrusters: []
@@ -9069,10 +9144,10 @@ MonoBehaviour:
   totalMass: 950
   dimensions: {x: 2.14, y: 1.26, z: 5.7}
   useDefaultCenterOfMass: 0
-  centerOfMass: {x: -0.04110688, y: 0.7647343, z: 1.5745999}
+  centerOfMass: {x: -0.040785745, y: 0.7637333, z: 1.5530673}
   centerOfMassOffset: {x: 0, y: -0.43, z: -0.4}
   useDefaultInertia: 1
-  inertiaTensor: {x: 22823.572, y: 23499.832, z: 3056.0808}
+  inertiaTensor: {x: 22706.7, y: 23376.791, z: 3034.2905}
   inertiaScale: {x: 1, y: 1, z: 1}
   updateInterval: 1
 --- !u!114 &7640090839627383697
@@ -9087,7 +9162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec7de57a33ea2840b159156e31cad04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floodedCenterOfMass: {x: 0, y: 0, z: 1}
+  floodedCenterOfMass: {x: 0, y: 1.94, z: 1}
   centerOfMassDriftPercent: 0.4
   addedMassPercentPerSecond: 0.1
   maxMassPercent: 3
@@ -9127,7 +9202,7 @@ MonoBehaviour:
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 32
-  _scenePathHash: 645291264
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 8152532617833539886
   _sceneNetworkObjects:
@@ -9153,8 +9228,8 @@ MonoBehaviour:
   AdvancedShipController: {fileID: 7640090839627383701}
   wheelVehicle: {fileID: 0}
   sleepMachine: {fileID: 0}
-  Visual: {fileID: 4859162229535668482}
-  visualFollowSpeed: 10
+  Visual: {fileID: 3513282992730015300}
+  visualFollowSpeed: 1
   sitTransform: {fileID: 6644650172397562772}
   CameraTransform: {fileID: 3383355585731294768}
   sitTransformNpc: {fileID: 9040898654670486493}
@@ -9522,11 +9597,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7640090840180358286}
   - component: {fileID: 7640090840180358386}
-  - component: {fileID: 7640090840180358387}
   - component: {fileID: 7640090840180358384}
   - component: {fileID: 7640090840180358385}
   m_Layer: 0
-  m_Name: Keel
+  m_Name: Keel WATER OBJ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9540,8 +9614,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7640090840180358287}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.7523, z: -0.7747}
-  m_LocalScale: {x: 0.009286939, y: 0.55698013, z: 2.3543737}
+  m_LocalPosition: {x: -0, y: 1.05, z: -0.7747}
+  m_LocalScale: {x: 1, y: 0.55698013, z: 2.3543737}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7640090839627383700}
@@ -9555,48 +9629,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7640090840180358287}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7640090840180358387
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7640090840180358287}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &7640090840180358384
 BoxCollider:
   m_ObjectHideFlags: 0

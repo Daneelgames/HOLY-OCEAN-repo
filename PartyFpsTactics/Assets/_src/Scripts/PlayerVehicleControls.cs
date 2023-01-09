@@ -98,7 +98,7 @@ namespace MrPink
             else
             {
                 Game.LocalPlayer.Movement.rb.isKinematic = false;
-                Game.LocalPlayer.Movement.rb.useGravity = true;
+                Game.LocalPlayer.Movement.rb.useGravity = false;
                 //Player.Movement.transform.parent = null;
             }
         }

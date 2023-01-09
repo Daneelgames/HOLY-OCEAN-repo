@@ -572,7 +572,7 @@ MonoBehaviour:
   calculateWaterHeights: 1
   calculateWaterNormals: 0
   calculateWaterFlows: 0
-  fluidDensity: 10
+  fluidDensity: 3
   buoyantForceCoefficient: 1
   slamForceCoefficient: 1
   suctionForceCoefficient: 1
@@ -11648,9 +11648,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 6209
   rb: {fileID: 5596697987043485629}
-  gravity: 5
+  playerWaterObject: {fileID: 7434130277617785098}
   jumpForce: 100
-  fallForceAcceleration: 15
+  _coyoteTimeMax: 0.75
+  canUseCoyoteTime: 1
+  _coyoteTime: 0
+  gravity: 5
+  gravityChangeSmooth: 1
+  newTargetGravity: 0
+  resultGravity: 0
   fallDamageThreshold: 10
   fallDamage: 100
   walkSpeed: 5
@@ -11661,7 +11667,6 @@ MonoBehaviour:
   slowDownModifier: 5
   groundCheckRadius: 0.15
   climbCheckRadius: 1
-  _coyoteTimeMax: 0.5
   stamina: 100
   staminaMax: 100
   staminaMin: -20
@@ -11679,7 +11684,6 @@ MonoBehaviour:
   middleRaycastHeight: 1.2
   bottomRaycastHeight: 0.2
   autoVaultPower: 5
-  underwaterPushPower: 100
   crouching: 0
   topCollider: {fileID: 5596697987043485618}
   bottomCollider: {fileID: 4864691832468757254}
@@ -11687,7 +11691,6 @@ MonoBehaviour:
   rotator: {fileID: 2996664407138911022}
   rotatorSpeed: 1
   minMaxRotatorAngle: 15
-  playerWaterObject: {fileID: 7434130277617785098}
 --- !u!114 &5596697987043485630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11776,7 +11779,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0.5
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80

@@ -49,6 +49,7 @@ namespace MrPink
         [SerializeField] private GameCamera _gameCamera;
         public Camera PlayerCamera => _gameCamera._Camera;
         [SerializeField] private float camMoveSmooth = 10;
+        [SerializeField] private float camMoveSmoothVehicle = 10;
         [SerializeField] private float camRotSmooth = 10;
         private void Awake()
         {
@@ -67,18 +68,16 @@ namespace MrPink
         private void Update()
         {
             if (_localPlayer == null) return;
+            /*
             if (_localPlayer.VehicleControls.controlledMachine == null)
-            {
-                _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position,
-                    _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.unscaledDeltaTime);
-            }
+                _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.unscaledDeltaTime);
             else
-            {
-                _gameCamera.transform.position = _localPlayer.VehicleControls.controlledMachine.CameraTransform.position;
-            }
+                _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position, _localPlayer.VehicleControls.controlledMachine.CameraTransform.position, camMoveSmoothVehicle * Time.unscaledDeltaTime);
+                */
             
-            _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation,
-                _localPlayer.LookAround.HeadRot, camRotSmooth * Time.unscaledDeltaTime);
+            _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.unscaledDeltaTime);
+            _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.unscaledDeltaTime);
+            
         }
 
         

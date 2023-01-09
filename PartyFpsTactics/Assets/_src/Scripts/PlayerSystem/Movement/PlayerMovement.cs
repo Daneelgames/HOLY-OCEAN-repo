@@ -13,21 +13,27 @@ namespace MrPink.PlayerSystem
     public class PlayerMovement : NetworkBehaviour
     {
         [Header("Movement")] public LayerMask WalkableLayerMask;
-
+        [SerializeField][ReadOnly]private Rigidbody movingPlatformRigidbody;
         public Rigidbody rb;
-        public float gravity = 5;
-        public float jumpForce = 300;
+        
+        [SerializeField] private WaterObject playerWaterObject;
+        [BoxGroup("VERTICAL")]public float jumpForce = 300;
+        [BoxGroup("VERTICAL")] [SerializeField] private float _coyoteTimeMax = 0.5f;
+        [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private bool canUseCoyoteTime = true;
+        [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private float _coyoteTime = 0;
+        [BoxGroup("VERTICAL")]public float gravity = 5;
+        [BoxGroup("VERTICAL")][SerializeField]float gravityChangeSmooth = 5f;
+        [BoxGroup("VERTICAL")][SerializeField][ReadOnly]float newTargetGravity = 0f;
+        [BoxGroup("VERTICAL")][SerializeField][ReadOnly]float resultGravity = 0;
+        [BoxGroup("VERTICAL")]public float fallDamageThreshold = 10;
+        [BoxGroup("VERTICAL")]public int fallDamage = 100;
 
-        public float fallForceAcceleration = 20;
-        public float fallDamageThreshold = 10;
-        public int fallDamage = 100;
-
-        public float walkSpeed = 5;
-        public float runSpeed = 8;
-        public float crouchSpeed = 2;
-        public float crouchRunSpeed = 3.5f;
-        public float acceleration = 1;
-        [SerializeField] private float slowDownModifier = 1;
+        [BoxGroup("HORIZONTAL")]public float walkSpeed = 5;
+        [BoxGroup("HORIZONTAL")]public float runSpeed = 8;
+        [BoxGroup("HORIZONTAL")]public float crouchSpeed = 2;
+        [BoxGroup("HORIZONTAL")]public float crouchRunSpeed = 3.5f;
+        [BoxGroup("HORIZONTAL")]public float acceleration = 1;
+        [BoxGroup("HORIZONTAL")][SerializeField] private float slowDownModifier = 1;
         
         public float groundCheckRadius = 0.25f;
         public float climbCheckRadius = 1;
@@ -37,20 +43,21 @@ namespace MrPink.PlayerSystem
         private Vector3 _prevVelocity;
         private Vector3 _resultVelocity;
 
-        [SerializeField] private float _coyoteTimeMax = 0.5f;
-        private float _coyoteTime = 0;
 
-        [Header("Stamina")] public float stamina = 100;
+        private GrindRail activeGrindRail;
+
+
+        [BoxGroup("STAMINA")] public float stamina = 100;
         [HideInInspector] public float staminaMax = 100;
-        public float staminaMin = -20;
-        [SerializeField] float climbStaminaCost = 5;
-        [SerializeField] float climbMoveStaminaCost = 10;
-        [SerializeField] float climbRunStaminaCost = 15;
-        [SerializeField] float runStaminaCost = 10;
-        [SerializeField] float runCrouchStaminaCost = 5;
-        [SerializeField] private float jumpStaminaCost = 10;
-        [SerializeField] private float idleStaminaRegen = 33;
-        [SerializeField] private float moveStaminaRegen = 25;
+        [BoxGroup("STAMINA")]public float staminaMin = -20;
+        [BoxGroup("STAMINA")][SerializeField] float climbStaminaCost = 5;
+        [BoxGroup("STAMINA")][SerializeField] float climbMoveStaminaCost = 10;
+        [BoxGroup("STAMINA")][SerializeField] float climbRunStaminaCost = 15;
+        [BoxGroup("STAMINA")][SerializeField] float runStaminaCost = 10;
+        [BoxGroup("STAMINA")][SerializeField] float runCrouchStaminaCost = 5;
+        [BoxGroup("STAMINA")][SerializeField] private float jumpStaminaCost = 10;
+        [BoxGroup("STAMINA")][SerializeField] private float idleStaminaRegen = 33;
+        [BoxGroup("STAMINA")][SerializeField] private float moveStaminaRegen = 25;
 
         [Header("Slopes")] bool onSlope = false;
         private Vector3 slopeMoveDirection;
@@ -60,16 +67,15 @@ namespace MrPink.PlayerSystem
 
         [SerializeField] private float _slopeRayDistance = 0.5f;
 
-        [Header("VAULTING")] 
-        [SerializeField] private float vaultRaycastDistance = 0.75f;
-        [SerializeField] private float middleRaycastHeight = 1f;
-        [SerializeField] private float bottomRaycastHeight = 0.5f;
-        [SerializeField] private float autoVaultPower = 5;
-        [SerializeField] private float underwaterPushPower = 100;
+        
+        [BoxGroup("VAULTING")] [SerializeField] private float vaultRaycastDistance = 0.75f;
+        [BoxGroup("VAULTING")] [SerializeField] private float middleRaycastHeight = 1f;
+        [BoxGroup("VAULTING")] [SerializeField] private float bottomRaycastHeight = 0.5f;
+        [BoxGroup("VAULTING")] [SerializeField] private float autoVaultPower = 5;
 
-        [Header("Crouching")] public bool crouching = false;
-        public CapsuleCollider topCollider;
-        public CapsuleCollider bottomCollider;
+        [BoxGroup("CROUCH")] public bool crouching = false;
+        [BoxGroup("CROUCH")] public CapsuleCollider topCollider;
+        [BoxGroup("CROUCH")] public CapsuleCollider bottomCollider;
 
         private Vector3 topColliderCenterStanding = new Vector3(0, 1.15f, 0);
         private float topColliderHeightStanding = 1.55731f;
@@ -101,11 +107,6 @@ namespace MrPink.PlayerSystem
                 return localPlayerHealth.health <= 0;
             }
         }
-
-        private bool canUseCoyoteTime = true;
-        private float additinalFallForce;
-
-        private GrindRail activeGrindRail;
 
         [ShowInInspector, ReadOnly] public MovementsState State { get; private set; } = new MovementsState();
 
@@ -269,12 +270,6 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            if (!State.IsGrounded)
-            {
-                // don't change stamina in air
-                return;
-            }
-
             if (!State.IsRunning)
             {
                 // MOVE
@@ -423,16 +418,18 @@ namespace MrPink.PlayerSystem
                 _targetVelocity += Vector3.up * 2;
 
             _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
-            
-            if (State.IsClimbing)
-                resultGravity = 0;
-            else if (State.IsUnderwater)
-                resultGravity = 1f;
-            else if (State.IsGrounded)
-                resultGravity = 1f;
-            else
-                resultGravity = gravity/* * additinalFallForce*/;
 
+            if (State.IsClimbing)
+                newTargetGravity = 0;
+            else if (State.IsUnderwater)
+                newTargetGravity = 1f;
+            else if (State.IsGrounded)
+                newTargetGravity = 1f;
+            else
+                newTargetGravity = gravity;
+
+            resultGravity = Mathf.Lerp(resultGravity, newTargetGravity, gravityChangeSmooth * Time.unscaledDeltaTime);
+            
             _resultVelocity += Vector3.down * resultGravity;
 
             if (State.CanVault)
@@ -510,7 +507,6 @@ namespace MrPink.PlayerSystem
                 lastVelocityInAirY = 1;
                 heightToFallFrom = transform.position.y;
                 State.IsGrounded = true;
-                additinalFallForce = 0;
                 if (canUseCoyoteTime)
                     _coyoteTime = 0;
             }
@@ -525,7 +521,6 @@ namespace MrPink.PlayerSystem
                 if (State.IsGrounded && canUseCoyoteTime)
                     _coyoteTime = _coyoteTimeMax;
 
-                additinalFallForce += fallForceAcceleration * Time.deltaTime;
                 State.IsGrounded = false;
 
                 if (canUseCoyoteTime && _coyoteTime > 0)
@@ -594,30 +589,28 @@ namespace MrPink.PlayerSystem
             }
         }
 
-        [SerializeField] private WaterObject playerWaterObject;
-        float resultGravity = 0;
-        
+        private Vector3 movingPlatformVelocity;        
         private void ApplyFreeMovement()
         {
             //rb.useGravity = false;
-
+            
             if (State.IsUnderwater) // IN WATER
             {
-                rb.AddForce(_resultVelocity);   
+                rb.AddForce(_resultVelocity);
+                return;
+            }
+
+            movingPlatformVelocity = movingPlatformRigidbody ? movingPlatformRigidbody.velocity : Vector3.zero;
+            
+            if (State.IsMoving == false && State.IsRunning == false && State.IsGrounded) // slow down
+            {
+                rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero + movingPlatformVelocity, slowDownModifier * Time.unscaledDeltaTime);   
             }
             else
             {
-                if (State.IsMoving == false && State.IsRunning == false && State.IsGrounded)
-                {
-                    rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, slowDownModifier * Time.unscaledDeltaTime);   
-                }
-                else
-                {
-                    //rb.AddForce(_resultVelocity, ForceMode.VelocityChange);   
-                    rb.velocity = _resultVelocity;   
-                }
+                //rb.AddForce(_resultVelocity, ForceMode.VelocityChange);   
+                rb.velocity = _resultVelocity + movingPlatformVelocity;   
             }
-            //rb.velocity = _resultVelocity;
         }
 
         private void ApplyGrindRailMovement()
@@ -637,6 +630,22 @@ namespace MrPink.PlayerSystem
             activeGrindRail = rail;
         }
 
+        public void SetMovingPlatform(Rigidbody platformRigidbody, bool exit = false)
+        {
+            if (exit)
+            {
+                if (platformRigidbody == movingPlatformRigidbody)
+                    movingPlatformRigidbody = null;
+                return;
+            }
+            
+            // enter
+            if (platformRigidbody == movingPlatformRigidbody)
+                return;
+
+            movingPlatformRigidbody = platformRigidbody;
+        }
+        
         public IEnumerator TeleportToPosition(Vector3 pos)
         {
             Debug.Log("TeleportToPosition " + pos);
