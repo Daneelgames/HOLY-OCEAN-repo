@@ -51,7 +51,7 @@ namespace MrPink.PlayerSystem
             Instance = this;
         }
 
-        private void Start()
+        public void Init()
         {
             foreach (var startingTool in startingTools)
             {

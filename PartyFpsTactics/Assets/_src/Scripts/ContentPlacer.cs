@@ -5,6 +5,7 @@ using FishNet.Object;
 using MrPink;
 using MrPink.Health;
 using MrPink.Units;
+using NWH.DWP2.ShipController;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -21,6 +22,7 @@ public class ContentPlacer : NetworkBehaviour
     [SerializeField] private int maxEnemiesAlive = 30;
     [SerializeField] private float respawnDelay = 5;
     [SerializeField] private float minMobSpawnDistance = 20;
+    [SerializeField] private AdvancedShipController defaultPlayerWaterbikerPrefab;
     
     public List<InteractiveObject> lootToSpawnAround;
     
@@ -44,6 +46,11 @@ public class ContentPlacer : NetworkBehaviour
             Debug.Log("SpawnAroundPlayer wait");
             yield return new WaitForSeconds(1);
         }
+
+        var playerBike = Instantiate(defaultPlayerWaterbikerPrefab, Game.LocalPlayer.transform.position + Vector3.up * 5, Game.LocalPlayer.transform.rotation);
+        var veh = playerBike.gameObject.GetComponent<ControlledMachine>();
+        Game.LocalPlayer.VehicleControls.RequestVehicleAction(veh);
+
         yield return new WaitForSeconds(5);
         float cooldown = respawnDelay;
         while (true)
@@ -267,8 +274,10 @@ public class ContentPlacer : NetworkBehaviour
         
         randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
         
-        NavMesh.SamplePosition(initPos + randomDir * maxDistance, out var hit, Mathf.Infinity, NavMesh.AllAreas);
-        return hit.position;
+        if (NavMesh.SamplePosition(initPos + randomDir * maxDistance, out var hit, Mathf.Infinity, NavMesh.AllAreas))
+            return hit.position;
+
+        return initPos;
     }
 
 }

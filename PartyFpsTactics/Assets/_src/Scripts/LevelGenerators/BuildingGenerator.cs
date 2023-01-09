@@ -187,7 +187,7 @@ public class BuildingGenerator : NetworkBehaviour
             disconnectedTilesFolder.position = Vector3.zero;
         }
 
-        StartCoroutine(PartyController.Instance.Init());
+        //StartCoroutine(PartyController.Instance.Init());
 
 
         if (buildingsToSpawnSettings.Count > 0 && buildingsToSpawnSettings[0].BuildingOriginTransform)

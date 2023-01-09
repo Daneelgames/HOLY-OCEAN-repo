@@ -50,49 +50,5 @@ namespace MrPink
             if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.LocalPlayer.Position) < 15)
                 npcInParty.aiVehicleControls.SetPassengerSit(machine);
         }
-
-        public IEnumerator RespawnPlayer()
-        {
-            yield break;
-            /*
-            var pos = Game.LocalPlayer.Position;
-            ScoringSystem.Instance.AddScore(Mathf.RoundToInt(-ScoringSystem.Instance.CurrentScore * 0.75f));
-            Game.LocalPlayer.Inventory.DropAll();
-
-            if (npcInParty)
-            {
-                if (npcInParty.health > 0)
-                {
-                    npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
-                }
-                else
-                {
-                    npcInParty.selfUnit.Resurrect();
-                    npcInParty.selfUnit.UnitMovement.TeleportNearPosition(pos);
-                }
-                if (npcInParty.npcInteraction && npcInParty.npcInteraction.npcDialoguesList)
-                {
-                    npcInParty.npcInteraction.CheckNpcDialogueList();
-                }
-
-            }
-
-            if (playerCar)
-            {
-                playerCar.rb.velocity = Vector3.zero;
-                playerCar.rb.angularVelocity = Vector3.zero;
-                playerCar.transform.rotation = Quaternion.identity;
-                playerCar.transform.position = pos;
-            }
-            Game.LocalPlayer.Resurrect();
-            UnitsManager.Instance.MoveUnitsToRespawnPoints(true, true);
-            yield return new WaitForSeconds(1f);
-            if (npcInParty && npcInParty.npcInteraction)
-            {
-                npcInParty.npcInteraction.PlayerInteraction();
-            }
-            
-            LevelTitlesManager.Instance.HideIntro();*/
-        }
     }
 }

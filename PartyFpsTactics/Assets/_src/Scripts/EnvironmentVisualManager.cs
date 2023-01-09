@@ -16,6 +16,11 @@ public class EnvironmentVisualManager : MonoBehaviour
     [SerializeField] private Color oceanFirstColor;
     [SerializeField] private Color oceanSecondColor;
 
+    private void Start()
+    {
+        OnValidate();
+    }
+
     private void OnValidate()
     {
         RenderSettings.fogColor = skyColor;

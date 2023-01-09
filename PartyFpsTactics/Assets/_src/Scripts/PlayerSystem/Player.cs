@@ -98,6 +98,7 @@ namespace MrPink.PlayerSystem
             * -1 if there was no previous owner. */
 
             SetLocalPlayerInstance();
+            _inventory.Init();
         }
 
 

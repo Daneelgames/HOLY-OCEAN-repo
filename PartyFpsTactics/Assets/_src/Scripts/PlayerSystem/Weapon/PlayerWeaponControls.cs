@@ -52,6 +52,8 @@ namespace MrPink.PlayerSystem
 
         private void Update()
         {
+            if (Game.LocalPlayer == null) return;
+            
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
             
@@ -83,6 +85,7 @@ namespace MrPink.PlayerSystem
 
         private void FixedUpdate()
         {
+            if (Game.LocalPlayer == null) return;
             if (_isDead)
                 return;
         
@@ -95,6 +98,8 @@ namespace MrPink.PlayerSystem
 
         private void LateUpdate()
         {
+            if (Game.LocalPlayer == null)
+                return;
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
         
