@@ -20,6 +20,9 @@ namespace MrPink.PlayerSystem
             public ToolType _toolType;
             public int amount;
         }
+
+        [SerializeField] private List<Tool> startingTools;
+        
         [SerializeField, AssetsOnly, Required]
         private WeaponController startingPistolWeapon;
         [SerializeField, AssetsOnly, Required]
@@ -50,10 +53,10 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            if (BuildingGenerator.Instance == null)
-                return;
-            
-            //SpawnPlayerWeapon(_startingSwordWeapon, 0);
+            foreach (var startingTool in startingTools)
+            {
+                AddTool(startingTool);
+            }
         }
     
     

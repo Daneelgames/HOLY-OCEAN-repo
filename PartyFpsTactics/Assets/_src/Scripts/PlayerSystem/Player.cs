@@ -199,7 +199,7 @@ namespace MrPink.PlayerSystem
             //Game.LocalPlayer.Resurrect();
             yield return new WaitForFixedUpdate();
             yield return null;
-            Shop.Instance.OpenShop(0);
+            //Shop.Instance.OpenShop(0);
             Game.LocalPlayer.Resurrect(true);
             respawnCoroutine = null;
         }

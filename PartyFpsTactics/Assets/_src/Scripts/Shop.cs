@@ -45,7 +45,7 @@ namespace MrPink
         void Start()
         {
             toolsList = new List<Tool>(ProgressionManager.Instance.CurrentLevel.toolsInShop);
-            OpenShop(0);
+            //OpenShop(0);
         }
 
         

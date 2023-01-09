@@ -148,6 +148,13 @@ namespace MrPink.PlayerSystem
             _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.unscaledDeltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
+            
+            //////////////////
+            
+            transform.localRotation = Quaternion.Euler(newRotation);
+            newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
+            
+            /*
             if (Game.LocalPlayer.VehicleControls.controlledMachine == null) 
             {
                 transform.localRotation = Quaternion.Euler(newRotation);
@@ -157,7 +164,7 @@ namespace MrPink.PlayerSystem
             {
                 vehicleHeadDummyTransform.localRotation = Quaternion.Slerp( Quaternion.Euler(new Vector3(transform.localEulerAngles.x, newRotation.y, transform.localEulerAngles.z)), Quaternion.Euler(newRotation), Time.unscaledDeltaTime);
                 newRotation = new Vector3(_verticalRotation, 0, 0) + vehicleHeadDummyTransform.eulerAngles;
-            }
+            }*/
         
             _headTransform.rotation = Quaternion.Euler(newRotation);
 

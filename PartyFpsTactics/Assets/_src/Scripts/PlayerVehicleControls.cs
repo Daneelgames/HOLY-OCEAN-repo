@@ -25,17 +25,9 @@ namespace MrPink
         private Coroutine exitCoroutine;
         IEnumerator ExitVehicleCoroutine()
         {
-            float t = 0;
-            float tt = 0.5f;
-
-            while (t < tt)
-            {
-                t += Time.deltaTime;
-                Game.LocalPlayer.Movement.rb.MovePosition(Vector3.Lerp(controlledMachine.sitTransform.position, 
-                    controlledMachine.sitTransform.position - controlledMachine.sitTransform.right * 1.5f, t/tt));
-                yield return null;
-            }
-            Game.LocalPlayer.Movement.SetCollidersTrigger(false);
+            yield return null;
+            //Game.LocalPlayer.Movement.SetCollidersTrigger(false);
+            Game.LocalPlayer.Movement.DisableColliders(true);
             controlledMachine.StopMachine();
             controlledMachine = null;
             TogglePlayerInside(null);
@@ -63,7 +55,9 @@ namespace MrPink
             if (this.controlledMachine == null && controlledMachine != null)
             {
                 // зайти в тачку
-                Game.LocalPlayer.Movement.SetCollidersTrigger(true);
+                
+                Game.LocalPlayer.Movement.DisableColliders(false);
+                //Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 this.controlledMachine = controlledMachine;
                 TogglePlayerInside(this.controlledMachine);
                 controlVehicleCoroutine = StartCoroutine(ControlVehicle());
@@ -73,7 +67,8 @@ namespace MrPink
             if (this.controlledMachine != null && this.controlledMachine != controlledMachine)
             {
                 // зайти в новую тачку
-                Game.LocalPlayer.Movement.SetCollidersTrigger(true);
+                Game.LocalPlayer.Movement.DisableColliders(false);
+                //Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 StopCoroutine(controlVehicleCoroutine);
                 this.controlledMachine.StopMachine();
                 this.controlledMachine = controlledMachine;

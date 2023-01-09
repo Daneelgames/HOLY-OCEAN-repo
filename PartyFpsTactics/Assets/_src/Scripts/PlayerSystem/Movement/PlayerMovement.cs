@@ -309,6 +309,11 @@ namespace MrPink.PlayerSystem
             bottomCollider.isTrigger = trigger;
             topCollider.isTrigger = trigger;
         }
+        public void DisableColliders(bool enable)
+        {
+            bottomCollider.enabled = enable;
+            topCollider.enabled = enable;
+        }
 
         public void SetCrouch(bool crouch)
         {
