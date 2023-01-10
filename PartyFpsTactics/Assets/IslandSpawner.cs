@@ -12,10 +12,8 @@ using Random = UnityEngine.Random;
 public class IslandSpawner : NetworkBehaviour
 {
     public static IslandSpawner Instance;    
-    [SyncVar][SerializeField] [ReadOnly] int currentSeed_s;
     [SerializeField] [ReadOnly] private List<Island> spawnedIslands = new List<Island>();
-    public int CurrentSeed => currentSeed_s;
-    [SyncVar][SerializeField][ReadOnly] List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings_s;
+    
 
     public override void OnStartClient()
     {
@@ -49,18 +47,20 @@ public class IslandSpawner : NetworkBehaviour
     public void NewIslandSpawned(Island newIsland)
     {
         Debug.Log("NEW ISLAND SPAWNED ON SERVER. " + newIsland);
+        int currentSeed = Random.Range(1,999) * Random.Range(1,999) * Random.Range(1,999);
+        List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings = newIsland.VoxelBuildingGen.RandomizeSettingsOnHost();
         ServerManager.Spawn(newIsland.gameObject);
-        RpcIniIslandOnClients(newIsland);
+        RpcInitIslandOnClients(newIsland, currentSeed, voxelFloorsRandomSettings);
     }
 
     [ObserversRpc(IncludeOwner = true)]
-    void RpcIniIslandOnClients(Island newIsland)
+    void RpcInitIslandOnClients(Island newIsland, int currentSeed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings)
     {
         if (spawnedIslands.Contains(newIsland))
             return;
         
         spawnedIslands.Add(newIsland);
-        newIsland.Init(currentSeed_s, voxelFloorsRandomSettings_s);
+        newIsland.Init(currentSeed, voxelFloorsRandomSettings);
         
     }
     

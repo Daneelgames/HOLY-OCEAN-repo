@@ -83,7 +83,7 @@ namespace MrPink.Units
         {
             while (hc.IsDead == false)
             {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(3f);
 
                 grounded = Physics.CheckSphere(ragdollOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
                 if (!grounded && ragdoll == false)

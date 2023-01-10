@@ -14,8 +14,7 @@ using UnityEngine.Events;
 public class GameVoxelModifier : NetworkBehaviour
 {
     public static GameVoxelModifier Instance;
-    
-    [SerializeField] List<VoxelModifier> modifiers = new List<VoxelModifier>();
+    [SerializeField] private VoxelModifier mainModifier;
 
     public override void OnStartClient() { 
         base.OnStartClient();
@@ -44,15 +43,6 @@ public class GameVoxelModifier : NetworkBehaviour
         {
             Debug.Log("SOMEONE STOPPED CONNECTION connection stopped");
             return;
-        }
-        if (remoteConnectionStateArgs.ConnectionState == RemoteConnectionState.Started)
-        {
-            if (modifiers.Count > 0)
-            {
-                networkConnection.Disconnect(true);
-                Debug.Log("SOMEONE STARTED CONNECTION DURING THE GAME connection stopped");
-                return;
-            }
         }
     }
 
@@ -118,30 +108,6 @@ public class GameVoxelModifier : NetworkBehaviour
     [ObserversRpc]
     void RpcModifyLocally(Vector3 pos)
     {
-        foreach (var modifier in modifiers)
-        {
-            var voxelGen = modifier.ReferenceGenerator;
-            var voxelGenCenterWorldPos = voxelGen.transform.position + (Vector3.one * voxelGen.RootSize) / 2;
-            
-            if (Vector3.Distance(pos, voxelGenCenterWorldPos) > voxelGen.RootSize)
-                continue;
-            
-            modifier.ModifyAtPos(pos);
-        }
-    }
-
-    public void AddIslandModifier(VoxelModifier modifier)
-    {
-        if (modifiers.Contains(modifier))
-            return;
-        
-        modifiers.Add(modifier);
-    }
-    public void RemoveIslandModifier(VoxelModifier modifier)
-    {
-        if (modifiers.Contains(modifier) == false)
-            return;
-        
-        modifiers.Remove(modifier);
+        mainModifier.ModifyAtPos(pos);
     }
 }

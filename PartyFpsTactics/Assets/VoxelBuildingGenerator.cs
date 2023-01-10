@@ -9,19 +9,13 @@ using Random = UnityEngine.Random;
 public class VoxelBuildingGenerator : MonoBehaviour
 {
     [SerializeField]private int currentSeed;
-    public static VoxelBuildingGenerator Instance;
     [SerializeField] private int floorsAmount = 5;
     [SerializeField] private VoxelBuildingFloor floorPrefab;
     [SerializeField] private float randomAngleMax;
     [SerializeField] private List<VoxelBuildingFloor> _floors;
     public List<VoxelBuildingFloor> Floors => _floors;
     [SerializeField] private VoxelGenerator _voxelGenerator;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
-
+    [SerializeField] private Transform firstFloorTransform;
     public void SaveRandomSeedOnEachClient(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
     {
         currentSeed = seed;
@@ -61,8 +55,12 @@ public class VoxelBuildingGenerator : MonoBehaviour
         
         return newFloorsRandomSettings;
     }
-    
+
     [Button]
+    public void SpawnFloorsEditor()
+    {
+        SpawnFloors(RandomizeSettingsOnHost());
+    }
     public void SpawnFloors(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettingsList)
     {
         foreach (var voxelBuildingFloor in _floors)
@@ -75,8 +73,8 @@ public class VoxelBuildingGenerator : MonoBehaviour
 
         _floors.Clear();
         
-        Vector3 spawnPos = transform.position;
-        Vector3 spawnRot = transform.eulerAngles;
+        Vector3 spawnPos = firstFloorTransform ? firstFloorTransform.position : transform.position;
+        Vector3 spawnRot = firstFloorTransform ? firstFloorTransform.eulerAngles : transform.eulerAngles;
         for (int i = 0; i < floorsAmount; i++)
         {
             var newFloor = Instantiate(floorPrefab);

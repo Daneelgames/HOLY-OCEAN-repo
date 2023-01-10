@@ -35640,6 +35640,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2435974626034174792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5550771523504371612}
+  m_Layer: 0
+  m_Name: FirstFloorTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5550771523504371612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2435974626034174792}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4102816775448840192}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4102816774943263165
 GameObject:
   m_ObjectHideFlags: 0
@@ -35732,7 +35763,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4102816775382095351}
   - component: {fileID: 4102816775382095348}
-  - component: {fileID: 4102816775382095346}
   m_Layer: 6
   m_Name: VoxelGen
   m_TagString: Untagged
@@ -35785,63 +35815,12 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -50286
+  instanceID: -193338
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
   __export_meshName: ExportedMesh
   __export_center: {x: -0.5, y: -0.5, z: -0.5}
---- !u!114 &4102816775382095346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4102816775382095350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb129d084c828d04c8ed985ecbe4b80a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetDimension: 0
-  Depth: 7
-  ID: 20
-  Radius: 1.5
-  AdditionalTargets: []
-  Radials: {x: 1, y: 1, z: 1}
-  BoxSize: {x: 2, y: 2, z: 2}
-  Orientation: {x: 0, y: 0, z: 0}
-  Mode: 2
-  Shape: 0
-  AlwaysModify:
-  - {fileID: 0}
-  UseWhiteList: 0
-  WhiteList: []
-  SphereCastLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  MaxChanges: 100
-  onModifyVoxel:
-    m_PersistentCalls:
-      m_Calls: []
-  PaintPosition: {x: -355.38226, y: -15.3619995, z: 371.34805}
-  ErrorMessage: 
-  EstimatedModifications: 27
-  EditorTools:
-    IDLeft: 2
-    ModeLeft: 1
-    IDRight: 2
-    ModeRight: 2
-    IDMiddle: 128
-    ModeMiddle: 0
-    EstimatedModifications: 0
-  Paint2D: 0
-  PaintPlaneXY: 0
-  PaintPlaneXZ: 0
-  PaintPlaneYZ: 0
-  PaintPlaneOffset: 0
-  PaintPlaneSize: 2000
-  PaintPlaneColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
 --- !u!1 &4102816775448840195
 GameObject:
   m_ObjectHideFlags: 0
@@ -35882,6 +35861,7 @@ Transform:
   - {fileID: 1780121641}
   - {fileID: 1337345688}
   - {fileID: 37064176}
+  - {fileID: 5550771523504371612}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -35898,7 +35878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSeed: 0
-  floorsAmount: 10
+  floorsAmount: 6
   floorPrefab: {fileID: 3101392995967531971, guid: b495a2d98b7fbe54b8be44bc1fd7cdd1, type: 3}
   randomAngleMax: 3
   _floors:
@@ -35913,3 +35893,4 @@ MonoBehaviour:
   - {fileID: 1337345689}
   - {fileID: 37064177}
   _voxelGenerator: {fileID: 4102816775382095348}
+  firstFloorTransform: {fileID: 5550771523504371612}

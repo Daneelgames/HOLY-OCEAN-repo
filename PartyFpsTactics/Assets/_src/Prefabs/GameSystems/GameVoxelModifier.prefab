@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3517951743550713569}
   - component: {fileID: 1451895747202976311}
   - component: {fileID: 8407207941268907526}
+  - component: {fileID: 5872794825884123155}
   m_Layer: 0
   m_Name: GameVoxelModifier
   m_TagString: Untagged
@@ -48,6 +49,7 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8407207941268907526}
   _networkObjectCache: {fileID: 8407207941268907526}
+  mainModifier: {fileID: 5872794825884123155}
   modifiers: []
   tilesLayerMask:
     serializedVersion: 2
@@ -75,8 +77,73 @@ MonoBehaviour:
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 14
-  _scenePathHash: 1239603258
+  _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 4104972968239081818
   _sceneNetworkObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 8407207941268907526}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &5872794825884123155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282490507337959670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb129d084c828d04c8ed985ecbe4b80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetDimension: 0
+  Depth: 7
+  ID: 20
+  Radius: 1.5
+  AdditionalTargets: []
+  Radials: {x: 1, y: 1, z: 1}
+  BoxSize: {x: 2, y: 2, z: 2}
+  Orientation: {x: 0, y: 0, z: 0}
+  Mode: 2
+  Shape: 0
+  AlwaysModify:
+  - {fileID: 0}
+  UseWhiteList: 0
+  WhiteList: []
+  SphereCastLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  MaxChanges: 100
+  onModifyVoxel:
+    m_PersistentCalls:
+      m_Calls: []
+  PaintPosition: {x: 240.29807, y: 46.94344, z: 119.98949}
+  ErrorMessage: "> No Generator to check safety found. \n\n"
+  EstimatedModifications: 0
+  EditorTools:
+    IDLeft: 2
+    ModeLeft: 1
+    IDRight: 2
+    ModeRight: 2
+    IDMiddle: 128
+    ModeMiddle: 0
+    EstimatedModifications: 0
+  Paint2D: 0
+  PaintPlaneXY: 0
+  PaintPlaneXZ: 0
+  PaintPlaneYZ: 0
+  PaintPlaneOffset: 0
+  PaintPlaneSize: 2000
+  PaintPlaneColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

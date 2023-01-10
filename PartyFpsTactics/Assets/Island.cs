@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using Fraktalia.VoxelGen.Modify;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Island : NetworkBehaviour
 {
-    [SerializeField] private List<VoxelModifier> islandVoxelModifiers = new List<VoxelModifier>();
     [SerializeField] private BuildingGenerator _tileBuildingGenerator;
     [SerializeField] private VoxelBuildingGenerator _voxelBuildingGenerator;
+    public VoxelBuildingGenerator VoxelBuildingGen => _voxelBuildingGenerator;
     [SerializeField] private NavMeshSurfaceUpdate _navMeshSurfaceUpdate;
-    
+
+    [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly] private float distanceToLocalPlayer;
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -27,11 +29,6 @@ public class Island : NetworkBehaviour
 
     IEnumerator InitCoroutine(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
     {
-        foreach (var islandVoxelModifier in islandVoxelModifiers)
-        {
-            yield return null;
-            GameVoxelModifier.Instance.AddIslandModifier(islandVoxelModifier);
-        }
 
         _voxelBuildingGenerator?.SaveRandomSeedOnEachClient(seed, voxelFloorRandomSettings);
         yield return null;
@@ -44,10 +41,6 @@ public class Island : NetworkBehaviour
         // close: update navmeshes, props, mobs 100%
         // mid: activate mobs, island might shoot at you
         // fat: hide everything, show lowpoly LOD
-        return;
-        foreach (var islandVoxelModifier in islandVoxelModifiers)
-        {
-            GameVoxelModifier.Instance.RemoveIslandModifier(islandVoxelModifier);
-        }
+        distanceToLocalPlayer = distance;
     }
 }
