@@ -79,4 +79,6 @@ public class ObjectsStreamer : MonoBehaviour
         if (StreamableObjects.Contains(str))
             StreamableObjects.Remove(str);
     }
+    
+    
 }

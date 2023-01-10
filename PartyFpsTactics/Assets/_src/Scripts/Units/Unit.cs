@@ -84,6 +84,15 @@ namespace MrPink.Units
             _healthController.health = 0;
         }
 
+        [SerializeField] [ReadOnly]private bool culled = false;
+        public void Cull(bool cull)
+        {
+            culled = cull;
+            
+        }
+        
+        
+
         
 #if UNITY_EDITOR
         [ContextMenu("Set Self Links")]

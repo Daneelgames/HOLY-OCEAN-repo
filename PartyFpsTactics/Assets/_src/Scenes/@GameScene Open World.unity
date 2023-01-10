@@ -9722,43 +9722,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followLocalPlayer: 1
   target: {fileID: 0}
---- !u!84 &1214549822
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: GerstnerCascades
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 5
-  m_VolumeDepth: 16
-  m_ShadowSamplingMode: 2
 --- !u!1 &1239457141
 GameObject:
   m_ObjectHideFlags: 0
@@ -10093,7 +10056,7 @@ MonoBehaviour:
   _reverseWaveWeight: 0.5
   _componentsPerOctave: 8
   _randomSeed: 0
-  _waveBuffers: {fileID: 1214549822}
+  _waveBuffers: {fileID: 1492435235}
 --- !u!1001 &1458604009
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10234,6 +10197,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &1492435235
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GerstnerCascades
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 5
+  m_VolumeDepth: 16
+  m_ShadowSamplingMode: 2
 --- !u!114 &1544752447 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
@@ -13236,6 +13236,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ContentPlacer
       objectReference: {fileID: 0}
+    - target: {fileID: 4899648721868771099, guid: ac1c06488425ef8459b18fb4300fad69, type: 3}
+      propertyPath: respawnDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4899648721868771099, guid: ac1c06488425ef8459b18fb4300fad69, type: 3}
+      propertyPath: maxEnemiesAlive
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 6505570773441274187, guid: ac1c06488425ef8459b18fb4300fad69, type: 3}
       propertyPath: _scenePathHash
       value: 2732387296
@@ -14069,6 +14077,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 51837837256310702, guid: 7a4711bee3e4b2f4aa81f710996457d8, type: 3}
+      propertyPath: TeamsRelationshipsList.Array.data[3].enemyTeams.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8148589189638961707, guid: 7a4711bee3e4b2f4aa81f710996457d8, type: 3}
       propertyPath: m_Name
       value: UnitsManager

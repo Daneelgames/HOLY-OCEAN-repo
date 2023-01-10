@@ -144,7 +144,6 @@ namespace MrPink
                 yield return null;
                 while (controlledMachine != null)
                 {
-                    yield return null;
                     if (leashParts[0].gameObject.activeInHierarchy == false)
                     {
                         ShowChain(true);
@@ -160,6 +159,7 @@ namespace MrPink
                         part.transform.position = leashStartPosition + leashVector.normalized * j* scaler;
                         part.transform.LookAt(playerPos);
                     }
+                    yield return null;
                 }
 
                 if (leashParts[0].gameObject.activeInHierarchy)
