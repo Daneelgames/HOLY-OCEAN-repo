@@ -120,7 +120,28 @@ public class GameVoxelModifier : NetworkBehaviour
     {
         foreach (var modifier in modifiers)
         {
+            var voxelGen = modifier.ReferenceGenerator;
+            var voxelGenCenterWorldPos = voxelGen.transform.position + (Vector3.one * voxelGen.RootSize) / 2;
+            
+            if (Vector3.Distance(pos, voxelGenCenterWorldPos) > voxelGen.RootSize)
+                continue;
+            
             modifier.ModifyAtPos(pos);
         }
+    }
+
+    public void AddIslandModifier(VoxelModifier modifier)
+    {
+        if (modifiers.Contains(modifier))
+            return;
+        
+        modifiers.Add(modifier);
+    }
+    public void RemoveIslandModifier(VoxelModifier modifier)
+    {
+        if (modifiers.Contains(modifier) == false)
+            return;
+        
+        modifiers.Remove(modifier);
     }
 }

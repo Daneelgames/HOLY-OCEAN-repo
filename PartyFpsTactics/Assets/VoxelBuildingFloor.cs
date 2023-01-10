@@ -73,7 +73,7 @@ public class VoxelBuildingFloor : MonoBehaviour
         holesAmountB = voxelFloorRandomSettings.holesAmountB;
         holesAmountL = voxelFloorRandomSettings.holesAmountL;
         
-        OnValidate();
+        ConstructFloor();
     }
     public void CutVoxels(VoxelGenerator voxelGenerator)
     {
@@ -89,7 +89,7 @@ public class VoxelBuildingFloor : MonoBehaviour
     }
 
     
-    private void OnValidate()
+    private void ConstructFloor()
     {
         ceiling.transform.localPosition = Vector3.up * floorHeight;
         floor.transform.localScale = new Vector3(floorSizeX, 1, floorSizeZ);

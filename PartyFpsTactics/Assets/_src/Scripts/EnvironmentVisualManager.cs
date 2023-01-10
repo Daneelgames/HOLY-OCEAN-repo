@@ -18,10 +18,10 @@ public class EnvironmentVisualManager : MonoBehaviour
 
     private void Start()
     {
-        OnValidate();
+        SetColor();
     }
 
-    private void OnValidate()
+    private void SetColor()
     {
         RenderSettings.fogColor = skyColor;
         RenderSettings.fogDensity = fogDensity;

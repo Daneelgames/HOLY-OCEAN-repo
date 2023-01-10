@@ -132,7 +132,7 @@ namespace MrPink.PlayerSystem
             {
                 rb.isKinematic = true;
                 rb.useGravity = false;
-            }
+            }   
 
             //temp?
             rb.useGravity = false;
@@ -426,6 +426,11 @@ namespace MrPink.PlayerSystem
 
             if (State.IsClimbing)
                 newTargetGravity = 0;
+            else if (State.CanVault)
+            {
+                newTargetGravity = 0;
+                _resultVelocity += Vector3.up * autoVaultPower;
+            }
             else if (State.IsUnderwater)
                 newTargetGravity = 1f;
             else if (State.IsGrounded)
@@ -437,10 +442,6 @@ namespace MrPink.PlayerSystem
             
             _resultVelocity += Vector3.down * resultGravity;
 
-            if (State.CanVault)
-            {
-                _resultVelocity += Vector3.up * autoVaultPower;
-            }
             _prevVelocity = _resultVelocity;
         }
 

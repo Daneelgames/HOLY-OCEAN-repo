@@ -34,6 +34,7 @@ public class VoxelBuildingGenerator : MonoBehaviour
         SpawnFloors(voxelFloorRandomSettings);
         yield return null;
         Generate();
+        yield break;
         yield return null;
         yield return StartCoroutine(ContentPlacer.Instance.SpawnPropsInVoxelBuilding(_floors));
         yield return StartCoroutine(ContentPlacer.Instance.SpawnEnemiesInVoxelBuilding(_floors));

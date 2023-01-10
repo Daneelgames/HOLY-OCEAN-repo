@@ -37,7 +37,7 @@ public class AddressableSpawner : MonoBehaviour
         if (_asyncOperationHandles.ContainsKey(assetReference))
         {
             if (_asyncOperationHandles[assetReference].IsDone)
-                SpawnParticleFromLoadedReference(assetReference, pos);
+                SpawnFromLoadedReference(assetReference, pos);
             else
                 EnqueueSpawnForAfterInitialization(assetReference, pos);
             
@@ -53,13 +53,13 @@ public class AddressableSpawner : MonoBehaviour
         _asyncOperationHandles[assetReference] = op;
         op.Completed += (operation) =>
         {
-            SpawnParticleFromLoadedReference(assetReference, pos);
+            SpawnFromLoadedReference(assetReference, pos);
             if (_queuedSpawnRequests.ContainsKey(assetReference))
             {
                 while (_queuedSpawnRequests[assetReference]?.Any() == true)
                 {
                     var position = _queuedSpawnRequests[assetReference].Dequeue();
-                    SpawnParticleFromLoadedReference(assetReference, position);
+                    SpawnFromLoadedReference(assetReference, position);
                 }
             }
         };
@@ -72,9 +72,9 @@ public class AddressableSpawner : MonoBehaviour
         _queuedSpawnRequests[assetReference].Enqueue(pos);
     }
 
-    private void SpawnParticleFromLoadedReference(AssetReference assetReference, Vector3 position)
+    private void SpawnFromLoadedReference(AssetReference assetReference, Vector3 position)
     {
-        assetReference.InstantiateAsync(position, Quaternion.Euler(0,Random.Range(0,360),0)).Completed += (asyncOperationHandle) =>
+        assetReference.InstantiateAsync(position, Quaternion.identity).Completed += (asyncOperationHandle) =>
         {
             if (_spawnedParticleSystems.ContainsKey(assetReference) == false)
             {
@@ -85,6 +85,7 @@ public class AddressableSpawner : MonoBehaviour
             var notify = asyncOperationHandle.Result.AddComponent<NotifyOnDestroy>();
             notify.Destroyed += Remove;
             notify.AssetReference = assetReference;
+            ProceedSpawnedObject(asyncOperationHandle.Result);
         };
     }
 
@@ -102,5 +103,9 @@ public class AddressableSpawner : MonoBehaviour
 
             _asyncOperationHandles.Remove(assetReference);
         }
+    }
+
+    public void ProceedSpawnedObject(GameObject spawned)
+    {
     }
 }

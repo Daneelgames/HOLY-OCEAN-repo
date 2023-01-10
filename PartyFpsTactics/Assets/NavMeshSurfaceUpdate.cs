@@ -29,7 +29,7 @@ public class NavMeshSurfaceUpdate : MonoBehaviour
     private Dictionary<int, List<NavMeshBuildMarkup>> MarkupsPerSurface= new Dictionary<int , List<NavMeshBuildMarkup>>();
     private Dictionary<int, List<NavMeshModifier>> ModifiersPerSurface = new Dictionary<int, List<NavMeshModifier>>();
 
-    private void Awake()
+    public void Init()
     {
         NavMeshDatas = new NavMeshData[Surfaces.Length];
         for (int i = 0; i < Surfaces.Length; i++)
