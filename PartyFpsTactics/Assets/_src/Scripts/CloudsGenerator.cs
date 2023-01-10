@@ -38,6 +38,7 @@ public class CloudsGenerator : MonoBehaviour
         
         var autoRotate = cloudsParent.AddComponent<CFX_AutoRotate>();
         var followTarget = cloudsParent.AddComponent<FollowTarget>();
+        followTarget.SetFollowPlayer();
         autoRotate.rotation = new Vector3(Random.Range(rotationSpeedMinMax.x, rotationSpeedMinMax.y), Random.Range(rotationSpeedMinMax.x, rotationSpeedMinMax.y), Random.Range(rotationSpeedMinMax.x, rotationSpeedMinMax.y));
         autoRotate.space = Space.Self;
     }

@@ -17,9 +17,15 @@ namespace MrPink
         public float playerFollowMoveScaler = 10;
         public float playerFollowRotScaler = 10;
         [SerializeField] private float staminaChangeOnBoost = -30;
+        [SerializeField] List<Transform> leashParts;
         private void Awake()
         {
             Instance = this;
+        }
+
+        private void Start()
+        {
+            StartCoroutine(UpdateLeashParts());
         }
 
         private Coroutine exitCoroutine;
@@ -127,6 +133,47 @@ namespace MrPink
                 boosting = Input.GetKey(KeyCode.LeftShift);
                 controlledMachine.SetCarInput(hor,ver, brake, boosting);
                 yield return null;
+            }
+        }
+
+        
+        IEnumerator UpdateLeashParts()
+        {
+            while (true)
+            {
+                yield return null;
+                while (controlledMachine != null)
+                {
+                    yield return null;
+                    if (leashParts[0].gameObject.activeInHierarchy == false)
+                    {
+                        ShowChain(true);
+                    }
+                    var playerPos = Game._instance.PlayerCamera.transform.position - Vector3.up;
+                    Vector3 leashVector = controlledMachine.sitTransform.position - playerPos;
+                    Vector3 leashStartPosition = playerPos;
+                
+                    float scaler = Vector3.Distance(controlledMachine.sitTransform.position, playerPos) / leashParts.Count;
+                    for (int j = 0; j < leashParts.Count; j++)
+                    {
+                        var part = leashParts[j];
+                        part.transform.position = leashStartPosition + leashVector.normalized * j* scaler;
+                        part.transform.LookAt(playerPos);
+                    }
+                }
+
+                if (leashParts[0].gameObject.activeInHierarchy)
+                {
+                    ShowChain(false);
+                }
+            }
+        }
+
+        void ShowChain(bool show)
+        {
+            foreach (var part in leashParts)
+            {
+                part.gameObject.SetActive(show);
             }
         }
     }

@@ -22,4 +22,9 @@ public class FollowTarget : MonoBehaviour
         
         transform.position = target.position;
     }
+
+    public void SetFollowPlayer()
+    {
+        followLocalPlayer = true;
+    }
 }
