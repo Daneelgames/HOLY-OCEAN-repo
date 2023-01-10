@@ -10,11 +10,19 @@ using Random = UnityEngine.Random;
 
 public class EnvironmentVisualManager : MonoBehaviour
 {
+    public static EnvironmentVisualManager Instance;
     [SerializeField] private OceanRenderer oceanRenderer;
     [SerializeField] private float fogDensity  = 0.01f;
     [SerializeField] private Color skyColor;
+    [SerializeField] private Color currentCloudsColor;
+    public Color CurrentCloudsColor => currentCloudsColor;
     [SerializeField] private Color oceanFirstColor;
     [SerializeField] private Color oceanSecondColor;
+
+    private void Awake()
+    {
+        Instance = this;    
+    }
 
     private void Start()
     {
