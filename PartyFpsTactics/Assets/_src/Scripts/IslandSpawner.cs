@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using MrPink;
@@ -20,7 +21,17 @@ public class IslandSpawner : NetworkBehaviour
         base.OnStartClient();
         
         Instance = this;
-        StartCoroutine(CullIslandsLocally());
+        
+    }
+
+    public override void OnOwnershipClient(NetworkConnection prevOwner)
+    {
+        base.OnOwnershipClient(prevOwner);
+        /* Current owner can be found by using base.Owner. prevOwner
+        * contains the connection which lost ownership. Value will be
+        * -1 if there was no previous owner. */
+
+        StartCoroutine(CullIslandsOnServer());
     }
 
     public float GetDistanceToClosestIsland(Vector3 posAsking)
@@ -37,13 +48,15 @@ public class IslandSpawner : NetworkBehaviour
         return distance;
     }
 
-    IEnumerator CullIslandsLocally()
+    [Server]
+    IEnumerator CullIslandsOnServer()
     {
         while (Game._instance == null || Game.LocalPlayer == null)
         {
             yield return null;
         }
 
+        float closestDistance = 100000;
         while (true)
         {
             yield return null;

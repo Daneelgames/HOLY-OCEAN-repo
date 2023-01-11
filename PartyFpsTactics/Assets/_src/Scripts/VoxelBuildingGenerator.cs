@@ -30,8 +30,6 @@ public class VoxelBuildingGenerator : MonoBehaviour
         Generate();
         yield break;
         yield return null;
-        yield return StartCoroutine(ContentPlacer.Instance.SpawnPropsInVoxelBuilding(_floors));
-        yield return StartCoroutine(ContentPlacer.Instance.SpawnEnemiesInVoxelBuilding(_floors));
     }
     
     public List<VoxelBuildingFloor.VoxelFloorRandomSettings> RandomizeSettingsOnHost()

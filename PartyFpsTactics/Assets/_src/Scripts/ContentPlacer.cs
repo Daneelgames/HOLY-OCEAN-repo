@@ -132,9 +132,9 @@ public class ContentPlacer : NetworkBehaviour
     }
     
     [Server]
-    public void SpawnEnemiesInBuilding(BuildingGenerator.Building building)
+    public void SpawnEnemiesInBuilding(BuildingGenerator.Building building, Island island)
     {
-        StartCoroutine(SpawnEnemiesInBuildingCoroutine(building));
+        StartCoroutine(SpawnEnemiesInBuildingCoroutine(building, island));
     }
 
     [Server]
@@ -191,7 +191,7 @@ public class ContentPlacer : NetworkBehaviour
     }
     
     [Server]
-    public IEnumerator SpawnEnemiesInVoxelBuilding(List<VoxelBuildingFloor> floors)
+    public IEnumerator SpawnEnemiesInVoxelBuilding(List<VoxelBuildingFloor> floors, Island island)
     {
         yield return new WaitForSeconds(5);
         for (int i = 0; i < floors.Count; i++)
@@ -235,14 +235,19 @@ public class ContentPlacer : NetworkBehaviour
                     break;
                 }
                 
+                if (island.IsCulled)
+                    yield break;
+                
                 var unit =  Instantiate(UnitsManager.Instance.GetRandomRedUnit, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                island.AddIslandUnit(unit);
                 ServerManager.Spawn(unit.gameObject);
+                yield return null;
             }
         }
     }
     
     [Server]
-    IEnumerator SpawnEnemiesInBuildingCoroutine(BuildingGenerator.Building building)
+    IEnumerator SpawnEnemiesInBuildingCoroutine(BuildingGenerator.Building building, Island island)
     {
         var tilesForSpawns = new List<TileHealth>();
 
@@ -264,15 +269,23 @@ public class ContentPlacer : NetworkBehaviour
 
             for (int j = 0; j < level.unitsToSpawn.Count; j++)
             {
+                if (island.IsCulled)
+                    yield break;
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
                 var unit =  Instantiate(level.unitsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                island.AddIslandUnit(unit);
                 ServerManager.Spawn(unit.gameObject);
+                yield return null;
             }
             for (int j = 0; j < level.uniqueNpcToSpawn.Count; j++)
             {
+                if (island.IsCulled)
+                    yield break;
                 var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
                 var unit =  Instantiate(level.uniqueNpcToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                island.AddIslandUnit(unit);
                 ServerManager.Spawn(unit.gameObject);
+                yield return null;
             }
             yield return null;
         }

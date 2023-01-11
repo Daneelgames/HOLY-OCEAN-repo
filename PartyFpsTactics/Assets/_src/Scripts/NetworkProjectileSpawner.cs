@@ -15,7 +15,7 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         Instance = this;
     }
 
-    public void SpawnProjectileOnEveryClient(Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 targetPos, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
+    public void SpawnProjectileOnEveryClient(float noiseDistance, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 targetPos, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
     {
         if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword ||
             _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeast ||
@@ -25,7 +25,7 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         }
         else // RANGED
         {
-            RpcSpawnProjectileOnEveryClient_Server( shotHolder.position, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY);   
+            RpcSpawnProjectileOnEveryClient_Server( noiseDistance, shotHolder.position, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY);   
         }
     }
 
@@ -37,8 +37,9 @@ public class NetworkProjectileSpawner : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void RpcSpawnProjectileOnEveryClient_Server(Vector3 pos,Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
+    void RpcSpawnProjectileOnEveryClient_Server(float noiseDistance, Vector3 pos,Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
     {
+        NoiseSystem.Instance.MakeNoise(pos, noiseDistance);
         RpcSpawnProjectileOnEveryClient_Client(pos, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY);
     }
     [ObserversRpc]

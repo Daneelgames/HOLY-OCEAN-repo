@@ -73,7 +73,6 @@ namespace MrPink.PlayerSystem
         [BoxGroup("VAULTING")] [SerializeField] private float bottomRaycastHeight = 0.5f;
         [BoxGroup("VAULTING")] [SerializeField] private float autoVaultPower = 5;
 
-        [BoxGroup("CROUCH")] public bool crouching = false;
         [BoxGroup("CROUCH")] public CapsuleCollider topCollider;
         [BoxGroup("CROUCH")] public CapsuleCollider bottomCollider;
 
@@ -285,7 +284,7 @@ namespace MrPink.PlayerSystem
             }
 
             // IF RUN
-            if (!crouching)
+            if (!State.IsCrouching)
                 targetStaminaScaler = runStaminaCost;
             else
                 targetStaminaScaler = runCrouchStaminaCost;
@@ -301,7 +300,7 @@ namespace MrPink.PlayerSystem
         private void HandleCrouch()
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
-                SetCrouch(!crouching);
+                SetCrouch(!State.IsCrouching);
         }
 
         public void SetCollidersTrigger(bool trigger)
@@ -317,7 +316,7 @@ namespace MrPink.PlayerSystem
 
         public void SetCrouch(bool crouch)
         {
-            if (crouching == crouch)
+            if (State.IsCrouching == crouch)
                 return;
 
             if (!crouch)
@@ -331,9 +330,9 @@ namespace MrPink.PlayerSystem
                 }
             }
 
-            crouching = crouch;
+            State.IsCrouching = crouch;
 
-            if (crouching)
+            if (State.IsCrouching)
             {
                 topCollider.center = topColliderCenterCrouching;
                 topCollider.height = topColliderHeightCrouching;
@@ -348,7 +347,7 @@ namespace MrPink.PlayerSystem
                 bottomCollider.height = bottomColliderHeightStanding;
             }
 
-            Game.LocalPlayer.LookAround.SetCrouch(crouching);
+            Game.LocalPlayer.LookAround.SetCrouch(State.IsCrouching);
         }
 
     private void HandleMovement()
@@ -403,7 +402,7 @@ namespace MrPink.PlayerSystem
                 State.IsRunning = moveInFrame;
                 State.IsMoving = false;
 
-                if (!crouching)
+                if (!State.IsCrouching)
                     _targetVelocity = _moveVector * runSpeed * scaler;
                 else
                     _targetVelocity = _moveVector * crouchRunSpeed * scaler;
@@ -413,7 +412,7 @@ namespace MrPink.PlayerSystem
                 State.IsMoving = moveInFrame;
                 State.IsRunning = false;
 
-                if (!crouching)
+                if (!State.IsCrouching)
                     _targetVelocity = _moveVector * walkSpeed * scaler;
                 else
                     _targetVelocity = _moveVector * crouchSpeed * scaler;

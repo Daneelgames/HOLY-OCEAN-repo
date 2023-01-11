@@ -32,6 +32,8 @@ namespace MrPink.WeaponsSystem
         [SerializeField]
         int bulletsPerShot = 1;
 
+        [SerializeField] private float noiseDistance = 30;
+
         [Tooltip("Projectile prefab")]
         [SerializeField, AssetsOnly, Required]
         private Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag;
@@ -113,6 +115,8 @@ namespace MrPink.WeaponsSystem
                 attackAu.Play();
             }
             
+            
+            
             if (_ownerHc.health <= 0)
                 return;
             
@@ -149,7 +153,7 @@ namespace MrPink.WeaponsSystem
                 float offsetX = Random.Range(0, projectileRandomRotationMax);
                 float offsetY = Random.Range(0, projectileRandomRotationMax);
                 
-                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(_attackColliderTag, shotHolder, targetPos, direction, _ownerHc, source, offsetX, offsetY);
+                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(noiseDistance, _attackColliderTag, shotHolder, targetPos, direction, _ownerHc, source, offsetX, offsetY);
             }
         }
 

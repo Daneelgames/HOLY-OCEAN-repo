@@ -36,8 +36,12 @@ public class AiWaterObject : MonoBehaviour
         resultThrust = thrustPower;
 
         targetRotation = Quaternion.Slerp(rb.transform.rotation,
-            Quaternion.LookRotation(Game.LocalPlayer.transform.position - transform.position),
+            Quaternion.LookRotation(Game.LocalPlayer.transform.position - transform.position, Vector3.up),
             rotateSmooth * Time.unscaledDeltaTime);
+
+        var targetRotationEulerAngles = targetRotation.eulerAngles;
+        targetRotationEulerAngles.z = 0;
+        targetRotation.eulerAngles = targetRotationEulerAngles;
     }
     
     public void SetInput(float _hor, float _ver, bool _brake, bool boost)

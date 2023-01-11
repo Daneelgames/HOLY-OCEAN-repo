@@ -6,6 +6,7 @@ namespace MrPink.PlayerSystem
     public class MovementsState
     {
         public bool IsGrounded;
+        public bool IsCrouching;
 
         public bool IsLeaning;
 

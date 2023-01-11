@@ -34,16 +34,28 @@ public class NavMeshSurfaceUpdate : MonoBehaviour
         NavMeshDatas = new NavMeshData[Surfaces.Length];
         for (int i = 0; i < Surfaces.Length; i++)
         {
+            if (Surfaces[i].navMeshData != null) continue;
+            
             NavMeshDatas[i] = new NavMeshData();
             NavMesh.AddNavMeshData(NavMeshDatas[i]);
             SourcesPerSurface.Add(i, new List<NavMeshBuildSource>());
             MarkupsPerSurface.Add(i, new List<NavMeshBuildMarkup>());
             ModifiersPerSurface.Add(i, new List<NavMeshModifier>());
+            Surfaces[i].navMeshData = NavMeshDatas[i];
         }
 
-        StartCoroutine(CheckPlayerMovement());
+        if (updateCoroutine != null)
+            StopCoroutine(updateCoroutine);
+        updateCoroutine = StartCoroutine(CheckPlayerMovement());
     }
 
+    public void Stop()
+    {
+        if (updateCoroutine != null)
+            StopCoroutine(updateCoroutine);
+    }
+
+    private Coroutine updateCoroutine;
     private IEnumerator CheckPlayerMovement()
     {
         WaitForSeconds Wait = new WaitForSeconds(UpdateRate);

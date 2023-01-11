@@ -134,7 +134,8 @@ namespace MrPink.Units
         public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1,
             float playerForce = -1, ScoringActionType action = ScoringActionType.NULL, int enduranceDamage = -1)
         {
-            Debug.Log("RAGDOLL TILE EXPLOSION; pos " + explosionPosition);
+            NoiseSystem.Instance.DefaultNoise(explosionPosition);
+            //Debug.Log("RAGDOLL TILE EXPLOSION; pos " + explosionPosition);
             if (distance < 0)
                 distance = tileExplosionDistance;
 

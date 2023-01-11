@@ -224,9 +224,9 @@ public class BuildingGenerator : NetworkBehaviour
             yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
         }
         
-        yield return SpawnLoot(building);
+        //yield return SpawnLoot(building);
         
-        ContentPlacer.Instance.SpawnEnemiesInBuilding(building);
+        //ContentPlacer.Instance.SpawnEnemiesInBuilding(building);
     }
 
 
@@ -1005,6 +1005,7 @@ public class BuildingGenerator : NetworkBehaviour
 
     IEnumerator SpawnLoot(Building building)
     {
+        yield break;
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
             if (!building.spawnedBuildingLevels[i].spawnLoot)

@@ -29,6 +29,9 @@ namespace MrPink.WeaponsSystem
         [SerializeField]
         private ConsumableTool consumableTool;
 
+        [SerializeField] [ReadOnly] private float currentCastRadius = 0.3f;
+        [SerializeField] private float playerCastRadius = 0.5f;
+        [SerializeField] private float aiCastRadius = 0.3f;
         [Space]
         
         public bool dieOnContact = true;
@@ -132,7 +135,12 @@ namespace MrPink.WeaponsSystem
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
             var target = CollisionTarget.Self;
-            if (Physics.SphereCast(lastPosition, 0.3f, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Ignore))
+            if (ownerHealth.IsPlayer)
+                currentCastRadius = playerCastRadius;
+            else
+                currentCastRadius = aiCastRadius;
+            
+            if (Physics.SphereCast(lastPosition, currentCastRadius, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.transform == null)
                     return;
