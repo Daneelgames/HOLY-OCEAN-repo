@@ -18,6 +18,8 @@ namespace MrPink.Units
         
         [SerializeField, ChildGameObjectsOnly]
         private UnitAiWeaponControls _unitWeaponControls;
+        [SerializeField, ChildGameObjectsOnly]
+        private UnitAiWeaponControls _aiVehicleControls;
         
         [SerializeField, ChildGameObjectsOnly, Required]
         private HumanVisualController _humanVisualController;
@@ -81,6 +83,7 @@ namespace MrPink.Units
         {
             if (_unitWeaponControls)
                 _unitWeaponControls.Death();
+            if (_aiVehicleControls) _aiVehicleControls.Death();
             _healthController.health = 0;
         }
 
@@ -88,7 +91,6 @@ namespace MrPink.Units
         public void Cull(bool cull)
         {
             culled = cull;
-            
         }
         
         

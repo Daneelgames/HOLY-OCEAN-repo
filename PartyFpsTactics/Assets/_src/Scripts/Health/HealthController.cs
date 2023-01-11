@@ -342,7 +342,7 @@ namespace MrPink.Health
             if (IsServer)
             {
                 Debug.Log("DEATH on server start " + gameObject.name);
-                RpcDeathOnClient(action);
+                DeathOnServer(action);
             }
             else
             {
@@ -356,8 +356,23 @@ namespace MrPink.Health
         {
             Debug.Log("DEATH RpcDeathOnServer " + gameObject.name);
             //DeathOnClient(action);
-            RpcDeathOnClient(action);
+            DeathOnServer(action);
         }
+        
+        [Server]
+        void DeathOnServer(ScoringActionType action)
+        {
+            RpcDeathOnClient(action);
+            StartCoroutine(DestroyOnServer());
+        }
+
+        [Server]
+        IEnumerator DestroyOnServer()
+        {
+            yield return new WaitForSeconds(10);
+            ServerManager.Despawn(gameObject, DespawnType.Destroy);
+        }
+
         
         [ObserversRpc(/*IncludeOwner = false*/)]
         void RpcDeathOnClient(ScoringActionType action)

@@ -15,6 +15,8 @@ public class ControlledMachine : MonoBehaviour
     [BoxGroup]
     public AdvancedShipController AdvancedShipController;
     [BoxGroup]
+    public AiWaterObject AiWaterObject;
+    [BoxGroup]
     public WheelVehicle wheelVehicle;
     [BoxGroup]
     public SleepMachine sleepMachine;
@@ -51,28 +53,30 @@ public class ControlledMachine : MonoBehaviour
     public void StartInput(HealthController driverHc)
     {
         controllingHc = driverHc;
-        if (AdvancedShipController)
+        if (AdvancedShipController && driverHc.IsPlayer)
         {
             AdvancedShipController.Wake();
         }
+        if (AiWaterObject)
+        {
+            AiWaterObject.StartInput(driverHc);
+        }
         if (wheelVehicle)
         {
-            wheelVehicle.IsPlayer = true;
+            wheelVehicle.IsPlayer = driverHc.IsPlayer;
             wheelVehicle.Handbrake = false;
         }
 
         if (sleepMachine)
         {
-            sleepMachine.PlayerInside(true);
+            if (driverHc.IsPlayer)
+                sleepMachine.PlayerInside(true);
         }
 
-        /*
-        rb.drag = rbDrag;
-        rb.angularDrag = rbAngularDrag;*/
         if (rotateVehicleStraight != null)
             StopCoroutine(rotateVehicleStraight);
         
-        if (driverHc == Game.LocalPlayer.Health)
+        if (driverHc.IsPlayer)
         {
             if (Vector3.Angle(transform.up, Vector3.down) < 120)
                 rotateVehicleStraight = StartCoroutine(RotateVehicleStraight());
@@ -158,6 +162,9 @@ public class ControlledMachine : MonoBehaviour
         {
             AdvancedShipController.Sleep();
         }
+
+        if (AiWaterObject)
+            AiWaterObject.StopInput();
         if (wheelVehicle)
         {
             wheelVehicle.IsPlayer = false;
@@ -197,12 +204,21 @@ public class ControlledMachine : MonoBehaviour
             yield return null;
         }
     }
-    
+
+    public void SetCarInputAi()
+    {
+        Debug.Log("Debug Ai Water bike 1");
+        if (AiWaterObject)
+            AiWaterObject.SetInputAi();
+    }
     public void SetCarInput(float hor, float ver, bool brake, bool boost = false)
     {
         // перекинуть в общий прием инпута от юнитов
         if (wheelVehicle)
             wheelVehicle.SetInput(hor, ver, brake, boost);
+        
+        if (AiWaterObject)
+            AiWaterObject.SetInput(hor, ver, brake, boost);
     }
 
     private void OnDestroy()

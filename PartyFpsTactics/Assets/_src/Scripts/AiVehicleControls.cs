@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using Cysharp.Threading.Tasks.Triggers;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Sirenix.OdinInspector;
 using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEngine;
@@ -13,7 +15,7 @@ using UnityEngine.AI;
 
 namespace MrPink
 {
-    public class AiVehicleControls : MonoBehaviour
+    public class AiVehicleControls : NetworkBehaviour
     {
         public bool controllingVehicle = false;
         public HealthController CarHc;
@@ -26,28 +28,14 @@ namespace MrPink
         public float maxReverseDistance = 100;
         public float stoppingSpeed = 50;
 
-        private void OnEnable()
+        public override void OnStartClient()
         {
-            if (controllingVehicle)
-                DriverSit(controlledMachine);
+            base.OnStartClient();
         }
-
+        
         private Coroutine exitCoroutine;
-        IEnumerator AiExitVehicleCoroutine()
+        public void AiExitVehicle()
         {
-            if (controlledMachine == null || controlledMachine.sitTransformNpc == null)
-                yield break;
-            
-            float t = 0;
-            float tt = 0.5f;
-
-            while (t < tt)
-            {
-                t += Time.deltaTime;
-                hc.transform.position = Vector3.Lerp(controlledMachine.sitTransformNpc.position, 
-                    controlledMachine.sitTransformNpc.position + controlledMachine.sitTransformNpc.right * 1.5f, t/tt);
-                yield return null;
-            }
             controlledMachine = null;
             hc.HumanVisualController.SetCollidersTriggers(false);
             hc.AiMovement.RestartActivities();
@@ -58,7 +46,7 @@ namespace MrPink
             float t = 0;
             float tt = 0.5f;
 
-            hc.HumanVisualController.SetVehicleAiPassenger(controlledMachine);
+            hc.HumanVisualController.SetVehicleAiDriver(controlledMachine);
             hc.HumanVisualController.SetCollidersTriggers(true);
             hc.AiMovement.StopActivities();
             var initPos = hc.transform.position;
@@ -71,69 +59,17 @@ namespace MrPink
             }
             followSitCoroutine = StartCoroutine(FollowSit());   
         }
-        public void SetPassengerSit(ControlledMachine machine, bool smoothExit = true)
-        {
-            if (machine && machine.sitTransformNpc == null)
-                return;
-            
-            // включить анимацию
-            // начинать преследовать трансформ нпс сит
-            if (exitCoroutine != null)
-                StopCoroutine(exitCoroutine);
-            if (enterCoroutine != null)
-                StopCoroutine(enterCoroutine);
-            Debug.Log("SetPassengerSit. veh: " + machine + "; smooth: " + smoothExit);
-        
-            if (machine != null)
-            {
-                controlledMachine = machine;
-                controllingVehicle = false;
-                
-                enterCoroutine = StartCoroutine(EnterVehicleCoroutine());
-            }
-            else
-            {
-                controllingVehicle = false;
-                if (smoothExit)
-                    exitCoroutine = StartCoroutine(AiExitVehicleCoroutine());
-                if (followSitCoroutine != null)
-                    StopCoroutine(followSitCoroutine);
-            
-                if (smoothExit)
-                    hc.HumanVisualController.SetVehicleAiPassenger(null);
-            }
-        }
 
+        [Button]
         public void DriverSit(ControlledMachine machine)
         {
             controlledMachine = machine;
             controllingVehicle = true;
             controlledMachine.StartInput(hc);
-            updateNavMeshPathCoroutine = StartCoroutine(UpdateNavmeshPath());
+            enterCoroutine = StartCoroutine(EnterVehicleCoroutine());
+            if (controlVehicleCoroutine != null)
+                StopCoroutine(controlVehicleCoroutine);
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
-        }
-
-        private Coroutine updateNavMeshPathCoroutine;
-        IEnumerator UpdateNavmeshPath()
-        {
-            NavMeshPath path = new NavMeshPath();
-            Vector3 posToSample = Vector3.zero;
-            while (Game._instance == null || Game.LocalPlayer == null)
-            {
-                yield return null;
-            }
-            while (true)
-            {
-                posToSample = Game.LocalPlayer.Position;
-                NavMesh.SamplePosition(posToSample, out var hit, 10, NavMesh.AllAreas);
-                if (NavMesh.CalculatePath(transform.position, Game.LocalPlayer.Position, NavMesh.AllAreas, path))
-                {
-                    cornersPath = path.corners;
-                    targetPosition = cornersPath.Length > 1 ? cornersPath[1] : Game.LocalPlayer.Position;
-                }
-                
-                yield return new WaitForSeconds(0.1f);
-            }
         }
 
         private void OnDrawGizmosSelected()
@@ -159,64 +95,14 @@ namespace MrPink
         private Coroutine controlVehicleCoroutine;
         IEnumerator ControlVehicle()
         {
-            float hor = 0;
-            float ver = 0;
-            bool brake = false;
-            controlledMachine.wheelVehicle.Handbrake = false;
-        
+            if (controlledMachine.wheelVehicle)
+                controlledMachine.wheelVehicle.Handbrake = false;
+            Debug.Log("Debug Ai Water bike 0");
             while (controlledMachine)
             {
                 yield return null;
-            
-                float reachedTargetDistance = 5;
-                float distance = Vector3.Distance(transform.position, targetPosition);
-            
-                if (distance > reachedTargetDistance)
-                {
-                    Vector3 dirToMovePos = (targetPosition - transform.position).normalized;
-                    var dot = Vector3.Dot(transform.forward, dirToMovePos);
-                    if (dot > 0)
-                    {
-                        // target in front
-                        ver = 1f;
-
-                        if (distance < stoppingDistance && controlledMachine.wheelVehicle.Speed > stoppingSpeed)
-                        {
-                            ver = -1;
-                        }
-                    }
-                    else
-                    {
-                        // target behind
-                        if (distance > maxReverseDistance)
-                        {
-                            // too far to rewerse
-                            ver = 1f;
-                        }
-                        else
-                            ver = -1f;
-                    }
-
-                    var angleToDir = Vector3.SignedAngle(transform.forward, dirToMovePos, Vector3.up);
-
-                    if (angleToDir > 0)
-                        hor = 1f;
-                    else
-                        hor = -1f;
-                }
-                else
-                {
-                    // try to stop
-                    if (controlledMachine.wheelVehicle.Speed > 10)
-                        ver = -1;
-                    else
-                    {
-                        ver = 0;
-                        hor = 0;   
-                    }
-                }
-            
-                controlledMachine.SetCarInput(hor, ver, brake);
+                Debug.Log("Debug Ai Water bike 0.1");
+                controlledMachine.SetCarInputAi();
             }
         }
 
@@ -230,6 +116,15 @@ namespace MrPink
                 transform.rotation = sit.rotation;
                 yield return null;
             }
+        }
+
+        public void Death()
+        {
+            if (controlVehicleCoroutine != null)
+                StopCoroutine(controlVehicleCoroutine);
+            controlledMachine.StopMachine();
+            controlledMachine = null;
+            controllingVehicle = false;
         }
     }
 }

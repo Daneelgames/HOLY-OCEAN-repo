@@ -40,8 +40,8 @@ namespace MrPink.Units
 
         private static readonly int InCover = Animator.StringToHash("InCover");
     
-        private bool ragdoll = false;
-        private bool inVehicle = false;
+        [SerializeField][ReadOnly]private bool ragdoll = false;
+        [SerializeField][ReadOnly]private bool inVehicle = false;
         public Material aliveMaterial;
         public Material deadMaterial;
         public SkinnedMeshRenderer meshRenderer;
@@ -51,6 +51,7 @@ namespace MrPink.Units
         private Coroutine _changeLerpToStandCoroutine;
         private Coroutine _followRagdollCoroutine;
         private static readonly int Passenger = Animator.StringToHash("Passenger");
+        private static readonly int Driver = Animator.StringToHash("Driver");
         [SerializeField] private List<Collider> extraCollidersToIgnore;
 
         private void Start()
@@ -58,8 +59,6 @@ namespace MrPink.Units
             if (hc == null)
                 hc = gameObject.GetComponent<HealthController>();
             
-            if (noRagdoll)
-                return;
             
             ragdollOriginParent = ragdollOrigin.parent;
             for (int i = 0; i < joints.Count; i++)
@@ -85,6 +84,12 @@ namespace MrPink.Units
             {
                 yield return new WaitForSeconds(3f);
 
+                if (inVehicle)
+                {
+                    grounded = true;
+                    continue;
+                }
+                
                 grounded = Physics.CheckSphere(ragdollOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
                 if (!grounded && ragdoll == false)
                 {
@@ -179,7 +184,8 @@ namespace MrPink.Units
             anim.SetFloat("VelocityZ", velocityZ, 0.1f, Time.deltaTime);
         }
 
-        private void FixedUpdate()
+        //private void FixedUpdate()
+        private void Update()
         {
             if (noRagdoll)
                 return;
@@ -226,13 +232,13 @@ namespace MrPink.Units
             }
         }
     
-        public void SetVehicleAiPassenger(ControlledMachine machine)
+        public void SetVehicleAiDriver(ControlledMachine machine)
         {
-            if (machine && machine.sitTransformNpc == null)
-                return;
-            
+            if (machine)
+                DeactivateRagdoll();
             inVehicle = machine;
             anim.enabled = true;
+            //anim.SetBool(Driver, inVehicle);
             anim.SetBool(Passenger, inVehicle);
         
             foreach (var rb in rigidbodies)
@@ -250,15 +256,39 @@ namespace MrPink.Units
             meshRenderer.material = deadMaterial;
             if (!ragdoll)
                 ActivateRagdoll();
+            if (hc.IsPlayer == false)
+                StartCoroutine(ScaleBonesDown());
+        }
+
+        IEnumerator ScaleBonesDown()
+        {
+            float time = 10;
+            float t = 0;
+            while (t < time)
+            {
+                yield return null;
+                
+                foreach (var rb in rigidbodies)
+                {
+                    rb.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t/time);
+                }
+
+                t += Time.unscaledDeltaTime;
+            }
         }
     
         public void ActivateRagdoll()
         {
             if (noRagdoll)
                 return;
-
-            if (hc.aiVehicleControls)
-                hc.aiVehicleControls.SetPassengerSit(null,false);
+            
+            if (hc.aiVehicleControls && hc.aiVehicleControls.controlledMachine != null)
+            {
+                if (hc.health < 1)
+                    hc.aiVehicleControls.AiExitVehicle();
+                else
+                    return;
+            }
             if (ragdoll && _followRagdollCoroutine != null)
                 StopCoroutine(_followRagdollCoroutine);
         

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
   m_Name: PaniniProjection
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   distance:
     m_OverrideState: 1
     m_Value: 0.5
@@ -64,7 +64,6 @@ MonoBehaviour:
   - {fileID: -5355503672465615963}
   - {fileID: -6886499046650717101}
   - {fileID: 6149611259848886687}
-  - {fileID: 8804139880130949368}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -121,29 +120,3 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 1
     m_Value: 1
---- !u!114 &8804139880130949368
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ce1611ace1a9a4a8284d45a924bdcd, type: 3}
-  m_Name: Dithering
-  m_EditorClassIdentifier: 
-  active: 1
-  lut:
-    m_OverrideState: 1
-    m_Value: {fileID: 2800000, guid: 61af987e0e4d43d45bc5a5ae4c1a09aa, type: 3}
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0.2
-  luminanceThreshold:
-    m_OverrideState: 1
-    m_Value: 1
-  tiling:
-    m_OverrideState: 1
-    m_Value: 2
-  shader: {fileID: 4800000, guid: 9dfd4d129fd660d43a2fb5c40d119ca4, type: 3}

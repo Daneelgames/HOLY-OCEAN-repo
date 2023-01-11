@@ -36,7 +36,6 @@ namespace MrPink
             {
                 var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,
                     playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
-                //captain.aiVehicleControls.PassengerSit(playerCar);
                 npcInParty = captain;
                 Game.LocalPlayer.CommanderControls.unitsInParty.Add(captain);
             }
@@ -47,8 +46,10 @@ namespace MrPink
 
         public void SetPlayerInCar(ControlledMachine machine)
         {
+            // put npc in car if there are multiple sits
+            /*
             if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.LocalPlayer.Position) < 15)
-                npcInParty.aiVehicleControls.SetPassengerSit(machine);
+                npcInParty.aiVehicleControls.SetPassengerSit(machine);*/
         }
     }
 }

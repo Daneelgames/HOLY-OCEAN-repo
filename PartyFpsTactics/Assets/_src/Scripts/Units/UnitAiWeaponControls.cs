@@ -41,6 +41,10 @@ namespace MrPink.Units
 
         private IEnumerator CheckIfNeedFireWeapon()
         {
+            while (Game._instance == null || Game.LocalPlayer == null)
+            {
+                yield return null;
+            }
             while (_selfUnit.HealthController.health > 0)
             {
                 if (IsServer == false)
@@ -102,12 +106,6 @@ namespace MrPink.Units
                 
                 if (angle < minAngleToRotateGun)
                 {
-                    /*
-                    if (handIk)
-                    {
-                        handIk.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
-                    }
-                    */
                     activeWeapon.transform.LookAt(enemyToShoot.visibilityTrigger.transform.position + offset);
                 }
                 else
