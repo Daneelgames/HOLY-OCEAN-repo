@@ -50,7 +50,6 @@ namespace MrPink.Units
             _selfUnit.HealthController.OnDeathEvent.AddListener(StopActivities);
 
             Awareness().ForgetWithHandler();
-
         }
 
         private void OnEnable()

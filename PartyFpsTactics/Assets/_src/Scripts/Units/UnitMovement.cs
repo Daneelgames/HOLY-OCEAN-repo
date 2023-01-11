@@ -4,6 +4,7 @@ using FishNet.Object;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -59,21 +60,16 @@ namespace MrPink.Units
                 rb.useGravity = false;
                 _agent.enabled = false;
             }
-        }
-        private void Start()
-        {
-            // TODO не делать этого в старте
+            
             _lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
-            _lookTransform.parent = transform.parent;
+            _lookTransform.parent = transform;
             
             if (rememberRespawPoint)
                 rememberedRespawnPoint = transform.position;
-        }
-
-        private void OnEnable()
-        {
+            
             StartCoroutine(UnitGravity());
         }
+
 
         IEnumerator UnitGravity()
         {
@@ -101,7 +97,8 @@ namespace MrPink.Units
             //_currentVelocity = _agent.velocity;
             //_currentVelocity = rb.velocity;
             //_selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
-            _lookTransform.transform.position = transform.position;
+            if (_lookTransform)
+                _lookTransform.transform.position = transform.position;
         }
 
         public void Death()
@@ -114,7 +111,8 @@ namespace MrPink.Units
 
         public void Resurrect()
         {
-            _agent.enabled = true;
+            if (base.IsServer)
+                _agent.enabled = true;
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
@@ -138,6 +136,8 @@ namespace MrPink.Units
         
         public void LookAt(Vector3 targetPosition)
         {
+            if (_lookTransform == null)
+                return;
             _lookTransform.LookAt(targetPosition, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, _lookTransform.rotation, Time.deltaTime * _turnSpeed);  
         }
@@ -145,9 +145,24 @@ namespace MrPink.Units
         public IEnumerator MoveToPosition(Vector3 target)
         {
             AgentSetPath(target, false);
-        
-            while (Vector3.Distance(transform.position, target) > 1)
+
+            float t = 0;
+            while (Vector3.Distance(transform.position, target) > 1 && t < 15)
+            {
+                t += Time.deltaTime;
                 yield return new WaitForSeconds(0.5f);
+            }
+        }
+
+        [SerializeField] private Vector2 wanderAroundCooldownMinMax = new Vector2(5, 60);
+        IEnumerator WanderAround()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(Random.Range(wanderAroundCooldownMinMax.x, wanderAroundCooldownMinMax.y));
+                Vector3 target = ContentPlacer.Instance.NavMeshPosAroundPosition(transform.position, 50f);
+                AgentSetPath(target, false);
+            }
         }
         
         public void AgentSetPath(Vector3 target, bool isFollowing, bool cheap = true)
