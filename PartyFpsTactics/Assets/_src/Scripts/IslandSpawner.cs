@@ -23,6 +23,20 @@ public class IslandSpawner : NetworkBehaviour
         StartCoroutine(CullIslandsLocally());
     }
 
+    public float GetDistanceToClosestIsland(Vector3 posAsking)
+    {
+        float distance = 100000f;
+        foreach (var island in spawnedIslands)
+        {
+            var pos = island.gameObject.transform.position;
+            var newDistance = Vector3.Distance(pos, posAsking);
+            if (newDistance < distance)
+                distance = newDistance;
+        }
+
+        return distance;
+    }
+
     IEnumerator CullIslandsLocally()
     {
         while (Game._instance == null || Game.LocalPlayer == null)

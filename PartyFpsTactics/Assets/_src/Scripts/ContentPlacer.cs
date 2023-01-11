@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Connection;
 using FishNet.Object;
 using MrPink;
 using MrPink.Health;
 using MrPink.Units;
 using NWH.DWP2.ShipController;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -23,6 +25,7 @@ public class ContentPlacer : NetworkBehaviour
     [SerializeField] private float respawnDelay = 5;
     [SerializeField] private float minMobSpawnDistance = 20;
     [SerializeField] private AdvancedShipController defaultPlayerWaterbikerPrefab;
+    [SerializeField] private List<HealthController> aiWaterBikes = new List<HealthController>();
     
     public List<InteractiveObject> lootToSpawnAround;
     
@@ -38,6 +41,29 @@ public class ContentPlacer : NetworkBehaviour
     }
 
     private Coroutine spawnAroundPlayer;
+
+
+    [ServerRpc(RequireOwnership = false)]
+    void RpcSpawnPlayerBikeOnServer(NetworkConnection playerConnection)
+    {
+        SpawnPlayerBikeOnServer(playerConnection);
+    }
+    [Server]
+    void SpawnPlayerBikeOnServer(NetworkConnection playerConnection)
+    {
+        var playerBike = Instantiate(defaultPlayerWaterbikerPrefab, Game.LocalPlayer.transform.position + Vector3.up * 5, Game.LocalPlayer.transform.rotation);
+        ServerManager.Spawn(playerBike.gameObject);
+        
+        RpcSetPlayerDrivingOnClient(playerConnection, playerBike.gameObject);
+    }
+    
+    [TargetRpc]
+    void RpcSetPlayerDrivingOnClient(NetworkConnection playerConnection, GameObject bikeGameObject)
+    {
+        var veh = bikeGameObject.GetComponent<ControlledMachine>();
+        Game.LocalPlayer.VehicleControls.RequestVehicleAction(veh);
+    }
+    
     
     IEnumerator SpawnAroundPlayer()
     {
@@ -47,45 +73,62 @@ public class ContentPlacer : NetworkBehaviour
             yield return new WaitForSeconds(1);
         }
 
-        var playerBike = Instantiate(defaultPlayerWaterbikerPrefab, Game.LocalPlayer.transform.position + Vector3.up * 5, Game.LocalPlayer.transform.rotation);
-        var veh = playerBike.gameObject.GetComponent<ControlledMachine>();
-        Game.LocalPlayer.VehicleControls.RequestVehicleAction(veh);
+        // HOW TO SPAWN BIKE
+        if (base.IsHost)
+        {
+            SpawnPlayerBikeOnServer(Game.LocalPlayer.Owner);
+        }
+        else
+        {
+            RpcSpawnPlayerBikeOnServer(Game.LocalPlayer.Owner);
+        }
 
         yield return new WaitForSeconds(5);
         float cooldown = respawnDelay;
         while (true)
         {
-            yield return new WaitForSeconds(cooldown);
-            
-                Debug.Log("SpawnAroundPlayer 0");
             if (base.IsHost)
             {
-                Debug.Log("SpawnAroundPlayer SpawnRedUnitAroundPlayer");
-                SpawnRedUnitAroundPlayer();
+                SpawnRedUnitAroundRandomPlayer();
             }
-            
-            if (Game.LocalPlayer == null || Game.LocalPlayer.Health.health <= 0)
-                continue;
 
-            Debug.Log("SpawnAroundPlayer SpawnLootAroundPlayer");
-            SpawnLootAroundPlayer();
+            if (Game.LocalPlayer != null && Game.LocalPlayer.Health.health > 0)
+            {
+                Debug.Log("SpawnAroundPlayer SpawnLootAroundPlayer");
+                SpawnLootAroundLocalPlayer();
+            }
+
+            yield return new WaitForSeconds(cooldown);
         }
     }
 
+    // spawn mob on navmesh if player is close to island
+    // else spawn mob in bike in the ocean 
+    [SerializeField] private float islandDistanceSpawn = 200;
     [Server]
-    void SpawnRedUnitAroundPlayer()
+    void SpawnRedUnitAroundRandomPlayer()
     {
         if (UnitsManager.Instance.HcInGame.Count > maxEnemiesAlive)
             return;
         var players = Game._instance.PlayersInGame;
         var randomPlayer = players[Random.Range(0, players.Count)];
-        
-        Vector3 pos = NavMeshPosAroundPosition(randomPlayer.MainCamera.transform.position, 100);
-            
-        if (Vector3.Distance(pos, randomPlayer.MainCamera.transform.position) < minMobSpawnDistance)
-            return;
 
-        SpawnRedUnit(pos);
+        var distance = IslandSpawner.Instance.GetDistanceToClosestIsland(randomPlayer.transform.position);
+        Vector3 pos;
+        if (distance <= islandDistanceSpawn)
+        {
+            pos = NavMeshPosAroundPosition(randomPlayer.MainCamera.transform.position, islandDistanceSpawn);   
+            if (Vector3.Distance(pos, randomPlayer.MainCamera.transform.position) < minMobSpawnDistance)
+                return;
+
+            SpawnRedUnit(pos);
+        }
+        else // spawn in sea
+        {
+            pos = randomPlayer.MainCamera.transform.position + Random.onUnitSphere * 50;   
+
+            SpawnRedUnitInBoat(pos);
+        }
     }
     
     [Server]
@@ -242,17 +285,39 @@ public class ContentPlacer : NetworkBehaviour
         var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
         ServerManager.Spawn(unit.gameObject);
     }
-    void SpawnLootAroundPlayer()
+    
+    [Server]
+    void SpawnRedUnitInBoat(Vector3 pos)
+    {
+        var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+        var boat = Instantiate(aiWaterBikes[Random.Range(0, aiWaterBikes.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot);
+        
+        ServerManager.Spawn(unit.gameObject);
+        ServerManager.Spawn(boat.gameObject);
+        
+        unit.aiVehicleControls.DriverSitOnServer(boat);
+    }
+    void SpawnLootAroundLocalPlayer()
     {
         float distanceToClosestPickup = InteractableEventsManager.Instance.GetDistanceFromClosestPickUpToPosition(Game.LocalPlayer.transform.position);
 
         if (distanceToClosestPickup < 50)
             return;
 
-        Vector3 pos = NavMeshPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, 100);
-            
+        var distance = IslandSpawner.Instance.GetDistanceToClosestIsland(Game.LocalPlayer.transform.position);
+        Vector3 pos;
+        if (distance <= islandDistanceSpawn)
+        {
+            pos = NavMeshPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, islandDistanceSpawn);
+        }
+        else // spawn in sea
+        {
+            pos = Game.LocalPlayer.MainCamera.transform.position + Random.onUnitSphere * 50;
+            pos.y = Game.LocalPlayer.MainCamera.transform.position.y;
+        }   
         if (Vector3.Distance(pos, Game.LocalPlayer.MainCamera.transform.position) < 10)
             return;
+
         SpawnRandomLoot(pos);
     }
 

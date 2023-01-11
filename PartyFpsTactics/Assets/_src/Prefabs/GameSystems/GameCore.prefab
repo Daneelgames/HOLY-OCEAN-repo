@@ -383,9 +383,9 @@ MonoBehaviour:
   _lightManager: {fileID: 0}
   _gameCamera: {fileID: 1353563323056243550}
   camMoveSmooth: 10
-  camMoveSmoothVehicle: 5
-  camRotSmooth: 50
-  camRotSmoothVehicle: 5
+  camMoveSmoothVehicle: 10
+  camRotSmooth: 20
+  camRotSmoothVehicle: 20
 --- !u!1 &1269974007516270462
 GameObject:
   m_ObjectHideFlags: 0
@@ -2311,6 +2311,10 @@ PrefabInstance:
     - target: {fileID: 1310130598830015855, guid: 79c211962e0524f439cd3fa715d7b0e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8854494916619586161, guid: 79c211962e0524f439cd3fa715d7b0e7, type: 3}
+      propertyPath: distanceScaler
+      value: 400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79c211962e0524f439cd3fa715d7b0e7, type: 3}

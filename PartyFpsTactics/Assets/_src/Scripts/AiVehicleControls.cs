@@ -27,6 +27,7 @@ namespace MrPink
         public float stoppingDistance = 20;
         public float maxReverseDistance = 100;
         public float stoppingSpeed = 50;
+        [SerializeField] private List<Collider> collidersToSetTriggerWhenInVehicle;
 
         public override void OnStartClient()
         {
@@ -36,6 +37,10 @@ namespace MrPink
         private Coroutine exitCoroutine;
         public void AiExitVehicle()
         {
+            foreach (var collider1 in collidersToSetTriggerWhenInVehicle)
+            {
+                collider1.isTrigger = false;
+            }
             controlledMachine = null;
             hc.HumanVisualController.SetCollidersTriggers(false);
             hc.AiMovement.RestartActivities();
@@ -60,10 +65,26 @@ namespace MrPink
             followSitCoroutine = StartCoroutine(FollowSit());   
         }
 
-        [Button]
-        public void DriverSit(ControlledMachine machine)
+        [Server]
+        public void DriverSitOnServer(HealthController car)
         {
-            controlledMachine = machine;
+            RpcDriverSitClient(car);
+        }
+
+        [ObserversRpc(IncludeOwner = true)]
+        void RpcDriverSitClient(HealthController car)
+        {
+            DriverSitOnClient(car);
+        }
+        
+        [Button]
+        public void DriverSitOnClient(HealthController car)
+        {
+            foreach (var collider1 in collidersToSetTriggerWhenInVehicle)
+            {
+                collider1.isTrigger = true;
+            }
+            controlledMachine = car.controlledMachine;
             controllingVehicle = true;
             controlledMachine.StartInput(hc);
             enterCoroutine = StartCoroutine(EnterVehicleCoroutine());
@@ -100,9 +121,9 @@ namespace MrPink
             Debug.Log("Debug Ai Water bike 0");
             while (controlledMachine)
             {
-                yield return null;
                 Debug.Log("Debug Ai Water bike 0.1");
                 controlledMachine.SetCarInputAi();
+                yield return null;
             }
         }
 
@@ -110,7 +131,7 @@ namespace MrPink
         IEnumerator FollowSit()
         {
             var sit = controlledMachine.sitTransformNpc;
-            while (true)
+            while (sit != null)
             {
                 transform.position = sit.position;
                 transform.rotation = sit.rotation;

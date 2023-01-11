@@ -692,12 +692,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1852825967723450302}
+  - component: {fileID: -859051106296591646}
   - component: {fileID: 1852825967723450299}
   - component: {fileID: 1852825967723450296}
   - component: {fileID: 1852825967723450279}
   - component: {fileID: 1852825967723450276}
   - component: {fileID: 1852825967723450298}
   - component: {fileID: 1852825967723450297}
+  - component: {fileID: 3638330159521411507}
+  - component: {fileID: -5745830068330774923}
   m_Layer: 0
   m_Name: WaterBike_Advanced
   m_TagString: Ship
@@ -731,6 +734,59 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -89.322, z: 0}
+--- !u!114 &-859051106296591646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852825967723450303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 7943338353946780412, guid: d5c3ef36948886548b4da02c5ae45196, type: 3}
+  _networkObjectCache: {fileID: 3638330159521411507}
+  isPlayer: 0
+  selfUnit: {fileID: 0}
+  health: 1000
+  healthMax: 1000
+  needs: {fileID: 0}
+  endurance: 1000
+  enduranceRegenSpeed: 1000
+  UnitRagdollStandupCooldown: 1
+  destroyOnDeath: 0
+  visibilityTrigger: {fileID: 3900651794404157729, guid: d5c3ef36948886548b4da02c5ae45196, type: 3}
+  proceduralDamageShake: 0
+  shakeX: 0
+  shakeY: 0
+  shakeZ: 0
+  maxShakeOffset: 0.1
+  transformToShake: {fileID: 0}
+  team: 0
+  UnitVision: {fileID: 0}
+  AiMovement: {fileID: 0}
+  aiVehicleControls: {fileID: 0}
+  HumanVisualController: {fileID: 0}
+  AiShop: {fileID: 0}
+  crimeLevel: {fileID: 0}
+  controlledMachine: {fileID: 1852825967723450297}
+  playerMovement: {fileID: 0}
+  explosionOnDeath: {fileID: 6857697932595898852, guid: 1354d180a93e6ac45b98c239b3570cc7, type: 3}
+  npcInteraction: {fileID: 5224821360271212229}
+  deathOnHit: {fileID: 0}
+  unitsVisibleBy: []
+  rb: {fileID: 0}
+  bodyParts:
+  - {fileID: 6565218898605415747}
+  bodyPartsTransforms: []
+  damageStates: []
+  IsDead: 0
+  OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1852825967723450299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,7 +980,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852825967723450303}
   serializedVersion: 2
-  m_Mass: 950
+  m_Mass: 0.0000001
   m_Drag: 0.025
   m_AngularDrag: 0.3
   m_UseGravity: 1
@@ -962,13 +1018,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMass: 950
-  totalMass: 950
+  totalMass: 0
   dimensions: {x: 2.14, y: 1.26, z: 5.7}
   useDefaultCenterOfMass: 0
-  centerOfMass: {x: -0.000014659483, y: -0.34965175, z: -0.58301926}
+  centerOfMass: {x: 0, y: -0.43, z: -0.4}
   centerOfMassOffset: {x: 0, y: -0.43, z: -0.4}
   useDefaultInertia: 1
-  inertiaTensor: {x: 1588.4131, y: 1562.3552, z: 408.67386}
+  inertiaTensor: {x: 1, y: 1, z: 1}
   inertiaScale: {x: 1, y: 1, z: 1}
   updateInterval: 1
 --- !u!114 &1852825967723450298
@@ -996,6 +1052,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AdvancedShipController: {fileID: 1852825967723450299}
+  AiWaterObject: {fileID: 0}
   wheelVehicle: {fileID: 0}
   sleepMachine: {fileID: 0}
   Visual: {fileID: 0}
@@ -1008,6 +1065,75 @@ MonoBehaviour:
   carCrashDamageColliders: []
   rb: {fileID: 1852825967723450296}
   controllingHc: {fileID: 0}
+--- !u!114 &3638330159521411507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852825967723450303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: -859051106296591646}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 66
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 13771586142092066940
+  _sceneNetworkObjects: []
+--- !u!114 &-5745830068330774923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852825967723450303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 3638330159521411507}
+  _networkObjectCache: {fileID: 0}
+  _synchronizeParent: 0
+  _packing:
+    Position: 1
+    Rotation: 1
+    Scale: 0
+  _interpolation: 2
+  _extrapolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  _clientAuthoritative: 1
+  _sendToOwner: 1
+  _interval: 1
+  _synchronizePosition: 1
+  _positionSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeRotation: 1
+  _rotationSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeScale: 0
+  _scaleSnapping:
+    X: 0
+    Y: 0
+    Z: 0
 --- !u!1 &1852825967957128062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,6 +1365,7 @@ GameObject:
   - component: {fileID: 1852825968040686614}
   - component: {fileID: 1852825968040686615}
   - component: {fileID: 1852825968040686612}
+  - component: {fileID: 6565218898605415747}
   m_Layer: 6
   m_Name: Hull
   m_TagString: Untagged
@@ -6262,6 +6389,21 @@ MonoBehaviour:
   emitPerCycle: 6
   emitTimeInterval: 0.04
   positionExtrapolationFrames: 4
+--- !u!114 &6565218898605415747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852825968040686634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 100
+  _healthController: {fileID: -859051106296591646}
+  damageScaler: 1
 --- !u!1 &1852825968348545290
 GameObject:
   m_ObjectHideFlags: 0

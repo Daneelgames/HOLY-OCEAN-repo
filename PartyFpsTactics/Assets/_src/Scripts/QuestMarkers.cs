@@ -12,6 +12,7 @@ public class QuestMarkers : MonoBehaviour
     public QuestMark questMarkPrefab;
     public Transform questMarkersParent;
     [SerializeField] private float markerSpeed;
+    [SerializeField] private float distanceScaler = 10;
 
     private void Awake()
     {
@@ -69,6 +70,8 @@ public class QuestMarkers : MonoBehaviour
                 continue;
             var textUI = marker.markerName;
             var target = marker.target;
+            var distance = Vector3.Distance(marker.target.position, Game.LocalPlayer.MainCamera.transform.position);
+            marker.transform.localScale = Vector3.one / Mathf.Clamp(distance / distanceScaler, 1, 100);
 
             float minX = textUI.GetPixelAdjustedRect().width / 2;
             float maxX = Screen.width - minX;
