@@ -60,9 +60,13 @@ public class IslandSpawner : NetworkBehaviour
         while (true)
         {
             yield return null;
-
-            foreach (var spawnedIsland in spawnedIslands)
+            
+            if (spawnedIslands.Count < 1)
+                continue;
+            
+            for (var index = spawnedIslands.Count - 1; index >= 0; index--)
             {
+                var spawnedIsland = spawnedIslands[index];
                 var distance = Vector3.Distance(Game.LocalPlayer.transform.position, spawnedIsland.transform.position);
                 spawnedIsland.DistanceCull(distance);
                 yield return null;

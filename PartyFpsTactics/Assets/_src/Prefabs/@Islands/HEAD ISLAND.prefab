@@ -16120,7 +16120,11 @@ MonoBehaviour:
   _tileBuildingGenerator: {fileID: 0}
   _voxelBuildingGenerator: {fileID: 6967940206191493090}
   _navMeshSurfaceUpdate: {fileID: 6359991616015023496}
+  islandUnits: []
+  culled: 1
   distanceToLocalPlayer: 0
+  mobsIslandSpawnDistance: 300
+  mobsIslandDespawnDistance: 500
 --- !u!114 &1261924167978257544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26484,7 +26488,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1382950
+  instanceID: 2338802
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -29495,7 +29499,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1383206
+  instanceID: 2339058
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -30163,7 +30167,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1383280
+  instanceID: 2339132
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -32800,7 +32804,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1383554
+  instanceID: 2339392
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -46292,7 +46296,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4102816775382095348, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: instanceID
-      value: -2899462
+      value: -6925906
       objectReference: {fileID: 0}
     - target: {fileID: 4102816775448840192, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: m_RootOrder
@@ -46304,7 +46308,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4102816775448840192, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.7
+      value: -12.2
       objectReference: {fileID: 0}
     - target: {fileID: 4102816775448840192, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: m_LocalPosition.z
@@ -46345,6 +46349,46 @@ PrefabInstance:
     - target: {fileID: 4102816775448840195, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: m_Name
       value: VoxelBuildingGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.9116783
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10.911838
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.2097569
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8963128
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.2207013
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.36432055
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.12322686
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -29.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 43.219
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550771523504371612, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 3.941
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}

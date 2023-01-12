@@ -26,10 +26,14 @@ public class Island : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        if (IsOwner == false)
-        {
-            IslandSpawner.Instance.NewIslandSpawned(this);
-        }   
+        StartCoroutine(AddIslandToSpawner());
+    }
+
+    IEnumerator AddIslandToSpawner()
+    {
+        while (IslandSpawner.Instance == null) yield return null;
+        
+        IslandSpawner.Instance.NewIslandSpawned(this);
     }
     public void Init(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
     {
@@ -38,7 +42,6 @@ public class Island : NetworkBehaviour
 
     IEnumerator InitCoroutine(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
     {
-
         _voxelBuildingGenerator?.SaveRandomSeedOnEachClient(seed, voxelFloorRandomSettings);
         yield return null;
     }
