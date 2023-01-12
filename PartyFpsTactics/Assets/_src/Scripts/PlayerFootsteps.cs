@@ -57,7 +57,7 @@ public class PlayerFootsteps : MonoBehaviour
                 stepsAu.clip = pm.State.IsClimbing ? climbClips[Random.Range(0, climbClips.Count)] : stepClips[Random.Range(0, stepClips.Count)];
                 stepsAu.Play();
                 if (pm.State.IsRunning || (pm.State.IsMoving && pm.State.IsCrouching == false))
-                    NoiseSystem.Instance.StepsNoise(pm.transform.position);
+                    NoiseSystem.Instance?.StepsNoise(pm.transform.position);
             }
         }
     }

@@ -449,6 +449,7 @@ namespace Crest
         float _viewerHeightAboveWaterSmooth = 0f;
 
         SampleHeightHelper _sampleHeightHelper = new SampleHeightHelper();
+        public SampleHeightHelper SampleHeightHelper => _sampleHeightHelper;
 
         public static OceanRenderer Instance { get; private set; }
 

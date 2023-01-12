@@ -262,15 +262,16 @@ namespace MrPink.Units
 
         IEnumerator ScaleBonesDown()
         {
-            float time = 10;
+            float time = 30;
             float t = 0;
+            Vector3 endScale = new Vector3(0, 1, 0);
             while (t < time)
             {
                 yield return null;
                 
                 foreach (var rb in rigidbodies)
                 {
-                    rb.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t/time);
+                    rb.transform.localScale = Vector3.Lerp(Vector3.one, endScale, t/time);
                 }
 
                 t += Time.unscaledDeltaTime;

@@ -221,16 +221,21 @@ namespace MrPink.PlayerSystem
 
         void GetUnderwater()
         {
-            bool underwater = false;
-            foreach (var resultState in playerWaterObject.ResultStates)
+            if (OceanRenderer.Instance == null)
+                State.IsUnderwater = false;
+            else
             {
-                if (resultState < 2)
-                {
-                    underwater = true;
-                    break;
-                }
+                State.IsUnderwater = OceanRenderer.Instance.ViewerHeightAboveWater < 1;
             }
-            State.IsUnderwater = underwater;
+            
+            if (State.IsUnderwater && playerWaterObject.gameObject.activeInHierarchy == false)
+            {
+                playerWaterObject.gameObject.SetActive(true);
+                return;
+            }
+            if (State.IsUnderwater == false && playerWaterObject.gameObject.activeInHierarchy)
+                playerWaterObject.gameObject.SetActive(false);
+            
         }
         
         void HandleJump()
