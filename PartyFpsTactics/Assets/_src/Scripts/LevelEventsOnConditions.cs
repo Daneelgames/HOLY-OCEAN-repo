@@ -169,14 +169,6 @@ public class LevelEventsOnConditions : MonoBehaviour
                 met =  Game.LocalPlayer.VehicleControls.controlledMachine;
                 break;
             case Condition.ConditionType.PlayerIsCloseToNpc:
-                if (quest.spawnedQuestNpcs[condition.spawnedQuestNpcId] == null || quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].health <= 0)
-                {
-                    QuestManager.Instance.FailQuest(quest);
-                    met = false;
-                    return -1;
-                }
-                var dist = Vector3.Distance(Game.LocalPlayer.Position, quest.spawnedQuestNpcs[condition.spawnedQuestNpcId].transform.position);
-                met = dist < condition.distanceToCompare;
                 break;
         }
 

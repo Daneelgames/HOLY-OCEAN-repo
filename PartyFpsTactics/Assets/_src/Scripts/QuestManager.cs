@@ -8,96 +8,35 @@ using Random = UnityEngine.Random;
 
 public class QuestManager : MonoBehaviour
 {
+    // на старте игры я хочу сказать
+    // дай игрокам блядь квест
+    // цепочку последовательных действий
+    // чтобы был бесконечный кооп метал гир брат
+    
+    // о а прикинь окошко настройки квеста да
+    // сразу в нем указать название квеста прикинь
+    // и там же прописать какой-то вводный диалог если нужен
+    // и указать префаб босса которого надо убить для выполнения квеста
+    
+    // ну прямо как интерком в mgs товарищ
+    // катсцена одна на всех клиентов, чтобы можно было контролить
+    // ну и в том же окошке прописать события включения новых интеркомов ммм?
+    // опен ворлд мгс это территория ограниченная зоной миссии
+    // в принципе как и остров
+    // чел, я понятия не имею нахрен как ты даже одну игру закончил
+    
+    // бля мужик
+    // может нахуй квесты вот это все?
+    // просто на каждом острове заспавнить по боссу да
+    // убиваешь боссов отмеченных, копишь павер
+    // мол тебе телка говорит
+    // я не люблю тебя пока ты не лучший стрелок
+    // ну и ты идешь стрелять других лучших стрелков пустыни/моря
+
     public static QuestManager Instance;
-    public List<Quest> activeQuests = new List<Quest>();
-    public List<Quest> generatedQuests = new List<Quest>();
-    public QuestData questTemplates;
-    public int questsToGenerate = 5;
+
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
-        GenerateQuests();
-    }
-
-
-    void GenerateQuests()
-    {
-        var questsTemplatesTemp = new List<Quest>(questTemplates.questVariants);
-        for (int i = 0; i < questsToGenerate; i++)
-        {
-            if (questsTemplatesTemp.Count <= 0)
-                questsTemplatesTemp = new List<Quest>(questTemplates.questVariants);
-
-            int r = Random.Range(0, questsTemplatesTemp.Count);
-            var quest = new Quest(questsTemplatesTemp[r]);
-            quest.spawnedQuestNpcs.Clear();
-            questsTemplatesTemp.RemoveAt(r);
-            ShuffleQuest(quest);
-            generatedQuests.Add(quest);
-        }
-    }
-
-    void ShuffleQuest(Quest newQuest)
-    {
-        /*
-        // choose quest giver
-        // fill conditions
-        for (int i = 0; i < newQuest.eventsOnConditions.Count; i++)
-        {
-            var subQuest = newQuest.eventsOnConditions[i];
-            for (int conditionIndex = 0; conditionIndex < subQuest.conditions.Count; conditionIndex++)
-            {
-                var condition = subQuest.conditions[conditionIndex];
-                switch (condition.conditionType)
-                {
-                    case Condition.ConditionType.PlayerIsCloseToNpc:
-                        
-                        break;
-                }
-            }
-        }
-        */
-    }
-
-    public void StartRandomQuest()
-    {
-        var randomQuest = generatedQuests[Random.Range(0, generatedQuests.Count)];
-        
-        activeQuests.Add(randomQuest);
-
-        var checkingQuestCoroutine = StartCoroutine(CheckingQuest(randomQuest));
-        checkingQuestCoroutines.Add(randomQuest, checkingQuestCoroutine);
-    }
-
-    private Dictionary<Quest, Coroutine> checkingQuestCoroutines = new Dictionary<Quest, Coroutine>();
-
-    IEnumerator CheckingQuest(Quest quest)
-    {
-        for (int i = 0; i < quest.eventsOnConditions.Count; i++)
-        {
-            yield return StartCoroutine(LevelEventsOnConditions.Instance.CheckingEvent(quest.eventsOnConditions[i], quest));   
-        }    
-    }
-
-    public void FailQuest(Quest quest)
-    {
-        // feedback on level failed
-        Debug.Log("FailQuest");
-        StopCoroutine(checkingQuestCoroutines[quest]);
-        ScoringSystem.Instance.CustomTextMessage("QUEST FAILED");
-        ScoringSystem.Instance.ItemFoundSoundLowPitch();
-        for (int i = 0; i < quest.spawnedQuestNpcs.Count; i++)
-        {
-            if (quest.spawnedQuestNpcs[i].visibilityTrigger != null)
-                QuestMarkers.Instance.RemoveMarker(quest.spawnedQuestNpcs[i].visibilityTrigger.transform);
-            else
-            {
-                QuestMarkers.Instance.RemoveMarker(null);
-            }
-        }
     }
 }

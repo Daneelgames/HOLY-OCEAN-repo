@@ -93,11 +93,7 @@ public class InteractableEventsManager : MonoBehaviour
         var npcHc = IOevent.ActorNpc; 
         if (npcHc == null)
         {
-            if (quest != null && IOevent.spawnedQuestHcId >= 0)
-            {
-                npcHc = quest.spawnedQuestNpcs[IOevent.spawnedQuestHcId];
-            }
-            else if (IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
+            if (IOevent.actorId >= 0 && LevelEventsOnConditions.Instance.levelActors.Count > IOevent.actorId)
                 npcHc = LevelEventsOnConditions.Instance.GetHcById(IOevent.actorId);
         }
         if (npcHc && !npcHc.gameObject.activeInHierarchy)
@@ -195,16 +191,10 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.StartRandomQuest:
-                QuestManager.Instance.StartRandomQuest();
                 break;
             case ScriptedEventType.AddQuestMarker:
-                int AddQuestMarkerHcIndex = IOevent.questMarkerTargetHcIndex;
-                QuestMarkers.Instance.AddMarker(quest.spawnedQuestNpcs[AddQuestMarkerHcIndex].visibilityTrigger.transform, quest);
                 break;
             case ScriptedEventType.RemoveQuestMarker:
-                int RemoveQuestMarkerHcIndex = IOevent.questMarkerTargetHcIndex;
-                QuestMarkers.Instance.RemoveMarker(quest.spawnedQuestNpcs[RemoveQuestMarkerHcIndex].visibilityTrigger.transform);
-                
                 break;
             case ScriptedEventType.SpawnQuestNpc:
                 
