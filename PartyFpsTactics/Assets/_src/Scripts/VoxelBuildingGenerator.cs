@@ -16,13 +16,13 @@ public class VoxelBuildingGenerator : MonoBehaviour
     public List<VoxelBuildingFloor> Floors => _floors;
     [SerializeField] private VoxelGenerator _voxelGenerator;
     [SerializeField] private Transform firstFloorTransform;
-    public void SaveRandomSeedOnEachClient(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
+    public void SaveRandomSeedOnEachClient(int seed, List<VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
         currentSeed = seed;
         StartCoroutine(StartGenerating(voxelFloorRandomSettings));
     }
     
-    private IEnumerator StartGenerating(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
+    private IEnumerator StartGenerating(List<VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
         Debug.Log("StartGenerating voxelFloorRandomSettings " + voxelFloorRandomSettings.Count);
         SpawnFloors(voxelFloorRandomSettings);
@@ -31,23 +31,35 @@ public class VoxelBuildingGenerator : MonoBehaviour
         yield break;
         yield return null;
     }
-    
-    public List<VoxelBuildingFloor.VoxelFloorRandomSettings> RandomizeSettingsOnHost()
+
+    [Serializable]
+    public class VoxelFloorSettingsRaw
     {
-        List<VoxelBuildingFloor.VoxelFloorRandomSettings> newFloorsRandomSettings = new List<VoxelBuildingFloor.VoxelFloorRandomSettings>();
+        [SerializeField]
+        public List<int> settings;
+    }
+    
+    public List<VoxelFloorSettingsRaw> RandomizeSettingsOnHost()
+    {
+        List<VoxelFloorSettingsRaw> newFloorsRandomSettings = new List<VoxelFloorSettingsRaw>();
         for (int i = 0; i < floorsAmount; i++)
         {
-            var newRandomSettings = new VoxelBuildingFloor.VoxelFloorRandomSettings();
-            newRandomSettings.floorHeight = Random.Range(3, 20);
-            newRandomSettings.floorSizeX = Random.Range(10, 50);
-            newRandomSettings.floorSizeZ = Random.Range(10, 50);
-            newRandomSettings.innerWallsAmountX = Random.Range(1, 5);
-            newRandomSettings.innerWallsAmountZ = Random.Range(1, 5);
-            newRandomSettings.holesAmountF = Random.Range(1, 10);
-            newRandomSettings.holesAmountR = Random.Range(1, 10);
-            newRandomSettings.holesAmountB = Random.Range(1, 10);
-            newRandomSettings.holesAmountL = Random.Range(1, 10);   
-            
+            var newRandomSettings = new VoxelFloorSettingsRaw
+            {
+                settings = new List<int>(9)
+                {
+                    [0] = Random.Range(3, 20),
+                    [1] = Random.Range(10, 50),
+                    [2] = Random.Range(10, 50),
+                    [3] = Random.Range(1, 5),
+                    [4] = Random.Range(1, 5),
+                    [5] = Random.Range(1, 10),
+                    [6] = Random.Range(1, 10),
+                    [7] = Random.Range(1, 10),
+                    [8] = Random.Range(1, 10)
+                }
+            };
+
             newFloorsRandomSettings.Add(newRandomSettings);
         }
         
@@ -59,7 +71,7 @@ public class VoxelBuildingGenerator : MonoBehaviour
     {
         SpawnFloors(RandomizeSettingsOnHost());
     }
-    public void SpawnFloors(List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettingsList)
+    public void SpawnFloors(List<VoxelFloorSettingsRaw> voxelFloorsRandomSettingsList)
     {
         foreach (var voxelBuildingFloor in _floors)
         {
@@ -79,7 +91,7 @@ public class VoxelBuildingGenerator : MonoBehaviour
             newFloor.transform.eulerAngles = spawnRot;
             newFloor.transform.position = spawnPos;
             newFloor.transform.parent = transform;
-            newFloor.SetSettings(voxelFloorsRandomSettingsList[i]);
+            newFloor.SetSettings(voxelFloorsRandomSettingsList[i].settings);
             _floors.Add(newFloor);
             
             spawnPos = newFloor.transform.position + newFloor.transform.up * newFloor.GetHeight;

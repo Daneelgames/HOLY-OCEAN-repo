@@ -35,12 +35,12 @@ public class Island : NetworkBehaviour
         
         IslandSpawner.Instance.NewIslandSpawned(this);
     }
-    public void Init(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
+    public void Init(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
         StartCoroutine(InitCoroutine(seed, voxelFloorRandomSettings));
     }
 
-    IEnumerator InitCoroutine(int seed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorRandomSettings)
+    IEnumerator InitCoroutine(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
         _voxelBuildingGenerator?.SaveRandomSeedOnEachClient(seed, voxelFloorRandomSettings);
         yield return null;

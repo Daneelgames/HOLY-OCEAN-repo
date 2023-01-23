@@ -46,9 +46,9 @@ public class VoxelBuildingFloor : MonoBehaviour
     [SerializeField] private List<GameObject> innerWallsZ = new List<GameObject>();
     [SerializeField] private List<GameObject> innerHolesZ = new List<GameObject>();
     
-    
+    /*
     [Serializable] 
-    public class VoxelFloorRandomSettings
+    public struct VoxelFloorRandomSettings
     {
         public int floorHeight;
         public int floorSizeX;
@@ -60,18 +60,19 @@ public class VoxelBuildingFloor : MonoBehaviour
         public int holesAmountB;
         public int holesAmountL;
     }
-
-    public void SetSettings(VoxelFloorRandomSettings voxelFloorRandomSettings)
+    */
+    
+    public void SetSettings(List<int> voxelFloorRandomSettings)
     {
-        floorHeight = voxelFloorRandomSettings.floorHeight;
-        floorSizeX = voxelFloorRandomSettings.floorSizeX;
-        floorSizeZ = voxelFloorRandomSettings.floorSizeZ;
-        innerWallsAmountX = voxelFloorRandomSettings.innerWallsAmountX;
-        innerWallsAmountZ = voxelFloorRandomSettings.innerWallsAmountZ;
-        holesAmountF = voxelFloorRandomSettings.holesAmountF;
-        holesAmountR = voxelFloorRandomSettings.holesAmountR;
-        holesAmountB = voxelFloorRandomSettings.holesAmountB;
-        holesAmountL = voxelFloorRandomSettings.holesAmountL;
+        floorHeight = voxelFloorRandomSettings[0];
+        floorSizeX = voxelFloorRandomSettings[1];
+        floorSizeZ = voxelFloorRandomSettings[2];
+        innerWallsAmountX = voxelFloorRandomSettings[3];
+        innerWallsAmountZ = voxelFloorRandomSettings[4];
+        holesAmountF = voxelFloorRandomSettings[5];
+        holesAmountR = voxelFloorRandomSettings[6];
+        holesAmountB = voxelFloorRandomSettings[7];
+        holesAmountL = voxelFloorRandomSettings[8];
         
         ConstructFloor();
     }

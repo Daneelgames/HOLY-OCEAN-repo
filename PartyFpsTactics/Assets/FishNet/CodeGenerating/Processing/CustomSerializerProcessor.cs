@@ -5,6 +5,7 @@ using FishNet.Serializing;
 using MonoFN.Cecil;
 using MonoFN.Cecil.Cil;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace FishNet.CodeGenerating.Processing
 {
@@ -21,9 +22,10 @@ namespace FishNet.CodeGenerating.Processing
 
         #endregion
 
+        private int _count = 0;
         internal bool CreateSerializerDelegates(TypeDefinition typeDef, bool replace)
         {
-            bool modified = false;            
+            bool modified = false;
             /* Find all declared methods and register delegates to them.
              * After they are all registered create any custom writers
              * needed to complete the declared methods. It's important to
@@ -40,12 +42,12 @@ namespace FishNet.CodeGenerating.Processing
                 MethodReference methodRef = base.ImportReference(methodDef);
                 if (extensionType == ExtensionType.Write)
                 {
-                    base.GetClass<WriterHelper>().AddWriterMethod(methodRef.Parameters[1].ParameterType, methodRef, false, !replace);
+                    base.GetClass<WriterProcessor>().AddWriterMethod(methodRef.Parameters[1].ParameterType, methodRef, false, !replace);
                     modified = true;
                 }
                 else if (extensionType == ExtensionType.Read)
                 {
-                    base.GetClass<ReaderHelper>().AddReaderMethod(methodRef.ReturnType, methodRef, false, !replace);
+                    base.GetClass<ReaderProcessor>().AddReaderMethod(methodRef.ReturnType, methodRef, false, !replace);
                     modified = true;
                 }
             }
@@ -74,7 +76,7 @@ namespace FishNet.CodeGenerating.Processing
                     continue;
                 if (base.GetClass<GeneralHelper>().CodegenExclude(methodDef))
                     continue;
-                 
+
                 declaredMethods.Add((methodDef, extensionType));
                 modified = true;
             }
@@ -195,8 +197,8 @@ namespace FishNet.CodeGenerating.Processing
 
                 //Find already existing read or write method.
                 MethodReference createdMethodRef = (extensionType == ExtensionType.Write) ?
-                    base.GetClass<WriterHelper>().GetFavoredWriteMethodReference(parameterType, true) :
-                    base.GetClass<ReaderHelper>().GetFavoredReadMethodReference(parameterType, true);
+                    base.GetClass<WriterProcessor>().GetWriteMethodReference(parameterType) :
+                    base.GetClass<ReaderProcessor>().GetReadMethodReference(parameterType);
                 //If a created method already exist nothing further is required.
                 if (createdMethodRef != null)
                 {
@@ -208,8 +210,8 @@ namespace FishNet.CodeGenerating.Processing
                 else
                 {
                     createdMethodRef = (extensionType == ExtensionType.Write) ?
-                        base.GetClass<WriterGenerator>().CreateWriter(parameterType) :
-                        base.GetClass<ReaderGenerator>().CreateReader(parameterType);
+                        base.GetClass<WriterProcessor>().CreateWriter(parameterType) :
+                        base.GetClass<ReaderProcessor>().CreateReader(parameterType);
                 }
 
                 //If method was created.
@@ -217,7 +219,7 @@ namespace FishNet.CodeGenerating.Processing
                 {
                     /* If an autopack type then we have to inject the
                      * autopack above the new instruction. */
-                    if (base.GetClass<WriterHelper>().IsAutoPackedType(parameterType))
+                    if (base.GetClass<WriterProcessor>().IsAutoPackedType(parameterType))
                     {
                         AutoPackType packType = base.GetClass<GeneralHelper>().GetDefaultAutoPackType(parameterType);
                         Instruction autoPack = processor.Create(OpCodes.Ldc_I4, (int)packType);
@@ -259,8 +261,7 @@ namespace FishNet.CodeGenerating.Processing
 #endif
 
 
-            string prefix = (write) ?
-                WriterHelper.WRITE_PREFIX : ReaderHelper.READ_PREFIX;
+            string prefix = (write) ? WriterProcessor.WRITE_PREFIX : ReaderProcessor.READ_PREFIX;
 
             //Does not contain prefix.
             if (methodDef.Name.Length < prefix.Length || methodDef.Name.Substring(0, prefix.Length) != prefix)
@@ -270,8 +271,8 @@ namespace FishNet.CodeGenerating.Processing
             if (methodDef.Parameters.Count >= 1)
             {
                 TypeReference tr = methodDef.Parameters[0].ParameterType;
-                if (tr.FullName != base.GetClass<WriterHelper>().Writer_TypeRef.FullName &&
-                    tr.FullName != base.GetClass<ReaderHelper>().Reader_TypeRef.FullName)
+                if (tr.FullName != base.GetClass<WriterImports>().Writer_TypeRef.FullName &&
+                    tr.FullName != base.GetClass<ReaderImports>().Reader_TypeRef.FullName)
                     return ExtensionType.None;
             }
 

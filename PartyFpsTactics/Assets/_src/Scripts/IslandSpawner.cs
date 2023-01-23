@@ -22,9 +22,17 @@ public class IslandSpawner : NetworkBehaviour
         
         Instance = this;
 
-        SpawnIslandOnServer();
+        //SpawnIslandOnServer();
 
-        StartCoroutine(CullIslandsOnServer());
+        if (base.IsHost)
+            StartCoroutine(CullIslandsOnServer());
+    }
+
+    private void Update()
+    {
+        //test
+        if (Input.GetKeyDown(KeyCode.L))
+            SpawnIslandOnServer();
     }
 
     [Server]
@@ -92,13 +100,13 @@ public class IslandSpawner : NetworkBehaviour
     {
         Debug.Log("NEW ISLAND SPAWNED ON SERVER. " + newIsland);
         int currentSeed = Random.Range(1,999) * Random.Range(1,999) * Random.Range(1,999);
-        List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings = newIsland.VoxelBuildingGen.RandomizeSettingsOnHost();
+        var voxelFloorsRandomSettings = newIsland.VoxelBuildingGen.RandomizeSettingsOnHost();
         ServerManager.Spawn(newIsland.gameObject);
         RpcInitIslandOnClients(newIsland, currentSeed, voxelFloorsRandomSettings);
     }
 
     [ObserversRpc(IncludeOwner = true)]
-    void RpcInitIslandOnClients(Island newIsland, int currentSeed, List<VoxelBuildingFloor.VoxelFloorRandomSettings> voxelFloorsRandomSettings)
+    void RpcInitIslandOnClients(Island newIsland, int currentSeed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorsRandomSettings)
     {
         if (spawnedIslands.Contains(newIsland))
             return;

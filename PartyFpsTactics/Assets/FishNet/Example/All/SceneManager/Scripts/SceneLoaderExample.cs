@@ -14,7 +14,6 @@ namespace FishNet.Example.Scened
     /// </summary>
     public class SceneLoaderExample : MonoBehaviour
     {
-        
         /// <summary>
         /// True to move the triggering object.
         /// </summary>
@@ -94,9 +93,6 @@ namespace FishNet.Example.Scened
             if (triggeringIdentity == null)
                 return;
 
-            if (triggeringIdentity.IsOwner == false)
-                return;
-            
             /* Dont let trigger hit twice by same connection too frequently
              * See _triggeredTimes field for more info. */
             if (_triggeredTimes.TryGetValue(triggeringIdentity.Owner, out float time))
@@ -128,6 +124,7 @@ namespace FishNet.Example.Scened
 
             //Make scene data.
             SceneLoadData sld = new SceneLoadData(_scenes);
+            sld.PreferredActiveScene = sld.SceneLookupDatas[0];
             sld.ReplaceScenes = _replaceOption;
             sld.Options = loadOptions;
             sld.MovedNetworkObjects = movedObjects.ToArray();

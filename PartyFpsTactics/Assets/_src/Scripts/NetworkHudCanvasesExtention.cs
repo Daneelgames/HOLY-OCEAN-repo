@@ -9,20 +9,14 @@ public class NetworkHudCanvasesExtention : MonoBehaviour
 {
     [SerializeField] private NetworkHudCanvases _networkHudCanvases;
 
-    private void Awake()
-    {
-        _networkHudCanvases.OnClickServer.AddListener(OnClickServer);
-        _networkHudCanvases.OnClickClient.AddListener(OnClickClient);
-        _networkHudCanvases.OnClickCopyOwnId.AddListener(OnClickCopyOwnId);
-    }
-
-    void OnClickServer()
+    /*
+    void NetworkHudCanvases_OnClickServer()
     {
         var steamId = SteamUser.GetSteamID();
         var newId = (int)steamId.m_SteamID;
         _networkHudCanvases.SetClientAddress(newId);
     }
-    void OnClickClient()
+    void NetworkHudCanvases_OnClickClient()
     {
         _networkHudCanvases.SetClientAddressFromInputField();
     }
@@ -31,5 +25,5 @@ public class NetworkHudCanvasesExtention : MonoBehaviour
         var steamId = SteamUser.GetSteamID();
         var newId = steamId.m_SteamID.ToString();
         GUIUtility.systemCopyBuffer = newId;
-    }
+    }*/
 }
