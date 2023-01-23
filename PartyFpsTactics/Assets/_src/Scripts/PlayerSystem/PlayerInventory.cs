@@ -10,7 +10,6 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerInventory : MonoBehaviour
     {
-        public static PlayerInventory Instance;
         
         public List<ToolAmount> amountOfEachTool = new List<ToolAmount>();
 
@@ -45,10 +44,6 @@ namespace MrPink.PlayerSystem
             }
 
             return 0;
-        }
-        private void Awake()
-        {
-            Instance = this;
         }
 
         public void Init()

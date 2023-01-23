@@ -16,10 +16,6 @@ public class ContentPlacer : NetworkBehaviour
 {
     public static ContentPlacer Instance;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
     
     [SerializeField] private int maxEnemiesAlive = 30;
     [SerializeField] private float respawnDelay = 5;
@@ -29,8 +25,12 @@ public class ContentPlacer : NetworkBehaviour
     
     public List<InteractiveObject> lootToSpawnAround;
     
-    private void OnEnable()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+        
+        Instance = this;
+        
         if (respawnDelay <= 0)
             return;
         

@@ -252,10 +252,10 @@ namespace MrPink.Health
             if (Shop.Instance.IsActive)
                 return;
             
-            if (Game.LocalPlayer.Health == this && PlayerInventory.Instance.HasTool(ToolType.OneTimeShield))
+            if (Game.LocalPlayer.Health == this && Game.LocalPlayer.Inventory.HasTool(ToolType.OneTimeShield))
             {
                 PlayerUi.Instance.RemoveShieldFeedback();
-                PlayerInventory.Instance.RemoveTool(ToolType.OneTimeShield);
+                Game.LocalPlayer.Inventory.RemoveTool(ToolType.OneTimeShield);
             }
             else
                 health -= damage;

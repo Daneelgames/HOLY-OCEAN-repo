@@ -22,25 +22,25 @@ namespace _src.Scripts
         [SerializeField] [ReadOnly] private float clientTimeOffset;
         [SerializeReference] private TimeProviderNetworked oceanTimeProvider;
         public static OceanTimeManager Instance;
-        private void Awake()
-        {
-            Instance = this;
-        }
-        
-        [Server]
-        void Update()
-        {
-            ServerTime = Time.time;
-        }
+
         public override void OnStartClient()
         {
             base.OnStartClient();
 
+            Instance = this;
+            
             if (base.IsHost)
                 return;
 
             GetCurrentClientTimeOffset();
             ApplyClientTimeOffsetToOcean();
+        }
+
+        
+        [Server]
+        void Update()
+        {
+            ServerTime = Time.time;
         }
 
         [Client]

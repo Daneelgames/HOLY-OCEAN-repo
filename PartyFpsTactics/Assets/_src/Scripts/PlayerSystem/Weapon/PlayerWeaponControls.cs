@@ -111,7 +111,7 @@ namespace MrPink.PlayerSystem
 
         public void SetWeapon(WeaponController weapon, Hand hand)
         {
-            PlayerInventory.Instance.SetWeapon(weapon, hand);
+            Game.LocalPlayer.Inventory.SetWeapon(weapon, hand);
             if (weapon)
                 weapon.transform.parent = _weaponsParent;
             

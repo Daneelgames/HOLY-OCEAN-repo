@@ -1,19 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
 
-public class UiMarkWorldObject : MonoBehaviour
+public class UiMarkWorldObject : NetworkBehaviour
 {
     [SerializeField] private Color markColor = new Color(1f, 0.82f, 0f);
-    void Start()
+   
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+        
         QuestMarkers.Instance.AddMarker(transform, markColor);    
-    }
-    void OnEnable()
-    {
-        if (QuestMarkers.Instance)
-            QuestMarkers.Instance.AddMarker(transform, markColor);    
     }
 
     private void OnDestroy()

@@ -16,7 +16,8 @@ public class GameVoxelModifier : NetworkBehaviour
     public static GameVoxelModifier Instance;
     [SerializeField] private VoxelModifier mainModifier;
 
-    public override void OnStartClient() { 
+    public override void OnStartClient() 
+    { 
         base.OnStartClient();
         // Your code here..
         

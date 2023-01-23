@@ -10,11 +10,12 @@ public class NetworkProjectileSpawner : NetworkBehaviour
 {
     public static NetworkProjectileSpawner Instance;
 
-    private void Awake()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+        
         Instance = this;
     }
-
     public void SpawnProjectileOnEveryClient(float noiseDistance, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 targetPos, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
     {
         if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword ||

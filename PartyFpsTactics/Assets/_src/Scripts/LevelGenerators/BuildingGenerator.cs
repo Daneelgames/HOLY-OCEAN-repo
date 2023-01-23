@@ -81,11 +81,13 @@ public class BuildingGenerator : NetworkBehaviour
     [Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
 
-    private void Awake()
+
+    public override void OnStartClient()
     {
+        base.OnStartClient();
+        
         Instance = this;
     }
-
 
     private int currentSeed;
     void InitOnClient(int seed)

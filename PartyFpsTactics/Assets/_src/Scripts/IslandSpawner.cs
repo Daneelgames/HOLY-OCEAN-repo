@@ -14,25 +14,38 @@ public class IslandSpawner : NetworkBehaviour
 {
     public static IslandSpawner Instance;    
     [SerializeField] [ReadOnly] private List<Island> spawnedIslands = new List<Island>();
-    
+    [SerializeField] private List<Island> islandPrefabList = new List<Island>();
 
     public override void OnStartClient()
     {
         base.OnStartClient();
         
         Instance = this;
-        
+
+        SpawnIslandOnServer();
+
+        StartCoroutine(CullIslandsOnServer());
     }
 
+    [Server]
+    void SpawnIslandOnServer()
+    {
+        var randomIslandPrefab = islandPrefabList[Random.Range(0, islandPrefabList.Count)];
+        var newIsland = Instantiate(randomIslandPrefab, new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)), Quaternion.identity);
+ 
+        ServerManager.Spawn(newIsland.gameObject);
+    }
+
+    /*
     public override void OnOwnershipClient(NetworkConnection prevOwner)
     {
         base.OnOwnershipClient(prevOwner);
         /* Current owner can be found by using base.Owner. prevOwner
         * contains the connection which lost ownership. Value will be
-        * -1 if there was no previous owner. */
+        * -1 if there was no previous owner. #1#
 
         StartCoroutine(CullIslandsOnServer());
-    }
+    }*/
 
     public float GetDistanceToClosestIsland(Vector3 posAsking)
     {
@@ -92,7 +105,5 @@ public class IslandSpawner : NetworkBehaviour
         
         spawnedIslands.Add(newIsland);
         newIsland.Init(currentSeed, voxelFloorsRandomSettings);
-        
     }
-    
 }
