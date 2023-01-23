@@ -90,6 +90,9 @@ namespace MrPink
             enterCoroutine = StartCoroutine(EnterVehicleCoroutine());
             if (controlVehicleCoroutine != null)
                 StopCoroutine(controlVehicleCoroutine);
+            
+            if (base.IsClientOnly)
+                return;
             controlVehicleCoroutine = StartCoroutine(ControlVehicle());
         }
 
@@ -114,6 +117,8 @@ namespace MrPink
         }
 
         private Coroutine controlVehicleCoroutine;
+        
+        // only on host
         IEnumerator ControlVehicle()
         {
             if (controlledMachine.wheelVehicle)

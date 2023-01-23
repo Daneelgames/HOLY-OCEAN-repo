@@ -52,7 +52,7 @@ public class ContentPlacer : NetworkBehaviour
     void SpawnPlayerBikeOnServer(NetworkConnection playerConnection)
     {
         var playerBike = Instantiate(defaultPlayerWaterbikerPrefab, Game.LocalPlayer.transform.position + Vector3.up * 5, Game.LocalPlayer.transform.rotation);
-        ServerManager.Spawn(playerBike.gameObject);
+        ServerManager.Spawn(playerBike.gameObject, playerConnection);
         
         RpcSetPlayerDrivingOnClient(playerConnection, playerBike.gameObject);
     }

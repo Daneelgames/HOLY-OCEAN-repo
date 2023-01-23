@@ -89,6 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 2
+  _addedNetworkObject: {fileID: 3638330159521411507}
+  _networkObjectCache: {fileID: 3638330159521411507}
   markColor: {r: 0, g: 0.940083, b: 1, a: 1}
 --- !u!135 &5529235688384015333
 SphereCollider:
@@ -970,7 +973,7 @@ MonoBehaviour:
   wheelVehicle: {fileID: 0}
   sleepMachine: {fileID: 0}
   Visual: {fileID: 0}
-  visualFollowSpeed: 1
+  visualFollowSpeed: 10
   sitTransform: {fileID: 3424718571400797136}
   CameraTransform: {fileID: 6720943768454907508}
   sitTransformNpc: {fileID: 1064600114280614809}
@@ -996,13 +999,17 @@ MonoBehaviour:
   _networkBehaviours:
   - {fileID: -859051106296591646}
   - {fileID: -5745830068330774923}
+  - {fileID: 5529235688384015354}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 67
+  <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 13771586142092066940

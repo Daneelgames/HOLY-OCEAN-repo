@@ -106,7 +106,7 @@ namespace MrPink
         }
         public void RemovePlayer(Player p)
         {
-            if (playersesInGame.Contains(p)) return;
+            if (playersesInGame.Contains(p) == false) return;
             
             playersesInGame.Remove(p);
         }

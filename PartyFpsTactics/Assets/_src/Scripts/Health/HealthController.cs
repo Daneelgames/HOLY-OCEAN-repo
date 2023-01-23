@@ -363,7 +363,9 @@ namespace MrPink.Health
         void DeathOnServer(ScoringActionType action)
         {
             RpcDeathOnClient(action);
-            StartCoroutine(DestroyOnServer());
+            
+            if (isPlayer == false)
+                StartCoroutine(DestroyOnServer());
         }
 
         [Server]

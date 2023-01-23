@@ -131,7 +131,7 @@ namespace MrPink
                 float ver = Input.GetAxis("Vertical");
 
                 boosting = Input.GetKey(KeyCode.LeftShift);
-                controlledMachine.SetCarInput(hor,ver, brake, boosting);
+                controlledMachine.SetCarInputPlayer(hor,ver, brake, boosting);
                 yield return null;
             }
         }

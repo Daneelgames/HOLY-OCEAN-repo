@@ -211,13 +211,13 @@ public class ControlledMachine : MonoBehaviour
         if (AiWaterObject)
             AiWaterObject.SetInputAi();
     }
-    public void SetCarInput(float hor, float ver, bool brake, bool boost = false)
+    public void SetCarInputPlayer(float hor, float ver, bool brake, bool boost = false)
     {
         // перекинуть в общий прием инпута от юнитов
         if (wheelVehicle)
             wheelVehicle.SetInput(hor, ver, brake, boost);
         
-        if (AiWaterObject)
+        if (AiWaterObject) // controlled by player
             AiWaterObject.SetInput(hor, ver, brake, boost);
     }
 
