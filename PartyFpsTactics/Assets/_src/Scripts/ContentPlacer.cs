@@ -358,4 +358,12 @@ public class ContentPlacer : NetworkBehaviour
         return initPos;
     }
 
+    public void SetMaxAliveMobs(int amount)
+    {
+        maxEnemiesAlive = amount;
+    }
+    public int GetMaxAliveMobs()
+    {
+        return maxEnemiesAlive;
+    }
 }

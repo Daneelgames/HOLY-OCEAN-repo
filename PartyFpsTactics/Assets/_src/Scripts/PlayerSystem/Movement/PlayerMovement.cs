@@ -21,6 +21,7 @@ namespace MrPink.PlayerSystem
         [BoxGroup("VERTICAL")] [SerializeField] private float _coyoteTimeMax = 0.5f;
         [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private bool canUseCoyoteTime = true;
         [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private float _coyoteTime = 0;
+        [BoxGroup("VERTICAL")] public bool useGravity { get; private set; } = true;
         [BoxGroup("VERTICAL")]public float gravity = 5;
         [BoxGroup("VERTICAL")][SerializeField]float gravityChangeSmooth = 5f;
         [BoxGroup("VERTICAL")][SerializeField][ReadOnly]float newTargetGravity = 0f;
@@ -444,6 +445,9 @@ namespace MrPink.PlayerSystem
 
             resultGravity = Mathf.Lerp(resultGravity, newTargetGravity, gravityChangeSmooth * Time.unscaledDeltaTime);
             
+            if (useGravity == false)
+                resultGravity = 0;
+            
             _resultVelocity += Vector3.down * resultGravity;
 
             _prevVelocity = _resultVelocity;
@@ -688,6 +692,11 @@ namespace MrPink.PlayerSystem
             //rb.useGravity = true;
             rb.drag = rbInitDrag;
             rb.angularDrag = rbInitAngularDrag;
+        }
+
+        public void SetNoGravity(bool noGravity)
+        {
+            useGravity = !noGravity;
         }
     }
 }
