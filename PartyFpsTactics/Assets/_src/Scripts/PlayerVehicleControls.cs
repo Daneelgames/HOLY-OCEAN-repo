@@ -5,6 +5,7 @@ using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using Cysharp.Threading.Tasks.Triggers;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink
@@ -13,6 +14,7 @@ namespace MrPink
     {
         public static PlayerVehicleControls Instance;
 
+        [SerializeField][ReadOnly] ControlledMachine ownVehicle;
         public ControlledMachine controlledMachine;
         public float playerFollowMoveScaler = 10;
         public float playerFollowRotScaler = 10;
@@ -26,6 +28,18 @@ namespace MrPink
         private void Start()
         {
             StartCoroutine(UpdateLeashParts());
+        }
+
+        private void Update()
+        {
+            if (controlledMachine != null)
+                return;
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                ownVehicle.transform.position = transform.position;
+                RequestVehicleAction(ownVehicle);
+            }
         }
 
         private Coroutine exitCoroutine;
@@ -44,7 +58,11 @@ namespace MrPink
             if (controlledMachine)
                 RequestVehicleAction(controlledMachine);
         }
-        
+
+        public void SaveOwnVehicle(ControlledMachine _controlledMachine)
+        {
+            ownVehicle = _controlledMachine;
+        }
         public void RequestVehicleAction(ControlledMachine controlledMachine)
         {
             if (exitCoroutine != null)

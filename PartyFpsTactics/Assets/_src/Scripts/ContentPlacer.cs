@@ -61,7 +61,8 @@ public class ContentPlacer : NetworkBehaviour
     void RpcSetPlayerDrivingOnClient(NetworkConnection playerConnection, GameObject bikeGameObject)
     {
         var veh = bikeGameObject.GetComponent<ControlledMachine>();
-        Game.LocalPlayer.VehicleControls.RequestVehicleAction(veh);
+        Game.LocalPlayer.VehicleControls.SaveOwnVehicle(veh);
+        //Game.LocalPlayer.VehicleControls.RequestVehicleAction(veh);
     }
     
     
@@ -73,7 +74,7 @@ public class ContentPlacer : NetworkBehaviour
             yield return new WaitForSeconds(1);
         }
 
-        // HOW TO SPAWN BIKE
+        // SPAWN BIKE FOR THIS PLAYER
         if (base.IsHost)
         {
             SpawnPlayerBikeOnServer(Game.LocalPlayer.Owner);

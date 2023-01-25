@@ -43,15 +43,7 @@ namespace MrPink
         }
     
         private void Update()
-        {
-            /*
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                if (!dialogueWindowActive)
-                    NewMessage(String.Empty, String.Empty, true);
-                ToggleDialogueWindow(!dialogueWindowActive);
-            }*/
-            
+        {   
             if (!dialogueWindowActive)
                 return;
         
