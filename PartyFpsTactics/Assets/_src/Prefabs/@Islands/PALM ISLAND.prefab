@@ -41615,7 +41615,11 @@ MonoBehaviour:
   _tileBuildingGenerator: {fileID: 0}
   _voxelBuildingGenerator: {fileID: 8560325615159410525}
   _navMeshSurfaceUpdate: {fileID: 5637452114658458935}
+  islandUnits: []
+  culled: 1
   distanceToLocalPlayer: 0
+  mobsIslandSpawnDistance: 300
+  mobsIslandDespawnDistance: 500
 --- !u!114 &6473927946314326102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41632,26 +41636,22 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 6670557985220958057}
+  - {fileID: -2463324513389666248}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 16
-  _scenePathHash: 0
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 3978214328509118822
   _sceneNetworkObjects:
   - {fileID: 6473927946314326102}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -41670,7 +41670,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 6473927946314326102}
+  _networkObjectCache: {fileID: 6473927946314326102}
   markColor: {r: 1, g: 0.82, b: 0, a: 1}
+  hideOnOwner: 0
 --- !u!1 &3366264233792444058
 GameObject:
   m_ObjectHideFlags: 0
@@ -65989,7 +65993,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5637452112884243006
 Transform:
   m_ObjectHideFlags: 0
@@ -66035,7 +66039,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1761162
+  instanceID: -3146906
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -66420,7 +66424,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1761186
+  instanceID: -3146892
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -110450,7 +110454,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4102816775382095348, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: instanceID
-      value: -6757108
+      value: -3132350
       objectReference: {fileID: 0}
     - target: {fileID: 4102816775448840192, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: m_RootOrder

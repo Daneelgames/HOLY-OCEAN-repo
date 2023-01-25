@@ -14,6 +14,7 @@ public class IslandSpawner : NetworkBehaviour
 {
     public static IslandSpawner Instance;    
     [SerializeField] [ReadOnly] private List<Island> spawnedIslands = new List<Island>();
+    [SerializeField] private float spawnDistance = 1000;
     [SerializeField] private List<Island> islandPrefabList = new List<Island>();
 
     public override void OnStartClient()
@@ -30,16 +31,17 @@ public class IslandSpawner : NetworkBehaviour
 
     private void Update()
     {
-        //test
-        if (Input.GetKeyDown(KeyCode.L))
-            SpawnIslandOnServer();
     }
+    
+    
 
     [Server]
-    void SpawnIslandOnServer()
+    public void SpawnIslandOnServer()
     {
         var randomIslandPrefab = islandPrefabList[Random.Range(0, islandPrefabList.Count)];
-        var newIsland = Instantiate(randomIslandPrefab, new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)), Quaternion.identity);
+        var spawnDir = new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)).normalized;
+        var spawnPos = spawnDir * spawnDistance;
+        var newIsland = Instantiate(randomIslandPrefab, spawnPos, Quaternion.identity);
  
         ServerManager.Spawn(newIsland.gameObject);
     }
@@ -99,10 +101,18 @@ public class IslandSpawner : NetworkBehaviour
     public void NewIslandSpawned(Island newIsland)
     {
         Debug.Log("NEW ISLAND SPAWNED ON SERVER. " + newIsland);
-        int currentSeed = Random.Range(1,999) * Random.Range(1,999) * Random.Range(1,999);
-        var voxelFloorsRandomSettings = newIsland.VoxelBuildingGen.RandomizeSettingsOnHost();
         ServerManager.Spawn(newIsland.gameObject);
-        RpcInitIslandOnClients(newIsland, currentSeed, voxelFloorsRandomSettings);
+        
+        int currentSeed = Random.Range(1,999) * Random.Range(1,999) * Random.Range(1,999);
+        if (newIsland.VoxelBuildingGen)
+        {
+            var voxelFloorsRandomSettings = newIsland.VoxelBuildingGen.RandomizeSettingsOnHost();
+            RpcInitIslandOnClients(newIsland, currentSeed, voxelFloorsRandomSettings);
+        }
+        else
+        {
+            RpcInitIslandOnClients(newIsland, currentSeed, null);
+        }
     }
 
     [ObserversRpc(IncludeOwner = true)]

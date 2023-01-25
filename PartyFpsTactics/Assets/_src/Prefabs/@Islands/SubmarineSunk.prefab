@@ -7149,6 +7149,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1077230858890137852}
+  - component: {fileID: -9218924638129041948}
+  - component: {fileID: 1274181075255149504}
+  - component: {fileID: 8022490163135556259}
   m_Layer: 0
   m_Name: SubmarineSunk
   m_TagString: Untagged
@@ -7175,6 +7178,76 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-9218924638129041948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373941326854333258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 102b294c358e29c47a2376e3db68122e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1261924167978257544, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
+  _networkObjectCache: {fileID: 1261924167978257544, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
+  _tileBuildingGenerator: {fileID: 0}
+  _voxelBuildingGenerator: {fileID: 0}
+  _navMeshSurfaceUpdate: {fileID: 0}
+  islandUnits: []
+  culled: 1
+  distanceToLocalPlayer: 0
+  mobsIslandSpawnDistance: 300
+  mobsIslandDespawnDistance: 500
+--- !u!114 &1274181075255149504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373941326854333258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours: []
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: -1
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 14216919704080732870
+  _sceneNetworkObjects: []
+--- !u!114 &8022490163135556259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373941326854333258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 1261924167978257544, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
+  _networkObjectCache: {fileID: 1261924167978257544, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
+  markerText: '?'
+  markColor: {r: 1, g: 0.82, b: 0, a: 1}
+  hideOnOwner: 0
 --- !u!1 &3374946381504079507
 GameObject:
   m_ObjectHideFlags: 0

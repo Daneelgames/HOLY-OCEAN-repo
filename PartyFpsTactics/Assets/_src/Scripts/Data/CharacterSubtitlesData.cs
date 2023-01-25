@@ -15,9 +15,10 @@ namespace _src.Scripts.Data
         [Serializable]
         public struct TextAudio
         {
-     
             public string messageText;
-            public AudioClip messageAudio;       
+            public AudioClip messageAudio;
+            public bool RunEvent;
+            [ShowIf("RunEvent")]public ScriptedEvent eventToRun;
         }
 
     }

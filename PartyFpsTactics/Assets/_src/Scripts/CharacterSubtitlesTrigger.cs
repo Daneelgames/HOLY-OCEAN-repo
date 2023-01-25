@@ -15,7 +15,8 @@ public class CharacterSubtitlesTrigger : MonoBehaviour
     {
         if (triggerOnce && triggered) return;
         if (other.gameObject != Game.LocalPlayer.gameObject) return;
-        triggered = true;
-        CharacterSubtitles.Instance.StartCharacterSubtitles(_characterSubtitlesData);
+        
+        if (CharacterSubtitles.Instance.TryToStartCharacterSubtitles(_characterSubtitlesData))
+            triggered = true;
     }
 }

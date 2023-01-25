@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 55688841}
   - component: {fileID: 55688842}
   - component: {fileID: 6910074058342054200}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: CharacterSpeakingTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6931,6 +6931,8 @@ GameObject:
   - component: {fileID: 7233733711483920593}
   - component: {fileID: 7199526278789121210}
   - component: {fileID: 515580479896972593}
+  - component: {fileID: 7215742554930245324}
+  - component: {fileID: 1666998553287829044}
   m_Layer: 7
   m_Name: She Npc
   m_TagString: Untagged
@@ -6993,6 +6995,62 @@ CapsuleCollider:
   m_Height: 1.7555972
   m_Direction: 1
   m_Center: {x: 0, y: 0.8746466, z: 0}
+--- !u!114 &7215742554930245324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8009848546024241771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1261924167978257544, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
+  _networkObjectCache: {fileID: 0}
+  markerText: R
+  markColor: {r: 1, g: 0.0812667, b: 0, a: 1}
+  hideOnOwner: 0
+--- !u!114 &1666998553287829044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8009848546024241771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 7215742554930245324}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: -1
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 2732387296
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 11771624312676215995
+  _sceneNetworkObjects:
+  - {fileID: 1666998553287829044}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &8038413141163880912
 GameObject:
   m_ObjectHideFlags: 0

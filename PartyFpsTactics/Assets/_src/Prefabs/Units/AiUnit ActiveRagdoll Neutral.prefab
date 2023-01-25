@@ -6573,6 +6573,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: -2920836169782800529}
+  _networkObjectCache: {fileID: -2920836169782800529}
   controllingVehicle: 0
   CarHc: {fileID: 0}
   hc: {fileID: 5673859260790904911}
@@ -6581,6 +6584,7 @@ MonoBehaviour:
   stoppingDistance: 20
   maxReverseDistance: 100
   stoppingSpeed: 50
+  collidersToSetTriggerWhenInVehicle: []
 --- !u!114 &6090508075434962156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6612,7 +6616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: -2920836169782800529}
   _networkObjectCache: {fileID: -2920836169782800529}
   _moveSpeed: 8
@@ -6624,6 +6628,7 @@ MonoBehaviour:
   rb: {fileID: 898283775404610476}
   _selfUnit: {fileID: 834634797964359098}
   rememberRespawPoint: 1
+  wanderAroundCooldownMinMax: {x: 5, y: 60}
 --- !u!114 &-4915185774981738495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6650,7 +6655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da030c9638e719468202567e4578531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: -2920836169782800529}
   _networkObjectCache: {fileID: -2920836169782800529}
   activeWeapons: []
@@ -6661,7 +6666,7 @@ MonoBehaviour:
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
-  maxDistanceToAttack: 50
+  maxDistanceToAttack: 100
   updateRate: 0.1
   maxDistanceFromPlayerToShoot: 200
 --- !u!114 &3176254616865558108
@@ -6859,6 +6864,8 @@ MonoBehaviour:
   activeAngularPositionSpring: 1500
   activeAngularPositionDamper: 100
   timeToStandUp: 3
+  ragdoll: 0
+  inVehicle: 0
   aliveMaterial: {fileID: 2100000, guid: e2f70939715ed9546a764a0d794e5831, type: 2}
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 4419122463221333621}
@@ -7045,6 +7052,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 5673859260790904911}
+  - {fileID: 1971991689436263911}
   - {fileID: 7767769086912786514}
   - {fileID: 5371681404181358584}
   - {fileID: 8509212130762963468}
@@ -7052,9 +7060,12 @@ MonoBehaviour:
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 27
+  <PrefabId>k__BackingField: 29
+  <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 7440926310269065867
@@ -7088,7 +7099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14be6723ef154774ab36b7631e755032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 3
+  _componentIndexCache: 4
   _addedNetworkObject: {fileID: -2920836169782800529}
   _networkObjectCache: {fileID: -2920836169782800529}
   _gpuInstancerPrefabAndHandlers:

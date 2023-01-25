@@ -26,11 +26,12 @@ public class QuestMarkers : MonoBehaviour
         mark.markerName.text = quest.questName;
         activeMarks.Add(mark);
     }
-    public void AddMarker(Transform markerTarget, Color color)
+    public void AddMarker(Transform markerTarget, Color color, string marketText)
     {
         var mark = Instantiate(questMarkPrefab, questMarkersParent);
         mark.target = markerTarget;
         mark.markerName.color = color;
+        mark.markerName.text = marketText;
         activeMarks.Add(mark);
     }
 

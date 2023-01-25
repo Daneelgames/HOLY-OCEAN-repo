@@ -90,6 +90,9 @@ public class InteractableEventsManager : MonoBehaviour
 
     public void RunEvent(ScriptedEvent IOevent, Quest quest = null, GameObject gameObjectToDestroy = null, bool qPressed = false, bool ePressed = false)
     {
+        if (IOevent == null)
+            return;
+        
         var npcHc = IOevent.ActorNpc; 
         if (npcHc == null)
         {
@@ -213,6 +216,10 @@ public class InteractableEventsManager : MonoBehaviour
                     if (unit)
                         unit.Resurrect();
                 }
+                break;
+            
+            case ScriptedEventType.SpawnRandomIsland:
+                IslandSpawner.Instance.SpawnIslandOnServer();
                 break;
         }
         

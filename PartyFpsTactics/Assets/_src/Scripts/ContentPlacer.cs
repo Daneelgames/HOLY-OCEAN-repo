@@ -25,11 +25,18 @@ public class ContentPlacer : NetworkBehaviour
     
     public List<InteractiveObject> lootToSpawnAround;
     
+    private List<ContentPlacerBlocker> _contentPlacerBlockers = new List<ContentPlacerBlocker>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public override void OnStartClient()
     {
         base.OnStartClient();
         
-        Instance = this;
+        //Instance = this;
         
         if (respawnDelay <= 0)
             return;
@@ -88,6 +95,11 @@ public class ContentPlacer : NetworkBehaviour
         float cooldown = respawnDelay;
         while (true)
         {
+            yield return new WaitForSeconds(cooldown);
+            
+            if (IsLocalPlayerNearContentSpawnBlocker())
+                continue;
+            
             if (base.IsHost)
             {
                 SpawnRedUnitAroundRandomPlayer();
@@ -99,7 +111,6 @@ public class ContentPlacer : NetworkBehaviour
                 SpawnLootAroundLocalPlayer();
             }
 
-            yield return new WaitForSeconds(cooldown);
         }
     }
 
@@ -366,5 +377,28 @@ public class ContentPlacer : NetworkBehaviour
     public int GetMaxAliveMobs()
     {
         return maxEnemiesAlive;
+    }
+
+    public void AddContentBlocker(ContentPlacerBlocker contentPlacerBlocker)
+    {
+        if (_contentPlacerBlockers.Contains(contentPlacerBlocker)) return;
+        _contentPlacerBlockers.Add(contentPlacerBlocker);
+    }
+    public void RemoveContentBlocker(ContentPlacerBlocker contentPlacerBlocker)
+    {
+        if (_contentPlacerBlockers.Contains(contentPlacerBlocker) == false) return;
+        _contentPlacerBlockers.Remove(contentPlacerBlocker);
+    }
+
+    bool IsLocalPlayerNearContentSpawnBlocker()
+    {
+        foreach (var contentPlacerBlocker in _contentPlacerBlockers)
+        {
+            var distance = Vector3.Distance(Game.LocalPlayer.Position, contentPlacerBlocker.transform.position);
+            if (distance <= contentPlacerBlocker.BlockDistance)
+                return true;
+        }
+
+        return false;
     }
 }
