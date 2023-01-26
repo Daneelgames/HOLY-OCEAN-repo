@@ -59,7 +59,7 @@ public class Island : NetworkBehaviour
         if (culled && distanceToLocalPlayer <= mobsIslandSpawnDistance)
         {
             culled = false;
-            _navMeshSurfaceUpdate.Init();
+            _navMeshSurfaceUpdate?.Init();
             SpawnIslandEnemies();
             return;
         }
@@ -67,7 +67,7 @@ public class Island : NetworkBehaviour
         if (culled == false && distanceToLocalPlayer >= mobsIslandDespawnDistance)
         {
             culled = true;
-            _navMeshSurfaceUpdate.Stop();
+            _navMeshSurfaceUpdate?.Stop();
             DespawnIslandEnemies();
             return;
         }
