@@ -47,6 +47,7 @@ namespace MrPink
 
         [Header("CAMERA")]
         [SerializeField] private GameCamera _gameCamera;
+        public GameCamera GetGameCamera => _gameCamera;
         public Camera PlayerCamera => _gameCamera._Camera;
         [SerializeField] private float camMoveSmooth = 10;
         [SerializeField] private float camMoveSmoothVehicle = 10;
@@ -127,6 +128,12 @@ namespace MrPink
             }
 
             return true;
+        }
+        
+        
+        public void SetLevelGeneratingFeedback(bool active)
+        {
+        
         }
     }
 }

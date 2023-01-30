@@ -6,4 +6,5 @@ public class GameCamera : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     public Camera _Camera => _camera;
+
 }

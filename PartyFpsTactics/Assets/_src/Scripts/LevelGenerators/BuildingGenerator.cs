@@ -90,11 +90,15 @@ public class BuildingGenerator : NetworkBehaviour
     }
 
     private int currentSeed;
-    void InitOnClient(int seed)
+    public void InitOnClient(int seed)
     {
         currentSeed = seed;
         Random.InitState(currentSeed);
         Debug.Log("BUILDING GENERATOR START GENERATING WITH SEED " + currentSeed +"; Random.state " + Random.state + "; hashCode " + Random.state.GetHashCode());
+
+        #region depricated - get building data from ProgressionManager
+
+        /*
         var currentLevel = ProgressionManager.Instance.CurrentLevel;
 
         for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
@@ -128,7 +132,11 @@ public class BuildingGenerator : NetworkBehaviour
         distanceToCutCeilingUnderStairsMinMax = currentLevel.distanceToCutCeilingUnderStairsMinMax;
         spawnWalls = currentLevel.spawnWalls;
         spawnLadders = currentLevel.spawnLadders;
+        */
 
+
+        #endregion
+        
         if (generatedBuildingFolder == null)
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
@@ -174,6 +182,9 @@ public class BuildingGenerator : NetworkBehaviour
         Building newBuilding = new Building();
         newBuilding.worldPos = buildingPos;
         spawnedBuildings.Add(newBuilding);
+        
+        Game._instance.SetLevelGeneratingFeedback(true);
+        
         StartCoroutine(SpawnBuilding(newBuilding));
     }
 
@@ -225,6 +236,8 @@ public class BuildingGenerator : NetworkBehaviour
             yield return StartCoroutine(SpawnPropsOnServer(building));
             yield return StartCoroutine(SpawnExplosiveBarrelsOnServer(building));
         }
+        
+        Game._instance.SetLevelGeneratingFeedback(false);
         
         //yield return SpawnLoot(building);
         
@@ -345,7 +358,6 @@ public class BuildingGenerator : NetworkBehaviour
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
                
-                
                 newLevel.roomTilesMatrix[x, 0, z] = newFloorTile;
                 //newLevel.tilesWalls.Add(newFloorTile);
                 newLevel.allTiles.Add(newFloorTile);

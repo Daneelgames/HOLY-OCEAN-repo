@@ -32,6 +32,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4314011031371377453}
   m_Father: {fileID: 0}
@@ -59,8 +60,8 @@ MonoBehaviour:
   _dangerousTime: 3.75
   projectileController: {fileID: 444546634323287089}
   ragdollExplosionDistance: 2
-  ragdollExplosionForce: 50
-  playerExplosionForce: 5
+  ragdollExplosionForce: 500
+  playerExplosionForce: 50
   _hitSolidFx: {fileID: 8300000, guid: 6f72c3e289dae814492b6b78578c5ee9, type: 3}
   _hitUnitFx: {fileID: 8300000, guid: b95d6461821a4f040a18bf0eec4f80b8, type: 3}
   _hitAudioSource: {fileID: 7601328651385341622}
@@ -73,7 +74,9 @@ MonoBehaviour:
   fragGrenadeTool: {fileID: 0}
   customLadderTool: {fileID: 0}
   consumableTool: {fileID: 0}
-  projectileRandomRotationMax: 12
+  currentCastRadius: 0.3
+  playerCastRadius: 0.5
+  aiCastRadius: 0.3
   dieOnContact: 1
   ricochetOnContact: 0
   stickOnContact: 0
@@ -434,6 +437,7 @@ Transform:
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4314011031371377453}
   m_RootOrder: 0
@@ -5197,6 +5201,7 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 3
+  m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
@@ -5220,6 +5225,10 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
+  m_MeshWeighting: 1
+  m_MeshWeighting1: 1
+  m_MeshWeighting2: 1
+  m_MeshWeighting3: 1
   m_MaskInteraction: 0
 --- !u!1 &7610261081426840073
 GameObject:
@@ -5249,6 +5258,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1984825346201059258}
   m_Father: {fileID: 7706236279808264294}

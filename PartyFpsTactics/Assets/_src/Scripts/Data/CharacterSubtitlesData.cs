@@ -18,7 +18,7 @@ namespace _src.Scripts.Data
             public string messageText;
             public AudioClip messageAudio;
             public bool RunEvent;
-            [ShowIf("RunEvent")]public ScriptedEvent eventToRun;
+            [ShowIf("RunEvent")] public ScriptedEvent eventToRun;
         }
 
     }

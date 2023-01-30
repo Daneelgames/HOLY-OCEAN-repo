@@ -142,6 +142,16 @@ public class ContentPlacer : NetworkBehaviour
             SpawnRedUnitInBoat(pos);
         }
     }
+
+    [Server]
+    public void SpawnBossOnIsland(Island island, Vector3 spawnPos)
+    {
+        Vector3 pos = spawnPos;
+
+        var unit =  Instantiate(UnitsManager.Instance.GetRandomBossUnit, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+        island.AddIslandUnit(unit);
+        ServerManager.Spawn(unit.gameObject);
+    }
     
     [Server]
     public void SpawnEnemiesInBuilding(BuildingGenerator.Building building, Island island)

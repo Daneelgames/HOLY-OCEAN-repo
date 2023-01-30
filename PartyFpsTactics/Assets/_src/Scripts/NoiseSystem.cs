@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MrPink.Health;
 using MrPink.Units;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NoiseSystem : MonoBehaviour
@@ -18,15 +19,24 @@ public class NoiseSystem : MonoBehaviour
 
     public void MakeNoise(Vector3 pos, float distance)
     {
+        StartCoroutine(MakeNoiseOverTime(pos, distance));
+    }
+
+    IEnumerator MakeNoiseOverTime(Vector3 pos, float distance)
+    {
         foreach (var hc in UnitsManager.Instance.HcInGame)
         {
             if (hc == null || hc.IsDead)
                 continue;
             if (hc.team == Team.PlayerParty)
                 continue;
+            if (hc.AiMovement == null)
+                continue;
+            
             if (Vector3.Distance(pos, hc.transform.position) <= distance)
             {
-                hc.AiMovement?.MoveToPositionOrder(pos);
+                hc.AiMovement.MoveToPositionOrder(pos);
+                yield return null;
             }
         }
     }

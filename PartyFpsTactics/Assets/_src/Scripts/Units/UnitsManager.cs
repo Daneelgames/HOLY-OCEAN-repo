@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using Sirenix.OdinInspector;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -33,10 +34,12 @@ namespace MrPink.Units
         public float tileExplosionForcePlayer = 100;
 
         public PhysicMaterial corpsesMaterial;
-        public List<HealthController> redTeamUnitPrefabs;
-        public List<HealthController> blueTeamUnitPrefabs;
-        public List<HealthController> neutralUnitPrefabs;
-        public List<HealthController> desertBeastsPrefabs;
+        
+        [BoxGroup("UNITS PREFABS")] public List<HealthController> bossUnitPrefabs;
+        [BoxGroup("UNITS PREFABS")] public List<HealthController> redTeamUnitPrefabs;
+        [BoxGroup("UNITS PREFABS")] public List<HealthController> blueTeamUnitPrefabs;
+        [BoxGroup("UNITS PREFABS")] public List<HealthController> neutralUnitPrefabs;
+        [BoxGroup("UNITS PREFABS")] public List<HealthController> desertBeastsPrefabs;
     
         // TODO use real queue
         private readonly List<BasicHealth> _bodyPartsQueueToKill = new List<BasicHealth>();
@@ -46,6 +49,7 @@ namespace MrPink.Units
         public Transform SpawnRoot => _spawnRoot;
 
         public HealthController GetRandomRedUnit => redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)];
+        public HealthController GetRandomBossUnit => bossUnitPrefabs[Random.Range(0, bossUnitPrefabs.Count)];
     
         private void Awake()
         {

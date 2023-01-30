@@ -7,6 +7,8 @@ using MrPink.Health;
 using MrPink.Units;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Island : NetworkBehaviour
 {
@@ -14,6 +16,9 @@ public class Island : NetworkBehaviour
     [SerializeField] private VoxelBuildingGenerator _voxelBuildingGenerator;
     public VoxelBuildingGenerator VoxelBuildingGen => _voxelBuildingGenerator;
     [SerializeField] private NavMeshSurfaceUpdate _navMeshSurfaceUpdate;
+    [SerializeField] private float randomSpherePosOnNavMeshMaxRange = 100;
+    
+    [SerializeField] private bool spawnBoss = true;
 
     [SerializeField] [ReadOnly] private List<HealthController> islandUnits = new List<HealthController>();
     [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly] private bool culled = true;
@@ -42,6 +47,7 @@ public class Island : NetworkBehaviour
 
     IEnumerator InitCoroutine(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
+        _tileBuildingGenerator?.InitOnClient(seed);
         _voxelBuildingGenerator?.SaveRandomSeedOnEachClient(seed, voxelFloorRandomSettings);
         yield return null;
     }
@@ -84,6 +90,18 @@ public class Island : NetworkBehaviour
         {
             ContentPlacer.Instance.SpawnEnemiesInBuilding(_tileBuildingGenerator.spawnedBuildings[0], this);
         }
+        if (spawnBoss)
+            ContentPlacer.Instance.SpawnBossOnIsland(this, GetRandomPosOnNavMesh());
+    }
+
+    Vector3 GetRandomPosOnNavMesh()
+    {
+        Vector3 pos = transform.position + Vector3.up * (randomSpherePosOnNavMeshMaxRange / 2) + Random.insideUnitSphere * Random.Range(0,randomSpherePosOnNavMeshMaxRange);
+        if (NavMesh.SamplePosition(pos, out var hit, Mathf.Infinity, NavMesh.AllAreas))
+        {
+            pos = hit.position;
+        }
+        return pos;
     }
     
     [Server]
