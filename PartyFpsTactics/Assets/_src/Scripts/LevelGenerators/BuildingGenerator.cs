@@ -267,17 +267,22 @@ public class BuildingGenerator : NetworkBehaviour
         Debug.Log("BUILDING GENERATOR CURRENT state " + Random.state + "; hashCode " + Random.state.GetHashCode());
         
         Random.InitState(currentSeed);
-        Vector3 levelPosition = new Vector3(buildingOrigin.position.x + Random.Range(buildingSettings.offsetPosMinMaxX.x, buildingSettings.offsetPosMinMaxX.y), levelY,
-            buildingOrigin.position.z + Random.Range(buildingSettings.offsetPosMinMaxZ.x, buildingSettings.offsetPosMinMaxZ.y));
+        var x = Random.Range(buildingSettings.offsetPosMinMaxX.x - levelIndexInBuilding,
+            buildingSettings.offsetPosMinMaxX.y + levelIndexInBuilding);
+        Random.InitState(currentSeed + levelIndexInBuilding);
+        var z = Random.Range(buildingSettings.offsetPosMinMaxZ.x - levelIndexInBuilding,
+            buildingSettings.offsetPosMinMaxZ.y + levelIndexInBuilding);
+        Vector3 levelPosition = new Vector3(buildingOrigin.position.x + x, levelY,
+            buildingOrigin.position.z + z);
         
         Random.InitState(currentSeed);
         var randomSizeX = Mathf.RoundToInt(Random.Range(buildingSettings.levelsScaleMinMaxX.x * 1f, buildingSettings.levelsScaleMinMaxX.y * 1f));
-        Random.InitState(currentSeed);
+        Random.InitState(currentSeed + levelIndexInBuilding);
         var randomSizeZ = Mathf.RoundToInt(Random.Range(buildingSettings.levelsScaleMinMaxZ.x * 1f, buildingSettings.levelsScaleMinMaxZ.y * 1f));
         
         Random.InitState(currentSeed);
         randomSizeX += Random.Range(-randomSizeX / 5 * levelIndexInBuilding, randomSizeX / 5 * levelIndexInBuilding);
-        Random.InitState(currentSeed);
+        Random.InitState(currentSeed + levelIndexInBuilding);
         randomSizeZ += Random.Range(-randomSizeZ / 5 * levelIndexInBuilding, randomSizeZ / 5 * levelIndexInBuilding);
         
         Vector3Int levelSize = new Vector3Int( randomSizeX * 2, levelHeights[levelIndexInBuilding].levelHeight,randomSizeZ * 2);
@@ -285,7 +290,7 @@ public class BuildingGenerator : NetworkBehaviour
         Quaternion levelRotation = Quaternion.identity;
         if (randomLevelRotation)
         {
-            Random.InitState(currentSeed);
+            Random.InitState(currentSeed + levelIndexInBuilding);
             levelRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
         }
 
@@ -340,7 +345,7 @@ public class BuildingGenerator : NetworkBehaviour
         int currentSpaceBetweenWindows = spaceBetweenWindows;
         Random.InitState(currentSeed);
         var xxx = Random.Range(1, size.y / 2 - 1);
-        Random.InitState(currentSeed);
+        Random.InitState(currentSeed + levelIndexInBuilding);
         var yyy = Random.Range(size.y / 2 + 1, size.y -1 );
         Vector2Int windowStartEndY = new Vector2Int(xxx, yyy);
         
@@ -371,7 +376,7 @@ public class BuildingGenerator : NetworkBehaviour
                     var obst = newFloorObstacle.AddComponent<NavMeshObstacle>();
                     obst.carving = true;
                 }
-                else // on every other floor
+                else if (buildingSettings.spawnSupports) // on every other floor
                 {
                     // TRY TO FIND SUPPORTER TILE
                     if (LevelgenTransforms.SetSupporterTile(building.spawnedBuildingLevels, newFloorTile) == null)
@@ -485,17 +490,20 @@ public class BuildingGenerator : NetworkBehaviour
                     }
                     
                 }
+                yield return null; 
             }
             yield return null;   
         }
 
+        /*
         Debug.LogError("SPAWN INSIDE WALLS IS TURNED OFF FOR NOW");
         yield break;
+        */
         
-        yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof));
+        yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof, levelIndexInBuilding));
     }
     
-    IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof)
+    IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof, int levelIndex)
     {
         if (availableStarPositionsForThinWalls.Count <= 0)
             yield break;
@@ -506,14 +514,14 @@ public class BuildingGenerator : NetworkBehaviour
         int max = level.size.x / 10;
         for (int i = 0; i < max; i++) // ROOMS AMOUNT
         {
-            Random.InitState(currentSeed);
+            Random.InitState(currentSeed + levelIndex);
             int buildWallUntillY = level.size.y - Mathf.Clamp(Random.Range(0, level.size.x / level.size.y), 0, level.size.y);
             
             // SPAWN INNER ROOMS
-            Random.InitState(currentSeed);
+            Random.InitState(currentSeed + levelIndex);
             int leftSidePosition = Random.Range(1, level.size.x - 1);
             int rightSidePosition = 0;
-            Random.InitState(currentSeed);
+            Random.InitState(currentSeed + levelIndex);
             int backSidePosition = Random.Range(1, level.size.z - 1);
             int frontSidePosition = 0;
 
@@ -524,7 +532,7 @@ public class BuildingGenerator : NetworkBehaviour
             }
             else
             {
-                Random.InitState(currentSeed);
+                Random.InitState(currentSeed + levelIndex);
                 var tempPos = leftSidePosition - Random.Range(2, level.size.x / 2);
                 rightSidePosition = leftSidePosition;
                 leftSidePosition = tempPos;
@@ -537,12 +545,13 @@ public class BuildingGenerator : NetworkBehaviour
             }
             else
             {
-                Random.InitState(currentSeed);
+                Random.InitState(currentSeed + levelIndex);
                 var tempPos = backSidePosition - Random.Range(2, level.size.z / 2);
                 frontSidePosition = backSidePosition;
                 backSidePosition = tempPos;
             }
 
+            Random.InitState(currentSeed + levelIndex);
             var thinColorPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
             var newRoom = new Room();
             for (int x = leftSidePosition; x <= rightSidePosition; x++)
@@ -578,7 +587,6 @@ public class BuildingGenerator : NetworkBehaviour
                         newRoomWallTile.transform.localRotation = Quaternion.identity;
                         newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
                         
-                        
                         level.roomTilesMatrix[x, y, z] = newRoomWallTile;
                         //level.tilesInside.Add(newRoomWallTile);
                         level.allTiles.Add(newRoomWallTile);
@@ -593,7 +601,9 @@ public class BuildingGenerator : NetworkBehaviour
                         
                         StartCoroutine(ConstructCover(newRoomWallTile.gameObject, 3));
                     }
+                    yield return null;
                 }
+                yield return null;
             }
             
             level.spawnedRooms.Add(newRoom);
@@ -618,11 +628,11 @@ public class BuildingGenerator : NetworkBehaviour
             }
         }
         // RANDOM WALLS
-        Random.InitState(currentSeed);
+        Random.InitState(currentSeed + levelIndex);
         int wallsAmount = Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y);
         for (int i = 0; i < wallsAmount; i++)
         {
-            Random.InitState(currentSeed);
+            Random.InitState(currentSeed + levelIndex);
             var currentWallCoord = availableStarPositionsForThinWalls[Random.Range(0, availableStarPositionsForThinWalls.Count)];
             var prevWallCoord = currentWallCoord;
             availableStarPositionsForThinWalls.Remove(currentWallCoord);
@@ -699,7 +709,7 @@ public class BuildingGenerator : NetworkBehaviour
                 {
                     break;
                 }
-                Random.InitState(currentSeed);
+                Random.InitState(currentSeed + levelIndex);
                 var nextPos = nextAvailablePositions[Random.Range(0, nextAvailablePositions.Count)];
                 prevWallCoord = currentWallCoord;
                 currentWallCoord = nextPos;
@@ -1407,7 +1417,8 @@ public class BuildingSettings
     public bool spawnLadders = true;
     public bool spawnRooms = true;
     public bool spawnNavMesh = true;
-    public bool updateClash = true;
+    public bool updateClash = false;
+    public bool spawnSupports = false;
 
     [Serializable]
     public class LevelSetting

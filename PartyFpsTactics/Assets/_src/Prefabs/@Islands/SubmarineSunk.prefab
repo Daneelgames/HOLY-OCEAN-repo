@@ -7151,6 +7151,7 @@ GameObject:
   - component: {fileID: 1077230858890137852}
   - component: {fileID: -9218924638129041948}
   - component: {fileID: 1274181075255149504}
+  - component: {fileID: 6855442423181985489}
   m_Layer: 0
   m_Name: SubmarineSunk
   m_TagString: Untagged
@@ -7195,6 +7196,8 @@ MonoBehaviour:
   _tileBuildingGenerator: {fileID: 0}
   _voxelBuildingGenerator: {fileID: 0}
   _navMeshSurfaceUpdate: {fileID: 0}
+  randomSpherePosOnNavMeshMaxRange: 100
+  spawnBoss: 1
   islandUnits: []
   culled: 1
   distanceToLocalPlayer: 0
@@ -7216,7 +7219,6 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: -9218924638129041948}
-  - {fileID: 0}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -7231,6 +7233,24 @@ MonoBehaviour:
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 14216919704080732870
   _sceneNetworkObjects: []
+--- !u!114 &6855442423181985489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3373941326854333258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 1274181075255149504}
+  _networkObjectCache: {fileID: 0}
+  markerText: '?'
+  markColor: {r: 0, g: 0, b: 0, a: 1}
+  hideOnOwner: 0
 --- !u!1 &3374946381504079507
 GameObject:
   m_ObjectHideFlags: 0

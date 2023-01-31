@@ -30,29 +30,19 @@ namespace MrPink
         public static GlobalFlags Flags
             => _instance._flags;
 
-        public float DistanceToClosestPlayer(Vector3 pos)
-        {
-            float distance = 100000;
-            foreach (var player in playersesInGame)
-            {
-                if (player == null)
-                    continue;
-                var newDist = Vector3.Distance(pos, player.transform.position);
-                if (newDist < distance)
-                    distance = newDist;
-            }
-
-            return distance;
-        }
-
-        [Header("CAMERA")]
-        [SerializeField] private GameCamera _gameCamera;
-        public GameCamera GetGameCamera => _gameCamera;
+        
+        [BoxGroup("CAMERA")] [SerializeField] private GameCamera _gameCamera;
+        [BoxGroup("CAMERA")] [SerializeField] private Transform cameraParent;
+        [BoxGroup("CAMERA")] [SerializeField] private Animator cameraAnimator;
+        [BoxGroup("CAMERA")] [SerializeField] private float camMoveSmooth = 10;
+        [BoxGroup("CAMERA")] [SerializeField] private float camMoveSmoothVehicle = 10;
+        [BoxGroup("CAMERA")] [SerializeField] private float camRotSmooth = 10;
+        [BoxGroup("CAMERA")] [SerializeField] private float camRotSmoothVehicle = 5;
+        private static readonly int Screenshake = Animator.StringToHash("Screenshake");
         public Camera PlayerCamera => _gameCamera._Camera;
-        [SerializeField] private float camMoveSmooth = 10;
-        [SerializeField] private float camMoveSmoothVehicle = 10;
-        [SerializeField] private float camRotSmooth = 10;
-        [SerializeField] private float camRotSmoothVehicle = 5;
+
+        [SerializeField] private AudioSource earthquakeAu;
+
         private void Awake()
         {
             if (_instance != null)
@@ -72,22 +62,36 @@ namespace MrPink
             if (_localPlayer == null) return;
             if (_localPlayer.VehicleControls.controlledMachine == null)
             {
-                _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position,
+                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position,
                     _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.unscaledDeltaTime);
-                _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.unscaledDeltaTime);
+                cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.unscaledDeltaTime);
             }
             else
             {
                 //_gameCamera.transform.position = _localPlayer.VehicleControls.controlledMachine.CameraTransform.position;
                 
-                _gameCamera.transform.position = Vector3.Lerp(_gameCamera.transform.position,
+                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position,
                     _localPlayer.VehicleControls.controlledMachine.CameraTransform.position,
                     camMoveSmoothVehicle * Time.unscaledDeltaTime);
                 
-                _gameCamera.transform.rotation = Quaternion.Slerp(_gameCamera.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.unscaledDeltaTime);
+                cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.unscaledDeltaTime);
             }
         }
+        
+        public float DistanceToClosestPlayer(Vector3 pos)
+        {
+            float distance = 100000;
+            foreach (var player in playersesInGame)
+            {
+                if (player == null)
+                    continue;
+                var newDist = Vector3.Distance(pos, player.transform.position);
+                if (newDist < distance)
+                    distance = newDist;
+            }
 
+            return distance;
+        }
         
         public void RespawnAllPlayers()
         {
@@ -133,7 +137,12 @@ namespace MrPink
         
         public void SetLevelGeneratingFeedback(bool active)
         {
-        
+            cameraAnimator.SetBool(Screenshake, active);
+            
+            if (active)
+                earthquakeAu.Play();
+            else
+                earthquakeAu.Stop();
         }
     }
 }

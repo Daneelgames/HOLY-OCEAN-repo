@@ -32,12 +32,13 @@ public class NoiseSystem : MonoBehaviour
                 continue;
             if (hc.AiMovement == null)
                 continue;
+            if (hc.AiMovement.enemyToLookAt != null)
+                continue;
             
-            if (Vector3.Distance(pos, hc.transform.position) <= distance)
-            {
-                hc.AiMovement.MoveToPositionOrder(pos);
-                yield return null;
-            }
+            if (!(Vector3.Distance(pos, hc.transform.position) <= distance)) continue;
+            
+            hc.AiMovement.MoveToPositionOrder(pos);
+            yield return null;
         }
     }
 

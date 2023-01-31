@@ -565,15 +565,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1262105703096445161, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.143885
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1262105703096445161, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6185163
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1262105703096445161, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.2047424
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1262105703096445161, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
       propertyPath: m_LocalRotation.w
@@ -606,50 +606,6 @@ PrefabInstance:
     - target: {fileID: 1262105703096445167, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
       propertyPath: m_Name
       value: GameCore
-      objectReference: {fileID: 0}
-    - target: {fileID: 1262105703096445167, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -19.95
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 203.08725
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -7.033
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.97679335
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.028433476
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.21219856
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.0061821155
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 73.825
-      objectReference: {fileID: 0}
-    - target: {fileID: 5012869041553306958, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96a733e899fe92447be958698df6e6ee, type: 3}
@@ -1988,6 +1944,43 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!84 &1034691327
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GerstnerCascades
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 5
+  m_VolumeDepth: 16
+  m_ShadowSamplingMode: 2
 --- !u!1 &1084639757
 GameObject:
   m_ObjectHideFlags: 0
@@ -2323,7 +2316,7 @@ MonoBehaviour:
   _reverseWaveWeight: 0.5
   _componentsPerOctave: 8
   _randomSeed: 0
-  _waveBuffers: {fileID: 2123741510}
+  _waveBuffers: {fileID: 1034691327}
 --- !u!114 &1544752447 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
@@ -3236,43 +3229,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!84 &2123741510
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: GerstnerCascades
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 5
-  m_VolumeDepth: 16
-  m_ShadowSamplingMode: 2
 --- !u!1 &2135568863
 GameObject:
   m_ObjectHideFlags: 0

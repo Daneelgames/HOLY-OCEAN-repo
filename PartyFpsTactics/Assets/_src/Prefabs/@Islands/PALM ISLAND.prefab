@@ -41544,6 +41544,7 @@ GameObject:
   - component: {fileID: 5637452114658458935}
   - component: {fileID: 6670557985220958057}
   - component: {fileID: 6473927946314326102}
+  - component: {fileID: -1502333015841759364}
   m_Layer: 0
   m_Name: PALM ISLAND
   m_TagString: Untagged
@@ -41614,6 +41615,8 @@ MonoBehaviour:
   _tileBuildingGenerator: {fileID: 0}
   _voxelBuildingGenerator: {fileID: 8560325615159410525}
   _navMeshSurfaceUpdate: {fileID: 5637452114658458935}
+  randomSpherePosOnNavMeshMaxRange: 100
+  spawnBoss: 1
   islandUnits: []
   culled: 1
   distanceToLocalPlayer: 0
@@ -41635,7 +41638,6 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 6670557985220958057}
-  - {fileID: 0}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -41644,7 +41646,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 17
+  <PrefabId>k__BackingField: 16
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0
@@ -41657,6 +41659,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &-1502333015841759364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3364272763113283403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 6473927946314326102}
+  _networkObjectCache: {fileID: 0}
+  markerText: '?'
+  markColor: {r: 0, g: 0, b: 0, a: 1}
+  hideOnOwner: 0
 --- !u!1 &3366264233792444058
 GameObject:
   m_ObjectHideFlags: 0
