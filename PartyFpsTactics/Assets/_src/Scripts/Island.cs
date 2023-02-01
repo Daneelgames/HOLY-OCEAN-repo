@@ -144,12 +144,11 @@ public class Island : NetworkBehaviour
     public void BuildingGenerated()
     {
         // cut rooms
-        if (voxelCutterForBuildings[0].colliders.Length > 0)
+        //if (voxelCutterForBuildings[0].colliders.Length <= 0) return;
+        
+        foreach (var colliderToVoxel in voxelCutterForBuildings)
         {
-            foreach (var colliderToVoxel in voxelCutterForBuildings)
-            {
-                colliderToVoxel.ApplyProceduralModifier(true);
-            }
+            colliderToVoxel.ApplyProceduralModifier(true);
         }
     }
 }
