@@ -16050,7 +16050,7 @@ GameObject:
   - component: {fileID: 1261924167978257544}
   - component: {fileID: -5149403275716468640}
   m_Layer: 0
-  m_Name: HEAD ISLAND
+  m_Name: HEAD ISLAND VoxelBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16127,6 +16127,7 @@ MonoBehaviour:
   distanceToLocalPlayer: 0
   mobsIslandSpawnDistance: 300
   mobsIslandDespawnDistance: 500
+  voxelCutterForBuildings: []
 --- !u!114 &1261924167978257544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16152,11 +16153,11 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 68
+  <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2732387296
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 13914241193939682070
+  <AssetPathHash>k__BackingField: 10606922500960947838
   _sceneNetworkObjects:
   - {fileID: 1261924167978257544}
   - {fileID: 0}
@@ -20987,6 +20988,87 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -272383130708263485, guid: e5f5c186e93d3b74b98b3a2f37709126, type: 3}
+--- !u!1 &5329158514118933670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9086073251312644377}
+  - component: {fileID: 1007270897957809438}
+  - component: {fileID: 4485991640214318217}
+  m_Layer: 2
+  m_Name: BuildingCut
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9086073251312644377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5329158514118933670}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6359991616711495767}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1007270897957809438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5329158514118933670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetGenerator: {fileID: 6359991616780401155}
+  Depth: 6
+  TargetDimension: 0
+  Additive: 1
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 500000 Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  tolerance: 0.001
+  falloffdist: 2000
+  finalMultiplier: 1
+  colliders: []
+--- !u!114 &4485991640214318217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5329158514118933670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetGenerator: {fileID: 6359991617671780998}
+  Depth: 0
+  TargetDimension: 0
+  Additive: 0
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 5 Million Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  tolerance: 0.001
+  falloffdist: 2000
+  finalMultiplier: 1
+  colliders: []
 --- !u!1 &5332384760914007648
 GameObject:
   m_ObjectHideFlags: 0
@@ -26497,7 +26579,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1458316
+  instanceID: 1491438
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -29508,7 +29590,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1458572
+  instanceID: 1491694
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -29816,6 +29898,7 @@ Transform:
   - {fileID: 6359991615843163214}
   - {fileID: 6359991616780401152}
   - {fileID: 6359991617671780993}
+  - {fileID: 9086073251312644377}
   m_Father: {fileID: 4093550205408370673}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30176,7 +30259,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -2964056
+  instanceID: 1491768
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -32813,7 +32896,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -2964072
+  instanceID: 1492028
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/

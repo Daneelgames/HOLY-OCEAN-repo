@@ -44,22 +44,29 @@ public class VoxelBuildingGenerator : MonoBehaviour
         List<VoxelFloorSettingsRaw> newFloorsRandomSettings = new List<VoxelFloorSettingsRaw>();
         for (int i = 0; i < floorsAmount; i++)
         {
-            var newRandomSettings = new VoxelFloorSettingsRaw
-            {
-                settings = new List<int>(9)
-                {
-                    [0] = Random.Range(3, 20),
-                    [1] = Random.Range(10, 50),
-                    [2] = Random.Range(10, 50),
-                    [3] = Random.Range(1, 5),
-                    [4] = Random.Range(1, 5),
-                    [5] = Random.Range(1, 10),
-                    [6] = Random.Range(1, 10),
-                    [7] = Random.Range(1, 10),
-                    [8] = Random.Range(1, 10)
-                }
-            };
+            var newRandomSettings = new VoxelFloorSettingsRaw();
+            newRandomSettings.settings = new List<int>();
+            
+            /*{
+                [0] = Random.Range(3, 20),
+                [1] = Random.Range(10, 50),
+                [2] = Random.Range(10, 50),
+                [3] = Random.Range(1, 5),
+                [4] = Random.Range(1, 5),
+                [5] = Random.Range(1, 10),
+                [6] = Random.Range(1, 10),
+                [7] = Random.Range(1, 10),
+                [8] = Random.Range(1, 10)
+            }*/
 
+            newRandomSettings.settings.Add(Random.Range(3, 20));
+            newRandomSettings.settings.Add(Random.Range(10, 50));
+            newRandomSettings.settings.Add(Random.Range(10, 50));
+            newRandomSettings.settings.Add(Random.Range(1, 5));
+            newRandomSettings.settings.Add(Random.Range(1, 10));
+            newRandomSettings.settings.Add(Random.Range(1, 10));
+            newRandomSettings.settings.Add(Random.Range(1, 10));
+            newRandomSettings.settings.Add(Random.Range(1, 10));
             newFloorsRandomSettings.Add(newRandomSettings);
         }
         

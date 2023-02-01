@@ -4,4 +4,5 @@ public enum MovementOrder
     MoveToPosition, 
     TakeCover, 
     FireWatch,
+    RotateToPosition
 }

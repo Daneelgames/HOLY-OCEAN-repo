@@ -1568,6 +1568,112 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6018283263780971431, guid: e5f5c186e93d3b74b98b3a2f37709126, type: 3}
+--- !u!1 &283357387731425588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1887965557569134948}
+  - component: {fileID: 111518432033093392}
+  - component: {fileID: 5636965639550079296}
+  - component: {fileID: 8939721074526386518}
+  m_Layer: 2
+  m_Name: BuildingCut
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1887965557569134948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283357387731425588}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.8, y: 47.3, z: 7.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6359991616711495767}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &111518432033093392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283357387731425588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetGenerator: {fileID: 6359991616780401155}
+  Depth: 6
+  TargetDimension: 0
+  Additive: 1
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 500000 Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  tolerance: 0.001
+  falloffdist: 2000
+  finalMultiplier: 1
+  colliders: []
+--- !u!114 &5636965639550079296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283357387731425588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetGenerator: {fileID: 6359991617671780998}
+  Depth: 0
+  TargetDimension: 0
+  Additive: 0
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 5 Million Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  tolerance: 0.001
+  falloffdist: 2000
+  finalMultiplier: 1
+  colliders: []
+--- !u!114 &8939721074526386518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283357387731425588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetGenerator: {fileID: 7550088143095487274}
+  Depth: 0
+  TargetDimension: 0
+  Additive: 0
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 5 Million Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  tolerance: 0.001
+  falloffdist: 2000
+  finalMultiplier: 1
+  colliders: []
 --- !u!1 &287115554028185158
 GameObject:
   m_ObjectHideFlags: 0
@@ -18959,7 +19065,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 2328250
+  instanceID: 1509810
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -20466,7 +20572,7 @@ GameObject:
   - component: {fileID: 1261924167978257544}
   - component: {fileID: -5716379535766909132}
   m_Layer: 0
-  m_Name: HEAD SKULL ISLAND
+  m_Name: HEAD SKULL ISLAND VoxelBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20543,6 +20649,7 @@ MonoBehaviour:
   distanceToLocalPlayer: 0
   mobsIslandSpawnDistance: 300
   mobsIslandDespawnDistance: 500
+  voxelCutterForBuildings: []
 --- !u!114 &1261924167978257544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20568,11 +20675,11 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 14
+  <PrefabId>k__BackingField: 4
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2732387296
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 3453311205226118202
+  <AssetPathHash>k__BackingField: 15122365313355099018
   _sceneNetworkObjects:
   - {fileID: 1261924167978257544}
   - {fileID: 0}
@@ -28798,7 +28905,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -3050302
+  instanceID: 1510756
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -32606,7 +32713,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 2329448
+  instanceID: 1511008
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -34049,7 +34156,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 2329544
+  instanceID: 1511104
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -34359,6 +34466,7 @@ Transform:
   - {fileID: 6359991616780401152}
   - {fileID: 6359991617671780993}
   - {fileID: 4925832773657117063}
+  - {fileID: 1887965557569134948}
   m_Father: {fileID: 4093550205408370673}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -34425,7 +34533,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -3050274
+  instanceID: 1511148
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -35592,7 +35700,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -3050288
+  instanceID: 1511258
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/

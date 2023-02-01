@@ -43,6 +43,7 @@ namespace MrPink.Units
         private Coroutine _takeCoverCoroutine;
         private Coroutine _getInCoverCoroutine;
         private Coroutine _moveToPositionCoroutine;
+        private Coroutine _rotateToPositionCoroutine;
 
 
         private void Start()
@@ -146,6 +147,8 @@ namespace MrPink.Units
         {
             if (_moveToPositionCoroutine != null)
                 StopCoroutine(_moveToPositionCoroutine);
+            if (_rotateToPositionCoroutine != null)
+                StopCoroutine(_rotateToPositionCoroutine);
             
             _selfUnit.UnitFollowTarget.StopFollowing();
             
@@ -336,6 +339,20 @@ namespace MrPink.Units
             _moveToPositionCoroutine = StartCoroutine(MoveToPositionAndFireWatchOrder(targetPos));
         }
 
+        public void RotateToPositionOrder(Vector3 targetPos)
+        { 
+            SetOccupiedSpot(_occupiedCoverSpot, null);
+            StopAllBehaviorCoroutines();
+            currentOrder = MovementOrder.RotateToPosition;
+            _rotateToPositionCoroutine = StartCoroutine(RotateToPositionAndFireWatchOrder(targetPos));
+        }
+
+        private IEnumerator RotateToPositionAndFireWatchOrder(Vector3 target)
+        {
+            yield return _selfUnit.UnitMovement.RotateToPosition(target);
+            
+            FireWatchOrder();
+        }
         private IEnumerator MoveToPositionAndFireWatchOrder(Vector3 target)
         {
             yield return _selfUnit.UnitMovement.MoveToPosition(target);

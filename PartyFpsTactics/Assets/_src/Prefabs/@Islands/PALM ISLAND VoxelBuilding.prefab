@@ -13896,6 +13896,62 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7022044769566303768, guid: 1e62f869f38259048a6220d303e72b81, type: 3}
+--- !u!1 &1085762464062265657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8669653840200134271}
+  - component: {fileID: 6491396056640889784}
+  m_Layer: 2
+  m_Name: BuildingCut
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8669653840200134271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085762464062265657}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4434551430317069268}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6491396056640889784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085762464062265657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetGenerator: {fileID: 5637452113909660348}
+  Depth: 6
+  TargetDimension: 0
+  Additive: 1
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 500000 Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  tolerance: 0.001
+  falloffdist: 2000
+  finalMultiplier: 1
+  colliders: []
 --- !u!1 &1088459174267628193
 GameObject:
   m_ObjectHideFlags: 0
@@ -41546,7 +41602,7 @@ GameObject:
   - component: {fileID: 6473927946314326102}
   - component: {fileID: -1502333015841759364}
   m_Layer: 0
-  m_Name: PALM ISLAND
+  m_Name: PALM ISLAND VoxelBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41622,6 +41678,7 @@ MonoBehaviour:
   distanceToLocalPlayer: 0
   mobsIslandSpawnDistance: 300
   mobsIslandDespawnDistance: 500
+  voxelCutterForBuildings: []
 --- !u!114 &6473927946314326102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41647,11 +41704,11 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 16
+  <PrefabId>k__BackingField: 6
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2732387296
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 3978214328509118822
+  <AssetPathHash>k__BackingField: 8119381321471497978
   _sceneNetworkObjects:
   - {fileID: 6473927946314326102}
   - {fileID: 0}
@@ -65941,7 +65998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5637452112850039296
 Transform:
   m_ObjectHideFlags: 0
@@ -66429,7 +66486,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -3146892
+  instanceID: 1536082
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -67688,7 +67745,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1761256
+  instanceID: 1536152
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -73953,10 +74010,11 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 726230183143236292}
-  - {fileID: 5637452112850039296}
   - {fileID: 5637452114847276273}
+  - {fileID: 8669653840200134271}
   - {fileID: 5637452113909660351}
   - {fileID: 5637452112884243006}
+  - {fileID: 5637452112850039296}
   m_Father: {fileID: 3364272763113283406}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -110468,7 +110526,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4102816775382095348, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: instanceID
-      value: -3132350
+      value: -14315556
       objectReference: {fileID: 0}
     - target: {fileID: 4102816775448840192, guid: fc771c309c3d5a64e85586a8ab223459, type: 3}
       propertyPath: m_RootOrder

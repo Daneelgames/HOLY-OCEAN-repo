@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityVector3;
 using FishNet.Object;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -20,6 +21,9 @@ namespace MrPink.Units
         [SerializeField]
         [Range(1, 100)]
         public float _moveSpeed = 2;
+        [SerializeField]
+        [Range(0.1f, 5f)]
+        float rotateTime = 1;
         
         [SerializeField]
         [Range(1,10)]
@@ -153,6 +157,25 @@ namespace MrPink.Units
                 yield return new WaitForSeconds(0.5f);
             }
         }
+        public IEnumerator RotateToPosition(Vector3 target)
+        {
+            //AgentSetPath(target, false);
+            _agent.isStopped = true;
+            _agent.enabled = false;
+            _agent.updateRotation = false;
+            float t = 0;
+            var startRot = transform.rotation;
+            var targetRot = Quaternion.LookRotation(target - transform.position, Vector3.up);
+            
+            while (t < rotateTime)
+            {
+                t += Time.deltaTime;
+                transform.rotation = Quaternion.Slerp(startRot, targetRot, t/rotateTime);
+                yield return null;
+            }
+            _agent.enabled = true;
+            _agent.updateRotation = true;
+        }
 
         [SerializeField] private Vector2 wanderAroundCooldownMinMax = new Vector2(5, 60);
         IEnumerator WanderAround()
@@ -181,9 +204,11 @@ namespace MrPink.Units
                 moveRigidbodyCoroutine = StartCoroutine(MoveRigidbody(target));
                 return;
             }
-            
+
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
+            _agent.isStopped = false;
+            
             Vector3 targetPos = SamplePos(target);
             if (cheap)
             {

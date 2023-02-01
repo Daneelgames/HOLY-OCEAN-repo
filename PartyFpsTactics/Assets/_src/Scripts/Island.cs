@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using Fraktalia.VoxelGen.Modify;
+using Fraktalia.VoxelGen.Modify.Procedural;
 using MrPink.Health;
 using MrPink.Units;
 using Sirenix.OdinInspector;
@@ -26,6 +27,7 @@ public class Island : NetworkBehaviour
     [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandSpawnDistance = 300;
     [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandDespawnDistance = 500;
 
+    [SerializeField] [ReadOnly] private ColliderToVoxel[] voxelCutterForBuildings;
     public bool IsCulled => culled;
     
     public override void OnStartClient()
@@ -42,12 +44,14 @@ public class Island : NetworkBehaviour
     }
     public void Init(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
+        voxelCutterForBuildings = gameObject.GetComponentsInChildren<ColliderToVoxel>();
+        
         StartCoroutine(InitCoroutine(seed, voxelFloorRandomSettings));
     }
 
     IEnumerator InitCoroutine(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
-        _tileBuildingGenerator?.InitOnClient(seed);
+        _tileBuildingGenerator?.InitOnClient(seed, this);
         _voxelBuildingGenerator?.SaveRandomSeedOnEachClient(seed, voxelFloorRandomSettings);
         yield return null;
     }
@@ -128,6 +132,24 @@ public class Island : NetworkBehaviour
         if (_voxelBuildingGenerator)
         {
             StartCoroutine(ContentPlacer.Instance.SpawnPropsInVoxelBuilding(_voxelBuildingGenerator.Floors));
+        }
+    }
+
+    public void AddRoomCutter(GameObject cutDummy)
+    {
+        if (voxelCutterForBuildings.Length > 0)
+            cutDummy.transform.parent = voxelCutterForBuildings[0].transform;
+    }
+
+    public void BuildingGenerated()
+    {
+        // cut rooms
+        if (voxelCutterForBuildings[0].colliders.Length > 0)
+        {
+            foreach (var colliderToVoxel in voxelCutterForBuildings)
+            {
+                colliderToVoxel.ApplyProceduralModifier(true);
+            }
         }
     }
 }

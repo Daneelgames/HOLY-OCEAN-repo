@@ -978,6 +978,43 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224431128458639770, guid: 4d8c6c9fba0e46f489b21fd7d92d739d, type: 3}
   m_PrefabInstance: {fileID: 511204890}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &590364304
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GerstnerCascades
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 5
+  m_VolumeDepth: 16
+  m_ShadowSamplingMode: 2
 --- !u!114 &606522057 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5787522021735580578, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
@@ -1900,43 +1937,6 @@ MonoBehaviour:
     _SkyBase: {r: 0.745283, g: 0.08161548, b: 0, a: 1}
     _SkyTowardsSun: {r: 1, g: 0, b: 0.05529642, a: 1}
   currentOceanVisual: 0
---- !u!84 &862896833
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: GerstnerCascades
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 5
-  m_VolumeDepth: 16
-  m_ShadowSamplingMode: 2
 --- !u!1 &928178929
 GameObject:
   m_ObjectHideFlags: 0
@@ -2139,7 +2139,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1081471904
@@ -2272,6 +2272,8 @@ MonoBehaviour:
   <SceneId>k__BackingField: 11735514077349838726
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 606522057}
   - {fileID: 1084639760}
   - {fileID: 1809009483}
@@ -2531,7 +2533,7 @@ MonoBehaviour:
   _reverseWaveWeight: 0.5
   _componentsPerOctave: 8
   _randomSeed: 0
-  _waveBuffers: {fileID: 862896833}
+  _waveBuffers: {fileID: 590364304}
 --- !u!114 &1544752447 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
@@ -4908,29 +4910,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8972700644157677413}
     - target: {fileID: 7368021338302537838, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
-      propertyPath: spawnDistance
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368021338302537838, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
       propertyPath: _networkObjectCache
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 7368021338302537838, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
-      propertyPath: islandPrefabList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368021338302537838, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
-      propertyPath: islandPrefabList.Array.data[0]
-      value: 
-      objectReference: {fileID: 735799012231920881, guid: 9b96c61b41e082942bb71c71c95e8c06, type: 3}
-    - target: {fileID: 7368021338302537838, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
-      propertyPath: islandPrefabList.Array.data[1]
-      value: 
-      objectReference: {fileID: -9218924638129041948, guid: 5d270c834b891cb468629c9503bc50b9, type: 3}
-    - target: {fileID: 7368021338302537838, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
-      propertyPath: islandPrefabList.Array.data[2]
-      value: 
-      objectReference: {fileID: -9218924638129041948, guid: 5d270c834b891cb468629c9503bc50b9, type: 3}
     - target: {fileID: 7787943180137382136, guid: 586e83e62072e2546babfcf81672d31d, type: 3}
       propertyPath: m_Name
       value: IslandSpawner
@@ -5160,8 +5142,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1666998553287829044, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
+      propertyPath: _scenePathHash
+      value: 2732387296
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666998553287829044, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: <SceneId>k__BackingField
-      value: 11735514079344319524
+      value: 11735514077739569662
       objectReference: {fileID: 0}
     - target: {fileID: 1666998553287829044, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[0]
@@ -5205,7 +5191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.1831393
+      value: -11.81
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5213,11 +5199,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.9136667
+      value: 2.43
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.25570554
+      value: 0.9231957
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalRotation.x
@@ -5225,7 +5211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.96675473
+      value: -0.3843303
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalRotation.z
@@ -5237,7 +5223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -209.631
+      value: -45.204
       objectReference: {fileID: 0}
     - target: {fileID: 7233733711483920593, guid: a465f8a9a1d791b428224e7a95b83b88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

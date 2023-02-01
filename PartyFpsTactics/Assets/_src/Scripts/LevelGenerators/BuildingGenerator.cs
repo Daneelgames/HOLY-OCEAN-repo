@@ -83,6 +83,8 @@ public class BuildingGenerator : NetworkBehaviour
     [Tooltip("More == buildings levels are more stable")]
     public int islandSupportsScalerToClash = 20;
 
+    private Island ownIsland;
+
 
     public override void OnStartClient()
     {
@@ -92,8 +94,9 @@ public class BuildingGenerator : NetworkBehaviour
     }
 
     private int currentSeed;
-    public void InitOnClient(int seed)
+    public void InitOnClient(int seed, Island island)
     {
+        ownIsland = island;
         currentSeed = seed;
         Random.InitState(currentSeed);
         Debug.Log("BUILDING GENERATOR START GENERATING WITH SEED " + currentSeed +"; Random.state " + Random.state + "; hashCode " + Random.state.GetHashCode());
@@ -230,7 +233,8 @@ public class BuildingGenerator : NetworkBehaviour
             
             StartCoroutine(UpdateNavMesh());
         }
-        
+
+        ownIsland.BuildingGenerated();
         generated = true;
         
         if (base.IsHost)
@@ -303,6 +307,15 @@ public class BuildingGenerator : NetworkBehaviour
 
     void ClearPlaceForBuilding(Vector3 levelPos, Quaternion levelRot, Vector3Int levelSize)
     {
+        var levelCutDummy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        
+        levelCutDummy.transform.position = levelPos + Vector3.up * levelSize.y/2;
+        levelCutDummy.transform.rotation = levelRot;
+        levelCutDummy.transform.localScale = levelSize;
+        levelCutDummy.layer = 2; // ignore raycast
+        var collider = levelCutDummy.GetComponent<Collider>();
+        collider.isTrigger = true;
+        ownIsland.AddRoomCutter(levelCutDummy);
         return;
         
         RaycastHit[] hit = Physics.BoxCastAll(levelPos + Vector3.up * levelSize.y / 2, levelSize, Vector3.up, levelRot, 1,   GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
@@ -1020,7 +1033,7 @@ public class BuildingGenerator : NetworkBehaviour
                 if (randomTile == null)
                     continue;
                 
-                Vector3 pos = randomTile.transform.position + Vector3.up;
+                Vector3 pos = randomTile.transform.position + Vector3.up/2;
                 level.tilesInside.Remove(randomTile);
                 var prop = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], pos, Quaternion.identity);
                 ServerManager.Spawn(prop.gameObject);

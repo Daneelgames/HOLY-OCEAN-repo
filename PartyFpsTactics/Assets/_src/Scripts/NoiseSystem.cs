@@ -44,7 +44,7 @@ public class NoiseSystem : MonoBehaviour
 
             if (!(Vector3.Distance(pos, hc.transform.position) <= distance)) continue;
 
-            hc.AiMovement.MoveToPositionOrder(pos);
+            hc.AiMovement.RotateToPositionOrder(pos);
             yield return null;
         }
     }
