@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Crest;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
@@ -91,12 +92,28 @@ namespace MrPink.Units
                 }
                 
                 grounded = Physics.CheckSphere(ragdollOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+
                 if (!grounded && ragdoll == false)
                 {
-                    if (hc.AiMovement)
-                        hc.AiMovement.StopActivities();
-                    
-                    ActivateRagdoll();
+                    OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 2);
+
+                    if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
+                    {
+                        var distance = transform.position.y - height;
+                        var isAboveSurface = distance > 0;
+                        if (isAboveSurface == false)
+                        {
+                            ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
+                        }
+                    }
+
+                    if (ragdoll == false)
+                    {
+                        if (hc.AiMovement)
+                            hc.AiMovement.StopActivities();
+
+                        ActivateRagdoll();
+                    }
                 }
             }
         }

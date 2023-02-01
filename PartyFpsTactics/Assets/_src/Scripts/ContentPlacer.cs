@@ -332,6 +332,14 @@ public class ContentPlacer : NetworkBehaviour
         
         unit.aiVehicleControls.DriverSitOnServer(boat);
     }
+
+    [Server]
+    public void SpawnBoatForUnit(Unit unit)
+    { 
+        var boat = Instantiate(aiWaterBikes[Random.Range(0, aiWaterBikes.Count)], unit.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot);
+        ServerManager.Spawn(boat.gameObject);
+        unit.HealthController.aiVehicleControls.DriverSitOnServer(boat);
+    }
     void SpawnLootAroundLocalPlayer()
     {
         float distanceToClosestPickup = InteractableEventsManager.Instance.GetDistanceFromClosestPickUpToPosition(Game.LocalPlayer.transform.position);

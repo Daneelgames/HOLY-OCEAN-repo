@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 4174006019086389488}
     m_Modifications:
     - target: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
@@ -56,6 +57,7 @@ PrefabInstance:
       value: FastShotgunWeaponAI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
 --- !u!114 &5795594755692572435 stripped
 MonoBehaviour:
@@ -68,11 +70,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eee4ce499a7b04080f83fc6893de5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &7245716659412475771 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
+  m_PrefabInstance: {fileID: 355773515423634874}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1339168493468748934
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 6270157075852802403}
     m_Modifications:
     - target: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
@@ -136,6 +144,7 @@ PrefabInstance:
       value: FastShotgunWeaponAI (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
 --- !u!114 &5049747117093221935 stripped
 MonoBehaviour:
@@ -148,11 +157,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1eee4ce499a7b04080f83fc6893de5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &8284279633782883911 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6945116638143859393, guid: d0fdb44fd48b69d47a0a023e477d6882, type: 3}
+  m_PrefabInstance: {fileID: 1339168493468748934}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4632712145721885805
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -5962046133909401527, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
@@ -165,12 +180,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: <PrefabId>k__BackingField
-      value: 17
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      propertyPath: _networkBehaviours.Array.size
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: <AssetPathHash>k__BackingField
       value: 16495821714218193867
       objectReference: {fileID: 0}
+    - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      propertyPath: _networkBehaviours.Array.data[5]
+      value: 
+      objectReference: {fileID: -6824634412066852146}
     - target: {fileID: 7425893, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -398,6 +421,10 @@ PrefabInstance:
     - target: {fileID: 622743779293351943, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: setDamagerAsEnemyBehaviour
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 898283775404610476, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      propertyPath: m_Mass
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1019069030648525431, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -788,6 +815,13 @@ PrefabInstance:
       value: -0.022333898
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8766185733789095069, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7245716659412475771}
+    - targetCorrespondingSourceObject: {fileID: 1679457303801085198, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8284279633782883911}
   m_SourcePrefab: {fileID: 100100000, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
 --- !u!1 &1369512922593345473 stripped
 GameObject:
@@ -806,12 +840,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 5
   _addedNetworkObject: {fileID: 1674681400229350146}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 1674681400229350146}
   markerText: '?'
   markColor: {r: 0, g: 0, b: 0, a: 1}
   hideOnOwner: 0
+  hideOnDistanceToLocalPlayer: 0
+  distanceToLocalPlayer: 300
 --- !u!114 &1674681400229350146 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}

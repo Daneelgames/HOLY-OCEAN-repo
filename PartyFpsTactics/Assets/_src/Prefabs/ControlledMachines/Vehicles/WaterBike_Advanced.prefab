@@ -92,7 +92,11 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 3638330159521411507}
   _networkObjectCache: {fileID: 3638330159521411507}
+  markerText: '?'
   markColor: {r: 0, g: 0.940083, b: 1, a: 1}
+  hideOnOwner: 0
+  hideOnDistanceToLocalPlayer: 0
+  distanceToLocalPlayer: 300
 --- !u!135 &5529235688384015333
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -977,7 +981,7 @@ MonoBehaviour:
   sitTransform: {fileID: 3424718571400797136}
   CameraTransform: {fileID: 6720943768454907508}
   sitTransformNpc: {fileID: 1064600114280614809}
-  DamageToControllingHcScaler: 0.33
+  DamageToControllingHcScaler: 1
   collidersEnabledWhenPlayerInside: []
   carCrashDamageColliders: []
   rb: {fileID: 1852825967723450296}
@@ -1896,6 +1900,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 3000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -5328,6 +5333,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 1
@@ -7150,6 +7156,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 1852825967723450302}
     m_Modifications:
     - target: {fileID: 1036251166624442, guid: 28b9f3c1d21b45a45a6dcd6dab008e15, type: 3}
@@ -7209,6 +7216,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 28b9f3c1d21b45a45a6dcd6dab008e15, type: 3}
 --- !u!4 &1853302618759649135 stripped
 Transform:
@@ -7220,6 +7228,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 1852825967723450302}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
@@ -7283,6 +7292,13 @@ PrefabInstance:
       value: waterBike
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7452370946900108511}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8487382586419326650}
   m_SourcePrefab: {fileID: 100100000, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
 --- !u!4 &5034307628166618001 stripped
 Transform:

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 6
 --- !u!114 &-6249960314475835152
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -35,6 +35,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Examples_Material_MaskedMarineSnow
   m_Shader: {fileID: -6465566751694194690, guid: 545a6fe2e76aad4439b7224d07f82043, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _MASK_MASKED
   m_InvalidKeywords:
@@ -49,6 +51,7 @@ Material:
   - TransparentDepthPostpass
   - TransparentBackface
   - RayTracingPrepass
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -93,6 +96,8 @@ Material:
     - _Masked: 1
     - _Metallic: 0
     - _OpaqueCullMode: 2
+    - _QueueControl: 1
+    - _QueueOffset: 0
     - _RayTracing: 0
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
@@ -126,6 +131,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - Crest_Emission: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 0.99586666, b: 0.752, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

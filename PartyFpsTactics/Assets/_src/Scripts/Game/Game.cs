@@ -137,6 +137,8 @@ namespace MrPink
         
         public void SetLevelGeneratingFeedback(bool active)
         {
+            return;
+            
             cameraAnimator.SetBool(Screenshake, active);
             
             if (active)

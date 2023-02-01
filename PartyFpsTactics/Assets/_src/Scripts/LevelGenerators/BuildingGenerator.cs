@@ -981,6 +981,7 @@ public class BuildingGenerator : NetworkBehaviour
         var newNavMesh = Instantiate(navMeshSurfacePrefab, navMeshesParent);
         newNavMesh.transform.position = spawnedLevel.position;
         newNavMesh.transform.localScale = spawnedLevel.size;
+        newNavMesh.transform.rotation = spawnedLevel.transform.rotation;
         newNavMesh.size = spawnedLevel.size;
         newNavMesh.center = new Vector3(0, newNavMesh.size.y/ 2, 0);
         navMeshSurfacesSpawned.Add(newNavMesh);

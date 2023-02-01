@@ -24,8 +24,15 @@ public class NoiseSystem : MonoBehaviour
 
     IEnumerator MakeNoiseOverTime(Vector3 pos, float distance)
     {
-        foreach (var hc in UnitsManager.Instance.HcInGame)
+        
+        if (UnitsManager.Instance.HcInGame.Count < 1)
+            yield break;
+        
+        for (var index = UnitsManager.Instance.HcInGame.Count - 1; index >= 0; index--)
         {
+            if (UnitsManager.Instance.HcInGame.Count <= index)
+                continue;
+            var hc = UnitsManager.Instance.HcInGame[index];
             if (hc == null || hc.IsDead)
                 continue;
             if (hc.team == Team.PlayerParty)
@@ -34,9 +41,9 @@ public class NoiseSystem : MonoBehaviour
                 continue;
             if (hc.AiMovement.enemyToLookAt != null)
                 continue;
-            
+
             if (!(Vector3.Distance(pos, hc.transform.position) <= distance)) continue;
-            
+
             hc.AiMovement.MoveToPositionOrder(pos);
             yield return null;
         }

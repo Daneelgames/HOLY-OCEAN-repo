@@ -632,6 +632,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -4033,6 +4034,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -5461,6 +5463,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 500
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -8862,6 +8865,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -10290,6 +10294,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 500
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -13691,6 +13696,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -14753,7 +14759,7 @@ MonoBehaviour:
   sitTransform: {fileID: 4714700760824073871}
   CameraTransform: {fileID: 3200139194852403841}
   sitTransformNpc: {fileID: 6930133898745650886}
-  DamageToControllingHcScaler: 0.33
+  DamageToControllingHcScaler: 1
   collidersEnabledWhenPlayerInside: []
   carCrashDamageColliders: []
   rb: {fileID: 3286151325192577885}
@@ -15534,6 +15540,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 6788128815142378521}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
@@ -15605,6 +15612,13 @@ PrefabInstance:
       value: waterBike
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5687666829273965867}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6650611870087884622}
   m_SourcePrefab: {fileID: 100100000, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
 --- !u!4 &7809225405153450597 stripped
 Transform:

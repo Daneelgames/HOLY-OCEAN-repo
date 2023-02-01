@@ -32,7 +32,7 @@ namespace Fraktalia.Core.Pipe
             {
                 pos[i] = mytarget.transform.localToWorldMatrix.MultiplyPoint3x4(new Vector3(querschnitt[i].x, 0, querschnitt[i].y));
 
-                pos[i] = Handles.FreeMoveHandle(pos[i], mytarget.transform.localRotation * Quaternion.Euler(90, 0, 0), 0.2f, Vector3.zero, Handles.CircleHandleCap);
+                var fmh_35_57_638107629221413720 = mytarget.transform.localRotation * Quaternion.Euler(90, 0, 0); pos[i] = Handles.FreeMoveHandle(pos[i], 0.2f, Vector3.zero, Handles.CircleHandleCap);
                 Vector3 newpos = mytarget.transform.worldToLocalMatrix.MultiplyPoint3x4(pos[i]);
                 querschnitt[i] = new Vector2(newpos.x, newpos.z);
             }

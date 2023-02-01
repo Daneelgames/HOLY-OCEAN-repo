@@ -28,7 +28,6 @@ public class CoverSystem : MonoBehaviour
         StartCoroutine(InitializeCoverSpots());
     }
 
-
     IEnumerator InitializeCoverSpots()
     {
         while (true)
