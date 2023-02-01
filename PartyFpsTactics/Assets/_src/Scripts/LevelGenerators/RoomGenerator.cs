@@ -19,12 +19,7 @@ namespace _src.Scripts.LevelGenerators
             Instance = this;
         }
 
-        public IEnumerator GenerateRooms(List<Level> spawnedLevels)
-        {
-            yield return StartCoroutine(GenerateRoomsCoroutine(spawnedLevels));
-        }
-
-        IEnumerator GenerateRoomsCoroutine(List<Level> spawnedLevels)
+        public IEnumerator GenerateRooms(List<Level> spawnedLevels, bool singleFrame)
         {
             for (int levelIndex = 0; levelIndex < spawnedLevels.Count; levelIndex++)
             {
@@ -49,6 +44,10 @@ namespace _src.Scripts.LevelGenerators
                     Vector3 worldSpawnPosition = new Vector3(randomTileCoords.x - level.size.x / 2, level.floorWorldHeight + 0.5f, randomTileCoords.z - level.size.z / 2);
 
                     Instantiate(level.controlledMachinesToSpawn[Random.Range(0, level.controlledMachinesToSpawn.Count)], worldSpawnPosition, Quaternion.identity);
+                    
+                    if (singleFrame)
+                        continue;
+                    
                     t++;
                     if (t > 5)
                     {

@@ -3,7 +3,6 @@ using Crest;
 using FishNet.Object;
 using MrPink.Health;
 using NWH.DWP2.WaterObjects;
-using Pathfinding;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;

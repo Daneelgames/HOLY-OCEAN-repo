@@ -28,9 +28,11 @@ public class BuildingGenerator : NetworkBehaviour
 
     public Transform generatedBuildingFolder;
     public Transform disconnectedTilesFolder;
+
+    [Header("GENERATE IN SINGLE FRAME OR OVER TIME")]
+    private bool singleFrame = true;
     [Header("SETTINGS")]
     //public List<int> mainBuildingLevelsHeights = new List<int>();
-
     public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
     
     public bool spawnGoals = true;
@@ -217,7 +219,7 @@ public class BuildingGenerator : NetworkBehaviour
             building.spawnedBuildingLevels[i].Init();
         }
         
-        yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels));
+        yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels, singleFrame));
         
         DestroyTilesForLadders();
         
@@ -408,7 +410,6 @@ public class BuildingGenerator : NetworkBehaviour
                 
                 // SPAWN BUILDING'S OUTSIDE WALLS 
                 
-                
                 if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) // OUTER WALLS
                 {
                     if (!spawnWalls)
@@ -452,7 +453,6 @@ public class BuildingGenerator : NetworkBehaviour
                             
                         newWallTile.transform.position = newFloorTile.transform.position + Vector3.up * y;
                         
-                        
                         newLevel.roomTilesMatrix[x, y, z] = newWallTile;
                         newLevel.tilesWalls.Add(newWallTile);
                         newLevel.allTiles.Add(newWallTile);
@@ -490,17 +490,17 @@ public class BuildingGenerator : NetworkBehaviour
                     }
                     
                 }
-                yield return null; 
+                //yield return null; 
             }
-            yield return null;   
+            //yield return null;   
         }
 
         /*
         Debug.LogError("SPAWN INSIDE WALLS IS TURNED OFF FOR NOW");
         yield break;
         */
-        
-        yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof, levelIndexInBuilding));
+        if (buildingSettings.spawnRooms)
+            yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof, levelIndexInBuilding));
     }
     
     IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof, int levelIndex)
@@ -843,7 +843,7 @@ public class BuildingGenerator : NetworkBehaviour
             }
         }
 
-        yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 100, levelFromClosestTile, levelToClosestTile));
+        yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 100, levelFromClosestTile, levelToClosestTile, singleFrame));
     }
 
     IEnumerator MakeLadderOnEntrance(Building building, Level level)
@@ -889,10 +889,10 @@ public class BuildingGenerator : NetworkBehaviour
         fromPosition = new Vector3(targetTileToConnect.position.x, 0, targetTileToConnect.position.z) + offsetVector * 5;  
         toPosition = targetTileToConnect.position - Vector3.up;
         
-        yield return StartCoroutine(SpawnLadder(fromPosition, toPosition, true, level.spawnedTransform, 20, null, targetTileToConnect));
+        yield return StartCoroutine(SpawnLadder(fromPosition, toPosition, true, level.spawnedTransform, 20, null, targetTileToConnect, singleFrame));
     }
     
-    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, Transform parent, int maxBridgeTiles = -1, Transform startTile = null, Transform targetTile = null)
+    public IEnumerator SpawnLadder(Vector3 fromPosition, Vector3 toPosition, bool destroyTilesAround, Transform parent, int maxBridgeTiles = -1, Transform startTile = null, Transform targetTile = null, bool singleFrame = false)
     {
         List<Transform> stairsTiles = new List<Transform>();
         
@@ -960,7 +960,8 @@ public class BuildingGenerator : NetworkBehaviour
                     }
                 }
             }
-            yield return null;
+            if (singleFrame == false)
+                yield return null;
         }
     }
 

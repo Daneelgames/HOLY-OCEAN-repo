@@ -38,6 +38,7 @@ namespace MrPink
             if (Input.GetKeyDown(KeyCode.C))
             {
                 ownVehicle.transform.position = transform.position;
+                ownVehicle.transform.rotation = transform.rotation;
                 RequestVehicleAction(ownVehicle);
             }
         }
