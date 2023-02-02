@@ -169,8 +169,7 @@ namespace MrPink.PlayerSystem
 
                 return;
             }
-
-            if (_isDead || Shop.Instance.IsActive)
+            if (_isDead)
             {
                 rb.isKinematic = false;
                 rb.useGravity = false;
@@ -182,6 +181,10 @@ namespace MrPink.PlayerSystem
                 return;
             }
             GetUnderwater();
+            
+            if (Shop.Instance.IsActive|| PlayerInventoryUI.Instance.IsActive)
+                return;
+            
             HandleJump();
             HandleCrouch();
             HandleMovement();
@@ -201,9 +204,6 @@ namespace MrPink.PlayerSystem
                 rb.MoveRotation(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.rotation);
                 return;
             }
-
-            if (Shop.Instance.IsActive)
-                return;
             
             GroundCheck();
             if (checkVault)

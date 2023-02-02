@@ -92,7 +92,8 @@ namespace MrPink.PlayerSystem
         
         private void Update()
         {
-            if (Shop.Instance && Shop.Instance.IsActive)
+            if ((Shop.Instance && Shop.Instance.IsActive)||
+                (PlayerInventoryUI.Instance && PlayerInventoryUI.Instance.IsActive))
                 return;
             if (Game.LocalPlayer == null)
                 return;

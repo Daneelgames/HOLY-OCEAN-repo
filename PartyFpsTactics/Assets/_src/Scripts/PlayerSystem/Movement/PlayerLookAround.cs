@@ -106,6 +106,8 @@ namespace MrPink.PlayerSystem
             
             if (Shop.Instance && Shop.Instance.IsActive)
                 return;
+            if (PlayerInventoryUI.Instance && PlayerInventoryUI.Instance.IsActive)
+                return;
         
             MouseLook();
         }

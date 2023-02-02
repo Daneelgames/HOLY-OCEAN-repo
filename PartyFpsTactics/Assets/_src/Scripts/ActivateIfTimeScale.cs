@@ -19,7 +19,7 @@ public class ActivateIfTimeScale : MonoBehaviour
         {
             yield return null;
             
-            if (GameManager.Instance == null || Shop.Instance.IsActive)
+            if (GameManager.Instance == null || Shop.Instance.IsActive || PlayerInventoryUI.Instance.IsActive)
             {
                 activeWhenTimeScaleLessTanOne.SetActive(false);
                 continue;
