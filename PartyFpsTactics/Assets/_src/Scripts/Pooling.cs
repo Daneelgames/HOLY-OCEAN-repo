@@ -17,6 +17,7 @@ public class Pooling : MonoBehaviour
     public List<ParticlesPool> ParticlesPools;
     public List<IslandTilePool> IslandTilesPools;
 
+    
 
     [Serializable]
     public class AttackColliderPool
@@ -24,7 +25,9 @@ public class Pooling : MonoBehaviour
         [Serializable]
         public enum AttackColliderPrefabTag
         {
-            DesertBeast, DesertBeastSmall, AiPistol, AiSmg, AiShotgun, PlayerPistol, PlayerSword, PlayerShotgun 
+            DesertBeast, DesertBeastSmall, AiPistol, AiSmg, AiShotgun, PlayerPistol, PlayerSword, PlayerShotgun,
+            PlayerFistMelee
+            
         }
 
         public AttackColliderPrefabTag attackColliderPrefabTag;
@@ -196,9 +199,11 @@ public class Pooling : MonoBehaviour
     {
         for (int i = 0; i < attackColliderPrefabs.Count; i++)
         {
-            if (attackColliderPrefabs[i].tag == list.attackColliderPrefabTag)
+            var tag = attackColliderPrefabs[i].tag;
+            if (tag == list.attackColliderPrefabTag)
             {
                 var newCollider = Instantiate(attackColliderPrefabs[i].prefab);
+                
                 newCollider.SetPool(list);
                 list.pool.Add(newCollider);
                 break;
@@ -285,11 +290,13 @@ public class Pooling : MonoBehaviour
             }
         }
         coll.gameObject.SetActive(false);
+        coll.transform.parent = transform;
     }
     IEnumerator ReleaseParticle(GameObject particle, ParticlesPool list)
     {
         yield return new WaitForSeconds(3);
         particle.gameObject.SetActive(false);
+        particle.transform.parent = transform;
         list.pool.Add(particle);
     }
     public void ReleaseIslandTile(IslandTile tile)

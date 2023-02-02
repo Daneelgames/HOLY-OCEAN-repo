@@ -104,7 +104,6 @@ namespace MrPink
     
         void TogglePlayerInside(ControlledMachine machine)
         {
-            PartyController.Instance.SetPlayerInCar(machine);
         
             if (machine)
             {

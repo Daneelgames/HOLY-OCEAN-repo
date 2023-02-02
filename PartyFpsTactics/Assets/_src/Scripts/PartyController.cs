@@ -2,54 +2,55 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MrPink
 {
-    public class PartyController : MonoBehaviour
+    public class PartyController : NetworkBehaviour
     {
         public static PartyController Instance;
-    
-        public ControlledMachine playerCar;
-        public HealthController npcInParty;
-
-        private void Awake()
+        [SerializeField] [ReadOnly] private int alivePlayers = 0;
+        public override void OnStartClient()
         {
+            base.OnStartClient();
             Instance = this;
-        }    
-    
-        public IEnumerator Init(Transform roadPartToSpawnOn = null)
-        {
-            while (Game._instance == null || Game.LocalPlayer == null)
-            {
-                yield return null;
-            }
 
-            while (ProgressionManager.Instance == null)
-            {
-                yield return null;
-            }
-            if (ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn)
-            {
-                var captain = Instantiate(ProgressionManager.Instance.CurrentLevel.mrCaptainPrefabToSpawn,
-                    playerCar.sitTransformNpc.position, playerCar.sitTransformNpc.rotation);
-                npcInParty = captain;
-                Game.LocalPlayer.CommanderControls.unitsInParty.Add(captain);
-            }
-        
-            Game.LocalPlayer.Movement.gameObject.SetActive(true);
-            Game.LocalPlayer.Interactor.cam.gameObject.SetActive(true);
+            StartCoroutine(GetPlayers());
         }
 
-        public void SetPlayerInCar(ControlledMachine machine)
+        IEnumerator GetPlayers()
         {
-            // put npc in car if there are multiple sits
-            /*
-            if (npcInParty && Vector3.Distance(npcInParty.transform.position, Game.LocalPlayer.Position) < 15)
-                npcInParty.aiVehicleControls.SetPassengerSit(machine);*/
+            while (true)
+            {
+                while (alivePlayers < 1)
+                {
+                    // wait until first player connects
+                    yield return null;
+                }
+
+                while (alivePlayers > 0)
+                {
+                    // wait while there's at least one player alive
+                    yield return null;
+                }
+
+                Game._instance.RespawnAllPlayers();
+                yield return null;
+            }
+        }
+
+        public void PlayerDied()
+        {
+            alivePlayers--;   
+        }
+        public void PlayerResurrected()
+        {
+            alivePlayers++;
         }
     }
 }

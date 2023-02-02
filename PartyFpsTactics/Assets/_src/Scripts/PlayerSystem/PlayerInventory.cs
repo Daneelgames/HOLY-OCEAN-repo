@@ -10,7 +10,6 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerInventory : MonoBehaviour
     {
-        
         public List<ToolAmount> amountOfEachTool = new List<ToolAmount>();
 
         [Serializable]
@@ -20,6 +19,7 @@ namespace MrPink.PlayerSystem
             public int amount;
         }
 
+        [SerializeField] private Tool defaultMeleeWeapon;
         [SerializeField] private List<Tool> startingTools;
         
         [SerializeField, AssetsOnly, Required]
@@ -28,6 +28,8 @@ namespace MrPink.PlayerSystem
         private WeaponController startingPistolLaserPointWeapon;
         [SerializeField, AssetsOnly, Required]
         private WeaponController shotterWeapon;
+        [SerializeField, AssetsOnly, Required]
+        private WeaponController defaultMeleeWeaponPrefab;
 
         [SerializeField, AssetsOnly, Required] 
         private WeaponController _startingSwordWeapon;
@@ -48,9 +50,18 @@ namespace MrPink.PlayerSystem
 
         public void Init()
         {
+            AddDefaultMeleeWeapon();
             foreach (var startingTool in startingTools)
             {
                 AddTool(startingTool);
+            }
+        }
+
+        void AddDefaultMeleeWeapon()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                AddTool(defaultMeleeWeapon);
             }
         }
     
@@ -95,9 +106,10 @@ namespace MrPink.PlayerSystem
                 SpawnPlayerWeapon(startingPistolWeapon);
             if (tool.tool == ToolType.Shotter)
                 SpawnPlayerWeapon(shotterWeapon);
+            if (tool.tool == ToolType.Fist)
+                SpawnPlayerWeapon(defaultMeleeWeaponPrefab);
             
             if (tool.tool == ToolType.OneTimeShield)
-                
                 PlayerUi.Instance.AddShieldFeedback();
 
             foreach (var toolAmount in amountOfEachTool)
@@ -183,6 +195,8 @@ namespace MrPink.PlayerSystem
                 toolAmount.amount = 0;
             }
             amountOfEachTool.Clear();
+
+            AddDefaultMeleeWeapon();
         }
 
         WeaponController leftWeapon;

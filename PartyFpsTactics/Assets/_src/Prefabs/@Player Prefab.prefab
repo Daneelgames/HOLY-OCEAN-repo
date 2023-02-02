@@ -12364,7 +12364,7 @@ Transform:
   - {fileID: 5458055721696668510}
   - {fileID: 4909690080124348775}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 37
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8799871737509889761
 MonoBehaviour:
@@ -12405,6 +12405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amountOfEachTool: []
+  defaultMeleeWeapon: {fileID: 11400000, guid: 1f544c73c96a4254a8896c9fafa7f9a6, type: 2}
   startingTools:
   - {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
   - {fileID: 11400000, guid: 36977df4a39c8244ebed8cd365314274, type: 2}
@@ -12413,6 +12414,7 @@ MonoBehaviour:
   startingPistolWeapon: {fileID: 4860745060149239904, guid: 9ff008ca9d8baed41b67b76d2aca903b, type: 3}
   startingPistolLaserPointWeapon: {fileID: 4860745060149239904, guid: 7e1ed899081c8bd469a8c666ac1bfe1d, type: 3}
   shotterWeapon: {fileID: 767009866483809362, guid: cdcb2486e26ef3142a09b6e365545787, type: 3}
+  defaultMeleeWeaponPrefab: {fileID: 2642470501878746763, guid: 845d400365bfc2a4fa3e8b3837923ad6, type: 3}
   _startingSwordWeapon: {fileID: 2642470501878746763, guid: e1bbc1d70dfae460fa94dc1bf7fd267f, type: 3}
 --- !u!114 &9066321015931522152
 MonoBehaviour:
@@ -12430,6 +12432,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 4075464650987322544}
   _networkObjectCache: {fileID: 4075464650987322544}
   isPlayer: 0
+  resetRoseInstanceDialogueOnDeath: 0
   selfUnit: {fileID: 0}
   health: 1000
   healthMax: 1000
@@ -12534,8 +12537,12 @@ MonoBehaviour:
   jumpStaminaCost: 25
   idleStaminaRegen: 30
   moveStaminaRegen: 20
+  slopeMoveDirection: {x: 0, y: 0, z: 0}
+  slopeNormal: {x: 0, y: 0, z: 0}
+  maxSlopeAngle: 50
   _slopeRayHeight: 0.25
   _slopeRayDistance: 0.5
+  checkVault: 0
   vaultRaycastDistance: 0.6
   middleRaycastHeight: 1.2
   bottomRaycastHeight: 0.2
@@ -12989,11 +12996,12 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 13
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 0
+  _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 3397734914140869745
   _sceneNetworkObjects:
   - {fileID: 4075464650987322544}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

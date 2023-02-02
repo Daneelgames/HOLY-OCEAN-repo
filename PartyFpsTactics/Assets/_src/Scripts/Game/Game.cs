@@ -96,9 +96,14 @@ namespace MrPink
         public void RespawnAllPlayers()
         {
             // called on server
-            foreach (var player in playersesInGame)
+            if (playersesInGame.Count > 0)
             {
-                player.Respawn();
+                for (var index = playersesInGame.Count - 1; index >= 0; index--)
+                {
+                    var player = playersesInGame[index];
+                    if (player != null)
+                        player.Respawn();
+                }
             }
         }
         

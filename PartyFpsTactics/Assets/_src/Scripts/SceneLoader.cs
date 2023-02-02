@@ -81,7 +81,7 @@ public class SceneLoader : MonoBehaviour
         if (_onAllPlayersDead)
             StartCoroutine(GetPlayers());
         
-        Game._instance.RespawnAllPlayers();
+        //Game._instance.RespawnAllPlayers();
     }
 
     IEnumerator GetPlayers()

@@ -14,6 +14,7 @@ namespace MrPink.Tools
         CheckpointTicket,
         Shotter,
         PistolLaserPoint,
-        Knife
+        Knife,
+        Fist
     }
 }

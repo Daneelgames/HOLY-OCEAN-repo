@@ -24,7 +24,6 @@ public class BuildingGenerator : NetworkBehaviour
     public List<Building> spawnedBuildings = new List<Building>();
     [HideInInspector]
     public List<TileHealth> spawnedProps = new List<TileHealth>();
-    public GameObject levelGoalSpawned;
 
     public Transform generatedBuildingFolder;
     public Transform disconnectedTilesFolder;
@@ -1193,23 +1192,15 @@ public class BuildingGenerator : NetworkBehaviour
     [Server]
     IEnumerator SpawnGoalsOnServer(Building building)
     {
-        // dola goldendola
-        int index = 0;
-        switch (_dolaSpawnWhere)
+        // spawn tools on every floor 
+        for (int index = 0; index < building.spawnedBuildingLevels.Count; index++)
         {
-            case DolaSpawnWhere.BottomFloor:
-                index = 0;
-                break;
-            case DolaSpawnWhere.TopFloor:
-                index = building.spawnedBuildingLevels.Count - 1;
-                break;
-            case DolaSpawnWhere.Random:
-                index = Random.Range(0, building.spawnedBuildingLevels.Count);
-                break;
+            var level = building.spawnedBuildingLevels[index];
+            var tiles = level.tilesInside;
+            Vector3 spawnPosition = tiles[Random.Range(0, tiles.Count)].transform.position + Vector3.up/2;
+            var levelGoalSpawned = Instantiate(ContentPlacer.Instance.GetToolForSpawnOnLevel().gameObject, spawnPosition, Quaternion.identity);
+            ServerManager.Spawn(levelGoalSpawned);
         }
-        Vector3 spawnPosition = building.spawnedBuildingLevels[index].position + Vector3.up;
-        levelGoalSpawned = Instantiate(levelGoalPrefab, spawnPosition, Quaternion.identity);
-        ServerManager.Spawn(levelGoalSpawned);
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
             for (int j = 0; j < building.spawnedBuildingLevels[i].spawnedRooms.Count; j++)

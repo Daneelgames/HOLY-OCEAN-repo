@@ -29,14 +29,9 @@ public class IslandSpawner : NetworkBehaviour
             StartCoroutine(CullIslandsOnServer());
     }
 
-    private void Update()
-    {
-    }
-    
-    
 
     [Server]
-    public void SpawnIslandOnServer()
+    public void SpawnRandomIslandOnServer()
     {
         var randomIslandPrefab = islandPrefabList[Random.Range(0, islandPrefabList.Count)];
         var spawnDir = new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)).normalized;
@@ -44,6 +39,17 @@ public class IslandSpawner : NetworkBehaviour
         var newIsland = Instantiate(randomIslandPrefab, spawnPos, Quaternion.identity);
  
         ServerManager.Spawn(newIsland.gameObject);
+    }
+
+    public void DespawnIslandsExceptHubOnServer()
+    {
+        for (int i = 0; i < spawnedIslands.Count; i++)
+        {
+            if (i == 0)
+                continue;
+            
+            ServerManager.Despawn(spawnedIslands[i].gameObject, DespawnType.Destroy);
+        }
     }
 
     /*

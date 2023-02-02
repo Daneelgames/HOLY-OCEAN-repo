@@ -219,7 +219,8 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.SpawnRandomIsland:
-                IslandSpawner.Instance.SpawnIslandOnServer();
+                IslandSpawner.Instance.DespawnIslandsExceptHubOnServer();
+                IslandSpawner.Instance.SpawnRandomIslandOnServer();
                 break;
         }
         

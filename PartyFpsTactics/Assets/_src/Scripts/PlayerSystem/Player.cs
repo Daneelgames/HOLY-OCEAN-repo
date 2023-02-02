@@ -88,6 +88,16 @@ namespace MrPink.PlayerSystem
             base.OnStartClient();
 
             Init();
+            StartCoroutine(ResurrectAtStart());
+        }
+
+        IEnumerator ResurrectAtStart()
+        {
+            while (PartyController.Instance == null)
+            {
+                yield return null;
+            }
+            PartyController.Instance.PlayerResurrected();
         }
         
         public override void OnOwnershipClient(NetworkConnection prevOwner)
@@ -147,6 +157,7 @@ namespace MrPink.PlayerSystem
             Weapon.Death();
             VehicleControls.Death();
             ScoringSystem.Instance.CooldownToZero();
+            PartyController.Instance.PlayerDied();
         }
 
         [Server]
@@ -203,6 +214,7 @@ namespace MrPink.PlayerSystem
             //Shop.Instance.OpenShop(0);
             Game.LocalPlayer.Resurrect(true);
             respawnCoroutine = null;
+            PartyController.Instance.PlayerResurrected();
         }
 
         // called on client by player who interacted

@@ -24,7 +24,8 @@ public class ContentPlacer : NetworkBehaviour
     [SerializeField] private List<HealthController> aiWaterBikes = new List<HealthController>();
     
     public List<InteractiveObject> lootToSpawnAround;
-    
+    public List<InteractiveObject> toolsToSpawnOnBuildingLevels;
+
     private List<ContentPlacerBlocker> _contentPlacerBlockers = new List<ContentPlacerBlocker>();
 
     private void Awake()
@@ -278,12 +279,13 @@ public class ContentPlacer : NetworkBehaviour
             var level = building.spawnedBuildingLevels[i];
                 
             tilesForSpawns.Clear();
-            for (var index = level.tilesInside.Count - 1; index >= 0; index--)
+            var tilesInsideTemp = new List<TileHealth>(level.tilesInside); 
+            for (var index = tilesInsideTemp.Count - 1; index >= 0; index--)
             {
-                var tile = level.tilesInside[index];
+                var tile = tilesInsideTemp[index];
                 if (tile == null)
                 {
-                    level.tilesInside.RemoveAt(index);
+                    tilesInsideTemp.RemoveAt(index);
                     continue;
                 }
                 tilesForSpawns.Add(tile);
@@ -419,4 +421,10 @@ public class ContentPlacer : NetworkBehaviour
 
         return false;
     }
+    
+    public InteractiveObject GetToolForSpawnOnLevel()
+    {
+        return toolsToSpawnOnBuildingLevels[Random.Range(0, toolsToSpawnOnBuildingLevels.Count)];
+    }
+
 }

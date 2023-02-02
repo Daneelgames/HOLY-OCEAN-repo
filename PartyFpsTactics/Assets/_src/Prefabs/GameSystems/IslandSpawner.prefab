@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7835018713726381178}
   - component: {fileID: 7368021338302537838}
+  - component: {fileID: 6053537034170030352}
   m_Layer: 0
   m_Name: IslandSpawner
   m_TagString: Untagged
@@ -45,11 +46,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
+  _addedNetworkObject: {fileID: 6053537034170030352}
   _networkObjectCache: {fileID: 0}
   spawnedIslands: []
   spawnDistance: 1000
   islandPrefabList:
   - {fileID: 735799012231920881, guid: 9b96c61b41e082942bb71c71c95e8c06, type: 3}
-  - {fileID: 735799012231920881, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
+  - {fileID: 735799012231920881, guid: 364089baba795bf4c9ea7f17a19b5268, type: 3}
   - {fileID: 6670557985220958057, guid: e71369a0f0fb50f47a68473705f47647, type: 3}
+--- !u!114 &6053537034170030352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7787943180137382136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours: []
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: -1
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 0
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 2776430894058396098
+  _sceneNetworkObjects: []
