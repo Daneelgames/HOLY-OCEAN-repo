@@ -442,7 +442,7 @@ namespace MrPink.PlayerSystem
             else
                 newTargetGravity = gravity;
 
-            resultGravity = Mathf.Lerp(resultGravity, newTargetGravity, gravityChangeSmooth * Time.unscaledDeltaTime);
+            resultGravity = State.IsClimbing ? newTargetGravity : Mathf.Lerp(resultGravity, newTargetGravity, gravityChangeSmooth * Time.unscaledDeltaTime);
             
             if (useGravity == false)
                 resultGravity = 0;
