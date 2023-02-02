@@ -26,7 +26,9 @@ namespace MrPink.Health
         {
             isPlayer = true;
         }
-        
+
+        [Header("USE FOR BOSSES")][SerializeField] private bool resetRoseInstanceDialogueOnDeath = false;
+
         public Unit selfUnit;
         [SyncVar] public int health = 100;
         public int healthMax = 100;
@@ -423,6 +425,9 @@ namespace MrPink.Health
             OnDeathEvent.Invoke();
 
             UnitsManager.Instance.RemoveUnit(this);
+            
+            if (resetRoseInstanceDialogueOnDeath)
+                CharacterSubtitlesTrigger.RoseInstance.SetTriggeredOff();
             
             if (destroyOnDeath)
                 Destroy(gameObject);

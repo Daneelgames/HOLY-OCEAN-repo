@@ -18,6 +18,7 @@ namespace MrPink.PlayerSystem
         
         public bool CanVault;
         public bool IsUnderwater;
+        public bool IsOnSlope;
 
     }
 }

@@ -59,15 +59,14 @@ namespace MrPink.PlayerSystem
         [BoxGroup("STAMINA")][SerializeField] private float idleStaminaRegen = 33;
         [BoxGroup("STAMINA")][SerializeField] private float moveStaminaRegen = 25;
 
-        [Header("Slopes")] bool onSlope = false;
-        private Vector3 slopeMoveDirection;
-        private Vector3 slopeNormal;
-
+        [Header("Slopes")]
+        [SerializeField] [ReadOnly] private Vector3 slopeMoveDirection;
+        [SerializeField] [ReadOnly] private Vector3 slopeNormal;
+        [SerializeField] private float maxSlopeAngle = 50f;
         [SerializeField] private float _slopeRayHeight = 0.25f;
-
         [SerializeField] private float _slopeRayDistance = 0.5f;
-
         
+        [BoxGroup("VAULTING")] [SerializeField] private bool checkVault = false;
         [BoxGroup("VAULTING")] [SerializeField] private float vaultRaycastDistance = 0.75f;
         [BoxGroup("VAULTING")] [SerializeField] private float middleRaycastHeight = 1f;
         [BoxGroup("VAULTING")] [SerializeField] private float bottomRaycastHeight = 0.5f;
@@ -88,7 +87,6 @@ namespace MrPink.PlayerSystem
 
         public Transform headTransform;
 
-        private bool goingUpHill = false;
         public Transform rotator;
         public float rotatorSpeed = 10;
         public float minMaxRotatorAngle = 90;
@@ -208,7 +206,8 @@ namespace MrPink.PlayerSystem
                 return;
             
             GroundCheck();
-            AutoVaultCheck();
+            if (checkVault)
+                AutoVaultCheck();
             ClimbingCheck();
             SlopeCheck();
 
@@ -390,9 +389,8 @@ namespace MrPink.PlayerSystem
 
             _moveVector.Normalize();
 
-            if (onSlope)
-                _moveVector = Vector3.ProjectOnPlane(_moveVector, slopeNormal);
-
+            if (State.IsOnSlope)
+                _moveVector = GetSlopeMovementDirection(_moveVector);
 
             float scaler = 1;
 
@@ -423,9 +421,6 @@ namespace MrPink.PlayerSystem
                     _targetVelocity = _moveVector * crouchSpeed * scaler;
             }
 
-            if (goingUpHill)
-                _targetVelocity += Vector3.up * 2;
-
             _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
 
             if (State.IsClimbing)
@@ -438,7 +433,9 @@ namespace MrPink.PlayerSystem
             else if (State.IsUnderwater)
                 newTargetGravity = 1f;
             else if (State.IsGrounded)
-                newTargetGravity = 1f;
+            {
+                newTargetGravity = State.IsOnSlope ? 0.1f : 1f;
+            }
             else
                 newTargetGravity = gravity;
 
@@ -468,23 +465,29 @@ namespace MrPink.PlayerSystem
         {
             if (!State.IsGrounded)
             {
-                onSlope = false;
+                State.IsOnSlope = false;
                 return;
             }
 
             if (Physics.Raycast(transform.position + Vector3.up * _slopeRayHeight, Vector3.down, out var hit,
                 _slopeRayDistance, WalkableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (hit.normal != Vector3.up)
+                var slopeAngle = Vector3.Angle(Vector3.up, hit.normal);
+                if (slopeAngle < maxSlopeAngle && slopeAngle > 0)
                 {
-                    onSlope = true;
+                    State.IsOnSlope = true;
                     slopeNormal = hit.normal;
                 }
                 else
-                    onSlope = false;
+                    State.IsOnSlope = false;
             }
             else
-                onSlope = false;
+                State.IsOnSlope = false;
+        }
+
+        Vector3 GetSlopeMovementDirection(Vector3 moveDir)
+        {
+            return Vector3.ProjectOnPlane(moveDir, slopeNormal).normalized;
         }
 
         private IEnumerator CoyoteTimeCooldown()

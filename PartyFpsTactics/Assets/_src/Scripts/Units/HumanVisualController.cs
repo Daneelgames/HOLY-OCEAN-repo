@@ -93,9 +93,9 @@ namespace MrPink.Units
                 
                 grounded = Physics.CheckSphere(ragdollOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
 
-                if (!grounded && ragdoll == false)
+                if (!grounded/* && ragdoll == false*/)
                 {
-                    OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 2);
+                    OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
 
                     if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
                     {
