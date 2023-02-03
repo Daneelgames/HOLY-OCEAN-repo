@@ -53,6 +53,7 @@ namespace MrPink.WeaponsSystem
         private bool dead = false;
 
         private bool rbIsKinematicInit = false;
+
         
         private void Awake()
         {
@@ -68,10 +69,9 @@ namespace MrPink.WeaponsSystem
             PlaySound(flyAu);
         }
 
-        public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0)
+        public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null)
         {
             base.Init(owner, source, shotHolder, action);
-
             rb.isKinematic = rbIsKinematicInit;
             lastPosition = transform.position;
 

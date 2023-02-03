@@ -124,6 +124,19 @@ namespace MrPink.PlayerSystem
             _hands[hand].Weapon = weapon;
         }
 
+        public void RemoveWeapon(WeaponController weapon)
+        {
+            foreach (var hand in _hands)
+            {
+                if (hand.Value.Weapon == weapon)
+                {
+                    Destroy(weapon.gameObject);
+                    hand.Value.Weapon = null;
+                    return;
+                }
+            }
+        }
+
 
         public void CooldownOnAttackInput()
         {

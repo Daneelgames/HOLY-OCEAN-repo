@@ -95,11 +95,13 @@ namespace MrPink.WeaponsSystem
             switch (target)
             {
                 case CollisionTarget.Solid:
+                    ownWeaponController?.MeleeColliderHit();
                     PlayHitSolidFeedback(/*other.*/transform.position);
                     break;
                 
                 case CollisionTarget.Creature:
                     //Debug.LogWarning("Can't find point");
+                    ownWeaponController?.MeleeColliderHit();
                     PlayHitUnitFeedback(other.transform.position);
                     break;
             }

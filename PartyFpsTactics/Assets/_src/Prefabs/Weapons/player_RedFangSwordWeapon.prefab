@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 2642470501878746763}
   - component: {fileID: 5972828274118483080}
   m_Layer: 0
-  m_Name: RedFangSwordWeapon
+  m_Name: player_RedFangSwordWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,11 +80,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 2642470501910343548}
+  toolType: 12
   _isMelee: 1
   cooldown: 1.5
   _delay: 0
   _attackSignalAudioSource: {fileID: 0}
   bulletsPerShot: 1
+  noiseDistance: 30
   _attackColliderTag: 6
   _animation: {fileID: 0}
   projectileRandomRotationMax: 0
@@ -233,6 +235,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 2642470501686540893}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2cbf34d31ac040c4d8be6157d0aa1c8e, type: 3}
@@ -300,6 +303,7 @@ PrefabInstance:
       value: ScavengeSword
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cbf34d31ac040c4d8be6157d0aa1c8e, type: 3}
 --- !u!4 &543450651867254492 stripped
 Transform:

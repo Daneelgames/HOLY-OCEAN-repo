@@ -7,12 +7,9 @@ namespace MrPink.Tools
     public class Tool : ScriptableObject
     {
         public ToolType tool;
+        public int defaultUses = 1;
         public int baseCost = 1000;
-        [Range(1, 99)]
-        public int maxAmount = 1;
 
-        public bool activeTool = false;
-    
         public string toolName = "Name";
         public string toolDescription = "Description";
     }

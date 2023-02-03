@@ -179,7 +179,7 @@ namespace MrPink.PlayerSystem
             var attackTime = Weapon.cooldown;
             
             Weapon.Shot(Game.LocalPlayer.Health);
-
+            
             if (Weapon.IsMelee)
                 await UniTask.Delay((int) (attackTime * 1000));
             

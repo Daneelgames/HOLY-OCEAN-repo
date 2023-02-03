@@ -16,14 +16,14 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         
         Instance = this;
     }
-    public void SpawnProjectileOnEveryClient(float noiseDistance, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 targetPos, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
+    public void SpawnProjectileOnEveryClient(float noiseDistance, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 targetPos, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, WeaponController weaponController)
     {
         if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword ||
             _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerFistMelee ||
             _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeast ||
             _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.DesertBeastSmall)
         {
-            SpawnMeleeProjectileLocally( shotHolder, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY);   
+            SpawnMeleeProjectileLocally( shotHolder, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY, weaponController);   
         }
         else // RANGED
         {
@@ -31,11 +31,11 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         }
     }
 
-    void SpawnMeleeProjectileLocally(Transform shotHolder, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY)
+    void SpawnMeleeProjectileLocally(Transform shotHolder, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, WeaponController weaponController)
     {
         BaseAttackCollider newProjectile;
         newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, shotHolder, Vector3.zero, Quaternion.identity);
-        newProjectile.Init(ownerHc, source, shotHolder, ScoringActionType.NULL, offsetX, offsetY);
+        newProjectile.Init(ownerHc, source, shotHolder, ScoringActionType.NULL, offsetX, offsetY, weaponController);
     }
 
     [ServerRpc(RequireOwnership = false)]

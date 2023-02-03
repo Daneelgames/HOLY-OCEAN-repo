@@ -10,13 +10,13 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerInventory : MonoBehaviour
     {
-        public List<ToolAmount> amountOfEachTool = new List<ToolAmount>();
+        public List<InventoryItem> inventoryItems = new List<InventoryItem>();
 
         [Serializable]
-        public class ToolAmount
+        public class InventoryItem
         {
             public ToolType _toolType;
-            public int amount;
+            public int usesLeft;
         }
 
         [SerializeField] private Tool defaultMeleeWeapon;
@@ -36,9 +36,9 @@ namespace MrPink.PlayerSystem
 
         public int GetCurrentSelectedIndex(ToolType toolType)
         {
-            for (var index = 0; index < amountOfEachTool.Count; index++)
+            for (var index = 0; index < inventoryItems.Count; index++)
             {
-                var toolAmount = amountOfEachTool[index];
+                var toolAmount = inventoryItems[index];
                 if (toolAmount._toolType == toolType)
                 {
                     return index;
@@ -87,10 +87,10 @@ namespace MrPink.PlayerSystem
 
         public bool HasTool(ToolType toolType)
         {
-            foreach (var toolAmount in amountOfEachTool)
+            foreach (var toolAmount in inventoryItems)
             {
                 if (toolAmount._toolType == toolType)
-                    return toolAmount.amount > 0;
+                    return toolAmount.usesLeft > 0;
             }
 
             return false;
@@ -112,63 +112,68 @@ namespace MrPink.PlayerSystem
             if (tool.tool == ToolType.OneTimeShield)
                 PlayerUi.Instance.AddShieldFeedback();
 
-            foreach (var toolAmount in amountOfEachTool)
-            {
-                if (toolAmount._toolType != tool.tool)
-                    continue;
-             
-                toolAmount.amount++;
-                Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();
-                return;
-            }
-
-            ToolAmount newAmount = new ToolAmount();
-            newAmount.amount = 1;
-            newAmount._toolType = tool.tool;
-            amountOfEachTool.Add(newAmount);
+            InventoryItem newItem = new InventoryItem();
+            newItem.usesLeft = tool.defaultUses;
+            newItem._toolType = tool.tool;
+            inventoryItems.Add(newItem);
             
             Game.LocalPlayer.ToolControls.SelectNextTool();
             Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();
         }
-    
-        public void RemoveTool(ToolType tool)
+
+        public void SpawnFist()
         {
-            foreach (var toolAmount in amountOfEachTool)
+            AddTool(defaultMeleeWeapon);
+        }
+    
+        public int RemoveTool(ToolType tool, int amount = 1)
+        {
+            Debug.Log("DAMAGE DURABILITY 1");
+            if (tool == ToolType.Null ||tool == ToolType.Fist)
+                return -1;
+            
+            Debug.Log("DAMAGE DURABILITY 1,1");
+            foreach (var toolAmount in inventoryItems)
             {
                 if (toolAmount._toolType != tool)
                     continue;
 
-                toolAmount.amount--;
-                if (toolAmount.amount <= 0)
-                    amountOfEachTool.Remove(toolAmount);
-                return;
+                toolAmount.usesLeft -= amount;
+                if (toolAmount.usesLeft <= 0)
+                    inventoryItems.Remove(toolAmount);
+                Debug.Log("DAMAGE DURABILITY 2");
+                return toolAmount.usesLeft;
             }
+
+            return -1;
         }
     
         public bool CanFitTool(Tool tool)
         {
-            foreach (var toolAmount in amountOfEachTool)
+            /*
+            foreach (var toolAmount in inventoryItems)
             {
                 if (toolAmount._toolType != tool.tool)
                     continue;
 
                 return toolAmount.amount < tool.maxAmount;
-            }
+            }*/
 
             return true;
         }
     
-        public int GetAmount(ToolType toolType)
+        public int GetItemsAmount(ToolType toolType)
         {
-            foreach (var toolAmount in amountOfEachTool)
+            int amount = 0;
+            foreach (var toolAmount in inventoryItems)
             {
                 if (toolAmount._toolType != toolType)
                     continue;
 
-                return toolAmount.amount;
+                amount++;
             }
 
-            return 0;
+            return amount;
         }
 
         public void DropAll()
@@ -176,7 +181,7 @@ namespace MrPink.PlayerSystem
             for (int i = 0; i < Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs.Count; i++)
             {
                 var toolPrefab = Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs[i];
-                var amount = GetAmount(toolPrefab.toolType);
+                var amount = GetItemsAmount(toolPrefab.toolType);
                 
                 for (int j = 0; j < amount; j++)
                 {
@@ -190,11 +195,11 @@ namespace MrPink.PlayerSystem
             Game.LocalPlayer.Weapon.SetWeapon(null, Hand.Left);
             SetWeapon(null, Hand.Left);
             
-            foreach (var toolAmount in amountOfEachTool)
+            foreach (var toolAmount in inventoryItems)
             {
-                toolAmount.amount = 0;
+                toolAmount.usesLeft = 0;
             }
-            amountOfEachTool.Clear();
+            inventoryItems.Clear();
 
             AddDefaultMeleeWeapon();
         }

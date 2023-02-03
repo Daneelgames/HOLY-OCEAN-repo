@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using MrPink.Health;
 using MrPink.PlayerSystem;
+using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -14,6 +15,7 @@ namespace MrPink.WeaponsSystem
     {
         public Transform shotHolder;
 
+        [SerializeField] private ToolType toolType;
         [SerializeField] 
         private bool _isMelee;
 
@@ -115,8 +117,6 @@ namespace MrPink.WeaponsSystem
                 attackAu.Play();
             }
             
-            
-            
             if (_ownerHc.health <= 0)
                 return;
             
@@ -135,7 +135,12 @@ namespace MrPink.WeaponsSystem
             SpawnProjectileInDirection(aiAimTransform ? aiAimTransform.position : transform.position + transform.forward, direction, isPlayer, _ownerHc);
 
             if (isPlayer)
+            {
                 Game.LocalPlayer.Movement.ChangeStamina(-attackStaminaCost);
+
+                if (_isMelee == false) // use durability of melee only if hit target
+                    DamageDurability();
+            }
 
             Cooldown().ForgetWithHandler();
             
@@ -153,10 +158,37 @@ namespace MrPink.WeaponsSystem
                 float offsetX = Random.Range(0, projectileRandomRotationMax);
                 float offsetY = Random.Range(0, projectileRandomRotationMax);
                 
-                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(noiseDistance, _attackColliderTag, shotHolder, targetPos, direction, _ownerHc, source, offsetX, offsetY);
+                NetworkProjectileSpawner.Instance.SpawnProjectileOnEveryClient(noiseDistance, _attackColliderTag, shotHolder, targetPos, direction, _ownerHc, source, offsetX, offsetY, this);
             }
         }
 
+        public void MeleeColliderHit()
+        {
+            DamageDurability();
+        }
+
+        void DamageDurability()
+        {
+            Debug.Log("DAMAGE DURABILITY 0");
+            if (toolType == null || toolType == ToolType.Fist)
+                return;
+            
+            Debug.Log("DAMAGE DURABILITY 0,1");
+            if (_ownerHc && _ownerHc.selfUnit == Game.LocalPlayer.Health.selfUnit)
+            {
+                Debug.Log("DAMAGE DURABILITY 0,2");
+                var usesLeft = Game.LocalPlayer.Inventory.RemoveTool(toolType);
+                Debug.Log("DAMAGE DURABILITY 0,3");
+                if (usesLeft < 0)
+                    return;
+                if (usesLeft < 1)
+                {
+                    // remove weapon
+                    Game.LocalPlayer.Weapon.RemoveWeapon(this);
+                    Game.LocalPlayer.Inventory.SpawnFist();
+                }
+            }   
+        }
         private async UniTask Cooldown()
         {
             OnCooldown = true;

@@ -98,8 +98,8 @@ namespace MrPink
             selectedItemIndex = index;
             selectedInfoNameText.text = toolsList[selectedItemIndex].toolName;
             selectedInfoDescriptionText.text = toolsList[selectedItemIndex].toolDescription;
-            int amount = Game._instance && Game.LocalPlayer ? Game.LocalPlayer.Inventory.GetAmount(toolsList[selectedItemIndex].tool) : 0;
-            selectedInfoDescriptionText.text += ". " + amount + " / " + toolsList[selectedItemIndex].maxAmount;
+            int amount = Game._instance && Game.LocalPlayer ? Game.LocalPlayer.Inventory.GetItemsAmount(toolsList[selectedItemIndex].tool) : 0;
+            selectedInfoDescriptionText.text += ". " + amount ;
         
             // TODO перенести текстовые штуки в систему локализации
 

@@ -11,7 +11,7 @@ public class PlayerInventoryUI : MonoBehaviour
 {
     public static PlayerInventoryUI Instance;
     [SerializeField] private List<ShopItem> inventoryItems;
-    [ReadOnly][SerializeField] private List<PlayerInventory.ToolAmount> toolAmounts;
+    [ReadOnly][SerializeField] private List<PlayerInventory.InventoryItem> toolAmounts;
     
     public Animator canvasAnim;
     private bool isActive = false;
@@ -23,6 +23,17 @@ public class PlayerInventoryUI : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        
+        
+    }
+
+    private void Start()
+    {
+        for (var index = 0; index < inventoryItems.Count; index++)
+        {
+            var t = inventoryItems[index];
+            t.button.onClick.AddListener(() => SlotSelected(index));
+        }
     }
 
     [Button]
@@ -34,7 +45,7 @@ public class PlayerInventoryUI : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         
-        toolAmounts = new List<PlayerInventory.ToolAmount>(Game.LocalPlayer.Inventory.amountOfEachTool);   
+        toolAmounts = new List<PlayerInventory.InventoryItem>(Game.LocalPlayer.Inventory.inventoryItems);   
         for (int i = 0; i < inventoryItems.Count; i++)
         {
             if (i >= toolAmounts.Count)
@@ -43,8 +54,17 @@ public class PlayerInventoryUI : MonoBehaviour
                 continue;
             }
             
-            inventoryItems[i].ShowItem(toolAmounts[i]._toolType.ToString(), toolAmounts[i].amount);
+            inventoryItems[i].ShowItem(toolAmounts[i]._toolType.ToString(), toolAmounts[i].usesLeft);
         }
+    }
+
+    void SlotSelected(int index)
+    {
+        if (index >= toolAmounts.Count)
+            return;
+        
+        var toolAmount = toolAmounts[index];
+        
     }
     
     [Button]
@@ -56,6 +76,7 @@ public class PlayerInventoryUI : MonoBehaviour
         canvasAnim.gameObject.SetActive(false);
         IsActive = false;
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked; 
+        
     }
 }

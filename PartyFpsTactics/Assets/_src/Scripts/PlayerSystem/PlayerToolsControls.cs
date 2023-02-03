@@ -60,7 +60,7 @@ namespace MrPink.PlayerSystem
             {
                 yield return null;
 
-                var toolsInInventory = Game.LocalPlayer.Inventory.amountOfEachTool;
+                var toolsInInventory = Game.LocalPlayer.Inventory.inventoryItems;
                 for (int i = 0; i < spawnedToolFeedbacks.Count; i++)
                 {
                     if (i >= toolsInInventory.Count)
@@ -70,7 +70,7 @@ namespace MrPink.PlayerSystem
                         continue;
                     }
                     
-                    spawnedToolFeedbacks[i].SetTool(toolsInInventory[i]._toolType, toolsInInventory[i].amount, GetToolSprite(toolsInInventory[i]._toolType));
+                    spawnedToolFeedbacks[i].SetTool(toolsInInventory[i]._toolType, toolsInInventory[i].usesLeft, GetToolSprite(toolsInInventory[i]._toolType));
                     if (i != selectedToolInInventorySlot)
                         spawnedToolFeedbacks[i].SetSelected(false);
                     else
@@ -135,7 +135,7 @@ namespace MrPink.PlayerSystem
         
             if (Input.GetKeyDown(KeyCode.F))
             { 
-                if (Game.LocalPlayer.Inventory.GetAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType) <= 0)
+                if (Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType) <= 0)
                 {
                     return;
                 }
@@ -158,7 +158,7 @@ namespace MrPink.PlayerSystem
                 if (i >= toolsProjectilesPrefabs.Count)
                     i = 0;
 
-                var amount = Game.LocalPlayer.Inventory.GetAmount(toolsProjectilesPrefabs[i].toolType); 
+                var amount = Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[i].toolType); 
                 if (amount > 0)
                 {
                     selectedToolInListOfPrefabs = i;
@@ -176,7 +176,7 @@ namespace MrPink.PlayerSystem
         
         public void UpdateSelectedToolFeedback()
         {
-            selectedToolAmount = Game.LocalPlayer.Inventory.GetAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType);
+            selectedToolAmount = Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType);
             
             /*
             if (selectedToolAmount <= 0)
