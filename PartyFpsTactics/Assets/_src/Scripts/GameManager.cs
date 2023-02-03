@@ -109,7 +109,7 @@ namespace MrPink
                 Game.LocalPlayer.LookAround._mouseSensitivity = Mathf.Clamp(Game.LocalPlayer.LookAround._mouseSensitivity - 50, 5, 1000);
             
             
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab))
             {
                 if (cursorVisible)
                 {
@@ -118,6 +118,7 @@ namespace MrPink
                     Cursor.visible = false;
                     SetCurrentTimeScale(1);
                     AudioListener.pause = false;
+                    PlayerInventoryUI.Instance.HideInventory();
                 }
                 else
                 {
@@ -126,6 +127,7 @@ namespace MrPink
                     Cursor.visible = true;
                     SetCurrentTimeScale(0);
                     AudioListener.pause = true;
+                    PlayerInventoryUI.Instance.ShowInventory();
                 }
             }
         

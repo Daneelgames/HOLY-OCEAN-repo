@@ -48,7 +48,7 @@ public class PlayerInventoryUI : MonoBehaviour
     }
     
     [Button]
-    public void CloseShop()
+    public void HideInventory()
     {
         if (Game.LocalPlayer == null) return;
             

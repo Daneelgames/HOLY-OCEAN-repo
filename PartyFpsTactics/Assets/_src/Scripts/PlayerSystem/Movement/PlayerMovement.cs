@@ -182,7 +182,8 @@ namespace MrPink.PlayerSystem
             }
             GetUnderwater();
             
-            if (Shop.Instance.IsActive|| PlayerInventoryUI.Instance.IsActive)
+            
+            if (Shop.Instance.IsActive/*|| PlayerInventoryUI.Instance.IsActive*/)
                 return;
             
             HandleJump();
