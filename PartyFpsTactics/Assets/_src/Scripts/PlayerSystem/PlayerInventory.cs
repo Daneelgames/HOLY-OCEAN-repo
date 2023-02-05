@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using MrPink.Tools;
 using MrPink.WeaponsSystem;
 using Sirenix.OdinInspector;
@@ -10,13 +11,35 @@ namespace MrPink.PlayerSystem
 {
     public class PlayerInventory : MonoBehaviour
     {
+        // in the bag
         public List<InventoryItem> inventoryItems = new List<InventoryItem>();
-
-        [Serializable]
-        public class InventoryItem
+        [SerializeField] private List<EquipmentSlot> _equipmentSlots;
+        public List<EquipmentSlot> GetEquipmentSlots => _equipmentSlots;
+        [Serializable] public class InventoryItem
         {
             public ToolType _toolType;
+            public List<ItemAction> ItemActions;
             public int usesLeft;
+        }
+        
+        [Serializable] public class EquipmentSlot
+        {
+            public enum Slot
+            {
+                LeftHand,
+                RightHand,
+                Head,
+                Body,
+                Legs
+            }
+
+            public Slot slot = Slot.LeftHand;
+            public InventoryItem equippedItem;
+        }
+
+        public enum ItemAction
+        {
+            EquipLeftHand, EquipRightHand, PlaceToQuickSlots, RemoveFromQuickSlots, Use
         }
 
         [SerializeField] private Tool defaultMeleeWeapon;
@@ -50,36 +73,42 @@ namespace MrPink.PlayerSystem
 
         public void Init()
         {
-            AddDefaultMeleeWeapon();
             foreach (var startingTool in startingTools)
             {
                 AddTool(startingTool);
             }
+
+            CheckIfPlayerHasEmptyHands();
+
         }
 
-        void AddDefaultMeleeWeapon()
+        async void CheckIfPlayerHasEmptyHands()
         {
-            for (int i = 0; i < 2; i++)
+            while (leftWeapon == null || rightWeapon == null)
             {
-                AddTool(defaultMeleeWeapon);
+                await UniTask.Delay(100);
+                if (leftWeapon != null && rightWeapon != null)
+                    return;
+                
+                SpawnFist();
             }
-        }
-    
+        }    
     
         // TODO стороны - через enum
-        public void SpawnPlayerWeapon(WeaponController weaponPrefab, int side = 0, bool forceHand = false) // 0- left, 1 - right
+        public void SpawnPlayerWeapon(InventoryItem inventoryItem, WeaponController weaponPrefab, int side = 0, bool forceHand = false) // 0- left, 1 - right
         {
             var wpn = Instantiate(weaponPrefab, Game.LocalPlayer.Position, Quaternion.identity);
-            
             if (Game.LocalPlayer.Weapon.Hands[0].Weapon != null && forceHand == false)
                 side = 1;
             
             switch (side)
             {
                 case 0:
+                    _equipmentSlots[0].equippedItem = inventoryItem;
                     Game.LocalPlayer.Weapon.SetWeapon(wpn, Hand.Left);
                     break;
                 case 1:
+                    _equipmentSlots[1].equippedItem = inventoryItem;
                     Game.LocalPlayer.Weapon.SetWeapon(wpn, Hand.Right);
                     break;
             }
@@ -95,27 +124,65 @@ namespace MrPink.PlayerSystem
 
             return false;
         }
+
+        public void CheckIfNeedUnequipToolBeforeEquipping(InventoryItem inventoryItem)
+        {
+            foreach (var equipmentSlot in _equipmentSlots)
+            {
+                if (equipmentSlot.equippedItem != inventoryItem)
+                    continue;
+                    
+                if (equipmentSlot.slot == EquipmentSlot.Slot.LeftHand)
+                    Game.LocalPlayer.Weapon.ClearHand(Hand.Left);
+                else if (equipmentSlot.slot == EquipmentSlot.Slot.RightHand)
+                    Game.LocalPlayer.Weapon.ClearHand(Hand.Right);
+            }
+        }
+
+        public void EquipToolByUiButton(ToolType toolType, int usesLeft, List<ItemAction> itemActions, int handIndex)
+        {
+            if (toolType == ToolType.Knife)
+                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), _startingSwordWeapon, handIndex, true);
+            if (toolType == ToolType.PistolLaserPoint)
+                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), startingPistolLaserPointWeapon, handIndex, true);
+            if (toolType == ToolType.UziPistol)
+                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), startingPistolWeapon, handIndex, true);
+            if (toolType == ToolType.Shotter)
+                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), shotterWeapon, handIndex, true);
+            if (toolType == ToolType.Fist)
+                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions),defaultMeleeWeaponPrefab, handIndex, true);
+        }
+
+        
+        InventoryItem GetInventoryItem(ToolType tooltype, int usesLeft, List<ItemAction> itemActions)
+        {
+            InventoryItem newItem = new InventoryItem();
+            newItem.usesLeft = usesLeft;
+            newItem._toolType = tooltype;
+            newItem.ItemActions = new List<ItemAction>(itemActions);
+            return newItem;
+        }
+        InventoryItem GetInventoryItem(Tool tool)
+        {
+            InventoryItem newItem = new InventoryItem();
+            newItem.usesLeft = tool.defaultUses;
+            newItem._toolType = tool.tool;
+            newItem.ItemActions = new List<ItemAction>(tool.InventoryItemActions);
+            return newItem;
+        }
         
         public void AddTool(Tool tool)
         {
-            if (tool.tool == ToolType.Knife)
-                SpawnPlayerWeapon(_startingSwordWeapon);
-            if (tool.tool == ToolType.PistolLaserPoint)
-                SpawnPlayerWeapon(startingPistolLaserPointWeapon);
-            if (tool.tool == ToolType.DualWeilder)
-                SpawnPlayerWeapon(startingPistolWeapon);
-            if (tool.tool == ToolType.Shotter)
-                SpawnPlayerWeapon(shotterWeapon);
+            var newItem = GetInventoryItem(tool);
+            
             if (tool.tool == ToolType.Fist)
-                SpawnPlayerWeapon(defaultMeleeWeaponPrefab);
+                SpawnPlayerWeapon(newItem, defaultMeleeWeaponPrefab);
+            else
+                inventoryItems.Add(newItem);
             
             if (tool.tool == ToolType.OneTimeShield)
                 PlayerUi.Instance.AddShieldFeedback();
 
-            InventoryItem newItem = new InventoryItem();
-            newItem.usesLeft = tool.defaultUses;
-            newItem._toolType = tool.tool;
-            inventoryItems.Add(newItem);
             
             Game.LocalPlayer.ToolControls.SelectNextTool();
             Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();
@@ -146,6 +213,17 @@ namespace MrPink.PlayerSystem
             }
 
             return -1;
+        }
+
+        public void ClearEquipmentSlot(EquipmentSlot.Slot slot)
+        {
+            foreach (var equipmentSlot in _equipmentSlots)
+            {
+                if (equipmentSlot.slot == slot)
+                {
+                    equipmentSlot.equippedItem = null;
+                }
+            }
         }
     
         public bool CanFitTool(Tool tool)
@@ -201,7 +279,7 @@ namespace MrPink.PlayerSystem
             }
             inventoryItems.Clear();
 
-            AddDefaultMeleeWeapon();
+            CheckIfPlayerHasEmptyHands();
         }
 
         WeaponController leftWeapon;

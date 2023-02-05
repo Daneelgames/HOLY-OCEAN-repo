@@ -15,6 +15,8 @@ namespace MrPink.WeaponsSystem
     {
         public Transform shotHolder;
 
+        [SerializeField] private Tool weaponTool;
+        public Tool GetTool => weaponTool;
         [SerializeField] private ToolType toolType;
         [SerializeField] 
         private bool _isMelee;
@@ -74,6 +76,8 @@ namespace MrPink.WeaponsSystem
     
         public bool OnCooldown { get; set; } = false;
 
+        [SerializeField] private bool continuousFire = false;
+        public bool ContinuousFire => continuousFire;
 
         public bool IsMelee
             => _isMelee;
@@ -184,7 +188,8 @@ namespace MrPink.WeaponsSystem
                 if (usesLeft < 1)
                 {
                     // remove weapon
-                    Game.LocalPlayer.Weapon.RemoveWeapon(this);
+                    var slot = Game.LocalPlayer.Weapon.RemoveWeapon(this);
+                    Game.LocalPlayer.Inventory.ClearEquipmentSlot(slot);
                     Game.LocalPlayer.Inventory.SpawnFist();
                 }
             }   

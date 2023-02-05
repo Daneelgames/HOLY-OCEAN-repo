@@ -141,6 +141,10 @@ namespace MrPink.PlayerSystem
                 CurrentPosition = Weapon.IsMelee
                     ? WeaponPosition.MeleeAim
                     : WeaponPosition.Aim;
+                if (Weapon.ContinuousFire)
+                {
+                    HandleAttack().ForgetWithHandler();
+                }
             }
 
             if (Input.GetMouseButtonUp(_mouseButtonIndex) && IsAiming)
@@ -170,18 +174,20 @@ namespace MrPink.PlayerSystem
             
         private async UniTask HandleAttack()
         {
+            if (_isAttacking)
+            {
+                return;
+            }
+            
             _isAttacking = true;
             
             if (Weapon.IsMelee)
                 CurrentPosition = WeaponPosition.MeleeAttack;
 
-            //var attackTime = await Weapon.Shot(Game.LocalPlayer.Health);
-            var attackTime = Weapon.cooldown;
-            
             Weapon.Shot(Game.LocalPlayer.Health);
             
-            if (Weapon.IsMelee)
-                await UniTask.Delay((int) (attackTime * 1000));
+            var attackTime = Weapon.cooldown;
+            await UniTask.Delay((int) (attackTime * 1000));
             
             _isAttacking = false;
         }

@@ -186,11 +186,11 @@ public class InteractableEventsManager : MonoBehaviour
                 // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
                 ScoringSystem.Instance.ItemFoundSound();
                 if (qPressed)
-                    Game.LocalPlayer.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 0, true);
+                    Game.LocalPlayer.Inventory.AddTool(IOevent.weaponToAdd.GetTool);
                 else if (ePressed)
-                    Game.LocalPlayer.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd, 1, true);
+                    Game.LocalPlayer.Inventory.AddTool(IOevent.weaponToAdd.GetTool);
                 else
-                    Game.LocalPlayer.Inventory.SpawnPlayerWeapon(IOevent.weaponToAdd);
+                    Game.LocalPlayer.Inventory.AddTool(IOevent.weaponToAdd.GetTool);
                 break;
             
             case ScriptedEventType.StartRandomQuest:

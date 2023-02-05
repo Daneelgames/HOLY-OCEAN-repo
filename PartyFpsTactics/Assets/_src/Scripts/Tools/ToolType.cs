@@ -3,7 +3,7 @@ namespace MrPink.Tools
     public enum ToolType
     {
         Null, 
-        DualWeilder, 
+        UziPistol, 
         OneTimeShield, 
         SpyCam, 
         CustomLadder,

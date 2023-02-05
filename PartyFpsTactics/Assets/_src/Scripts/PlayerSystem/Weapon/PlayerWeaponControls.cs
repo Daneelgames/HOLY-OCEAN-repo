@@ -124,7 +124,13 @@ namespace MrPink.PlayerSystem
             _hands[hand].Weapon = weapon;
         }
 
-        public void RemoveWeapon(WeaponController weapon)
+        public void ClearHand(Hand hand)
+        {
+            Destroy(_hands[hand].Weapon.gameObject);
+            _hands[hand].Weapon = null;
+        }
+        
+        public PlayerInventory.EquipmentSlot.Slot RemoveWeapon(WeaponController weapon)
         {
             foreach (var hand in _hands)
             {
@@ -132,9 +138,14 @@ namespace MrPink.PlayerSystem
                 {
                     Destroy(weapon.gameObject);
                     hand.Value.Weapon = null;
-                    return;
+                    if (hand.Key == Hand.Left)
+                        return PlayerInventory.EquipmentSlot.Slot.LeftHand;
+                    
+                    return PlayerInventory.EquipmentSlot.Slot.RightHand;
                 }
             }
+            Debug.LogError("CANT FIND WEAPON TO REMOVE, CHECK THE CODE. THIS ONE SHOULDNT BE CALLED");
+            return PlayerInventory.EquipmentSlot.Slot.Body;
         }
 
 

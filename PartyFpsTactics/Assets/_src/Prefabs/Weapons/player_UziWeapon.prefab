@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 1583757985459792439}
   - component: {fileID: -2919768044141576140}
   m_Layer: 7
-  m_Name: player_SingleShotPistolWeapon
+  m_Name: player_UziWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,9 +231,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 2553621459076764277}
+  weaponTool: {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
   toolType: 1
   _isMelee: 0
-  cooldown: 1.2
+  cooldown: 0.2
   _delay: 0
   _attackSignalAudioSource: {fileID: 0}
   bulletsPerShot: 1
@@ -251,9 +252,10 @@ MonoBehaviour:
   gunMoveSpeedScaler: 2
   gunRotSpeedScaler: 2
   gunMoveSpeed: 2
-  gunRotationSpeed: 2
+  gunRotationSpeed: 10
   WeaponRotationZScalerThreshold: 0
   WeaponRotationZScaler: 50
+  continuousFire: 1
 --- !u!82 &1583757985459792439
 AudioSource:
   m_ObjectHideFlags: 0

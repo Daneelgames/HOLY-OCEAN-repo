@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using MrPink.PlayerSystem;
 using UnityEngine;
 
 namespace MrPink.Tools
@@ -7,6 +9,7 @@ namespace MrPink.Tools
     public class Tool : ScriptableObject
     {
         public ToolType tool;
+        public List<PlayerInventory.ItemAction> InventoryItemActions;
         public int defaultUses = 1;
         public int baseCost = 1000;
 
