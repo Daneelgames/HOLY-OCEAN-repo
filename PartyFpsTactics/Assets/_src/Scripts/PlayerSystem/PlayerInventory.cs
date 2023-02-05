@@ -17,6 +17,7 @@ namespace MrPink.PlayerSystem
         public List<EquipmentSlot> GetEquipmentSlots => _equipmentSlots;
         [Serializable] public class InventoryItem
         {
+            public EquipmentSlot.Slot currentSlot;
             public ToolType _toolType;
             public List<ItemAction> ItemActions;
             public int usesLeft;
@@ -30,16 +31,17 @@ namespace MrPink.PlayerSystem
                 RightHand,
                 Head,
                 Body,
-                Legs
+                Legs,
+                Null
             }
 
-            public Slot slot = Slot.LeftHand;
+            public Slot slot = Slot.Null;
             public InventoryItem equippedItem;
         }
 
         public enum ItemAction
         {
-            EquipLeftHand, EquipRightHand, PlaceToQuickSlots, RemoveFromQuickSlots, Use
+            ArmLeft, ArmRight, QuickSlot, Use
         }
 
         [SerializeField] private Tool defaultMeleeWeapon;
@@ -104,10 +106,18 @@ namespace MrPink.PlayerSystem
             switch (side)
             {
                 case 0:
+                    inventoryItem.currentSlot = EquipmentSlot.Slot.LeftHand;
+                    ClearSlot(EquipmentSlot.Slot.LeftHand);
+                    if (_equipmentSlots[0].equippedItem != null)
+                        _equipmentSlots[0].equippedItem.currentSlot = EquipmentSlot.Slot.Null;
                     _equipmentSlots[0].equippedItem = inventoryItem;
                     Game.LocalPlayer.Weapon.SetWeapon(wpn, Hand.Left);
                     break;
                 case 1:
+                    inventoryItem.currentSlot = EquipmentSlot.Slot.RightHand;
+                    ClearSlot(EquipmentSlot.Slot.RightHand);
+                    if (_equipmentSlots[1].equippedItem != null)
+                        _equipmentSlots[1].equippedItem.currentSlot = EquipmentSlot.Slot.Null;
                     _equipmentSlots[1].equippedItem = inventoryItem;
                     Game.LocalPlayer.Weapon.SetWeapon(wpn, Hand.Right);
                     break;
@@ -125,17 +135,26 @@ namespace MrPink.PlayerSystem
             return false;
         }
 
-        public void CheckIfNeedUnequipToolBeforeEquipping(InventoryItem inventoryItem)
+        public void ClearSlot(EquipmentSlot.Slot slot)
         {
+            foreach (var inventoryItem in inventoryItems)
+            {
+                if (inventoryItem.currentSlot == slot)
+                    inventoryItem.currentSlot = EquipmentSlot.Slot.Null;
+            }
             foreach (var equipmentSlot in _equipmentSlots)
             {
-                if (equipmentSlot.equippedItem != inventoryItem)
-                    continue;
-                    
-                if (equipmentSlot.slot == EquipmentSlot.Slot.LeftHand)
-                    Game.LocalPlayer.Weapon.ClearHand(Hand.Left);
-                else if (equipmentSlot.slot == EquipmentSlot.Slot.RightHand)
-                    Game.LocalPlayer.Weapon.ClearHand(Hand.Right);
+                if (equipmentSlot.slot == slot)
+                {
+                    if (equipmentSlot.equippedItem != null)
+                        equipmentSlot.equippedItem.currentSlot = EquipmentSlot.Slot.Null;
+                    equipmentSlot.equippedItem = null;
+                    if (slot == EquipmentSlot.Slot.LeftHand)
+                        Game.LocalPlayer.Weapon.ClearHand(Hand.Left);
+                    if (slot == EquipmentSlot.Slot.RightHand)
+                        Game.LocalPlayer.Weapon.ClearHand(Hand.Right);
+                    return;
+                }
             }
         }
 
@@ -154,7 +173,7 @@ namespace MrPink.PlayerSystem
         }
 
         
-        InventoryItem GetInventoryItem(ToolType tooltype, int usesLeft, List<ItemAction> itemActions)
+        public static InventoryItem GetInventoryItem(ToolType tooltype, int usesLeft, List<ItemAction> itemActions)
         {
             InventoryItem newItem = new InventoryItem();
             newItem.usesLeft = usesLeft;
@@ -167,6 +186,7 @@ namespace MrPink.PlayerSystem
             InventoryItem newItem = new InventoryItem();
             newItem.usesLeft = tool.defaultUses;
             newItem._toolType = tool.tool;
+            newItem.currentSlot = EquipmentSlot.Slot.Null;
             newItem.ItemActions = new List<ItemAction>(tool.InventoryItemActions);
             return newItem;
         }
@@ -215,16 +235,6 @@ namespace MrPink.PlayerSystem
             return -1;
         }
 
-        public void ClearEquipmentSlot(EquipmentSlot.Slot slot)
-        {
-            foreach (var equipmentSlot in _equipmentSlots)
-            {
-                if (equipmentSlot.slot == slot)
-                {
-                    equipmentSlot.equippedItem = null;
-                }
-            }
-        }
     
         public bool CanFitTool(Tool tool)
         {

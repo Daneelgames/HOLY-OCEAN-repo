@@ -13,7 +13,7 @@ public class CustomLadderTool : MonoBehaviour
         {
             targetPos = hit.point;
         }*/
-        
-        StartCoroutine(BuildingGenerator.Instance.SpawnLadder(targetPos, transform.position, false, BuildingGenerator.Instance.generatedBuildingFolder, maxLadderLength));
+        var building = BuildingGenerator.GetClosestInstance(transform.position);
+        StartCoroutine(building.SpawnLadder(targetPos, transform.position, false, building.generatedBuildingFolder, maxLadderLength));
     }
 }

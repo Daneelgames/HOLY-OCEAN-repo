@@ -97,7 +97,7 @@ namespace MrPink.Units
 
         
 #if UNITY_EDITOR
-        [ContextMenu("Set Self Links")]
+        [Button("Set Self Links")]
         private void SetSelf()
         {
             _healthController = GetComponent<HealthController>();

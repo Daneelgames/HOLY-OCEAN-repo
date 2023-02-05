@@ -19,6 +19,7 @@ public class ShopItem : MonoBehaviour
     {
         raycastedSprite.enabled = false;
         itemName.gameObject.SetActive(false);
+        itemAmount.gameObject.SetActive(false);
     }
 
     public void ShowItem(PlayerInventory.InventoryItem inventoryItem)
@@ -32,5 +33,6 @@ public class ShopItem : MonoBehaviour
         else
             itemAmount.text = String.Empty;
         itemName.gameObject.SetActive(true);
+        itemAmount.gameObject.SetActive(true);
     }
 }

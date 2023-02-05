@@ -3213,6 +3213,7 @@ MonoBehaviour:
     NpcPrefabsToSpawn: []
     minMaxDistanceToPlayer: {x: 100, y: 300}
     spawnInPoiCell: 0
+    hcToResurrect: {fileID: 0}
     actorId: -1
     spawnedQuestHcId: -1
   rb: {fileID: 0}
@@ -10267,12 +10268,14 @@ MonoBehaviour:
   _unitVision: {fileID: 3311541302662433574}
   _unitAiMovement: {fileID: 8202549971289192397}
   _unitWeaponControls: {fileID: 8060476488009055449}
+  _aiVehicleControls: {fileID: 0}
   _humanVisualController: {fileID: 667880543447192957}
   _unitMovement: {fileID: 5664459306495748979}
   _followTarget: {fileID: 2204894623481908000}
   _characterNeeds: {fileID: 5746472785082230798}
   _spawnLootOnDeath: {fileID: 9065746006023407045}
   _npcInteraction: {fileID: 3196694163748766099}
+  culled: 0
 --- !u!114 &7776875987276874606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10287,7 +10290,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: -8774370397282309712}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: -8774370397282309712}
+  isPlayer: 0
+  resetRoseInstanceDialogueOnDeath: 0
   selfUnit: {fileID: 3370289575657189019}
   health: 10000
   healthMax: 10000
@@ -10356,6 +10361,7 @@ MonoBehaviour:
   - {fileID: 6152078736270408241}
   - {fileID: 2049484597136554732}
   damageStates: []
+  IsDead: 0
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -10394,6 +10400,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e495a93fdb3c044a5000ac93eb5ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: -8774370397282309712}
+  _networkObjectCache: {fileID: -8774370397282309712}
   controllingVehicle: 0
   CarHc: {fileID: 0}
   hc: {fileID: 7776875987276874606}
@@ -10402,6 +10411,7 @@ MonoBehaviour:
   stoppingDistance: 20
   maxReverseDistance: 100
   stoppingSpeed: 50
+  collidersToSetTriggerWhenInVehicle: []
 --- !u!114 &8202549971289192397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10433,10 +10443,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edfb02cde314f399f1ffc7612164452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: -8774370397282309712}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: -8774370397282309712}
   _moveSpeed: 8
+  rotateTime: 1
   _turnSpeed: 4
   gravityForce: 13
   _stopDistanceFollow: 1.5
@@ -10445,6 +10456,7 @@ MonoBehaviour:
   rb: {fileID: 4399398212673593085}
   _selfUnit: {fileID: 3370289575657189019}
   rememberRespawPoint: 1
+  wanderAroundCooldownMinMax: {x: 5, y: 60}
 --- !u!114 &2204894623481908000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10471,9 +10483,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da030c9638e719468202567e4578531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: -8774370397282309712}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: -8774370397282309712}
   activeWeapons: []
   handsIk:
   - {fileID: 7019198265316258743}
@@ -10680,12 +10692,18 @@ MonoBehaviour:
   activeAngularPositionSpring: 1500
   activeAngularPositionDamper: 100
   timeToStandUp: 2
+  ragdoll: 0
+  inVehicle: 0
   aliveMaterial: {fileID: 2100000, guid: 3f7c363f5197b4d4aafd192a044753f5, type: 2}
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 0}
   tilesLayerMask:
     serializedVersion: 2
     m_Bits: 4160
+  extraCollidersToIgnore: []
+  grounded: 1
+  groundedCheckSphereRadius: 2.5
+  moveRbToOriginIfPlayerForce: 5
 --- !u!195 &6151679054331608272
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10859,14 +10877,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 7776875987276874606}
+  - {fileID: 4471353770407177926}
+  - {fileID: 5664459306495748979}
+  - {fileID: 8060476488009055449}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 1
+  <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 482850130866462551

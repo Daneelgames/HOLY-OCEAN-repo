@@ -51,7 +51,7 @@ public class CharacterNeeds : MonoBehaviour
             if (ownHealth.health <= 0)
                 continue;
             
-            if (ownHealth != Game.LocalPlayer.Health) // AI units only regen for now
+            if (ownHealth.IsPlayer == false) // AI units only regen for now
             {
                 ownHealth.AddHealth(healthRegenOnNeeds);
                 continue;

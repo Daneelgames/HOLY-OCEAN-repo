@@ -110,7 +110,7 @@ namespace MrPink.PlayerSystem
             if (!IsWeaponEquipped)
                 return;
 
-            if (Weapon.OnCooldown || _isCollidingWithWall)
+            if ((Weapon.OnCooldown && Weapon.ContinuousFire == false) || _isCollidingWithWall)
             {
                 IsAiming = false;
                 CurrentPosition = WeaponPosition.Reload;
@@ -141,7 +141,7 @@ namespace MrPink.PlayerSystem
                 CurrentPosition = Weapon.IsMelee
                     ? WeaponPosition.MeleeAim
                     : WeaponPosition.Aim;
-                if (Weapon.ContinuousFire)
+                if (Weapon.ContinuousFire && Weapon.OnCooldown == false)
                 {
                     HandleAttack().ForgetWithHandler();
                 }
@@ -185,11 +185,12 @@ namespace MrPink.PlayerSystem
                 CurrentPosition = WeaponPosition.MeleeAttack;
 
             Weapon.Shot(Game.LocalPlayer.Health);
-            
+            if (Weapon.IsMelee == false)
+                _isAttacking = false;
             var attackTime = Weapon.cooldown;
-            await UniTask.Delay((int) (attackTime * 1000));
-            
+            await UniTask.Delay((int) (attackTime * 500));
             _isAttacking = false;
+            await UniTask.Delay((int) (attackTime * 500));
         }
 
         public void UpdateWeaponPosition()

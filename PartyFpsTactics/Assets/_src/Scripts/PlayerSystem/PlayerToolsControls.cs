@@ -16,11 +16,11 @@ namespace MrPink.PlayerSystem
         // TODO подрубить UnityDictionary, сделать UnityDictionary<Enum, ProjectileController>
         // 0 - spycam; 1 - ladder; 2 - fragGrenade
         public List<ProjectileController> toolsProjectilesPrefabs;
+        [ReadOnly][SerializeField] List<PlayerInventory.InventoryItem> toolsInQuickSlots = new List<PlayerInventory.InventoryItem>();
         [Header("TOOL SELECTED IN THE LIST OF PREFABS")]
         public int selectedToolInListOfPrefabs = 0;
         public int selectedToolInInventorySlot = 0;
         public int selectedToolAmount = 0;
-
         [SerializeField] private List<ToolUiFeedback> spawnedToolFeedbacks;
         //public Text toolsControlsHintText;
         [SerializeField] private List<ToolSprite> _toolSprites;
@@ -60,23 +60,33 @@ namespace MrPink.PlayerSystem
             {
                 yield return null;
 
-                var toolsInInventory = Game.LocalPlayer.Inventory.inventoryItems;
                 for (int i = 0; i < spawnedToolFeedbacks.Count; i++)
                 {
-                    if (i >= toolsInInventory.Count)
+                    if (i >= toolsInQuickSlots.Count)
                     {
                         spawnedToolFeedbacks[i].SetTool(ToolType.Null, 0, null);
                         spawnedToolFeedbacks[i].SetSelected(false);
                         continue;
                     }
                     
-                    spawnedToolFeedbacks[i].SetTool(toolsInInventory[i]._toolType, toolsInInventory[i].usesLeft, GetToolSprite(toolsInInventory[i]._toolType));
+                    spawnedToolFeedbacks[i].SetTool(toolsInQuickSlots[i]._toolType, toolsInQuickSlots[i].usesLeft, GetToolSprite(toolsInQuickSlots[i]._toolType));
                     if (i != selectedToolInInventorySlot)
                         spawnedToolFeedbacks[i].SetSelected(false);
                     else
                         spawnedToolFeedbacks[i].SetSelected(true);
                 }
             }
+        }
+
+        public void ToggleToQuickSlots(PlayerInventory.InventoryItem inventoryItem)
+        {
+            if (toolsInQuickSlots.Contains(inventoryItem))
+            {
+                toolsInQuickSlots.Remove(inventoryItem);
+                return;
+            }
+            
+            toolsInQuickSlots.Add(inventoryItem);
         }
 
         Sprite GetToolSprite(ToolType tool)
@@ -110,29 +120,6 @@ namespace MrPink.PlayerSystem
                 SelectNextTool();
             }
         
-            /*
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                int i = selectedTool - 1;
-                while (true)
-                {
-                    if (i < 0)
-                        i = toolsPrefabs.Count - 1;
-                
-                    if (Game.Player.Inventory.GetAmount(toolsPrefabs[i].toolType) > 0)
-                    {
-                        selectedTool = i;
-                        break;
-                    }
-                
-                    if (i == selectedTool)
-                        break;
-                    i--;
-                }
-
-                UpdateSelectedToolFeedback();
-            }*/
-        
             if (Input.GetKeyDown(KeyCode.F))
             { 
                 if (Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType) <= 0)
@@ -141,15 +128,34 @@ namespace MrPink.PlayerSystem
                 }
             
                 // throw selected
-                var newTool = Instantiate(toolsProjectilesPrefabs[selectedToolInListOfPrefabs]);
-                newTool.transform.position = Game.LocalPlayer.Movement.headTransform.position;
-                newTool.transform.rotation = Game.LocalPlayer.MainCamera.transform.rotation;
-                newTool.Init(Game.LocalPlayer.Health, DamageSource.Player, null);
-                Game.LocalPlayer.Inventory.RemoveTool(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType);
-                UpdateSelectedToolFeedback();
+                SpawnToolPrefab(toolsProjectilesPrefabs[selectedToolInListOfPrefabs]);
             }
         }
 
+        public void UseTool(ToolType toolType)
+        {
+            var prefab = toolsProjectilesPrefabs[selectedToolInListOfPrefabs];
+            foreach (var toolsProjectilesPrefab in toolsProjectilesPrefabs)
+            {
+                if (toolsProjectilesPrefab.toolType == toolType)
+                {
+                    prefab = toolsProjectilesPrefab;
+                    break;
+                }
+            }
+            SpawnToolPrefab(prefab);
+        }
+
+        void SpawnToolPrefab(ProjectileController prefab)
+        {
+            var newTool = Instantiate(prefab);
+            newTool.transform.position = Game.LocalPlayer.Movement.headTransform.position;
+            newTool.transform.rotation = Game.LocalPlayer.MainCamera.transform.rotation;
+            newTool.Init(Game.LocalPlayer.Health, DamageSource.Player, null);
+            Game.LocalPlayer.Inventory.RemoveTool(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType);
+            UpdateSelectedToolFeedback();
+        }
+        
         public void SelectNextTool()
         {
             int i = selectedToolInListOfPrefabs + 1;

@@ -27,7 +27,7 @@ namespace MrPink.PlayerSystem
         [BoxGroup("VERTICAL")][SerializeField][ReadOnly]float resultGravity = 0;
         [BoxGroup("VERTICAL")]public float fallDamageThreshold = 10;
         [BoxGroup("VERTICAL")]public int fallDamage = 100;
-
+        [SerializeField] private Vector3 currentVehicleExitVelocity;
         [BoxGroup("HORIZONTAL")]public float walkSpeed = 5;
         [BoxGroup("HORIZONTAL")]public float runSpeed = 8;
         [BoxGroup("HORIZONTAL")]public float crouchSpeed = 2;
@@ -219,6 +219,11 @@ namespace MrPink.PlayerSystem
                 ApplyGrindRailMovement();
         }
 
+        public void AddVehicleExitForce(Vector3 machineVelocity)
+        {
+            currentVehicleExitVelocity = machineVelocity;
+        }
+        
         void GetUnderwater()
         {
             if (OceanRenderer.Instance == null)
@@ -445,7 +450,7 @@ namespace MrPink.PlayerSystem
             if (useGravity == false)
                 resultGravity = 0;
             
-            _resultVelocity += Vector3.down * resultGravity;
+            _resultVelocity += currentVehicleExitVelocity + Vector3.down * resultGravity;
 
             _prevVelocity = _resultVelocity;
         }
@@ -524,6 +529,8 @@ namespace MrPink.PlayerSystem
                 lastVelocityInAirY = 1;
                 heightToFallFrom = transform.position.y;
                 State.IsGrounded = true;
+                if (currentVehicleExitVelocity.magnitude > 0)
+                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.deltaTime);
                 if (canUseCoyoteTime)
                     _coyoteTime = 0;
             }
@@ -539,6 +546,8 @@ namespace MrPink.PlayerSystem
                     _coyoteTime = _coyoteTimeMax;
 
                 State.IsGrounded = false;
+                if (currentVehicleExitVelocity.magnitude > 0)
+                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, Time.deltaTime);
 
                 if (canUseCoyoteTime && _coyoteTime > 0)
                 {
@@ -578,9 +587,8 @@ namespace MrPink.PlayerSystem
         Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.red);
     }
 
-    
     private RaycastHit[] hitInfoClimb;
-        void ClimbingCheck()
+        void ClimbingCheck()    
         {
             if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
             {
@@ -596,13 +604,9 @@ namespace MrPink.PlayerSystem
             State.IsClimbing = newClimbing;
             if (State.IsClimbing)
             {
-                /*
-                if (State.IsGrounded == false)
-                {
-                    if (crouching == false)
-                        SetCrouch(true);
-                }*/
                 heightToFallFrom = transform.position.y;
+                if (currentVehicleExitVelocity.magnitude > 0)
+                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 100f * Time.deltaTime);
             }
         }
 

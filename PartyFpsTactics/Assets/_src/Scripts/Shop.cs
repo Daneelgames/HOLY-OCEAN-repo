@@ -71,9 +71,7 @@ namespace MrPink
                     continue;
                 }
             
-                Debug.LogError("SHOP ISNT WORKING. CHECK THE LINE BELOW");
-                return;
-                shopItemsIcons[i].ShowItem(null);
+                shopItemsIcons[i].ShowItem(PlayerInventory.GetInventoryItem(toolsList[i].tool, toolsList[i].defaultUses, toolsList[i].InventoryItemActions));
                 if (toolsList[i].baseCost > ScoringSystem.Instance.CurrentScore)
                     shopItemsIcons[i].raycastedSprite.color = Color.red;
                 else

@@ -198,22 +198,24 @@ namespace MrPink.Units
 
             // BUMP PROPS
             bool propBumped = false;
+
+            var closestBuilding = BuildingGenerator.GetClosestInstance(explosionPosition); 
             
-            if (BuildingGenerator.Instance != null)
-                for (int i = 0; i < BuildingGenerator.Instance.spawnedProps.Count; i++)
+            if (closestBuilding != null)
+                for (int i = 0; i < closestBuilding.spawnedProps.Count; i++)
                 {
-                    if (Vector3.Distance(BuildingGenerator.Instance.spawnedProps[i].transform.position, explosionPosition) >
+                    if (Vector3.Distance(closestBuilding.spawnedProps[i].transform.position, explosionPosition) >
                         distance)
                         continue;
 
-                    var rb = BuildingGenerator.Instance.spawnedProps[i].Rigidbody;
+                    var rb = closestBuilding.spawnedProps[i].Rigidbody;
 
                     if (!rb) 
                         continue;
                 
                     propBumped = true;
                     rb.AddExplosionForce(tileExplosionForceBarrels * 30, explosionPosition, distance);
-                    BuildingGenerator.Instance.spawnedProps[i].tileAttack.dangerous = true;
+                    closestBuilding.spawnedProps[i].tileAttack.dangerous = true;
                 }
 
             if (propBumped && action != ScoringActionType.NULL)

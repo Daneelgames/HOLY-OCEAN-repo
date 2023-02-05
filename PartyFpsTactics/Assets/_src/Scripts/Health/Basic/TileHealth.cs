@@ -59,14 +59,14 @@ namespace MrPink.Health
         void Start()
         {   
             if (prop)
-                BuildingGenerator.Instance.AddProp(this);
+                BuildingGenerator.GetClosestInstance(transform.position).AddProp(this);
         }
 
 
         private void OnDestroy()
         {
             if (prop)
-                BuildingGenerator.Instance.RemoveProp(this);
+                BuildingGenerator.GetClosestInstance(transform.position).RemoveProp(this);
             
             if (parentLevel)
                 parentLevel.allTiles.Remove(this);
@@ -144,8 +144,9 @@ namespace MrPink.Health
         }
         private void DestroyTileParticlesAndShake(DamageSource source, bool deathParticles = true)
         {
+            var closestBuilding = BuildingGenerator.GetClosestInstance(transform.position);
             if (deathParticles)
-                BuildingGenerator.Instance.DebrisParticles(transform.position);
+                closestBuilding.DebrisParticles(transform.position);
             
             var hit = Physics.OverlapSphere(transform.position, 1, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < hit.Length; i++)
@@ -153,7 +154,7 @@ namespace MrPink.Health
                 if (hit[i].transform == transform || hit[i].gameObject.isStatic)
                     continue;
 
-                BuildingGenerator.Instance.TileDamagedFeedback(hit[i].transform);
+                closestBuilding.TileDamagedFeedback(hit[i].transform);
             }
         }
 
@@ -170,7 +171,7 @@ namespace MrPink.Health
             if (IsAlive)
             {
                 if (!rb)
-                    BuildingGenerator.Instance.TileDamagedFeedback(this);
+                    BuildingGenerator.GetClosestInstance(transform.position).TileDamagedFeedback(this);
             }
             else
                 Death(source);
@@ -185,7 +186,7 @@ namespace MrPink.Health
                 DestroyTileParticlesAndShake(DamageSource.Environment, true);
             
             if (sendToLevelgen && parentLevel != null)
-                BuildingGenerator.Instance.TileDestroyed(parentLevel, tileLevelCoordinates);
+                BuildingGenerator.GetClosestInstance(transform.position).TileDestroyed(parentLevel, tileLevelCoordinates);
             
             // sync tile destruction by ehhh position?
             if (rpcSync)

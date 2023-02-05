@@ -126,7 +126,8 @@ namespace MrPink.PlayerSystem
 
         public void ClearHand(Hand hand)
         {
-            Destroy(_hands[hand].Weapon.gameObject);
+            if (_hands[hand].Weapon != null)
+                Destroy(_hands[hand].Weapon.gameObject);
             _hands[hand].Weapon = null;
         }
         

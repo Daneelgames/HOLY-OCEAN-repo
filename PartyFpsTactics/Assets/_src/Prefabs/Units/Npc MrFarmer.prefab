@@ -81,6 +81,7 @@ MonoBehaviour:
     NpcPrefabsToSpawn: []
     minMaxDistanceToPlayer: {x: 100, y: 300}
     spawnInPoiCell: 0
+    hcToResurrect: {fileID: 0}
     actorId: -1
     spawnedQuestHcId: -1
 --- !u!1001 &2502122351734030009
@@ -88,11 +89,16 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -5962046133909401527, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: <AssetPathHash>k__BackingField
       value: 13574756046488943277
+      objectReference: {fileID: 0}
+    - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 62
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: <AssetPathHash>k__BackingField
@@ -527,6 +533,10 @@ PrefabInstance:
       value: -0.022337675
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1763282942905736036, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7141595355612368057}
   m_SourcePrefab: {fileID: 100100000, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
 --- !u!4 &4233704136661345757 stripped
 Transform:

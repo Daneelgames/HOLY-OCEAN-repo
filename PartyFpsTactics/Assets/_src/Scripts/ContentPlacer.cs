@@ -164,7 +164,7 @@ public class ContentPlacer : NetworkBehaviour
     public IEnumerator SpawnPropsInVoxelBuilding(List<VoxelBuildingFloor> floors)
     {
         yield return new WaitForSeconds(5);
-        var propsPrefabs = BuildingGenerator.Instance.PropsPrefabs;
+        var propsPrefabs = BuildingGenerator.GetClosestInstance(floors[0].transform.position).PropsPrefabs;
         
         for (int i = 0; i < floors.Count; i++)
         {

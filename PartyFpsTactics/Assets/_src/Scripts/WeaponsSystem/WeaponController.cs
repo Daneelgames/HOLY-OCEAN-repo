@@ -27,7 +27,8 @@ namespace MrPink.WeaponsSystem
         [SerializeField]
         [FormerlySerializedAs("delay")]
         private float _delay = 0f;
-        
+
+        private bool canDamageDurability = false;
         
         [SerializeField]
         [FormerlySerializedAs("attackSignalAu")]
@@ -103,9 +104,10 @@ namespace MrPink.WeaponsSystem
     
         async void ShotAsync(Vector3 direction, HealthController ownerHc, Transform aiAimTransform = null)
         {
+            canDamageDurability = true;
+            
             if (_ownerHc == null)
                 SetOwnHc(ownerHc);
-            
             //OnCooldown = true;
             if (_attackSignalAudioSource != null)
             {
@@ -135,7 +137,8 @@ namespace MrPink.WeaponsSystem
 
             if (shotParticles)
                 shotParticles.Play();
-            
+
+            transform.position += Random.insideUnitSphere * 0.15f;
             SpawnProjectileInDirection(aiAimTransform ? aiAimTransform.position : transform.position + transform.forward, direction, isPlayer, _ownerHc);
 
             if (isPlayer)
@@ -168,6 +171,8 @@ namespace MrPink.WeaponsSystem
 
         public void MeleeColliderHit()
         {
+            if (canDamageDurability == false)
+                return;
             DamageDurability();
         }
 
@@ -180,16 +185,15 @@ namespace MrPink.WeaponsSystem
             Debug.Log("DAMAGE DURABILITY 0,1");
             if (_ownerHc && _ownerHc.selfUnit == Game.LocalPlayer.Health.selfUnit)
             {
-                Debug.Log("DAMAGE DURABILITY 0,2");
                 var usesLeft = Game.LocalPlayer.Inventory.RemoveTool(toolType);
-                Debug.Log("DAMAGE DURABILITY 0,3");
+                canDamageDurability = false;
                 if (usesLeft < 0)
                     return;
                 if (usesLeft < 1)
                 {
                     // remove weapon
                     var slot = Game.LocalPlayer.Weapon.RemoveWeapon(this);
-                    Game.LocalPlayer.Inventory.ClearEquipmentSlot(slot);
+                    Game.LocalPlayer.Inventory.ClearSlot(slot);
                     Game.LocalPlayer.Inventory.SpawnFist();
                 }
             }   

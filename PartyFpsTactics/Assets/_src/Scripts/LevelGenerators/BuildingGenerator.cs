@@ -18,7 +18,23 @@ using Random = UnityEngine.Random;
 
 public class BuildingGenerator : NetworkBehaviour
 {
-    public static BuildingGenerator Instance;
+    public static BuildingGenerator GetClosestInstance(Vector3 pos)
+    {
+        BuildingGenerator closest = null;
+        float distance = 10000;
+        foreach (var instance in Instances)
+        {
+            var newDistance = Vector3.Distance(instance.transform.position, pos);
+            if (newDistance < distance)
+            {
+                distance = newDistance;
+                closest = instance;
+            }
+        }
+
+        return closest;
+    }
+    public static List<BuildingGenerator> Instances = new List<BuildingGenerator>();
     
     
     public List<Building> spawnedBuildings = new List<Building>();
@@ -89,7 +105,7 @@ public class BuildingGenerator : NetworkBehaviour
     {
         base.OnStartClient();
         
-        Instance = this;
+        Instances.Add(this);
     }
 
     private int currentSeed;

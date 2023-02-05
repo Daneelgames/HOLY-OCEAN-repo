@@ -32,13 +32,10 @@ namespace MrPink
 
         private void Update()
         {
-            if (controlledMachine != null)
-                return;
-
             if (Input.GetKeyDown(KeyCode.C))
             {
-                ownVehicle.transform.position = transform.position;
-                ownVehicle.transform.rotation = transform.rotation;
+                /*ownVehicle.transform.position = transform.position;
+                ownVehicle.transform.rotation = transform.rotation;*/
                 RequestVehicleAction(ownVehicle);
             }
         }
@@ -50,8 +47,9 @@ namespace MrPink
             //Game.LocalPlayer.Movement.SetCollidersTrigger(false);
             Game.LocalPlayer.Movement.DisableColliders(true);
             controlledMachine.StopMachine();
+            var rbVector = controlledMachine.rb.velocity;
             controlledMachine = null;
-            TogglePlayerInside(null);
+            TogglePlayerInside(null, rbVector);
         }
 
         public void Death()
@@ -84,7 +82,7 @@ namespace MrPink
                 Game.LocalPlayer.Movement.DisableColliders(false);
                 //Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 this.controlledMachine = controlledMachine;
-                TogglePlayerInside(this.controlledMachine);
+                TogglePlayerInside(this.controlledMachine, Vector3.zero);
                 controlVehicleCoroutine = StartCoroutine(ControlVehicle());
                 return;
             }
@@ -97,14 +95,13 @@ namespace MrPink
                 StopCoroutine(controlVehicleCoroutine);
                 this.controlledMachine.StopMachine();
                 this.controlledMachine = controlledMachine;
-                TogglePlayerInside(this.controlledMachine);
+                TogglePlayerInside(this.controlledMachine, Vector3.zero);
                 controlVehicleCoroutine = StartCoroutine(ControlVehicle());
             }
         }
     
-        void TogglePlayerInside(ControlledMachine machine)
+        void TogglePlayerInside(ControlledMachine machine, Vector3 machineVelocityToAdd)
         {
-        
             if (machine)
             {
                 Game.LocalPlayer.Movement.SetCrouch(false);
@@ -118,6 +115,7 @@ namespace MrPink
             {
                 Game.LocalPlayer.Movement.rb.isKinematic = false;
                 Game.LocalPlayer.Movement.rb.useGravity = false;
+                Game.LocalPlayer.Movement.AddVehicleExitForce(machineVelocityToAdd);
                 //Player.Movement.transform.parent = null;
             }
         }

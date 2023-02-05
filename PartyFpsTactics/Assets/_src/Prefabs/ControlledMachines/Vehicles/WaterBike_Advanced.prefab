@@ -671,6 +671,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7943338353946780412, guid: d5c3ef36948886548b4da02c5ae45196, type: 3}
   _networkObjectCache: {fileID: 3638330159521411507}
   isPlayer: 0
+  resetRoseInstanceDialogueOnDeath: 0
   selfUnit: {fileID: 0}
   health: 1000000
   healthMax: 1000
@@ -903,12 +904,12 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 950
   m_Drag: 0.025
-  m_AngularDrag: 3
+  m_AngularDrag: 5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1852825967723450279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,7 +1013,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 67
+  <PrefabId>k__BackingField: 66
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0

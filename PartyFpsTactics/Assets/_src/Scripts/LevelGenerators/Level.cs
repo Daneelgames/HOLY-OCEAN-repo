@@ -92,6 +92,7 @@ namespace _src.Scripts.LevelGenerators
 
         IEnumerator CheckTiles()
         {
+            var closestBuilding = BuildingGenerator.GetClosestInstance(transform.position);
             while (true)
             {
                 if (Vector3.Distance(position, Game.LocalPlayer.Position) > 200)
@@ -132,7 +133,7 @@ namespace _src.Scripts.LevelGenerators
                     bool canCrash = false;
                     if (firstFloor == false)
                     {
-                     if (currentIslandSupports * BuildingGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount || 
+                     if (currentIslandSupports * closestBuilding.islandSupportsScalerToClash < wallsInCurrentIslandAmount || 
                          floorConnectionsInCurrentIslandAmount == 0 ||wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5)
                          canCrash = true;   
                     }
@@ -165,6 +166,7 @@ namespace _src.Scripts.LevelGenerators
         
         IEnumerator ClashIsland(List<TileHealth> newIsland)
         {
+            var closestBuilding = BuildingGenerator.GetClosestInstance(transform.position);
             for (int i = newIsland.Count - 1; i >= 0; i--)
             {
                 if (i >= newIsland.Count)
@@ -220,8 +222,8 @@ namespace _src.Scripts.LevelGenerators
                     newIsland.Remove(tile);
                     if (tile != null)
                     {
-                        tile.ActivateRigidbody(100, BuildingGenerator.Instance.tilePhysicsMaterial, false, 150);
-                        BuildingGenerator.Instance.AddToDisconnectedTilesFolder(tile.transform);
+                        tile.ActivateRigidbody(100, closestBuilding.tilePhysicsMaterial, false, 150);
+                        closestBuilding.AddToDisconnectedTilesFolder(tile.transform);
                     }   
                 }
             }

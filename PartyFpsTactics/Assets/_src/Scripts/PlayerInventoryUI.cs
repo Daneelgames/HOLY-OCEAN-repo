@@ -22,16 +22,7 @@ public class PlayerInventoryUI : MonoBehaviour
     [SerializeField]private List<InventoryItemActionButtonUi> _inventoryItemActionButtonUis;
     [Serializable] public class EquipmentSlotUI
     {
-        public enum Slot
-        {
-            LeftHand,
-            RightHand,
-            Head,
-            Body,
-            Legs
-        }
-
-        public Slot slot = Slot.LeftHand;
+        public PlayerInventory.EquipmentSlot.Slot slot = PlayerInventory.EquipmentSlot.Slot.Null;
         public ShopItem slotItemUi;
         public PlayerInventory.InventoryItem equippedItem;
     }
@@ -70,7 +61,12 @@ public class PlayerInventoryUI : MonoBehaviour
             int index = i;
             t.button.onClick.AddListener(delegate { SlotSelectedDelegate(index);});
         }
-        
+        UpdateEquipmentSlotsUi();
+        HideItemActions();
+    }
+
+    void UpdateEquipmentSlotsUi()
+    {
         foreach (var equipmentSlotUi in _equipmentSlotUis)
         {
             if (equipmentSlotUi.equippedItem != null && equipmentSlotUi.equippedItem.usesLeft > 0)
@@ -80,7 +76,6 @@ public class PlayerInventoryUI : MonoBehaviour
             else
                 equipmentSlotUi.slotItemUi.HideItem();
         }
-        HideItemActions();
     }
 
     
@@ -102,7 +97,6 @@ public class PlayerInventoryUI : MonoBehaviour
         }
     }
     
-  
     public void SlotSelectedDelegate(int idx_)
     {
         //Here i want to know w$$anonymous$$ch button was Clicked.
@@ -145,6 +139,8 @@ public class PlayerInventoryUI : MonoBehaviour
                 continue;
             }
             
+            
+            
             _inventoryItemActionButtonUis[i].gameObject.SetActive(true);
             _inventoryItemActionButtonUis[i].GetButton.onClick.RemoveAllListeners();
             int index = i;
@@ -157,13 +153,23 @@ public class PlayerInventoryUI : MonoBehaviour
     {
         switch (itemAction)
         {
-            case PlayerInventory.ItemAction.EquipLeftHand:
+            case PlayerInventory.ItemAction.ArmLeft:
                 EquipLeftHand();
                 HideItemActions();
                 break;
-            case PlayerInventory.ItemAction.EquipRightHand:
+            case PlayerInventory.ItemAction.ArmRight:
                 EquipRightHand();
                 HideItemActions();
+                break;
+            case PlayerInventory.ItemAction.Use:
+                PlayerToolsControls.Instance.UseTool(selectedInventoryItem._toolType);
+                HideItemActions();
+                ShowInventory();
+                break;
+            case PlayerInventory.ItemAction.QuickSlot:
+                PlayerToolsControls.Instance.ToggleToQuickSlots(selectedInventoryItem);
+                HideItemActions();
+                ShowInventory();
                 break;
         }
     }
@@ -171,29 +177,39 @@ public class PlayerInventoryUI : MonoBehaviour
 
     public void EquipLeftHand()
     {
-        Game.LocalPlayer.Inventory.CheckIfNeedUnequipToolBeforeEquipping(selectedInventoryItem);
+        if (selectedInventoryItem.currentSlot != PlayerInventory.EquipmentSlot.Slot.Null)
+        {
+            ClearSlot(selectedInventoryItem.currentSlot);
+            Game.LocalPlayer.Inventory.ClearSlot(selectedInventoryItem.currentSlot);
+        }
         Game.LocalPlayer.Inventory.EquipToolByUiButton(selectedInventoryItem._toolType, selectedInventoryItem.usesLeft, selectedInventoryItem.ItemActions, 0);
-        EquipItemUI(EquipmentSlotUI.Slot.LeftHand, selectedInventoryItem);
+        EquipItemUI(PlayerInventory.EquipmentSlot.Slot.LeftHand, selectedInventoryItem);
     }
     public void EquipRightHand()
     {
-        Game.LocalPlayer.Inventory.CheckIfNeedUnequipToolBeforeEquipping(selectedInventoryItem);
+        if (selectedInventoryItem.currentSlot != PlayerInventory.EquipmentSlot.Slot.Null)
+        { 
+            ClearSlot(selectedInventoryItem.currentSlot);
+            Game.LocalPlayer.Inventory.ClearSlot(selectedInventoryItem.currentSlot);
+        }
         Game.LocalPlayer.Inventory.EquipToolByUiButton(selectedInventoryItem._toolType, selectedInventoryItem.usesLeft, selectedInventoryItem.ItemActions, 1);
-        EquipItemUI(EquipmentSlotUI.Slot.RightHand, selectedInventoryItem);
+        EquipItemUI(PlayerInventory.EquipmentSlot.Slot.RightHand, selectedInventoryItem);
     }
 
-    public void UnequipItemUI(EquipmentSlotUI.Slot slot, PlayerInventory.InventoryItem inventoryItem)
+    void ClearSlot(PlayerInventory.EquipmentSlot.Slot slot)
     {
         foreach (var equipmentSlotUi in _equipmentSlotUis)
         {
-            if (equipmentSlotUi.slot != slot)
-                continue;
-            equipmentSlotUi.equippedItem = null;
-            equipmentSlotUi.slotItemUi.HideItem();
+            if (equipmentSlotUi.slot == slot)
+            {
+                equipmentSlotUi.equippedItem = null;
+            }
         }
     }
-    public void EquipItemUI(EquipmentSlotUI.Slot slot, PlayerInventory.InventoryItem inventoryItem)
+
+    public void EquipItemUI(PlayerInventory.EquipmentSlot.Slot slot, PlayerInventory.InventoryItem inventoryItem)
     {
+        inventoryItem.currentSlot = slot;
         foreach (var equipmentSlotUi in _equipmentSlotUis)
         {
             if (equipmentSlotUi.slot != slot)
@@ -201,6 +217,7 @@ public class PlayerInventoryUI : MonoBehaviour
             equipmentSlotUi.equippedItem = inventoryItem;
             equipmentSlotUi.slotItemUi.ShowItem(inventoryItem);
         }
-    }
 
+        UpdateEquipmentSlotsUi();
+    }
 }

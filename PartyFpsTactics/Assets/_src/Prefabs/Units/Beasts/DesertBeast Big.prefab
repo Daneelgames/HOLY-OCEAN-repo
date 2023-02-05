@@ -598,6 +598,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5242216847767519842}
+  - component: {fileID: -5930898470893031762}
   - component: {fileID: 1876098499272473148}
   - component: {fileID: 6634025865956733556}
   - component: {fileID: 13917179899874975}
@@ -606,12 +607,12 @@ GameObject:
   - component: {fileID: 2646737403989280130}
   - component: {fileID: 8254907987185259264}
   - component: {fileID: -8284327079036214745}
-  - component: {fileID: -5930898470893031762}
   - component: {fileID: 334130167860987239}
   - component: {fileID: 8269070158630374642}
   - component: {fileID: -547814810673682729}
   - component: {fileID: -3975353653018754904}
   - component: {fileID: 2924197870175925946}
+  - component: {fileID: -897257351364988355}
   m_Layer: 7
   m_Name: DesertBeast Big
   m_TagString: Untagged
@@ -636,6 +637,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5930898470893031762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faceCam: {fileID: 0}
+  _healthController: {fileID: 1876098499272473148}
+  _unitVision: {fileID: 6634025865956733556}
+  _unitAiMovement: {fileID: 13917179899874975}
+  _unitWeaponControls: {fileID: 0}
+  _aiVehicleControls: {fileID: 0}
+  _humanVisualController: {fileID: 8692219909506116655}
+  _unitMovement: {fileID: 8254907987185259264}
+  _followTarget: {fileID: -8284327079036214745}
+  _characterNeeds: {fileID: 334130167860987239}
+  _spawnLootOnDeath: {fileID: 8269070158630374642}
+  _npcInteraction: {fileID: 0}
+  culled: 0
 --- !u!114 &1876098499272473148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,7 +676,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 2924197870175925946}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2924197870175925946}
+  isPlayer: 0
+  resetRoseInstanceDialogueOnDeath: 0
   selfUnit: {fileID: -5930898470893031762}
   health: 2000
   healthMax: 2000
@@ -723,6 +751,7 @@ MonoBehaviour:
   - {fileID: 4223956982184485513}
   - {fileID: 2848740519341052134}
   damageStates: []
+  IsDead: 0
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -782,7 +811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 2924197870175925946}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2924197870175925946}
   activeWeapons:
   - {fileID: 8799047299024897258}
   handsIk: []
@@ -904,12 +933,18 @@ MonoBehaviour:
   activeAngularPositionSpring: 1500
   activeAngularPositionDamper: 100
   timeToStandUp: 2
+  ragdoll: 0
+  inVehicle: 0
   aliveMaterial: {fileID: 0}
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 7631144225832590342}
   tilesLayerMask:
     serializedVersion: 2
     m_Bits: 4160
+  extraCollidersToIgnore: []
+  grounded: 1
+  groundedCheckSphereRadius: 2.5
+  moveRbToOriginIfPlayerForce: 5
 --- !u!195 &2646737403989280130
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -946,8 +981,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 2924197870175925946}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 2924197870175925946}
   _moveSpeed: 4
+  rotateTime: 1
   _turnSpeed: 5
   gravityForce: 13
   _stopDistanceFollow: 1
@@ -956,6 +992,7 @@ MonoBehaviour:
   rb: {fileID: -547814810673682729}
   _selfUnit: {fileID: -5930898470893031762}
   rememberRespawPoint: 1
+  wanderAroundCooldownMinMax: {x: 5, y: 60}
 --- !u!114 &-8284327079036214745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -970,29 +1007,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selfAgent: {fileID: 2646737403989280130}
   _selfMovement: {fileID: 8254907987185259264}
---- !u!114 &-5930898470893031762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 576296732197411295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  faceCam: {fileID: 0}
-  _healthController: {fileID: 1876098499272473148}
-  _unitVision: {fileID: 6634025865956733556}
-  _unitAiMovement: {fileID: 13917179899874975}
-  _unitWeaponControls: {fileID: 0}
-  _humanVisualController: {fileID: 8692219909506116655}
-  _unitMovement: {fileID: 8254907987185259264}
-  _followTarget: {fileID: -8284327079036214745}
-  _characterNeeds: {fileID: 334130167860987239}
-  _spawnLootOnDeath: {fileID: 8269070158630374642}
-  _npcInteraction: {fileID: 0}
 --- !u!114 &334130167860987239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,18 +1086,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 1876098499272473148}
+  - {fileID: 2177682337277068683}
+  - {fileID: 8254907987185259264}
+  - {fileID: -897257351364988355}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 8
+  <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 2428953257150701796
   _sceneNetworkObjects: []
+--- !u!114 &-897257351364988355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576296732197411295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 3
+  _addedNetworkObject: {fileID: 2924197870175925946}
+  _networkObjectCache: {fileID: 2924197870175925946}
+  _synchronizeParent: 0
+  _packing:
+    Position: 1
+    Rotation: 1
+    Scale: 0
+  _interpolation: 2
+  _extrapolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  _clientAuthoritative: 1
+  _sendToOwner: 1
+  _interval: 1
+  _synchronizePosition: 1
+  _positionSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeRotation: 1
+  _rotationSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeScale: 0
+  _scaleSnapping:
+    X: 0
+    Y: 0
+    Z: 0
 --- !u!1 &617381421211773646
 GameObject:
   m_ObjectHideFlags: 0
@@ -8697,6 +8760,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 530272780948393671}
     m_Modifications:
     - target: {fileID: 2642470501878746762, guid: ee8c67256a0362245ab0df36ea0ddbe9, type: 3}
@@ -8748,6 +8812,7 @@ PrefabInstance:
       value: DesertBeastMeleeWeapon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: ee8c67256a0362245ab0df36ea0ddbe9, type: 3}
 --- !u!114 &8799047299024897258 stripped
 MonoBehaviour:
