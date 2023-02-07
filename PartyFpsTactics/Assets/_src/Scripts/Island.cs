@@ -99,7 +99,7 @@ public class Island : NetworkBehaviour
             ContentPlacer.Instance.SpawnEnemiesInBuilding(_tileBuildingGenerator.spawnedBuildings[0], this);
         }
         if (spawnBoss)
-            ContentPlacer.Instance.SpawnBossOnIsland(this, GetRandomPosOnNavMesh());
+            ContentPlacer.Instance.SpawnBossOnIsland(this, _tileBuildingGenerator.GetRandomPosInsideLastLevel());
     }
 
     Vector3 GetRandomPosOnNavMesh()

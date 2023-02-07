@@ -1403,6 +1403,28 @@ public class BuildingGenerator : NetworkBehaviour
             }
         }
     }
+    
+    public Vector3 GetRandomPosInsideLastLevel()
+    {
+        if (spawnedBuildings[0].spawnedBuildingLevels.Count < 1)
+        {
+            return transform.position;
+        }
+        
+        var tilesInside = spawnedBuildings[0].spawnedBuildingLevels[spawnedBuildings[0].spawnedBuildingLevels.Count - 1].tilesInside;
+        var tile = tilesInside[Random.Range(0, tilesInside.Count)];
+        int tries = 30;
+        while (tile == null)
+        {
+            tile = tilesInside[Random.Range(0, tilesInside.Count)];
+            tries--;
+            if (tries < 1)
+            {
+                return transform.position;
+            }
+        }
+        return tile.transform.position;
+    }
 }
 
 [Serializable]
@@ -1442,6 +1464,7 @@ public class BuildingSettings
         public List<HealthController> unitsToSpawn = new List<HealthController>();
         public List<ControlledMachine> controlledMachinesToSpawn = new List<ControlledMachine>();
     }
+    
 }
 
 public static class LevelgenTransforms
@@ -1486,4 +1509,5 @@ public static class LevelgenTransforms
     
     private static int GetOffsetOfTiles(float positionA, float positionB, float size)
         => Mathf.RoundToInt(Mathf.Abs(positionB - positionA) / size);
+
 }

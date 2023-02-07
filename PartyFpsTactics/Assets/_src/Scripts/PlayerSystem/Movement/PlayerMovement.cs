@@ -450,6 +450,9 @@ namespace MrPink.PlayerSystem
             if (useGravity == false)
                 resultGravity = 0;
             
+            if (currentVehicleExitVelocity.magnitude > 0)
+                currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.deltaTime);
+            
             _resultVelocity += currentVehicleExitVelocity + Vector3.down * resultGravity;
 
             _prevVelocity = _resultVelocity;
@@ -529,8 +532,6 @@ namespace MrPink.PlayerSystem
                 lastVelocityInAirY = 1;
                 heightToFallFrom = transform.position.y;
                 State.IsGrounded = true;
-                if (currentVehicleExitVelocity.magnitude > 0)
-                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.deltaTime);
                 if (canUseCoyoteTime)
                     _coyoteTime = 0;
             }
@@ -547,8 +548,6 @@ namespace MrPink.PlayerSystem
 
                 State.IsGrounded = false; 
                 // in air, not climbing
-                if (currentVehicleExitVelocity.magnitude > 0)
-                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10 * Time.deltaTime);
 
                 if (canUseCoyoteTime && _coyoteTime > 0)
                 {
@@ -595,11 +594,6 @@ namespace MrPink.PlayerSystem
             hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
                 Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             
-            if (hitInfoClimb.Length > 0)
-            {
-                if (currentVehicleExitVelocity.magnitude > 0)
-                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.deltaTime);
-            }
             
             if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
             {
