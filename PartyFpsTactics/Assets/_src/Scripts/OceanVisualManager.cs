@@ -10,7 +10,7 @@ public class OceanVisualManager : MonoBehaviour
     [SerializeField] private OceanRenderer _oceanRenderer;
     private Material oceanMaterial;
     [SerializeField] private List<OceanVisual> _oceanVisuals;
-    [SerializeField] [ReadOnly] private int currentOceanVisual;
+    [SerializeField] private int currentOceanVisual;
 
     [Serializable]
     public struct OceanVisual
@@ -26,21 +26,9 @@ public class OceanVisualManager : MonoBehaviour
     private void Start()
     {
         oceanMaterial = _oceanRenderer.OceanMaterial;
+        SetOceanVisual();
     }
 
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            currentOceanVisual++;
-
-            if (currentOceanVisual >= _oceanVisuals.Count)
-                currentOceanVisual = 0;
-
-            SetOceanVisual();
-        }
-    }
 
     [Button]
     public void SetOceanVisual(int index)

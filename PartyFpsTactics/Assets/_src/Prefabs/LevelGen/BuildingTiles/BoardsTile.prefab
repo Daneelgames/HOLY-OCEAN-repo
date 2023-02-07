@@ -511,6 +511,7 @@ GameObject:
   - component: {fileID: 5237696207237465462}
   - component: {fileID: 138821813567458997}
   - component: {fileID: 9156595738611088229}
+  - component: {fileID: -6521838108754646456}
   m_Layer: 6
   m_Name: BoardsTile
   m_TagString: Untagged
@@ -537,7 +538,7 @@ Transform:
   - {fileID: 1030514556743667645}
   - {fileID: 4336111431825660091}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1211562686235662036
 BoxCollider:
@@ -603,3 +604,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gpuiPrefab: {fileID: 0}
+--- !u!208 &-6521838108754646456
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8943623579927757030}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.45, y: 0.9, z: 0.45}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.9, z: 0}
+  m_TimeToStationary: 0.5

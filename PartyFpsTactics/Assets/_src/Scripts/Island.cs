@@ -27,7 +27,7 @@ public class Island : NetworkBehaviour
     [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandSpawnDistance = 300;
     [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandDespawnDistance = 500;
 
-    [SerializeField] [ReadOnly] private ColliderToVoxel[] voxelCutterForBuildings;
+    [SerializeField] private ColliderToVoxel[] voxelCutterForBuildings;
     public bool IsCulled => culled;
     
     public override void OnStartClient()
@@ -42,10 +42,14 @@ public class Island : NetworkBehaviour
         
         IslandSpawner.Instance.NewIslandSpawned(this);
     }
+
+    private void OnDestroy()
+    {
+        IslandSpawner.Instance.IslandDestroyed(this);
+    }
+
     public void Init(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
-        voxelCutterForBuildings = gameObject.GetComponentsInChildren<ColliderToVoxel>();
-        
         StartCoroutine(InitCoroutine(seed, voxelFloorRandomSettings));
     }
 

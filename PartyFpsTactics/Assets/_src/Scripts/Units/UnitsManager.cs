@@ -199,7 +199,7 @@ namespace MrPink.Units
             // BUMP PROPS
             bool propBumped = false;
 
-            var closestBuilding = BuildingGenerator.GetClosestInstance(explosionPosition); 
+            var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(explosionPosition); 
             
             if (closestBuilding != null)
                 for (int i = 0; i < closestBuilding.spawnedProps.Count; i++)

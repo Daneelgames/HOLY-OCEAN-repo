@@ -18,24 +18,6 @@ using Random = UnityEngine.Random;
 
 public class BuildingGenerator : NetworkBehaviour
 {
-    public static BuildingGenerator GetClosestInstance(Vector3 pos)
-    {
-        BuildingGenerator closest = null;
-        float distance = 10000;
-        foreach (var instance in Instances)
-        {
-            var newDistance = Vector3.Distance(instance.transform.position, pos);
-            if (newDistance < distance)
-            {
-                distance = newDistance;
-                closest = instance;
-            }
-        }
-
-        return closest;
-    }
-    public static List<BuildingGenerator> Instances = new List<BuildingGenerator>();
-    
     
     public List<Building> spawnedBuildings = new List<Building>();
     [HideInInspector]
@@ -45,7 +27,7 @@ public class BuildingGenerator : NetworkBehaviour
     public Transform disconnectedTilesFolder;
 
     [Header("GENERATE IN SINGLE FRAME OR OVER TIME")]
-    private bool singleFrame = true;
+    [SerializeField]private bool singleFrame = false;
     [Header("SETTINGS")]
     //public List<int> mainBuildingLevelsHeights = new List<int>();
     public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
@@ -104,8 +86,13 @@ public class BuildingGenerator : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        
-        Instances.Add(this);
+
+        IslandSpawner.Instance.AddTileBuilding(this);
+    }
+
+    private void OnDestroy()
+    {
+        IslandSpawner.Instance.RemoveTileBuilding(this);
     }
 
     private int currentSeed;
@@ -320,6 +307,18 @@ public class BuildingGenerator : NetworkBehaviour
         yield return StartCoroutine(SpawnBaseTiles(building, levelIndexInBuilding, levelPosition, levelSize, levelRotation, levelHeights, buildingSettings));
     }
 
+    void ClearPlaceForLadder(Vector3 startPos, Vector3 endPos)
+    {
+        var levelCutDummy = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        
+        levelCutDummy.transform.position = Vector3.Lerp(startPos, endPos, 0.5f) + Vector3.up;
+        levelCutDummy.transform.rotation = Quaternion.LookRotation((endPos - startPos).normalized);
+        levelCutDummy.transform.localScale = new Vector3(2,2,Vector3.Distance(startPos,endPos));
+        levelCutDummy.layer = 2; // ignore raycast
+        var collider = levelCutDummy.GetComponent<Collider>();
+        collider.isTrigger = true;
+        ownIsland.AddRoomCutter(levelCutDummy);
+    }
     void ClearPlaceForBuilding(Vector3 levelPos, Quaternion levelRot, Vector3Int levelSize)
     {
         var levelCutDummy = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -331,17 +330,6 @@ public class BuildingGenerator : NetworkBehaviour
         var collider = levelCutDummy.GetComponent<Collider>();
         collider.isTrigger = true;
         ownIsland.AddRoomCutter(levelCutDummy);
-        return;
-        
-        RaycastHit[] hit = Physics.BoxCastAll(levelPos + Vector3.up * levelSize.y / 2, levelSize, Vector3.up, levelRot, 1,   GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
-        if (hit.Length > 0)
-        {
-            for (int i = 0; i < hit.Length; i++)
-            {
-                if (hit[i].collider.gameObject.layer == 6)
-                    Destroy(hit[i].collider.gameObject);
-            }
-        }
     }
     
     //. this method spawns building level "bounds"
@@ -520,7 +508,8 @@ public class BuildingGenerator : NetworkBehaviour
                 }
                 //yield return null; 
             }
-            //yield return null;   
+            if (singleFrame == false)
+                yield return null;   
         }
 
         /*
@@ -629,7 +618,7 @@ public class BuildingGenerator : NetworkBehaviour
                         
                         StartCoroutine(ConstructCover(newRoomWallTile.gameObject, 3));
                     }
-                    yield return null;
+                    //yield return null;
                 }
                 yield return null;
             }
@@ -871,6 +860,8 @@ public class BuildingGenerator : NetworkBehaviour
             }
         }
 
+        
+        ClearPlaceForLadder(levelFromClosestTile.position, levelToClosestTile.position);
         yield return StartCoroutine(SpawnLadder(levelFromClosestTile.position, levelToClosestTile.position, true, levelFrom.spawnedTransform, 100, levelFromClosestTile, levelToClosestTile, singleFrame));
     }
 
@@ -917,6 +908,7 @@ public class BuildingGenerator : NetworkBehaviour
         fromPosition = new Vector3(targetTileToConnect.position.x, 0, targetTileToConnect.position.z) + offsetVector * 5;  
         toPosition = targetTileToConnect.position - Vector3.up;
         
+        ClearPlaceForLadder(fromPosition, toPosition);
         yield return StartCoroutine(SpawnLadder(fromPosition, toPosition, true, level.spawnedTransform, 20, null, targetTileToConnect, singleFrame));
     }
     
@@ -1290,7 +1282,7 @@ public class BuildingGenerator : NetworkBehaviour
 
     IEnumerator TileDamagedFeedbackCoroutine(Transform tile)
     {
-        Debug.LogWarning("TILES SHAKE DAMAGE FEEDBACK IS DISABLED");
+        //Debug.LogWarning("TILES SHAKE DAMAGE FEEDBACK IS DISABLED");
         yield break;
         
         if (tile.gameObject.isStatic)

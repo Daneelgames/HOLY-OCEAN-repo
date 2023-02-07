@@ -25,7 +25,7 @@ namespace MrPink
         [Header("THIS LIST IS USED WHEN MAKING A ROAD PRE RUNTIME")]
         public List<Collider> terrainAndIslandsColliders = new List<Collider>();
         public LayerMask AllSolidsMask;
-        private bool cursorVisible = false;
+        private bool cursorVisible = true;
         [SerializeField] private GameObject tileNavMeshObstaclePrefab;
 
         public Material rockDefaultMaterial;
@@ -87,12 +87,12 @@ namespace MrPink
         {
             if (Game._instance == null || Game.LocalPlayer == null)
             {
-                if (cursorVisible == false)
+                if (cursorVisible)
                 {
-                    cursorVisible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                    SetCurrentTimeScale(0);
+                    cursorVisible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    SetCurrentTimeScale(1);
                     AudioListener.pause = false;
                 }
                 return;

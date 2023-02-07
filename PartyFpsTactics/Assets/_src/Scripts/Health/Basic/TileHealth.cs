@@ -59,14 +59,14 @@ namespace MrPink.Health
         void Start()
         {   
             if (prop)
-                BuildingGenerator.GetClosestInstance(transform.position).AddProp(this);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).AddProp(this);
         }
 
 
         private void OnDestroy()
         {
             if (prop)
-                BuildingGenerator.GetClosestInstance(transform.position).RemoveProp(this);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).RemoveProp(this);
             
             if (parentLevel)
                 parentLevel.allTiles.Remove(this);
@@ -144,7 +144,7 @@ namespace MrPink.Health
         }
         private void DestroyTileParticlesAndShake(DamageSource source, bool deathParticles = true)
         {
-            var closestBuilding = BuildingGenerator.GetClosestInstance(transform.position);
+            var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(transform.position);
             if (deathParticles)
                 closestBuilding.DebrisParticles(transform.position);
             
@@ -171,7 +171,7 @@ namespace MrPink.Health
             if (IsAlive)
             {
                 if (!rb)
-                    BuildingGenerator.GetClosestInstance(transform.position).TileDamagedFeedback(this);
+                    IslandSpawner.Instance.GetClosestTileBuilding(transform.position).TileDamagedFeedback(this);
             }
             else
                 Death(source);
@@ -186,7 +186,7 @@ namespace MrPink.Health
                 DestroyTileParticlesAndShake(DamageSource.Environment, true);
             
             if (sendToLevelgen && parentLevel != null)
-                BuildingGenerator.GetClosestInstance(transform.position).TileDestroyed(parentLevel, tileLevelCoordinates);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).TileDestroyed(parentLevel, tileLevelCoordinates);
             
             // sync tile destruction by ehhh position?
             if (rpcSync)

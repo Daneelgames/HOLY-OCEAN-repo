@@ -9,6 +9,7 @@ using Unity.AI.Navigation;
 
 public class NavMeshSurfaceUpdate : MonoBehaviour
 {
+    [SerializeField] private bool buildOnce = true;
     [SerializeField]
     private NavMeshSurface[] Surfaces;
     [SerializeField]
@@ -80,6 +81,8 @@ public class NavMeshSurfaceUpdate : MonoBehaviour
                 WorldAnchor = Game.LocalPlayer.transform.position;
             }
 
+            if (buildOnce)
+                yield break;
         }
     }
 

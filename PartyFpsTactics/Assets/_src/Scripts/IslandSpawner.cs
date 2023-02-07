@@ -17,6 +17,8 @@ public class IslandSpawner : NetworkBehaviour
     [SerializeField] private float spawnDistance = 1000;
     [SerializeField] private List<Island> islandPrefabList = new List<Island>();
 
+    List<BuildingGenerator> TileBuildingsInstances = new List<BuildingGenerator>();
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -29,6 +31,38 @@ public class IslandSpawner : NetworkBehaviour
             StartCoroutine(CullIslandsOnServer());
     }
 
+    public void AddTileBuilding(BuildingGenerator buildingGenerator)
+    {
+        if (TileBuildingsInstances.Contains(buildingGenerator))
+            return;
+        TileBuildingsInstances.Add(buildingGenerator);
+    }
+    public void RemoveTileBuilding(BuildingGenerator buildingGenerator)
+    {
+        if (TileBuildingsInstances.Contains(buildingGenerator) == false)
+            return;
+        TileBuildingsInstances.Remove(buildingGenerator);
+    }
+    
+    public BuildingGenerator GetClosestTileBuilding(Vector3 pos)
+    {
+        BuildingGenerator closest = null;
+        float distance = 10000;
+        foreach (var instance in TileBuildingsInstances)
+        {
+            if (instance == null)
+                continue;
+            
+            var newDistance = Vector3.Distance(instance.transform.position, pos);
+            if (newDistance < distance)
+            {
+                distance = newDistance;
+                closest = instance;
+            }
+        }
+
+        return closest;
+    }
 
     [Server]
     public void SpawnRandomIslandOnServer()
@@ -68,6 +102,7 @@ public class IslandSpawner : NetworkBehaviour
         float distance = 100000f;
         foreach (var island in spawnedIslands)
         {
+            if (island == null) continue;
             var pos = island.gameObject.transform.position;
             var newDistance = Vector3.Distance(pos, posAsking);
             if (newDistance < distance)
@@ -96,6 +131,8 @@ public class IslandSpawner : NetworkBehaviour
             for (var index = spawnedIslands.Count - 1; index >= 0; index--)
             {
                 var spawnedIsland = spawnedIslands[index];
+                if (spawnedIsland == null)
+                    continue;
                 var distance = Vector3.Distance(Game.LocalPlayer.transform.position, spawnedIsland.transform.position);
                 spawnedIsland.DistanceCull(distance);
                 yield return null;
@@ -119,6 +156,13 @@ public class IslandSpawner : NetworkBehaviour
         {
             RpcInitIslandOnClients(newIsland, currentSeed, null);
         }
+    }
+
+    public void IslandDestroyed(Island island)
+    {
+        if (spawnedIslands.Contains(island) == false)
+            return;
+        spawnedIslands.Remove(island);
     }
 
     [ObserversRpc(IncludeOwner = true)]

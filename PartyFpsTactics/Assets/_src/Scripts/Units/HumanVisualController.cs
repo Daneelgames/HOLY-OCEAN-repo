@@ -91,7 +91,7 @@ namespace MrPink.Units
                     continue;
                 }
                 
-                grounded = Physics.CheckSphere(ragdollOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+                grounded = Physics.CheckSphere(ragdollOrigin.position, ragdoll?groundedCheckSphereRadius/3 : groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
 
                 if (!grounded/* && ragdoll == false*/)
                 {

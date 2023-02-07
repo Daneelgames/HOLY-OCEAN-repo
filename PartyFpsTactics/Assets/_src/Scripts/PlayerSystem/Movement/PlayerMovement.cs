@@ -545,9 +545,10 @@ namespace MrPink.PlayerSystem
                 if (State.IsGrounded && canUseCoyoteTime)
                     _coyoteTime = _coyoteTimeMax;
 
-                State.IsGrounded = false;
+                State.IsGrounded = false; 
+                // in air, not climbing
                 if (currentVehicleExitVelocity.magnitude > 0)
-                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, Time.deltaTime);
+                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10 * Time.deltaTime);
 
                 if (canUseCoyoteTime && _coyoteTime > 0)
                 {
@@ -590,14 +591,22 @@ namespace MrPink.PlayerSystem
     private RaycastHit[] hitInfoClimb;
         void ClimbingCheck()    
         {
+
+            hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
+                Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+            
+            if (hitInfoClimb.Length > 0)
+            {
+                if (currentVehicleExitVelocity.magnitude > 0)
+                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.deltaTime);
+            }
+            
             if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
             {
                 State.IsClimbing = false;
                 return;
             }
-
-            hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
-                Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+            
             var newClimbing = hitInfoClimb.Length > 0;
             if (newClimbing && State.IsClimbing == false)
                 rb.velocity = Vector3.zero;
@@ -605,8 +614,6 @@ namespace MrPink.PlayerSystem
             if (State.IsClimbing)
             {
                 heightToFallFrom = transform.position.y;
-                if (currentVehicleExitVelocity.magnitude > 0)
-                    currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 100f * Time.deltaTime);
             }
         }
 

@@ -92,7 +92,7 @@ namespace _src.Scripts.LevelGenerators
 
         IEnumerator CheckTiles()
         {
-            var closestBuilding = BuildingGenerator.GetClosestInstance(transform.position);
+            var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(transform.position);
             while (true)
             {
                 if (Vector3.Distance(position, Game.LocalPlayer.Position) > 200)
@@ -166,7 +166,7 @@ namespace _src.Scripts.LevelGenerators
         
         IEnumerator ClashIsland(List<TileHealth> newIsland)
         {
-            var closestBuilding = BuildingGenerator.GetClosestInstance(transform.position);
+            var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(transform.position);
             for (int i = newIsland.Count - 1; i >= 0; i--)
             {
                 if (i >= newIsland.Count)

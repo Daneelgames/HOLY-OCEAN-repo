@@ -17,7 +17,8 @@ namespace MrPink.WeaponsSystem
     {
         public bool addVelocityEveryFrame = true;
         public float projectileSpeed = 100;
-    
+
+        [Header("FOR PLAYER PROJECTILES")][SerializeField] private bool singleSphereCast = false;
         public ToolType toolType = ToolType.Null;
         [ShowIf("toolType", ToolType.FragGrenade)]
         [SerializeField]
@@ -139,8 +140,21 @@ namespace MrPink.WeaponsSystem
                 currentCastRadius = playerCastRadius;
             else
                 currentCastRadius = aiCastRadius;
+
+            if (singleSphereCast && Physics.SphereCast(currentPosition, currentCastRadius, transform.forward, out var hit, 100f, unitsMask, QueryTriggerInteraction.Ignore))
+            {
+                if (hit.transform == null)
+                    return;
+        
+                if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
+                    return;
             
-            if (Physics.SphereCast(lastPosition, currentCastRadius, currentPosition - lastPosition, out var hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Ignore))
+        
+                target = TryDoDamage(hit.collider);
+                PlayHitUnitFeedback(hit.point);
+                dead = true;
+            }
+            else if (Physics.SphereCast(lastPosition, currentCastRadius, currentPosition - lastPosition, out hit, distanceBetweenPositions, unitsMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.transform == null)
                     return;
@@ -186,7 +200,8 @@ namespace MrPink.WeaponsSystem
             
             if (collisionTarget == CollisionTarget.Self) // THIS CONTACT DOESNT COUNT, DO NOTHING
                 return;
-            
+
+            transform.position = hit.point;
             if (dieOnContact)
                 Death();
             else if (ricochetOnContact)
