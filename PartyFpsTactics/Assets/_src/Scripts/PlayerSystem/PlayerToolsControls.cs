@@ -16,7 +16,7 @@ namespace MrPink.PlayerSystem
         // TODO подрубить UnityDictionary, сделать UnityDictionary<Enum, ProjectileController>
         // 0 - spycam; 1 - ladder; 2 - fragGrenade
         public List<ProjectileController> toolsProjectilesPrefabs;
-        [ReadOnly][SerializeField] List<PlayerInventory.InventoryItem> toolsInQuickSlots = new List<PlayerInventory.InventoryItem>();
+        [SerializeField] List<PlayerInventory.InventoryItem> toolsInQuickSlots = new List<PlayerInventory.InventoryItem>();
         [Header("TOOL SELECTED IN THE LIST OF PREFABS")]
         public int selectedToolInListOfPrefabs = 0;
         public int selectedToolInInventorySlot = 0;

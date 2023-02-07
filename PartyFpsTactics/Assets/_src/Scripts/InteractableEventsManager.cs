@@ -104,6 +104,10 @@ public class InteractableEventsManager : MonoBehaviour
         
         switch (IOevent.scriptedEventType)
         {
+            case ScriptedEventType.OpenShop:
+
+                Shop.Instance.OpenShop(0);
+                break;
             case ScriptedEventType.StartDialogue:
 
                 PhoneDialogueEvents.Instance.RunNpcDialogueCutscene(IOevent.dialogueToStart, npcHc, IOevent.destroyInteractorAfterDialogueCompleted, IOevent.scoreToAddOnDialogueCompleted, IOevent.setNextLevelOnDialogueCompleted);

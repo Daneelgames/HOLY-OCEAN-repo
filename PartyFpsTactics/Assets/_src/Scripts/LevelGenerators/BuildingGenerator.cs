@@ -147,13 +147,15 @@ public class BuildingGenerator : NetworkBehaviour
         if (generatedBuildingFolder == null)
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
-            generatedBuildingFolder.position = Vector3.zero;
         }
+        generatedBuildingFolder.position = Vector3.zero;
+        generatedBuildingFolder.parent = transform;
         if (disconnectedTilesFolder == null)
         {
             disconnectedTilesFolder = new GameObject("DisconnectedTiles").transform;
-            disconnectedTilesFolder.position = Vector3.zero;
         }
+        disconnectedTilesFolder.position = Vector3.zero;
+        disconnectedTilesFolder.parent = transform;
 
         //StartCoroutine(PartyController.Instance.Init());
 
@@ -1424,6 +1426,19 @@ public class BuildingGenerator : NetworkBehaviour
             }
         }
         return tile.transform.position;
+    }
+
+    public void DestroyBuilding()
+    {
+        for (int i = 0; i < spawnedBuildings.Count; i++)
+        {
+            if (spawnedBuildings[i].spawnedBuildingLevels.Count < 1)
+                continue;
+            for (int j = spawnedBuildings[i].spawnedBuildingLevels.Count - 1; j >= 0; j--)
+            {
+                Destroy(spawnedBuildings[i].spawnedBuildingLevels[j].transform.gameObject);
+            }
+        }
     }
 }
 

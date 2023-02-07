@@ -138,7 +138,7 @@ namespace MrPink.WeaponsSystem
             if (shotParticles)
                 shotParticles.Play();
 
-            transform.position += Random.insideUnitSphere * 0.15f;
+            transform.position += Random.insideUnitSphere * 0.05f;
             SpawnProjectileInDirection(aiAimTransform ? aiAimTransform.position : transform.position + transform.forward, direction, isPlayer, _ownerHc);
 
             if (isPlayer)

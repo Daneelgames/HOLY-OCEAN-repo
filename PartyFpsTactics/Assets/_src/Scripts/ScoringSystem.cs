@@ -19,7 +19,7 @@ namespace MrPink
 
         public List<ActionScore> Scores;
         [SerializeField]
-        int currentScore = 10000;
+        int currentScore = 3000;
 
         public int CurrentScore
         {
@@ -57,8 +57,6 @@ namespace MrPink
             }
 
             addedScoreFeedbackTransform.transform.localScale = new Vector3(1, 0, 1);
-            if (CurrentScore < 1000)
-                CurrentScore = 10000;
         }
 
         public void RegisterAction(ScoringActionType scoringAction, float addToCooldown = 5)

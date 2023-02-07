@@ -47,13 +47,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 6053537034170030352}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 6053537034170030352}
   spawnedIslands: []
-  spawnDistance: 1000
+  spawnDistance: 500
   islandPrefabList:
   - {fileID: 735799012231920881, guid: 9b96c61b41e082942bb71c71c95e8c06, type: 3}
   - {fileID: 735799012231920881, guid: 364089baba795bf4c9ea7f17a19b5268, type: 3}
   - {fileID: 6670557985220958057, guid: e71369a0f0fb50f47a68473705f47647, type: 3}
+  - {fileID: 3481429887257740796, guid: 8010425497bd43b47ac84c0a9dbe6373, type: 3}
 --- !u!114 &6053537034170030352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 7368021338302537838}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -77,7 +79,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 18
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0

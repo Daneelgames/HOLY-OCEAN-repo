@@ -104,6 +104,6 @@ namespace _src.Scripts.Data
     public enum ScriptedEventType
     {
         StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
-        AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest, Resurrect, SpawnRandomIsland
+        AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest, Resurrect, SpawnRandomIsland, OpenShop
     }
 }
