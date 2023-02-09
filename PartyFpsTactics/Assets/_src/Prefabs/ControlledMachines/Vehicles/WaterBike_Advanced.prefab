@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8d2efc063dfab4fa0b6fad62228406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoPickUpOnStart: 0
   type: 2
   npcDialoguesList: {fileID: 0}
   interactiveObjectName: SAIL
@@ -840,8 +841,8 @@ MonoBehaviour:
   stabilizeRoll: 1
   stabilizePitch: 1
   maxStabilizationTorqueAngle: 20
-  rollStabilizationMaxTorque: 1000
-  pitchStabilizationMaxTorque: 500
+  rollStabilizationMaxTorque: 5000
+  pitchStabilizationMaxTorque: 2000
   onShipInitialized:
     m_PersistentCalls:
       m_Calls: []
@@ -853,7 +854,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852825967723450303}
   serializedVersion: 2
-  m_Mass: 950
+  m_Mass: 0.0000001
   m_Drag: 0.025
   m_AngularDrag: 5
   m_UseGravity: 1
@@ -891,13 +892,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMass: 950
-  totalMass: 950
+  totalMass: 0
   dimensions: {x: 2.14, y: 1.26, z: 5.7}
   useDefaultCenterOfMass: 0
-  centerOfMass: {x: -0.000012498815, y: -0.34965175, z: 0.21698074}
+  centerOfMass: {x: 0, y: -0.43, z: 0.4}
   centerOfMassOffset: {x: 0, y: -0.43, z: 0.4}
   useDefaultInertia: 1
-  inertiaTensor: {x: 1588.4137, y: 1568.3302, z: 402.69968}
+  inertiaTensor: {x: 1, y: 1, z: 1}
   inertiaScale: {x: 1, y: 1, z: 1}
   updateInterval: 1
 --- !u!114 &1852825967723450298

@@ -221,6 +221,7 @@ namespace MrPink.PlayerSystem
 
         public void AddVehicleExitForce(Vector3 machineVelocity)
         {
+            return;
             currentVehicleExitVelocity = machineVelocity;
         }
         

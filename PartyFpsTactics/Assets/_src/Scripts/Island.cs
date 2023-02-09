@@ -9,6 +9,7 @@ using MrPink.Units;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
+using Object = System.Object;
 using Random = UnityEngine.Random;
 
 public class Island : NetworkBehaviour
@@ -20,6 +21,7 @@ public class Island : NetworkBehaviour
     [SerializeField] private float randomSpherePosOnNavMeshMaxRange = 100;
     
     [SerializeField] private bool spawnBoss = true;
+    private bool bossKilled = false;
 
     [SerializeField] [ReadOnly] private List<HealthController> islandUnits = new List<HealthController>();
     [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly] private bool culled = true;
@@ -98,9 +100,10 @@ public class Island : NetworkBehaviour
         {
             ContentPlacer.Instance.SpawnEnemiesInBuilding(_tileBuildingGenerator.spawnedBuildings[0], this);
         }
-        if (spawnBoss)
+        if (spawnBoss && bossKilled == false)
             ContentPlacer.Instance.SpawnBossOnIsland(this, _tileBuildingGenerator.GetRandomPosInsideLastLevel());
     }
+
 
     Vector3 GetRandomPosOnNavMesh()
     {
@@ -125,11 +128,13 @@ public class Island : NetworkBehaviour
         islandUnits.Clear();
     }
 
-    public void AddIslandUnit(HealthController unit)
+    public void AddIslandUnit(HealthController unit, bool boss = false)
     {
         if (islandUnits.Contains(unit)) return;   
         
         islandUnits.Add(unit);
+        if (boss)
+            unit.OnDeathEvent.AddListener(HealthController_OnBossKilled);
     }
     void SpawnPropsInBuilding()
     {
@@ -154,5 +159,11 @@ public class Island : NetworkBehaviour
         {
             colliderToVoxel.ApplyProceduralModifier(true);
         }
+    }
+
+    void HealthController_OnBossKilled()
+    {
+        UiMarkWorldObject islandMarker = gameObject.GetComponent<UiMarkWorldObject>();
+        Destroy(islandMarker);
     }
 }

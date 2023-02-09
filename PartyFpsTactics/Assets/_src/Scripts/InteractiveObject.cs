@@ -13,6 +13,7 @@ public class InteractiveObject : MonoBehaviour
         ItemInteractable, NpcInteractable, VehicleInteractable
     }
 
+    [SerializeField] private bool autoPickUpOnStart = false;
     public InteractableType type = InteractableType.ItemInteractable;
 
     [ShowIf("type", InteractableType.NpcInteractable)]
@@ -25,6 +26,13 @@ public class InteractiveObject : MonoBehaviour
     private void Start()
     {
         InteractableEventsManager.Instance.AddInteractable(this);
+        
+    }
+
+    private void OnEnable()
+    {
+        if (autoPickUpOnStart)
+            PlayerInteraction();
     }
 
     private void OnDestroy()

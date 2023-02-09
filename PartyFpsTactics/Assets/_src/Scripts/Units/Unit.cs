@@ -1,3 +1,4 @@
+using System;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -78,7 +79,7 @@ namespace MrPink.Units
             if (_humanVisualController)
                 _humanVisualController.Resurrect();
         }
-        
+
         public void Death()
         {
             if (_unitWeaponControls)

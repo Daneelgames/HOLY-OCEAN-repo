@@ -226,6 +226,12 @@ namespace MrPink.PlayerSystem
                     : WeaponPosition.Idle
             ];
             
+            if (Weapon && Weapon.IsMelee)
+            {
+                _isCollidingWithWall = false;
+                return;
+            }
+            
             if (Physics.Raycast(raycastTransform.position,
                     raycastTransform.forward, out var hit,
                     Vector3.Distance(raycastTransform.position, raycastTransform.position + raycastTransform.forward * 0.5f), allSolidsLayerMask))

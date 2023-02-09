@@ -422,7 +422,7 @@ namespace MrPink.Health
                 Destroy(npcInteraction.gameObject);
             }
             
-            OnDeathEvent.Invoke();
+            OnDeathEvent?.Invoke();
 
             UnitsManager.Instance.RemoveUnit(this);
             
