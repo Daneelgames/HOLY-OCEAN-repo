@@ -39,6 +39,7 @@ namespace MrPink.PlayerSystem
         [SerializeField, Required] private CharacterNeeds _characterNeeds;
         [SerializeField, Required] private HumanVisualController _visualController;
 
+        private Checkpoint currentCheckpoint;
 
         // FIXME дает слишком свободный доступ, к тому же объектов сейчас несколько
         public GameObject GameObject
@@ -205,7 +206,7 @@ namespace MrPink.PlayerSystem
                 yield return null;
             }
             Debug.Log("RespawnPlayerOverTime RESPAWN");
-            yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(spawner.Spawns[Random.Range(0,spawner.Spawns.Length)].position + Vector3.up * 0.5f));
+            yield return StartCoroutine(Game.LocalPlayer.Movement.TeleportToPosition(currentCheckpoint.transform.position + Vector3.up * 0.5f));
             yield return null;
             yield return new WaitForFixedUpdate();
             //Game.LocalPlayer.Resurrect();
@@ -215,6 +216,12 @@ namespace MrPink.PlayerSystem
             Game.LocalPlayer.Resurrect(true);
             respawnCoroutine = null;
             PartyController.Instance.PlayerResurrected();
+        }
+
+        public void SaveCheckpoint(Checkpoint checkpoint)
+        {
+            currentCheckpoint?.DisableCheckpoint();
+            currentCheckpoint = checkpoint;
         }
 
         // called on client by player who interacted
