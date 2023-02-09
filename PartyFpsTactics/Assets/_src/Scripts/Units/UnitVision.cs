@@ -205,6 +205,12 @@ namespace MrPink.Units
                     if (unit == Game.LocalPlayer.Health)
                     {
                         //Debug.Log("UnitVision UNIT " + gameObject.name + " ADDS PLAYER TO VISIBLE ENEMIES");
+
+                        if (seePlayerFeedbackCoroutine == null)
+                        {
+                            seePlayerFeedbackCoroutine = StartCoroutine(SeePlayerFeedback());
+
+                        }
                     }
                     AddVisibleEnemy(unit);
                     return;
@@ -223,6 +229,15 @@ namespace MrPink.Units
                 //Debug.Log("UnitVision UNIT " + gameObject.name + " CANT SEE PLAYER");
             }
             RemoveFromVisible(unit);
+        }
+        
+        Coroutine seePlayerFeedbackCoroutine;
+        IEnumerator SeePlayerFeedback()
+        {
+            QuestMarkers.Instance.AddMarker(transform, Color.red, "!");
+            yield return new WaitForSeconds(1);
+            QuestMarkers.Instance.RemoveMarker(transform);
+            seePlayerFeedbackCoroutine = null;
         }
 
         private void AddVisibleEnemy(HealthController unit)

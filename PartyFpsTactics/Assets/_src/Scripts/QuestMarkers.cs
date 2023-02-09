@@ -24,14 +24,21 @@ public class QuestMarkers : MonoBehaviour
         var mark = Instantiate(questMarkPrefab, questMarkersParent);
         mark.target = markerTarget;
         mark.markerName.text = quest.questName;
+        mark.markerNameBack.text = quest.questName;
         activeMarks.Add(mark);
     }
     public void AddMarker(Transform markerTarget, Color color, string marketText)
     {
+        foreach (var activeMark in activeMarks)
+        {
+            if (activeMark.target == markerTarget)
+                return;
+        }
         var mark = Instantiate(questMarkPrefab, questMarkersParent);
         mark.target = markerTarget;
         mark.markerName.color = color;
         mark.markerName.text = marketText;
+        mark.markerNameBack.text = marketText;
         activeMarks.Add(mark);
     }
 

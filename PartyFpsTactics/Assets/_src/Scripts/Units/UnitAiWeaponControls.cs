@@ -18,9 +18,8 @@ namespace MrPink.Units
         public float minAngleToRotateGun = 30;
         public float minAngleToShoot = 15;
         public bool rotateWeaponTowardTarget = true;
-        public float maxDistanceToAttack = 1000;
+        float maxDistanceToAttack = 1000;
         public float updateRate = 0.1f;
-        public float maxDistanceFromPlayerToShoot = 250;
         
         private Unit _selfUnit;
 
@@ -31,6 +30,7 @@ namespace MrPink.Units
 
         private void OnEnable()
         {
+            maxDistanceToAttack = _selfUnit.UnitVision.visionDistance;
             if (checkIfNeedFireWeaponCoroutine != null)
                 StopCoroutine(checkIfNeedFireWeaponCoroutine);
             
@@ -57,7 +57,7 @@ namespace MrPink.Units
                 else
                     yield return null;
                 
-                if (Vector3.Distance(transform.position, Game.LocalPlayer.MainCamera.transform.position) > maxDistanceFromPlayerToShoot)
+                if (Vector3.Distance(transform.position, Game.LocalPlayer.MainCamera.transform.position) > maxDistanceToAttack)
                     continue;
 
                 for (var index = 0; index < activeWeapons.Count; index++)

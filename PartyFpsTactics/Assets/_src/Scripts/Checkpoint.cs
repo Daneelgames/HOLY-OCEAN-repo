@@ -9,12 +9,15 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private float activationDistance = 5;
     [SerializeField] private GameObject activeFeedback;
 
-    private void Start()
+    private void OnEnable()
     {
         activeFeedback.SetActive(false);
-        StartCoroutine(GetPlayer());
+        if (getPlayerCoroutine != null)
+            StopCoroutine(getPlayerCoroutine);
+        getPlayerCoroutine = StartCoroutine(GetPlayer());
     }
 
+    private Coroutine getPlayerCoroutine;
     private IEnumerator GetPlayer()
     {
         while (true)
