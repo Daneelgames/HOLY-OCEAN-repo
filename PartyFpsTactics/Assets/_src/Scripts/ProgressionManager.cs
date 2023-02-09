@@ -20,6 +20,12 @@ public class ProgressionManager : MonoBehaviour
         Instance = this;
     }
 
+    public void LevelCompleted()
+    {
+        currentLevelIndex = Mathf.Clamp(currentLevelIndex + 1, 0, levelDatas.Count - 1);
+        CharacterSubtitles.Instance.TryToStartCharacterSubtitles(CurrentLevel.LevelStartCharacterSubtitlesData);
+    }
+
     public void SetCurrentLevel(int index)
     {
         currentLevelIndex = Mathf.Clamp(index, 0, levelDatas.Count - 1);

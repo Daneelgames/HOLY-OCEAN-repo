@@ -27,7 +27,7 @@ namespace MrPink.Health
             isPlayer = true;
         }
 
-        [Header("USE FOR BOSSES")][SerializeField] private bool resetRoseInstanceDialogueOnDeath = false;
+        [Header("USE FOR BOSSES")][SerializeField] private bool completeGameLevelOnDeath = false;
 
         public Unit selfUnit;
         [SyncVar] public int health = 100;
@@ -426,8 +426,8 @@ namespace MrPink.Health
 
             UnitsManager.Instance.RemoveUnit(this);
             
-            if (resetRoseInstanceDialogueOnDeath)
-                CharacterSubtitlesTrigger.RoseInstance.SetTriggeredOff();
+            if (completeGameLevelOnDeath)
+                ProgressionManager.Instance.LevelCompleted();
             
             if (destroyOnDeath)
                 Destroy(gameObject);

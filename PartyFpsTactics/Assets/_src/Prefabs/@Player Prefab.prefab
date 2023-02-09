@@ -573,6 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8d2efc063dfab4fa0b6fad62228406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoPickUpOnStart: 0
   type: 1
   npcDialoguesList: {fileID: 0}
   interactiveObjectName: BROTHER
@@ -12471,7 +12472,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 4075464650987322544}
   _networkObjectCache: {fileID: 4075464650987322544}
   isPlayer: 0
-  resetRoseInstanceDialogueOnDeath: 0
+  completeGameLevelOnDeath: 0
   selfUnit: {fileID: 0}
   health: 1000
   healthMax: 1000
@@ -12547,12 +12548,12 @@ MonoBehaviour:
   movingPlatformRigidbody: {fileID: 0}
   rb: {fileID: 5596697987043485629}
   playerWaterObject: {fileID: 7434130277617785098}
-  jumpForce: 300
+  jumpForce: 200
   _coyoteTimeMax: 0.75
   canUseCoyoteTime: 1
   _coyoteTime: 0
-  gravity: 3
-  gravityChangeSmooth: 5
+  gravity: 4
+  gravityChangeSmooth: 10
   newTargetGravity: 0
   resultGravity: 0
   fallDamageThreshold: 10

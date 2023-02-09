@@ -179,15 +179,6 @@ namespace MrPink
         
         
 
-        public void LevelCompleted()
-        {
-            if (ProgressionManager.Instance.currentLevelIndex >= ProgressionManager.Instance.levelDatas.Count)
-                ProgressionManager.Instance.SetCurrentLevel(Random.Range(0, ProgressionManager.Instance.levelDatas.Count));
-            else
-                ProgressionManager.Instance.SetCurrentLevel(ProgressionManager.Instance.currentLevelIndex + 1);
-
-            StartLobbyScene();
-        }
         
         public void StartLobbyScene()
         {

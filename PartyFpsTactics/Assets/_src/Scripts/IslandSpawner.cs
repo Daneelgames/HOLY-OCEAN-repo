@@ -75,11 +75,11 @@ public class IslandSpawner : NetworkBehaviour
         ServerManager.Spawn(newIsland.gameObject);
     }
 
-    public void DespawnIslandsExceptHubOnServer()
+    public void DespawnIslandsExceptLastOnServer()
     {
         for (int i = 0; i < spawnedIslands.Count; i++)
         {
-            if (i == 0)
+            if (i == 1)
                 continue;
             
             ServerManager.Despawn(spawnedIslands[i].gameObject, DespawnType.Destroy);
@@ -170,6 +170,16 @@ public class IslandSpawner : NetworkBehaviour
     {
         if (spawnedIslands.Contains(newIsland))
             return;
+        
+        if (spawnedIslands.Count > 1)
+        {
+            for (int i = spawnedIslands.Count - 1; i >= 0; i--)
+            {
+                var island = spawnedIslands[i];
+                if (island == null)
+                    spawnedIslands.RemoveAt(i);
+            }
+        }
         
         spawnedIslands.Add(newIsland);
         newIsland.Init(currentSeed, voxelFloorsRandomSettings);

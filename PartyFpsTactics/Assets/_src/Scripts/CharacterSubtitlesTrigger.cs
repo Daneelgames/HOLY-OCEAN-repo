@@ -9,7 +9,6 @@ public class CharacterSubtitlesTrigger : MonoBehaviour
 {
     public static CharacterSubtitlesTrigger RoseInstance { get; private set; }
     [SerializeField] private bool roseInstance = false;
-    [SerializeField] private CharacterSubtitlesData _characterSubtitlesData;
     [SerializeField] private bool triggerOnce = true;
     bool triggered = false;
 
@@ -24,12 +23,13 @@ public class CharacterSubtitlesTrigger : MonoBehaviour
         if (triggerOnce && triggered) return;
         if (other.gameObject != Game.LocalPlayer.gameObject) return;
         
-        if (CharacterSubtitles.Instance.TryToStartCharacterSubtitles(_characterSubtitlesData))
+        if (CharacterSubtitles.Instance.TryToStartCharacterSubtitles(ProgressionManager.Instance.CurrentLevel.LevelStartCharacterSubtitlesData))
             triggered = true;
     }
 
-    public void SetTriggeredOff()
+    public void LevelCompleted()
     {
-        triggered = false;
+        //triggered = false;
+        // start next dialogue right away
     }
 }

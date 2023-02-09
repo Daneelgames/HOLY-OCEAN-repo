@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
+using MrPink;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -31,7 +32,7 @@ public class InteractiveObject : MonoBehaviour
 
     private void OnEnable()
     {
-        if (autoPickUpOnStart)
+        if (autoPickUpOnStart && Vector3.Distance(transform.position, Game.LocalPlayer.transform.position) < 30)
             PlayerInteraction();
     }
 
