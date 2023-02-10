@@ -27,7 +27,6 @@ public class InteractiveObject : MonoBehaviour
     private void Start()
     {
         InteractableEventsManager.Instance.AddInteractable(this);
-        
     }
 
     private void OnEnable()

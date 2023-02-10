@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MrPink.Units
 {
@@ -228,16 +229,36 @@ namespace MrPink.Units
             {
                 //Debug.Log("UnitVision UNIT " + gameObject.name + " CANT SEE PLAYER");
             }
+
+            if (unit.IsPlayer) // if any player
+            {
+                if (visibleEnemies.Contains(unit)) // if this ai sees player in this frame
+                {
+                    //give order to follow current players position
+                    // should be called once when player exits ai vision
+                    if (Random.value > 0.5f) // just for interest
+                    {
+                        _selfHealth.AiMovement.MoveToPositionOrder(unit.transform.position);
+                    }
+                }
+            }
             RemoveFromVisible(unit);
         }
         
         Coroutine seePlayerFeedbackCoroutine;
         IEnumerator SeePlayerFeedback()
         {
-            QuestMarkers.Instance.AddMarker(transform, Color.red, "!");
+            QuestMarkers.Instance.AddMarker(raycastOrigin, Color.red, "!");
             yield return new WaitForSeconds(1);
-            QuestMarkers.Instance.RemoveMarker(transform);
+            QuestMarkers.Instance.RemoveMarker(raycastOrigin);
             seePlayerFeedbackCoroutine = null;
+        }
+
+        private void OnDestroy()
+        {
+            QuestMarkers.Instance.RemoveMarker(raycastOrigin);
+            if (seePlayerFeedbackCoroutine != null)
+                StopCoroutine(seePlayerFeedbackCoroutine);
         }
 
         private void AddVisibleEnemy(HealthController unit)

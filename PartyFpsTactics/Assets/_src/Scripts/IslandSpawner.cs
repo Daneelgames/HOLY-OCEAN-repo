@@ -67,7 +67,9 @@ public class IslandSpawner : NetworkBehaviour
     [Server]
     public void SpawnRandomIslandOnServer()
     {
-        var randomIslandPrefab = islandPrefabList[Random.Range(0, islandPrefabList.Count)];
+        int islandIndex = ProgressionManager.Instance.currentLevelIndex;
+        islandIndex = Mathf.Clamp(islandIndex, 0, islandPrefabList.Count - 1);
+        var randomIslandPrefab = islandPrefabList[islandIndex];
         var spawnDir = new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)).normalized;
         var spawnPos = spawnDir * spawnDistance;
         var newIsland = Instantiate(randomIslandPrefab, spawnPos, Quaternion.identity);
@@ -75,14 +77,14 @@ public class IslandSpawner : NetworkBehaviour
         ServerManager.Spawn(newIsland.gameObject);
     }
 
-    public void DespawnIslandsExceptLastOnServer()
+    public void DespawnIslandsExceptClosestOnServer()
     {
         for (int i = 0; i < spawnedIslands.Count; i++)
         {
             if (i == 1)
                 continue;
-            
-            ServerManager.Despawn(spawnedIslands[i].gameObject, DespawnType.Destroy);
+            if (Vector3.Distance(Game.LocalPlayer.transform.position, spawnedIslands[i].transform.position) > 100)
+                ServerManager.Despawn(spawnedIslands[i].gameObject, DespawnType.Destroy);
         }
     }
 
