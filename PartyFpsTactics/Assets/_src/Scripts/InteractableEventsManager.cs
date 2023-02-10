@@ -79,7 +79,7 @@ public class InteractableEventsManager : MonoBehaviour
         {
             var IOevent = IO.eventsOnInteraction[i];
             
-            RunEvent(IOevent, null, null, qPressed, ePressed);
+            RunEvent(IOevent, null, null, qPressed, ePressed, IO);
 
             if (IOevent.scriptedEventType == ScriptedEventType.DestroyOnInteraction)
             {
@@ -88,7 +88,7 @@ public class InteractableEventsManager : MonoBehaviour
         }
     }
 
-    public void RunEvent(ScriptedEvent IOevent, Quest quest = null, GameObject gameObjectToDestroy = null, bool qPressed = false, bool ePressed = false)
+    public void RunEvent(ScriptedEvent IOevent, Quest quest = null, GameObject gameObjectToDestroy = null, bool qPressed = false, bool ePressed = false, InteractiveObject IO = null)
     {
         if (IOevent == null)
             return;
@@ -225,6 +225,11 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.SpawnRandomIsland:
                 IslandSpawner.Instance.DespawnIslandsExceptClosestOnServer();
                 IslandSpawner.Instance.SpawnRandomIslandOnServer();
+                break;
+            
+            case ScriptedEventType.ReturnInventoryLoot:
+                
+                Game.LocalPlayer.Inventory.AddInventoryItems(IO.GetPlayerLootInventoryItems);            
                 break;
         }
         

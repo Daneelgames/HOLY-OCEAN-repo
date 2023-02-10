@@ -190,6 +190,25 @@ namespace MrPink.PlayerSystem
             newItem.ItemActions = new List<ItemAction>(tool.InventoryItemActions);
             return newItem;
         }
+
+        public void AddInventoryItems(List<InventoryItem> newInventoryItems)
+        {
+            foreach (var inventoryItem in newInventoryItems)
+            {
+                AddInventoryItem(inventoryItem);
+            }
+        }
+
+        public void AddInventoryItem(InventoryItem newItem)
+        {
+            if (newItem._toolType == ToolType.Fist)
+                SpawnPlayerWeapon(newItem, defaultMeleeWeaponPrefab);
+            else
+                inventoryItems.Add(newItem);
+            
+            if (newItem._toolType == ToolType.OneTimeShield)
+                PlayerUi.Instance.AddShieldFeedback();
+        }
         
         public void AddTool(Tool tool)
         {
@@ -264,8 +283,9 @@ namespace MrPink.PlayerSystem
             return amount;
         }
 
-        public void DropAll()
+        public void DropAllOnDeath()
         {
+            var itemsToDrop = new List<InventoryItem>(inventoryItems);
             for (int i = 0; i < Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs.Count; i++)
             {
                 var toolPrefab = Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs[i];
@@ -290,6 +310,8 @@ namespace MrPink.PlayerSystem
             inventoryItems.Clear();
 
             CheckIfPlayerHasEmptyHands();
+
+            ContentPlacer.Instance.SpawnPlayerLootContainer(itemsToDrop);
         }
 
         WeaponController leftWeapon;

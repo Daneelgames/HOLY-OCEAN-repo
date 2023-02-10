@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using _src.Scripts.Data;
 using MrPink;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -44,6 +45,13 @@ public class InteractiveObject : MonoBehaviour
     {
         CheckNpcDialogueList();
         InteractableEventsManager.Instance.InteractWithIO(this, qPressed, ePressed);
+    }
+
+    private List<PlayerInventory.InventoryItem> playerLootInventoryItems;
+    public List<PlayerInventory.InventoryItem> GetPlayerLootInventoryItems => playerLootInventoryItems;
+    public void SaveInventoryLoot(List<PlayerInventory.InventoryItem> inventoryItems)
+    {
+        playerLootInventoryItems = new List<PlayerInventory.InventoryItem>(inventoryItems);
     }
 
     public void CheckNpcDialogueList()

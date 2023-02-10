@@ -5,6 +5,7 @@ using FishNet.Connection;
 using FishNet.Object;
 using MrPink;
 using MrPink.Health;
+using MrPink.PlayerSystem;
 using MrPink.Units;
 using NWH.DWP2.ShipController;
 using Unity.Mathematics;
@@ -23,6 +24,7 @@ public class ContentPlacer : NetworkBehaviour
     [SerializeField] private AdvancedShipController defaultPlayerWaterbikerPrefab;
     [SerializeField] private List<HealthController> aiWaterBikes = new List<HealthController>();
     
+    public InteractiveObject inventoryLootPrefab;
     public List<InteractiveObject> lootToSpawnAround;
     public List<InteractiveObject> toolsToSpawnOnBuildingLevels;
 
@@ -50,6 +52,17 @@ public class ContentPlacer : NetworkBehaviour
 
     private Coroutine spawnAroundPlayer;
 
+    private InteractiveObject currentPlayerInventoryLoot;
+    public void SpawnPlayerLootContainer(List<PlayerInventory.InventoryItem> inventoryItems) // locally
+    {
+        if (currentPlayerInventoryLoot != null)
+        {
+            Destroy(currentPlayerInventoryLoot.gameObject);
+        }
+        currentPlayerInventoryLoot = Instantiate(inventoryLootPrefab, Game.LocalPlayer.Position,
+            Game.LocalPlayer.transform.rotation);
+        currentPlayerInventoryLoot.SaveInventoryLoot(inventoryItems);
+    }
 
     [ServerRpc(RequireOwnership = false)]
     void RpcSpawnPlayerBikeOnServer(NetworkConnection playerConnection)
