@@ -228,7 +228,6 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.ReturnInventoryLoot:
-                
                 Game.LocalPlayer.Inventory.AddInventoryItems(IO.GetPlayerLootInventoryItems);            
                 break;
         }

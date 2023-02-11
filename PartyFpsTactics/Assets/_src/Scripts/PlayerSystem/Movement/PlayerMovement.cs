@@ -17,9 +17,12 @@ namespace MrPink.PlayerSystem
         
         [SerializeField] private WaterObject playerWaterObject;
         [BoxGroup("VERTICAL")]public float jumpForce = 300;
+        [BoxGroup("VERTICAL")]public float dashForce = 100;
+        [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private Vector3 jumpVelocity;
         [BoxGroup("VERTICAL")] [SerializeField] private float _coyoteTimeMax = 0.5f;
         [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private bool canUseCoyoteTime = true;
         [BoxGroup("VERTICAL")] [SerializeField] [ReadOnly] private float _coyoteTime = 0;
+        
         [BoxGroup("VERTICAL")] public bool useGravity { get; private set; } = true;
         [BoxGroup("VERTICAL")]public float gravity = 5;
         [BoxGroup("VERTICAL")][SerializeField]float gravityChangeSmooth = 5f;
@@ -157,7 +160,10 @@ namespace MrPink.PlayerSystem
                 }          
             }
 
+            if (_isDead == false)
+                HandleJump();
             HandleStamina();
+            HandleMovement();
             if (Game.LocalPlayer.VehicleControls.controlledMachine)
             {
                 State.IsRunning = false;
@@ -169,6 +175,7 @@ namespace MrPink.PlayerSystem
 
                 return;
             }
+
             if (_isDead)
             {
                 rb.isKinematic = false;
@@ -180,15 +187,13 @@ namespace MrPink.PlayerSystem
                 State.IsLeaning = false;
                 return;
             }
+            
+            HandleCrouch();
             GetUnderwater();
-            
-            
+
+
             if (Shop.Instance.IsActive || PlayerInventoryUI.Instance.IsActive)
                 return;
-            
-            HandleJump();
-            HandleCrouch();
-            HandleMovement();
         }
 
         private void FixedUpdate()
@@ -199,6 +204,8 @@ namespace MrPink.PlayerSystem
             if (_isDead)
                 return;
 
+            ReduceJumpVelocity();
+            
             if (Game.LocalPlayer.VehicleControls.controlledMachine)
             {
                 rb.MovePosition(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.position);
@@ -219,6 +226,14 @@ namespace MrPink.PlayerSystem
                 ApplyGrindRailMovement();
         }
 
+        void ReduceJumpVelocity()
+        {
+            if (State.IsGrounded && canUseCoyoteTime)
+                jumpVelocity = Vector3.zero;
+            if (jumpVelocity.magnitude > 0)
+                jumpVelocity = Vector3.Lerp(jumpVelocity, Vector3.zero, Time.fixedUnscaledDeltaTime);
+        }
+        
         public void AddVehicleExitForce(Vector3 machineVelocity)
         {
             return;
@@ -246,13 +261,20 @@ namespace MrPink.PlayerSystem
         
         void HandleJump()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && (State.IsGrounded || _coyoteTime > 0) && stamina > 0)
+            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || _coyoteTime > 0) && stamina > 0)
             {
+                if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
+                    Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls.controlledMachine);
                 var vel = rb.velocity;
                 vel.y = 0;
                 rb.velocity = vel;
 
-                Jump(Vector3.zero);
+                var x = _movementInput.x;
+                var z = _movementInput.y;
+                if (x == 0 && z == 0)
+                    z = -1;
+                var additionalForce = new Vector3(x, 0, z).normalized;
+                Jump(additionalForce);
             }
         }
 
@@ -379,7 +401,7 @@ namespace MrPink.PlayerSystem
             }
 
             rotator.localEulerAngles = new Vector3(0, 0,
-                Mathf.LerpAngle(rotator.localEulerAngles.z, targetAngle, rotatorSpeed * Time.deltaTime));
+                Mathf.LerpAngle(rotator.localEulerAngles.z, targetAngle, rotatorSpeed * Time.fixedUnscaledDeltaTime));
 
             int hor = (int)Input.GetAxisRaw("Horizontal");
             int vert = (int)Input.GetAxisRaw("Vertical");
@@ -428,7 +450,7 @@ namespace MrPink.PlayerSystem
                     _targetVelocity = _moveVector * crouchSpeed * scaler;
             }
 
-            _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.deltaTime * acceleration);
+            _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.fixedUnscaledDeltaTime * acceleration);
 
             if (State.IsClimbing)
                 newTargetGravity = 0;
@@ -446,13 +468,13 @@ namespace MrPink.PlayerSystem
             else
                 newTargetGravity = gravity;
 
-            resultGravity = State.IsClimbing ? newTargetGravity : Mathf.Lerp(resultGravity, newTargetGravity, gravityChangeSmooth * Time.unscaledDeltaTime);
+            resultGravity = State.IsClimbing ? newTargetGravity : Mathf.Lerp(resultGravity, newTargetGravity, gravityChangeSmooth * Time.fixedUnscaledDeltaTime);
             
             if (useGravity == false)
                 resultGravity = 0;
             
             if (currentVehicleExitVelocity.magnitude > 0)
-                currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.deltaTime);
+                currentVehicleExitVelocity = Vector3.Lerp(currentVehicleExitVelocity, Vector3.zero, 10f * Time.fixedUnscaledDeltaTime);
             
             _resultVelocity += currentVehicleExitVelocity + Vector3.down * resultGravity;
 
@@ -460,15 +482,18 @@ namespace MrPink.PlayerSystem
         }
 
 
-        public void Jump(Vector3 additionalForce)
+        public void Jump(Vector3 dashDir)
         {
             SetGrindRail(null);
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce * jumpForce, ForceMode.Impulse);
+            //rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce, ForceMode.Impulse);
 
             StartCoroutine(CoyoteTimeCooldown());
             ChangeStamina(-1 * jumpStaminaCost);
             _coyoteTime = 0;
+            
+            var jumpLocalVel = Vector3.up * jumpForce + dashDir * dashForce;
+            jumpVelocity = headTransform.TransformDirection(jumpLocalVel);
         }
 
         private void SlopeCheck()
@@ -528,6 +553,8 @@ namespace MrPink.PlayerSystem
                     {
                         Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
                     }
+                    if (canUseCoyoteTime)
+                        rb.velocity = Vector3.zero;
                 }
 
                 lastVelocityInAirY = 1;
@@ -632,7 +659,7 @@ namespace MrPink.PlayerSystem
             else
             {
                 //rb.AddForce(_resultVelocity, ForceMode.VelocityChange);   
-                rb.velocity = _resultVelocity + movingPlatformVelocity;   
+                rb.velocity = _resultVelocity + jumpVelocity + movingPlatformVelocity;   
             }
         }
 
