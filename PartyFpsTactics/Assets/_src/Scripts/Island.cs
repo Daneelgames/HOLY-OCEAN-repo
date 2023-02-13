@@ -89,11 +89,6 @@ public class Island : NetworkBehaviour
                 _navMeshSurfaceUpdate?.Stop();
                 DespawnIslandEnemies();
             }
-            if (bossKilled)
-            {
-                ServerManager.Despawn(gameObject, DespawnType.Destroy);
-                Destroy(gameObject);
-            }
         }
     }
 
@@ -173,5 +168,9 @@ public class Island : NetworkBehaviour
     {
         UiMarkWorldObject islandMarker = gameObject.GetComponent<UiMarkWorldObject>();
         Destroy(islandMarker);
+        
+        if (base.IsHost)
+            ServerManager.Despawn(gameObject, DespawnType.Destroy);
+        //Destroy(gameObject);
     }
 }

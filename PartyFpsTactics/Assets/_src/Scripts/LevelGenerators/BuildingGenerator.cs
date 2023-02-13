@@ -168,6 +168,8 @@ public class BuildingGenerator : NetworkBehaviour
     {
         if (spawnedProps.Contains(prop))
             return;
+
+        prop.transform.parent = generatedBuildingFolder;
         spawnedProps.Add(prop);
     }
     public void RemoveProp(TileHealth prop)
