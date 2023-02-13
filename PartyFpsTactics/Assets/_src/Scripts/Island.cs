@@ -30,6 +30,7 @@ public class Island : NetworkBehaviour
     [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandDespawnDistance = 500;
 
     [SerializeField] private ColliderToVoxel[] voxelCutterForBuildings;
+    
     public bool IsCulled => culled;
     
     public override void OnStartClient()
@@ -80,12 +81,19 @@ public class Island : NetworkBehaviour
             return;
         }
 
-        if (culled == false && distanceToLocalPlayer >= mobsIslandDespawnDistance)
+        if (distanceToLocalPlayer >= mobsIslandDespawnDistance)
         {
-            culled = true;
-            _navMeshSurfaceUpdate?.Stop();
-            DespawnIslandEnemies();
-            return;
+            if (culled == false)
+            {
+                culled = true;
+                _navMeshSurfaceUpdate?.Stop();
+                DespawnIslandEnemies();
+            }
+            if (bossKilled)
+            {
+                ServerManager.Despawn(gameObject, DespawnType.Destroy);
+                Destroy(gameObject);
+            }
         }
     }
 

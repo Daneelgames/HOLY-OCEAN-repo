@@ -77,17 +77,6 @@ public class IslandSpawner : NetworkBehaviour
         ServerManager.Spawn(newIsland.gameObject);
     }
 
-    public void DespawnIslandsExceptClosestOnServer()
-    {
-        for (int i = 0; i < spawnedIslands.Count; i++)
-        {
-            if (i == 1)
-                continue;
-            if (Vector3.Distance(Game.LocalPlayer.transform.position, spawnedIslands[i].transform.position) > 100)
-                ServerManager.Despawn(spawnedIslands[i].gameObject, DespawnType.Destroy);
-        }
-    }
-
     /*
     public override void OnOwnershipClient(NetworkConnection prevOwner)
     {
@@ -102,9 +91,16 @@ public class IslandSpawner : NetworkBehaviour
     public float GetDistanceToClosestIsland(Vector3 posAsking)
     {
         float distance = 100000f;
-        foreach (var island in spawnedIslands)
+        if (spawnedIslands.Count < 1)
+            return distance;
+        for (var index = spawnedIslands.Count - 1; index >= 0; index--)
         {
-            if (island == null) continue;
+            var island = spawnedIslands[index];
+            if (island == null)
+            {
+                spawnedIslands.RemoveAt(index);
+                continue;
+            }
             var pos = island.gameObject.transform.position;
             var newDistance = Vector3.Distance(pos, posAsking);
             if (newDistance < distance)

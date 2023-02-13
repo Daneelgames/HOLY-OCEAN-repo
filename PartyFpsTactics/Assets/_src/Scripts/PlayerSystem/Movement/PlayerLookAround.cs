@@ -122,8 +122,8 @@ namespace MrPink.PlayerSystem
             if (!currentCutsceneTargetTransform)
                 return;
             
-            _headTransform.position = Vector3.Lerp(_headTransform.position,currentCutsceneTargetTransform.position, Time.deltaTime);
-            _headTransform.rotation = Quaternion.Slerp(_headTransform.rotation,currentCutsceneTargetTransform.rotation, Time.deltaTime);
+            _headTransform.position = Vector3.Lerp(_headTransform.position,currentCutsceneTargetTransform.position, Time.fixedUnscaledDeltaTime);
+            _headTransform.rotation = Quaternion.Slerp(_headTransform.rotation,currentCutsceneTargetTransform.rotation, Time.fixedUnscaledDeltaTime);
         }
 
 
@@ -142,12 +142,12 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.unscaledDeltaTime;
+            _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.fixedUnscaledDeltaTime;
             
             var newRotation = new Vector3(0, _horizontalRotation, 0);
             //newRotation = new Vector3(transform.localRotation.x, _horizontalRotation, transform.localRotation.z);
             
-            _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.unscaledDeltaTime;
+            _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.fixedUnscaledDeltaTime;
             _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
 
             

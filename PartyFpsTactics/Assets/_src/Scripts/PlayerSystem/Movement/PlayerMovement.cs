@@ -251,12 +251,15 @@ namespace MrPink.PlayerSystem
             
             if (State.IsUnderwater && playerWaterObject.gameObject.activeInHierarchy == false)
             {
+                rb.velocity = Vector3.zero;
                 playerWaterObject.gameObject.SetActive(true);
                 return;
             }
             if (State.IsUnderwater == false && playerWaterObject.gameObject.activeInHierarchy)
+            {
+                rb.velocity = Vector3.zero;
                 playerWaterObject.gameObject.SetActive(false);
-            
+            }
         }
         
         void HandleJump()
@@ -554,7 +557,10 @@ namespace MrPink.PlayerSystem
                         Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
                     }
                     if (canUseCoyoteTime)
+                    {
                         rb.velocity = Vector3.zero;
+                        rb.isKinematic = true; // it will uncheck later in update i hope
+                    }
                 }
 
                 lastVelocityInAirY = 1;

@@ -36,8 +36,27 @@ namespace MrPink
             {
                 /*ownVehicle.transform.position = transform.position;
                 ownVehicle.transform.rotation = transform.rotation;*/
+                if (controlledMachine == null)
+                {
+                    StartCoroutine(GetBikeToPlayer());
+                    return;
+                }
+
                 RequestVehicleAction(ownVehicle);
             }
+        }
+
+        IEnumerator GetBikeToPlayer()
+        {
+            ownVehicle.gameObject.SetActive(false);
+            yield return null;
+            ownVehicle.transform.position = transform.position;
+            ownVehicle.transform.rotation = transform.rotation;
+            yield return null;
+            ownVehicle.gameObject.SetActive(true);
+            yield return null;
+            
+            RequestVehicleAction(ownVehicle);
         }
 
         private Coroutine exitCoroutine;

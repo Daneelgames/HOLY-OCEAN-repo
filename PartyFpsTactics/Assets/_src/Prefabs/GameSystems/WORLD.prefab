@@ -1,5 +1,261 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &983890798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 983890799}
+  - component: {fileID: 983890800}
+  m_Layer: 0
+  m_Name: OceanAmbientWind
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &983890799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983890798}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 315.89, y: 101.711, z: 10.325012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2306356793621366076}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &983890800
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983890798}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: e99ff23afc4853f4eb87a1a98e4e3f84, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!1 &1299027014245478447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737678242425960363}
+  - component: {fileID: 6118584455040482078}
+  m_Layer: 0
+  m_Name: OceanAmbientWaves
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &737678242425960363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299027014245478447}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 315.89, y: 101.711, z: 10.325012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2306356793621366076}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &6118584455040482078
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299027014245478447}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 62eeb825e40119244b38e327176a4916, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.3
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2306356792571947544
 GameObject:
   m_ObjectHideFlags: 0
@@ -10618,6 +10874,8 @@ Transform:
   - {fileID: 2306356794081307810}
   - {fileID: 2306356793725769791}
   - {fileID: 2306356793230866997}
+  - {fileID: 983890799}
+  - {fileID: 737678242425960363}
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10639,8 +10897,8 @@ MonoBehaviour:
     _DiffuseGrazing: {r: 0, g: 0.49680614, b: 1, a: 1}
     _FoamBubbleColor: {r: 0.5990566, g: 0.9608678, b: 1, a: 1}
     _FoamWhiteColor: {r: 1, g: 1, b: 1, a: 1}
-    _SkyBase: {r: 1, g: 0.8929886, b: 0.5254902, a: 1}
-    _SkyTowardsSun: {r: 1, g: 0.7531516, b: 0, a: 1}
+    _SkyBase: {r: 0.5254902, g: 0.72345245, b: 1, a: 1}
+    _SkyTowardsSun: {r: 0, g: 0.10499692, b: 1, a: 1}
     SkySimpleColor:
       serializedVersion: 2
       key0: {r: 0.30204967, g: 0.24510503, b: 0.6415094, a: 1}
@@ -11007,8 +11265,8 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     SkyMoonColorSunColor: {r: 0.94117653, g: 0.50980395, b: 0.058823533, a: 1}
     SkyMoonGlowColorSunColor: {r: 0.94117653, g: 0.50980395, b: 0.058823533, a: 0}
-  - _Diffuse: {r: 0.122641504, g: 0.01214845, b: 0.01214845, a: 0}
-    _DiffuseGrazing: {r: 0.066037714, g: 0.007787465, b: 0.007787465, a: 0}
+  - _Diffuse: {r: 0.19447273, g: 0.054901965, b: 0.22745098, a: 0}
+    _DiffuseGrazing: {r: 0.14216658, g: 0.082235664, b: 0.2264151, a: 0}
     _FoamBubbleColor: {r: 0.6320754, g: 0.11627804, b: 0.11627804, a: 0}
     _FoamWhiteColor: {r: 0.7924528, g: 0.25044498, b: 0.25044498, a: 0}
     _SkyBase: {r: 0.16037738, g: 0.03858135, b: 0.03858135, a: 0}
@@ -18009,11 +18267,11 @@ MonoBehaviour:
   LST: 625.7634
   lastHourUpdate: 11
   hourTime: 0
-  cloudAnim: {x: 0.1, y: -0.35283798, z: 0.62121737}
-  cloudFlatBaseAnim: {x: 0, y: -0.84784347}
-  cloudFlatDetailAnim: {x: 0, y: 0.61276037}
-  cloudAnimNonScaled: {x: 0, y: -30.849283}
-  cirrusAnim: {x: 0, y: 0.8381621}
+  cloudAnim: {x: 0.1, y: -0.97424066, z: 0.28730476}
+  cloudFlatBaseAnim: {x: 0, y: 0.8900187}
+  cloudFlatDetailAnim: {x: 0, y: -0.4358223}
+  cloudAnimNonScaled: {x: 0, y: -31.11165}
+  cirrusAnim: {x: 0, y: 0.7263134}
   windIntensity: 0.25000146
   shadowIntensityMod: 0
   interiorMode: 0
@@ -18082,10 +18340,10 @@ MonoBehaviour:
     lastActiveWeatherPreset: {fileID: 0}
     VFXHolder: {fileID: 2306356793462635651}
     SFXHolder: {fileID: 2306356792827389592}
-    wetness: 1.61e-43
-    curWetness: 1.61e-43
-    snowStrength: 1.82e-43
-    curSnowStrength: 1.82e-43
+    wetness: 1.39e-43
+    curWetness: 1.39e-43
+    snowStrength: 1.57e-43
+    curSnowStrength: 1.57e-43
     thundersfx: 0
     currentAudioSource: {fileID: 2306356793554691867}
     weatherFullyChanged: 0

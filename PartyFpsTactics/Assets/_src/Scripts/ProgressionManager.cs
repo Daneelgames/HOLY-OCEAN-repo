@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class ProgressionManager : MonoBehaviour
@@ -20,6 +21,7 @@ public class ProgressionManager : MonoBehaviour
         Instance = this;
     }
 
+    [Button]
     public void LevelCompleted()
     {
         currentLevelIndex = Mathf.Clamp(currentLevelIndex + 1, 0, levelDatas.Count - 1);

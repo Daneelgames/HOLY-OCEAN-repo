@@ -73,7 +73,8 @@ namespace MrPink.PlayerSystem
 
             bool aiming = _hands[Hand.Left].IsAiming || _hands[Hand.Right].IsAiming;
             
-            targetFov = aiming ? camFovAim : camFovIdle;
+            //targetFov = aiming ? camFovAim : camFovIdle;
+            targetFov =  camFovIdle;
 
             /*
             _weaponsTargetsParent.position = Vector3.Lerp(_weaponsTargetsParent.position,  Game.Player.MainCamera.transform.position, gunMoveSpeed * Time.deltaTime);
