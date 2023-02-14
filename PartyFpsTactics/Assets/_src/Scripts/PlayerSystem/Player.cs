@@ -220,7 +220,8 @@ namespace MrPink.PlayerSystem
 
         public void SaveCheckpoint(Checkpoint checkpoint)
         {
-            currentCheckpoint?.DisableCheckpoint();
+            if (currentCheckpoint) currentCheckpoint.DisableCheckpoint();
+            
             currentCheckpoint = checkpoint;
         }
 

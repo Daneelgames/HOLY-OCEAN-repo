@@ -248,6 +248,9 @@ public class InteractableEventsManager : MonoBehaviour
             if (InteractivePickUps[i].rb == null)
             {
                 var rb = InteractivePickUps[i].gameObject.AddComponent<Rigidbody>();
+                
+                if (rb == null)
+                    continue;
                 rb.isKinematic = false;
                 rb.useGravity = true;
                 rb.drag = 1;

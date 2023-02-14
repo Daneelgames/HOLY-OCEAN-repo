@@ -66,7 +66,7 @@ namespace MrPink.Health
         private void OnDestroy()
         {
             if (prop)
-                    IslandSpawner.Instance.GetClosestTileBuilding(transform.position).RemoveProp(this);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).RemoveProp(this);
             
             if (parentLevel)
                 parentLevel.allTiles.Remove(this);
