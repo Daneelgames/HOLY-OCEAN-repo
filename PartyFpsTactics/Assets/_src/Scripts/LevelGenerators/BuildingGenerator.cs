@@ -18,7 +18,6 @@ using Random = UnityEngine.Random;
 
 public class BuildingGenerator : NetworkBehaviour
 {
-    
     public List<Building> spawnedBuildings = new List<Building>();
     [HideInInspector]
     public List<TileHealth> spawnedProps = new List<TileHealth>();
@@ -227,8 +226,10 @@ public class BuildingGenerator : NetworkBehaviour
             
             building.spawnedBuildingLevels[i].Init();
         }
-        
-        yield return StartCoroutine(RoomGenerator.Instance.GenerateRooms(building.spawnedBuildingLevels, singleFrame));
+
+        var roomsGenerator = gameObject.GetComponent<RoomGenerator>();
+        if (roomsGenerator)
+            yield return StartCoroutine(roomsGenerator.GenerateRooms(building.spawnedBuildingLevels, singleFrame));
         
         DestroyTilesForLadders();
         
@@ -1025,8 +1026,11 @@ public class BuildingGenerator : NetworkBehaviour
             }
             Vector3 pos = randomTile.transform.position + Vector3.up;
             randomLevel.tilesInside.Remove(randomTile);
-            var barrel = Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
-            ServerManager.Spawn(barrel);
+            if (explosiveBarrelPrefab)
+            {
+                var barrel = Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+                ServerManager.Spawn(barrel);
+            }
             yield return null;
         }
     }
@@ -1287,7 +1291,6 @@ public class BuildingGenerator : NetworkBehaviour
     IEnumerator TileDamagedFeedbackCoroutine(Transform tile)
     {
         //Debug.LogWarning("TILES SHAKE DAMAGE FEEDBACK IS DISABLED");
-        yield break;
         
         if (tile.gameObject.isStatic)
             yield break;
@@ -1317,7 +1320,8 @@ public class BuildingGenerator : NetworkBehaviour
     }
     public void DebrisParticles(Vector3 pos)
     {
-        Instantiate(tileDestroyedParticles, pos, Quaternion.identity);
+        var debris = Instantiate(tileDestroyedParticles, pos, Quaternion.identity);
+        debris.transform.parent = transform;
     }
 
     void AddNavMeshSurfaceToQueue(Vector3 pos)
@@ -1432,6 +1436,7 @@ public class BuildingGenerator : NetworkBehaviour
 
     public void DestroyBuilding()
     {
+        return;
         for (int i = 0; i < spawnedBuildings.Count; i++)
         {
             if (spawnedBuildings[i].spawnedBuildingLevels.Count < 1)
@@ -1464,9 +1469,7 @@ public class BuildingSettings
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
 
-    public bool spawnProps = true;
     public bool spawnLoot = true;
-    public bool spawnUnits = true;
     public bool spawnLadders = true;
     public bool spawnRooms = true;
     public bool spawnNavMesh = true;
@@ -1480,6 +1483,7 @@ public class BuildingSettings
         public List<HealthController> uniqueNpcsToSpawn = new List<HealthController>();
         public List<HealthController> unitsToSpawn = new List<HealthController>();
         public List<ControlledMachine> controlledMachinesToSpawn = new List<ControlledMachine>();
+        [Header("NETWORKED")]public List<GameObject> extraGameObjectsToSpawn = new List<GameObject>();
     }
     
 }

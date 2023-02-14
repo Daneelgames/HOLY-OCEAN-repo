@@ -72,7 +72,9 @@ public class Island : NetworkBehaviour
         // mid: activate mobs, island might shoot at you
         // fat: hide everything, show lowpoly LOD
         distanceToLocalPlayer = distance;
-
+        if (_tileBuildingGenerator && _tileBuildingGenerator.Generated == false)
+            return;
+        
         if (culled && distanceToLocalPlayer <= mobsIslandSpawnDistance)
         {
             culled = false;
@@ -166,6 +168,7 @@ public class Island : NetworkBehaviour
 
     void HealthController_OnBossKilled()
     {
+        
         UiMarkWorldObject islandMarker = gameObject.GetComponent<UiMarkWorldObject>();
         Destroy(islandMarker);
         

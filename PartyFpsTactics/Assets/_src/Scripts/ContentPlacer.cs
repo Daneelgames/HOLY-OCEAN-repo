@@ -324,6 +324,15 @@ public class ContentPlacer : NetworkBehaviour
                 ServerManager.Spawn(unit.gameObject);
                 yield return null;
             }
+            for (int j = 0; j < level.extraGameObjectsToSpawn.Count; j++)
+            {
+                if (island.IsCulled)
+                    yield break;
+                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                var extraGo =  Instantiate(level.extraGameObjectsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                ServerManager.Spawn(extraGo.gameObject);
+                yield return null;
+            }
             yield return null;
         }
     }

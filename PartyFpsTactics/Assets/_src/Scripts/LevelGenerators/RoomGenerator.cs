@@ -7,18 +7,6 @@ namespace _src.Scripts.LevelGenerators
 {
     public class RoomGenerator : MonoBehaviour
     {
-        public static RoomGenerator Instance;
-
-        void Awake()
-        {
-            if (Instance)
-            {
-                Destroy(Instance.gameObject);
-            }
-        
-            Instance = this;
-        }
-
         public IEnumerator GenerateRooms(List<Level> spawnedLevels, bool singleFrame)
         {
             for (int levelIndex = 0; levelIndex < spawnedLevels.Count; levelIndex++)

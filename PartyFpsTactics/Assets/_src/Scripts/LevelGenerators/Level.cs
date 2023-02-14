@@ -32,9 +32,7 @@ namespace _src.Scripts.LevelGenerators
         int floorConnectionsInCurrentIslandAmount = 0;
         private int currentIslandSupports = 0;
         
-        public bool spawnProps = true;
         public bool spawnLoot = true;
-        public bool spawnUnits = true;
         public bool spawnRooms = true;
         public bool spawnLadders = true;
         public bool spawnNavMesh = true;
@@ -42,19 +40,19 @@ namespace _src.Scripts.LevelGenerators
 
         public List<HealthController> uniqueNpcToSpawn = new List<HealthController>();
         public List<HealthController> unitsToSpawn = new List<HealthController>();
+        public List<GameObject> extraGameObjectsToSpawn = new List<GameObject>();
         public List<ControlledMachine> controlledMachinesToSpawn = new List<ControlledMachine>();
 
         public void SetBuildingSettings(BuildingSettings buildingSettings, int levelIndex)
         {
-            spawnProps = buildingSettings.spawnProps;
             spawnLoot = buildingSettings.spawnLoot;
-            spawnUnits = buildingSettings.spawnUnits;
             spawnRooms = buildingSettings.spawnRooms;
             spawnLadders = buildingSettings.spawnLadders;
             spawnNavMesh = buildingSettings.spawnNavMesh;
             updateClash = buildingSettings.updateClash;
             uniqueNpcToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].uniqueNpcsToSpawn);
             unitsToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].unitsToSpawn);
+            extraGameObjectsToSpawn = new List<GameObject>(buildingSettings.levelsSettings[levelIndex].extraGameObjectsToSpawn);
             controlledMachinesToSpawn = new List<ControlledMachine>(buildingSettings.levelsSettings[levelIndex].controlledMachinesToSpawn);
         }
         
