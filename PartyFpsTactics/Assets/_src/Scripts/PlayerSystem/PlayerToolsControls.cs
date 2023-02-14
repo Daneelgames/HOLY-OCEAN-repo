@@ -90,7 +90,11 @@ namespace MrPink.PlayerSystem
                     selectedQuickSlotIndex = -1;
                 return;
             }
-            
+
+            if (toolsInQuickSlots.Count == spawnedToolFeedbacks.Count)
+            {
+                ToggleToQuickSlots(toolsInQuickSlots[0]); // remove first before adding another one
+            }
             toolsInQuickSlots.Add(inventoryItem);
             if (selectedQuickSlotIndex == -1)
                 selectedQuickSlotIndex = toolsInQuickSlots.Count-1;
@@ -129,6 +133,8 @@ namespace MrPink.PlayerSystem
         
             if (Input.GetKeyDown(KeyCode.F))
             { 
+                if (selectedQuickSlotIndex < 0)
+                    return;
                 if (Game.LocalPlayer.Inventory.GetItemsAmount(toolsInQuickSlots[selectedQuickSlotIndex]._toolType) <= 0)
                 {
                     return;
@@ -169,7 +175,18 @@ namespace MrPink.PlayerSystem
             newTool.transform.position = Game.LocalPlayer.Movement.headTransform.position;
             newTool.transform.rotation = Game.LocalPlayer.MainCamera.transform.rotation;
             newTool.Init(Game.LocalPlayer.Health, DamageSource.Player, null);
-            Game.LocalPlayer.Inventory.RemoveTool(prefab.toolType);
+            var resultAmount = Game.LocalPlayer.Inventory.RemoveTool(prefab.toolType);
+            if (resultAmount < 1)
+            {
+                foreach (var item in toolsInQuickSlots)
+                {
+                    if (item._toolType == prefab.toolType)
+                    {
+                        ToggleToQuickSlots(item);
+                        break;
+                    }
+                }
+            }
             UpdateSelectedToolFeedback();
         }
         
@@ -190,6 +207,11 @@ namespace MrPink.PlayerSystem
         
         public void UpdateSelectedToolFeedback()
         {
+            if (Game.LocalPlayer == null)
+                return;
+            if (selectedQuickSlotIndex < 0)
+                return;
+            
             selectedToolAmount = Game.LocalPlayer.Inventory.GetItemsAmount(toolsInQuickSlots[selectedQuickSlotIndex]._toolType);
             
             /*

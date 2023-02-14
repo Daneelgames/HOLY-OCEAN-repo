@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 0.750625
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
-  m_SkyboxMaterial: {fileID: 1198109760}
+  m_SkyboxMaterial: {fileID: 1184560644}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -123,43 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: a3d31b9167aa48343aec4b1386dd1a81, type: 2}
---- !u!84 &3819696
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 2048
-  m_Height: 2048
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!21 &44696875
 Material:
   serializedVersion: 8
@@ -1937,43 +1900,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224431128458639770, guid: 4d8c6c9fba0e46f489b21fd7d92d739d, type: 3}
   m_PrefabInstance: {fileID: 511204890}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &533684687
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: GerstnerCascades
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 5
-  m_VolumeDepth: 16
-  m_ShadowSamplingMode: 2
 --- !u!114 &606522057 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5787522021735580578, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
@@ -2415,6 +2341,7 @@ MonoBehaviour:
   _sceneNetworkObjects:
   - {fileID: 606522057}
   - {fileID: 1084639760}
+  - {fileID: 1580870897}
   - {fileID: 1809009483}
   - {fileID: 2041859586}
   - {fileID: 666904553603923657}
@@ -2471,7 +2398,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1198109760
+--- !u!21 &1184560644
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -2576,7 +2503,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d302289fbd31ca459044a54f7483d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!84 &1331431773
+--- !u!84 &1362127619
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GerstnerCascades
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 5
+  m_VolumeDepth: 16
+  m_ShadowSamplingMode: 2
+--- !u!114 &1544752447 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+  m_PrefabInstance: {fileID: 1809009482}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd76228898cdf6443862b974396f3d0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1580870897 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3208828200462519453, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
+  m_PrefabInstance: {fileID: 5596919103759060738}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!84 &1596421895
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2613,17 +2599,6 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!114 &1544752447 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
-  m_PrefabInstance: {fileID: 1809009482}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd76228898cdf6443862b974396f3d0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1771658837
 GameObject:
   m_ObjectHideFlags: 0
@@ -3167,6 +3142,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &2082209460
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2048
+  m_Height: 2048
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1001 &252119039780777089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3845,6 +3857,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WORLD
       objectReference: {fileID: 0}
+    - target: {fileID: 2306356793727503918, guid: 25abfb875a5783b45b4ea0e315557011, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.631154
+      objectReference: {fileID: 0}
     - target: {fileID: 2306356793727503919, guid: 25abfb875a5783b45b4ea0e315557011, type: 3}
       propertyPath: Player
       value: 
@@ -3868,6 +3884,10 @@ PrefabInstance:
     - target: {fileID: 2306356793838997095, guid: 25abfb875a5783b45b4ea0e315557011, type: 3}
       propertyPath: _waveBuffers
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2306356794081307810, guid: 25abfb875a5783b45b4ea0e315557011, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.631154
       objectReference: {fileID: 0}
     - target: {fileID: 2306356794367455517, guid: 25abfb875a5783b45b4ea0e315557011, type: 3}
       propertyPath: _camera
@@ -4365,6 +4385,10 @@ PrefabInstance:
     - target: {fileID: 1721239254144499073, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: m_Name
       value: PrincessTowerHub
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721239254144499073, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3028627508691204874, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: VoxelMeshes.Array.data[0]
@@ -6416,11 +6440,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3028627509639336198, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: instanceID
-      value: -2300
+      value: -1384900
+      objectReference: {fileID: 0}
+    - target: {fileID: 3208828200462519453, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
+      propertyPath: _scenePathHash
+      value: 2732387296
       objectReference: {fileID: 0}
     - target: {fileID: 3208828200462519453, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: <SceneId>k__BackingField
-      value: 11735514077870232143
+      value: 11735514079521758930
       objectReference: {fileID: 0}
     - target: {fileID: 3208828200462519453, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[2]
@@ -6495,8 +6523,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4136491515409634240, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
+      propertyPath: _scenePathHash
+      value: 2732387296
+      objectReference: {fileID: 0}
+    - target: {fileID: 4136491515409634240, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: <SceneId>k__BackingField
-      value: 11735514077739569662
+      value: 11735514080212482600
       objectReference: {fileID: 0}
     - target: {fileID: 4136491515409634240, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[2]
@@ -6527,8 +6559,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8972700644157677413}
     - target: {fileID: 5787522021735580578, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
+      propertyPath: _scenePathHash
+      value: 2732387296
+      objectReference: {fileID: 0}
+    - target: {fileID: 5787522021735580578, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: <SceneId>k__BackingField
-      value: 11735514077385193716
+      value: 11735514077172449770
       objectReference: {fileID: 0}
     - target: {fileID: 5787522021735580578, guid: 9d334f8fd658e9f49b1d109614de0d86, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[2]
