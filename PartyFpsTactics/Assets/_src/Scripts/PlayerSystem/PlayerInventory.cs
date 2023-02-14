@@ -223,7 +223,7 @@ namespace MrPink.PlayerSystem
                 PlayerUi.Instance.AddShieldFeedback();
 
             
-            Game.LocalPlayer.ToolControls.SelectNextTool();
+            Game.LocalPlayer.ToolControls.SelectNextToolOnQuickSlots();
             Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();
         }
 
@@ -234,20 +234,19 @@ namespace MrPink.PlayerSystem
     
         public int RemoveTool(ToolType tool, int amount = 1)
         {
-            Debug.Log("DAMAGE DURABILITY 1");
             if (tool == ToolType.Null ||tool == ToolType.Fist)
                 return -1;
             
-            Debug.Log("DAMAGE DURABILITY 1,1");
             foreach (var toolAmount in inventoryItems)
             {
                 if (toolAmount._toolType != tool)
                     continue;
 
                 toolAmount.usesLeft -= amount;
+                
+                Debug.Log("REMOVE TOOL. Compare " + tool + " with " + toolAmount._toolType + "; Should be the same");
                 if (toolAmount.usesLeft <= 0)
                     inventoryItems.Remove(toolAmount);
-                Debug.Log("DAMAGE DURABILITY 2");
                 return toolAmount.usesLeft;
             }
 

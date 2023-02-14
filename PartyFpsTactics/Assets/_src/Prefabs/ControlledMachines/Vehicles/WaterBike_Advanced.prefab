@@ -623,7 +623,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7943338353946780412, guid: d5c3ef36948886548b4da02c5ae45196, type: 3}
   _networkObjectCache: {fileID: 3638330159521411507}
   isPlayer: 0
-  resetRoseInstanceDialogueOnDeath: 0
+  completeGameLevelOnDeath: 0
   selfUnit: {fileID: 0}
   health: 1000000
   healthMax: 1000
@@ -854,7 +854,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852825967723450303}
   serializedVersion: 2
-  m_Mass: 0.0000001
+  m_Mass: 950
   m_Drag: 0.025
   m_AngularDrag: 5
   m_UseGravity: 1
@@ -892,13 +892,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMass: 950
-  totalMass: 0
+  totalMass: 950
   dimensions: {x: 2.14, y: 1.26, z: 5.7}
   useDefaultCenterOfMass: 0
-  centerOfMass: {x: 0, y: -0.43, z: 0.4}
+  centerOfMass: {x: -0.000012897188, y: -0.8051739, z: 0.10418558}
   centerOfMassOffset: {x: 0, y: -0.43, z: 0.4}
   useDefaultInertia: 1
-  inertiaTensor: {x: 1, y: 1, z: 1}
+  inertiaTensor: {x: 2590.5837, y: 2349.6516, z: 623.6408}
   inertiaScale: {x: 1, y: 1, z: 1}
   updateInterval: 1
 --- !u!114 &1852825967723450298
@@ -1157,7 +1157,7 @@ GameObject:
   - component: {fileID: 1852825968040686615}
   - component: {fileID: 1852825968040686612}
   - component: {fileID: 6565218898605415747}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,7 +1172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852825968040686634}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.2041893, y: 0.021567538, z: 0.21105194}
+  m_LocalPosition: {x: 0.2041893, y: 0, z: 0.21105194}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6914,7 +6914,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6271128310437259500}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.003000142, y: 1.781, z: -0.2560001}
+  m_LocalPosition: {x: 0, y: 1.066, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6932,7 +6932,8 @@ GameObject:
   - component: {fileID: 8487382586419326650}
   - component: {fileID: 4424397816502175244}
   - component: {fileID: 6430758787555944808}
-  m_Layer: 0
+  - component: {fileID: 356688266533796910}
+  m_Layer: 6
   m_Name: BezierCurve.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7004,6 +7005,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &356688266533796910
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376444239023677742}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8552261695923337930, guid: c49ab326a49941d4ab5c0654ea85b37b, type: 3}
 --- !u!1 &8910270624386826540
 GameObject:
   m_ObjectHideFlags: 0
@@ -7015,7 +7030,8 @@ GameObject:
   - component: {fileID: 7452370946900108511}
   - component: {fileID: 1626456964496806818}
   - component: {fileID: 7908248568430077336}
-  m_Layer: 0
+  - component: {fileID: 6765306375307767319}
+  m_Layer: 6
   m_Name: BezierCurve.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7087,6 +7103,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6765306375307767319
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8910270624386826540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1825875415147931077, guid: c49ab326a49941d4ab5c0654ea85b37b, type: 3}
 --- !u!1001 &1852825968312109509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7215,6 +7245,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -7223,6 +7257,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b719c312114c76844931b83ecd7720d9, type: 2}
+    - target: {fileID: -516098083770646512, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 46054fca16b4b7c469f8763f0a26ba51, type: 3}
       propertyPath: m_Name
       value: waterBike

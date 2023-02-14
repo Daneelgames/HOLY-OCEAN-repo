@@ -190,10 +190,6 @@ namespace MrPink.PlayerSystem
             
             HandleCrouch();
             GetUnderwater();
-
-
-            if (Shop.Instance.IsActive || PlayerInventoryUI.Instance.IsActive)
-                return;
         }
 
         private void FixedUpdate()
@@ -264,6 +260,9 @@ namespace MrPink.PlayerSystem
         
         void HandleJump()
         {
+            if (stamina < staminaMax/10)
+                return;
+            
             if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || _coyoteTime > 0) && stamina > 0)
             {
                 if (Game.LocalPlayer.VehicleControls.controlledMachine != null)

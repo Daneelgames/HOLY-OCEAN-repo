@@ -83,6 +83,8 @@ namespace MrPink
         [Button]
         public void CloseShop()
         {
+            if (!IsActive)
+                return;
             if (Game.LocalPlayer == null) return;
             
             Debug.Log("CloseShop");

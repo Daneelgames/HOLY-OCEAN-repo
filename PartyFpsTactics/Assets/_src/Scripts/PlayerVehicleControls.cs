@@ -64,7 +64,8 @@ namespace MrPink
             yield return null;
             ownVehicle.gameObject.SetActive(true);
             yield return null;
-            
+
+            ownVehicle.DashForward();
             RequestVehicleAction(ownVehicle);
         }
 

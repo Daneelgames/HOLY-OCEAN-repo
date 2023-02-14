@@ -17,9 +17,9 @@ namespace MrPink.PlayerSystem
         // 0 - spycam; 1 - ladder; 2 - fragGrenade
         public List<ProjectileController> toolsProjectilesPrefabs;
         [SerializeField] List<PlayerInventory.InventoryItem> toolsInQuickSlots = new List<PlayerInventory.InventoryItem>();
-        [Header("TOOL SELECTED IN THE LIST OF PREFABS")]
-        public int selectedToolInListOfPrefabs = 0;
-        public int selectedToolInInventorySlot = 0;
+
+        [Header("TOOL SELECTED IN THE LIST OF PREFABS")] 
+        [SerializeField] [ReadOnly] private int selectedQuickSlotIndex = -1;
         public int selectedToolAmount = 0;
         [SerializeField] private List<ToolUiFeedback> spawnedToolFeedbacks;
         //public Text toolsControlsHintText;
@@ -54,7 +54,7 @@ namespace MrPink.PlayerSystem
                 yield return null;
             }
             
-            SelectNextTool();
+            SelectNextToolOnQuickSlots();
             UpdateSelectedToolFeedback();
             while (true)
             {
@@ -70,7 +70,7 @@ namespace MrPink.PlayerSystem
                     }
                     
                     spawnedToolFeedbacks[i].SetTool(toolsInQuickSlots[i]._toolType, toolsInQuickSlots[i].usesLeft, GetToolSprite(toolsInQuickSlots[i]._toolType));
-                    if (i != selectedToolInInventorySlot)
+                    if (i != selectedQuickSlotIndex)
                         spawnedToolFeedbacks[i].SetSelected(false);
                     else
                         spawnedToolFeedbacks[i].SetSelected(true);
@@ -83,10 +83,17 @@ namespace MrPink.PlayerSystem
             if (toolsInQuickSlots.Contains(inventoryItem))
             {
                 toolsInQuickSlots.Remove(inventoryItem);
+
+                if (toolsInQuickSlots.Count > 0)
+                    selectedQuickSlotIndex = Mathf.Clamp(selectedQuickSlotIndex, 0, toolsInQuickSlots.Count - 1);
+                else
+                    selectedQuickSlotIndex = -1;
                 return;
             }
             
             toolsInQuickSlots.Add(inventoryItem);
+            if (selectedQuickSlotIndex == -1)
+                selectedQuickSlotIndex = toolsInQuickSlots.Count-1;
         }
 
         Sprite GetToolSprite(ToolType tool)
@@ -117,31 +124,41 @@ namespace MrPink.PlayerSystem
             
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SelectNextTool();
+                SelectNextToolOnQuickSlots();
             }
         
             if (Input.GetKeyDown(KeyCode.F))
             { 
-                if (Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType) <= 0)
+                if (Game.LocalPlayer.Inventory.GetItemsAmount(toolsInQuickSlots[selectedQuickSlotIndex]._toolType) <= 0)
                 {
                     return;
                 }
             
                 // throw selected
-                SpawnToolPrefab(toolsProjectilesPrefabs[selectedToolInListOfPrefabs]);
+                SpawnToolPrefab(GetToolPrefab(toolsInQuickSlots[selectedQuickSlotIndex]._toolType));
             }
+        }
+
+        ProjectileController GetToolPrefab(ToolType type)
+        {
+            foreach (var prefab in toolsProjectilesPrefabs)
+            {
+                if (prefab.toolType == type)
+                {
+                    return prefab;
+                }
+            }
+
+            return null;
         }
 
         public void UseTool(ToolType toolType)
         {
-            var prefab = toolsProjectilesPrefabs[selectedToolInListOfPrefabs];
-            foreach (var toolsProjectilesPrefab in toolsProjectilesPrefabs)
+            var prefab = GetToolPrefab(toolType);
+            if (prefab == null)
             {
-                if (toolsProjectilesPrefab.toolType == toolType)
-                {
-                    prefab = toolsProjectilesPrefab;
-                    break;
-                }
+                Debug.LogError("TRYING TO SPAWN NULL PREFAB");
+                return;
             }
             SpawnToolPrefab(prefab);
         }
@@ -152,37 +169,28 @@ namespace MrPink.PlayerSystem
             newTool.transform.position = Game.LocalPlayer.Movement.headTransform.position;
             newTool.transform.rotation = Game.LocalPlayer.MainCamera.transform.rotation;
             newTool.Init(Game.LocalPlayer.Health, DamageSource.Player, null);
-            Game.LocalPlayer.Inventory.RemoveTool(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType);
+            Game.LocalPlayer.Inventory.RemoveTool(prefab.toolType);
             UpdateSelectedToolFeedback();
         }
         
-        public void SelectNextTool()
+        public void SelectNextToolOnQuickSlots()
         {
-            int i = selectedToolInListOfPrefabs + 1;
-            while (true)
+            if (toolsInQuickSlots.Count < 1)
             {
-                if (i >= toolsProjectilesPrefabs.Count)
-                    i = 0;
-
-                var amount = Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[i].toolType); 
-                if (amount > 0)
-                {
-                    selectedToolInListOfPrefabs = i;
-                    selectedToolInInventorySlot = Game.LocalPlayer.Inventory.GetCurrentSelectedIndex(toolsProjectilesPrefabs[i].toolType);
-                    break;
-                }
-                
-                if (i == selectedToolInListOfPrefabs)
-                    break;
-                i++;
+                selectedQuickSlotIndex = -1;
+                return;
             }
-
+            
+            selectedQuickSlotIndex++;
+            if (selectedQuickSlotIndex >= toolsInQuickSlots.Count)
+                selectedQuickSlotIndex = 0;
+            
             UpdateSelectedToolFeedback();
         }
         
         public void UpdateSelectedToolFeedback()
         {
-            selectedToolAmount = Game.LocalPlayer.Inventory.GetItemsAmount(toolsProjectilesPrefabs[selectedToolInListOfPrefabs].toolType);
+            selectedToolAmount = Game.LocalPlayer.Inventory.GetItemsAmount(toolsInQuickSlots[selectedQuickSlotIndex]._toolType);
             
             /*
             if (selectedToolAmount <= 0)

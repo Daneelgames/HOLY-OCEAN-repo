@@ -41,6 +41,7 @@ public class PlayerInventoryUI : MonoBehaviour
     [Button]
     public void ShowInventory()
     {
+        Shop.Instance.CloseShop();
         ScoringSystem.Instance.UpdateScore();
         canvasAnim.gameObject.SetActive(true);
         IsActive = true;

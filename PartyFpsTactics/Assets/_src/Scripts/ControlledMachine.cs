@@ -21,6 +21,8 @@ public class ControlledMachine : MonoBehaviour
     [BoxGroup]
     public SleepMachine sleepMachine;
     
+    [SerializeField]private float dashForce = 1000;
+    
     public Transform Visual;
     public float visualFollowSpeed = 10;
     public Transform sitTransform;
@@ -50,6 +52,10 @@ public class ControlledMachine : MonoBehaviour
         }
     }
 
+    public void DashForward()
+    {
+        rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+    }
     public void StartInput(HealthController driverHc)
     {
         controllingHc = driverHc;
