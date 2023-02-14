@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using Cysharp.Threading.Tasks.Triggers;
+using FishNet.Connection;
+using FishNet.Object;
 using MrPink.Health;
 using MrPink.PlayerSystem;
 using Sirenix.OdinInspector;
@@ -10,7 +12,7 @@ using UnityEngine;
 
 namespace MrPink
 {
-    public class PlayerVehicleControls : MonoBehaviour
+    public class PlayerVehicleControls : NetworkBehaviour
     {
         public static PlayerVehicleControls Instance;
 
@@ -22,20 +24,27 @@ namespace MrPink
         [SerializeField] List<Transform> leashParts;
         private void Awake()
         {
-            Instance = this;
         }
 
-        private void Start()
+        public override void OnOwnershipClient(NetworkConnection prevOwner)
         {
+            base.OnOwnershipClient(prevOwner);
+            /* Current owner can be found by using base.Owner. prevOwner
+            * contains the connection which lost ownership. Value will be
+            * -1 if there was no previous owner. */
+
+            Instance = this;
             StartCoroutine(UpdateLeashParts());
         }
 
+
         private void Update()
         {
+            if (Game._instance == null || Game.LocalPlayer == null || Game.LocalPlayer.Health.IsDead)
+                return;
+            
             if (Input.GetKeyDown(KeyCode.C))
             {
-                /*ownVehicle.transform.position = transform.position;
-                ownVehicle.transform.rotation = transform.rotation;*/
                 if (controlledMachine == null)
                 {
                     StartCoroutine(GetBikeToPlayer());
