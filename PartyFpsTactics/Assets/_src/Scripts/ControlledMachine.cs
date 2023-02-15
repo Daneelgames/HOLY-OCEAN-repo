@@ -138,8 +138,8 @@ public class ControlledMachine : MonoBehaviour
 
         while (true)
         {
-            Visual.transform.position = Vector3.Lerp(Visual.transform.position, transform.position, visualFollowSpeed * Time.smoothDeltaTime);
-            Visual.transform.rotation = Quaternion.Lerp(Visual.transform.rotation, transform.rotation, visualFollowSpeed * Time.smoothDeltaTime);
+            Visual.transform.position = Vector3.Lerp(Visual.transform.position, transform.position, visualFollowSpeed * Time.fixedUnscaledDeltaTime);
+            Visual.transform.rotation = Quaternion.Lerp(Visual.transform.rotation, transform.rotation, visualFollowSpeed * Time.fixedUnscaledDeltaTime);
 
             for (var index = 0; index < carCrashDamageColliders.Count; index++)
             {

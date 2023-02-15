@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using MrPink.PlayerSystem;
+using MrPink.Units;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -95,7 +96,7 @@ namespace MrPink
         
         public void RespawnAllPlayers()
         {
-            // called on server
+            // called on server? seems not
             if (playersesInGame.Count > 0)
             {
                 for (var index = playersesInGame.Count - 1; index >= 0; index--)
@@ -105,6 +106,8 @@ namespace MrPink
                         player.Respawn();
                 }
             }
+
+            UnitsManager.Instance.HealAllUnits();
         }
         
         public void AddPlayer(Player p)

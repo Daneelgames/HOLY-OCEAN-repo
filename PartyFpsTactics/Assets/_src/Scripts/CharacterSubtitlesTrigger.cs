@@ -20,6 +20,7 @@ public class CharacterSubtitlesTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (Game.LocalPlayer == null) return;
         if (triggerOnce && triggered) return;
         if (other.gameObject != Game.LocalPlayer.gameObject) return;
         

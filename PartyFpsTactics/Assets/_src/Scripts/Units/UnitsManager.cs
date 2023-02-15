@@ -258,6 +258,17 @@ namespace MrPink.Units
 
             }
         }
+
+        public void HealAllUnits()
+        {
+            foreach (var hc in hcInGame)
+            {
+                if (hc == null || hc.health < 1)
+                    continue;
+                
+                hc.AddHealth(hc.healthMax);
+            }
+        }
         
         private async UniTask BodyPartsKillQueue()
         {

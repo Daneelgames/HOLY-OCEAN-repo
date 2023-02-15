@@ -160,7 +160,8 @@ namespace MrPink.Units
         public IEnumerator RotateToPosition(Vector3 target)
         {
             //AgentSetPath(target, false);
-            _agent.isStopped = true;
+            if (_agent.isOnNavMesh)
+                _agent.isStopped = true;
             _agent.enabled = false;
             _agent.updateRotation = false;
             float t = 0;
@@ -205,6 +206,9 @@ namespace MrPink.Units
                 return;
             }
 
+            if (_agent.isOnNavMesh == false)
+                return;
+            
             _agent.speed = _moveSpeed;
             _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
             _agent.isStopped = false;
