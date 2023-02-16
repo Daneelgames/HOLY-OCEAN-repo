@@ -26,7 +26,7 @@ public class Pooling : MonoBehaviour
         public enum AttackColliderPrefabTag
         {
             DesertBeast, DesertBeastSmall, AiPistol, AiSmg, AiShotgun, PlayerPistol, PlayerSword, PlayerShotgun,
-            PlayerFistMelee
+            PlayerFistMelee, PlayerUzi
             
         }
 
@@ -218,6 +218,7 @@ public class Pooling : MonoBehaviour
             if (particlesPrefabs[i].tag == list.particlePrefabTag)
             {
                 var newCollider = Instantiate(particlesPrefabs[i].prefab);
+                newCollider.transform.parent = transform;
                 list.pool.Add(newCollider);
                 break;
             }
