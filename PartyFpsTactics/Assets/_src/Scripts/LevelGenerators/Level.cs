@@ -61,7 +61,7 @@ namespace _src.Scripts.LevelGenerators
             return;
             
             if (updateClash)
-                StartCoroutine(CheckTiles());
+                StartCoroutine(UpdateClash());
         }
 
         private void OnDrawGizmosSelected()
@@ -88,7 +88,7 @@ namespace _src.Scripts.LevelGenerators
             }
         }
 
-        IEnumerator CheckTiles()
+        IEnumerator UpdateClash()
         {
             var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(transform.position);
             while (true)
@@ -137,7 +137,7 @@ namespace _src.Scripts.LevelGenerators
                     }
                     else if (currentIslandSupports == 0 || floorConnectionsInCurrentIslandAmount == 0 /*|| currentIslandSupports * LevelGenerator.Instance.islandSupportsScalerToClash < wallsInCurrentIslandAmount ||
                              wallsInCurrentIslandAmount > floorConnectionsInCurrentIslandAmount * size.y * 5*/)
-                    canCrash = true;
+                        canCrash = true;
                     
                     if (canCrash)
                     {

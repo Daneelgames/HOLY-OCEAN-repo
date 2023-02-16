@@ -38,6 +38,7 @@ namespace MrPink.Units
     
         List<Quaternion> initRotations = new List<Quaternion>();
         public float timeToStandUp = 2;
+        [SerializeField] float getGroundedCooldown = 1;
 
         private static readonly int InCover = Animator.StringToHash("InCover");
     
@@ -55,6 +56,7 @@ namespace MrPink.Units
         private static readonly int Driver = Animator.StringToHash("Driver");
         [SerializeField] private List<Collider> extraCollidersToIgnore;
 
+        [SerializeField] private Transform groundedRaycastOrigin;
         private void Start()
         {
             if (hc == null)
@@ -83,7 +85,7 @@ namespace MrPink.Units
         {
             while (hc.IsDead == false)
             {
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(getGroundedCooldown);
 
                 if (inVehicle)
                 {
@@ -91,7 +93,7 @@ namespace MrPink.Units
                     continue;
                 }
                 
-                grounded = Physics.CheckSphere(ragdollOrigin.position, ragdoll?groundedCheckSphereRadius/3 : groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+                grounded = Physics.CheckSphere(groundedRaycastOrigin.position, ragdoll?groundedCheckSphereRadius/3 : groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
 
                 if (!grounded/* && ragdoll == false*/)
                 {
@@ -536,7 +538,7 @@ namespace MrPink.Units
             if (noRagdoll)
                 return;
 
-            Debug.Log("ExplosionRagdoll");
+            //Debug.Log("ExplosionRagdoll");
             foreach (var rb in rigidbodies)
                 rb.AddExplosionForce(force, pos, distance);
         }

@@ -11682,7 +11682,7 @@ GameObject:
   - component: {fileID: 3826388455443313347}
   - component: {fileID: 568780907167190505}
   m_Layer: 0
-  m_Name: Skeleton ISLAND bones
+  m_Name: ISLAND SKELETON TileBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11706,7 +11706,7 @@ Transform:
   - {fileID: 5978950259387827030}
   - {fileID: 1565359174463692883}
   m_Father: {fileID: 0}
-  m_RootOrder: 35
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3481429887257740796
 MonoBehaviour:
@@ -11735,6 +11735,8 @@ MonoBehaviour:
   mobsIslandDespawnDistance: 500
   voxelCutterForBuildings:
   - {fileID: 671396555645168277}
+  targetHavok: 0
+  currentHavok: 0
 --- !u!114 &2521545166707060642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11780,7 +11782,7 @@ MonoBehaviour:
   - {fileID: 568780907167190505}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField:
-  - {fileID: 0}
+  - {fileID: 4409321357923144986}
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
@@ -11789,9 +11791,9 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 5
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2732387296
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 11751521640972403618
+  <AssetPathHash>k__BackingField: 4177521141935704906
   _sceneNetworkObjects:
   - {fileID: 0}
   - {fileID: 3826388455443313347}
@@ -11819,8 +11821,8 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 3826388455443313347}
   _networkObjectCache: {fileID: 3826388455443313347}
-  markerText: '?'
-  markColor: {r: 0, g: 0, b: 0, a: 1}
+  markerText: SKELETON
+  markColor: {r: 0.8679245, g: 0.38582504, b: 0.38074043, a: 1}
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
@@ -20999,7 +21001,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _scenePathHash
-      value: 2732387296
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: <SceneId>k__BackingField
@@ -21029,6 +21031,10 @@ PrefabInstance:
       propertyPath: _sceneNetworkObjects.Array.data[1]
       value: 
       objectReference: {fileID: 3826388455443313347}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <ParentNetworkObject>k__BackingField
+      value: 
+      objectReference: {fileID: 3826388455443313347}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: spawnGoals
       value: 0
@@ -21038,12 +21044,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnRooms
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnProps
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[0].spawnNavMesh
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnNavMesh

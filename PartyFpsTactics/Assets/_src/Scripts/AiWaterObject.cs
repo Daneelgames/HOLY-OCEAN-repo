@@ -32,7 +32,6 @@ public class AiWaterObject : MonoBehaviour
     // every update
     public void SetInputAi()
     {
-        Debug.Log("Debug Ai Water bike 2");
         resultThrust = thrustPower;
 
         targetRotation = Quaternion.Slerp(rb.transform.rotation,

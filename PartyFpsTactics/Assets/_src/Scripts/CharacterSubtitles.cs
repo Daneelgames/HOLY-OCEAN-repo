@@ -38,15 +38,23 @@ public class CharacterSubtitles : MonoBehaviour
     {
         for (int i = 0; i < currentCharacterSubtitles.phrases.Count; i++)
         {
-            subtitleText.text = currentCharacterSubtitles.phrases[i].messageText;
-            dialogueVisualAnimator.SetBool(Active, true);
+            if (currentCharacterSubtitles.phrases[i].messageText.Length > 0)
+            {
+                subtitleText.text = currentCharacterSubtitles.phrases[i].messageText;
+                dialogueVisualAnimator.SetBool(Active, true);
+                
+                if (currentCharacterSubtitles.phrases[i].messageAudio == null)
+                    Debug.LogError("NO AUDIO FOR THIS LINE");
+                
+                _audioSource.clip = currentCharacterSubtitles.phrases[i].messageAudio;
+                _audioSource.Play();
+
+                yield return new WaitForSeconds(_audioSource.clip.length);
+                dialogueVisualAnimator.SetBool(Active, false);
+                yield return new WaitForSeconds(_audioSource.clip.length * .25f);
+            }
             
-            _audioSource.clip = currentCharacterSubtitles.phrases[i].messageAudio;
-            _audioSource.Play();
             
-            yield return new WaitForSeconds(_audioSource.clip.length);
-            dialogueVisualAnimator.SetBool(Active, false);
-            yield return new WaitForSeconds(_audioSource.clip.length * .25f);
             if (currentCharacterSubtitles.phrases[i].RunEvent == false)
                 continue;
             InteractableEventsManager.Instance.RunEvent(currentCharacterSubtitles.phrases[i].eventToRun);   

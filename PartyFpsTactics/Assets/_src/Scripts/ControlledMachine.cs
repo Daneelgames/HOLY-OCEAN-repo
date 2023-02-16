@@ -213,7 +213,6 @@ public class ControlledMachine : MonoBehaviour
 
     public void SetCarInputAi()
     {
-        Debug.Log("Debug Ai Water bike 1");
         if (AiWaterObject)
             AiWaterObject.SetInputAi();
     }

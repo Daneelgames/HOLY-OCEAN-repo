@@ -196,7 +196,7 @@ namespace MrPink.WeaponsSystem
 
         private void HandleEndOfCollision(RaycastHit hit, CollisionTarget collisionTarget)
         {
-            Debug.Log("projectile hit " + hit.collider.name);
+            //Debug.Log("projectile hit " + hit.collider.name);
             
             if (collisionTarget == CollisionTarget.Self) // THIS CONTACT DOESNT COUNT, DO NOTHING
                 return;
@@ -226,7 +226,7 @@ namespace MrPink.WeaponsSystem
 
         private void Death()
         {
-            Debug.Log("Destroy projectile");
+            //Debug.Log("Destroy projectile");
         
             if (toolType == ToolType.FragGrenade)
                 fragGrenadeTool.Explode();

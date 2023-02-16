@@ -87,11 +87,11 @@ namespace MrPink.WeaponsSystem
                 }
             }
             
-            Debug.Log($" car  Коллизия с {other.gameObject.name}");
+             //Debug.Log($" car  Коллизия с {other.gameObject.name}");
             
             var target = TryDoDamage(other);
             
-            Debug.Log("car melee tryDoDamage target: " + target);
+            //Debug.Log("car melee tryDoDamage target: " + target);
             switch (target)
             {
                 case CollisionTarget.Solid:

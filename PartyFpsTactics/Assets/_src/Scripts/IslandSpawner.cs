@@ -70,7 +70,7 @@ public class IslandSpawner : NetworkBehaviour
         int islandIndex = ProgressionManager.Instance.currentLevelIndex;
         islandIndex = Mathf.Clamp(islandIndex, 0, islandPrefabList.Count - 1);
         var randomIslandPrefab = islandPrefabList[islandIndex];
-        var spawnDir = new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)).normalized;
+        var spawnDir = (Vector3.zero - new Vector3(Game.LocalPlayer.Position.x,0,Game.LocalPlayer.Position.z)).normalized;
         
         var spawnPos = spawnDir * spawnDistance;
         var newIsland = Instantiate(randomIslandPrefab, spawnPos, Quaternion.identity);

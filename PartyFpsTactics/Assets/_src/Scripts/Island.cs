@@ -31,6 +31,9 @@ public class Island : NetworkBehaviour
 
     [SerializeField] private ColliderToVoxel[] voxelCutterForBuildings;
     
+    [BoxGroup("Havok")] [SerializeField] [ReadOnly] private int targetHavok;
+    [BoxGroup("Havok")] [SerializeField] [ReadOnly] private int currentHavok;
+    float GetHavokFill => (float)currentHavok / targetHavok;
     public bool IsCulled => culled;
     
     public override void OnStartClient()
@@ -91,6 +94,13 @@ public class Island : NetworkBehaviour
                 _navMeshSurfaceUpdate?.Stop();
                 DespawnIslandEnemies();
             }
+            
+            if (base.IsHost && spawnBoss && bossKilled)
+            {
+                spawnBoss = false;
+                ServerManager.Despawn(gameObject, DespawnType.Destroy);
+                return;
+            }
         }
     }
 
@@ -105,10 +115,62 @@ public class Island : NetworkBehaviour
         {
             ContentPlacer.Instance.SpawnEnemiesInBuilding(_tileBuildingGenerator.spawnedBuildings[0], this);
         }
+
         if (spawnBoss && bossKilled == false)
-            ContentPlacer.Instance.SpawnBossOnIsland(this, _tileBuildingGenerator.GetRandomPosInsideLastLevel());
+        {
+            if (islandHavokCoroutine != null)
+                StopCoroutine(islandHavokCoroutine);
+            InitTargetHavok();
+            islandHavokCoroutine = StartCoroutine(GetIslandHavok());
+        }
     }
 
+    void InitTargetHavok()
+    {
+        targetHavok = 0;
+        currentHavok = 0;
+        foreach (var level in _tileBuildingGenerator.spawnedBuildings[0].spawnedBuildingLevels)
+        {
+            for (var index = 0; index < level.unitsToSpawn.Count; index++)
+            {
+                targetHavok++;
+            }
+        }
+
+        targetHavok /= 2; // kill half of mobs to spawn boss
+    }
+
+    
+    private Coroutine islandHavokCoroutine;
+    IEnumerator GetIslandHavok()
+    {
+        IslandHavokUi.Instance.ShowBar();
+        while (currentHavok < targetHavok)
+        {
+            float t = 1;
+            while (t > 0)
+            {
+                t -= Time.fixedUnscaledDeltaTime;
+                IslandHavokUi.Instance.SetHavokFill(GetHavokFill);
+                yield return null;
+            }
+            if (distanceToLocalPlayer > mobsIslandDespawnDistance)
+            {
+                // reduce havok if player is far
+                currentHavok = Mathf.Clamp(currentHavok - 1, 0, targetHavok);
+            }
+        }
+        
+        IslandHavokUi.Instance.HideBar();
+        IslandHavokFull();
+        StopCoroutine(islandHavokCoroutine);
+    }
+
+
+    public void IslandHavokFull()
+    {
+        ContentPlacer.Instance.SpawnBossOnIsland(this, _tileBuildingGenerator.GetRandomPosInsideLastLevel());
+    }
 
     Vector3 GetRandomPosOnNavMesh()
     {
@@ -140,6 +202,8 @@ public class Island : NetworkBehaviour
         islandUnits.Add(unit);
         if (boss)
             unit.OnDeathEvent.AddListener(HealthController_OnBossKilled);
+        else
+            unit.OnDeathEvent.AddListener(HealthController_OnIslandUnitKilled);
     }
     void SpawnPropsInBuilding()
     {
@@ -159,9 +223,34 @@ public class Island : NetworkBehaviour
     {
         // cut rooms
         //if (voxelCutterForBuildings[0].colliders.Length <= 0) return;
+
+        StartCoroutine(CutVoxelsForRoomsOverTime());
+    }
+
+    IEnumerator CutVoxelsForRoomsOverTime()
+    {
+        Debug.Log("CutVoxelsForRoomsOverTime; voxelCutterForBuildings " + voxelCutterForBuildings.Length);
         
+        var manualBaker = voxelCutterForBuildings[0].gameObject.GetComponent<ColliderToVoxelManualBaker>();
+        
+
         foreach (var colliderToVoxel in voxelCutterForBuildings)
         {
+            yield return null;
+
+            while (colliderToVoxel.TargetGenerator.HullGeneratorsWorking)
+            {
+                yield return null;
+            }
+            
+            if (manualBaker)
+            {
+                manualBaker._colliderToVoxel = colliderToVoxel;
+                manualBaker.HideAllColliders();
+                manualBaker.Bake(colliderToVoxel.transform.childCount, true);
+                continue;
+            }
+            
             colliderToVoxel.ApplyProceduralModifier(true);
         }
     }
@@ -171,9 +260,15 @@ public class Island : NetworkBehaviour
         
         UiMarkWorldObject islandMarker = gameObject.GetComponent<UiMarkWorldObject>();
         Destroy(islandMarker);
-        
+
+        bossKilled = true;
+        /*
         if (base.IsHost)
-            ServerManager.Despawn(gameObject, DespawnType.Destroy);
+            ServerManager.Despawn(gameObject, DespawnType.Destroy);*/
         //Destroy(gameObject);
+    }
+    void HealthController_OnIslandUnitKilled()
+    {
+        currentHavok++;
     }
 }

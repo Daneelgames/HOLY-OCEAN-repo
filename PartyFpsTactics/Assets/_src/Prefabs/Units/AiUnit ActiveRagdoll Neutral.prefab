@@ -3269,6 +3269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8d2efc063dfab4fa0b6fad62228406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoPickUpOnStart: 0
   type: 1
   npcDialoguesList: {fileID: 0}
   interactiveObjectName: SAND STRANGER
@@ -6467,7 +6468,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: -2920836169782800529}
   _networkObjectCache: {fileID: -2920836169782800529}
   isPlayer: 0
-  resetRoseInstanceDialogueOnDeath: 0
+  completeGameLevelOnDeath: 0
   selfUnit: {fileID: 834634797964359098}
   health: 150
   healthMax: 150
@@ -6669,9 +6670,7 @@ MonoBehaviour:
   minAngleToRotateGun: 90
   minAngleToShoot: 90
   rotateWeaponTowardTarget: 1
-  maxDistanceToAttack: 100
   updateRate: 0.1
-  maxDistanceFromPlayerToShoot: 200
 --- !u!114 &3176254616865558108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6867,6 +6866,7 @@ MonoBehaviour:
   activeAngularPositionSpring: 1500
   activeAngularPositionDamper: 100
   timeToStandUp: 3
+  getGroundedCooldown: 1
   ragdoll: 0
   inVehicle: 0
   aliveMaterial: {fileID: 2100000, guid: e2f70939715ed9546a764a0d794e5831, type: 2}
@@ -6877,6 +6877,7 @@ MonoBehaviour:
     m_Bits: 4160
   extraCollidersToIgnore:
   - {fileID: 7380722583892912433}
+  groundedRaycastOrigin: {fileID: 35257284}
   grounded: 1
   groundedCheckSphereRadius: 2.5
   moveRbToOriginIfPlayerForce: 5

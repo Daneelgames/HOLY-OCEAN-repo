@@ -53,7 +53,7 @@ public class ContentPlacer : NetworkBehaviour
     private Coroutine spawnAroundPlayer;
 
     private InteractiveObject currentPlayerInventoryLoot;
-    public void SpawnPlayerLootContainer(List<PlayerInventory.InventoryItem> inventoryItems) // locally
+    public void SpawnPlayerLootContainer(List<PlayerInventory.InventoryItem> inventoryItems, int moneyToDrop) // locally
     {
         if (currentPlayerInventoryLoot != null)
         {
@@ -61,7 +61,7 @@ public class ContentPlacer : NetworkBehaviour
         }
         currentPlayerInventoryLoot = Instantiate(inventoryLootPrefab, Game.LocalPlayer.Position,
             Game.LocalPlayer.transform.rotation);
-        currentPlayerInventoryLoot.SaveInventoryLoot(inventoryItems);
+        currentPlayerInventoryLoot.SaveInventoryLoot(inventoryItems, moneyToDrop);
     }
 
     [ServerRpc(RequireOwnership = false)]

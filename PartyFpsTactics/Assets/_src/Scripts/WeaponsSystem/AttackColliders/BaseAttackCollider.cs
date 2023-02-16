@@ -136,7 +136,7 @@ namespace MrPink.WeaponsSystem
         {
             if (!unitsExplosionCompleted)
             {
-                Debug.Log("UNITS EXPLOSION");
+                    //Debug.Log("UNITS EXPLOSION");
                 InteractableEventsManager.Instance.ExplosionNearInteractables(transform.position);
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance, ragdollExplosionForce, playerExplosionForce);
                 unitsExplosionCompleted = true;
@@ -242,7 +242,7 @@ namespace MrPink.WeaponsSystem
 
             if (targetHealth.IsOwnedBy(ownerHealth))
             {
-                Debug.Log("return CollisionTarget.Self;");
+                //Debug.Log("return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
 
@@ -250,7 +250,7 @@ namespace MrPink.WeaponsSystem
             {
                 if (damagedHealthControllers.Count > 0 && damagedHealthControllers.Contains(targetHealth.HealthController))
                 {
-                    Debug.Log("return CollisionTarget.Creature;");
+                    //Debug.Log("return CollisionTarget.Creature;");
                     {
                         UnitsExplosion(ownerHealth);
                         return CollisionTarget.Creature;

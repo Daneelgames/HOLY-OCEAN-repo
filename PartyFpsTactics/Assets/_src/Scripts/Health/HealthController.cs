@@ -190,7 +190,7 @@ namespace MrPink.Health
         {
             if (hpToRegen <= 0) return;
             
-            Debug.Log("AddHealth " + hpToRegen);
+            //Debug.Log("AddHealth " + hpToRegen);
             health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
             if (Game.LocalPlayer.Health == this)
             {
@@ -248,12 +248,12 @@ namespace MrPink.Health
             if (health <= 0)
                 return;
 
-            if (IsImmortal)
+            if (IsImmortal || Game._instance.IsLevelGenerating)
                 damage = 0;
             
             if (Shop.Instance.IsActive)
                 return;
-            
+                
             if (Game.LocalPlayer.Health == this && Game.LocalPlayer.Inventory.HasTool(ToolType.OneTimeShield))
             {
                 PlayerUi.Instance.RemoveShieldFeedback();
@@ -381,7 +381,7 @@ namespace MrPink.Health
         [ObserversRpc(/*IncludeOwner = false*/)]
         void RpcDeathOnClient(ScoringActionType action)
         {
-            Debug.Log("DEATH RpcDeathOnClient " + gameObject.name);
+            //Debug.Log("DEATH RpcDeathOnClient " + gameObject.name);
             DeathOnClient(action);
         }
 
@@ -430,7 +430,10 @@ namespace MrPink.Health
                 ProgressionManager.Instance.LevelCompleted();
             
             if (destroyOnDeath)
+            {
+                OnDeathEvent?.RemoveAllListeners();
                 Destroy(gameObject);
+            }
         }
         
         public void AddToVisibleByUnits(HealthController unit)

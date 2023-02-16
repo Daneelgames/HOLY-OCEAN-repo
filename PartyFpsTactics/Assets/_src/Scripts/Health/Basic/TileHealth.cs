@@ -144,9 +144,13 @@ namespace MrPink.Health
         }
         private void DestroyTileParticlesAndShake(DamageSource source, bool deathParticles = true)
         {
-            var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(transform.position);
             if (deathParticles)
-                closestBuilding.DebrisParticles(transform.position);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).DebrisParticles(transform.position);
+            
+            if (source != DamageSource.Player)
+                return;
+
+            var closestBuilding = IslandSpawner.Instance.GetClosestTileBuilding(transform.position);
             
             var hit = Physics.OverlapSphere(transform.position, 1, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < hit.Length; i++)
@@ -186,7 +190,7 @@ namespace MrPink.Health
                 DestroyTileParticlesAndShake(DamageSource.Environment, true);
             
             if (sendToLevelgen && parentLevel != null)
-                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).TileDestroyed(parentLevel, tileLevelCoordinates);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).TileDestroyed(parentLevel, this);
             
             // sync tile destruction by ehhh position?
             if (rpcSync)

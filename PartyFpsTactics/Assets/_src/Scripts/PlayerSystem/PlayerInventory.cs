@@ -285,6 +285,10 @@ namespace MrPink.PlayerSystem
         public void DropAllOnDeath()
         {
             var itemsToDrop = new List<InventoryItem>(inventoryItems);
+            int moneyToDrop = ScoringSystem.Instance.CurrentScore;
+            ScoringSystem.Instance.RemoveScore(moneyToDrop);
+            ContentPlacer.Instance.SpawnPlayerLootContainer(itemsToDrop, moneyToDrop);
+            
             for (int i = 0; i < Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs.Count; i++)
             {
                 var toolPrefab = Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs[i];
@@ -309,8 +313,6 @@ namespace MrPink.PlayerSystem
             inventoryItems.Clear();
 
             CheckIfPlayerHasEmptyHands();
-
-            ContentPlacer.Instance.SpawnPlayerLootContainer(itemsToDrop);
         }
 
         WeaponController leftWeapon;

@@ -16178,7 +16178,7 @@ GameObject:
   - component: {fileID: 1261924167978257544}
   - component: {fileID: 4312861106947477765}
   m_Layer: 0
-  m_Name: HEAD ISLAND TileBuilding
+  m_Name: ISLAND HEAD TileBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16232,6 +16232,8 @@ MonoBehaviour:
   voxelCutterForBuildings:
   - {fileID: 9142360115740641630}
   - {fileID: 8172008302290976152}
+  targetHavok: 0
+  currentHavok: 0
 --- !u!114 &6359991616015023496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16281,11 +16283,11 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 1
+  <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 14842962670002989624
+  <AssetPathHash>k__BackingField: 4689803512179862576
   _sceneNetworkObjects:
   - {fileID: 3152839529628881584}
   - {fileID: 1261924167978257544}
@@ -16320,8 +16322,8 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 1261924167978257544}
   _networkObjectCache: {fileID: 1261924167978257544}
-  markerText: '?'
-  markColor: {r: 0, g: 0, b: 0, a: 1}
+  markerText: HEAD
+  markColor: {r: 0.8679245, g: 0.38582504, b: 0.38074043, a: 1}
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
@@ -26575,7 +26577,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1737078
+  instanceID: 1416344
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -29424,7 +29426,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1737316
+  instanceID: 1416582
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -29996,7 +29998,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1737380
+  instanceID: 1416646
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -32377,7 +32379,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1737614
+  instanceID: 1416880
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -34617,6 +34619,7 @@ GameObject:
   - component: {fileID: 4215674974669241342}
   - component: {fileID: 9142360115740641630}
   - component: {fileID: 8172008302290976152}
+  - component: {fileID: 500182128689729838}
   m_Layer: 2
   m_Name: BuildingCut
   m_TagString: Untagged
@@ -34676,9 +34679,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetGenerator: {fileID: 6359991616780401155}
-  Depth: 0
+  Depth: 6
   TargetDimension: 0
-  Additive: 0
+  Additive: 1
   ClearBlock: 0
   ErrorMessage: This setup would modify more than 5 Million Voxels. You do not want
     to freeze Unity
@@ -34687,6 +34690,20 @@ MonoBehaviour:
   falloffdist: 2000
   finalMultiplier: 1
   colliders: []
+--- !u!114 &500182128689729838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6799631080295411716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91cbfeaec88ae57468f181fcd97d7769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colliderToVoxel: {fileID: 0}
+  lastPieceIndex: 0
 --- !u!1 &6814682674861006329
 GameObject:
   m_ObjectHideFlags: 0
@@ -46412,12 +46429,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnRooms
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnProps
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[0].spawnNavMesh
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnNavMesh

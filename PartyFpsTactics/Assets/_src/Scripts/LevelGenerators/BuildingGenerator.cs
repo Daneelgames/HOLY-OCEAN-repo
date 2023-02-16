@@ -529,241 +529,50 @@ public class BuildingGenerator : NetworkBehaviour
     {
         if (availableStarPositionsForThinWalls.Count <= 0)
             yield break;
+
+        var tilesTemp = new List<TileHealth>(level.tilesInside);
         
-        List<Vector2Int> RoomsOccupiedTilesPositions = new List<Vector2Int>(); // this will make sure rooms dont intersect
+        int buildWallUntillY = level.size.y - Mathf.Clamp(Random.Range(0, level.size.x / level.size.y), 0, level.size.y);
+        
+        if (hasRoof)
+            buildWallUntillY = level.size.y - 1;
+
         
         
-        int max = level.size.x / 10;
-        for (int i = 0; i < max; i++) // ROOMS AMOUNT
+        int step = 0;
+        Random.InitState(currentSeed);
+        for (int i = 0; i < Random.Range(1,5); i++)
         {
-            Random.InitState(currentSeed + levelIndex);
-            int buildWallUntillY = level.size.y - Mathf.Clamp(Random.Range(0, level.size.x / level.size.y), 0, level.size.y);
-            
-            // SPAWN INNER ROOMS
-            Random.InitState(currentSeed + levelIndex);
-            int leftSidePosition = Random.Range(1, level.size.x - 1);
-            int rightSidePosition = 0;
-            Random.InitState(currentSeed + levelIndex);
-            int backSidePosition = Random.Range(1, level.size.z - 1);
-            int frontSidePosition = 0;
-
-            if (leftSidePosition < level.size.x / 2)
-            {
-                Random.InitState(currentSeed);
-                rightSidePosition = leftSidePosition + Random.Range(2, level.size.x / 2);
-            }
-            else
-            {
-                Random.InitState(currentSeed + levelIndex);
-                var tempPos = leftSidePosition - Random.Range(2, level.size.x / 2);
-                rightSidePosition = leftSidePosition;
-                leftSidePosition = tempPos;
-            }
-
-            if (backSidePosition < level.size.z / 2)
-            {
-                Random.InitState(currentSeed);
-                frontSidePosition = backSidePosition + Random.Range(2, level.size.z / 2);
-            }
-            else
-            {
-                Random.InitState(currentSeed + levelIndex);
-                var tempPos = backSidePosition - Random.Range(2, level.size.z / 2);
-                frontSidePosition = backSidePosition;
-                backSidePosition = tempPos;
-            }
-
-            Random.InitState(currentSeed + levelIndex);
-            var thinColorPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
-            var newRoom = new Room();
-            for (int x = leftSidePosition; x <= rightSidePosition; x++)
-            {
-                for (int z = backSidePosition; z <= frontSidePosition; z++)
-                {
-                    if (RoomsOccupiedTilesPositions.Contains(new Vector2Int(x,z)))
-                        continue;
-                    
-                    if (x != leftSidePosition && x != rightSidePosition && z != backSidePosition &&
-                        z != frontSidePosition)
-                    {
-                        // IF NOT A TILE FOR A WALL,
-                        // MARK THIS EMPTY SPACE AS A ROOM
-                        newRoom.coordsInside.Add(new Vector3Int(x, 0, z));
-                        RoomsOccupiedTilesPositions.Add(new Vector2Int(x,z));
-                        continue;
-                    }
-                    
-                    // NOW SPAWN WALLS AROUND THE ROOM
-                    
-                    RoomsOccupiedTilesPositions.Add(new Vector2Int(x,z));
-                    
-                    if (hasRoof)
-                        buildWallUntillY = level.size.y - 1;
-
-                    for (int y = 1; y < buildWallUntillY; y++)
-                    {
-                        if (level.roomTilesMatrix[x, y, z] != null)
-                            continue;
-                        
-                        var newRoomWallTile = Instantiate(thinColorPrefab, level.spawnedTransform);
-                        newRoomWallTile.transform.localRotation = Quaternion.identity;
-                        newRoomWallTile.transform.localPosition = new Vector3(x, y, z) - new Vector3(level.size.x / 2, 0, level.size.z / 2);
-                        
-                        level.roomTilesMatrix[x, y, z] = newRoomWallTile;
-                        //level.tilesInside.Add(newRoomWallTile);
-                        level.allTiles.Add(newRoomWallTile);
-                        if (y == buildWallUntillY - 1)
-                            level.tilesTop.Add(newRoomWallTile);
-
-                        var coords = new Vector3Int(x, y, z);
-                        newRoomWallTile.SetTileRoomCoordinates(coords, level);
-                        
-                        if (y != 1)
-                            continue;
-                        
-                        StartCoroutine(ConstructCover(newRoomWallTile.gameObject, 3));
-                    }
-                    //yield return null;
-                }
-                yield return null;
-            }
-            
-            level.spawnedRooms.Add(newRoom);
             yield return null;
-        }
-        // SPAWN INVISIBLE BLOCKERS FOR RANDOM WALLS
-        int[,,] invisibleWallBlockers = new int[level.size.x,level.size.y,level.size.z]; // 0 is free, 1 is block
-        Vector3Int roomSize = new Vector3Int(level.size.x / 5, level.size.y, level.size.z / 5);
-        Random.InitState(currentSeed);
-        var xxx = Random.Range(0, level.size.x / 2);
-        Random.InitState(currentSeed);
-        var yyy = Random.Range(0, level.size.z / 2);
-        Vector3Int roomLocalCoords = new Vector3Int(xxx, 0, yyy);
-        for (int x = 0; x < roomSize.x; x++)
-        {
-            for (int z = 0; z < roomSize.z; z++)
-            {
-                for (int y = 0; y < roomSize.y; y++)
-                {
-                    invisibleWallBlockers[roomLocalCoords.x + x, y, roomLocalCoords.z + z] = 1;
-                }
-            }
-        }
-        // RANDOM WALLS
-        Random.InitState(currentSeed + levelIndex);
-        int wallsAmount = Random.Range(thinWallsPerLevelMinMax.x, thinWallsPerLevelMinMax.y);
-        for (int i = 0; i < wallsAmount; i++)
-        {
-            Random.InitState(currentSeed + levelIndex);
-            var currentWallCoord = availableStarPositionsForThinWalls[Random.Range(0, availableStarPositionsForThinWalls.Count)];
-            var prevWallCoord = currentWallCoord;
-            availableStarPositionsForThinWalls.Remove(currentWallCoord);
-            // пустить крота по y==1
-
-            List<Vector3Int> positionsInThinWall = new List<Vector3Int>(); 
-            positionsInThinWall.Add(currentWallCoord);
-            Random.InitState(currentSeed);
-            float thinWallHeightScaler = Random.Range(0.2f, 1f);
-            int posIndex = 0;
-
-            int t = 0;
             
-            while (true)
+            step++;
+            Random.InitState(currentSeed + step);
+            var randomTile = tilesTemp[Random.Range(0, tilesTemp.Count)];
+            int x = Mathf.RoundToInt(randomTile.transform.localPosition.x);
+            int z = Mathf.RoundToInt(randomTile.transform.localPosition.z);
+            
+            tilesTemp.Remove(randomTile);
+
+            Random.InitState(currentSeed + step);
+            var thinColorPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
+            for (int y = 1; y < buildWallUntillY; y++)
             {
-                List<Vector3Int> nextAvailablePositions = new List<Vector3Int>(); 
-                if (currentWallCoord.x - 1 >= 0 && level.roomTilesMatrix[currentWallCoord.x - 1, currentWallCoord.y, currentWallCoord.z] == null)
-                {
-                    var newCoord = new Vector3Int(currentWallCoord.x - 1, currentWallCoord.y, currentWallCoord.z);
-                    bool canAdd = true;
+                var newRoomWallTile = Instantiate(thinColorPrefab, level.spawnedTransform);
+                newRoomWallTile.transform.localRotation = Quaternion.identity;
+                newRoomWallTile.transform.localPosition = new Vector3(x, y, z);
+                        
+                level.allTiles.Add(newRoomWallTile);
+                if (y == buildWallUntillY - 1)
+                    level.tilesTop.Add(newRoomWallTile);
 
-                    if (posIndex > 0)
-                        canAdd = !HasNeighbourTiles(newCoord, level, currentWallCoord, prevWallCoord);
-
-                    if (invisibleWallBlockers[newCoord.x, 0, newCoord.z] == 1)
-                        canAdd = false;
-                    
-                    if (canAdd)
-                        nextAvailablePositions.Add(newCoord);
-                }
-                if (currentWallCoord.z + 1 < level.size.z && level.roomTilesMatrix[currentWallCoord.x, currentWallCoord.y, currentWallCoord.z + 1] == null)
-                {
-                    var newCoord = new Vector3Int(currentWallCoord.x, currentWallCoord.y, currentWallCoord.z + 1);
-                    bool canAdd = true;
-                    
-                    if (posIndex > 0)
-                        canAdd = !HasNeighbourTiles(newCoord, level, currentWallCoord, prevWallCoord);
-                    
-                    if (invisibleWallBlockers[newCoord.x, 0, newCoord.z] == 1)
-                        canAdd = false;
-
-                    if (canAdd)
-                        nextAvailablePositions.Add(newCoord);
-                }
-                if (currentWallCoord.x + 1 < level.size.x && level.roomTilesMatrix[currentWallCoord.x + 1, currentWallCoord.y, currentWallCoord.z] == null)
-                {
-                    var newCoord = new Vector3Int(currentWallCoord.x + 1, currentWallCoord.y, currentWallCoord.z);
-                    bool canAdd = true;
-                    if (posIndex > 0)
-                        canAdd = !HasNeighbourTiles(newCoord, level, currentWallCoord, prevWallCoord);
-                    
-                    if (invisibleWallBlockers[newCoord.x, 0, newCoord.z] == 1)
-                        canAdd = false;
-
-                    if (canAdd)
-                        nextAvailablePositions.Add(newCoord);
-                }
-                if (currentWallCoord.z - 1 >= 0 && level.roomTilesMatrix[currentWallCoord.x, currentWallCoord.y, currentWallCoord.z - 1] == null)
-                {
-                    var newCoord = new Vector3Int(currentWallCoord.x, currentWallCoord.y, currentWallCoord.z - 1);
-                    bool canAdd = true;
-                    if (posIndex > 0)
-                        canAdd = !HasNeighbourTiles(newCoord, level, currentWallCoord, prevWallCoord);
-                    
-                    if (invisibleWallBlockers[newCoord.x, 0, newCoord.z] == 1)
-                        canAdd = false;
-
-                    if (canAdd)
-                        nextAvailablePositions.Add(newCoord);
-                }
-
-                posIndex++;
-                if (nextAvailablePositions.Count <= 0)
-                {
-                    break;
-                }
-                Random.InitState(currentSeed + levelIndex);
-                var nextPos = nextAvailablePositions[Random.Range(0, nextAvailablePositions.Count)];
-                prevWallCoord = currentWallCoord;
-                currentWallCoord = nextPos;
-
-                int buildWallUntillY = level.size.y;
-                if (hasRoof)
-                    buildWallUntillY = level.size.y - 1;
-                else
-                    buildWallUntillY = Mathf.RoundToInt(buildWallUntillY * thinWallHeightScaler);
-                
-                for (int y = 1; y < buildWallUntillY;  y++)
-                {
-                    var newWallTile = Instantiate(tileWallThinPrefab, level.spawnedTransform);
-                    newWallTile.transform.localRotation = Quaternion.identity;
-                    newWallTile.transform.localPosition =  new Vector3(nextPos.x - level.size.x / 2, y, nextPos.z - level.size.z/2);
-                    
-                    level.roomTilesMatrix[nextPos.x, y, nextPos.z] = newWallTile;
-                    level.allTiles.Add(newWallTile);
-                    if (y == buildWallUntillY - 1)
-                        level.tilesTop.Add(newWallTile);
-                    
-                    var coords = new Vector3Int(nextPos.x, y, nextPos.z);
-                    newWallTile.SetTileRoomCoordinates(coords, level);
-                }
-
-                t++;
-                if (t > 10)
-                {
-                    t = 0;
-                    yield return null;
-                }
-            }
+                var coords = new Vector3Int(x, y, z);
+                newRoomWallTile.SetTileRoomCoordinates(coords, level);
+                        
+                if (y != 1)
+                    continue;
+                        
+                StartCoroutine(ConstructCover(newRoomWallTile.gameObject, 3));
+            } 
         }
     }
 
@@ -1244,17 +1053,18 @@ public class BuildingGenerator : NetworkBehaviour
         StartCoroutine(TileDamagedFeedbackCoroutine(tile));
     }
 
-    public void TileDestroyed(Level level, Vector3Int destroyedTileCoords)
+    public void TileDestroyed(Level level,TileHealth tile)
     {
-        int x = destroyedTileCoords.x;
-        int y = destroyedTileCoords.y;
-        int z = destroyedTileCoords.z;
         
         /*
         Debug.Log("Tile Destroyed, destroyedTileCoords: " + destroyedTileCoords);
         Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);*/
-        level.roomTilesMatrix[x, y, z] = null;
         
+        UnitsManager.Instance.RagdollTileExplosion(tile.transform.position);
+        InteractableEventsManager.Instance.ExplosionNearInteractables(tile.transform.position);
+        GameVoxelModifier.Instance.DestructionInWorld(tile.transform.position);
+        
+        /*
         // check neighbours
         for (int YYY = 1; YYY < level.size.y; YYY++)
         {
@@ -1275,13 +1085,10 @@ public class BuildingGenerator : NetworkBehaviour
                 }
 
                 //Debug.Log("Tile Destroyed AddRigidbody");
-                UnitsManager.Instance.RagdollTileExplosion(tile.transform.position);
-                InteractableEventsManager.Instance.ExplosionNearInteractables(tile.transform.position);
-                GameVoxelModifier.Instance?.DestructionInWorld(tile.transform.position);
                 tile.ActivateRigidbody(100, tilePhysicsMaterial);
                 level.roomTilesMatrix[x, YYY, z] = null;
             }
-        }
+        }*/
     }
 
     //IEnumerator CheckTilesToFall

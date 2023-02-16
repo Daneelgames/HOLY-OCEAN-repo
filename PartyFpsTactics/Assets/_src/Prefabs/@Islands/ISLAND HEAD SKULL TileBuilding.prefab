@@ -9188,6 +9188,7 @@ GameObject:
   - component: {fileID: 5306204244080011444}
   - component: {fileID: 5331760386187212470}
   - component: {fileID: 6063151943970548777}
+  - component: {fileID: 4412605550571464466}
   m_Layer: 2
   m_Name: RoomsCut
   m_TagString: Untagged
@@ -9282,6 +9283,20 @@ MonoBehaviour:
   falloffdist: 2000
   finalMultiplier: 1
   colliders: []
+--- !u!114 &4412605550571464466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898281930952229535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91cbfeaec88ae57468f181fcd97d7769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colliderToVoxel: {fileID: 0}
+  lastPieceIndex: 0
 --- !u!1 &1906004132827577983
 GameObject:
   m_ObjectHideFlags: 0
@@ -19065,7 +19080,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1364846
+  instanceID: 1424732
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -20572,7 +20587,7 @@ GameObject:
   - component: {fileID: 1261924167978257544}
   - component: {fileID: -5716379535766909132}
   m_Layer: 0
-  m_Name: HEAD SKULL ISLAND TileBuilding
+  m_Name: ISLAND HEAD SKULL TileBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20652,6 +20667,8 @@ MonoBehaviour:
   - {fileID: 5306204244080011444}
   - {fileID: 5331760386187212470}
   - {fileID: 6063151943970548777}
+  targetHavok: 0
+  currentHavok: 0
 --- !u!114 &1261924167978257544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20678,11 +20695,11 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 3
+  <PrefabId>k__BackingField: 1
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 18009675669928165122
+  <AssetPathHash>k__BackingField: 237992247087831570
   _sceneNetworkObjects:
   - {fileID: 1453758175633178418}
   - {fileID: 1261924167978257544}
@@ -20710,8 +20727,8 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 1261924167978257544}
   _networkObjectCache: {fileID: 1261924167978257544}
-  markerText: '?'
-  markColor: {r: 0, g: 0, b: 0, a: 1}
+  markerText: SKULLHEAD
+  markColor: {r: 0.8679245, g: 0.38582504, b: 0.38074043, a: 1}
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
@@ -25293,9 +25310,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetGenerator: {fileID: 6359991616780401155}
-  Depth: 0
+  Depth: 6
   TargetDimension: 0
-  Additive: 0
+  Additive: 1
   ClearBlock: 0
   ErrorMessage: This setup would modify more than 5 Million Voxels. You do not want
     to freeze Unity
@@ -29017,7 +29034,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1365806
+  instanceID: 1425694
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -32763,7 +32780,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1366058
+  instanceID: 1425944
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -34079,7 +34096,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1366140
+  instanceID: 1426026
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -34457,7 +34474,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1366184
+  instanceID: 1426070
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -35624,7 +35641,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1366294
+  instanceID: 1426180
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -51124,12 +51141,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnRooms
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnProps
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[0].spawnNavMesh
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnNavMesh

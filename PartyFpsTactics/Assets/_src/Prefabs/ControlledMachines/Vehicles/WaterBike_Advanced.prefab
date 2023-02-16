@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105920004949120202}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.003, y: 0.389, z: 0.304}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0030005097, y: 0.389, z: 0.30400002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1852825967723450302}
-  m_RootOrder: 9
+  m_Father: {fileID: 849971203446461996}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5224821360271212229
 MonoBehaviour:
@@ -134,13 +134,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 793721021182918901}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.003, y: 0.197, z: -0.256}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.013, y: 0.721, z: 1.168}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1852825967723450302}
-  m_RootOrder: 7
+  m_Father: {fileID: 849971203446461996}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1852825967152086562
 GameObject:
@@ -599,10 +599,6 @@ Transform:
   - {fileID: 1852825967432489628}
   - {fileID: 1852825967152086573}
   - {fileID: 1853302618759649135}
-  - {fileID: 6720943768454907508}
-  - {fileID: 3424718571400797136}
-  - {fileID: 1064600114280614809}
-  - {fileID: 2522410383717725721}
   - {fileID: 849971203446461996}
   - {fileID: 1547542833486703857}
   m_Father: {fileID: 0}
@@ -718,7 +714,7 @@ MonoBehaviour:
     stopDuration: 0.5
     thrustPosition: {x: -0.4, y: -0.7, z: -2.4}
     thrustDirection: {x: 0, y: 0, z: 1}
-    applyThrustWhenAboveWater: 0
+    applyThrustWhenAboveWater: 1
     reverseThrustCoefficient: 0.5
     maxSpeed: 35
     thrustCurve:
@@ -896,10 +892,10 @@ MonoBehaviour:
   totalMass: 950
   dimensions: {x: 2.14, y: 1.26, z: 5.7}
   useDefaultCenterOfMass: 0
-  centerOfMass: {x: 0.00056851003, y: 0.34682405, z: -0.5853386}
+  centerOfMass: {x: -0.000012498815, y: -0.37121105, z: 0.21698074}
   centerOfMassOffset: {x: 0, y: -0.43, z: 0.4}
   useDefaultInertia: 1
-  inertiaTensor: {x: 5261.7725, y: 4545.1104, z: 1132.3132}
+  inertiaTensor: {x: 1588.4044, y: 1568.3315, z: 402.68924}
   inertiaScale: {x: 1, y: 1, z: 1}
   updateInterval: 1
 --- !u!114 &1852825967723450298
@@ -931,8 +927,8 @@ MonoBehaviour:
   wheelVehicle: {fileID: 0}
   sleepMachine: {fileID: 0}
   dashForce: 1000
-  Visual: {fileID: 849971203446461996}
-  visualFollowSpeed: 1000
+  Visual: {fileID: 1852825967723450302}
+  visualFollowSpeed: 100
   sitTransform: {fileID: 3424718571400797136}
   CameraTransform: {fileID: 6720943768454907508}
   sitTransformNpc: {fileID: 1064600114280614809}
@@ -969,7 +965,7 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 66
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2732387296
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 13771586142092066940
   _sceneNetworkObjects:
@@ -6867,6 +6863,10 @@ Transform:
   m_Children:
   - {fileID: 5034307628166618001}
   - {fileID: 9077405444536374024}
+  - {fileID: 6720943768454907508}
+  - {fileID: 3424718571400797136}
+  - {fileID: 1064600114280614809}
+  - {fileID: 2522410383717725721}
   m_Father: {fileID: 1852825967723450302}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6893,13 +6893,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5192337943095041485}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: 0.937, z: -1.682}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.020000212, y: 0.937, z: -1.6820006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1852825967723450302}
-  m_RootOrder: 8
+  m_Father: {fileID: 849971203446461996}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6271128310437259500
 GameObject:
@@ -6929,8 +6929,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1852825967723450302}
-  m_RootOrder: 6
+  m_Father: {fileID: 849971203446461996}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6376444239023677742
 GameObject:

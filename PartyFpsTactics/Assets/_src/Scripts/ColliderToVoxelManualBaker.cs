@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ColliderToVoxelManualBaker : MonoBehaviour
 {
-    [SerializeField] private ColliderToVoxel _colliderToVoxel;
+    public ColliderToVoxel _colliderToVoxel;
     
     
     [BoxGroup("BAKING")] [SerializeField] [ReadOnly] private int lastPieceIndex = 0;

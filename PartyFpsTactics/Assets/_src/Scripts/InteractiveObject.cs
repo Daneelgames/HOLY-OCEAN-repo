@@ -47,11 +47,39 @@ public class InteractiveObject : MonoBehaviour
         InteractableEventsManager.Instance.InteractWithIO(this, qPressed, ePressed);
     }
 
-    private List<PlayerInventory.InventoryItem> playerLootInventoryItems;
+    [SerializeField] [ReadOnly] private List<PlayerInventory.InventoryItem> playerLootInventoryItems;
+    private int playerMoneyToDrop = 0;
     public List<PlayerInventory.InventoryItem> GetPlayerLootInventoryItems => playerLootInventoryItems;
-    public void SaveInventoryLoot(List<PlayerInventory.InventoryItem> inventoryItems)
+    public int GetPlayerMoneyToDrop => playerMoneyToDrop;
+    public void SaveInventoryLoot(List<PlayerInventory.InventoryItem> inventoryItems, int moneyToDrop)
     {
-        playerLootInventoryItems = new List<PlayerInventory.InventoryItem>(inventoryItems);
+        playerLootInventoryItems = new List<PlayerInventory.InventoryItem>();
+        
+        foreach (var item in inventoryItems)
+        {
+            var newItem = new PlayerInventory.InventoryItem();
+            newItem._toolType = item._toolType;
+            newItem.usesLeft = item.usesLeft;
+            newItem.ItemActions = item.ItemActions;
+            newItem.currentSlot = PlayerInventory.EquipmentSlot.Slot.Null;
+            
+            Debug.Log("DROP 0 " + newItem._toolType + "; uses " + newItem.usesLeft);
+            playerLootInventoryItems.Add(newItem);
+        }
+        foreach (var item in playerLootInventoryItems)
+        {
+            Debug.Log("DROP 1 " + item._toolType + "; uses " + item.usesLeft);
+        }
+        playerMoneyToDrop = moneyToDrop;
+    }
+    
+    [Button]
+    public void DebugInventory()
+    {
+        foreach (var item in playerLootInventoryItems)
+        {
+            Debug.Log("DROP 1 " + item._toolType + "; uses " + item.usesLeft);
+        }
     }
 
     public void CheckNpcDialogueList()

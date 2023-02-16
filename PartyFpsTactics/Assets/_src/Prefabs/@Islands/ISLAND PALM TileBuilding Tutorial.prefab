@@ -2432,7 +2432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colliderToVoxel: {fileID: 99015610748057721}
-  lastPieceIndex: 1088
+  lastPieceIndex: 0
 --- !u!1 &101747603325242459
 GameObject:
   m_ObjectHideFlags: 0
@@ -7161,8 +7161,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499183151784807479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -32.1, y: -20, z: -33.1}
-  m_LocalScale: {x: 0.31051874, y: 1, z: 0.31051874}
+  m_LocalPosition: {x: -28.29, y: -20, z: -35.94}
+  m_LocalScale: {x: 0.7304332, y: 1, z: 0.7304332}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4039894955072307964}
@@ -11652,6 +11652,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6152865949787205246}
   - component: {fileID: 8936042449104389653}
+  - component: {fileID: 1394852422900125662}
   m_Layer: 0
   m_Name: RoomsCutSkin
   m_TagString: Untagged
@@ -11698,6 +11699,20 @@ MonoBehaviour:
   falloffdist: 2000
   finalMultiplier: 1
   colliders: []
+--- !u!114 &1394852422900125662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 879011616687180874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91cbfeaec88ae57468f181fcd97d7769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colliderToVoxel: {fileID: 0}
+  lastPieceIndex: 0
 --- !u!1 &889998741713583950
 GameObject:
   m_ObjectHideFlags: 0
@@ -41602,7 +41617,7 @@ GameObject:
   - component: {fileID: 6473927946314326102}
   - component: {fileID: -1502333015841759364}
   m_Layer: 0
-  m_Name: PALM ISLAND TileBuilding
+  m_Name: ISLAND PALM TileBuilding Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41655,6 +41670,8 @@ MonoBehaviour:
   mobsIslandDespawnDistance: 500
   voxelCutterForBuildings:
   - {fileID: 8936042449104389653}
+  targetHavok: 0
+  currentHavok: 0
 --- !u!114 &5637452114658458935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41706,18 +41723,14 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 5
+  <PrefabId>k__BackingField: 3
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 1463669070905141680
+  <AssetPathHash>k__BackingField: 2882729573533656910
   _sceneNetworkObjects:
   - {fileID: 115383790497731435}
   - {fileID: 6473927946314326102}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -41742,8 +41755,8 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 6473927946314326102}
   _networkObjectCache: {fileID: 6473927946314326102}
-  markerText: '?'
-  markColor: {r: 0, g: 0, b: 0, a: 1}
+  markerText: PALM
+  markColor: {r: 0.8679245, g: 0.38582504, b: 0.38074043, a: 1}
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
@@ -66479,7 +66492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5637452113649377652
 Transform:
   m_ObjectHideFlags: 0
@@ -66488,7 +66501,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5637452113649377653}
   m_LocalRotation: {x: -0.026393307, y: -0.5909667, z: -0.14209275, w: 0.7936444}
-  m_LocalPosition: {x: -5.870001, y: 20.89, z: -7.7799997}
+  m_LocalPosition: {x: -11.67, y: 20.89, z: -11.88}
   m_LocalScale: {x: 11.78487, y: 11.78487, z: 11.78487}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66622,7 +66635,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1304420
+  instanceID: 1200822
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -66664,7 +66677,7 @@ MonoBehaviour:
   DuplicateMapOnClone: 0
   SaveInSceneSubFolder: 1
   RemoveVoxelmapOnDelete: 0
-  IsDirty: 0
+  IsDirty: 1
   ModuleScene:
     saveSystem: {fileID: 0}
     SceneVoxelData:
@@ -66946,7 +66959,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5637452114435727830
 Transform:
   m_ObjectHideFlags: 0
@@ -66955,7 +66968,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5637452114435727831}
   m_LocalRotation: {x: -0.026393307, y: -0.5909667, z: -0.14209275, w: 0.7936444}
-  m_LocalPosition: {x: -11.5, y: 1.5, z: -11.7}
+  m_LocalPosition: {x: -17.3, y: 1.5, z: -15.8}
   m_LocalScale: {x: 11.78487, y: 11.78487, z: 11.78487}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -67106,7 +67119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5637452114645247433
 Transform:
   m_ObjectHideFlags: 0
@@ -67115,7 +67128,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5637452114645247438}
   m_LocalRotation: {x: -0.026393307, y: -0.5909667, z: -0.14209275, w: 0.7936444}
-  m_LocalPosition: {x: -13.530001, y: 5.56, z: -11.4}
+  m_LocalPosition: {x: -19.33, y: 5.56, z: -15.5}
   m_LocalScale: {x: 22.410109, y: 22.410109, z: 22.410109}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -67819,7 +67832,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1304482
+  instanceID: 1200884
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
@@ -67902,7 +67915,11 @@ MonoBehaviour:
   tolerance: 0.001
   falloffdist: 2000
   finalMultiplier: 1
-  colliders: []
+  colliders:
+  - {fileID: 5637452114435727825}
+  - {fileID: 5637452114960353168}
+  - {fileID: 5637452113649377655}
+  - {fileID: 5637452114645247432}
 --- !u!114 &5637452114847276272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67935,7 +67952,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5637452114960353169
 Transform:
   m_ObjectHideFlags: 0
@@ -67944,7 +67961,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5637452114960353174}
   m_LocalRotation: {x: -0.026393307, y: -0.5909667, z: -0.14209275, w: 0.7936444}
-  m_LocalPosition: {x: -7.710001, y: 8.6, z: -4.8999996}
+  m_LocalPosition: {x: -13.51, y: 8.6, z: -9}
   m_LocalScale: {x: 11.78487, y: 11.78487, z: 11.78487}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -74016,8 +74033,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6113834124278703034}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -7.1, z: 0}
+  m_LocalRotation: {x: 0.2914279, y: -0.017672809, z: -0.12398407, w: 0.9483593}
+  m_LocalPosition: {x: -26.8, y: -49.7, z: -46.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -74030,7 +74047,7 @@ Transform:
   - {fileID: 2628663932837762079}
   m_Father: {fileID: 3364272763113283406}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 33.256, y: -7.268, z: -17.07}
 --- !u!1 &6124801887739868044
 GameObject:
   m_ObjectHideFlags: 0
@@ -110779,7 +110796,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.size
-      value: 15
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[0]
@@ -110802,12 +110819,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnRooms
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnProps
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[0].spawnNavMesh
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: buildingsToSpawnSettings.Array.data[1].spawnNavMesh
@@ -110853,21 +110874,33 @@ PrefabInstance:
       propertyPath: buildingsToSpawnSettings.Array.data[0].levelsScaleMinMaxZ.y
       value: 21
       objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsSettings.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsSettings.Array.data[1].levelHeight
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsSettings.Array.data[2].levelHeight
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.312618
+      value: -25.512249
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.201899
+      value: -2.9082432
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.306541
+      value: -28.345497
       objectReference: {fileID: 0}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_LocalRotation.w

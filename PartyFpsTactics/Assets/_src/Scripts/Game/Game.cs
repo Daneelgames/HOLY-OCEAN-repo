@@ -58,14 +58,14 @@ namespace MrPink
 
         
         //private void LateUpdate()
-        private void Update()
+        private void LateUpdate()
         {
             if (_localPlayer == null) return;
             if (_localPlayer.VehicleControls.controlledMachine == null)
             {
                 cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position,
-                    _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.unscaledDeltaTime);
-                cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.unscaledDeltaTime);
+                    _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.fixedUnscaledDeltaTime);
+                cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.fixedUnscaledDeltaTime);
             }
             else
             {
@@ -75,7 +75,7 @@ namespace MrPink
                     _localPlayer.VehicleControls.controlledMachine.CameraTransform.position,
                     camMoveSmoothVehicle * Time.unscaledDeltaTime);
                 
-                cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.unscaledDeltaTime);
+                cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.fixedUnscaledDeltaTime);
             }
         }
         
@@ -141,18 +141,13 @@ namespace MrPink
 
             return true;
         }
-        
+
+        private bool levelGenerating = false;
+        public bool IsLevelGenerating => levelGenerating;
         
         public void SetLevelGeneratingFeedback(bool active)
         {
-            return;
-            
-            cameraAnimator.SetBool(Screenshake, active);
-            
-            if (active)
-                earthquakeAu.Play();
-            else
-                earthquakeAu.Stop();
+            levelGenerating = active;
         }
     }
 }

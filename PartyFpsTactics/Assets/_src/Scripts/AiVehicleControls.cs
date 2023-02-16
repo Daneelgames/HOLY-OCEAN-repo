@@ -123,10 +123,8 @@ namespace MrPink
         {
             if (controlledMachine.wheelVehicle)
                 controlledMachine.wheelVehicle.Handbrake = false;
-            Debug.Log("Debug Ai Water bike 0");
             while (controlledMachine)
             {
-                Debug.Log("Debug Ai Water bike 0.1");
                 controlledMachine.SetCarInputAi();
                 yield return null;
             }
