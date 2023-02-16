@@ -87,11 +87,11 @@ namespace MrPink
         {
             if (Game._instance == null || Game.LocalPlayer == null)
             {
-                if (cursorVisible)
+                if (!cursorVisible)
                 {
-                    cursorVisible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
+                    cursorVisible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
                     SetCurrentTimeScale(1);
                     AudioListener.pause = false;
                 }

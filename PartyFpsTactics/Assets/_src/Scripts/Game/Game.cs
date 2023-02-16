@@ -78,9 +78,15 @@ namespace MrPink
                 cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.fixedUnscaledDeltaTime);
             }
         }
-        
-        public float DistanceToClosestPlayer(Vector3 pos)
+
+        public struct PlayerDistance
         {
+            public Player Player;
+            public float distance;
+        }
+        public PlayerDistance DistanceToClosestPlayer(Vector3 pos)
+        {
+            PlayerDistance closest = new PlayerDistance();
             float distance = 100000;
             foreach (var player in playersesInGame)
             {
@@ -88,10 +94,14 @@ namespace MrPink
                     continue;
                 var newDist = Vector3.Distance(pos, player.transform.position);
                 if (newDist < distance)
+                {
                     distance = newDist;
+                    closest.Player = player;
+                }
             }
+            closest.distance = distance;
 
-            return distance;
+            return closest;
         }
         
         public void RespawnAllPlayers()

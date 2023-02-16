@@ -20,6 +20,10 @@ public class Checkpoint : MonoBehaviour
     private Coroutine getPlayerCoroutine;
     private IEnumerator GetPlayer()
     {
+        while (Game._instance == null || Game.LocalPlayer == null)
+        {
+            yield return null;
+        }
         while (true)
         {
             yield return new WaitForSeconds(0.5f);

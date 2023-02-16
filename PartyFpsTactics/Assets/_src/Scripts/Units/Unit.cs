@@ -11,25 +11,25 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly, Required]
         private HealthController _healthController;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, ChildGameObjectsOnly, ]
         private UnitVision _unitVision;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, ChildGameObjectsOnly]
         private UnitAiMovement _unitAiMovement;
+        [SerializeField, ChildGameObjectsOnly]
+        private UnitMovement _unitMovement;
+        
+        [SerializeField, ChildGameObjectsOnly]
+        private UnitFollowTarget _followTarget;
         
         [SerializeField, ChildGameObjectsOnly]
         private UnitAiWeaponControls _unitWeaponControls;
         [SerializeField, ChildGameObjectsOnly]
         private UnitAiWeaponControls _aiVehicleControls;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
+        [SerializeField, ChildGameObjectsOnly, ]
         private HumanVisualController _humanVisualController;
         
-        [SerializeField, ChildGameObjectsOnly, Required]
-        private UnitMovement _unitMovement;
-        
-        [SerializeField, ChildGameObjectsOnly, Required]
-        private UnitFollowTarget _followTarget;
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private CharacterNeeds _characterNeeds;
@@ -109,8 +109,8 @@ namespace MrPink.Units
             _followTarget = GetComponent<UnitFollowTarget>();
             _characterNeeds = GetComponent<CharacterNeeds>();
             
-            _unitAiMovement.SetUnit(this);
-            _unitMovement.SetUnit(this);
+            _unitAiMovement?.SetUnit(this);
+            _unitMovement?.SetUnit(this);
         }
 #endif
         
