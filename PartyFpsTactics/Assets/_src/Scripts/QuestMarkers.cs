@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink;
+using MrPink.Health;
 using UnityEngine;
 
 public class QuestMarkers : MonoBehaviour
@@ -21,13 +22,18 @@ public class QuestMarkers : MonoBehaviour
 
     public void AddMarker(Transform markerTarget, Quest quest)
     {
+        foreach (var activeMark in activeMarks)
+        {
+            if (activeMark.target == markerTarget)
+                return;
+        }
         var mark = Instantiate(questMarkPrefab, questMarkersParent);
         mark.target = markerTarget;
         mark.markerName.text = quest.questName;
         mark.markerNameBack.text = quest.questName;
         activeMarks.Add(mark);
     }
-    public void AddMarker(Transform markerTarget, Color color, string marketText)
+    public void AddMarker(Transform markerTarget, Color color, string marketText, HealthController hcToHpBar = null)
     {
         foreach (var activeMark in activeMarks)
         {
@@ -39,6 +45,13 @@ public class QuestMarkers : MonoBehaviour
         mark.markerName.color = color;
         mark.markerName.text = marketText;
         mark.markerNameBack.text = marketText;
+        mark.hcToHpBar = hcToHpBar;
+        if (hcToHpBar)
+        {
+            mark.hpBar.transform.parent.gameObject.SetActive(true);
+            mark.hpBar.color = color;
+            mark.StartListeningForDamage();
+        }
         activeMarks.Add(mark);
     }
 
@@ -76,6 +89,11 @@ public class QuestMarkers : MonoBehaviour
             
             if (marker == null || marker.target == null)
                 continue;
+            if (marker.target == null)
+            {
+                Destroy(marker.gameObject);
+                continue;
+            }
             var textUI = marker.markerName;
             var target = marker.target;
             var distance = Vector3.Distance(marker.target.position, Game.LocalPlayer.MainCamera.transform.position);
@@ -113,6 +131,23 @@ public class QuestMarkers : MonoBehaviour
 
             marker.transform.position =
                 Vector3.Lerp(marker.transform.position, pos, markerSpeed * Time.unscaledDeltaTime);
+            if (marker.hcToHpBar != null)
+            {
+                if (marker.hcToHpBar.health > 0)
+                {
+                    marker.hpBar.fillAmount = marker.hcToHpBar.GetHealthFill;
+                }
+                else
+                {
+                    marker.target = null;
+                    marker.hcToHpBar = null;
+                    continue;
+                }
+            }
+            else if (marker.hpBar.transform.parent.gameObject.activeInHierarchy)
+            {
+                marker.hpBar.transform.parent.gameObject.SetActive(false);
+            }
         }
     }
 }

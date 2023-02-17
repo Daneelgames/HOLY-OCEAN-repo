@@ -327,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: <PrefabId>k__BackingField
-      value: 78
+      value: 82
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: _networkBehaviours.Array.size
@@ -335,7 +335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: <AssetPathHash>k__BackingField
-      value: 16495821714218193867
+      value: 17673670182512950169
       objectReference: {fileID: 0}
     - target: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: _networkBehaviours.Array.data[5]
@@ -823,11 +823,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5673859260790904911, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: health
-      value: 2000
+      value: 7000
       objectReference: {fileID: 0}
     - target: {fileID: 5673859260790904911, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: healthMax
-      value: 2000
+      value: 7000
       objectReference: {fileID: 0}
     - target: {fileID: 5673859260790904911, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: completeGameLevelOnDeath
@@ -851,7 +851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6002119186621381548, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: m_Name
-      value: Npc MrHot Boss
+      value: Boss MrHot
       objectReference: {fileID: 0}
     - target: {fileID: 6048137497508785332, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
       propertyPath: m_LocalScale.x
@@ -1056,6 +1056,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1078378779969362978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5673859260790904911, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
+  m_PrefabInstance: {fileID: 4632712145721885805}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369512922593345473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ce5c8fdf3ded546bbe4d929530333b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1369512922593345473 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6002119186621381548, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}
@@ -1081,6 +1092,7 @@ MonoBehaviour:
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 0
   distanceToLocalPlayer: 100
+  healthControllerToHealthbar: {fileID: 1078378779969362978}
 --- !u!114 &1674681400229350146 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -2920836169782800529, guid: 0082a87d653d1a946b36af4ad9b6d24e, type: 3}

@@ -78,6 +78,7 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 7492870915056160710, guid: c376c6d91bd76934ca9c650afd6259ea, type: 3}
+  playerLootInventoryItems: []
 --- !u!114 &5529235688384015354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,7 +854,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 950
   m_Drag: 0.025
-  m_AngularDrag: 5
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -963,7 +964,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 66
+  <PrefabId>k__BackingField: 65
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -6159,6 +6160,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: -859051106296591646}
   damageScaler: 1
+  climbable: 0
+  rb: {fileID: 0}
 --- !u!1 &1852825968348545290
 GameObject:
   m_ObjectHideFlags: 0

@@ -49,7 +49,7 @@ namespace MrPink
                 Destroy(gameObject);
                 return;
             }
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 50;
             Instance = this;
             StartCoroutine(Instance.SetLevelType(_levelType));
             Random.InitState((int)DateTime.Now.Ticks);

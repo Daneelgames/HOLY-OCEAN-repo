@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using MrPink;
+using MrPink.Health;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UiMarkWorldObject : NetworkBehaviour
 {
@@ -13,6 +15,7 @@ public class UiMarkWorldObject : NetworkBehaviour
     [SerializeField] private bool hideOnOwner = false;
     [SerializeField] private bool hideOnDistanceToLocalPlayer = false;
     [ShowIf("hideOnDistanceToLocalPlayer")][SerializeField] private float distanceToLocalPlayer = 300;
+    [SerializeField] private HealthController healthControllerToHealthbar;
     private bool showing = false;
     
     public override void OnStartClient()
@@ -24,7 +27,7 @@ public class UiMarkWorldObject : NetworkBehaviour
             return;
         }
         if (showing == false)
-            QuestMarkers.Instance.AddMarker(transform, markColor, markerText);
+            QuestMarkers.Instance.AddMarker(transform, markColor, markerText, healthControllerToHealthbar);
 
         if (hideOnDistanceToLocalPlayer)
             StartCoroutine(CheckDistanceToPlayer());
@@ -46,7 +49,7 @@ public class UiMarkWorldObject : NetworkBehaviour
             else
             {
                 if (showing) continue;
-                QuestMarkers.Instance.AddMarker(transform, markColor, markerText);
+                QuestMarkers.Instance.AddMarker(transform, markColor, markerText, healthControllerToHealthbar);
                 showing = true;
             }
         }

@@ -32,7 +32,7 @@ namespace MrPink.Health
         public Unit selfUnit;
         [SyncVar] public int health = 100;
         public int healthMax = 100;
-        
+        public float GetHealthFill => (float)health / healthMax;
         public CharacterNeeds needs;
         public float endurance = 100;
         float enduranceMax = 100;
@@ -87,6 +87,7 @@ namespace MrPink.Health
         //public bool IsDead { get; private set; } = false;
 
         public UnityEvent OnDeathEvent = new UnityEvent();
+        public UnityEvent OnDamagedEvent = new UnityEvent();
         
         private IEnumerator Start()
         {
@@ -262,6 +263,9 @@ namespace MrPink.Health
             else
                 health -= damage;
 
+            
+            OnDamagedEvent?.Invoke();
+            
             if (Game.LocalPlayer.Health == this)
             {
                 PlayerUi.Instance.UpdateHealthBar();
@@ -431,6 +435,7 @@ namespace MrPink.Health
             
             if (destroyOnDeath)
             {
+                OnDamagedEvent?.RemoveAllListeners();
                 OnDeathEvent?.RemoveAllListeners();
                 Destroy(gameObject);
             }

@@ -13,6 +13,8 @@ namespace MrPink.PlayerSystem
     {
         [Header("Movement")] public LayerMask WalkableLayerMask;
         [SerializeField][ReadOnly]private Rigidbody movingPlatformRigidbody;
+        [SerializeField][ReadOnly] private Vector3 movingPlatformVelocity;        
+
         public Rigidbody rb;
         
         [SerializeField] private WaterObject playerWaterObject;
@@ -168,11 +170,7 @@ namespace MrPink.PlayerSystem
             {
                 State.IsRunning = false;
                 _resultVelocity = Vector3.zero;
-                /*
-                rb.MovePosition(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.position);
-                rb.MoveRotation(Game.LocalPlayer.VehicleControls.controlledMachine.sitTransform.rotation);
-                */
-
+                movingPlatformRigidbody = null;
                 return;
             }
 
@@ -551,7 +549,7 @@ namespace MrPink.PlayerSystem
                     if (PlayerFootsteps.Instance)
                         PlayerFootsteps.Instance.PlayLanding();
 
-                    if (transform.position.y + fallDamageThreshold < heightToFallFrom)
+                    if (State.IsUnderwater == false && transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
                         Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
                     }
@@ -620,13 +618,10 @@ namespace MrPink.PlayerSystem
         Debug.DrawLine(transform.position + Vector3.up * middleRaycastHeight, transform.position + Vector3.up * middleRaycastHeight + _moveVector.normalized * vaultRaycastDistance, Color.red);
     }
 
-    private RaycastHit[] hitInfoClimb;
+        [SerializeField] [ReadOnly] private bool closeToClimbableSurface;
         void ClimbingCheck()    
         {
-
-            hitInfoClimb = Physics.SphereCastAll(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius,
-                Vector3.up, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
-            
+            closeToClimbableSurface = Physics.CheckSphere(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             
             if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
             {
@@ -634,17 +629,15 @@ namespace MrPink.PlayerSystem
                 return;
             }
             
-            var newClimbing = hitInfoClimb.Length > 0;
-            if (newClimbing && State.IsClimbing == false)
+            if (closeToClimbableSurface && State.IsClimbing == false)
                 rb.velocity = Vector3.zero;
-            State.IsClimbing = newClimbing;
+            State.IsClimbing = closeToClimbableSurface;
             if (State.IsClimbing)
             {
                 heightToFallFrom = transform.position.y;
             }
         }
 
-        private Vector3 movingPlatformVelocity;        
         private void ApplyFreeMovement()
         {
             //rb.useGravity = false;
@@ -655,8 +648,15 @@ namespace MrPink.PlayerSystem
                 return;
             }
 
-            movingPlatformVelocity = movingPlatformRigidbody ? movingPlatformRigidbody.velocity : Vector3.zero;
-            
+            if (movingPlatformRigidbody && closeToClimbableSurface)
+            {
+                movingPlatformVelocity = movingPlatformRigidbody.velocity;
+            }
+            else
+            {
+                movingPlatformVelocity = Vector3.zero;
+            }
+
             if (State.IsMoving == false && State.IsRunning == false && State.IsGrounded) // slow down
             {
                 rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero + movingPlatformVelocity, slowDownModifier * Time.unscaledDeltaTime);   
@@ -685,8 +685,15 @@ namespace MrPink.PlayerSystem
             activeGrindRail = rail;
         }
 
+        // SHOULD BE CALLED ONLY LOCALLY
         public void SetMovingPlatform(Rigidbody platformRigidbody, bool exit = false)
         {
+            if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
+            {        
+                movingPlatformRigidbody = null;
+                return;
+            }
+            
             if (exit)
             {
                 if (platformRigidbody == movingPlatformRigidbody)
