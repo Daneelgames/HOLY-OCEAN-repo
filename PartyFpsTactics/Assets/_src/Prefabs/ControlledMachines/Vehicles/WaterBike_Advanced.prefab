@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2522410383717725721}
   - component: {fileID: 5224821360271212229}
-  - component: {fileID: 5529235688384015354}
   - component: {fileID: 5529235688384015333}
   m_Layer: 11
   m_Name: PlayerControlsInteractor
@@ -79,26 +78,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   hc: {fileID: 7492870915056160710, guid: c376c6d91bd76934ca9c650afd6259ea, type: 3}
   playerLootInventoryItems: []
---- !u!114 &5529235688384015354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105920004949120202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 2
-  _addedNetworkObject: {fileID: 3638330159521411507}
-  _networkObjectCache: {fileID: 3638330159521411507}
-  markerText: '?'
-  markColor: {r: 0, g: 0.940083, b: 1, a: 1}
-  hideOnOwner: 0
-  hideOnDistanceToLocalPlayer: 0
-  distanceToLocalPlayer: 300
 --- !u!135 &5529235688384015333
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -659,6 +638,9 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  OnDamagedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1852825967723450299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,7 +836,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 950
   m_Drag: 0.025
-  m_AngularDrag: 1
+  m_AngularDrag: 2
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -955,7 +937,7 @@ MonoBehaviour:
   _networkBehaviours:
   - {fileID: -859051106296591646}
   - {fileID: -5745830068330774923}
-  - {fileID: 5529235688384015354}
+  - {fileID: 0}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1

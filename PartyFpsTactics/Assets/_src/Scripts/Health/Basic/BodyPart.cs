@@ -23,12 +23,13 @@ namespace MrPink.Health
             return CollisionTarget.Creature;
         }
 
-        [SerializeField] private bool climbable = false;
-        [ShowIf("climbable")][SerializeField] private Rigidbody rb;
+        [SerializeField] private bool movingPlatform = false;
+        public bool IsMovingPlatform => movingPlatform;
+        [ShowIf("movingPlatform")][SerializeField] private Rigidbody movingPlatformRb;
 
-        private void OnTriggerEnter(Collider other)
+        /*private void OnTriggerEnter(Collider other)
         {
-            if (climbable == false)
+            if (movingPlatform == false)
                 return;
             
             if (Game.LocalPlayer == null) return;
@@ -40,7 +41,7 @@ namespace MrPink.Health
         }
         private void OnTriggerExit(Collider other)
         {
-            if (climbable == false)
+            if (movingPlatform == false)
                 return;
             
             if (Game.LocalPlayer == null) return;
@@ -49,12 +50,14 @@ namespace MrPink.Health
                 return;
             
             Game.LocalPlayer.Movement.SetMovingPlatform(rb, true);
-        }
+        }*/
 
         [Button]
-        public void GetRb()
+        public void GetRbComponent()
         {
-            rb = gameObject.GetComponent<Rigidbody>();
+            movingPlatformRb = gameObject.GetComponent<Rigidbody>();
         }
+
+        public Rigidbody MovingPlatformRb => movingPlatformRb;
     }
 }

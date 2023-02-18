@@ -87,7 +87,7 @@ public class QuestMarkers : MonoBehaviour
         {
             var marker = activeMarks[i];
             
-            if (marker == null || marker.target == null)
+            if (marker == null)
                 continue;
             if (marker.target == null)
             {

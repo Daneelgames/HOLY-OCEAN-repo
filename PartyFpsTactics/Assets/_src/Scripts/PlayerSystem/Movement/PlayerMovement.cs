@@ -12,7 +12,7 @@ namespace MrPink.PlayerSystem
     public class PlayerMovement : NetworkBehaviour
     {
         [Header("Movement")] public LayerMask WalkableLayerMask;
-        [SerializeField][ReadOnly]private Rigidbody movingPlatformRigidbody;
+        [SerializeField][ReadOnly] private Rigidbody movingPlatformRigidbody;
         [SerializeField][ReadOnly] private Vector3 movingPlatformVelocity;        
 
         public Rigidbody rb;
@@ -535,13 +535,16 @@ namespace MrPink.PlayerSystem
 
         private float lastVelocityInAirY = 0;
 
+        private Collider[] groundedHit = new Collider[1];
         private void GroundCheck()
         {
             if (Game._instance == null || Game.LocalPlayer == null)
                 return;
 
-            if (Physics.CheckSphere(transform.position, groundCheckRadius, WalkableLayerMask,
-                QueryTriggerInteraction.Ignore))
+            groundedHit[0] = null;
+            Physics.OverlapSphereNonAlloc(transform.position, groundCheckRadius, groundedHit, WalkableLayerMask, QueryTriggerInteraction.Ignore);
+            
+            if (groundedHit[0] != null)
             {
                 if (!State.IsGrounded && Game.LocalPlayer.VehicleControls.controlledMachine == null &&
                     !State.IsClimbing)
@@ -560,9 +563,25 @@ namespace MrPink.PlayerSystem
                     }
                 }
 
+                if (groundedHit[0].gameObject.layer == 12) // SOLIDS OBJECTS IGNORE NAVMESH - for big bosseses
+                {
+                    if (groundedHit[0].gameObject.TryGetComponent<BodyPart>(out BodyPart bodyPart))
+                    {
+                        if (bodyPart.IsMovingPlatform)
+                            movingPlatformRigidbody = bodyPart.MovingPlatformRb;
+                        else
+                            movingPlatformRigidbody = null;
+                    }
+                    else
+                        movingPlatformRigidbody = null;
+                }
+                else
+                    movingPlatformRigidbody = null;
+                
                 lastVelocityInAirY = 1;
                 heightToFallFrom = transform.position.y;
                 State.IsGrounded = true;
+                
                 if (canUseCoyoteTime)
                     _coyoteTime = 0;
             }
@@ -589,6 +608,9 @@ namespace MrPink.PlayerSystem
             {
                 State.IsGrounded = false;
             }
+            
+            if (State.IsGrounded == false)
+                movingPlatformRigidbody = null;
         }
 
     void AutoVaultCheck()

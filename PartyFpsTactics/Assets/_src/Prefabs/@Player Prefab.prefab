@@ -630,6 +630,7 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 0}
+  playerLootInventoryItems: []
 --- !u!136 &2575907712496450633
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1586,6 +1587,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &1472195762380052098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,6 +1766,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &1564080481396618308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2090,6 +2095,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &1679758482549891596
 GameObject:
   m_ObjectHideFlags: 0
@@ -7418,6 +7425,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &1902755326976469215
 GameObject:
   m_ObjectHideFlags: 0
@@ -8497,6 +8506,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &2700306425143768009
 GameObject:
   m_ObjectHideFlags: 0
@@ -8825,6 +8836,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &2877015621208366747
 GameObject:
   m_ObjectHideFlags: 0
@@ -9180,6 +9193,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &3081098193916991525
 GameObject:
   m_ObjectHideFlags: 0
@@ -9674,6 +9689,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &3879979470671988559
 GameObject:
   m_ObjectHideFlags: 0
@@ -10415,6 +10432,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &4307962057041293156
 GameObject:
   m_ObjectHideFlags: 0
@@ -11228,6 +11247,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 5
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &4989266879813572793
 GameObject:
   m_ObjectHideFlags: 0
@@ -11686,6 +11707,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &5355734574719593384
 GameObject:
   m_ObjectHideFlags: 0
@@ -12527,6 +12550,9 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  OnDamagedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5596697987043485628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12546,6 +12572,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 6209
   movingPlatformRigidbody: {fileID: 0}
+  movingPlatformVelocity: {x: 0, y: 0, z: 0}
   rb: {fileID: 5596697987043485629}
   playerWaterObject: {fileID: 7434130277617785098}
   jumpForce: 10
@@ -12569,7 +12596,7 @@ MonoBehaviour:
   slowDownModifier: 5
   groundCheckRadius: 0.15
   climbCheckRadius: 1
-  stamina: 100
+  stamina: 200
   staminaMax: 100
   staminaMin: -20
   climbStaminaCost: 5
@@ -12596,6 +12623,7 @@ MonoBehaviour:
   rotator: {fileID: 2996664407138911022}
   rotatorSpeed: 1
   minMaxRotatorAngle: 15
+  closeToClimbableSurface: 0
 --- !u!114 &5596697987043485630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13435,6 +13463,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &5918081030042533152
 GameObject:
   m_ObjectHideFlags: 0
@@ -13711,6 +13741,7 @@ MonoBehaviour:
   hideOnOwner: 1
   hideOnDistanceToLocalPlayer: 0
   distanceToLocalPlayer: 300
+  healthControllerToHealthbar: {fileID: 0}
 --- !u!1 &6134095062119469307
 GameObject:
   m_ObjectHideFlags: 0
@@ -14003,6 +14034,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &6235021221604305796
 GameObject:
   m_ObjectHideFlags: 0
@@ -15132,6 +15165,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &7173822753466189030
 GameObject:
   m_ObjectHideFlags: 0
@@ -15309,6 +15344,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 5
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &7235418502928763887
 GameObject:
   m_ObjectHideFlags: 0
@@ -15985,6 +16022,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &7813549155074150928
 GameObject:
   m_ObjectHideFlags: 0
@@ -16200,6 +16239,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &7913261623347207439
 GameObject:
   m_ObjectHideFlags: 0
@@ -16782,6 +16823,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 9066321015931522152}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &8433441992636478852
 GameObject:
   m_ObjectHideFlags: 0
