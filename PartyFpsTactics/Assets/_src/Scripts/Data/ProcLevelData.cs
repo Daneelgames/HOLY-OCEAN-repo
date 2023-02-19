@@ -20,6 +20,7 @@ namespace _src.Scripts.Data
         public List<Tool> toolsInShop;
 
         public List<LevelEvent> levelEvents;
+        public HealthController boss;
     }
 
     [Serializable]

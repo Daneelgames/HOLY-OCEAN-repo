@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class SnakeMovementBrain : NetworkBehaviour
 {
+    [SerializeField] [ReadOnly] private string lastCalledState;
     [SerializeField] private SnakeMovement _snakeMovement;
     [SerializeField] private HealthController _ownHealth;
     [SerializeField] private float updateTime = 0.5f;
@@ -77,7 +78,10 @@ public class SnakeMovementBrain : NetworkBehaviour
             }
 
             if (availableMovementStateIndexes.Count > 0)
+            {
                 _snakeMovement.SetMovementState(_movementStates[availableMovementStateIndexes[0]]);
+                lastCalledState = _movementStates[availableMovementStateIndexes[0]].stateName;
+            }
         }
     }
 
@@ -93,6 +97,7 @@ public class SnakeMovementBrain : NetworkBehaviour
     void SetChargeState()
     {
         _snakeMovement.SetMovementState(_chargeState);
+        lastCalledState = _chargeState.stateName;
     }
     
     void HealthController_OnDamagedEvent()
@@ -113,5 +118,6 @@ public class SnakeMovementBrain : NetworkBehaviour
     {
         // set back off pattern
         _snakeMovement.SetMovementState(_backOffState);
+        lastCalledState = _backOffState.stateName;
     }
 }

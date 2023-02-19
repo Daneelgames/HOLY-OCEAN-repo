@@ -11,20 +11,20 @@ using Random = UnityEngine.Random;
 
 public class SnakeMovement : MonoBehaviour
 {
-    private float moveSpeed = 30;
-    [SerializeField] private float gravityDrag = 0.1f;
-    [SerializeField] private Vector2 gravityForceMinMax = new Vector2(-500,500);
-    [SerializeField] private Vector2 gravityChangeTimeMinMax = new Vector2(1,10);
-    [SerializeField] [ReadOnly] private float gravityForce = 30;
+    [SerializeField] [ReadOnly]private float moveSpeed = 30;
     [SerializeField] private float moveSpeedMin = 50; 
     [SerializeField] private float moveSpeedMax = 150; 
-    private float rotationSpeed = 10f;
+    [SerializeField] private float gravityDrag = 0.1f;
+    [SerializeField] [ReadOnly] private float gravityForce = 30;
+    [SerializeField] private Vector2 gravityForceMinMax = new Vector2(-500,500);
+    [SerializeField] private Vector2 gravityChangeTimeMinMax = new Vector2(1,10);
+    [SerializeField] [ReadOnly] private float rotationSpeed = 10f;
     [SerializeField] private float rotationSpeedMin = 1f;
     [SerializeField] private float rotationSpeedMax = 10f;
-    [SerializeField] private Transform target;
+    [SerializeField] [ReadOnly]private float changeRotationSpeedCooldown = 3;
+    [SerializeField] [ReadOnly] private Transform target;
     public Transform Target => target;
     [SerializeField] private bool active = false;
-    [SerializeField] private float changeRotationSpeedCooldown = 3;
     [SerializeField] private Rigidbody rb;
     
     private Vector3 targetDir;

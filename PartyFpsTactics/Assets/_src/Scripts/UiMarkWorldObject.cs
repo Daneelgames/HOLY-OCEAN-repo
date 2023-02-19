@@ -64,6 +64,6 @@ public class UiMarkWorldObject : NetworkBehaviour
     private void OnDisable()
     {
         showing = false;
-        QuestMarkers.Instance.RemoveMarker(transform);    
+        QuestMarkers.Instance?.RemoveMarker(transform);    
     }
 }

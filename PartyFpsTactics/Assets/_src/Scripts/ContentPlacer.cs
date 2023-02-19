@@ -161,8 +161,8 @@ public class ContentPlacer : NetworkBehaviour
     public void SpawnBossOnIsland(Island island, Vector3 spawnPos)
     {
         Vector3 pos = spawnPos;
-
-        var unit =  Instantiate(UnitsManager.Instance.GetRandomBossUnit, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+        
+        var unit =  Instantiate(ProgressionManager.Instance.CurrentLevel.boss, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
         island.AddIslandUnit(unit, true);
         ServerManager.Spawn(unit.gameObject);
     }
