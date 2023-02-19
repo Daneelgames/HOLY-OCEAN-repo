@@ -98,6 +98,28 @@ namespace MrPink
                 return;
             }
             
+            if (PlayerInventoryUI.Instance.IsActive || Shop.Instance.IsActive)
+            {
+                if (!cursorVisible)
+                {
+                    cursorVisible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                    AudioListener.pause = false;
+                }
+            }
+            else
+            {
+                if (cursorVisible)
+                {
+                    cursorVisible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    AudioListener.pause = false;
+                }
+            }
+                
+            
             if (Input.GetKeyDown(KeyCode.O))
                 AudioListener.volume = Mathf.Clamp(AudioListener.volume - 0.1f, 0, 1);
             if (Input.GetKeyDown(KeyCode.P))
@@ -113,21 +135,11 @@ namespace MrPink
             {
                 if (cursorVisible)
                 {
-                    cursorVisible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                    //SetCurrentTimeScale(1);
-                    //AudioListener.pause = false;
                     SettingsGameWrapper.Instance.CloseMenu();
                     PlayerInventoryUI.Instance.HideInventory();
                 }
                 else
                 {
-                    cursorVisible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                    //SetCurrentTimeScale(0);
-                    //AudioListener.pause = true;
                     SettingsGameWrapper.Instance.OpenMenu();
                     PlayerInventoryUI.Instance.ShowInventory();
                 }
@@ -150,20 +162,8 @@ namespace MrPink
                     KillPlayer();
                 if (Input.GetKeyDown(KeyCode.X))
                     ScoringSystem.Instance.AddScore(-ScoringSystem.Instance.CurrentScore);
-            
-                /*
                 if (Input.GetKeyDown(KeyCode.D))
-                {
-                    if (BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count <= 0)
-                        return;
-
-                    for (int i = BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop.Count - 1; i >= 0; i--)
-                    {
-                        var tile = BuildingGenerator.Instance.spawnedBuildingLevels[0].tilesTop[i];
-                        if (tile)
-                            tile.Damage(1000, DamageSource.Environment);
-                    }
-                }*/
+                    UnitsManager.Instance.KillAllMobs();
             }
         }
 

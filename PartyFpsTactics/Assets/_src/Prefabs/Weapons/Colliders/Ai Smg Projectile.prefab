@@ -601,6 +601,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -3994,6 +3995,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -4836,6 +4838,7 @@ GameObject:
   - component: {fileID: 7601328651385341622}
   - component: {fileID: 9157171069865134070}
   - component: {fileID: -2500232918689918222}
+  - component: {fileID: -12808591214268645}
   m_Layer: 9
   m_Name: Ai Smg Projectile
   m_TagString: Untagged
@@ -4891,11 +4894,14 @@ MonoBehaviour:
   ownerHealth: {fileID: 0}
   addVelocityEveryFrame: 1
   projectileSpeed: 27
+  singleSphereCast: 0
   toolType: 0
   fragGrenadeTool: {fileID: 0}
   customLadderTool: {fileID: 0}
   consumableTool: {fileID: 0}
-  projectileRandomRotationMax: 4
+  currentCastRadius: 0.3
+  playerCastRadius: 0.5
+  aiCastRadius: 0.3
   dieOnContact: 1
   ricochetOnContact: 0
   stickOnContact: 0
@@ -5228,6 +5234,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-12808591214268645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3044484379556785917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e47636ddc812a24ca479acaddb710d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SettingsProvider: {fileID: 11400000, guid: 2aa641fad43b9154a8c9634b7481bf03, type: 2}
+  ID: audioEffectVolume
+  InputRange: {x: 0, y: 100}
+  AudioSources:
+  - {fileID: 7601328651385341622}
+  - {fileID: 9157171069865134070}
+  - {fileID: -2500232918689918222}
 --- !u!1 &7610261081426840073
 GameObject:
   m_ObjectHideFlags: 0

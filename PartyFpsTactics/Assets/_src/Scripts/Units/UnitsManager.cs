@@ -304,6 +304,20 @@ namespace MrPink.Units
 
             return handledInFrame;
         }
-    
+
+        public void KillAllMobs()
+        {
+            if (hcInGame.Count < 1)
+                return;
+            
+            for (var index = hcInGame.Count - 1; index >= 0; index--)
+            {
+                var healthController = hcInGame[index];
+                if (!healthController || healthController.IsDead || healthController.team == Team.PlayerParty)
+                    continue;
+
+                healthController.Kill();
+            }
+        }
     }
 }

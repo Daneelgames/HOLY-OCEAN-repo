@@ -57,6 +57,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2270557677604217041}
   - component: {fileID: 7139420924754906556}
+  - component: {fileID: 8051221172597126209}
   m_Layer: 2
   m_Name: Audio Source
   m_TagString: Untagged
@@ -175,6 +176,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8051221172597126209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193044435167663123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e47636ddc812a24ca479acaddb710d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SettingsProvider: {fileID: 11400000, guid: 2aa641fad43b9154a8c9634b7481bf03, type: 2}
+  ID: audioEffectVolume
+  InputRange: {x: 0, y: 100}
+  AudioSources:
+  - {fileID: 7139420924754906556}
 --- !u!1 &1931633586693162402
 GameObject:
   m_ObjectHideFlags: 0
@@ -10489,6 +10507,7 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 4102157424843857070}
   hc: {fileID: 0}
+  playerLootInventoryItems: []
 --- !u!54 &4102157424843857070
 Rigidbody:
   m_ObjectHideFlags: 0
