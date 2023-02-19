@@ -78,6 +78,7 @@ namespace MrPink
         
         void SetCurrentTimeScale(float t)
         {
+             return;
             CurrentTimeScale = t;
             CurrentTimeScale = Mathf.Clamp(CurrentTimeScale, 0.1f, 100);
         }
@@ -92,7 +93,6 @@ namespace MrPink
                     cursorVisible = true;
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    SetCurrentTimeScale(1);
                     AudioListener.pause = false;
                 }
                 return;
@@ -116,8 +116,9 @@ namespace MrPink
                     cursorVisible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
-                    SetCurrentTimeScale(1);
-                    AudioListener.pause = false;
+                    //SetCurrentTimeScale(1);
+                    //AudioListener.pause = false;
+                    SettingsGameWrapper.Instance.CloseMenu();
                     PlayerInventoryUI.Instance.HideInventory();
                 }
                 else
@@ -125,8 +126,9 @@ namespace MrPink
                     cursorVisible = true;
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
-                    SetCurrentTimeScale(0);
-                    AudioListener.pause = true;
+                    //SetCurrentTimeScale(0);
+                    //AudioListener.pause = true;
+                    SettingsGameWrapper.Instance.OpenMenu();
                     PlayerInventoryUI.Instance.ShowInventory();
                 }
             }

@@ -24,6 +24,7 @@ namespace MrPink
         private LightManager _lightManager;
 
         public static LightManager LightManager => _instance._lightManager;
+        [SerializeField] private Transform gameplayUi;
 
         public static Player LocalPlayer
             => _instance._localPlayer;
@@ -136,6 +137,7 @@ namespace MrPink
         
         public void SetLocalPlayer(Player p)
         {
+            gameplayUi.gameObject.SetActive(true);   
             _localPlayer = p;
         }
 

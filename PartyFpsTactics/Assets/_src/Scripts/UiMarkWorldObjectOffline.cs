@@ -16,11 +16,20 @@ public class UiMarkWorldObjectOffline : MonoBehaviour
     
     public  void OnEnable()
     {
+        StartCoroutine(WaitForInit());
+    }
+
+    IEnumerator WaitForInit()
+    {
+        while (QuestMarkers.Instance == null)
+        {
+            yield return null;
+        }
         if (showing == false)
             QuestMarkers.Instance.AddMarker(transform, markColor, markerText);
 
         if (hideOnDistanceToLocalPlayer)
-            StartCoroutine(CheckDistanceToPlayer());
+            StartCoroutine(CheckDistanceToPlayer());   
     }
 
     IEnumerator CheckDistanceToPlayer()
@@ -49,11 +58,11 @@ public class UiMarkWorldObjectOffline : MonoBehaviour
     private void OnDestroy()
     {
         showing = false;
-        QuestMarkers.Instance.RemoveMarker(transform);
+        QuestMarkers.Instance?.RemoveMarker(transform);
     }
     private void OnDisable()
     {
         showing = false;
-        QuestMarkers.Instance.RemoveMarker(transform);    
+        QuestMarkers.Instance?.RemoveMarker(transform);    
     }
 }
