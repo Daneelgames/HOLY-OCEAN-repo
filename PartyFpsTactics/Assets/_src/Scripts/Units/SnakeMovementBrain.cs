@@ -102,16 +102,18 @@ public class SnakeMovementBrain : NetworkBehaviour
     
     void HealthController_OnDamagedEvent()
     {
+        if (signalBeforeChargeCoroutine != null)
+            return;
+        
+        /*
         // set charge pattern
         var currentFill = _ownHealth.GetHealthFill;
         
         if (prevHealthFill - currentFill < healthFillStepToCharge)
             return;
         
-        if (signalBeforeChargeCoroutine != null)
-            return;
+        prevHealthFill = currentFill;*/
         
-        prevHealthFill = currentFill;
         signalBeforeChargeCoroutine = StartCoroutine(SignalBeforeCharge());
     }
     void DamageUnitsTrigger_OnPlayerDamaged()
