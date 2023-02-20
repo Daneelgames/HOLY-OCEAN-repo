@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _src.Scripts.Data;
 using FishNet.Connection;
 using FishNet.Object;
 using MrPink;
@@ -161,8 +162,20 @@ public class ContentPlacer : NetworkBehaviour
     public void SpawnBossOnIsland(Island island, Vector3 spawnPos)
     {
         Vector3 pos = spawnPos;
-        
-        var unit =  Instantiate(ProgressionManager.Instance.CurrentLevel.boss, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+        var currentLevel = ProgressionManager.Instance.CurrentLevel;
+        switch (currentLevel.spawnBossType)
+        {
+            case ProcLevelData.SpawnBossType.Building:
+                pos = island.TileBuildingGenerator.GetRandomPosInsideLastLevel();
+                break;
+            case ProcLevelData.SpawnBossType.Island:
+                pos = NavMeshPosAroundPosition(Game._instance.PlayersInGame[0].transform.position, islandDistanceSpawn); 
+                break;
+            case ProcLevelData.SpawnBossType.Ocean:
+                pos = island.transform.position + Random.onUnitSphere * Random.Range(200, 300);
+                break;
+        }
+        var unit =  Instantiate(currentLevel.boss, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
         island.AddIslandUnit(unit, true);
         ServerManager.Spawn(unit.gameObject);
     }

@@ -88,35 +88,23 @@ namespace MrPink
         {
             if (Game._instance == null || Game.LocalPlayer == null)
             {
-                if (!cursorVisible)
-                {
-                    cursorVisible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                    AudioListener.pause = false;
-                }
+                cursorVisible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 return;
             }
             
             if (PlayerInventoryUI.Instance.IsActive || Shop.Instance.IsActive)
             {
-                if (!cursorVisible)
-                {
-                    cursorVisible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                    AudioListener.pause = false;
-                }
+                cursorVisible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
             else
             {
-                if (cursorVisible)
-                {
-                    cursorVisible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                    AudioListener.pause = false;
-                }
+                cursorVisible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
                 
             

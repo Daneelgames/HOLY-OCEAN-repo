@@ -21,6 +21,13 @@ namespace _src.Scripts.Data
 
         public List<LevelEvent> levelEvents;
         public HealthController boss;
+
+        public enum SpawnBossType
+        {
+            Ocean, Island, Building
+        }
+
+        public SpawnBossType spawnBossType;
     }
 
     [Serializable]

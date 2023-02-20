@@ -15,6 +15,7 @@ using Random = UnityEngine.Random;
 public class Island : NetworkBehaviour
 {
     [SerializeField] private BuildingGenerator _tileBuildingGenerator;
+    public BuildingGenerator TileBuildingGenerator => _tileBuildingGenerator;
     [SerializeField] private VoxelBuildingGenerator _voxelBuildingGenerator;
     public VoxelBuildingGenerator VoxelBuildingGen => _voxelBuildingGenerator;
     [SerializeField] private NavMeshSurfaceUpdate _navMeshSurfaceUpdate;

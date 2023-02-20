@@ -9,6 +9,7 @@ using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.TerrainTools;
 using Random = UnityEngine.Random;
 
 namespace MrPink.WeaponsSystem
@@ -131,7 +132,10 @@ namespace MrPink.WeaponsSystem
                 ricochetCooldown -= Time.deltaTime;
         
             if (addVelocityEveryFrame)
-                rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
+            {
+                transform.position += (transform.forward * projectileSpeed + Vector3.down * gravity) * Time.fixedUnscaledTime;
+                //rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
+            }
         
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
