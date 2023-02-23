@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MrPink.PlayerSystem;
+using MrPink.Tools;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,31 +14,42 @@ namespace MrPink
     public class ScoringSystem : MonoBehaviour
     {
         public static ScoringSystem Instance;
-
-        // каждый килл дает множитель
-        // вид килла определяет количество очков
-   
-
-        public List<ActionScore> Scores;
-        [SerializeField]
-        int currentScore = 3000;
-
-        public int CurrentScore
+        [SerializeField] [ReadOnly] int currentGold = 3000;
+        
+        public int CurrentGold
         {
-            get => currentScore;
-            set => currentScore = value;
+            get => currentGold;
+            set => currentGold = value;
+        }
+        
+        [BoxGroup("MOJO")][SerializeField] private List<MojoLevel> _mojoLevels = new List<MojoLevel>();
+        [BoxGroup("MOJO")][SerializeField] [ReadOnly] private int currentMojoLevel = 0;
+        public int GetCurrentMojoLevel => currentMojoLevel;
+        [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentDamageInCombo;
+        [BoxGroup("MOJO")][SerializeField] private float comboReduceSpeed = 10;
+        [BoxGroup("MOJO")][SerializeField] private float comboReduceCooldown = 1;
+        [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentComboReduceCooldown;
+        
+        [Serializable]
+        public struct MojoLevel
+        {
+            [Header("for level up")]
+            public int minDamage;
+            
+            [Header("equipment set for the level")]
+            public Tool HeadTool;
+            public Tool HandLTool;
+            public Tool HandRTool;
+            public Tool BodyTool;
+            public Tool LegsTool;
         }
 
-        public int currentScoreInCombo = 0;
-        public int currentMultiplier = 1;
-        [Range(1, 10)] public float scoreCooldownMax = 5;
-        public float scoreCooldownCurrent = 0;
-
         [Header("UI")] 
-        public Text currentScoreText;
-        public Text comboText;
-        public Text actionNameText;
-        public Image scoreCooldownFeedback;
+        public Text currentGoldText;
+        public Text comboLevelText;
+        public Text dmgFeedbackText;
+        public Image comboBar;
+        
         public AudioSource scoreAddedAu;
 
         public Transform addedScoreFeedbackTransform;
@@ -52,56 +65,126 @@ namespace MrPink
         
             if (PlayerPrefs.HasKey("currentScore"))
             {
-                CurrentScore = PlayerPrefs.GetInt("currentScore");
-                currentScoreText.text = "DOLAS: " + CurrentScore;
+                CurrentGold = PlayerPrefs.GetInt("currentScore");
+                currentGoldText.text = "DOLAS: " + CurrentGold;
             }
 
             addedScoreFeedbackTransform.transform.localScale = new Vector3(1, 0, 1);
+            UpdateMojoLevelUi();
         }
 
+        
+        void Update()
+        {
+            if (currentComboReduceCooldown > 0)
+            {
+                currentComboReduceCooldown -= Time.deltaTime;
+            }
+            else
+            {
+                if (currentDamageInCombo > 0)
+                {
+                    currentDamageInCombo -= Time.deltaTime * comboReduceSpeed;
+                }
+
+                if (currentMojoLevel > 0)
+                {
+                    if (currentDamageInCombo <= _mojoLevels[currentMojoLevel - 1].minDamage)
+                    {
+                        // dont drop levels
+                        currentDamageInCombo = _mojoLevels[currentMojoLevel - 1].minDamage + 1;
+                        //DecreaseMojoLevel();
+                    }
+                }
+                if (currentDamageInCombo < 0)
+                    currentDamageInCombo = 0;
+            }
+            
+            comboBar.fillAmount = GetComboFillAmount();
+        }
+
+        public void RegisterDamage(int damage)
+        {
+            currentDamageInCombo += damage;
+            currentComboReduceCooldown = comboReduceCooldown; 
+            if (damageFeedbackAnimateCoroutine != null)
+                StopCoroutine(damageFeedbackAnimateCoroutine);
+            
+            damageFeedbackAnimateCoroutine = StartCoroutine(DamageFeedbackAnimate(damage));
+
+
+            if (currentDamageInCombo >= _mojoLevels[currentMojoLevel].minDamage)
+                IncreaseMojoLevel();
+        }
+
+        void IncreaseMojoLevel()
+        {
+            var newMojo = currentMojoLevel + 1;
+            newMojo = Mathf.Clamp(newMojo, 0, _mojoLevels.Count-1);
+            if (newMojo == currentMojoLevel)
+                return;
+
+            currentMojoLevel = newMojo;
+            UpdateMojoLevelUi();
+            Game.LocalPlayer.Health.RestoreHealth();
+            UpdateMojoInventory();
+        }
+        public void DecreaseMojoLevel()
+        {
+            currentMojoLevel--;
+            currentMojoLevel = Mathf.Clamp(currentMojoLevel, 0, _mojoLevels.Count-1);
+            currentDamageInCombo = _mojoLevels[currentMojoLevel].minDamage;
+            UpdateMojoLevelUi();
+            UpdateMojoInventory();
+        }
+
+        void UpdateMojoInventory()
+        {
+            Game.LocalPlayer.Inventory.DropAll(false, false);
+            
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].HeadTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].HandLTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].HandRTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].BodyTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].LegsTool);
+        }
+
+        void UpdateMojoLevelUi()
+        {
+            comboLevelText.text = "MOJO " + currentMojoLevel;
+        }
+
+        [Button]
+        public void GetCurrentComboFillAmount()
+        {
+            Debug.LogError("GetCurrentComboFillAmount " + GetComboFillAmount());
+        }
+
+        float GetComboFillAmount()
+        {
+            float max = _mojoLevels[currentMojoLevel].minDamage;
+            float min = 0;
+            if (currentMojoLevel > 0)
+                min = _mojoLevels[currentMojoLevel - 1].minDamage;
+            var targetMax = max - min;
+            var targetCurrent = currentDamageInCombo - min;
+            
+            return targetCurrent/targetMax;
+        }
+        
         public void RegisterAction(ScoringActionType scoringAction, float addToCooldown = 5)
         {
             return;
-            if (Game.LocalPlayer.Health.health <= 0)
-                return;
-        
-            for (int i = 0; i < Scores.Count; i++)
-            {
-                var actionScore = Scores[i];
-                if (actionScore.scoringActionType == scoringAction)
-                {
-                    // ACTION FEEDBACK
-                    actionNameText.text = scoringAction.ToString();
-                    StartCoroutine(AnimateActionNameFeedback());
-                
-                    if (scoreCooldownCoroutine == null)
-                        scoreCooldownCoroutine = StartCoroutine(ScoreCooldown());
-                    else
-                        scoreCooldownCurrent = Mathf.Clamp(scoreCooldownCurrent + addToCooldown, 0, scoreCooldownMax);
-                
-                    currentScoreInCombo += actionScore.score;
-                
-                    if (MultiplyAction(actionScore.scoringActionType))
-                        currentMultiplier++;
-
-                
-                    string multiplierString = String.Empty; 
-                    if (currentMultiplier > 0)
-                        multiplierString = " X " + currentMultiplier;
-
-                    comboText.text = "DOLAS IN COMBO: " + currentScoreInCombo + multiplierString;
-                
-                    break;
-                }
-            }
         }
 
-        IEnumerator AnimateActionNameFeedback()
+        private Coroutine damageFeedbackAnimateCoroutine;
+        IEnumerator DamageFeedbackAnimate(int dmg)
         {
+            dmgFeedbackText.text = "+" + dmg + "DMG";
             float t = 0;
             while (t < 0.1f)
             {
-                actionNameText.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 1.5f, t/0.1f);
+                dmgFeedbackText.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one * 1.5f, t/0.1f);
                 t += Time.deltaTime;
                 yield return null;
             }
@@ -109,30 +192,19 @@ namespace MrPink
             t = 0;
             while (t < 0.2f)
             {
-                actionNameText.transform.localScale = Vector3.Lerp(Vector3.one * 1.5f, Vector3.one, t/0.2f);
+                dmgFeedbackText.transform.localScale = Vector3.Lerp(Vector3.one * 1.5f, Vector3.one, t/0.2f);
                 t += Time.deltaTime;
                 yield return null;
             }
-        }
-    
-        private Coroutine scoreCooldownCoroutine;
-        IEnumerator ScoreCooldown()
-        {
-            scoreCooldownCurrent = scoreCooldownMax;
-            while (scoreCooldownCurrent > 0)
+
+            yield return new WaitForSeconds(3);
+            t = 0;
+            while (t < 1f)
             {
-                scoreCooldownCurrent -= Time.deltaTime;
-                scoreCooldownFeedback.fillAmount = scoreCooldownCurrent / scoreCooldownMax;
+                dmgFeedbackText.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, t);
+                t += Time.deltaTime;
                 yield return null;
             }
-
-            scoreCooldownFeedback.fillAmount = 0;
-            AddScore(currentScoreInCombo * currentMultiplier);
-            actionNameText.text = String.Empty;
-            comboText.text = String.Empty;
-            currentScoreInCombo = 0;
-            currentMultiplier = 1;
-            scoreCooldownCoroutine = null;
         }
 
         public void ItemFoundSound()
@@ -146,13 +218,13 @@ namespace MrPink
             scoreAddedAu.Play();
         }
         
-        public void AddScore(int amount)
+        public void AddGold(int amount)
         {
             if (amount == 0)
                 return;
             
             ItemFoundSound();
-            CurrentScore += amount;
+            CurrentGold += amount;
             string text;
             if (amount > 0)
                 text = "+" + amount;
@@ -161,8 +233,8 @@ namespace MrPink
             
             CustomTextMessage(text);
         
-            PlayerPrefs.SetInt("currentScore", CurrentScore);
-            currentScoreText.text = "DOLAS: " + CurrentScore;
+            PlayerPrefs.SetInt("currentScore", CurrentGold);
+            currentGoldText.text = "DOLAS: " + CurrentGold;
             PlayerPrefs.Save();
         }
 
@@ -198,72 +270,18 @@ namespace MrPink
 
         public void RemoveScore(int amount)
         {
-            CurrentScore -= amount;
+            CurrentGold -= amount;
         
-            PlayerPrefs.SetInt("currentScore", CurrentScore);
-            currentScoreText.text = "DOLAS: " + CurrentScore;
+            PlayerPrefs.SetInt("currentScore", CurrentGold);
+            currentGoldText.text = "DOLAS: " + CurrentGold;
             PlayerPrefs.Save();
         }
-        public void CooldownToZero()
+        public void UpdateGold()
         {
-            scoreCooldownCurrent = 0;
-        }
-        public void UpdateScore()
-        {
-            scoreCooldownCurrent = 0;
-            currentScoreText.text = "DOLAS: " + CurrentScore;
+            currentGoldText.text = "DOLAS: " + CurrentGold;
         }
 
-        bool MultiplyAction(ScoringActionType action)
-        {
-            switch (action)
-            {
-                case ScoringActionType.KillExplosion:
-                    return true;
-                case ScoringActionType.KillRangedIdle:
-                    return true;
-                case ScoringActionType.KillRangedOnMove:
-                    return true;
-                case ScoringActionType.KillRangedOnRun:
-                    return true;
-                case ScoringActionType.KillRangedOnJump:
-                    return true;
-                case ScoringActionType.KillMeleeIdle:
-                    return true;
-                case ScoringActionType.KillMeleeOnMove:
-                    return true;
-                case ScoringActionType.KillMeleeOnRun:
-                    return true;
-                case ScoringActionType.KillMeleeOnJump:
-                    return true;
-                case ScoringActionType.KillLeaningRangedIdle:
-                    return true;
-                case ScoringActionType.KillLeaningRangedOnMove:
-                    return true;
-                case ScoringActionType.KillLeaningRangedOnRun:
-                    return true;
-                case ScoringActionType.KillLeaningRangedOnJump:
-                    return true;
-                case ScoringActionType.KillLeaningMeleeIdle:
-                    return true;
-                case ScoringActionType.KillLeaningMeleeOnMove:
-                    return true;
-                case ScoringActionType.KillLeaningMeleeOnRun:
-                    return true;
-                case ScoringActionType.KillLeaningMeleeOnJump:
-                    return true;
-            }
-
-            return false;
-        }
     }
-}
-
-[Serializable]
-public class ActionScore
-{
-    public ScoringActionType scoringActionType;
-    public int score = 100;
 }
 
 [Serializable]

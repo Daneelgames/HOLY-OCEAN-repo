@@ -148,7 +148,7 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.AddScore:
-                ScoringSystem.Instance.AddScore(IOevent.scoreToAdd);
+                ScoringSystem.Instance.AddGold(IOevent.scoreToAdd);
                 break;
             
             
@@ -228,7 +228,7 @@ public class InteractableEventsManager : MonoBehaviour
             
             case ScriptedEventType.ReturnInventoryLoot:
                 Game.LocalPlayer.Inventory.AddInventoryItems(IO.GetPlayerLootInventoryItems);
-                ScoringSystem.Instance.AddScore(IO.GetPlayerMoneyToDrop);
+                ScoringSystem.Instance.AddGold(IO.GetPlayerMoneyToDrop);
                 break;
         }
         

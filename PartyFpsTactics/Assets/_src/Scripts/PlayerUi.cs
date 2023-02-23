@@ -18,7 +18,6 @@ namespace MrPink
         public Dictionary<HealthController, Image> markedEnemies = new Dictionary<HealthController, Image>();
         public Vector3 enemyMarkerOffset;
         public Image healthBar;
-        public Image staminaBar;
         public List<Image> characterNeedsBars;
 
         public Animator shieldFeedbackAnim;
@@ -85,7 +84,6 @@ namespace MrPink
                     markedEnemies.Remove(unit);
                 }
 
-                staminaBar.fillAmount = Game.LocalPlayer.Movement.stamina / Game.LocalPlayer.Movement.staminaMax;
                 for (int i = 0; i < Game.LocalPlayer.CharacterNeeds.needs.Count; i++)
                 {
                     // 0 is sleep

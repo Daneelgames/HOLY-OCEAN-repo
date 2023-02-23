@@ -18,6 +18,7 @@ namespace MrPink.WeaponsSystem
     {
         public bool addVelocityEveryFrame = true;
         public float projectileSpeed = 100;
+        public float gravity = 13;
 
         [Header("FOR PLAYER PROJECTILES")][SerializeField] private bool singleSphereCast = false;
         public ToolType toolType = ToolType.Null;
@@ -42,7 +43,6 @@ namespace MrPink.WeaponsSystem
         public float ricochetCooldownMax = 0.5f;
         private float ricochetCooldown = 0;
         public Rigidbody rb;
-        public float gravity = 13;
         public LayerMask solidsMask;
         public LayerMask unitsMask;
         private Vector3 currentPosition;
@@ -59,7 +59,7 @@ namespace MrPink.WeaponsSystem
         
         private void Awake()
         {
-            rbIsKinematicInit = rb.isKinematic;
+            if (rb) rbIsKinematicInit = rb.isKinematic;
         }
 
         void OnEnable()
@@ -74,12 +74,12 @@ namespace MrPink.WeaponsSystem
         public override void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null)
         {
             base.Init(owner, source, shotHolder, action);
-            rb.isKinematic = rbIsKinematicInit;
+            if (rb) rb.isKinematic = rbIsKinematicInit;
             lastPosition = transform.position;
 
             if (!IsAttachedToShotHolder)
             {
-                if (rb != null && !addVelocityEveryFrame)
+                if (rb && rb != null && !addVelocityEveryFrame)
                     rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
 
                 transform.localEulerAngles += new Vector3(offsetX,offsetY, 0);   
@@ -133,7 +133,7 @@ namespace MrPink.WeaponsSystem
         
             if (addVelocityEveryFrame)
             {
-                transform.position += (transform.forward * projectileSpeed + Vector3.down * gravity) * Time.fixedUnscaledTime;
+                transform.position += (transform.forward * projectileSpeed + Vector3.down * gravity) * Time.fixedUnscaledDeltaTime;
                 //rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
             }
         
@@ -236,7 +236,7 @@ namespace MrPink.WeaponsSystem
                 fragGrenadeTool.Explode();
         
             dead = true;
-            rb.isKinematic = true;
+            if (rb) rb.isKinematic = true;
             if (visual)
                 visual.gameObject.SetActive(false);
             DeathCoroutine().ForgetWithHandler();
@@ -256,9 +256,12 @@ namespace MrPink.WeaponsSystem
         private void StickToObject(Collider coll)
         {
             transform.parent = coll.transform;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
+            if (rb)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true;
+            }
             dead = true;
         
             if (toolType == ToolType.CustomLadder)

@@ -106,7 +106,7 @@ namespace MrPink.WeaponsSystem
         public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null)
         {
             ownWeaponController = weaponController;
-            if (projectileController)
+            if (projectileController && projectileController.rb)
             {
                 projectileController.rb.velocity = Vector3.zero;
                 projectileController.rb.angularVelocity = Vector3.zero;

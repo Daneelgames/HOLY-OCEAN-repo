@@ -151,13 +151,12 @@ namespace MrPink.PlayerSystem
         {
             Debug.Log("PLAYER DEATH, SHOULD DROP SHIT");
             if (Visual.gameObject.activeInHierarchy) Visual.Death();
-            Game.LocalPlayer.Inventory.DropAllOnDeath();
+            Game.LocalPlayer.Inventory.DropAll();
             Game.LocalPlayer.Interactor.SetInteractionText(String.Empty);
             Movement.Death(killer);
             LookAround.Death(killer);
             Weapon.Death();
             VehicleControls.Death();
-            ScoringSystem.Instance.CooldownToZero();
             PartyController.Instance.PlayerDied();
         }
 

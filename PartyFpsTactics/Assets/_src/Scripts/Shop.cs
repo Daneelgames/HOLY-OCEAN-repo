@@ -57,7 +57,7 @@ namespace MrPink
         [Button]
         public void OpenShop(int newSelectedItem)
         {
-            ScoringSystem.Instance.UpdateScore();
+            ScoringSystem.Instance.UpdateGold();
             canvasAnim.gameObject.SetActive(true);
             IsActive = true;
             Cursor.visible = true;
@@ -71,8 +71,8 @@ namespace MrPink
                     continue;
                 }
             
-                shopItemsIcons[i].ShowItem(PlayerInventory.GetInventoryItem(toolsList[i].tool, toolsList[i].defaultUses, toolsList[i].InventoryItemActions));
-                if (toolsList[i].baseCost > ScoringSystem.Instance.CurrentScore)
+                shopItemsIcons[i].ShowItem(PlayerInventory.GetInventoryItem(toolsList[i].tool, toolsList[i].defaultUses));
+                if (toolsList[i].baseCost > ScoringSystem.Instance.CurrentGold)
                     shopItemsIcons[i].raycastedSprite.color = Color.red;
                 else
                     shopItemsIcons[i].raycastedSprite.color = Color.white;
@@ -120,7 +120,7 @@ namespace MrPink
             }
             else
             {
-                if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore ||
+                if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentGold ||
                     Game.LocalPlayer.Inventory.CanFitTool(toolsList[selectedItemIndex]) == false)
                 {
                     buyForText.text = "Not enough DOLAS";   
@@ -143,7 +143,7 @@ namespace MrPink
             if (Game._instance == null || Game.LocalPlayer == null)
                 return;
             // buy selectedItemIndex item
-            if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentScore)
+            if (toolsList[selectedItemIndex].baseCost > ScoringSystem.Instance.CurrentGold)
                 return;
             if (!Game.LocalPlayer.Inventory.CanFitTool(toolsList[selectedItemIndex]))
                 return;

@@ -19,8 +19,9 @@ namespace MrPink.PlayerSystem
         {
             public EquipmentSlot.Slot currentSlot;
             public ToolType _toolType;
-            public List<ItemAction> ItemActions;
             public int usesLeft;
+
+            public WeaponController WeaponPrefab;
         }
         
         [Serializable] public class EquipmentSlot
@@ -39,10 +40,6 @@ namespace MrPink.PlayerSystem
             public InventoryItem equippedItem;
         }
 
-        public enum ItemAction
-        {
-            ArmLeft, ArmRight, QuickSlot, Use
-        }
 
         [SerializeField] private Tool defaultMeleeWeapon;
         [SerializeField] private List<Tool> startingTools;
@@ -75,13 +72,7 @@ namespace MrPink.PlayerSystem
 
         public void Init()
         {
-            foreach (var startingTool in startingTools)
-            {
-                AddTool(startingTool);
-            }
-
             CheckIfPlayerHasEmptyHands();
-
         }
 
         async void CheckIfPlayerHasEmptyHands()
@@ -97,10 +88,12 @@ namespace MrPink.PlayerSystem
         }    
     
         // TODO стороны - через enum
-        public void SpawnPlayerWeapon(InventoryItem inventoryItem, WeaponController weaponPrefab, int side = 0, bool forceHand = false) // 0- left, 1 - right
+        void SpawnPlayerWeapon(InventoryItem inventoryItem) // 0- left, 1 - right
         {
+            var weaponPrefab = inventoryItem.WeaponPrefab;
+            int side = 0;
             var wpn = Instantiate(weaponPrefab, Game.LocalPlayer.Position, Quaternion.identity);
-            if (Game.LocalPlayer.Weapon.Hands[0].Weapon != null && forceHand == false)
+            if (Game.LocalPlayer.Weapon.Hands[0].Weapon != null)
                 side = 1;
             
             switch (side)
@@ -158,66 +151,49 @@ namespace MrPink.PlayerSystem
             }
         }
 
-        public void EquipToolByUiButton(ToolType toolType, int usesLeft, List<ItemAction> itemActions, int handIndex)
-        {
-            if (toolType == ToolType.Knife)
-                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), _startingSwordWeapon, handIndex, true);
-            if (toolType == ToolType.PistolLaserPoint)
-                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), startingPistolLaserPointWeapon, handIndex, true);
-            if (toolType == ToolType.UziPistol)
-                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), startingPistolWeapon, handIndex, true);
-            if (toolType == ToolType.Shotter)
-                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions), shotterWeapon, handIndex, true);
-            if (toolType == ToolType.Fist)
-                SpawnPlayerWeapon(GetInventoryItem(toolType, usesLeft, itemActions),defaultMeleeWeaponPrefab, handIndex, true);
-        }
 
         
-        public static InventoryItem GetInventoryItem(ToolType tooltype, int usesLeft, List<ItemAction> itemActions)
+        public static InventoryItem GetInventoryItem(ToolType tooltype, int usesLeft)
         {
             InventoryItem newItem = new InventoryItem();
             newItem.usesLeft = usesLeft;
             newItem._toolType = tooltype;
-            newItem.ItemActions = new List<ItemAction>(itemActions);
             return newItem;
         }
         InventoryItem GetInventoryItem(Tool tool)
         {
             InventoryItem newItem = new InventoryItem();
+            newItem.WeaponPrefab = tool.WeaponPrefab;
             newItem.usesLeft = tool.defaultUses;
             newItem._toolType = tool.tool;
             newItem.currentSlot = EquipmentSlot.Slot.Null;
-            newItem.ItemActions = new List<ItemAction>(tool.InventoryItemActions);
             return newItem;
         }
 
         public void AddInventoryItems(List<InventoryItem> newInventoryItems)
         {
-            foreach (var inventoryItem in newInventoryItems)
-            {
-                AddInventoryItem(inventoryItem);
-            }
         }
 
         public void AddInventoryItem(InventoryItem newItem)
         {
-            if (newItem._toolType == ToolType.Fist)
-                SpawnPlayerWeapon(newItem, defaultMeleeWeaponPrefab);
-            else
-                inventoryItems.Add(newItem);
-            
-            if (newItem._toolType == ToolType.OneTimeShield)
-                PlayerUi.Instance.AddShieldFeedback();
         }
-        
+
+        public void AddAndEquipTool(Tool tool)
+        {
+            if (tool && (tool.WeaponPrefab || tool.PassiveToolPrefab))
+                SpawnPlayerWeapon(GetInventoryItem(tool));
+            
+            /*
+            if (tool.tool == ToolType.OneTimeShield)
+                PlayerUi.Instance.AddShieldFeedback();*/
+            
+            Game.LocalPlayer.ToolControls.SelectNextToolOnQuickSlots();
+            Game.LocalPlayer.ToolControls.UpdateSelectedToolFeedback();   
+        }
         public void AddTool(Tool tool)
         {
             var newItem = GetInventoryItem(tool);
-            
-            if (tool.tool == ToolType.Fist)
-                SpawnPlayerWeapon(newItem, defaultMeleeWeaponPrefab);
-            else
-                inventoryItems.Add(newItem);
+            inventoryItems.Add(newItem);
             
             if (tool.tool == ToolType.OneTimeShield)
                 PlayerUi.Instance.AddShieldFeedback();
@@ -229,7 +205,7 @@ namespace MrPink.PlayerSystem
 
         public void SpawnFist()
         {
-            AddTool(defaultMeleeWeapon);
+            AddAndEquipTool(defaultMeleeWeapon);
         }
     
         public int RemoveTool(ToolType tool, int amount = 1)
@@ -282,12 +258,14 @@ namespace MrPink.PlayerSystem
             return amount;
         }
 
-        public void DropAllOnDeath()
+        public void DropAll(bool removeMoney = true, bool dropLootContainer = true)
         {
             var itemsToDrop = new List<InventoryItem>(inventoryItems);
-            int moneyToDrop = ScoringSystem.Instance.CurrentScore;
-            ScoringSystem.Instance.RemoveScore(moneyToDrop);
-            ContentPlacer.Instance.SpawnPlayerLootContainer(itemsToDrop, moneyToDrop);
+            int moneyToDrop = ScoringSystem.Instance.CurrentGold;
+            if (removeMoney)
+                ScoringSystem.Instance.RemoveScore(moneyToDrop);
+            if (dropLootContainer)
+                ContentPlacer.Instance.SpawnPlayerLootContainer(itemsToDrop, moneyToDrop);
             
             for (int i = 0; i < Game.LocalPlayer.ToolControls.toolsProjectilesPrefabs.Count; i++)
             {

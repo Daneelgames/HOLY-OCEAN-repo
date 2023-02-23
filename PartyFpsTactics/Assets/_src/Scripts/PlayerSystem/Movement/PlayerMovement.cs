@@ -51,19 +51,6 @@ namespace MrPink.PlayerSystem
 
         private GrindRail activeGrindRail;
 
-
-        [BoxGroup("STAMINA")] public float stamina = 100;
-        [HideInInspector] public float staminaMax = 100;
-        [BoxGroup("STAMINA")]public float staminaMin = -20;
-        [BoxGroup("STAMINA")][SerializeField] float climbStaminaCost = 5;
-        [BoxGroup("STAMINA")][SerializeField] float climbMoveStaminaCost = 10;
-        [BoxGroup("STAMINA")][SerializeField] float climbRunStaminaCost = 15;
-        [BoxGroup("STAMINA")][SerializeField] float runStaminaCost = 10;
-        [BoxGroup("STAMINA")][SerializeField] float runCrouchStaminaCost = 5;
-        [BoxGroup("STAMINA")][SerializeField] private float jumpStaminaCost = 10;
-        [BoxGroup("STAMINA")][SerializeField] private float idleStaminaRegen = 33;
-        [BoxGroup("STAMINA")][SerializeField] private float moveStaminaRegen = 25;
-
         [Header("Slopes")]
         [SerializeField] [ReadOnly] private Vector3 slopeMoveDirection;
         [SerializeField] [ReadOnly] private Vector3 slopeNormal;
@@ -121,7 +108,6 @@ namespace MrPink.PlayerSystem
 
         private void Start()
         {
-            staminaMax = stamina;
             rbInitDrag = rb.drag;
             rbInitAngularDrag = rb.angularDrag;
             SetCrouch(false);
@@ -164,7 +150,6 @@ namespace MrPink.PlayerSystem
 
             if (_isDead == false)
                 HandleJump();
-            HandleStamina();
             HandleMovement();
             if (Game.LocalPlayer.VehicleControls.controlledMachine)
             {
@@ -258,10 +243,7 @@ namespace MrPink.PlayerSystem
         
         void HandleJump()
         {
-            if (stamina < staminaMax/10)
-                return;
-            
-            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || _coyoteTime > 0) && stamina > 0)
+            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || _coyoteTime > 0))
             {
                 if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
                     Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls.controlledMachine);
@@ -277,58 +259,7 @@ namespace MrPink.PlayerSystem
                 Jump(additionalForce);
             }
         }
-
-        private float targetStaminaScaler = 1;
-
-        void HandleStamina()
-        {
-            if (Game.LocalPlayer.VehicleControls.controlledMachine)
-            {
-                ChangeStamina(idleStaminaRegen * Time.deltaTime);
-                return;
-            }
-
-            if (State.IsClimbing && !State.IsGrounded)
-            {
-                targetStaminaScaler = climbStaminaCost;
-
-                if (State.IsRunning)
-                    targetStaminaScaler = climbRunStaminaCost;
-                else if (State.IsMoving)
-                    targetStaminaScaler = climbMoveStaminaCost;
-
-                ChangeStamina(-1 * targetStaminaScaler * Time.deltaTime);
-
-                return;
-            }
-
-            if (!State.IsRunning)
-            {
-                // MOVE
-                targetStaminaScaler = idleStaminaRegen;
-                if (State.IsMoving)
-                    targetStaminaScaler = moveStaminaRegen;
-                if (stamina < staminaMax)
-                {
-                    ChangeStamina(targetStaminaScaler * Time.deltaTime);
-                }
-
-                return;
-            }
-
-            // IF RUN
-            if (!State.IsCrouching)
-                targetStaminaScaler = runStaminaCost;
-            else
-                targetStaminaScaler = runCrouchStaminaCost;
-            ChangeStamina(-1 * targetStaminaScaler * Time.deltaTime);
-        }
-
-        public void ChangeStamina(float offset)
-        {
-            stamina = Mathf.Clamp(stamina + offset, staminaMin, staminaMax);
-        }
-
+        
 
         private void HandleCrouch()
         {
@@ -421,23 +352,17 @@ namespace MrPink.PlayerSystem
             if (State.IsOnSlope)
                 _moveVector = GetSlopeMovementDirection(_moveVector);
 
-            float scaler = 1;
-
-            if (stamina < 0.1f && State.IsGrounded)
-                scaler = 0.66f;
-            else if (Game.LocalPlayer.Interactor.carryingPortableRb)
-                scaler = 0.66f;
 
             // RUNNING
-            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && (State.IsGrounded || State.IsClimbing == false))
+            if (Input.GetKey(KeyCode.LeftShift) && (State.IsGrounded || State.IsClimbing == false))
             {
                 State.IsRunning = moveInFrame;
                 State.IsMoving = false;
 
                 if (!State.IsCrouching)
-                    _targetVelocity = _moveVector * runSpeed * scaler;
+                    _targetVelocity = _moveVector * runSpeed;
                 else
-                    _targetVelocity = _moveVector * crouchRunSpeed * scaler;
+                    _targetVelocity = _moveVector * crouchRunSpeed;
             }
             else
             {
@@ -445,9 +370,9 @@ namespace MrPink.PlayerSystem
                 State.IsRunning = false;
 
                 if (!State.IsCrouching)
-                    _targetVelocity = _moveVector * walkSpeed * scaler;
+                    _targetVelocity = _moveVector * walkSpeed;
                 else
-                    _targetVelocity = _moveVector * crouchSpeed * scaler;
+                    _targetVelocity = _moveVector * crouchSpeed;
             }
 
             _resultVelocity = Vector3.Lerp(_prevVelocity, _targetVelocity, Time.fixedUnscaledDeltaTime * acceleration);
@@ -489,7 +414,6 @@ namespace MrPink.PlayerSystem
             //rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce, ForceMode.Impulse);
 
             StartCoroutine(CoyoteTimeCooldown());
-            ChangeStamina(-1 * jumpStaminaCost);
             _coyoteTime = 0;
             
             var jumpLocalVel = Vector3.up * jumpForce + dashDir * dashForce;
@@ -645,7 +569,7 @@ namespace MrPink.PlayerSystem
         {
             closeToClimbableSurface = Physics.CheckSphere(Game.LocalPlayer.MainCamera.transform.position, climbCheckRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
             
-            if (stamina <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
+            if (Input.GetKey(KeyCode.LeftShift) == false)
             {
                 State.IsClimbing = false;
                 return;

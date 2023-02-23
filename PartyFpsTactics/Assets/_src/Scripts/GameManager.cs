@@ -121,7 +121,7 @@ namespace MrPink
             
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab))
             {
-                if (cursorVisible)
+                if (SettingsGameWrapper.Instance.IsOpened)
                 {
                     SettingsGameWrapper.Instance.CloseMenu();
                     PlayerInventoryUI.Instance.HideInventory();
@@ -145,11 +145,11 @@ namespace MrPink
                 if (Input.GetKeyDown(KeyCode.R))
                     RespawnPlayer();
                 if (Input.GetKeyDown(KeyCode.F))
-                    ScoringSystem.Instance.AddScore(1000);
+                    ScoringSystem.Instance.AddGold(1000);
                 if (Input.GetKeyDown(KeyCode.K))
                     KillPlayer();
                 if (Input.GetKeyDown(KeyCode.X))
-                    ScoringSystem.Instance.AddScore(-ScoringSystem.Instance.CurrentScore);
+                    ScoringSystem.Instance.AddGold(-ScoringSystem.Instance.CurrentGold);
                 if (Input.GetKeyDown(KeyCode.D))
                     UnitsManager.Instance.KillAllMobs();
             }

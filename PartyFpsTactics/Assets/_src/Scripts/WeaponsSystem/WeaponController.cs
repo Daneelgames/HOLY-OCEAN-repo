@@ -143,8 +143,6 @@ namespace MrPink.WeaponsSystem
 
             if (isPlayer)
             {
-                Game.LocalPlayer.Movement.ChangeStamina(-attackStaminaCost);
-
                 if (_isMelee == false) // use durability of melee only if hit target
                     DamageDurability();
             }

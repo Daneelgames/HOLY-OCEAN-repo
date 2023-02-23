@@ -174,8 +174,6 @@ namespace MrPink.Units
                                                tileExplosionForceBarrels, ForceMode.VelocityChange);
 
                     hcInGame[i].Damage(1, DamageSource.Player);
-                    if (action != ScoringActionType.NULL)
-                        ScoringSystem.Instance.RegisterAction(ScoringActionType.BarrelBumped, 3);
 
                     continue;
                 }
@@ -184,8 +182,6 @@ namespace MrPink.Units
                 {
                     if (hcInGame[i].HumanVisualController)
                     {
-                        if (hcInGame[i].health > 0 && action != ScoringActionType.NULL)
-                            ScoringSystem.Instance.RegisterAction(ScoringActionType.EnemyBumped, 2);
                         hcInGame[i].HumanVisualController.ActivateRagdoll();
                         hcInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
                     }

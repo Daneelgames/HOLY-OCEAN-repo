@@ -60,7 +60,6 @@ public class InteractiveObject : MonoBehaviour
             var newItem = new PlayerInventory.InventoryItem();
             newItem._toolType = item._toolType;
             newItem.usesLeft = item.usesLeft;
-            newItem.ItemActions = item.ItemActions;
             newItem.currentSlot = PlayerInventory.EquipmentSlot.Slot.Null;
             
             Debug.Log("DROP 0 " + newItem._toolType + "; uses " + newItem.usesLeft);

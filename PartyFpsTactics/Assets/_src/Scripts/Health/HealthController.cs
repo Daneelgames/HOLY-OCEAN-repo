@@ -186,6 +186,10 @@ namespace MrPink.Health
             endurance = enduranceMax;
         }
 
+        public void RestoreHealth()
+        {
+            health = healthMax;
+        }
 
         public void AddHealth(int hpToRegen)
         {
@@ -243,7 +247,8 @@ namespace MrPink.Health
         {
             Damage(healthMax, DamageSource.Environment);
         }
-        
+
+        private PlayerInventory.EquipmentSlot bodyEquipmentSlot;
         public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {
             if (health <= 0)
@@ -255,14 +260,7 @@ namespace MrPink.Health
             if (Shop.Instance.IsActive)
                 return;
                 
-            if (Game.LocalPlayer.Health == this && Game.LocalPlayer.Inventory.HasTool(ToolType.OneTimeShield))
-            {
-                PlayerUi.Instance.RemoveShieldFeedback();
-                Game.LocalPlayer.Inventory.RemoveTool(ToolType.OneTimeShield);
-            }
-            else
-                health -= damage;
-
+            health -= damage;
             
             OnDamagedEvent?.Invoke();
             
@@ -275,13 +273,13 @@ namespace MrPink.Health
                 controlledMachine.controllingHc.Damage(Mathf.RoundToInt(damage * controlledMachine.DamageToControllingHcScaler), DamageSource.Environment);
                 
 
+            if (source == DamageSource.Player)
+                ScoringSystem.Instance.RegisterDamage(damage);
+            
             if (health <= 0)
             {
                 health = 0;
                 StartCoroutine(Death(action, killer));
-            
-                if (source == DamageSource.Player && action != ScoringActionType.NULL)
-                    ScoringSystem.Instance.RegisterAction(action);
                 
                 return;
             }
@@ -344,8 +342,18 @@ namespace MrPink.Health
         {
             if (IsDead) 
                 yield break;
+
+            if (Game.LocalPlayer.Health == this)
+            {
+                if (ScoringSystem.Instance.GetCurrentMojoLevel > 0)
+                {
+                    ScoringSystem.Instance.DecreaseMojoLevel();
+                    RestoreHealth();
+                    yield break;
+                }
+            }
             
-            if (IsServer)
+            if (IsHost)
             {
                 Debug.Log("DEATH on server start " + gameObject.name);
                 DeathOnServer(action);

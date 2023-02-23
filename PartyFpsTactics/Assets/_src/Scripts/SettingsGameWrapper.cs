@@ -10,6 +10,8 @@ public class SettingsGameWrapper : MonoBehaviour
     public static SettingsGameWrapper Instance;
     [SerializeField] private Transform menuTransform;
     [SerializeField] private Transform startGameButton;
+
+    public bool IsOpened => menuTransform.gameObject.activeInHierarchy;
     private void Awake()
     {
         if (Instance != null)
