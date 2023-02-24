@@ -120,11 +120,12 @@ public class ContentPlacer : NetworkBehaviour
                 SpawnRedUnitAroundRandomPlayer();
             }
 
+            /*
             if (Game.LocalPlayer != null && Game.LocalPlayer.Health.health > 0)
             {
                 Debug.Log("SpawnAroundPlayer SpawnLootAroundPlayer");
                 SpawnLootAroundLocalPlayer();
-            }
+            }*/
 
         }
     }

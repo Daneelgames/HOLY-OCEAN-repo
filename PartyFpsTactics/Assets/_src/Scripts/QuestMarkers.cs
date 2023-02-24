@@ -52,6 +52,10 @@ public class QuestMarkers : MonoBehaviour
             mark.hpBar.color = color;
             mark.StartListeningForDamage();
         }
+        else
+        {
+            mark.hpBar.transform.parent.gameObject.SetActive(false);
+        }
         activeMarks.Add(mark);
     }
 

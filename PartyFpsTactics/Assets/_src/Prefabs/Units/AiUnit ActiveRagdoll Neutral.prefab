@@ -2073,6 +2073,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &252019346782943451
 GameObject:
   m_ObjectHideFlags: 0
@@ -2448,6 +2450,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &818368898755802240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2657,6 +2661,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &1024849585037189583
 GameObject:
   m_ObjectHideFlags: 0
@@ -2833,6 +2839,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &1366199997578914052
 GameObject:
   m_ObjectHideFlags: 0
@@ -3301,6 +3309,7 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 5673859260790904911}
+  playerLootInventoryItems: []
 --- !u!136 &4226590641253379149
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3604,6 +3613,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &2560397662263845156
 GameObject:
   m_ObjectHideFlags: 0
@@ -3921,6 +3932,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &3224822954900166475
 GameObject:
   m_ObjectHideFlags: 0
@@ -4256,6 +4269,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &3736555965012166689
 GameObject:
   m_ObjectHideFlags: 0
@@ -4754,6 +4769,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &4536172875164325730
 GameObject:
   m_ObjectHideFlags: 0
@@ -4930,6 +4947,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &4536705746996301471
 GameObject:
   m_ObjectHideFlags: 0
@@ -5566,6 +5585,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &5396175071870527623
 GameObject:
   m_ObjectHideFlags: 0
@@ -5918,6 +5939,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &5737468715609422720
 GameObject:
   m_ObjectHideFlags: 0
@@ -6312,6 +6335,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &5884284986084403203
 GameObject:
   m_ObjectHideFlags: 0
@@ -6443,11 +6468,11 @@ MonoBehaviour:
   _healthController: {fileID: 5673859260790904911}
   _unitVision: {fileID: 622743779293351943}
   _unitAiMovement: {fileID: 6090508075434962156}
+  _unitMovement: {fileID: 7767769086912786514}
+  _followTarget: {fileID: -4915185774981738495}
   _unitWeaponControls: {fileID: 5371681404181358584}
   _aiVehicleControls: {fileID: 5371681404181358584}
   _humanVisualController: {fileID: 3176254616865558108}
-  _unitMovement: {fileID: 7767769086912786514}
-  _followTarget: {fileID: -4915185774981738495}
   _characterNeeds: {fileID: -1517983677754019025}
   _spawnLootOnDeath: {fileID: 6385933416773639908}
   _npcInteraction: {fileID: 5205671269229392275}
@@ -6539,6 +6564,9 @@ MonoBehaviour:
   damageStates: []
   IsDead: 0
   OnDeathEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamagedEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &622743779293351943
@@ -6992,12 +7020,6 @@ MonoBehaviour:
   lootToSpawn:
   - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
     chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: edfa06cee4886db40aa3d98992531fee, type: 3}
-    chance: 0.2
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: ed5c68905bba0c04bbc74c0beff70286, type: 3}
-    chance: 0.2
-  - objectToSpawnOnDeath: {fileID: 4533318020577912468, guid: 2b3ee23fed8c81946b30993d13db032e, type: 3}
-    chance: 0.2
 --- !u!114 &1246593914576948072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7069,7 +7091,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 26
+  <PrefabId>k__BackingField: 27
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -7743,6 +7765,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 5
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &6565273398580350971
 GameObject:
   m_ObjectHideFlags: 0
@@ -8199,6 +8223,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &7709950344811270182
 GameObject:
   m_ObjectHideFlags: 0
@@ -8566,6 +8592,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &8307824214213071177
 GameObject:
   m_ObjectHideFlags: 0
@@ -8887,6 +8915,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 2
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &8464487115148771860
 GameObject:
   m_ObjectHideFlags: 0
@@ -9257,6 +9287,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 5
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &8884911090037479601
 GameObject:
   m_ObjectHideFlags: 0
@@ -9435,6 +9467,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 5673859260790904911}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &8940472895756750278
 GameObject:
   m_ObjectHideFlags: 0
