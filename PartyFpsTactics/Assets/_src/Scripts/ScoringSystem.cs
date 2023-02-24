@@ -138,7 +138,7 @@ namespace MrPink
             UpdateMojoInventory();
         }
 
-        void UpdateMojoInventory()
+        public void UpdateMojoInventory()
         {
             Game.LocalPlayer.Inventory.DropAll(false, false);
             

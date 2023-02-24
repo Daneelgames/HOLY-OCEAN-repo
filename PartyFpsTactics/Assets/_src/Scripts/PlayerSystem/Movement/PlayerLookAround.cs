@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using FishNet.Object;
 using JetBrains.Annotations;
@@ -112,6 +113,27 @@ namespace MrPink.PlayerSystem
             MouseLook();
         }
 
+        private void MouseLook()
+        {
+            _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.fixedUnscaledDeltaTime;
+            _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.fixedUnscaledDeltaTime;
+            _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
+            
+            var newRotation = new Vector3(0, _horizontalRotation, 0);
+            transform.localRotation = Quaternion.Euler(newRotation);
+            newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
+            
+            _headTransform.rotation = Quaternion.Euler(newRotation);
+
+            float resultFollowSpeed = _cameraFollowBodySmooth;
+            
+            if (Game.LocalPlayer.VehicleControls.controlledMachine)
+                resultFollowSpeed *= 10;
+            
+            _headTransform.transform.position = Vector3.Lerp(_headTransform.transform.position,transform.position + transform.up * _playerHeadHeightTarget, resultFollowSpeed * Time.unscaledDeltaTime);
+            vehicleHeadDummyTransform.position = _headTransform.transform.position;
+        }
+
         
         public void SetCurrentCutsceneTargetTrasform(Transform _transform)
         {
@@ -132,54 +154,7 @@ namespace MrPink.PlayerSystem
             _playerHeadHeightTarget = isCrouching ? _playerHeadHeightCrouch : _playerHeadHeight;
         }
         
-        private void MouseLook()
-        {
-            // TODO не работать с this.transform
-            
-            if (_isDead && _killerToLookAt != null)
-            {
-                _headTransform.rotation = Quaternion.Lerp(_headTransform.rotation, Quaternion.LookRotation(_killerToLookAt.position - _headTransform.position), Time.unscaledDeltaTime);
-                return;
-            }
-
-            _horizontalRotation += Input.GetAxis("Mouse X") * _mouseSensitivity * Time.fixedUnscaledDeltaTime;
-            
-            var newRotation = new Vector3(0, _horizontalRotation, 0);
-            //newRotation = new Vector3(transform.localRotation.x, _horizontalRotation, transform.localRotation.z);
-            
-            _verticalRotation -= Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.fixedUnscaledDeltaTime;
-            _verticalRotation = Mathf.Clamp(_verticalRotation, -_vertLookAngleClamp, _vertLookAngleClamp);
-
-            
-            //////////////////
-            
-            transform.localRotation = Quaternion.Euler(newRotation);
-            newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
-            
-            /*
-            if (Game.LocalPlayer.VehicleControls.controlledMachine == null) 
-            {
-                transform.localRotation = Quaternion.Euler(newRotation);
-                newRotation = new Vector3(_verticalRotation, 0, 0) + transform.eulerAngles;
-            }
-            else // ЕСЛИ В ТАЧКЕ ИЛИ ЛОДКЕ
-            {
-                vehicleHeadDummyTransform.localRotation = Quaternion.Slerp( Quaternion.Euler(new Vector3(transform.localEulerAngles.x, newRotation.y, transform.localEulerAngles.z)), Quaternion.Euler(newRotation), Time.unscaledDeltaTime);
-                newRotation = new Vector3(_verticalRotation, 0, 0) + vehicleHeadDummyTransform.eulerAngles;
-            }*/
         
-            _headTransform.rotation = Quaternion.Euler(newRotation);
-
-            float resultFollowSpeed = _cameraFollowBodySmooth;
-            
-            if (Game.LocalPlayer.VehicleControls.controlledMachine)
-                resultFollowSpeed *= 10;
-            
-            _headTransform.transform.position = 
-                Vector3.Lerp(_headTransform.transform.position,transform.position + transform.up * _playerHeadHeightTarget, 
-                    resultFollowSpeed * Time.unscaledDeltaTime);
-            vehicleHeadDummyTransform.position = _headTransform.transform.position;
-        }
 
         public void Death(Transform killer = null)
         {

@@ -378,7 +378,7 @@ namespace MrPink.Units
         public void RestartActivities()
         {
             
-            _selfUnit.UnitMovement.Resurrect();
+            _selfUnit.UnitMovement.RestoreAgent();
             
             HealthController enemy = null;
             if (_selfUnit.UnitVision.visibleEnemies.Count > 0)

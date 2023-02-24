@@ -18,7 +18,8 @@ namespace MrPink.WeaponsSystem
     {
         public bool addVelocityEveryFrame = true;
         public float projectileSpeed = 100;
-        public float gravity = 13;
+        [SerializeField] [ReadOnly] float gravityCurrent = 0;
+        [SerializeField] float gravityScaler = 10;
 
         [Header("FOR PLAYER PROJECTILES")][SerializeField] private bool singleSphereCast = false;
         public ToolType toolType = ToolType.Null;
@@ -76,11 +77,11 @@ namespace MrPink.WeaponsSystem
             base.Init(owner, source, shotHolder, action);
             if (rb) rb.isKinematic = rbIsKinematicInit;
             lastPosition = transform.position;
-
+            gravityCurrent = 0;
             if (!IsAttachedToShotHolder)
             {
                 if (rb && rb != null && !addVelocityEveryFrame)
-                    rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravity, ForceMode.VelocityChange);
+                    rb.AddForce(transform.forward * projectileSpeed + Vector3.down * gravityCurrent, ForceMode.VelocityChange);
 
                 transform.localEulerAngles += new Vector3(offsetX,offsetY, 0);   
             }
@@ -130,10 +131,12 @@ namespace MrPink.WeaponsSystem
                 return;
             if (ricochetCooldown > 0)
                 ricochetCooldown -= Time.deltaTime;
-        
+
+            gravityCurrent += gravityScaler * Time.deltaTime;
+            
             if (addVelocityEveryFrame)
             {
-                transform.position += (transform.forward * projectileSpeed + Vector3.down * gravity) * Time.fixedUnscaledDeltaTime;
+                transform.position += (transform.forward * projectileSpeed + Vector3.down * gravityCurrent) * Time.deltaTime;
                 //rb.velocity = transform.forward * projectileSpeed + Vector3.down * gravity * Time.deltaTime;
             }
         

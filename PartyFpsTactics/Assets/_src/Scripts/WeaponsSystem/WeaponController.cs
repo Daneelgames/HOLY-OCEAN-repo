@@ -155,7 +155,6 @@ namespace MrPink.WeaponsSystem
 
         void SpawnProjectileInDirection(Vector3 targetPos, Vector3 direction, bool isPlayer, HealthController ownerHc)
         {
-            //ScoringActionType action = isPlayer ? GetPlayerScoringAction() : ScoringActionType.NULL;
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
 
             for (int i = 0; i < bulletsPerShot; i++)
@@ -207,7 +206,7 @@ namespace MrPink.WeaponsSystem
                 reloadingAu.pitch = Random.Range(0.8f, 1.1f);
                 reloadingAu.Play();
             }
-            await UniTask.Delay((int) (cooldown * 1000));
+            await UniTask.Delay((int) (cooldown * 1000), DelayType.DeltaTime);
             OnCooldown = false;
             
             if (reloadingAu)

@@ -74,10 +74,10 @@ namespace MrPink.Units
             _healthController.Resurrect();
             
             if (_unitMovement)
-                _unitMovement.Resurrect();
+                _unitMovement.RestoreAgent();
             
             if (_humanVisualController)
-                _humanVisualController.Resurrect();
+                _humanVisualController.Restore();
         }
 
         public void Death()

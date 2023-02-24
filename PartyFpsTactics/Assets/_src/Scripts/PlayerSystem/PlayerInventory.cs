@@ -72,7 +72,8 @@ namespace MrPink.PlayerSystem
 
         public void Init()
         {
-            CheckIfPlayerHasEmptyHands();
+            ScoringSystem.Instance.UpdateMojoInventory();
+            //CheckIfPlayerHasEmptyHands();
         }
 
         async void CheckIfPlayerHasEmptyHands()

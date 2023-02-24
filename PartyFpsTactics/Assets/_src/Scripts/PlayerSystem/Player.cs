@@ -265,7 +265,7 @@ namespace MrPink.PlayerSystem
             Weapon.Resurrect();
             CharacterNeeds.ResetNeeds();
             if (Visual.gameObject.activeInHierarchy)
-                Visual.Resurrect();
+                Visual.Restore();
         }
 
         void OnDestroy()

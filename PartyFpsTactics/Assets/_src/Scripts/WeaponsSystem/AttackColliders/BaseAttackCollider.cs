@@ -250,11 +250,8 @@ namespace MrPink.WeaponsSystem
             {
                 if (damagedHealthControllers.Count > 0 && damagedHealthControllers.Contains(targetHealth.HealthController))
                 {
-                    //Debug.Log("return CollisionTarget.Creature;");
-                    {
-                        UnitsExplosion(ownerHealth);
-                        return CollisionTarget.Creature;
-                    }
+                    UnitsExplosion(ownerHealth);
+                    return CollisionTarget.Creature;
                 }
 
                 if (ownerHealth && damage > 0)

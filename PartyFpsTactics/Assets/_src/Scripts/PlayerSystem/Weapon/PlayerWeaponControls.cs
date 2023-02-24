@@ -59,6 +59,9 @@ namespace MrPink.PlayerSystem
             if (PlayerInventoryUI.Instance && PlayerInventoryUI.Instance.IsActive)
                 return;
             
+            if (SettingsGameWrapper.Instance && SettingsGameWrapper.Instance.IsOpened)
+                return;
+            
             if (Game.Flags.IsPlayerInputBlocked || Game.LocalPlayer.Interactor.carryingPortableRb)
             {
                 Debug.Log("Game.Flags.IsPlayerInputBlocked");

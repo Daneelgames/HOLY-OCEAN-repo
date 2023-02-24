@@ -26,7 +26,7 @@ public class NetworkProjectileSpawner : NetworkBehaviour
             SpawnMeleeProjectileLocally( shotHolder, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY, weaponController);   
         }
         else // RANGED
-        {
+        { 
             RpcSpawnProjectileOnEveryClient_Server( noiseDistance, shotHolder.position, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY);   
         }
     }

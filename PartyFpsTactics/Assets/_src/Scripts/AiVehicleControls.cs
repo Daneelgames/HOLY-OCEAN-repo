@@ -140,6 +140,12 @@ namespace MrPink
                 transform.rotation = sit.rotation;
                 yield return null;
             }
+            
+            // no more sit - exit
+            
+            hc.HumanVisualController.SetVehicleAiDriver(controlledMachine);
+            hc.HumanVisualController.SetCollidersTriggers(false);
+            hc.AiMovement.RestartActivities();
         }
 
         public void Death()

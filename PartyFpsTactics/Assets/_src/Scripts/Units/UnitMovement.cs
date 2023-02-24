@@ -113,7 +113,7 @@ namespace MrPink.Units
             //this.enabled = false;
         }
 
-        public void Resurrect()
+        public void RestoreAgent()
         {
             if (base.IsServer)
                 _agent.enabled = true;

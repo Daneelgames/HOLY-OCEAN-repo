@@ -64,18 +64,13 @@ namespace MrPink
             if (_localPlayer == null) return;
             if (_localPlayer.VehicleControls.controlledMachine == null)
             {
-                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position,
-                    _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.fixedUnscaledDeltaTime);
+                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position, _localPlayer.LookAround.HeadPos, camMoveSmooth * Time.fixedUnscaledDeltaTime);
                 cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmooth * Time.fixedUnscaledDeltaTime);
             }
             else
             {
-                //_gameCamera.transform.position = _localPlayer.VehicleControls.controlledMachine.CameraTransform.position;
-                
-                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position,
-                    _localPlayer.VehicleControls.controlledMachine.CameraTransform.position,
-                    camMoveSmoothVehicle * Time.unscaledDeltaTime);
-                
+                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position, _localPlayer.VehicleControls.controlledMachine.CameraTransform.position, 
+                    camMoveSmoothVehicle * Time.fixedUnscaledDeltaTime);
                 cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.fixedUnscaledDeltaTime);
             }
         }

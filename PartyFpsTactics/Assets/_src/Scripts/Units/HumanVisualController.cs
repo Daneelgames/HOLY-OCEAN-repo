@@ -95,28 +95,26 @@ namespace MrPink.Units
                 
                 grounded = Physics.CheckSphere(groundedRaycastOrigin.position, ragdoll?groundedCheckSphereRadius/3 : groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
 
-                if (!grounded/* && ragdoll == false*/)
+                if (grounded) continue;
+                
+                OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
+
+                if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
                 {
-                    OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
-
-                    if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
+                    var distance = transform.position.y - height;
+                    var isAboveSurface = distance > 0;
+                    if (isAboveSurface == false)
                     {
-                        var distance = transform.position.y - height;
-                        var isAboveSurface = distance > 0;
-                        if (isAboveSurface == false)
-                        {
-                            ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
-                        }
-                    }
-
-                    if (ragdoll == false)
-                    {
-                        if (hc.AiMovement)
-                            hc.AiMovement.StopActivities();
-
-                        ActivateRagdoll();
+                        ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
                     }
                 }
+
+                if (ragdoll) continue;
+                
+                if (hc.AiMovement)
+                    hc.AiMovement.StopActivities();
+
+                ActivateRagdoll();
             }
         }
         
@@ -253,13 +251,15 @@ namespace MrPink.Units
     
         public void SetVehicleAiDriver(ControlledMachine machine)
         {
-            if (machine)
-                DeactivateRagdoll();
             inVehicle = machine;
+            
+            if (inVehicle)
+                DeactivateRagdoll();
+            else
+                ActivateRagdoll();
+            
             anim.enabled = true;
-            //anim.SetBool(Driver, inVehicle);
             anim.SetBool(Passenger, inVehicle);
-        
             foreach (var rb in rigidbodies)
             {
                 rb.isKinematic = inVehicle;
@@ -507,11 +507,11 @@ namespace MrPink.Units
                     break;
             }
             
-            Resurrect();
+            Restore();
 
         }
 
-        public void Resurrect()
+        public void Restore()
         {
             if (hc.health <= 0)
                 return;
@@ -529,7 +529,7 @@ namespace MrPink.Units
             if (hc.AiMovement)
             {
                 hc.AiMovement.RestartActivities();
-                hc.selfUnit.UnitMovement.Resurrect();
+                hc.selfUnit.UnitMovement.RestoreAgent();
             }
         }
 
