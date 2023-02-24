@@ -74,6 +74,10 @@ namespace MrPink.WeaponsSystem
             get => ownerHealth;
             set => ownerHealth = value;
         }
+        
+        private int currentDamageScaler = 1;
+
+        protected WeaponController ownWeaponController;
 
         protected ScoringActionType actionOnHit;
 
@@ -102,9 +106,9 @@ namespace MrPink.WeaponsSystem
             }
         }
 
-        protected WeaponController ownWeaponController;
-        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null)
+        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null, int damageScaler = 1)
         {
+            currentDamageScaler = damageScaler;
             ownWeaponController = weaponController;
             if (projectileController && projectileController.rb)
             {
@@ -149,7 +153,7 @@ namespace MrPink.WeaponsSystem
             }
         }
         
-        protected CollisionTarget TryDoDamage(Collider targetCollider, float damageScaler = 1)
+        protected CollisionTarget TryDoDamage(Collider targetCollider, float newDamageScaler = -1)
         {
             if (Game.LocalPlayer == null)
                 return CollisionTarget.Self;
@@ -178,8 +182,10 @@ namespace MrPink.WeaponsSystem
                 Debug.Log("car return CollisionTarget.Self;");
                 return CollisionTarget.Self;
             }
-            
-            var resultDmg = Mathf.RoundToInt(damage * damageScaler);
+
+            if (newDamageScaler < 0)
+                newDamageScaler = currentDamageScaler;
+            var resultDmg = Mathf.RoundToInt(damage * newDamageScaler);
             
             if (targetCollider.gameObject == Game.LocalPlayer.GameObject)
             {

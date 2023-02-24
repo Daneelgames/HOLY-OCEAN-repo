@@ -84,6 +84,8 @@ public class Island : NetworkBehaviour
             culled = false;
             _navMeshSurfaceUpdate?.Init();
             SpawnIslandEnemies();
+            if (spawnBoss && bossKilled == false)
+                MusicManager.Instance.PlayIslandMusic();
             return;
         }
 
@@ -263,6 +265,7 @@ public class Island : NetworkBehaviour
         Destroy(islandMarker);
 
         bossKilled = true;
+        MusicManager.Instance.StopMusic();
         /*
         if (base.IsHost)
             ServerManager.Despawn(gameObject, DespawnType.Destroy);*/

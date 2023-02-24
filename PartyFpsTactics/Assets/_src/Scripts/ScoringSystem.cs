@@ -30,6 +30,8 @@ namespace MrPink
         [BoxGroup("MOJO")][SerializeField] private float comboReduceCooldown = 1;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentComboReduceCooldown;
         
+        [BoxGroup("MOJO")] [SerializeField] [ReadOnly] private int currentMojoDamageScaler = 1;
+        public int GetCurrentMojoDamageScaler => currentMojoDamageScaler;
         [Serializable]
         public struct MojoLevel
         {
@@ -120,7 +122,14 @@ namespace MrPink
         void IncreaseMojoLevel()
         {
             var newMojo = currentMojoLevel + 1;
-            newMojo = Mathf.Clamp(newMojo, 0, _mojoLevels.Count-1);
+            
+            if (newMojo >= _mojoLevels.Count)
+            {
+                currentMojoDamageScaler++;
+                newMojo = 0;
+            }
+            
+            //newMojo = Mathf.Clamp(newMojo, 0, _mojoLevels.Count-1);
             if (newMojo == currentMojoLevel)
                 return;
 
@@ -132,8 +141,15 @@ namespace MrPink
         public void DecreaseMojoLevel()
         {
             currentMojoLevel--;
+            currentMojoDamageScaler--;
+            if (currentMojoDamageScaler < 1)
+                currentMojoDamageScaler = 1;
             currentMojoLevel = Mathf.Clamp(currentMojoLevel, 0, _mojoLevels.Count-1);
-            currentDamageInCombo = _mojoLevels[currentMojoLevel].minDamage;
+            if (currentMojoLevel > 1)
+                currentDamageInCombo = _mojoLevels[currentMojoLevel - 1].minDamage + 1;
+            else
+                currentDamageInCombo = 0;
+            
             UpdateMojoLevelUi();
             UpdateMojoInventory();
         }
@@ -151,7 +167,10 @@ namespace MrPink
 
         void UpdateMojoLevelUi()
         {
-            comboLevelText.text = "MOJO " + currentMojoLevel;
+            string scalerString = String.Empty;
+            if (currentMojoDamageScaler > 1)
+                scalerString = "X" + currentMojoDamageScaler + " DMG";
+            comboLevelText.text = "MOJO " + currentMojoLevel + scalerString;
         }
 
         [Button]
