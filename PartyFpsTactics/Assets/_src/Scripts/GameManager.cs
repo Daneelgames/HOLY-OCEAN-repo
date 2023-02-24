@@ -94,7 +94,7 @@ namespace MrPink
                 return;
             }
             
-            if (PlayerInventoryUI.Instance.IsActive || Shop.Instance.IsActive)
+            if (PlayerInventoryUI.Instance.IsActive || Shop.Instance.IsActive || SettingsGameWrapper.Instance.IsOpened)
             {
                 cursorVisible = true;
                 Cursor.lockState = CursorLockMode.None;
