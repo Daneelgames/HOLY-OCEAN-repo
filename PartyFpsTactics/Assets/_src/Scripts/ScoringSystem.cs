@@ -133,6 +133,7 @@ namespace MrPink
             if (newMojo == currentMojoLevel)
                 return;
 
+            currentDamageInCombo = _mojoLevels[currentMojoLevel-1].minDamage + 1;
             currentMojoLevel = newMojo;
             UpdateMojoLevelUi();
             Game.LocalPlayer.Health.RestoreHealth();

@@ -20,7 +20,7 @@ public class SnakeMovementBrain : NetworkBehaviour
     [SerializeField] private MovementState _chargeState;
     [SerializeField] private MovementState _backOffState;
     [SerializeField] private List<MovementState> _movementStates;
-    [SerializeField] private List<DamageUnitsOnCollision> _damageUnitsTriggers = new List<DamageUnitsOnCollision>();
+    [SerializeField] private List<DamageZone> _damageUnitsTriggers = new List<DamageZone>();
 
     [Serializable]
     public struct MovementState

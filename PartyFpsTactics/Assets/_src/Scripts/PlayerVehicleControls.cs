@@ -100,7 +100,8 @@ namespace MrPink
             {
                 // выйти из тачки
                 exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
-                StopCoroutine(controlVehicleCoroutine);
+                if (controlVehicleCoroutine != null)
+                    StopCoroutine(controlVehicleCoroutine);
                 return;
             }
 

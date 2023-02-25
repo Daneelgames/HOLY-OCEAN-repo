@@ -18518,7 +18518,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7291637187789318284}
-  - component: {fileID: 5910401585465249558}
+  - component: {fileID: 7924947762965889832}
   m_Layer: 6
   m_Name: HullGenerator_Marching
   m_TagString: Untagged
@@ -18541,7 +18541,7 @@ Transform:
   m_Father: {fileID: 4925832773657117063}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5910401585465249558
+--- !u!114 &7924947762965889832
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18550,7 +18550,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3786394883972413093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd29b12423eb2e408ed2b5014fbbf37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3313c9611474a2741a582b71193ccd2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   engine: {fileID: 7550088143095487274}
@@ -19080,19 +19080,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1424732
+  instanceID: 2195330
+  NoDistanceCollision: 0
+  FarDistance: 0
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
-  NoDistanceCollision: 0
-  FarDistance: 0
-  VoxelMaterial: {fileID: 2100000, guid: 1e60543cd88f3274883f2b5d07a278d9, type: 2}
-  VoxelMaterialShell: {fileID: 0}
+  frameBudgetPerCell: 0
+  VoxelMaterial: {fileID: 2100000, guid: 0e3463bb58436ed4d8688c39fdc56697, type: 2}
   DetailGenerator: []
-  MinimumID: 0
-  MaximumID: 255
-  UVPower: 0.1
-  SmoothAngle: 180
+  SurfaceDimension: 0
+  SurfacePoint: 128
+  TargetLOD: 0
+  AddBarycentricColors: 0
+  GenerateCubeUV: 1
+  GenerateSphereUV: 0
+  RecalculateNormals: 0
+  NormalAngle: 0
+  UVPower: 0.05
   TextureDimensionUV3: 1
   TextureDimensionUV4: -1
   TextureDimensionUV5: -1
@@ -19101,8 +19106,7 @@ MonoBehaviour:
   TexturePowerUV4: 1
   TexturePowerUV5: 1
   TexturePowerUV6: 1
-  AddTesselationColors: 1
-  UseNewCalculator: 0
+  m_marchingCubes: {fileID: 7200000, guid: a85ae2bce31b12a4dad3424fdbed9f9c, type: 3}
 --- !u!1 &3792566777822192627
 GameObject:
   m_ObjectHideFlags: 0
@@ -20732,6 +20736,7 @@ MonoBehaviour:
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
+  healthControllerToHealthbar: {fileID: 0}
 --- !u!1 &4105419912526311848
 GameObject:
   m_ObjectHideFlags: 0
@@ -29018,7 +29023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullGenerators:
-  - {fileID: 5910401585465249558}
+  - {fileID: 7924947762965889832}
   RootSize: 120
   SubdivisionPower: 2
   DimensionCount: 2
@@ -29034,7 +29039,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1425694
+  instanceID: 2196292
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -32218,7 +32223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6359991615849549836}
-  - component: {fileID: 6359991615849549839}
+  - component: {fileID: 3825268133255211605}
   m_Layer: 6
   m_Name: HullGenerator_Marching
   m_TagString: Untagged
@@ -32241,7 +32246,7 @@ Transform:
   m_Father: {fileID: 6359991616780401152}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6359991615849549839
+--- !u!114 &3825268133255211605
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -32250,7 +32255,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359991615849549838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd29b12423eb2e408ed2b5014fbbf37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3313c9611474a2741a582b71193ccd2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   engine: {fileID: 6359991616780401155}
@@ -32780,19 +32785,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1425944
+  instanceID: 2196542
+  NoDistanceCollision: 0
+  FarDistance: 0
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
-  NoDistanceCollision: 0
-  FarDistance: 0
+  frameBudgetPerCell: 0
   VoxelMaterial: {fileID: 2100000, guid: 43d9a4eed4b2bed448a8048a3eed4518, type: 2}
-  VoxelMaterialShell: {fileID: 0}
   DetailGenerator: []
-  MinimumID: 0
-  MaximumID: 255
-  UVPower: 0.1
-  SmoothAngle: 180
+  SurfaceDimension: 0
+  SurfacePoint: 128
+  TargetLOD: 0
+  AddBarycentricColors: 0
+  GenerateCubeUV: 1
+  GenerateSphereUV: 0
+  RecalculateNormals: 0
+  NormalAngle: 0
+  UVPower: 0.05
   TextureDimensionUV3: 1
   TextureDimensionUV4: -1
   TextureDimensionUV5: -1
@@ -32801,8 +32811,7 @@ MonoBehaviour:
   TexturePowerUV4: 1
   TexturePowerUV5: 1
   TexturePowerUV6: 1
-  AddTesselationColors: 1
-  UseNewCalculator: 0
+  m_marchingCubes: {fileID: 7200000, guid: a85ae2bce31b12a4dad3424fdbed9f9c, type: 3}
 --- !u!1 &6359991616107361266
 GameObject:
   m_ObjectHideFlags: 0
@@ -33534,7 +33543,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6359991616613837382}
-  - component: {fileID: 6359991616613837383}
+  - component: {fileID: 4678771027788983516}
   m_Layer: 6
   m_Name: HullGenerator_Marching
   m_TagString: Untagged
@@ -33557,7 +33566,7 @@ Transform:
   m_Father: {fileID: 6359991617671780993}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6359991616613837383
+--- !u!114 &4678771027788983516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -33566,7 +33575,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6359991616613837377}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd29b12423eb2e408ed2b5014fbbf37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3313c9611474a2741a582b71193ccd2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   engine: {fileID: 6359991617671780998}
@@ -34096,19 +34105,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1426026
+  instanceID: 2196624
+  NoDistanceCollision: 0
+  FarDistance: 0
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
-  NoDistanceCollision: 0
-  FarDistance: 0
+  frameBudgetPerCell: 0
   VoxelMaterial: {fileID: 2100000, guid: 4a144d4abc5be2e458bedd6f01fdecee, type: 2}
-  VoxelMaterialShell: {fileID: 0}
   DetailGenerator: []
-  MinimumID: 0
-  MaximumID: 255
-  UVPower: 0.1
-  SmoothAngle: 180
+  SurfaceDimension: 0
+  SurfacePoint: 128
+  TargetLOD: 0
+  AddBarycentricColors: 0
+  GenerateCubeUV: 1
+  GenerateSphereUV: 0
+  RecalculateNormals: 0
+  NormalAngle: 0
+  UVPower: 0.05
   TextureDimensionUV3: 1
   TextureDimensionUV4: -1
   TextureDimensionUV5: -1
@@ -34117,8 +34131,7 @@ MonoBehaviour:
   TexturePowerUV4: 1
   TexturePowerUV5: 1
   TexturePowerUV6: 1
-  AddTesselationColors: 1
-  UseNewCalculator: 0
+  m_marchingCubes: {fileID: 7200000, guid: a85ae2bce31b12a4dad3424fdbed9f9c, type: 3}
 --- !u!1 &6359991616634967546
 GameObject:
   m_ObjectHideFlags: 0
@@ -34458,7 +34471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullGenerators:
-  - {fileID: 6359991615849549839}
+  - {fileID: 3825268133255211605}
   RootSize: 120
   SubdivisionPower: 2
   DimensionCount: 2
@@ -34474,7 +34487,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1426070
+  instanceID: 2196668
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -35625,7 +35638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullGenerators:
-  - {fileID: 6359991616613837383}
+  - {fileID: 4678771027788983516}
   RootSize: 120
   SubdivisionPower: 2
   DimensionCount: 2
@@ -35641,7 +35654,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1426180
+  instanceID: 2196778
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/

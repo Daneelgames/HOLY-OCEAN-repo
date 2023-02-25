@@ -249,16 +249,16 @@ namespace MrPink.Health
         }
 
         private PlayerInventory.EquipmentSlot bodyEquipmentSlot;
-        public void Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
+        public int Damage(int damage, DamageSource source, ScoringActionType action = ScoringActionType.NULL, Transform killer = null)
         {
             if (health <= 0)
-                return;
+                return health;
 
             if (IsImmortal || Game._instance.IsLevelGenerating)
                 damage = 0;
             
             if (Shop.Instance.IsActive)
-                return;
+                return health;
                 
             health -= damage;
             
@@ -281,7 +281,7 @@ namespace MrPink.Health
                 health = 0;
                 StartCoroutine(Death(action, killer));
                 
-                return;
+                return health;
             }
 
             if (deathOnHit)
@@ -290,6 +290,8 @@ namespace MrPink.Health
             if (proceduralDamageShake && transformToShake)
                 StartCoroutine(DamageShake());
             SetDamageState();
+            
+            return health;
         }
         
         

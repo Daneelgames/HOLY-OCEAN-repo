@@ -1692,7 +1692,6 @@ MonoBehaviour:
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField:
   - {fileID: 3794070089182216025}
-  - {fileID: 0}
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
@@ -2212,7 +2211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3028627508691204873}
-  - component: {fileID: 3028627508691204874}
+  - component: {fileID: 8418131035606273756}
   m_Layer: 6
   m_Name: HullGenerator_Marching
   m_TagString: Untagged
@@ -2235,7 +2234,7 @@ Transform:
   m_Father: {fileID: 3028627509639336197}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3028627508691204874
+--- !u!114 &8418131035606273756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2244,7 +2243,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3028627508691204875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd29b12423eb2e408ed2b5014fbbf37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3313c9611474a2741a582b71193ccd2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   engine: {fileID: 3028627509639336198}
@@ -2774,19 +2773,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1186862
+  instanceID: 2177192
+  NoDistanceCollision: 0
+  FarDistance: 0
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
-  NoDistanceCollision: 0
-  FarDistance: 0
+  frameBudgetPerCell: 0
   VoxelMaterial: {fileID: 2100000, guid: 0e3463bb58436ed4d8688c39fdc56697, type: 2}
-  VoxelMaterialShell: {fileID: 0}
   DetailGenerator: []
-  MinimumID: 0
-  MaximumID: 255
-  UVPower: 0.1
-  SmoothAngle: 180
+  SurfaceDimension: 0
+  SurfacePoint: 128
+  TargetLOD: 0
+  AddBarycentricColors: 0
+  GenerateCubeUV: 1
+  GenerateSphereUV: 0
+  RecalculateNormals: 0
+  NormalAngle: 0
+  UVPower: 0.05
   TextureDimensionUV3: 1
   TextureDimensionUV4: -1
   TextureDimensionUV5: -1
@@ -2795,8 +2799,7 @@ MonoBehaviour:
   TexturePowerUV4: 1
   TexturePowerUV5: 1
   TexturePowerUV6: 1
-  AddTesselationColors: 1
-  UseNewCalculator: 0
+  m_marchingCubes: {fileID: 7200000, guid: a85ae2bce31b12a4dad3424fdbed9f9c, type: 3}
 --- !u!1 &3028627509639336202
 GameObject:
   m_ObjectHideFlags: 0
@@ -2844,7 +2847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullGenerators:
-  - {fileID: 3028627508691204874}
+  - {fileID: 0}
   RootSize: 350
   SubdivisionPower: 2
   DimensionCount: 2

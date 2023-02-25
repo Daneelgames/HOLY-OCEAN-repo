@@ -41760,6 +41760,7 @@ MonoBehaviour:
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
+  healthControllerToHealthbar: {fileID: 0}
 --- !u!1 &3366264233792444058
 GameObject:
   m_ObjectHideFlags: 0
@@ -66619,7 +66620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullGenerators:
-  - {fileID: 5637452114823778480}
+  - {fileID: 1004305684346437197}
   RootSize: 150
   SubdivisionPower: 2
   DimensionCount: 2
@@ -66635,7 +66636,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1200822
+  instanceID: 2241786
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -66677,7 +66678,7 @@ MonoBehaviour:
   DuplicateMapOnClone: 0
   SaveInSceneSubFolder: 1
   RemoveVoxelmapOnDelete: 0
-  IsDirty: 1
+  IsDirty: 0
   ModuleScene:
     saveSystem: {fileID: 0}
     SceneVoxelData:
@@ -67270,7 +67271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5637452114823778483}
-  - component: {fileID: 5637452114823778480}
+  - component: {fileID: 1004305684346437197}
   m_Layer: 6
   m_Name: HullGenerator_Marching
   m_TagString: Untagged
@@ -67293,7 +67294,7 @@ Transform:
   m_Father: {fileID: 5637452113909660351}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5637452114823778480
+--- !u!114 &1004305684346437197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67302,7 +67303,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5637452114823778481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd29b12423eb2e408ed2b5014fbbf37, type: 3}
+  m_Script: {fileID: 11500000, guid: 3313c9611474a2741a582b71193ccd2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   engine: {fileID: 5637452113909660348}
@@ -67832,19 +67833,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1200884
+  instanceID: 2241848
+  NoDistanceCollision: 0
+  FarDistance: 0
   width: 8
   Cell_Subdivision: 8
   NumCores: 8
-  NoDistanceCollision: 0
-  FarDistance: 0
+  frameBudgetPerCell: 0
   VoxelMaterial: {fileID: 2100000, guid: 43d9a4eed4b2bed448a8048a3eed4518, type: 2}
-  VoxelMaterialShell: {fileID: 0}
   DetailGenerator: []
-  MinimumID: 0
-  MaximumID: 255
-  UVPower: 0.1
-  SmoothAngle: 180
+  SurfaceDimension: 0
+  SurfacePoint: 128
+  TargetLOD: 0
+  AddBarycentricColors: 0
+  GenerateCubeUV: 1
+  GenerateSphereUV: 0
+  RecalculateNormals: 0
+  NormalAngle: 0
+  UVPower: 0.05
   TextureDimensionUV3: 1
   TextureDimensionUV4: -1
   TextureDimensionUV5: -1
@@ -67853,8 +67859,7 @@ MonoBehaviour:
   TexturePowerUV4: 1
   TexturePowerUV5: 1
   TexturePowerUV6: 1
-  AddTesselationColors: 1
-  UseNewCalculator: 0
+  m_marchingCubes: {fileID: 7200000, guid: a85ae2bce31b12a4dad3424fdbed9f9c, type: 3}
 --- !u!1 &5637452114847276278
 GameObject:
   m_ObjectHideFlags: 0
