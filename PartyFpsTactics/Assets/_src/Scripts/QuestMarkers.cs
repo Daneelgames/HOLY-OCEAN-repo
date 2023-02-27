@@ -101,7 +101,8 @@ public class QuestMarkers : MonoBehaviour
             var textUI = marker.markerName;
             var target = marker.target;
             var distance = Vector3.Distance(marker.target.position, Game.LocalPlayer.MainCamera.transform.position);
-            marker.transform.localScale = Vector3.one / Mathf.Clamp(distance / distanceScaler, 1, 100);
+            
+            marker.transform.localScale = Vector3.one / Mathf.Clamp(distance / distanceScaler, 1.5f, 100);
 
             float minX = textUI.GetPixelAdjustedRect().width / 2;
             float maxX = Screen.width - minX;
@@ -133,8 +134,7 @@ public class QuestMarkers : MonoBehaviour
             pos.x = Mathf.Clamp(pos.x, minX, maxX);
             pos.y = Mathf.Clamp(pos.y, minY, maxY);
 
-            marker.transform.position =
-                Vector3.Lerp(marker.transform.position, pos, markerSpeed * Time.unscaledDeltaTime);
+            marker.transform.position = Vector3.Lerp(marker.transform.position, pos, markerSpeed * Time.unscaledDeltaTime);
             if (marker.hcToHpBar != null)
             {
                 if (marker.hcToHpBar.health > 0)

@@ -39,7 +39,6 @@ namespace MrPink.WeaponsSystem
 
         public void FollowDetachedTransform(Transform detachedParent)
         {
-            Debug.Log("FollowDetachedTransform");
             ownRb.MovePosition(detachedParent.position);
             ownRb.MoveRotation(detachedParent.rotation);
         }

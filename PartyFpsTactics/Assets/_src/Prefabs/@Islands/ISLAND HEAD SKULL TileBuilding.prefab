@@ -20586,8 +20586,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4093550205408370673}
-  - component: {fileID: 6359991616015023496}
   - component: {fileID: 735799012231920881}
+  - component: {fileID: 6359991616015023496}
   - component: {fileID: 1261924167978257544}
   - component: {fileID: -5716379535766909132}
   m_Layer: 0
@@ -20616,8 +20616,43 @@ Transform:
   - {fileID: 4369761378180565627}
   - {fileID: 4427089560376610718}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &735799012231920881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4093550205408370676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 102b294c358e29c47a2376e3db68122e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1261924167978257544}
+  _networkObjectCache: {fileID: 1261924167978257544}
+  _voxelSaveSystems:
+  - {fileID: 6359991616780401164}
+  - {fileID: 6359991617671780999}
+  - {fileID: 2627564015206225404}
+  _tileBuildingGenerator: {fileID: 4369761378180565626}
+  _voxelBuildingGenerator: {fileID: 0}
+  _navMeshSurfaceUpdate: {fileID: 6359991616015023496}
+  randomSpherePosOnNavMeshMaxRange: 100
+  spawnBoss: 1
+  islandUnits: []
+  culled: 1
+  distanceToLocalPlayer: 0
+  mobsIslandSpawnDistance: 300
+  mobsIslandDespawnDistance: 500
+  voxelCutterForBuildings:
+  - {fileID: 5306204244080011444}
+  - {fileID: 5331760386187212470}
+  - {fileID: 6063151943970548777}
+  targetHavok: 0
+  currentHavok: 0
 --- !u!114 &6359991616015023496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20642,37 +20677,6 @@ MonoBehaviour:
   MovementThreshold: 1
   NavMeshSize: {x: 200, y: 20, z: 200}
   CacheSources: 0
---- !u!114 &735799012231920881
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4093550205408370676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 102b294c358e29c47a2376e3db68122e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 1261924167978257544}
-  _networkObjectCache: {fileID: 1261924167978257544}
-  _tileBuildingGenerator: {fileID: 4369761378180565626}
-  _voxelBuildingGenerator: {fileID: 0}
-  _navMeshSurfaceUpdate: {fileID: 6359991616015023496}
-  randomSpherePosOnNavMeshMaxRange: 100
-  spawnBoss: 1
-  islandUnits: []
-  culled: 1
-  distanceToLocalPlayer: 0
-  mobsIslandSpawnDistance: 300
-  mobsIslandDespawnDistance: 500
-  voxelCutterForBuildings:
-  - {fileID: 5306204244080011444}
-  - {fileID: 5331760386187212470}
-  - {fileID: 6063151943970548777}
-  targetHavok: 0
-  currentHavok: 0
 --- !u!114 &1261924167978257544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20701,13 +20705,20 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 1
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 0
+  _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 237992247087831570
   _sceneNetworkObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1453758175633178418}
   - {fileID: 1261924167978257544}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -51115,7 +51126,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _scenePathHash
-      value: 0
+      value: 2732387296
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: <IsNested>k__BackingField
@@ -51131,14 +51142,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.size
-      value: 11
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[0]
       value: 
-      objectReference: {fileID: 1453758175633178418}
+      objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: _sceneNetworkObjects.Array.data[8]
+      value: 
+      objectReference: {fileID: 1453758175633178418}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: _sceneNetworkObjects.Array.data[9]
       value: 
       objectReference: {fileID: 1261924167978257544}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}

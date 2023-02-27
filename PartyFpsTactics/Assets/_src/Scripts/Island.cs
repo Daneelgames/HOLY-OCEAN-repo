@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
+using Fraktalia.VoxelGen;
 using Fraktalia.VoxelGen.Modify;
 using Fraktalia.VoxelGen.Modify.Procedural;
 using MrPink.Health;
@@ -14,6 +15,7 @@ using Random = UnityEngine.Random;
 
 public class Island : NetworkBehaviour
 {
+    [SerializeField] private List<VoxelSaveSystem> _voxelSaveSystems = new List<VoxelSaveSystem>();
     [SerializeField] private BuildingGenerator _tileBuildingGenerator;
     public BuildingGenerator TileBuildingGenerator => _tileBuildingGenerator;
     [SerializeField] private VoxelBuildingGenerator _voxelBuildingGenerator;
@@ -60,8 +62,24 @@ public class Island : NetworkBehaviour
         StartCoroutine(InitCoroutine(seed, voxelFloorRandomSettings));
     }
 
+    [Button]
+    public void GetVoxelSaveSystems()
+    {
+        var saveSystems = gameObject.GetComponentsInChildren<VoxelSaveSystem>();
+        foreach (var voxelSaveSystem in saveSystems)
+        {
+            _voxelSaveSystems.Add(voxelSaveSystem);
+        }
+    }
+    
     IEnumerator InitCoroutine(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
+
+        foreach (var voxelSaveSystem in _voxelSaveSystems)
+        {
+            voxelSaveSystem.Load();
+        }
+
         _tileBuildingGenerator?.InitOnClient(seed, this);
         _voxelBuildingGenerator?.SaveRandomSeedOnEachClient(seed, voxelFloorRandomSettings);
         yield return null;
@@ -107,6 +125,7 @@ public class Island : NetworkBehaviour
         }
     }
 
+
     [Server]
     void SpawnIslandEnemies()
     {
@@ -140,7 +159,7 @@ public class Island : NetworkBehaviour
             }
         }
 
-        targetHavok /= 2; // kill half of mobs to spawn boss
+        targetHavok = Mathf.RoundToInt(targetHavok * 0.8f); // kill most mobs to spawn boss
     }
 
     
@@ -236,7 +255,6 @@ public class Island : NetworkBehaviour
         
         var manualBaker = voxelCutterForBuildings[0].gameObject.GetComponent<ColliderToVoxelManualBaker>();
         
-
         foreach (var colliderToVoxel in voxelCutterForBuildings)
         {
             yield return null;
@@ -266,6 +284,9 @@ public class Island : NetworkBehaviour
 
         bossKilled = true;
         MusicManager.Instance.StopMusic();
+        
+        
+        ProgressionManager.Instance.LevelCompleted();
         /*
         if (base.IsHost)
             ServerManager.Despawn(gameObject, DespawnType.Destroy);*/

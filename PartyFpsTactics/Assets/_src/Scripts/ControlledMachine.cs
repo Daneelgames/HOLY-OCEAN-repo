@@ -24,6 +24,7 @@ public class ControlledMachine : MonoBehaviour
     [SerializeField]private float dashForce = 1000;
     
     public Transform Visual;
+    private bool visualFollowing = false;
     public float visualFollowSpeed = 10;
     public Transform sitTransform;
     public Transform CameraTransform;
@@ -93,10 +94,7 @@ public class ControlledMachine : MonoBehaviour
             }
         }
 
-        if (visualFollowCoroutine != null)
-            StopCoroutine(visualFollowCoroutine);
-        
-        visualFollowCoroutine = StartCoroutine(VisualFollow());
+        ToggleVisualFollow();
     }
 
     public void AddForceOnImpact(Vector3 impactOrigin)
@@ -123,46 +121,71 @@ public class ControlledMachine : MonoBehaviour
         }
     }
     
-    private Coroutine visualFollowCoroutine;
-    IEnumerator VisualFollow()
+    void ToggleVisualFollow()
     {
         if (Visual == null)
-            yield break;
+            return;
+
+        visualFollowing = !visualFollowing;
         
-        Visual.transform.parent = null;
-        for (var index = 0; index < carCrashDamageColliders.Count; index++)
+        if (visualFollowing)
         {
-            var col = carCrashDamageColliders[index];
-            col.transform.parent = null;
-        }
-
-        while (true)
-        {
-            Visual.transform.position = Vector3.Lerp(Visual.transform.position, transform.position, visualFollowSpeed * Time.fixedUnscaledDeltaTime);
-            Visual.transform.rotation = Quaternion.Lerp(Visual.transform.rotation, transform.rotation, visualFollowSpeed * Time.fixedUnscaledDeltaTime);
-
+            Visual.transform.parent = null;
             for (var index = 0; index < carCrashDamageColliders.Count; index++)
             {
                 var col = carCrashDamageColliders[index];
-                if (carCrashCollidersParents.Count <= index)
-                    break;
-                
-                col.FollowDetachedTransform(carCrashCollidersParents[index]);
+                col.transform.parent = null;
             }
+        }
+        else
+        {
+            Visual.transform.parent = transform;
+            for (var index = 0; index < carCrashDamageColliders.Count; index++)
+            {
+                var col = carCrashDamageColliders[index];
+                col.transform.parent = transform;
+            } 
+        }
+    }
+    
 
-            yield return null;
+    private void Update()
+    {
+        if (visualFollowing == false)
+            return;
+
+        Visual.transform.position = transform.position; 
+        Visual.transform.rotation = transform.rotation;
+        /*
+         Vector3.Lerp(Visual.transform.position, transform.position, visualFollowSpeed * Time.fixedUnscaledDeltaTime);
+        Quaternion.Lerp(Visual.transform.rotation, transform.rotation, visualFollowSpeed * Time.fixedUnscaledDeltaTime);
+        */
+
+        for (var index = 0; index < carCrashDamageColliders.Count; index++)
+        {
+            var col = carCrashDamageColliders[index];
+            if (carCrashCollidersParents.Count <= index)
+                break;
+                
+            col.FollowDetachedTransform(carCrashCollidersParents[index]);
         }
     }
 
+    public void DriverKilled()
+    {
+        StopMachine();
+
+        if (gameObject.TryGetComponent<HealthController>(out var hc))
+        {
+            hc.Kill();
+        }
+    }
+    
     public void StopMachine()
     {
         if (Visual)
         {
-            if (visualFollowCoroutine != null)
-                StopCoroutine(visualFollowCoroutine);
-
-            Visual.transform.parent = transform;
-            visualFollowCoroutine = StartCoroutine(ResetVisualTransform());
+            ToggleVisualFollow();
         }
         if (AdvancedShipController)
         {
@@ -222,12 +245,17 @@ public class ControlledMachine : MonoBehaviour
         if (wheelVehicle)
             wheelVehicle.SetInput(hor, ver, brake, boost);
         
-        if (AiWaterObject) // controlled by player
+        if (AiWaterObject) // if mob's bike controlled by player -  not used
             AiWaterObject.SetInput(hor, ver, brake, boost);
     }
 
     private void OnDestroy()
     {
         if (Visual) Destroy(Visual.gameObject);
+        for (var index = 0; index < carCrashDamageColliders.Count; index++)
+        {
+            var col = carCrashDamageColliders[index].gameObject;
+            Destroy(col);
+        }
     }
 }

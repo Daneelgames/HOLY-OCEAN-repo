@@ -25,8 +25,12 @@ namespace MrPink.Units
         [SerializeField, ChildGameObjectsOnly]
         private UnitAiWeaponControls _unitWeaponControls;
         [SerializeField, ChildGameObjectsOnly]
-        private UnitAiWeaponControls _aiVehicleControls;
-        
+        private AiVehicleControls _aiVehicleControls;
+        public AiVehicleControls AiVehicleControls
+        {
+            get => _aiVehicleControls;
+        }
+
         [SerializeField, ChildGameObjectsOnly, ]
         private HumanVisualController _humanVisualController;
         

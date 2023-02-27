@@ -372,6 +372,7 @@ namespace MrPink.Units
             //this.enabled = false;
             
             StopAllBehaviorCoroutines();
+                
             _selfUnit.HumanVisualController?.SetMovementVelocity(Vector3.zero);
         }
 

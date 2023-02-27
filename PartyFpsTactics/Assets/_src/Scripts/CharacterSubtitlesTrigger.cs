@@ -28,9 +28,9 @@ public class CharacterSubtitlesTrigger : MonoBehaviour
             triggered = true;
     }
 
-    public void LevelCompleted()
+    public void RestartTrigger()
     {
-        //triggered = false;
+        triggered = false;
         // start next dialogue right away
     }
 }

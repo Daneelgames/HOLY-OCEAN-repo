@@ -27,8 +27,6 @@ namespace MrPink.Health
             isPlayer = true;
         }
 
-        [Header("USE FOR BOSSES")][SerializeField] private bool completeGameLevelOnDeath = false;
-
         public Unit selfUnit;
         [SyncVar] public int health = 100;
         public int healthMax = 100;
@@ -188,7 +186,7 @@ namespace MrPink.Health
 
         public void RestoreHealth()
         {
-            health = healthMax;
+            AddHealth(healthMax);
         }
 
         public void AddHealth(int hpToRegen)
@@ -407,7 +405,10 @@ namespace MrPink.Health
             IsDead = true;
             if (AiMovement)
                 AiMovement.StopActivities();
-
+            
+            if (aiVehicleControls && aiVehicleControls.controlledMachine)
+                aiVehicleControls.controlledMachine.DriverKilled();
+                    
             if (selfUnit)
                 selfUnit.Death();
             
@@ -439,9 +440,6 @@ namespace MrPink.Health
             OnDeathEvent?.Invoke();
 
             UnitsManager.Instance.RemoveUnit(this);
-            
-            if (completeGameLevelOnDeath)
-                ProgressionManager.Instance.LevelCompleted();
             
             if (destroyOnDeath)
             {

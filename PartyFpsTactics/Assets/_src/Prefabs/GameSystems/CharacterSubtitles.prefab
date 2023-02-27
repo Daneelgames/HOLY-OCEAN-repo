@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5167583973457106190}
   - component: {fileID: 4611835874517509425}
   - component: {fileID: 7971197632251177558}
+  - component: {fileID: 5079424556032737953}
   m_Layer: 0
   m_Name: CharacterSubtitles
   m_TagString: Untagged
@@ -146,6 +147,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5079424556032737953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562508646982960860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e47636ddc812a24ca479acaddb710d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SettingsProvider: {fileID: 11400000, guid: 2aa641fad43b9154a8c9634b7481bf03, type: 2}
+  ID: audioEffectVolume
+  InputRange: {x: 0, y: 100}
+  AudioSources:
+  - {fileID: 7971197632251177558}
 --- !u!1 &5302468539212469589
 GameObject:
   m_ObjectHideFlags: 0

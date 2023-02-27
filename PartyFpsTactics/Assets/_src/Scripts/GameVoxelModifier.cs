@@ -16,6 +16,9 @@ public class GameVoxelModifier : NetworkBehaviour
     public static GameVoxelModifier Instance;
     [SerializeField] private VoxelModifier mainModifier;
 
+    [SerializeField] private bool networkSyncDestroyedTiles = false;
+    [SerializeField] private bool playersCanDestroyVoxels = false;
+
     public override void OnStartClient() 
     { 
         base.OnStartClient();
@@ -49,6 +52,8 @@ public class GameVoxelModifier : NetworkBehaviour
 
     public void TileDestroyedInWorld(Vector3 tilePos)
     {
+        if (networkSyncDestroyedTiles == false)
+            return;
         if (base.IsServer)
         {
             RpcTileDestroyedInWorldClient(tilePos);
@@ -88,6 +93,9 @@ public class GameVoxelModifier : NetworkBehaviour
     
     public void DestructionInWorld(Vector3 pos)
     {
+        if (playersCanDestroyVoxels == false)
+            return;
+        
         if (IsServer || IsHost)
         {
             // tell other clients

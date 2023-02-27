@@ -474,12 +474,13 @@ namespace MrPink.Units
             while (true)
             {
                 yield return null;
+                /*
                 if (hc.IsPlayer)
                 {
                     if( Vector3.Distance(pelvisRb.transform.position, transform.position) > 2)
                         pelvisRb.AddForce((transform.position - pelvisRb.transform.position).normalized * moveRbToOriginIfPlayerForce, ForceMode.Acceleration);
                     continue;
-                }
+                }*/
                 
                 transform.position = ragdollOrigin.position;
                 t += Time.deltaTime;
@@ -516,11 +517,6 @@ namespace MrPink.Units
             if (hc.health <= 0)
                 return;
             
-            if (Physics.Linecast(transform.position, transform.position + Vector3.up, out var hit,
-                GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
-            {
-                transform.position = hit.point + Vector3.up * 0.1f;
-            }
             ragdollOrigin.parent = ragdollOriginParent;
             DeactivateRagdoll();
             

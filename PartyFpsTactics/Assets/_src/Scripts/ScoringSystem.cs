@@ -26,17 +26,19 @@ namespace MrPink
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private int currentMojoLevel = 0;
         public int GetCurrentMojoLevel => currentMojoLevel;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentDamageInCombo;
-        [BoxGroup("MOJO")][SerializeField] private float comboReduceSpeed = 10;
         [BoxGroup("MOJO")][SerializeField] private float comboReduceCooldown = 1;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentComboReduceCooldown;
         
         [BoxGroup("MOJO")] [SerializeField] [ReadOnly] private int currentMojoDamageScaler = 1;
         public int GetCurrentMojoDamageScaler => currentMojoDamageScaler;
         [Serializable]
-        public struct MojoLevel
+        public class MojoLevel
         {
             [Header("for level up")]
             public int minDamage;
+            [Header("Doesnt count cooldown")] [SerializeField] public float timeToDrainFull;
+            [ReadOnly]public float comboReduceSpeed;
+            
             
             [Header("equipment set for the level")]
             public Tool HeadTool;
@@ -75,7 +77,29 @@ namespace MrPink
             UpdateMojoLevelUi();
         }
 
-        
+
+        private void OnValidate()
+        {
+            for (var index = 0; index < _mojoLevels.Count; index++)
+            {
+                float localZeroMojo = 0;
+                if (index > 0)
+                    localZeroMojo = _mojoLevels[index - 1].minDamage;
+                
+                var mojoLevel = _mojoLevels[index];
+                float amountToDrain = mojoLevel.minDamage - localZeroMojo;
+
+                if (mojoLevel.timeToDrainFull > 0)
+                {
+                    mojoLevel.comboReduceSpeed = amountToDrain / mojoLevel.timeToDrainFull; 
+                }
+                else
+                {
+                    mojoLevel.comboReduceSpeed = 0;
+                }
+            }
+        }
+
         void Update()
         {
             if (currentComboReduceCooldown > 0)
@@ -86,7 +110,7 @@ namespace MrPink
             {
                 if (currentDamageInCombo > 0)
                 {
-                    currentDamageInCombo -= Time.deltaTime * comboReduceSpeed;
+                    currentDamageInCombo -= Time.deltaTime * _mojoLevels[currentMojoLevel].comboReduceSpeed;
                 }
 
                 if (currentMojoLevel > 0)
@@ -133,8 +157,9 @@ namespace MrPink
             if (newMojo == currentMojoLevel)
                 return;
 
-            currentDamageInCombo = _mojoLevels[currentMojoLevel-1].minDamage + 1;
             currentMojoLevel = newMojo;
+            currentDamageInCombo = _mojoLevels[currentMojoLevel-1].minDamage + 1;
+            ItemFoundSound();
             UpdateMojoLevelUi();
             Game.LocalPlayer.Health.RestoreHealth();
             UpdateMojoInventory();
@@ -151,6 +176,7 @@ namespace MrPink
             else
                 currentDamageInCombo = 0;
             
+            ItemFoundSoundLowPitch();
             UpdateMojoLevelUi();
             UpdateMojoInventory();
         }
@@ -227,14 +253,14 @@ namespace MrPink
             }
         }
 
-        public void ItemFoundSound()
+        void ItemFoundSound()
         {
             scoreAddedAu.pitch = Random.Range(0.9f, 1.1f);
             scoreAddedAu.Play();
         }
-        public void ItemFoundSoundLowPitch()
+        void ItemFoundSoundLowPitch()
         {
-            scoreAddedAu.pitch = Random.Range(0.3f, 0.5f);
+            scoreAddedAu.pitch = Random.Range(0.2f, 0.4f);
             scoreAddedAu.Play();
         }
         
@@ -243,7 +269,6 @@ namespace MrPink
             if (amount == 0)
                 return;
             
-            ItemFoundSound();
             CurrentGold += amount;
             string text;
             if (amount > 0)

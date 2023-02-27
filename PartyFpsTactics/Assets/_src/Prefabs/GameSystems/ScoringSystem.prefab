@@ -545,71 +545,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentGold: 3000
   _mojoLevels:
-  - minDamage: 0
+  - minDamage: 500
+    timeToDrainFull: 10
+    comboReduceSpeed: 50
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: 1f544c73c96a4254a8896c9fafa7f9a6, type: 2}
     HandRTool: {fileID: 11400000, guid: 1f544c73c96a4254a8896c9fafa7f9a6, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 1000
+  - minDamage: 2000
+    timeToDrainFull: 10
+    comboReduceSpeed: 150
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     HandRTool: {fileID: 0}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 2000
+  - minDamage: 3000
+    timeToDrainFull: 9
+    comboReduceSpeed: 111.111115
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: f2bb7ecf2de5f904099d64e675fe90dd, type: 2}
     HandRTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 3500
+  - minDamage: 5000
+    timeToDrainFull: 9
+    comboReduceSpeed: 222.22223
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
     HandRTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 5000
+  - minDamage: 7000
+    timeToDrainFull: 8
+    comboReduceSpeed: 250
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     HandRTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 7000
+  - minDamage: 9000
+    timeToDrainFull: 8
+    comboReduceSpeed: 250
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: f2bb7ecf2de5f904099d64e675fe90dd, type: 2}
     HandRTool: {fileID: 11400000, guid: f2bb7ecf2de5f904099d64e675fe90dd, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 10000
+  - minDamage: 13000
+    timeToDrainFull: 7
+    comboReduceSpeed: 571.4286
     HeadTool: {fileID: 0}
-    HandLTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
+    HandLTool: {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
     HandRTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 12500
+  - minDamage: 15000
+    timeToDrainFull: 7
+    comboReduceSpeed: 285.7143
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
     HandRTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
-  - minDamage: 15000
+  - minDamage: 18000
+    timeToDrainFull: 6
+    comboReduceSpeed: 500
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
     HandRTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
   - minDamage: 20000
+    timeToDrainFull: 5
+    comboReduceSpeed: 400
     HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
-    HandRTool: {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
+    HandRTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
     BodyTool: {fileID: 0}
     LegsTool: {fileID: 0}
   currentMojoLevel: 0
   currentDamageInCombo: 0
-  comboReduceSpeed: 100
   comboReduceCooldown: 1
   currentComboReduceCooldown: 0
+  currentMojoDamageScaler: 1
   currentGoldText: {fileID: 9207623594911621216}
   comboLevelText: {fileID: 4158558409232471774}
   dmgFeedbackText: {fileID: 4158558409275785655}

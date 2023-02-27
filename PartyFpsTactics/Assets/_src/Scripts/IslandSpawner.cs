@@ -65,7 +65,7 @@ public class IslandSpawner : NetworkBehaviour
     }
 
     [Server]
-    public void SpawnRandomIslandOnServer()
+    public void SpawnIslandOnServer()
     {
         int islandIndex = ProgressionManager.Instance.currentLevelIndex;
         islandIndex = Mathf.Clamp(islandIndex, 0, islandPrefabList.Count - 1);

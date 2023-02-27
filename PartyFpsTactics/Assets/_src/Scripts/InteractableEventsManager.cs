@@ -182,13 +182,9 @@ public class InteractableEventsManager : MonoBehaviour
                 break;
             
             case ScriptedEventType.AddTool:
-                // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
-                ScoringSystem.Instance.ItemFoundSound();
                 Game.LocalPlayer.Inventory.AddTool(IOevent.toolToAdd);
                 break;
             case ScriptedEventType.AddWeapon:
-                // todo - вынести ScoringSystem.Instance.ItemFoundSound() в другое место
-                ScoringSystem.Instance.ItemFoundSound();
                 if (qPressed)
                     Game.LocalPlayer.Inventory.AddTool(IOevent.weaponToAdd.GetTool);
                 else if (ePressed)
@@ -222,8 +218,8 @@ public class InteractableEventsManager : MonoBehaviour
                 }
                 break;
             
-            case ScriptedEventType.SpawnRandomIsland:
-                IslandSpawner.Instance.SpawnRandomIslandOnServer();
+            case ScriptedEventType.SpawnNewIsland:
+                IslandSpawner.Instance.SpawnIslandOnServer();
                 break;
             
             case ScriptedEventType.ReturnInventoryLoot:

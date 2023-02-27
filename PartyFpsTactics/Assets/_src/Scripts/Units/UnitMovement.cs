@@ -115,13 +115,13 @@ namespace MrPink.Units
 
         public void RestoreAgent()
         {
-            if (base.IsServer)
-                _agent.enabled = true;
+            if (base.IsHost)
+                TryToEnableAgent();
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
             
-            this.enabled = true;
+            //this.enabled = true;
             
             return;
             
@@ -131,6 +131,15 @@ namespace MrPink.Units
             
             _agent.enabled = true;
             this.enabled = true;
+        }
+
+        void TryToEnableAgent()
+        {
+            if (_agent == null)
+                return;
+            
+            if (_selfUnit.AiVehicleControls == false || _selfUnit.AiVehicleControls.controlledMachine == null)
+                _agent.enabled = true;
         }
 
         public void Run()
@@ -174,8 +183,10 @@ namespace MrPink.Units
                 transform.rotation = Quaternion.Slerp(startRot, targetRot, t/rotateTime);
                 yield return null;
             }
-            _agent.enabled = true;
-            _agent.updateRotation = true;
+            
+            TryToEnableAgent();
+            if (_agent.enabled)
+                _agent.updateRotation = true;
         }
 
         [SerializeField] private Vector2 wanderAroundCooldownMinMax = new Vector2(5, 60);

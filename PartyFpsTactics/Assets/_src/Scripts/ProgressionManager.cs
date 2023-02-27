@@ -25,7 +25,8 @@ public class ProgressionManager : MonoBehaviour
     public void LevelCompleted()
     {
         currentLevelIndex = Mathf.Clamp(currentLevelIndex + 1, 0, levelDatas.Count - 1);
-        CharacterSubtitles.Instance.TryToStartCharacterSubtitles(CurrentLevel.LevelStartCharacterSubtitlesData);
+        CharacterSubtitlesTrigger.RoseInstance.RestartTrigger();
+        //CharacterSubtitles.Instance.TryToStartCharacterSubtitles(CurrentLevel.LevelStartCharacterSubtitlesData);
     }
 
     public void SetCurrentLevel(int index)
