@@ -20,6 +20,7 @@ namespace _src.Scripts.Data
         public List<Tool> toolsInShop;
 
         public List<LevelEvent> levelEvents;
+        public List<Island> islandPrefabs;
         public HealthController boss;
 
         public enum SpawnBossType
@@ -28,6 +29,7 @@ namespace _src.Scripts.Data
         }
 
         public SpawnBossType spawnBossType;
+        public BuildingSettings BuildingSettings;
     }
 
     [Serializable]

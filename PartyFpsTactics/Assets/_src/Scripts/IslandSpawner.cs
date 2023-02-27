@@ -15,9 +15,9 @@ public class IslandSpawner : NetworkBehaviour
     public static IslandSpawner Instance;    
     [SerializeField] [ReadOnly] private List<Island> spawnedIslands = new List<Island>();
     [SerializeField] private float spawnDistance = 1000;
-    [SerializeField] private List<Island> islandPrefabList = new List<Island>();
 
     List<BuildingGenerator> TileBuildingsInstances = new List<BuildingGenerator>();
+    
 
     public override void OnStartClient()
     {
@@ -67,9 +67,8 @@ public class IslandSpawner : NetworkBehaviour
     [Server]
     public void SpawnIslandOnServer()
     {
-        int islandIndex = ProgressionManager.Instance.currentLevelIndex;
-        islandIndex = Mathf.Clamp(islandIndex, 0, islandPrefabList.Count - 1);
-        var randomIslandPrefab = islandPrefabList[islandIndex];
+        var levelPrefabs = ProgressionManager.Instance.CurrentLevel.islandPrefabs;
+        var randomIslandPrefab = levelPrefabs[Random.Range(0,levelPrefabs.Count)];
         var spawnDir = (Vector3.zero - new Vector3(Game.LocalPlayer.Position.x,0,Game.LocalPlayer.Position.z)).normalized;
         
         var spawnPos = spawnDir * spawnDistance;
@@ -78,6 +77,16 @@ public class IslandSpawner : NetworkBehaviour
         ServerManager.Spawn(newIsland.gameObject);
     }
 
+    public void RunOver()
+    {
+        for (var index = spawnedIslands.Count - 1; index > 0; index--)
+        {
+            var island = spawnedIslands[index];
+            island.DestroyOnRunEnded();
+            spawnedIslands.RemoveAt(index);
+        }
+    }
+    
     /*
     public override void OnOwnershipClient(NetworkConnection prevOwner)
     {

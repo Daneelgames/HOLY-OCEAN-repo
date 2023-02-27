@@ -22,23 +22,36 @@ public class Island : NetworkBehaviour
     public VoxelBuildingGenerator VoxelBuildingGen => _voxelBuildingGenerator;
     [SerializeField] private NavMeshSurfaceUpdate _navMeshSurfaceUpdate;
     [SerializeField] private float randomSpherePosOnNavMeshMaxRange = 100;
-    
+
     [SerializeField] private bool spawnBoss = true;
     private bool bossKilled = false;
 
     [SerializeField] [ReadOnly] private List<HealthController> islandUnits = new List<HealthController>();
-    [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly] private bool culled = true;
-    [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly] private float distanceToLocalPlayer;
-    [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandSpawnDistance = 300;
-    [BoxGroup("ISLAND LODs")] [SerializeField] private float mobsIslandDespawnDistance = 500;
+
+    [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly]
+    private bool culled = true;
+
+    [BoxGroup("ISLAND LODs")] [SerializeField] [ReadOnly]
+    private float distanceToLocalPlayer;
+
+    [BoxGroup("ISLAND LODs")] [SerializeField]
+    private float mobsIslandSpawnDistance = 300;
+
+    [BoxGroup("ISLAND LODs")] [SerializeField]
+    private float mobsIslandDespawnDistance = 500;
 
     [SerializeField] private ColliderToVoxel[] voxelCutterForBuildings;
-    
-    [BoxGroup("Havok")] [SerializeField] [ReadOnly] private int targetHavok;
-    [BoxGroup("Havok")] [SerializeField] [ReadOnly] private int currentHavok;
+
+    [BoxGroup("Havok")] [SerializeField] [ReadOnly]
+    private int targetHavok;
+
+    [BoxGroup("Havok")] [SerializeField] [ReadOnly]
+    private int currentHavok;
+
     float GetHavokFill => (float)currentHavok / targetHavok;
     public bool IsCulled => culled;
-    
+    [SerializeField] private float sinkSpeed = 10;
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -48,13 +61,23 @@ public class Island : NetworkBehaviour
     IEnumerator AddIslandToSpawner()
     {
         while (IslandSpawner.Instance == null) yield return null;
-        
+
         IslandSpawner.Instance.NewIslandSpawned(this);
     }
 
     private void OnDestroy()
     {
         IslandSpawner.Instance.IslandDestroyed(this);
+    }
+
+    public void DestroyOnRunEnded()
+    {
+        culled = true;
+        _navMeshSurfaceUpdate?.Stop();
+        DespawnIslandEnemies();
+
+        if (base.IsHost)
+            ServerManager.Despawn(gameObject, DespawnType.Destroy);
     }
 
     public void Init(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
@@ -291,6 +314,16 @@ public class Island : NetworkBehaviour
         if (base.IsHost)
             ServerManager.Despawn(gameObject, DespawnType.Destroy);*/
         //Destroy(gameObject);
+        StartCoroutine(SinkIsland());
+    }
+
+    IEnumerator SinkIsland()
+    {
+        while (transform.position.y > - 500)
+        {
+            yield return null;
+            transform.position += Vector3.down * sinkSpeed;
+        }
     }
     void HealthController_OnIslandUnitKilled()
     {

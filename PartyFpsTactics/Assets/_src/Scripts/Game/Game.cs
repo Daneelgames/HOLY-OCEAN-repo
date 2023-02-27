@@ -102,6 +102,9 @@ namespace MrPink
         
         public void RespawnAllPlayers()
         {
+            MusicManager.Instance.StopMusic();
+            IslandSpawner.Instance.RunOver();
+            CharacterSubtitlesTrigger.RoseInstance.RestartTrigger();
             // called on server? seems not
             if (playersesInGame.Count > 0)
             {

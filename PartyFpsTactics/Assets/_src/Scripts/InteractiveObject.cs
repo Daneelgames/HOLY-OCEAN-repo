@@ -32,7 +32,7 @@ public class InteractiveObject : MonoBehaviour
 
     private void OnEnable()
     {
-        if (autoPickUpOnStart && Vector3.Distance(transform.position, Game.LocalPlayer.transform.position) < 30)
+        if (autoPickUpOnStart)
             PlayerInteraction();
     }
 

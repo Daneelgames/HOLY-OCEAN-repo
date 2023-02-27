@@ -7175,6 +7175,7 @@ Transform:
   - {fileID: 2623159052813901966}
   - {fileID: 4343714093227060947}
   - {fileID: 9092677178196049259}
+  - {fileID: 8576425091218138040}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7193,7 +7194,8 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 1261924167978257544, guid: a4769d9b1e1282f478348bea2d129b66, type: 3}
   _networkObjectCache: {fileID: 1274181075255149504}
-  _tileBuildingGenerator: {fileID: 0}
+  _voxelSaveSystems: []
+  _tileBuildingGenerator: {fileID: 8576425091218138041}
   _voxelBuildingGenerator: {fileID: 0}
   _navMeshSurfaceUpdate: {fileID: 0}
   randomSpherePosOnNavMeshMaxRange: 100
@@ -7203,6 +7205,10 @@ MonoBehaviour:
   distanceToLocalPlayer: 0
   mobsIslandSpawnDistance: 300
   mobsIslandDespawnDistance: 500
+  voxelCutterForBuildings: []
+  targetHavok: 0
+  currentHavok: 0
+  sinkSpeed: 10
 --- !u!114 &1274181075255149504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7254,6 +7260,7 @@ MonoBehaviour:
   hideOnOwner: 0
   hideOnDistanceToLocalPlayer: 1
   distanceToLocalPlayer: 300
+  healthControllerToHealthbar: {fileID: 0}
 --- !u!1 &3374946381504079507
 GameObject:
   m_ObjectHideFlags: 0
@@ -18931,6 +18938,184 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.07851467, y: 0.11646163, z: 0.0058230967}
   m_Center: {x: -0.000000015230112, y: 1.4872167e-10, z: 0.0027406947}
+--- !u!1001 &3295425787128557875
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 2
+    m_TransformParent: {fileID: 1077230858890137852}
+    m_Modifications:
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: _scenePathHash
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <SceneId>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <IsNested>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 39
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <ComponentIndex>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: _sceneNetworkObjects.Array.size
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: _sceneNetworkObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 6885404217525016305}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: spawnGoals
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnProps
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnRooms
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[1].spawnProps
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].spawnNavMesh
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[1].spawnNavMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[2].spawnNavMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[3].spawnNavMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].offsetPosMinMaxX.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].offsetPosMinMaxX.y
+      value: 51
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].offsetPosMinMaxZ.x
+      value: -49
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].offsetPosMinMaxZ.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsScaleMinMaxX.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsScaleMinMaxX.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsScaleMinMaxZ.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: buildingsToSpawnSettings.Array.data[0].levelsScaleMinMaxZ.y
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -19.290068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.414917
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.3926773
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538700427162571445, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: m_Name
+      value: BuildingGenerator
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_AddedGameObjects: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8da4667c6541cc047af245d102688646, type: 3}
+--- !u!114 &6885404217525016305 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+  m_PrefabInstance: {fileID: 3295425787128557875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &8576425091218138040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
+  m_PrefabInstance: {fileID: 3295425787128557875}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8576425091218138041 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+  m_PrefabInstance: {fileID: 3295425787128557875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd76228898cdf6443862b974396f3d0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4812454350559257849
 PrefabInstance:
   m_ObjectHideFlags: 0

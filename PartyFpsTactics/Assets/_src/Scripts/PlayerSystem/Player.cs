@@ -151,7 +151,7 @@ namespace MrPink.PlayerSystem
         {
             Debug.Log("PLAYER DEATH, SHOULD DROP SHIT");
             if (Visual.gameObject.activeInHierarchy) Visual.Death();
-            Game.LocalPlayer.Inventory.DropAll();
+            Game.LocalPlayer.Inventory.DropAll(false, false);
             Game.LocalPlayer.Interactor.SetInteractionText(String.Empty);
             Movement.Death(killer);
             LookAround.Death(killer);

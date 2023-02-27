@@ -98,11 +98,13 @@ namespace MrPink.Units
         private void Update()
         {
             _currentVelocity = _agent.velocity + rb.velocity;
-            //_currentVelocity = _agent.velocity;
-            //_currentVelocity = rb.velocity;
-            //_selfUnit.HumanVisualController.SetMovementVelocity(_currentVelocity);
             if (_lookTransform)
                 _lookTransform.transform.position = transform.position;
+
+            if (_selfUnit.AiVehicleControls && _selfUnit.AiVehicleControls.controlledMachine != null && _agent.enabled)
+            {
+                _agent.enabled = false;
+            }
         }
 
         public void Death()
@@ -138,7 +140,7 @@ namespace MrPink.Units
             if (_agent == null)
                 return;
             
-            if (_selfUnit.AiVehicleControls == false || _selfUnit.AiVehicleControls.controlledMachine == null)
+            if (_selfUnit.AiVehicleControls == null || _selfUnit.AiVehicleControls.controlledMachine == null)
                 _agent.enabled = true;
         }
 

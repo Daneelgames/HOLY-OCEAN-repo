@@ -29,7 +29,6 @@ public class BuildingGenerator : NetworkBehaviour
     [SerializeField]private bool singleFrame = false;
     [Header("SETTINGS")]
     //public List<int> mainBuildingLevelsHeights = new List<int>();
-    public List<BuildingSettings> buildingsToSpawnSettings = new List<BuildingSettings>();
     
     public bool spawnGoals = true;
     public bool spawnWalls = true;
@@ -55,7 +54,6 @@ public class BuildingGenerator : NetworkBehaviour
     public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
     public bool randomLevelRotation = false;
-    public int explosiveBarrelsAmount = 2;
 
     [Space] [Header("NAVIGATION")] 
     public Transform navMeshesParent;
@@ -159,8 +157,7 @@ public class BuildingGenerator : NetworkBehaviour
         //StartCoroutine(PartyController.Instance.Init());
 
 
-        if (buildingsToSpawnSettings.Count > 0 && buildingsToSpawnSettings[0].BuildingOriginTransform)
-            StartCoroutine(SpawnBuilding(buildingsToSpawnSettings[0].BuildingOriginTransform.position));
+        StartCoroutine(SpawnBuilding(transform.position));
     }
 
     public void AddProp(TileHealth prop)
@@ -186,9 +183,6 @@ public class BuildingGenerator : NetworkBehaviour
             yield break;
         }
 
-        if (spawnedBuildings.Count > buildingsToSpawnSettings.Count)
-            yield break;
-
         Building newBuilding = new Building();
         newBuilding.worldPos = buildingPos;
         spawnedBuildings.Add(newBuilding);
@@ -202,13 +196,11 @@ public class BuildingGenerator : NetworkBehaviour
     {
         generated = false;
         //var buildingSettings = buildingsToSpawnSettings[Random.Range(0, buildingsToSpawnSettings.Count)];
-        var buildingSettings = buildingsToSpawnSettings[0];
-        buildingSettings.BuildingOriginTransform.position = building.worldPos;
+        var buildingSettings = ProgressionManager.Instance.CurrentLevel.BuildingSettings;
         for (int j = 0; j < buildingSettings.levelsSettings.Count; j++)
         {
             yield return StartCoroutine(SpawnNewBuildingLevel(building, j, buildingSettings));
         }
-        
         
         for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
         {
@@ -261,7 +253,7 @@ public class BuildingGenerator : NetworkBehaviour
     IEnumerator SpawnNewBuildingLevel(Building building, int levelIndexInBuilding,  BuildingSettings buildingSettings)
     {
         var levelHeights = buildingSettings.levelsSettings;
-        var buildingOrigin = buildingSettings.BuildingOriginTransform;
+        var buildingOrigin = transform;
         
         float levelY = 0;
         levelY = buildingOrigin.position.y;
@@ -825,7 +817,7 @@ public class BuildingGenerator : NetworkBehaviour
     [Server]
     IEnumerator SpawnExplosiveBarrelsOnServer(Building building)
     {
-        for (int i = 0; i < explosiveBarrelsAmount; i++)
+        for (int i = 0; i < ProgressionManager.Instance.CurrentLevel.BuildingSettings.explosiveBarrelsAmount; i++)
         {
             var randomLevel = building.spawnedBuildingLevels[Random.Range(1, building.spawnedBuildingLevels.Count)];
             var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
@@ -838,6 +830,7 @@ public class BuildingGenerator : NetworkBehaviour
             if (explosiveBarrelPrefab)
             {
                 var barrel = Instantiate(explosiveBarrelPrefab, pos, Quaternion.identity);
+                barrel.transform.parent =  generatedBuildingFolder;
                 ServerManager.Spawn(barrel);
             }
             yield return null;
@@ -860,6 +853,7 @@ public class BuildingGenerator : NetworkBehaviour
                 Vector3 pos = randomTile.transform.position + Vector3.up/2;
                 level.tilesInside.Remove(randomTile);
                 var prop = Instantiate(propsPrefabs[Random.Range(0, propsPrefabs.Count)], pos, Quaternion.identity);
+                prop.transform.parent = generatedBuildingFolder;
                 ServerManager.Spawn(prop.gameObject);
                 yield return null;   
             }
@@ -1197,27 +1191,6 @@ public class BuildingGenerator : NetworkBehaviour
     {
         t.parent = disconnectedTilesFolder;
     }
-
-    private void OnDrawGizmos()
-    {
-        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
-        {
-            var building = buildingsToSpawnSettings[i];
-            float lastHeight = 0;
-            for (int j = 0; j < building.levelsSettings.Count; j++)
-            {
-                // yellow is min, red is full
-                Vector3 offsetVert = Vector3.up * building.levelsSettings[j].levelHeight / 2 + Vector3.up * lastHeight;
-                
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.x * 2, building.levelsSettings[j].levelHeight, building.levelsScaleMinMaxZ.x * 2));
-                
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(building.BuildingOriginTransform.position + offsetVert, new Vector3(building.levelsScaleMinMaxX.y * 2, building.levelsSettings[j].levelHeight, building.levelsScaleMinMaxZ.y * 2));
-                lastHeight += building.levelsSettings[j].levelHeight;
-            }
-        }
-    }
     
     public Vector3 GetRandomPosInsideLastLevel()
     {
@@ -1241,19 +1214,6 @@ public class BuildingGenerator : NetworkBehaviour
         return tile.transform.position;
     }
 
-    public void DestroyBuilding()
-    {
-        return;
-        for (int i = 0; i < spawnedBuildings.Count; i++)
-        {
-            if (spawnedBuildings[i].spawnedBuildingLevels.Count < 1)
-                continue;
-            for (int j = spawnedBuildings[i].spawnedBuildingLevels.Count - 1; j >= 0; j--)
-            {
-                Destroy(spawnedBuildings[i].spawnedBuildingLevels[j].transform.gameObject);
-            }
-        }
-    }
 }
 
 [Serializable]
@@ -1268,7 +1228,6 @@ public class BuildingSettings
     [Space]
     [Header("BUILDING")]
     public List<LevelSetting> levelsSettings = new List<LevelSetting>();
-    public Transform BuildingOriginTransform;
     
     public Vector2Int offsetPosMinMaxX = new Vector2Int(0, 0);
     public Vector2Int offsetPosMinMaxZ = new Vector2Int(0, 0);
@@ -1282,7 +1241,7 @@ public class BuildingSettings
     public bool spawnNavMesh = true;
     public bool updateClash = false;
     public bool spawnSupports = false;
-
+    public int explosiveBarrelsAmount = 2;
     [Serializable]
     public class LevelSetting
     {
