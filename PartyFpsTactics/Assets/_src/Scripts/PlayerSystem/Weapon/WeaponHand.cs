@@ -48,8 +48,7 @@ namespace MrPink.PlayerSystem
         [ShowInInspector, ReadOnly]
         public bool IsAiming { get; private set; }
         
-        public Transform CurrentTransform
-            => this[CurrentPosition];
+        public Transform CurrentTransform => this[CurrentPosition];
 
         public bool IsWeaponEquipped
             => _weapon != null;
@@ -179,10 +178,16 @@ namespace MrPink.PlayerSystem
                 return;
             }
             
-            _isAttacking = true;
-            
             if (Weapon.IsMelee)
                 CurrentPosition = WeaponPosition.MeleeAttack;
+            else
+            {
+                Weapon.transform.position = this[WeaponPosition.Aim].position;
+                Weapon.transform.rotation = this[WeaponPosition.Aim].rotation;
+            }
+            
+            _isAttacking = true;
+            
 
             Weapon.Shot(Game.LocalPlayer.Health);
             if (Weapon.IsMelee == false)

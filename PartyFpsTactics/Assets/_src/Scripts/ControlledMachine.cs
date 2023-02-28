@@ -22,6 +22,7 @@ public class ControlledMachine : MonoBehaviour
     public SleepMachine sleepMachine;
     
     [SerializeField]private float dashForce = 1000;
+    [SerializeField]private float dashCooldown = 0;
     
     public Transform Visual;
     private bool visualFollowing = false;
@@ -55,6 +56,10 @@ public class ControlledMachine : MonoBehaviour
 
     public void DashForward()
     {
+        if (dashCooldown > 0)
+            return;
+
+        dashCooldown = 1;
         rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
     }
     public void StartInput(HealthController driverHc)
@@ -151,6 +156,8 @@ public class ControlledMachine : MonoBehaviour
 
     private void Update()
     {
+        if (dashCooldown > 0)
+            dashCooldown -= Time.deltaTime;
         if (visualFollowing == false)
             return;
 
@@ -244,6 +251,8 @@ public class ControlledMachine : MonoBehaviour
         // перекинуть в общий прием инпута от юнитов
         if (wheelVehicle)
             wheelVehicle.SetInput(hor, ver, brake, boost);
+        if (boost)
+            DashForward();
         
         if (AiWaterObject) // if mob's bike controlled by player -  not used
             AiWaterObject.SetInput(hor, ver, brake, boost);

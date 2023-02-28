@@ -145,7 +145,7 @@ namespace MrPink
                 if (Input.GetKeyDown(KeyCode.R))
                     RespawnPlayer();
                 if (Input.GetKeyDown(KeyCode.F))
-                    ScoringSystem.Instance.AddGold(1000);
+                    ScoringSystem.Instance.IncreaseMojoLevel();
                 if (Input.GetKeyDown(KeyCode.K))
                     KillPlayer();
                 if (Input.GetKeyDown(KeyCode.X))

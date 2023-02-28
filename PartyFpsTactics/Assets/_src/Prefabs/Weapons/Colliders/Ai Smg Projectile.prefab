@@ -4858,7 +4858,7 @@ Transform:
   m_Children:
   - {fileID: 4314011031371377453}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &444546634323287089
 MonoBehaviour:
@@ -4892,7 +4892,8 @@ MonoBehaviour:
   ownerHealth: {fileID: 0}
   addVelocityEveryFrame: 1
   projectileSpeed: 27
-  gravity: 0
+  gravityCurrent: 0
+  gravityScaler: 10
   singleSphereCast: 0
   toolType: 0
   fragGrenadeTool: {fileID: 0}
@@ -4927,7 +4928,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 5009326681492139478, guid: 0feb87d9d0c4ed747ae0e93d3ab5bf4e, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3110ef6fe4e3a40438faae6242adcb48, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5023,7 +5024,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 89b5d1cb20eab3748aebf338e93fc44c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5119,7 +5120,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

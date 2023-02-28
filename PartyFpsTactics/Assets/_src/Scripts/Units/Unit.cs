@@ -7,6 +7,10 @@ namespace MrPink.Units
 {
     public class Unit : MonoBehaviour
     {
+        [Header("SET TRUE FOR SIMPLE MOBS")]
+        [SerializeField] private bool destroyOnDistance = false;
+        public bool DestroyOnDistance => destroyOnDistance;
+        
         public Transform faceCam;
         [SerializeField, ChildGameObjectsOnly, Required]
         private HealthController _healthController;
@@ -117,6 +121,8 @@ namespace MrPink.Units
             _unitMovement?.SetUnit(this);
         }
 #endif
+        
+        
         
     }
 }

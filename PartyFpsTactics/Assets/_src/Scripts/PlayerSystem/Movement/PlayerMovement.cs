@@ -243,7 +243,7 @@ namespace MrPink.PlayerSystem
         
         void HandleJump()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || _coyoteTime > 0))
+            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || State.IsUnderwater || _coyoteTime > 0))
             {
                 if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
                     Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls.controlledMachine);

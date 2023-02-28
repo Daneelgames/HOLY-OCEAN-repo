@@ -18,11 +18,7 @@ namespace MrPink.Units
         public static UnitsManager Instance;
          List<HealthController> hcInGame = new List<HealthController>();
         public List<HealthController> HcInGame => hcInGame;
-        [Header("STREAMING")] 
-        public float streamingDistance = 200;
-        public float streamingDistanceMin = 20;
-        public int maxUnitsToShow = 30;
-        int currentShowAmount = 0;
+        public float destroyUnitsDistance = 500;
         
         [Space]
         
@@ -91,7 +87,13 @@ namespace MrPink.Units
                         continue;
 
                     var unit = hcInGame[i];
-                    ShowUnit(unit, true);
+                    if (unit.selfUnit == null || unit.selfUnit.DestroyOnDistance == false)
+                        continue;
+                    if (unit.health < 1)
+                        continue;
+                    var distance = Game._instance.DistanceToClosestPlayer(unit.transform.position);
+                    if (distance.distance > destroyUnitsDistance)
+                        unit.DestroyOnDistance();
                 }
             }
         }
@@ -101,23 +103,10 @@ namespace MrPink.Units
         {
             if (show == false) return;
             
-            /*
-            if (show)
-                currentShowAmount++;
-            else
-            {
-                if (PhoneDialogueEvents.Instance.currentTalknigNpc == hc)
-                    return;
-                currentShowAmount--;
-            }*/
-            
             if (hc.health <= 0)
             {
                 hcInGame.Remove(hc);
-                //Destroy(hc.gameObject);
-                return;
             }
-            //hc.gameObject.SetActive(show);
         }
         
         

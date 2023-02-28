@@ -601,6 +601,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -3985,6 +3986,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
@@ -4989,6 +4991,9 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  OnDamagedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1211562686235662036
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5074,12 +5079,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db267534dabc446783c4a0d70e214db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
-  _addedNetworkObject: {fileID: -4479586652306346031}
-  _networkObjectCache: {fileID: -4479586652306346031}
-  _health: 10
+  _health: 600
   _healthController: {fileID: 8318412091301529756}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!114 &-4479586652306346031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5096,14 +5100,16 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 8318412091301529756}
-  - {fileID: 3713385740783791883}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
+  _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 10
+  <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 8326653980009100096

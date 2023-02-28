@@ -143,7 +143,7 @@ namespace MrPink
                 IncreaseMojoLevel();
         }
 
-        void IncreaseMojoLevel()
+        public void IncreaseMojoLevel()
         {
             var newMojo = currentMojoLevel + 1;
             

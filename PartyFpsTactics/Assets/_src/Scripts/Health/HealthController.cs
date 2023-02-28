@@ -401,8 +401,10 @@ namespace MrPink.Health
         {
             bool isLocalPlayer = Game.LocalPlayer.Health == this;
             health = 0;
-            Debug.Log("DEATH DeathOnClient " + gameObject.name + "; isLocalPlayer + " + isLocalPlayer);
             IsDead = true;
+            if (selfUnit)
+                selfUnit.SpawnLootOnDeath.SpawnLoot();
+            
             if (AiMovement)
                 AiMovement.StopActivities();
             
@@ -420,10 +422,6 @@ namespace MrPink.Health
                 var explosion = Instantiate(explosionOnDeath, visibilityTrigger.transform.position, transform.rotation);
                 explosion.Init(action);
             }
-
-            if (selfUnit)
-                selfUnit.SpawnLootOnDeath.SpawnLoot();
-
 
             if (isLocalPlayer)
             {
@@ -447,6 +445,16 @@ namespace MrPink.Health
                 OnDeathEvent?.RemoveAllListeners();
                 Destroy(gameObject);
             }
+        }
+
+        public void DestroyOnDistance()
+        {
+            if (aiVehicleControls && aiVehicleControls.controlledMachine)
+                aiVehicleControls.controlledMachine.DriverKilled();
+            UnitsManager.Instance.RemoveUnit(this);
+            OnDamagedEvent?.RemoveAllListeners();
+            OnDeathEvent?.RemoveAllListeners();
+            Destroy(gameObject);
         }
         
         public void AddToVisibleByUnits(HealthController unit)
