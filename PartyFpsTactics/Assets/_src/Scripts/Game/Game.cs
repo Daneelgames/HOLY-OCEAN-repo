@@ -69,8 +69,8 @@ namespace MrPink
             }
             else
             {
-                cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position, _localPlayer.VehicleControls.controlledMachine.CameraTransform.position, 
-                    camMoveSmoothVehicle * Time.deltaTime);
+                //cameraParent.transform.position = Vector3.Lerp(cameraParent.transform.position, _localPlayer.VehicleControls.controlledMachine.CameraTransform.position, camMoveSmoothVehicle * Time.deltaTime);
+                cameraParent.transform.position = _localPlayer.VehicleControls.controlledMachine.CameraTransform.position;
                 cameraParent.transform.rotation = Quaternion.Slerp(cameraParent.transform.rotation, _localPlayer.LookAround.HeadRot, camRotSmoothVehicle * Time.deltaTime);
             }
         }
