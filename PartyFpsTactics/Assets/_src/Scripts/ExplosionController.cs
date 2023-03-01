@@ -56,7 +56,7 @@ namespace MrPink
             {
                 playerDamaged = true;
                 collidedGameObjects.Add(Game.LocalPlayer.GameObject);
-                Game.LocalPlayer.Health.Damage(damage, DamageSource.Environment);
+                //Game.LocalPlayer.Health.Damage(damage / 10, DamageSource.Environment);
                 return;
             }
             if (collidedGameObjects.Contains(other.gameObject))
@@ -65,13 +65,13 @@ namespace MrPink
             collidedGameObjects.Add(other.gameObject);
         
             var health = other.gameObject.GetComponent<BasicHealth>();
-            if (health == null || health.IsDead) 
+            if (health == null || health.IsDead || (health.HealthController && health.HealthController.IsPlayer)) 
                 return;
         
             var remainingDamage = health.Health - damage;
         
             if (remainingDamage > 0)
-                health.Damage(damage, DamageSource.Environment);
+                health.Damage(damage, DamageSource.Player);
             else
                 UnitsManager.Instance.AddHealthEntityToQueue(health, scoringAction);
         }

@@ -50,7 +50,7 @@ public class Island : NetworkBehaviour
 
     float GetHavokFill => (float)currentHavok / targetHavok;
     public bool IsCulled => culled;
-    [SerializeField] private float sinkSpeed = 10;
+    private float sinkSpeed = 1;
 
     public override void OnStartClient()
     {
@@ -319,11 +319,15 @@ public class Island : NetworkBehaviour
 
     IEnumerator SinkIsland()
     {
+        /*
         while (transform.position.y > - 500)
         {
             yield return null;
             transform.position += Vector3.down * sinkSpeed;
         }
+        */
+        yield return null;
+        transform.position += Vector3.up * -100;
     }
     void HealthController_OnIslandUnitKilled()
     {

@@ -98,6 +98,8 @@ namespace MrPink.PlayerSystem
             {
                 yield return null;
             }
+            
+            ScoringSystem.Instance.IncreaseMojoLevel();
             PartyController.Instance.PlayerResurrected();
         }
         
@@ -213,6 +215,7 @@ namespace MrPink.PlayerSystem
             yield return null;
             //Shop.Instance.OpenShop(0);
             Game.LocalPlayer.Resurrect(true);
+            ScoringSystem.Instance.IncreaseMojoLevel();
             respawnCoroutine = null;
             PartyController.Instance.PlayerResurrected();
         }

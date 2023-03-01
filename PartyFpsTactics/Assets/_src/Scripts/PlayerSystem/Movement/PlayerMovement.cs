@@ -245,8 +245,7 @@ namespace MrPink.PlayerSystem
         {
             if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || State.IsUnderwater || _coyoteTime > 0))
             {
-                if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
-                    Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls.controlledMachine);
+                Vector3 additionalVelocity = Vector3.zero;
                 var vel = rb.velocity;
                 vel.y = 0;
                 rb.velocity = vel;
@@ -255,8 +254,15 @@ namespace MrPink.PlayerSystem
                 var z = _movementInput.y;
                 if (x == 0 && z == 0)
                     z = -1;
-                var additionalForce = new Vector3(x, 0, z).normalized;
-                Jump(additionalForce);
+                var dashDir = new Vector3(x, 0, z).normalized;
+                
+                if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
+                {
+                    additionalVelocity = dashDir * Game.LocalPlayer.VehicleControls.controlledMachine.rb.velocity.magnitude; 
+                    Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls
+                        .controlledMachine);
+                }
+                Jump(dashDir, additionalVelocity);
             }
         }
         
@@ -407,7 +413,7 @@ namespace MrPink.PlayerSystem
         }
 
 
-        public void Jump(Vector3 dashDir)
+        public void Jump(Vector3 dashDir, Vector3 additionalVelocity)
         {
             SetGrindRail(null);
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -416,7 +422,7 @@ namespace MrPink.PlayerSystem
             StartCoroutine(CoyoteTimeCooldown());
             _coyoteTime = 0;
             
-            var jumpLocalVel = Vector3.up * jumpForce + dashDir * dashForce;
+            var jumpLocalVel = Vector3.up * jumpForce + dashDir * dashForce + additionalVelocity;
             jumpVelocity = headTransform.TransformDirection(jumpLocalVel);
         }
 
