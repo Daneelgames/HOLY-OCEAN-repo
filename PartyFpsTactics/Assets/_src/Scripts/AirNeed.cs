@@ -42,6 +42,8 @@ public class AirNeed : NetworkBehaviour
                     freeAirTimeCurrent = freeAirTimeMax;
             }
             
+            PostProcessingWrapper.Instance.SetVignette(freeAirTimeCurrent/freeAirTimeMax);
+            
             if (freeAirTimeCurrent < 0)
             {
                 Game.LocalPlayer.Health.DrainHealth(drainAmount);
