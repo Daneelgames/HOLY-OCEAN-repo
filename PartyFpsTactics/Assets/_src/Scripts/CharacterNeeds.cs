@@ -20,6 +20,8 @@ public class CharacterNeeds : MonoBehaviour
 
     private void OnEnable()
     {
+        if (_needsCoroutine != null)
+            StopCoroutine(_needsCoroutine);
         _needsCoroutine = StartCoroutine(Needs());
     }
 

@@ -354,8 +354,10 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     void SpawnRedUnit(Vector3 pos)
     {
+        var island = IslandSpawner.Instance.GetClosestIsland(pos);
         pos = UnitsManager.Instance.SamplePos(pos);
         var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+        island.AddIslandUnit(unit);
         ServerManager.Spawn(unit.gameObject);
     }
     
@@ -364,6 +366,9 @@ public class ContentPlacer : NetworkBehaviour
     {
         var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
         var boat = Instantiate(aiWaterBikes[Random.Range(0, aiWaterBikes.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot);
+        
+        var island = IslandSpawner.Instance.GetClosestIsland(pos);
+        island.AddIslandUnit(unit);
         
         ServerManager.Spawn(unit.gameObject);
         ServerManager.Spawn(boat.gameObject);

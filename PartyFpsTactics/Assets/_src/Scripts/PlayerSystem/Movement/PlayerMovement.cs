@@ -151,6 +151,7 @@ namespace MrPink.PlayerSystem
             if (_isDead == false)
                 HandleJump();
             HandleMovement();
+            GetUnderwater();
             if (Game.LocalPlayer.VehicleControls.controlledMachine)
             {
                 State.IsRunning = false;
@@ -172,7 +173,6 @@ namespace MrPink.PlayerSystem
             }
             
             HandleCrouch();
-            GetUnderwater();
         }
 
         private void FixedUpdate()
@@ -222,19 +222,28 @@ namespace MrPink.PlayerSystem
         void GetUnderwater()
         {
             if (OceanRenderer.Instance == null)
-                State.IsUnderwater = false;
+                State.BodyIsUnderwater = false;
             else
             {
-                State.IsUnderwater = OceanRenderer.Instance.ViewerHeightAboveWater < 1;
+                var height = OceanRenderer.Instance.ViewerHeightAboveWater;
+                State.BodyIsUnderwater =  height < 1;
+                State.HeadIsUnderwater = height < 0;
             }
             
-            if (State.IsUnderwater && playerWaterObject.gameObject.activeInHierarchy == false)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine != null)
+            {
+                if (playerWaterObject.gameObject.activeInHierarchy)
+                    playerWaterObject.gameObject.SetActive(false);
+                return;
+            }
+            
+            if (State.BodyIsUnderwater && playerWaterObject.gameObject.activeInHierarchy == false)
             {
                 rb.velocity = Vector3.zero;
                 playerWaterObject.gameObject.SetActive(true);
                 return;
             }
-            if (State.IsUnderwater == false && playerWaterObject.gameObject.activeInHierarchy)
+            if (State.BodyIsUnderwater == false && playerWaterObject.gameObject.activeInHierarchy)
             {
                 rb.velocity = Vector3.zero;
                 playerWaterObject.gameObject.SetActive(false);
@@ -243,7 +252,7 @@ namespace MrPink.PlayerSystem
         
         void HandleJump()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsClimbing || State.IsUnderwater || _coyoteTime > 0))
+            if (Input.GetKeyDown(KeyCode.Space) && (Game.LocalPlayer.VehicleControls.controlledMachine != null || State.IsGrounded || State.IsSwinging || State.IsClimbing || State.BodyIsUnderwater || _coyoteTime > 0))
             {
                 Vector3 additionalVelocity = Vector3.zero;
                 var vel = rb.velocity;
@@ -262,6 +271,7 @@ namespace MrPink.PlayerSystem
                     Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls
                         .controlledMachine);
                 }
+                PlayerHookshot.Instance.StopSwing();
                 Jump(dashDir, additionalVelocity);
             }
         }
@@ -270,7 +280,14 @@ namespace MrPink.PlayerSystem
         private void HandleCrouch()
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
-                SetCrouch(!State.IsCrouching);
+            {
+                PlayerHookshot.Instance.StopSwing();
+                
+                if(State.IsGrounded || State.IsClimbing)
+                    SetCrouch(!State.IsCrouching);
+                else
+                    SlamDash();
+            }
         }
 
         public void SetCollidersTrigger(bool trigger)
@@ -390,7 +407,7 @@ namespace MrPink.PlayerSystem
                 newTargetGravity = 0;
                 _resultVelocity += Vector3.up * autoVaultPower;
             }
-            else if (State.IsUnderwater)
+            else if (State.BodyIsUnderwater)
                 newTargetGravity = 1f;
             else if (State.IsGrounded)
             {
@@ -413,7 +430,7 @@ namespace MrPink.PlayerSystem
         }
 
 
-        public void Jump(Vector3 dashDir, Vector3 additionalVelocity)
+        void Jump(Vector3 dashDir, Vector3 additionalVelocity)
         {
             SetGrindRail(null);
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -424,6 +441,19 @@ namespace MrPink.PlayerSystem
             
             var jumpLocalVel = Vector3.up * jumpForce + dashDir * dashForce + additionalVelocity;
             jumpVelocity = headTransform.TransformDirection(jumpLocalVel);
+        }
+
+        void SlamDash()
+        {
+            SetGrindRail(null);
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            //rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce, ForceMode.Impulse);
+
+            StartCoroutine(CoyoteTimeCooldown());
+            _coyoteTime = 0;
+            
+            var jumpLocalVel = Vector3.down * jumpForce;
+            jumpVelocity = jumpLocalVel;
         }
 
         private void SlopeCheck()
@@ -482,7 +512,7 @@ namespace MrPink.PlayerSystem
                     if (PlayerFootsteps.Instance)
                         PlayerFootsteps.Instance.PlayLanding();
 
-                    if (State.IsUnderwater == false && transform.position.y + fallDamageThreshold < heightToFallFrom)
+                    if (State.BodyIsUnderwater == false && transform.position.y + fallDamageThreshold < heightToFallFrom)
                     {
                         Game.LocalPlayer.Health.Damage(fallDamage, DamageSource.Environment);
                     }
@@ -594,7 +624,7 @@ namespace MrPink.PlayerSystem
         {
             //rb.useGravity = false;
             
-            if (State.IsUnderwater) // IN WATER
+            if (State.BodyIsUnderwater) // IN WATER
             {
                 rb.AddForce(_resultVelocity);
                 return;

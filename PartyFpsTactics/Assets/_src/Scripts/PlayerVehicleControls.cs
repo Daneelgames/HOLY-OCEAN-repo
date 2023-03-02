@@ -139,6 +139,7 @@ namespace MrPink
                 Game.LocalPlayer.Movement.rb.angularVelocity = Vector3.zero;
                 Game.LocalPlayer.Movement.rb.isKinematic = true;
                 Game.LocalPlayer.Movement.rb.useGravity = false;
+                PlayerHookshot.Instance.StopSwing();
                 //Player.Movement.transform.parent = controlledVehicle.sitTransform;
             }
             else

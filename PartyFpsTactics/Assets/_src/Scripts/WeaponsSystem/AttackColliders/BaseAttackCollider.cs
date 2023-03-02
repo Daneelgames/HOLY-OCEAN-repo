@@ -136,6 +136,11 @@ namespace MrPink.WeaponsSystem
             StartCoroutine(LifetimeCoroutine());
         }
 
+        public void SetPlayerDamageSource()
+        {
+            _damageSource = DamageSource.Player;
+        }
+        
         void UnitsExplosion(HealthController owner)
         {
             if (!unitsExplosionCompleted)

@@ -92,6 +92,7 @@ namespace MrPink
                     var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
                     if (tileAttack)
                     {
+                        tileAttack.SetPlayerDamageSource();
                         tileAttack.dangerous = true;
                         tileAttack.SetTempOwnerHc(Game.LocalPlayer.Health, 10);
                     }

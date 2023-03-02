@@ -15,9 +15,11 @@ namespace MrPink.PlayerSystem
         public bool IsMoving;
         
         public bool IsClimbing;
+        public bool IsSwinging;
         
         public bool CanVault;
-        public bool IsUnderwater;
+        public bool BodyIsUnderwater;
+        public bool HeadIsUnderwater;
         public bool IsOnSlope;
 
     }

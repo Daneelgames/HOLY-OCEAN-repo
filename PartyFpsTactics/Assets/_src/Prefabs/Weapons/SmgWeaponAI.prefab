@@ -136,11 +136,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 7683259333257678407}
+  weaponTool: {fileID: 0}
+  toolType: 0
   _isMelee: 0
   cooldown: 0.1
   _delay: 0
   _attackSignalAudioSource: {fileID: 3570548196317481403}
   bulletsPerShot: 1
+  noiseDistance: 30
   _attackColliderTag: 3
   _animation: {fileID: 0}
   projectileRandomRotationMax: 3
@@ -150,12 +153,14 @@ MonoBehaviour:
   reloadingClip: {fileID: 0}
   reloadingEndClip: {fileID: 0}
   gunsMoveDistanceScaler: 0.2
+  shotParticles: {fileID: 0}
   gunMoveSpeedScaler: 5
   gunRotSpeedScaler: 5
   gunMoveSpeed: 100
   gunRotationSpeed: 100
   WeaponRotationZScalerThreshold: 0.2
   WeaponRotationZScaler: 3
+  continuousFire: 0
 --- !u!82 &3570548196317481403
 AudioSource:
   m_ObjectHideFlags: 0
@@ -165,7 +170,7 @@ AudioSource:
   m_GameObject: {fileID: 2697036058661301667}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 4370754265684073554, guid: 0feb87d9d0c4ed747ae0e93d3ab5bf4e, type: 2}
   m_audioClip: {fileID: 8300000, guid: fb9fdc493ba74a341920aed2182689b1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -425,6 +430,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 4487578885012687930}
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 88ff1c7b08620ac449a891449fdb5d3b, type: 3}
@@ -488,6 +494,7 @@ PrefabInstance:
       value: revolver
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 88ff1c7b08620ac449a891449fdb5d3b, type: 3}
 --- !u!4 &5765741020713031864 stripped
 Transform:

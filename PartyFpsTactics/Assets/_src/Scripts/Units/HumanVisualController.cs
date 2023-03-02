@@ -96,16 +96,19 @@ namespace MrPink.Units
                 grounded = Physics.CheckSphere(groundedRaycastOrigin.position, ragdoll?groundedCheckSphereRadius/3 : groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
 
                 if (grounded) continue;
-                
-                OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
 
-                if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
+                if (hc.health > 0)
                 {
-                    var distance = transform.position.y - height;
-                    var isAboveSurface = distance > 0;
-                    if (isAboveSurface == false)
+                    OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
+
+                    if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
                     {
-                        ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
+                        var distance = transform.position.y - height;
+                        var isAboveSurface = distance > 0;
+                        if (isAboveSurface == false)
+                        {
+                            ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
+                        }
                     }
                 }
 

@@ -32,4 +32,9 @@ public class SetLineRendererToRaycast : MonoBehaviour
             pointVisual.position = transform.position + transform.forward * 10000;
         }
     }
+
+    private void OnDestroy()
+    {
+        Destroy(pointVisual.gameObject);
+    }
 }

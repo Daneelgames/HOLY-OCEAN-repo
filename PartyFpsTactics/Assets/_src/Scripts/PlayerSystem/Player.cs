@@ -139,7 +139,7 @@ namespace MrPink.PlayerSystem
         [Client(RequireOwnership = true)]
         void SetLocalPlayerInstance()
         {
-            Debug.Log(gameObject.name + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
+            Debug.Log(gameObject.name.ToUpper() + " PLAYER PUT HIMSELF AS LOCAL PLAYER");
 
             /*if (base.IsHost == false)
             {

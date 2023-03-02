@@ -120,7 +120,7 @@ public class Island : NetworkBehaviour
         if (_tileBuildingGenerator && _tileBuildingGenerator.Generated == false)
             return;
         
-        if (culled && distanceToLocalPlayer <= mobsIslandSpawnDistance)
+        if (culled/* && distanceToLocalPlayer <= mobsIslandSpawnDistance*/)
         {
             culled = false;
             _navMeshSurfaceUpdate?.Init();
@@ -129,7 +129,7 @@ public class Island : NetworkBehaviour
                 MusicManager.Instance.PlayIslandMusic();
             return;
         }
-
+        return; // dont despawn mobs if you're far away - no reason for it
         if (distanceToLocalPlayer >= mobsIslandDespawnDistance)
         {
             if (culled == false)
@@ -306,7 +306,7 @@ public class Island : NetworkBehaviour
         Destroy(islandMarker);
 
         bossKilled = true;
-        MusicManager.Instance.StopMusic();
+        MusicManager.Instance.PlayIslandMusic();
         
         
         ProgressionManager.Instance.LevelCompleted();
@@ -327,7 +327,8 @@ public class Island : NetworkBehaviour
         }
         */
         yield return null;
-        transform.position += Vector3.up * -100;
+        if (base.IsHost)
+            ServerManager.Despawn(gameObject, DespawnType.Destroy);
     }
     void HealthController_OnIslandUnitKilled()
     {

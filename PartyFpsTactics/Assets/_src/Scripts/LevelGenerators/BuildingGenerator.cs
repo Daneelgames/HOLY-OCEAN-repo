@@ -1121,8 +1121,8 @@ public class BuildingGenerator : NetworkBehaviour
     }
     public void DebrisParticles(Vector3 pos)
     {
-        var debris = Instantiate(tileDestroyedParticles, pos, Quaternion.identity);
-        debris.transform.parent = transform;
+        var debris = Pooling.Instance.SpawnParticle(Pooling.ParticlesPool.ParticlePrefabTag.Debris, pos, Quaternion.identity);
+        //debris.transform.parent = transform;
     }
 
     void AddNavMeshSurfaceToQueue(Vector3 pos)

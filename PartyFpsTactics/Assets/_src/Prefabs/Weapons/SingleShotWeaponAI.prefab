@@ -137,11 +137,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotHolder: {fileID: 7683259333257678407}
+  weaponTool: {fileID: 0}
+  toolType: 0
   _isMelee: 0
   cooldown: 1
   _delay: 1
   _attackSignalAudioSource: {fileID: 3570548196317481403}
   bulletsPerShot: 1
+  noiseDistance: 30
   _attackColliderTag: 2
   _animation: {fileID: 0}
   projectileRandomRotationMax: 0
@@ -158,6 +161,7 @@ MonoBehaviour:
   gunRotationSpeed: 100
   WeaponRotationZScalerThreshold: 0.2
   WeaponRotationZScaler: 3
+  continuousFire: 0
 --- !u!82 &3570548196317481403
 AudioSource:
   m_ObjectHideFlags: 0
@@ -167,7 +171,7 @@ AudioSource:
   m_GameObject: {fileID: 2697036058661301667}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 4370754265684073554, guid: 0feb87d9d0c4ed747ae0e93d3ab5bf4e, type: 2}
   m_audioClip: {fileID: 8300000, guid: fb9fdc493ba74a341920aed2182689b1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -427,6 +431,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 4487578885012687930}
     m_Modifications:
     - target: {fileID: 4893107214201841592, guid: b514190bf6830744f9218cbc03dce9fe, type: 3}
@@ -490,6 +495,7 @@ PrefabInstance:
       value: ShotParticles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: b514190bf6830744f9218cbc03dce9fe, type: 3}
 --- !u!4 &50471508200704032 stripped
 Transform:
@@ -506,6 +512,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 4487578885012687930}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 8b9c94457114673418e33790ca4f09f3, type: 3}
@@ -589,6 +596,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: ffe04eeaffbabff4988ecbe89a109247, type: 2}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b9c94457114673418e33790ca4f09f3, type: 3}
 --- !u!4 &5888928355100868469 stripped
 Transform:

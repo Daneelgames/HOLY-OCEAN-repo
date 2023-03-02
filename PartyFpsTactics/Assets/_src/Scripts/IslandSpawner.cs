@@ -120,6 +120,32 @@ public class IslandSpawner : NetworkBehaviour
         return distance;
     }
 
+    public Island GetClosestIsland(Vector3 posAsking)
+    {
+        float distance = 100000f;
+        Island closest = null;
+        if (spawnedIslands.Count < 1)
+            return null;
+        for (var index = spawnedIslands.Count - 1; index >= 0; index--)
+        {
+            var island = spawnedIslands[index];
+            if (island == null)
+            {
+                spawnedIslands.RemoveAt(index);
+                continue;
+            }
+            var pos = island.gameObject.transform.position;
+            var newDistance = Vector3.Distance(pos, posAsking);
+            if (newDistance < distance)
+            {
+                distance = newDistance;
+                closest = island;
+            }
+        }
+
+        return closest;
+    }
+
     [Server]
     IEnumerator CullIslandsOnServer()
     {

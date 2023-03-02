@@ -10,8 +10,10 @@ public class DamageZone : MonoBehaviour
     [SerializeField] private DamageSource damageSource = DamageSource.Environment;
     [SerializeField] private int damage = 50;
     [SerializeField] private float damageCooldown = 0.5f;
+    [SerializeField] private float maxDamageDistance = 15f;
     public UnityAction OnPlayerDamaged;
     private List<UnitDamageCoroutine> _unitDamageCoroutines = new List<UnitDamageCoroutine>();
+    [SerializeField] private List<Collider> collidersToIgnore = new List<Collider>();
     struct UnitDamageCoroutine
     {
         public Coroutine damageCoroutine;
@@ -21,6 +23,8 @@ public class DamageZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer != 7) // units only
+            return;
+        if (collidersToIgnore.Contains(other))
             return;
         
         var Health = GetHealthController(other.gameObject);
@@ -37,7 +41,6 @@ public class DamageZone : MonoBehaviour
         newUnitDamageCoroutine.go = other.gameObject;
         newUnitDamageCoroutine.damageCoroutine = StartCoroutine(DamageCoroutine(Health));
         _unitDamageCoroutines.Add(newUnitDamageCoroutine);
-    
     }
 
     private void OnTriggerExit(Collider other)
@@ -45,6 +48,9 @@ public class DamageZone : MonoBehaviour
         if (other.gameObject.layer != 7) // units only
             return;
 
+        if (collidersToIgnore.Contains(other))
+            return;
+        
         var Health = GetHealthController(other.gameObject);
         if (Health == null)
             return;
@@ -53,7 +59,8 @@ public class DamageZone : MonoBehaviour
         {
             if (unitDamageCoroutine.hc == Health)
             {
-                StopCoroutine(unitDamageCoroutine.damageCoroutine);
+                if (unitDamageCoroutine.damageCoroutine != null)
+                    StopCoroutine(unitDamageCoroutine.damageCoroutine);
                 _unitDamageCoroutines.Remove(unitDamageCoroutine);
                 return;
             }
@@ -65,6 +72,8 @@ public class DamageZone : MonoBehaviour
     {
         while (true)
         {
+            if (Vector3.Distance(transform.position, hc.transform.position) > maxDamageDistance)
+                break;
             var resultHealth = hc.Damage(damage, damageSource);
             if (resultHealth < 1)
             {
@@ -79,7 +88,8 @@ public class DamageZone : MonoBehaviour
         {
             if (unitDamageCoroutine.hc == hc)
             {
-                StopCoroutine(unitDamageCoroutine.damageCoroutine);
+                if (unitDamageCoroutine.damageCoroutine != null)
+                    StopCoroutine(unitDamageCoroutine.damageCoroutine);
                 _unitDamageCoroutines.Remove(unitDamageCoroutine);
                 yield break;
             }
