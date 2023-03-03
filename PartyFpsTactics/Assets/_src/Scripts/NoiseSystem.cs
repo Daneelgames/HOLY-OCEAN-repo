@@ -33,7 +33,7 @@ public class NoiseSystem : MonoBehaviour
             if (UnitsManager.Instance.HcInGame.Count <= index)
                 continue;
             var hc = UnitsManager.Instance.HcInGame[index];
-            if (hc == null || hc.IsDead)
+            if (hc == null || hc.IsDead || hc.gameObject.activeInHierarchy == false)
                 continue;
             if (hc.team == Team.PlayerParty)
                 continue;

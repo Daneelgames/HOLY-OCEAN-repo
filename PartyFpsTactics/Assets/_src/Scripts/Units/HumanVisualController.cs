@@ -47,7 +47,6 @@ namespace MrPink.Units
         public Material aliveMaterial;
         public Material deadMaterial;
         public SkinnedMeshRenderer meshRenderer;
-        public LayerMask tilesLayerMask;
         private float lerpToStand = 1;
     
         private Coroutine _changeLerpToStandCoroutine;
@@ -55,6 +54,9 @@ namespace MrPink.Units
         private static readonly int Passenger = Animator.StringToHash("Passenger");
         private static readonly int Driver = Animator.StringToHash("Driver");
         [SerializeField] private List<Collider> extraCollidersToIgnore;
+        [SerializeField] [ReadOnly] private bool grounded = true;
+        public bool IsGrounded => grounded;
+        [SerializeField] [ReadOnly] private float groundedCheckSphereRadius = 1;
 
         [SerializeField] private Transform groundedRaycastOrigin;
         private void Start()
@@ -74,13 +76,25 @@ namespace MrPink.Units
             }
 
             IgnoreOwnCollision();
-
+        }
+        
+        private void OnEnable()
+        {
+            if (getMovementAnimCoroutine != null)
+                StopCoroutine(getMovementAnimCoroutine);
+            
+            DeactivateRagdoll();
+            
             if (hc.IsPlayer == false)
-                StartCoroutine(GetGroundedAi());
+            {
+                if (getGroundedAi != null)
+                    StopCoroutine(getGroundedAi);
+                getGroundedAi = StartCoroutine(GetGroundedAi());
+            }
+            getMovementAnimCoroutine = StartCoroutine(GetMovementAnim());
         }
 
-        [SerializeField] [ReadOnly] private bool grounded = true;
-        [SerializeField]  private float groundedCheckSphereRadius = 2.5f;
+        private Coroutine getGroundedAi;
         IEnumerator GetGroundedAi()
         {
             while (hc.IsDead == false)
@@ -93,26 +107,27 @@ namespace MrPink.Units
                     continue;
                 }
                 
-                grounded = Physics.CheckSphere(groundedRaycastOrigin.position, ragdoll?groundedCheckSphereRadius/3 : groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
+                grounded = Physics.CheckSphere(groundedRaycastOrigin.position, groundedCheckSphereRadius, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore);
 
-                if (grounded) continue;
-
-                if (hc.health > 0)
+                if (ragdoll)
                 {
-                    OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
-
-                    if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
+                    if (hc.health > 0)
                     {
-                        var distance = transform.position.y - height;
-                        var isAboveSurface = distance > 0;
-                        if (isAboveSurface == false)
+                        OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
+
+                        if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
                         {
-                            ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
+                            var distance = transform.position.y - height;
+                            var isAboveSurface = distance > 0;
+                            if (isAboveSurface == false)
+                            {
+                                ContentPlacer.Instance.SpawnBoatForUnit(hc.selfUnit);
+                            }
                         }
                     }
+                    continue;
                 }
-
-                if (ragdoll) continue;
+                if (grounded) continue;
                 
                 if (hc.AiMovement)
                     hc.AiMovement.StopActivities();
@@ -140,15 +155,6 @@ namespace MrPink.Units
             }
         }
 
-        private void OnEnable()
-        {
-            if (getMovementAnimCoroutine != null)
-                StopCoroutine(getMovementAnimCoroutine);
-            
-            DeactivateRagdoll();
-            
-            getMovementAnimCoroutine = StartCoroutine(GetMovementAnim());
-        }
 
         private Coroutine getMovementAnimCoroutine;
 
@@ -276,6 +282,12 @@ namespace MrPink.Units
                 return;
             
             meshRenderer.material = deadMaterial;
+            if (getGroundedAi != null)
+                StopCoroutine(getGroundedAi);
+            if (_changeLerpToStandCoroutine != null)
+                StopCoroutine(_changeLerpToStandCoroutine);
+            if (_followRagdollCoroutine != null)
+                StopCoroutine(_followRagdollCoroutine);
             if (!ragdoll)
                 ActivateRagdoll();
             if (hc.IsPlayer == false)
@@ -319,7 +331,7 @@ namespace MrPink.Units
                 StopCoroutine(_changeLerpToStandCoroutine);
 
             anim.enabled = false;
-            ragdoll = true;
+            ragdoll = true;    
             _followRagdollCoroutine = StartCoroutine(FollowTheRagdoll());
         
             foreach (var joint in joints)
@@ -465,7 +477,6 @@ namespace MrPink.Units
             lerpToStand = 1;
         }
 
-        [SerializeField] private float moveRbToOriginIfPlayerForce = 5;
         private IEnumerator FollowTheRagdoll()
         {
             if (hc.IsPlayer == false) // only for mobs
@@ -473,17 +484,9 @@ namespace MrPink.Units
             float standupCooldown = hc.UnitRagdollStandupCooldown;
             float t = 0;
             Vector3 prevPos = rigidbodies[0].transform.position;
-            var pelvisRb = rigidbodies[0];
             while (true)
             {
                 yield return null;
-                /*
-                if (hc.IsPlayer)
-                {
-                    if( Vector3.Distance(pelvisRb.transform.position, transform.position) > 2)
-                        pelvisRb.AddForce((transform.position - pelvisRb.transform.position).normalized * moveRbToOriginIfPlayerForce, ForceMode.Acceleration);
-                    continue;
-                }*/
                 
                 transform.position = ragdollOrigin.position;
                 t += Time.deltaTime;
@@ -528,7 +531,7 @@ namespace MrPink.Units
             if (hc.AiMovement)
             {
                 hc.AiMovement.RestartActivities();
-                hc.selfUnit.UnitMovement.RestoreAgent();
+                hc.selfUnit.UnitMovement.RestoreMovement();
             }
         }
 

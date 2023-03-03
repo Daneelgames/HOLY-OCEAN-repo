@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAudioSource;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityVector3;
 using FishNet.Object;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
+using Stop = BehaviorDesigner.Runtime.Tasks.Unity.UnityParticleSystem.Stop;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,6 +24,9 @@ namespace MrPink.Units
         [Range(1, 100)]
         public float _moveSpeed = 2;
         [SerializeField]
+        [Range(1, 100)]
+        public float _vaultPower = 20;
+        [SerializeField]
         [Range(0.1f, 5f)]
         float rotateTime = 1;
         
@@ -33,120 +38,91 @@ namespace MrPink.Units
         private float _runSpeed = 4;
 
         public float gravityForce = 13;
-        [SerializeField]
-        private float _stopDistanceFollow = 1.5f;
+        [SerializeField] [ReadOnly] float currentGravityForce = 1;
         
         [SerializeField]
-        private float _stopDistanceMove = 0;
-        
-        [SerializeField, ChildGameObjectsOnly, Required]
-        private NavMeshAgent _agent;
-
-        public NavMeshAgent Agent => _agent;
-
+        private float distanceToPickNexPathPoint = 5;
+    
         [SerializeField, ChildGameObjectsOnly] private Rigidbody rb;
         
         [SerializeField, ChildGameObjectsOnly, Required]
         private Unit _selfUnit;
 
         
-        private Vector3 _currentVelocity;
         private Transform _lookTransform;
         
         public bool rememberRespawPoint = false;
         private Vector3 rememberedRespawnPoint;
 
-        public override void OnStartClient() { 
+        [SerializeField][ReadOnly]private Vector3 targetPositionToReach;
+        public Vector3 GetTargetPositionToReach => targetPositionToReach;
+        [SerializeField][ReadOnly]private DynamicPathfinder.Path currentPath;
+
+        public override void OnStartClient() 
+        { 
             base.OnStartClient();
-            if (IsServer == false)
-            {
-                rb.isKinematic = true;
-                rb.useGravity = false;
-                _agent.enabled = false;
-            }
+            rb.isKinematic = base.IsClientOnly;
+            rb.useGravity = !base.IsClientOnly;
+        }
+
+        private void OnEnable()
+        {
+            targetPositionToReach = transform.position;
             
-            _lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
-            _lookTransform.parent = transform;
+            if (_lookTransform == null){
+                _lookTransform = new GameObject(gameObject.name + "LookTransform").transform;
+                _lookTransform.parent = transform;
+            }
             
             if (rememberRespawPoint)
                 rememberedRespawnPoint = transform.position;
-            
-            StartCoroutine(UnitGravity());
+            if (unitGravityCoroutine != null)
+                StopCoroutine(unitGravityCoroutine);
+            unitGravityCoroutine = StartCoroutine(UnitGravity());
         }
 
-
+        private Coroutine unitGravityCoroutine;
         IEnumerator UnitGravity()
         {
-            if (_agent.enabled)
-                yield break;
-            
             while (true)
             {
-                if (!Physics.Linecast(transform.position, transform.position + Vector3.down,
-                    GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
-                {
-                    var velocity = rb.velocity;
-                    velocity += Vector3.down * gravityForce;
+                yield return new WaitForSeconds(0.1f);
+                
+                if (_selfUnit.HumanVisualController.IsGrounded)
+                    continue;
 
-                    velocity = new Vector3(velocity.x, Mathf.Clamp(velocity.y, -10, 10), velocity.z);
-                    rb.velocity = velocity;
-                }
-                yield return new WaitForSeconds(0.5f);
+                rb.AddForce(Vector3.down * currentGravityForce);
             }
         }
 
         private void Update()
         {
-            _currentVelocity = _agent.velocity + rb.velocity;
             if (_lookTransform)
                 _lookTransform.transform.position = transform.position;
 
-            if (_selfUnit.AiVehicleControls && _selfUnit.AiVehicleControls.controlledMachine != null && _agent.enabled)
-            {
-                _agent.enabled = false;
-            }
+            //transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y, 0), _turnSpeed * Time.deltaTime);
         }
 
         public void Death()
         {
-            if (_agent)
-                _agent.enabled = false;
-            rb.isKinematic = false;
-            //this.enabled = false;
+            currentGravityForce = gravityForce;
+            rb.isKinematic = base.IsClientOnly;
+            rb.useGravity = !base.IsClientOnly;
         }
 
-        public void RestoreAgent()
+        public void RestoreMovement()
         {
-            if (base.IsHost)
-                TryToEnableAgent();
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-            
-            //this.enabled = true;
-            
-            return;
-            
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
-                transform.position = hit.position;
-            
-            _agent.enabled = true;
-            this.enabled = true;
+            rb.isKinematic = base.IsClientOnly;
+            rb.useGravity = !base.IsClientOnly;
+            targetPositionToReach = transform.position;
         }
 
-        void TryToEnableAgent()
-        {
-            if (_agent == null)
-                return;
-            
-            if (_selfUnit.AiVehicleControls == null || _selfUnit.AiVehicleControls.controlledMachine == null)
-                _agent.enabled = true;
-        }
 
         public void Run()
         {
-            _agent.speed = _runSpeed;
+            //_agent.speed = _runSpeed;
         }
         
         public void LookAt(Vector3 targetPosition)
@@ -157,24 +133,8 @@ namespace MrPink.Units
             transform.rotation = Quaternion.Slerp(transform.rotation, _lookTransform.rotation, Time.deltaTime * _turnSpeed);  
         }
         
-        public IEnumerator MoveToPosition(Vector3 target)
-        {
-            AgentSetPath(target, false);
-
-            float t = 0;
-            while (Vector3.Distance(transform.position, target) > 1 && t < 15)
-            {
-                t += Time.deltaTime;
-                yield return new WaitForSeconds(0.5f);
-            }
-        }
         public IEnumerator RotateToPosition(Vector3 target)
         {
-            //AgentSetPath(target, false);
-            if (_agent.isOnNavMesh)
-                _agent.isStopped = true;
-            _agent.enabled = false;
-            _agent.updateRotation = false;
             float t = 0;
             var startRot = transform.rotation;
             var targetRot = Quaternion.LookRotation(target - transform.position, Vector3.up);
@@ -185,90 +145,93 @@ namespace MrPink.Units
                 transform.rotation = Quaternion.Slerp(startRot, targetRot, t/rotateTime);
                 yield return null;
             }
-            
-            TryToEnableAgent();
-            if (_agent.enabled)
-                _agent.updateRotation = true;
         }
-
-        [SerializeField] private Vector2 wanderAroundCooldownMinMax = new Vector2(5, 60);
-        IEnumerator WanderAround()
+ 
+        public void SetTargetPositionToReach(Vector3 targetPos)
         {
-            while (true)
-            {
-                yield return new WaitForSeconds(Random.Range(wanderAroundCooldownMinMax.x, wanderAroundCooldownMinMax.y));
-                Vector3 target = ContentPlacer.Instance.NavMeshPosAroundPosition(transform.position, 50f);
-                AgentSetPath(target, false);
-            }
+            targetPositionToReach = targetPos;
         }
-        
-        public void AgentSetPath(Vector3 target, bool isFollowing, bool cheap = true)
+
+        public void SetNewPath(DynamicPathfinder.Path path)
         {
-            if (IsServer == false)
-                return;
-            
-            if (enabled == false)
-                return;
-            
-            if (_agent.enabled == false)
-            {
-                // NO NAV MESH
-                if (moveRigidbodyCoroutine != null)
-                    StopCoroutine(moveRigidbodyCoroutine);
-                moveRigidbodyCoroutine = StartCoroutine(MoveRigidbody(target));
-                return;
-            }
-
-            if (_agent.isOnNavMesh == false)
-                return;
-            
-            _agent.speed = _moveSpeed;
-            _agent.stoppingDistance = isFollowing ? _stopDistanceFollow : _stopDistanceMove;
-            _agent.isStopped = false;
-            
-            Vector3 targetPos = SamplePos(target);
-            if (cheap)
-            {
-                _agent.SetDestination(targetPos);
-                return;
-            }
-            
-            var path = new NavMeshPath();
-            transform.position = SamplePos(transform.position);
-            NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
-            
-            _agent.SetPath(path);
+            currentGravityForce = 1;
+            currentPath = path;
+            if (moveRigidbodyCoroutine != null)
+                StopCoroutine(moveRigidbodyCoroutine);
+            moveRigidbodyCoroutine = StartCoroutine(MoveRigidbodyOnPath());
         }
 
+        [SerializeField] [ReadOnly] private int currentClosestIndexOnPath;
         private Coroutine moveRigidbodyCoroutine;
-        IEnumerator MoveRigidbody(Vector3 targetPos)
+        IEnumerator MoveRigidbodyOnPath()
         {
-            while (true)
+            if (currentPath.points.Count < 1)
+                yield break;
+            Vector3 targetPos = currentPath.points[Mathf.Clamp(GetCurrentClosestPointOnPathIndex(currentPath), 0, currentPath.points.Count-1)];
+            float t = 0;
+            while (_selfUnit.HealthController.health > 0)
             {
                 yield return new WaitForSeconds(0.1f);
+                t += 0.1f;
+                if (t >= 1)
+                {
+                    var raycastOrigin = transform.position + Vector3.up;
+                    if (Physics.Raycast(raycastOrigin, (targetPos - raycastOrigin).normalized, out var hit,
+                        Mathf.Infinity, 1 << 6))
+                    {
+                        targetPos = hit.point;
+                    }
+                    t = 0;
+                }
+
+                var distance = Vector3.Distance(transform.position, targetPos);
+                //Debug.Log("Current Distance To Target " + distance);
+                if (distance < distanceToPickNexPathPoint)
+                {
+                    //Debug.Log("PICK NEXT CLOSEST POINT Current Distance To Target " + distance);
+                    targetPos = currentPath.points[Mathf.Clamp(GetCurrentClosestPointOnPathIndex(currentPath) + 1, 0, currentPath.points.Count-1)];
+                }
                 
-                if (Vector3.Distance(transform.position, targetPos) < _stopDistanceMove)
-                    continue;
+                Debug.DrawLine(transform.position + Vector3.up, targetPos, Color.red, 1);
                 
-                rb.AddForce((targetPos - transform.position).normalized * _moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+                if (targetPos.y > transform.position.y)
+                {
+                    rb.AddForce(
+                        ((targetPos - transform.position).normalized * _moveSpeed + Vector3.up * _vaultPower) *
+                        Time.deltaTime, ForceMode.VelocityChange);
+                    currentGravityForce = 1;
+                }
+                else
+                {
+                    rb.AddForce((targetPos - transform.position).normalized * _moveSpeed * Time.deltaTime,
+                        ForceMode.VelocityChange);
+                    currentGravityForce = 1;
+                }
             }
+            currentGravityForce = gravityForce;
+        }
+
+        int GetCurrentClosestPointOnPathIndex(DynamicPathfinder.Path path)
+        {
+            int closestIndex = 0;
+            float distance = 10000;
+            for (var index = 0; index < path.points.Count; index++)
+            {
+                var pathPoint = path.points[index];
+                var newDistance = Vector3.Distance(pathPoint, transform.position);
+                if (newDistance < distance)
+                {
+                    distance = newDistance;
+                    closestIndex = index;
+                }
+            }
+
+            return closestIndex;
         }
         
-        public void TeleportNearPosition(Vector3 pos)
+        void TeleportNearPosition(Vector3 pos)
         {
-            //transform.position = pos;
-            //transform.position = SamplePos(pos);
-            
-            if (_agent.enabled == false)
-            {
-                rb.MovePosition(pos);
-            }
-            else
-            {
-                _agent.Warp(SamplePos(pos));
-                return;
-            }
-            
+            rb.MovePosition(pos);
         }
 
         public void TeleportToRespawnPosition()
@@ -277,14 +240,6 @@ namespace MrPink.Units
                 TeleportNearPosition(rememberedRespawnPoint);
         }
         
-        private Vector3 SamplePos(Vector3 startPos)
-        {
-            
-            if (NavMesh.SamplePosition(startPos, out var hit, 10f, NavMesh.AllAreas))
-                startPos = hit.position;
-
-            return startPos;
-        }
         
         private void OnDestroy()
         {

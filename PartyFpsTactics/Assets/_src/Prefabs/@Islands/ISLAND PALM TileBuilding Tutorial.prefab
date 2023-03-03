@@ -41613,7 +41613,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3364272763113283406}
   - component: {fileID: 6670557985220958057}
-  - component: {fileID: 5637452114658458935}
   - component: {fileID: 6473927946314326102}
   - component: {fileID: -1502333015841759364}
   m_Layer: 0
@@ -41662,7 +41661,7 @@ MonoBehaviour:
   - {fileID: 5637452113909660339}
   _tileBuildingGenerator: {fileID: 2959330580123575843}
   _voxelBuildingGenerator: {fileID: 0}
-  _navMeshSurfaceUpdate: {fileID: 5637452114658458935}
+  _navMeshSurfaceUpdate: {fileID: 0}
   randomSpherePosOnNavMeshMaxRange: 100
   spawnBoss: 1
   islandUnits: []
@@ -41674,31 +41673,6 @@ MonoBehaviour:
   - {fileID: 8936042449104389653}
   targetHavok: 0
   currentHavok: 0
---- !u!114 &5637452114658458935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3364272763113283403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b85b4409b8a8b459a005ce712df827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildOnce: 1
-  Surfaces:
-  - {fileID: 5637452113133922334}
-  - {fileID: 5637452114303007598}
-  - {fileID: 5637452114562177768}
-  - {fileID: 5637452114775251170}
-  - {fileID: 5637452113223837723}
-  - {fileID: 5637452114289596797}
-  UpdateRate: 1
-  countDistance: 0
-  MovementThreshold: 1
-  NavMeshSize: {x: 200, y: 20, z: 200}
-  CacheSources: 0
 --- !u!114 &6473927946314326102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41725,7 +41699,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 3
+  <PrefabId>k__BackingField: 4
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 2732387296
   <SceneId>k__BackingField: 0

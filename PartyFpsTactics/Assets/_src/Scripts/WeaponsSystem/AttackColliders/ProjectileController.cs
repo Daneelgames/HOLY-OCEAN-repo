@@ -66,6 +66,7 @@ namespace MrPink.WeaponsSystem
         void OnEnable()
         {
             dead = false;
+            gravityCurrent = 0;
             if (visual)
                 visual.gameObject.SetActive(true);
             PlaySound(shotAu);

@@ -62,6 +62,21 @@ public class PlayerHookshot : NetworkBehaviour
         }
     }
 
+    public void AddColliderToIgnore(GameObject go)
+    {
+        if (collidersToIgnore.Contains(go))
+            return;
+        collidersToIgnore.Add(go);
+    }
+    
+    public void RemoveColliderToIgnore(GameObject go)
+    {
+        if (collidersToIgnore.Contains(go) == false)
+            return;
+        collidersToIgnore.Remove(go);
+    }
+    
+
 
     void StartSwing()
     {
@@ -72,9 +87,10 @@ public class PlayerHookshot : NetworkBehaviour
         {
             if (collidersToIgnore.Contains(hit.collider.gameObject))
                 continue;
-            if (Game.LocalPlayer.VehicleControls.controlledMachine && Game.LocalPlayer.VehicleControls.controlledMachine == hit.collider.gameObject)
+            if (Game.LocalPlayer.VehicleControls.controlledMachine && Game.LocalPlayer.VehicleControls.controlledMachine.gameObject == hit.collider.gameObject)
                 continue;
             _hit = hit;
+            break;
         }            
 
         if (_hit.collider == null)
@@ -91,7 +107,7 @@ public class PlayerHookshot : NetworkBehaviour
             hookPoint = new GameObject("HookshotPoint").transform;
 
         hookPoint.position = _hit.point;
-        hookPoint.parent = _hit.transform;
+        hookPoint.parent = _hit.collider.transform;
 
         if (joint == null)
             joint = gameObject.AddComponent<SpringJoint>();

@@ -11,7 +11,6 @@ using MrPink.Health;
 using MrPink.PlayerSystem;
 using MrPink.Units;
 using Sirenix.OdinInspector;
-using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -32,14 +31,11 @@ public class BuildingGenerator : NetworkBehaviour
     
     public bool spawnGoals = true;
     public bool spawnWalls = true;
-    public bool spawnLadders = true;
     public LayerMask allSolidsLayerMask;
 
     public BillboardGenerator billboardGeneratorPrefab;
-    public GameObject levelGoalPrefab;
     public TileHealth tilePrefab;
     public TileHealth tileWallPrefab;
-    public TileHealth tileWallThinPrefab;
     public List<TileHealth> tileWallThinColorPrefabs;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
@@ -51,15 +47,9 @@ public class BuildingGenerator : NetworkBehaviour
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
     public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
-    public Vector2Int thinWallsPerLevelMinMax = new Vector2Int(1, 10);
     
     public bool randomLevelRotation = false;
 
-    [Space] [Header("NAVIGATION")] 
-    public Transform navMeshesParent;
-    public NavMeshSurface navMeshSurfacePrefab;
-    public List<NavMeshSurface> navMeshSurfacesSpawned;
-    public float updateNavMeshDistance = 100;
     public PhysicMaterial tilePhysicsMaterial;
 
     private bool generated = false;
@@ -68,7 +58,6 @@ public class BuildingGenerator : NetworkBehaviour
     [Serializable]
     public class Building
     {
-        public Vector3 worldPos;
         public List<Level> spawnedBuildingLevels = new List<Level>();
         public int localEntranceSide;
     }
@@ -99,47 +88,6 @@ public class BuildingGenerator : NetworkBehaviour
         Random.InitState(currentSeed);
         Debug.Log("BUILDING GENERATOR START GENERATING WITH SEED " + currentSeed +"; Random.state " + Random.state + "; hashCode " + Random.state.GetHashCode());
 
-        #region depricated - get building data from ProgressionManager
-
-        /*
-        var currentLevel = ProgressionManager.Instance.CurrentLevel;
-
-        for (int i = 0; i < buildingsToSpawnSettings.Count; i++)
-        {
-            buildingsToSpawnSettings[i].levelsSettings = new List<BuildingSettings.LevelSetting>(currentLevel.BuildingSettings.levelsSettings);
-            buildingsToSpawnSettings[i].spawnLadders = currentLevel.BuildingSettings.spawnLadders;
-            buildingsToSpawnSettings[i].spawnLoot = currentLevel.BuildingSettings.spawnLoot;
-            buildingsToSpawnSettings[i].spawnProps = currentLevel.BuildingSettings.spawnProps;
-            buildingsToSpawnSettings[i].spawnRooms = currentLevel.BuildingSettings.spawnRooms;
-            buildingsToSpawnSettings[i].spawnUnits = currentLevel.BuildingSettings.spawnUnits;
-            buildingsToSpawnSettings[i].spawnNavMesh = currentLevel.BuildingSettings.spawnNavMesh;
-            buildingsToSpawnSettings[i].levelsScaleMinMaxX = currentLevel.BuildingSettings.levelsScaleMinMaxX;
-            buildingsToSpawnSettings[i].levelsScaleMinMaxZ = currentLevel.BuildingSettings.levelsScaleMinMaxZ;
-
-            currentLevel = ProgressionManager.Instance.RandomLevel;
-
-        }
-        //buildingsToSpawnSettings[0] = currentLevel.BuildingSettings;
-        
-        levelGoalPrefab = currentLevel.levelGoalPrefab;
-        tilePrefab = currentLevel.tilePrefab;
-        tileWallPrefab = currentLevel.tileWallPrefab;
-        tileWallThinPrefab = currentLevel.tileWallThinPrefab;
-        explosiveBarrelsAmount = currentLevel.explosiveBarrelsAmount;
-        explosiveBarrelPrefab = currentLevel.explosiveBarrelPrefab;
-        lootPerLevelMinMax = currentLevel.lootPerLevelMinMax;
-        grindRailsMinMax = currentLevel.grindRailsPerLevelMinMax;
-        grindRailsPrefab = currentLevel.grindRailsPrefab;
-        stairsDistanceMinMax = currentLevel.stairsDistanceMinMax;
-        thinWallsPerLevelMinMax = currentLevel.thinWallsPerLevelMinMax;
-        distanceToCutCeilingUnderStairsMinMax = currentLevel.distanceToCutCeilingUnderStairsMinMax;
-        spawnWalls = currentLevel.spawnWalls;
-        spawnLadders = currentLevel.spawnLadders;
-        */
-
-
-        #endregion
-        
         if (generatedBuildingFolder == null)
         {
             generatedBuildingFolder = new GameObject("GeneratedBuilding").transform;
@@ -152,8 +100,6 @@ public class BuildingGenerator : NetworkBehaviour
         }
         disconnectedTilesFolder.position = Vector3.zero;
         disconnectedTilesFolder.parent = transform;
-
-        //StartCoroutine(PartyController.Instance.Init());
 
 
         StartCoroutine(SpawnBuilding(transform.position));
@@ -183,7 +129,6 @@ public class BuildingGenerator : NetworkBehaviour
         }
 
         Building newBuilding = new Building();
-        newBuilding.worldPos = buildingPos;
         spawnedBuildings.Add(newBuilding);
         
         Game._instance.SetLevelGeneratingFeedback(true);
@@ -213,8 +158,6 @@ public class BuildingGenerator : NetworkBehaviour
 
             yield return StartCoroutine(MakeLaddersBetweenLevels(building, i));
             
-            SpawnNavmesh(building.spawnedBuildingLevels[i]);
-            
             building.spawnedBuildingLevels[i].Init();
         }
 
@@ -228,8 +171,6 @@ public class BuildingGenerator : NetworkBehaviour
         {
             if (spawnGoals)
                 yield return StartCoroutine(SpawnGoalsOnServer(building));
-            
-            StartCoroutine(UpdateNavMesh());
         }
 
         ownIsland.BuildingGenerated();
@@ -382,44 +323,6 @@ public class BuildingGenerator : NetworkBehaviour
                 newLevel.allTiles.Add(newFloorTile);
                 newLevel.tilesFloor.Add(newFloorTile);
 
-                if (levelIndexInBuilding == 0) // only on very first floor
-                {
-                    var newFloorObstacle = new GameObject("FloorObstacle");
-                    newFloorObstacle.transform.parent = newFloorTile.transform;
-                    newFloorObstacle.transform.localPosition = new Vector3(0, -0.5f, 0);
-                    var obst = newFloorObstacle.AddComponent<NavMeshObstacle>();
-                    obst.carving = true;
-                }
-                else if (buildingSettings.spawnSupports) // on every other floor
-                {
-                    // TRY TO FIND SUPPORTER TILE
-                    if (LevelgenTransforms.SetSupporterTile(building.spawnedBuildingLevels, newFloorTile) == null)
-                    {
-                        // IF NO SUPPORTER TILE UNDER CORNER TILES -
-                        // SPAWN UNDESTRACTIBLE SUPPORT
-
-                        if (x == 0 && z == 0 || x == size.x - 1 && z == 0 || x == 0 && z == size.z - 1 ||
-                            x == size.x - 1 && z == size.z - 1)
-                        {
-                            GameObject newSupport = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            newSupport.name = "STRONG SUPPORT";
-                            newSupport.transform.parent = newLevelGameObject.transform;
-                            newSupport.transform.localPosition = newFloorTile.transform.localPosition;
-                            newSupport.transform.localScale = new Vector3(0.9f, 1000, 0.9f);
-                            newSupport.transform.localPosition += Vector3.down * 500.5f;
-                            var mesh = newSupport.GetComponent<MeshRenderer>();
-                            mesh.material = GameManager.Instance.rockDefaultMaterial;
-                            newSupport.layer = 12;
-                            var obstacle = newSupport.AddComponent<NavMeshObstacle>();
-                            obstacle.carving = true;
-                            var tileHealth = newSupport.AddComponent<TileHealth>();
-                            tileHealth.ImmuneToDamage = true;
-                            newFloorTile.supporterTile = tileHealth;
-                            tileHealth.supportedTile = newFloorTile;
-                        }
-                    }
-                }
-                
                 // SPAWN BUILDING'S OUTSIDE WALLS 
                 
                 if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) // OUTER WALLS
@@ -799,19 +702,6 @@ public class BuildingGenerator : NetworkBehaviour
         }
     }
     
-    void SpawnNavmesh(Level spawnedLevel)
-    {
-        if (!spawnedLevel.spawnNavMesh)
-            return;
-        
-        var newNavMesh = Instantiate(navMeshSurfacePrefab, navMeshesParent);
-        newNavMesh.transform.position = spawnedLevel.position;
-        newNavMesh.transform.localScale = spawnedLevel.size;
-        newNavMesh.transform.rotation = spawnedLevel.transform.rotation;
-        newNavMesh.size = spawnedLevel.size;
-        newNavMesh.center = new Vector3(0, newNavMesh.size.y/ 2, 0);
-        navMeshSurfacesSpawned.Add(newNavMesh);
-    }
     
     [Server]
     IEnumerator SpawnExplosiveBarrelsOnServer(Building building)
@@ -1124,57 +1014,6 @@ public class BuildingGenerator : NetworkBehaviour
         //debris.transform.parent = transform;
     }
 
-    void AddNavMeshSurfaceToQueue(Vector3 pos)
-    {
-        float distance = 1000;
-        NavMeshSurface closestNavMeshSurface = null;
-        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
-        {
-            float newDistance = Vector3.Distance(pos, navMeshSurfacesSpawned[i].transform.position);
-            if (newDistance < distance)
-            {
-                distance = newDistance;
-                closestNavMeshSurface = navMeshSurfacesSpawned[i];
-            }
-        }
-        // add closest navmesh to navmesh queue
-    }
-    
-    IEnumerator UpdateNavMesh()
-    {
-        while (Game._instance == null || Game.LocalPlayer == null)
-        {
-            yield return null;
-        }
-        for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
-        {
-            yield return new WaitForSecondsRealtime(0.25f);
-            navMeshSurfacesSpawned[i].BuildNavMesh();
-        }
-        yield break;
-        while (true)
-        {
-            yield return null;
-            
-            for (int i = 0; i < navMeshSurfacesSpawned.Count; i++)
-            {
-                yield return new WaitForSecondsRealtime(1f);
-                
-                if (Game._instance == null || Game.LocalPlayer == null)
-                    continue;
-                if (Vector3.Distance(Game.LocalPlayer.Position, navMeshSurfacesSpawned[i].transform.position) < updateNavMeshDistance)
-                {
-                    if (navMeshSurfacesSpawned[i].navMeshData)
-                        navMeshSurfacesSpawned[i].UpdateNavMesh(navMeshSurfacesSpawned[i].navMeshData);
-                    else
-                    {
-                        navMeshSurfacesSpawned[i].BuildNavMesh();
-                    }
-                }
-            }
-        }
-    }
-    
 
     IEnumerator ConstructCover(GameObject newCoverGo, float waitTime)
     {
@@ -1237,7 +1076,6 @@ public class BuildingSettings
     public bool spawnLoot = true;
     public bool spawnLadders = true;
     public bool spawnRooms = true;
-    public bool spawnNavMesh = true;
     public bool updateClash = false;
     public bool spawnSupports = false;
     public int explosiveBarrelsAmount = 2;

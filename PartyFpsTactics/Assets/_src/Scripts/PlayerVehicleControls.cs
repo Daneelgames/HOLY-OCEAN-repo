@@ -99,6 +99,8 @@ namespace MrPink
             if (this.controlledMachine != null && this.controlledMachine == controlledMachine)
             {
                 // выйти из тачки
+                PlayerHookshot.Instance.RemoveColliderToIgnore(this.controlledMachine.gameObject);
+                PlayerHookshot.Instance.RemoveColliderToIgnore(this.controlledMachine.transform.GetChild(0).gameObject);
                 exitCoroutine = StartCoroutine(ExitVehicleCoroutine());
                 if (controlVehicleCoroutine != null)
                     StopCoroutine(controlVehicleCoroutine);
@@ -113,6 +115,8 @@ namespace MrPink
                 //Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 this.controlledMachine = controlledMachine;
                 TogglePlayerInside(this.controlledMachine, Vector3.zero);
+                PlayerHookshot.Instance.AddColliderToIgnore(this.controlledMachine.gameObject);
+                PlayerHookshot.Instance.AddColliderToIgnore(this.controlledMachine.transform.GetChild(0).gameObject);
                 controlVehicleCoroutine = StartCoroutine(ControlVehicle());
                 return;
             }
@@ -120,11 +124,15 @@ namespace MrPink
             if (this.controlledMachine != null && this.controlledMachine != controlledMachine)
             {
                 // зайти в новую тачку
+                PlayerHookshot.Instance.RemoveColliderToIgnore(this.controlledMachine.gameObject);
+                PlayerHookshot.Instance.RemoveColliderToIgnore(this.controlledMachine.transform.GetChild(0).gameObject);
                 Game.LocalPlayer.Movement.DisableColliders(false);
                 //Game.LocalPlayer.Movement.SetCollidersTrigger(true);
                 StopCoroutine(controlVehicleCoroutine);
                 this.controlledMachine.StopMachine();
                 this.controlledMachine = controlledMachine;
+                PlayerHookshot.Instance.AddColliderToIgnore(this.controlledMachine.gameObject);
+                PlayerHookshot.Instance.AddColliderToIgnore(this.controlledMachine.transform.GetChild(0).gameObject);
                 TogglePlayerInside(this.controlledMachine, Vector3.zero);
                 controlVehicleCoroutine = StartCoroutine(ControlVehicle());
             }

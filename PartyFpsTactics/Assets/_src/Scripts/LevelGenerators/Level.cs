@@ -35,7 +35,6 @@ namespace _src.Scripts.LevelGenerators
         public bool spawnLoot = true;
         public bool spawnRooms = true;
         public bool spawnLadders = true;
-        public bool spawnNavMesh = true;
         public bool updateClash = true;
 
         public List<HealthController> uniqueNpcToSpawn = new List<HealthController>();
@@ -48,7 +47,6 @@ namespace _src.Scripts.LevelGenerators
             spawnLoot = buildingSettings.spawnLoot;
             spawnRooms = buildingSettings.spawnRooms;
             spawnLadders = buildingSettings.spawnLadders;
-            spawnNavMesh = buildingSettings.spawnNavMesh;
             updateClash = buildingSettings.updateClash;
             uniqueNpcToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].uniqueNpcsToSpawn);
             unitsToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].unitsToSpawn);

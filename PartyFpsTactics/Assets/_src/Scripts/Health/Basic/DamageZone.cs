@@ -72,6 +72,8 @@ public class DamageZone : MonoBehaviour
     {
         while (true)
         {
+            if (hc == null)
+                break;
             if (Vector3.Distance(transform.position, hc.transform.position) > maxDamageDistance)
                 break;
             var resultHealth = hc.Damage(damage, damageSource);

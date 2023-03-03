@@ -20,7 +20,6 @@ public class Island : NetworkBehaviour
     public BuildingGenerator TileBuildingGenerator => _tileBuildingGenerator;
     [SerializeField] private VoxelBuildingGenerator _voxelBuildingGenerator;
     public VoxelBuildingGenerator VoxelBuildingGen => _voxelBuildingGenerator;
-    [SerializeField] private NavMeshSurfaceUpdate _navMeshSurfaceUpdate;
     [SerializeField] private float randomSpherePosOnNavMeshMaxRange = 100;
 
     [SerializeField] private bool spawnBoss = true;
@@ -73,7 +72,6 @@ public class Island : NetworkBehaviour
     public void DestroyOnRunEnded()
     {
         culled = true;
-        _navMeshSurfaceUpdate?.Stop();
         DespawnIslandEnemies();
 
         if (base.IsHost)
@@ -123,7 +121,6 @@ public class Island : NetworkBehaviour
         if (culled/* && distanceToLocalPlayer <= mobsIslandSpawnDistance*/)
         {
             culled = false;
-            _navMeshSurfaceUpdate?.Init();
             SpawnIslandEnemies();
             if (spawnBoss && bossKilled == false)
                 MusicManager.Instance.PlayIslandMusic();
@@ -135,7 +132,6 @@ public class Island : NetworkBehaviour
             if (culled == false)
             {
                 culled = true;
-                _navMeshSurfaceUpdate?.Stop();
                 DespawnIslandEnemies();
             }
             

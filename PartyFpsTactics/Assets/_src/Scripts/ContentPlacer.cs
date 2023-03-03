@@ -145,7 +145,7 @@ public class ContentPlacer : NetworkBehaviour
         Vector3 pos;
         if (distance <= islandDistanceSpawn)
         {
-            pos = NavMeshPosAroundPosition(randomPlayer.MainCamera.transform.position, islandDistanceSpawn);   
+            pos = PosAroundPosition(randomPlayer.MainCamera.transform.position, islandDistanceSpawn);   
             if (Vector3.Distance(pos, randomPlayer.MainCamera.transform.position) < minMobSpawnDistance)
                 return;
 
@@ -170,7 +170,7 @@ public class ContentPlacer : NetworkBehaviour
                 pos = island.TileBuildingGenerator.GetRandomPosInsideLastLevel();
                 break;
             case ProcLevelData.SpawnBossType.Island:
-                pos = NavMeshPosAroundPosition(Game._instance.PlayersInGame[0].transform.position, islandDistanceSpawn); 
+                pos = PosAroundPosition(Game._instance.PlayersInGame[0].transform.position, islandDistanceSpawn); 
                 break;
             case ProcLevelData.SpawnBossType.Ocean:
                 pos = island.transform.position + Random.onUnitSphere * Random.Range(200, 300);
@@ -355,7 +355,7 @@ public class ContentPlacer : NetworkBehaviour
     void SpawnRedUnit(Vector3 pos)
     {
         var island = IslandSpawner.Instance.GetClosestIsland(pos);
-        pos = UnitsManager.Instance.SamplePos(pos);
+        //pos = UnitsManager.Instance.SamplePos(pos);
         var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
         island.AddIslandUnit(unit);
         ServerManager.Spawn(unit.gameObject);
@@ -394,7 +394,7 @@ public class ContentPlacer : NetworkBehaviour
         Vector3 pos;
         if (distance <= islandDistanceSpawn)
         {
-            pos = NavMeshPosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, islandDistanceSpawn);
+            pos = PosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, islandDistanceSpawn);
         }
         else // spawn in sea
         {
@@ -419,15 +419,9 @@ public class ContentPlacer : NetworkBehaviour
         }
     }
 
-    public Vector3 NavMeshPosAroundPosition(Vector3 initPos, float maxDistance)
+    Vector3 PosAroundPosition(Vector3 initPos, float maxDistance)
     {
-        Vector3 randomDir = Game.LocalPlayer.MainCamera.transform.forward;
-        
-        randomDir = new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f));
-        
-        if (NavMesh.SamplePosition(initPos + randomDir * maxDistance, out var hit, Mathf.Infinity, NavMesh.AllAreas))
-            return hit.position;
-
+        initPos += Random.onUnitSphere * Random.Range(1, maxDistance);
         return initPos;
     }
 

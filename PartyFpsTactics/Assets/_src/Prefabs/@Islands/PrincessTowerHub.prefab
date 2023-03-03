@@ -25,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93694530}
-  m_LocalRotation: {x: -0, y: -0.70291066, z: -0, w: 0.7112782}
-  m_LocalPosition: {x: 10.412753, y: 3.31, z: -15.759026}
+  m_LocalRotation: {x: 0.00048893323, y: 0.93664896, z: -0.0014189939, w: 0.35026616}
+  m_LocalPosition: {x: 155.16734, y: 37.264397, z: -138.37083}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1722,7 +1722,6 @@ GameObject:
   - component: {fileID: 4017954118577966647}
   - component: {fileID: 3556745003259092747}
   - component: {fileID: 5787522021735580578}
-  - component: {fileID: 4854269199310984703}
   m_Layer: 0
   m_Name: PrincessTowerHub
   m_TagString: Untagged
@@ -1771,7 +1770,6 @@ MonoBehaviour:
   - {fileID: 3028627509639336201}
   _tileBuildingGenerator: {fileID: 0}
   _voxelBuildingGenerator: {fileID: 0}
-  _navMeshSurfaceUpdate: {fileID: 4854269199310984703}
   randomSpherePosOnNavMeshMaxRange: 100
   spawnBoss: 0
   islandUnits: []
@@ -1808,7 +1806,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 6
+  <PrefabId>k__BackingField: 7
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -1822,30 +1820,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
---- !u!114 &4854269199310984703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1721239254144499073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b85b4409b8a8b459a005ce712df827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildOnce: 1
-  Surfaces:
-  - {fileID: 7561665733032066376}
-  - {fileID: 1608598368616676386}
-  - {fileID: 5773642413401193340}
-  - {fileID: 1878305049501185079}
-  - {fileID: 1318563388970122059}
-  UpdateRate: 1
-  countDistance: 0
-  MovementThreshold: 1
-  NavMeshSize: {x: 200, y: 20, z: 200}
-  CacheSources: 0
 --- !u!1 &1750932107103796769
 GameObject:
   m_ObjectHideFlags: 0
@@ -8947,6 +8921,10 @@ PrefabInstance:
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: <IsNested>k__BackingField
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <PrefabId>k__BackingField
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: <ComponentIndex>k__BackingField

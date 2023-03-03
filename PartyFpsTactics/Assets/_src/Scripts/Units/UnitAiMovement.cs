@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAudioSource;
 using Brezg.Extensions.UniTaskExtensions;
 using Cysharp.Threading.Tasks;
 using FishNet.Object;
@@ -73,7 +74,7 @@ namespace MrPink.Units
             if (_selfUnit.HealthController.health <= 0)
                 return;
             
-            if (enemyToLookAt != null && !inCover && enemyToLookAt)
+            if (enemyToLookAt != null && !inCover)
                 _selfUnit.UnitMovement.LookAt(enemyToLookAt.transform.position);
 
             if (_takeCoverCooldown > 0)
@@ -187,7 +188,7 @@ namespace MrPink.Units
                     // TO DO - переделать на систему вейпойнтов / спавнеров
                     Vector3 targetPos = transform.position + (transform.position - enemy.transform.position).normalized * 5;
 
-                    _selfUnit.UnitMovement.AgentSetPath(targetPos, true);
+                    _selfUnit.UnitMovement.SetTargetPositionToReach(targetPos);
                 }
                 else
                     FollowTargetOrder(enemy.transform);
@@ -213,7 +214,7 @@ namespace MrPink.Units
         
             //SET PATH TO SPOT
             if (_selfUnit.UnitMovement != null)
-                _selfUnit.UnitMovement.AgentSetPath(chosenCover.transform.position, false);
+                _selfUnit.UnitMovement.SetTargetPositionToReach(chosenCover.transform.position);
             
             var spotPosition = _occupiedCoverSpot.transform.position;
 
@@ -344,7 +345,12 @@ namespace MrPink.Units
             SetOccupiedSpot(_occupiedCoverSpot, null);
             StopAllBehaviorCoroutines();
             currentOrder = MovementOrder.RotateToPosition;
-            _rotateToPositionCoroutine = StartCoroutine(RotateToPositionAndFireWatchOrder(targetPos));
+            if (enemyToLookAt == null)
+            {
+                if (_rotateToPositionCoroutine != null)
+                    StopCoroutine(_rotateToPositionCoroutine);
+                _rotateToPositionCoroutine = StartCoroutine(RotateToPositionAndFireWatchOrder(targetPos));
+            }
         }
 
         private IEnumerator RotateToPositionAndFireWatchOrder(Vector3 target)
@@ -355,9 +361,8 @@ namespace MrPink.Units
         }
         private IEnumerator MoveToPositionAndFireWatchOrder(Vector3 target)
         {
-            yield return _selfUnit.UnitMovement.MoveToPosition(target);
-            
-            FireWatchOrder();
+            yield return null;
+           _selfUnit.UnitMovement.SetTargetPositionToReach(target);
         }
         
         public void RunOrder()
@@ -379,7 +384,7 @@ namespace MrPink.Units
         public void RestartActivities()
         {
             
-            _selfUnit.UnitMovement.RestoreAgent();
+            _selfUnit.UnitMovement.RestoreMovement();
             
             HealthController enemy = null;
             if (_selfUnit.UnitVision.visibleEnemies.Count > 0)

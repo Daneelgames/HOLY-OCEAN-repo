@@ -13,7 +13,7 @@ namespace MrPink.Units
 
         [SerializeField, ChildGameObjectsOnly, Required]
         private UnitMovement _selfMovement;
-        
+
         private Vector3 _currentTargetPosition;
         private Coroutine _followCoroutine;
 
@@ -27,7 +27,7 @@ namespace MrPink.Units
         {
             if (_followCoroutine == null)
                 return;
-            
+
             StopCoroutine(_followCoroutine);
         }
 
@@ -47,27 +47,18 @@ namespace MrPink.Units
                     StopFollowing();
                     yield break;
                 }
+
                 _currentTargetPosition = target.position;
-                _selfMovement.AgentSetPath(_currentTargetPosition, true);
+                _selfMovement.SetTargetPositionToReach(_currentTargetPosition);
                 //Debug.Log("FollowTargetCoroutine");
                 yield return new WaitForSeconds(0.5f);
             }
         }
-        
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(_currentTargetPosition , Vector3.one);
+            Gizmos.DrawWireCube(_currentTargetPosition, Vector3.one);
         }
-        
-#if UNITY_EDITOR
-
-        public void TransferData()
-        {
-            _selfAgent = GetComponent<NavMeshAgent>();
-            _selfMovement = GetComponent<UnitMovement>();
-        }
-        
-#endif
     }
 }

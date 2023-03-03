@@ -10297,6 +10297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e713d8183542abaf8d1e3fc9d1ca3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyOnDistance: 0
   faceCam: {fileID: 3049115349435270797}
   _healthController: {fileID: 7776875987276874606}
   _unitVision: {fileID: 3311541302662433574}
@@ -10482,17 +10483,20 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: -8774370397282309712}
   _networkObjectCache: {fileID: -8774370397282309712}
-  _moveSpeed: 8
+  _moveSpeed: 20
+  _vaultPower: 20
   rotateTime: 1
   _turnSpeed: 4
   gravityForce: 13
-  _stopDistanceFollow: 1.5
-  _stopDistanceMove: 0.5
-  _agent: {fileID: 6151679054331608272}
+  currentGravityForce: 1
+  distanceToPickNexPathPoint: 5
   rb: {fileID: 4399398212673593085}
   _selfUnit: {fileID: 3370289575657189019}
   rememberRespawPoint: 1
-  wanderAroundCooldownMinMax: {x: 5, y: 60}
+  targetPositionToReach: {x: 0, y: 0, z: 0}
+  currentPath:
+    points: []
+  currentClosestIndexOnPath: 0
 --- !u!114 &2204894623481908000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10732,14 +10736,10 @@ MonoBehaviour:
   aliveMaterial: {fileID: 2100000, guid: 3f7c363f5197b4d4aafd192a044753f5, type: 2}
   deadMaterial: {fileID: 2100000, guid: 26b86000ea59aef42ae43ede45d5b8fa, type: 2}
   meshRenderer: {fileID: 0}
-  tilesLayerMask:
-    serializedVersion: 2
-    m_Bits: 4160
   extraCollidersToIgnore: []
-  groundedRaycastOrigin: {fileID: 0}
   grounded: 1
   groundedCheckSphereRadius: 2.5
-  moveRbToOriginIfPlayerForce: 5
+  groundedRaycastOrigin: {fileID: 0}
 --- !u!195 &6151679054331608272
 NavMeshAgent:
   m_ObjectHideFlags: 0

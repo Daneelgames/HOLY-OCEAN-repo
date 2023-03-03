@@ -50,13 +50,18 @@ namespace MrPink.Units
         {
             if (setDamagerAsEnemyBehaviour == EnemiesSetterBehaviour.SetOnlyOtherTeam && damager.team == _selfHealth.team)
                 return;
-
+            /*
+            // VVV WE DONT USE STACK FOR NOW VVV
             if (!stack && _enemiesToRemember.Contains(damager))
+                return;
+            */
+            if (_enemiesToRemember.Contains(damager))
                 return;
 
             // IF DAMAGED BY A MACHINE - SET DAMAGER DRIVER
             if (damager.controlledMachine && damager.controlledMachine.controllingHc)
                 damager = damager.controlledMachine.controllingHc;
+            
             
             Debug.Log("SetDamager " + damager);
             _enemiesToRemember.Add(damager);
@@ -164,7 +169,7 @@ namespace MrPink.Units
                 for (int i = 0; i < _enemiesToRemember.Count; i++)
                 {
                     var unit = _enemiesToRemember[i];
-                    if (unit == null)
+                    if (unit == null || unit.gameObject.activeInHierarchy == false)
                         continue;
 
                     CheckUnit(unit, true);
@@ -174,7 +179,7 @@ namespace MrPink.Units
                 for (int i = 0; i < UnitsManager.Instance.HcInGame.Count; i++)
                 {
                     var unit = UnitsManager.Instance.HcInGame[i];
-                    if (unit == null)
+                    if (unit == null || unit == _selfHealth || unit.gameObject.activeInHierarchy == false)
                         continue;
                 
                     CheckUnit(unit);
