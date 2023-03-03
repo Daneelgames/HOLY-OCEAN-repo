@@ -60,7 +60,6 @@ public class BuildingGenerator : NetworkBehaviour
     public NavMeshSurface navMeshSurfacePrefab;
     public List<NavMeshSurface> navMeshSurfacesSpawned;
     public float updateNavMeshDistance = 100;
-    public GameObject tileDestroyedParticles;
     public PhysicMaterial tilePhysicsMaterial;
 
     private bool generated = false;

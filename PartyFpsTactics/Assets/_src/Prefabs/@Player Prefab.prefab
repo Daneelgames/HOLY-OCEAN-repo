@@ -13188,6 +13188,7 @@ MonoBehaviour:
   - {fileID: 3967563716606119907}
   - {fileID: 5201198674905340780}
   - {fileID: 1676776200903774004}
+  - {fileID: -9066319893650402255}
   - {fileID: 1564578065392454773}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
@@ -13276,6 +13277,8 @@ MonoBehaviour:
   hookPoint: {fileID: 0}
   hookshotLineRenderer: {fileID: 293431507323766610}
   hookshotAu: {fileID: 8949315025752999603}
+  collidersToIgnore:
+  - {fileID: 5596697987043485619}
 --- !u!114 &-9066319893650402255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13288,6 +13291,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0d0186bd61f5a4eb27dad3664f469a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 9
+  _addedNetworkObject: {fileID: 4075464650987322544}
+  _networkObjectCache: {fileID: 4075464650987322544}
+  freeAirTimeMax: 10
+  drainAmount: 6
+  maxPosY: 150
 --- !u!1 &5596697988226418837
 GameObject:
   m_ObjectHideFlags: 0
@@ -14023,7 +14032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a988f6f45520071458e51440d83fa9d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 9
+  _componentIndexCache: 10
   _addedNetworkObject: {fileID: 4075464650987322544}
   _networkObjectCache: {fileID: 4075464650987322544}
   markerText: '?'

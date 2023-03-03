@@ -18,6 +18,7 @@ public class PlayerHookshot : NetworkBehaviour
     [SerializeField] private LineRenderer hookshotLineRenderer;
     private bool swinging = false;
     [SerializeField] private AudioSource hookshotAu;
+    [SerializeField] private List<GameObject> collidersToIgnore = new List<GameObject>();
 
     private SpringJoint joint;
     
@@ -64,11 +65,24 @@ public class PlayerHookshot : NetworkBehaviour
 
     void StartSwing()
     {
-        RaycastHit hit;
         var cam = Game._instance.PlayerCamera;
-        if (Physics.SphereCast(cam.transform.position + cam.transform.forward, 0.75f, cam.transform.forward, out hit, maxHookshotDistance, _layerMask, QueryTriggerInteraction.Ignore) == false)
-            return;
+        var hits = Physics.SphereCastAll(cam.transform.position + cam.transform.forward, 0.75f, cam.transform.forward, maxHookshotDistance, _layerMask, QueryTriggerInteraction.Ignore);
+        RaycastHit _hit = new RaycastHit();
+        foreach (var hit in hits)
+        {
+            if (collidersToIgnore.Contains(hit.collider.gameObject))
+                continue;
+            if (Game.LocalPlayer.VehicleControls.controlledMachine && Game.LocalPlayer.VehicleControls.controlledMachine == hit.collider.gameObject)
+                continue;
+            _hit = hit;
+        }            
 
+        if (_hit.collider == null)
+        {
+            StopSwing();
+            return;
+        }
+        
         if (Game.LocalPlayer.VehicleControls.controlledMachine)
             Game.LocalPlayer.VehicleControls.RequestVehicleAction(Game.LocalPlayer.VehicleControls.controlledMachine);
         
@@ -76,8 +90,8 @@ public class PlayerHookshot : NetworkBehaviour
         if (hookPoint == null)
             hookPoint = new GameObject("HookshotPoint").transform;
 
-        hookPoint.position = hit.point;
-        hookPoint.parent = hit.transform;
+        hookPoint.position = _hit.point;
+        hookPoint.parent = _hit.transform;
 
         if (joint == null)
             joint = gameObject.AddComponent<SpringJoint>();
@@ -92,7 +106,7 @@ public class PlayerHookshot : NetworkBehaviour
         joint.minDistance = distanceFromPoint * 0.25f;
         */
         joint.maxDistance = 0.1f;
-        joint.minDistance = 1f;
+        joint.minDistance = 0.5f;
 
         joint.spring = 50f;
         joint.damper = 7f;
