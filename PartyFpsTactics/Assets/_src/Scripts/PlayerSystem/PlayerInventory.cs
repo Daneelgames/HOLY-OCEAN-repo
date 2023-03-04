@@ -196,7 +196,7 @@ namespace MrPink.PlayerSystem
             var newItem = GetInventoryItem(tool);
             inventoryItems.Add(newItem);
             
-            if (tool.tool == ToolType.OneTimeShield)
+            if (tool.tool == ToolType.Shield)
                 PlayerUi.Instance.AddShieldFeedback();
 
             

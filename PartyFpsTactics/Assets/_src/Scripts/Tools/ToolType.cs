@@ -3,17 +3,17 @@ namespace MrPink.Tools
     public enum ToolType
     {
         Null, 
-        UziPistol, 
-        OneTimeShield, 
+        Uzi, 
+        Shield, 
         SpyCam, 
-        CustomLadder,
-        FragGrenade,
+        Ladder,
+        Grenade,
         BugMeat,
         SandWater,
         OilCoffee,
         CheckpointTicket,
         Shotter,
-        PistolLaserPoint,
+        Pistol,
         Knife,
         Fist
     }

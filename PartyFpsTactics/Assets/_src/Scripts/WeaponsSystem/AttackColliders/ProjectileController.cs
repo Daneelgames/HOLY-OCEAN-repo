@@ -23,11 +23,11 @@ namespace MrPink.WeaponsSystem
 
         [Header("FOR PLAYER PROJECTILES")][SerializeField] private bool singleSphereCast = false;
         public ToolType toolType = ToolType.Null;
-        [ShowIf("toolType", ToolType.FragGrenade)]
+        [ShowIf("toolType", ToolType.Grenade)]
         [SerializeField]
         private FragGrenadeTool fragGrenadeTool;
     
-        [ShowIf("toolType", ToolType.CustomLadder)]
+        [ShowIf("toolType", ToolType.Ladder)]
         [SerializeField]
         private CustomLadderTool customLadderTool;
         [SerializeField]
@@ -236,7 +236,7 @@ namespace MrPink.WeaponsSystem
         {
             //Debug.Log("Destroy projectile");
         
-            if (toolType == ToolType.FragGrenade)
+            if (toolType == ToolType.Grenade)
                 fragGrenadeTool.Explode();
         
             dead = true;
@@ -268,7 +268,7 @@ namespace MrPink.WeaponsSystem
             }
             dead = true;
         
-            if (toolType == ToolType.CustomLadder)
+            if (toolType == ToolType.Ladder)
                 customLadderTool.ConstructLadder(ownerHealth.transform.position - Vector3.up);
         }
 

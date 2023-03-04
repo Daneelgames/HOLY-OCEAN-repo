@@ -226,6 +226,9 @@ public class InteractableEventsManager : MonoBehaviour
                 Game.LocalPlayer.Inventory.AddInventoryItems(IO.GetPlayerLootInventoryItems);
                 ScoringSystem.Instance.AddGold(IO.GetPlayerMoneyToDrop);
                 break;
+            case ScriptedEventType.OpenMojoCustomization:
+                MojoCustomization.Instance.OpenWindow();
+                break;
         }
         
         if (gameObjectToDestroy)

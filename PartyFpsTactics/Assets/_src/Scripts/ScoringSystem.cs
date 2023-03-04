@@ -23,6 +23,7 @@ namespace MrPink
         }
         
         [BoxGroup("MOJO")][SerializeField] private List<MojoLevel> _mojoLevels = new List<MojoLevel>();
+        public List<MojoLevel> MojoLevels => _mojoLevels;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private int currentMojoLevel = 0;
         public int GetCurrentMojoLevel => currentMojoLevel;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentDamageInCombo;

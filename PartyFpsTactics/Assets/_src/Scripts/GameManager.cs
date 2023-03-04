@@ -94,7 +94,7 @@ namespace MrPink
                 return;
             }
             
-            if (PlayerInventoryUI.Instance.IsActive || Shop.Instance.IsActive || SettingsGameWrapper.Instance.IsOpened)
+            if (PlayerInventoryUI.Instance.IsActive || MojoCustomization.Instance.IsShowing || Shop.Instance.IsActive || SettingsGameWrapper.Instance.IsOpened)
             {
                 cursorVisible = true;
                 Cursor.lockState = CursorLockMode.None;
@@ -107,16 +107,6 @@ namespace MrPink
                 Cursor.visible = false;
             }
                 
-            
-            if (Input.GetKeyDown(KeyCode.O))
-                AudioListener.volume = Mathf.Clamp(AudioListener.volume - 0.1f, 0, 1);
-            if (Input.GetKeyDown(KeyCode.P))
-                AudioListener.volume = Mathf.Clamp(AudioListener.volume + 0.1f, 0, 1);
-
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-                Game.LocalPlayer.LookAround._mouseSensitivity = Mathf.Clamp(Game.LocalPlayer.LookAround._mouseSensitivity + 50, 5, 1000);
-            if (Input.GetKeyDown(KeyCode.Alpha9))
-                Game.LocalPlayer.LookAround._mouseSensitivity = Mathf.Clamp(Game.LocalPlayer.LookAround._mouseSensitivity - 50, 5, 1000);
             
             
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab))

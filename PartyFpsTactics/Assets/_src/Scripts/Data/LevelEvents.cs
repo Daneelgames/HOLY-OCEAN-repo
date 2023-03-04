@@ -105,6 +105,6 @@ namespace _src.Scripts.Data
     {
         StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
         AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest, Resurrect, SpawnNewIsland, OpenShop,
-        ReturnInventoryLoot
+        ReturnInventoryLoot, OpenMojoCustomization
     }
 }

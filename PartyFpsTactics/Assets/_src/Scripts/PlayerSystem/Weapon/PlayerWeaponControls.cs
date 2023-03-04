@@ -58,6 +58,8 @@ namespace MrPink.PlayerSystem
                 return;
             if (PlayerInventoryUI.Instance && PlayerInventoryUI.Instance.IsActive)
                 return;
+            if (MojoCustomization.Instance && MojoCustomization.Instance.IsShowing)
+                return;
             
             if (SettingsGameWrapper.Instance && SettingsGameWrapper.Instance.IsOpened)
                 return;
