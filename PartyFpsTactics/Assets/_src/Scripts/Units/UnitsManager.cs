@@ -16,8 +16,8 @@ namespace MrPink.Units
     public class UnitsManager : MonoBehaviour
     {
         public static UnitsManager Instance;
-         List<HealthController> hcInGame = new List<HealthController>();
-        public List<HealthController> HcInGame => hcInGame;
+         List<HealthController> mobsInGame = new List<HealthController>();
+        public List<HealthController> MobsInGame => mobsInGame;
         public float destroyUnitsDistance = 500;
         
         [Space]
@@ -60,14 +60,14 @@ namespace MrPink.Units
             StartCoroutine(StreamUnits());
         }
 
-        public void AddUnit(HealthController hc)
+        public void AddMob(HealthController hc)
         {
-            hcInGame.Add(hc);
+            mobsInGame.Add(hc);
         }
         public void RemoveUnit(HealthController hc)
         {
-            if (hcInGame.Contains(hc))
-                hcInGame.Remove(hc);
+            if (mobsInGame.Contains(hc))
+                mobsInGame.Remove(hc);
         }
 
         IEnumerator StreamUnits()
@@ -76,17 +76,17 @@ namespace MrPink.Units
             {
                 yield return null;
                 
-                if (hcInGame.Count <= 0)
+                if (mobsInGame.Count <= 0)
                     continue;
                 
-                for (int i = hcInGame.Count - 1; i >= 0; i--)
+                for (int i = mobsInGame.Count - 1; i >= 0; i--)
                 {
                     yield return null;
 
-                    if (hcInGame.Count <= i)
+                    if (mobsInGame.Count <= i)
                         continue;
 
-                    var unit = hcInGame[i];
+                    var unit = mobsInGame[i];
                     if (unit.selfUnit == null || unit.selfUnit.DestroyOnDistance == false)
                         continue;
                     if (unit.health < 1)
@@ -105,7 +105,7 @@ namespace MrPink.Units
             
             if (hc.health <= 0)
             {
-                hcInGame.Remove(hc);
+                mobsInGame.Remove(hc);
             }
         }
         
@@ -142,41 +142,41 @@ namespace MrPink.Units
                 enduranceDamage = defaultInduranceDamage;
             
             // BUMP ENEMIES
-            for (int i = 0; i < hcInGame.Count; i++)
+            for (int i = 0; i < mobsInGame.Count; i++)
             {
-                if (i >= hcInGame.Count || !hcInGame[i].gameObject.activeInHierarchy)
+                if (i >= mobsInGame.Count || !mobsInGame[i].gameObject.activeInHierarchy)
                     continue;
 
-                if (!(Vector3.Distance(explosionPosition, hcInGame[i].transform.position + Vector3.up) <= distance)) continue;
+                if (!(Vector3.Distance(explosionPosition, mobsInGame[i].transform.position + Vector3.up) <= distance)) continue;
                 
-                if (hcInGame[i].playerMovement)
+                if (mobsInGame[i].playerMovement)
                 {
                     continue;
-                    hcInGame[i].playerMovement.rb.AddForce((hcInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
+                    mobsInGame[i].playerMovement.rb.AddForce((mobsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                               playerForce, ForceMode.VelocityChange);
                     continue;
                 }
 
-                if (hcInGame[i].rb) // BARRELS
+                if (mobsInGame[i].rb) // BARRELS
                 {
-                    hcInGame[i].rb.AddForce((hcInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
+                    mobsInGame[i].rb.AddForce((mobsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
                                                tileExplosionForceBarrels, ForceMode.VelocityChange);
 
-                    hcInGame[i].Damage(1, DamageSource.Player);
+                    mobsInGame[i].Damage(1, DamageSource.Player);
 
                     continue;
                 }
 
-                if (hcInGame[i].DamageEndurance(enduranceDamage) <= 0)
+                if (mobsInGame[i].DamageEndurance(enduranceDamage) <= 0)
                 {
-                    if (hcInGame[i].HumanVisualController)
+                    if (mobsInGame[i].HumanVisualController)
                     {
-                        hcInGame[i].HumanVisualController.ActivateRagdoll();
-                        hcInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
+                        mobsInGame[i].HumanVisualController.ActivateRagdoll();
+                        mobsInGame[i].HumanVisualController.ExplosionRagdoll(explosionPosition, force, distance);
                     }
 
-                    if (hcInGame[i].AiMovement)
-                        hcInGame[i].AiMovement.StopActivities();
+                    if (mobsInGame[i].AiMovement)
+                        mobsInGame[i].AiMovement.StopActivities();
 
                 }
             }
@@ -218,9 +218,9 @@ namespace MrPink.Units
 
         public void MoveUnitsToRespawnPoints(bool destroyDead, bool healAlive)
         {
-            for (int i = 0; i < hcInGame.Count; i++)
+            for (int i = 0; i < mobsInGame.Count; i++)
             {
-                var unit = hcInGame[i];
+                var unit = mobsInGame[i];
                 if (!unit)
                     continue;
 
@@ -246,7 +246,7 @@ namespace MrPink.Units
 
         public void HealAllUnits()
         {
-            foreach (var hc in hcInGame)
+            foreach (var hc in mobsInGame)
             {
                 if (hc == null || hc.health < 1)
                     continue;
@@ -292,12 +292,12 @@ namespace MrPink.Units
 
         public void KillAllMobs()
         {
-            if (hcInGame.Count < 1)
+            if (mobsInGame.Count < 1)
                 return;
             
-            for (var index = hcInGame.Count - 1; index >= 0; index--)
+            for (var index = mobsInGame.Count - 1; index >= 0; index--)
             {
-                var healthController = hcInGame[index];
+                var healthController = mobsInGame[index];
                 if (!healthController || healthController.IsDead || healthController.team == Team.PlayerParty)
                     continue;
 

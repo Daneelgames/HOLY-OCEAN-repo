@@ -94,6 +94,8 @@ namespace MrPink.WeaponsSystem
         // ReSharper disable Unity.PerformanceAnalysis
         public void Shot(HealthController ownerHc, Transform aiAimTransform = null)
         {
+            if (OnCooldown)
+                return;
             ShotAsync(shotHolder.forward, ownerHc, aiAimTransform);
         }
 

@@ -85,6 +85,8 @@ public class PlayerHookshot : NetworkBehaviour
         RaycastHit _hit = new RaycastHit();
         foreach (var hit in hits)
         {
+            if (Vector3.Distance(hit.point, transform.position) > maxHookshotDistance)
+                continue;
             if (collidersToIgnore.Contains(hit.collider.gameObject))
                 continue;
             if (Game.LocalPlayer.VehicleControls.controlledMachine && Game.LocalPlayer.VehicleControls.controlledMachine.gameObject == hit.collider.gameObject)

@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using MrPink;
 using MrPink.Units;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Unity.EditorCoroutines.Editor;
-using Unity.VisualScripting;
+//using Unity.EditorCoroutines.Editor;
 
 public class DynamicPathfinder : MonoBehaviour
 {
@@ -41,14 +38,14 @@ public class DynamicPathfinder : MonoBehaviour
         {
             yield return null;
 
-            int unitsAmount = UnitsManager.Instance.HcInGame.Count;
+            int unitsAmount = UnitsManager.Instance.MobsInGame.Count;
             if (unitsAmount < 1)
                 continue;
             
             for (int i = unitsAmount - 1; i >= 0; i--)
             {
                 yield return null;
-                var unit = UnitsManager.Instance.HcInGame[i];
+                var unit = UnitsManager.Instance.MobsInGame[i];
                 if (unit == null || unit.health < 1 || unit.gameObject.activeInHierarchy == false)
                     continue;
                 
@@ -72,10 +69,12 @@ public class DynamicPathfinder : MonoBehaviour
     {
         var hunterUnitEyes = a.position + Vector3.up; 
         var preyUnitEyes = b.position + Vector3.up; 
-        if (Application.isEditor && Application.isPlaying == false)
+        /*
+         if (Application.isEditor && Application.isPlaying == false)
             EditorCoroutineUtility.StartCoroutine(AskForPath(hunterUnitEyes, preyUnitEyes), this);
         else
-            StartCoroutine(AskForPath(hunterUnitEyes, preyUnitEyes));
+        */
+        StartCoroutine(AskForPath(hunterUnitEyes, preyUnitEyes));
     }
 
     [Serializable]

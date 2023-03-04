@@ -25,14 +25,14 @@ public class NoiseSystem : MonoBehaviour
     IEnumerator MakeNoiseOverTime(Vector3 pos, float distance)
     {
         
-        if (UnitsManager.Instance.HcInGame.Count < 1)
+        if (UnitsManager.Instance.MobsInGame.Count < 1)
             yield break;
         
-        for (var index = UnitsManager.Instance.HcInGame.Count - 1; index >= 0; index--)
+        for (var index = UnitsManager.Instance.MobsInGame.Count - 1; index >= 0; index--)
         {
-            if (UnitsManager.Instance.HcInGame.Count <= index)
+            if (UnitsManager.Instance.MobsInGame.Count <= index)
                 continue;
-            var hc = UnitsManager.Instance.HcInGame[index];
+            var hc = UnitsManager.Instance.MobsInGame[index];
             if (hc == null || hc.IsDead || hc.gameObject.activeInHierarchy == false)
                 continue;
             if (hc.team == Team.PlayerParty)

@@ -34,10 +34,7 @@ public class Island : NetworkBehaviour
     private float distanceToLocalPlayer;
 
     [BoxGroup("ISLAND LODs")] [SerializeField]
-    private float mobsIslandSpawnDistance = 300;
-
-    [BoxGroup("ISLAND LODs")] [SerializeField]
-    private float mobsIslandDespawnDistance = 500;
+    private float showHavokMeterDistance = 500;
 
     [SerializeField] private ColliderToVoxel[] voxelCutterForBuildings;
 
@@ -47,7 +44,8 @@ public class Island : NetworkBehaviour
     [BoxGroup("Havok")] [SerializeField] [ReadOnly]
     private int currentHavok;
 
-    float GetHavokFill => (float)currentHavok / targetHavok;
+    public float GetTargetHavok => targetHavok;
+    public float GetHavokFill => (float)currentHavok / targetHavok;
     public bool IsCulled => culled;
     private float sinkSpeed = 1;
 
@@ -117,31 +115,15 @@ public class Island : NetworkBehaviour
         distanceToLocalPlayer = distance;
         if (_tileBuildingGenerator && _tileBuildingGenerator.Generated == false)
             return;
-        
-        if (culled/* && distanceToLocalPlayer <= mobsIslandSpawnDistance*/)
-        {
-            culled = false;
-            SpawnIslandEnemies();
-            if (spawnBoss && bossKilled == false)
-                MusicManager.Instance.PlayIslandMusic();
+
+        if (distance > showHavokMeterDistance)
             return;
-        }
-        return; // dont despawn mobs if you're far away - no reason for it
-        if (distanceToLocalPlayer >= mobsIslandDespawnDistance)
-        {
-            if (culled == false)
-            {
-                culled = true;
-                DespawnIslandEnemies();
-            }
-            
-            if (base.IsHost && spawnBoss && bossKilled)
-            {
-                spawnBoss = false;
-                ServerManager.Despawn(gameObject, DespawnType.Destroy);
-                return;
-            }
-        }
+        if (!culled) return;
+        
+        culled = false;
+        SpawnIslandEnemies();
+        if (spawnBoss && bossKilled == false)
+            MusicManager.Instance.PlayIslandMusic();
     }
 
 
@@ -195,11 +177,6 @@ public class Island : NetworkBehaviour
                 IslandHavokUi.Instance.SetHavokFill(GetHavokFill);
                 yield return null;
             }
-            if (distanceToLocalPlayer > mobsIslandDespawnDistance)
-            {
-                // reduce havok if player is far
-                currentHavok = Mathf.Clamp(currentHavok - 1, 0, targetHavok);
-            }
         }
         
         IslandHavokUi.Instance.HideBar();
@@ -208,7 +185,7 @@ public class Island : NetworkBehaviour
     }
 
 
-    public void IslandHavokFull()
+    void IslandHavokFull()
     {
         ContentPlacer.Instance.SpawnBossOnIsland(this, _tileBuildingGenerator.GetRandomPosInsideLastLevel());
     }

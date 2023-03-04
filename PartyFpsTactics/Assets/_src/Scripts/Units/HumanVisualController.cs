@@ -288,15 +288,17 @@ namespace MrPink.Units
                 StopCoroutine(_changeLerpToStandCoroutine);
             if (_followRagdollCoroutine != null)
                 StopCoroutine(_followRagdollCoroutine);
-            if (!ragdoll)
-                ActivateRagdoll();
+            
             if (hc.IsPlayer == false)
                 StartCoroutine(ScaleBonesDown());
+            if (!ragdoll)
+                ActivateRagdoll();
         }
 
         IEnumerator ScaleBonesDown()
         {
-            float time = 30;
+            ragdollOrigin.parent = transform;
+            float time = 1;
             float t = 0;
             Vector3 endScale = new Vector3(0, 1, 0);
             while (t < time)
@@ -310,6 +312,11 @@ namespace MrPink.Units
 
                 t += Time.unscaledDeltaTime;
             }
+            foreach (var rb in rigidbodies)
+            {
+                rb.transform.localScale = endScale;
+            }
+
         }
     
         public void ActivateRagdoll()
@@ -479,7 +486,7 @@ namespace MrPink.Units
 
         private IEnumerator FollowTheRagdoll()
         {
-            if (hc.IsPlayer == false) // only for mobs
+            if (hc.IsPlayer == false && hc.health > 0) // only for mobs
                 ragdollOrigin.parent = null;
             float standupCooldown = hc.UnitRagdollStandupCooldown;
             float t = 0;

@@ -35,9 +35,9 @@ public class TeamsManager : MonoBehaviour
     {
         HealthController closestEnemy = null;
         float distance = range;
-        for (int i = 0; i < UnitsManager.Instance.HcInGame.Count; i++)
+        for (int i = 0; i < UnitsManager.Instance.MobsInGame.Count; i++)
         {
-            var unit = UnitsManager.Instance.HcInGame[i];
+            var unit = UnitsManager.Instance.MobsInGame[i];
             if (unit == null || unit.health <= 0)
                 continue;
 

@@ -37,10 +37,8 @@ namespace _src.Scripts.LevelGenerators
         public bool spawnLadders = true;
         public bool updateClash = true;
 
-        public List<HealthController> uniqueNpcToSpawn = new List<HealthController>();
         public List<HealthController> unitsToSpawn = new List<HealthController>();
-        public List<GameObject> extraGameObjectsToSpawn = new List<GameObject>();
-        public List<ControlledMachine> controlledMachinesToSpawn = new List<ControlledMachine>();
+        public List<ControlledMachine> controlledMachnesToSpawn = new List<ControlledMachine>();
 
         public void SetBuildingSettings(BuildingSettings buildingSettings, int levelIndex)
         {
@@ -48,10 +46,7 @@ namespace _src.Scripts.LevelGenerators
             spawnRooms = buildingSettings.spawnRooms;
             spawnLadders = buildingSettings.spawnLadders;
             updateClash = buildingSettings.updateClash;
-            uniqueNpcToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].uniqueNpcsToSpawn);
             unitsToSpawn = new List<HealthController>(buildingSettings.levelsSettings[levelIndex].unitsToSpawn);
-            extraGameObjectsToSpawn = new List<GameObject>(buildingSettings.levelsSettings[levelIndex].extraGameObjectsToSpawn);
-            controlledMachinesToSpawn = new List<ControlledMachine>(buildingSettings.levelsSettings[levelIndex].controlledMachinesToSpawn);
         }
         
         public void Init()

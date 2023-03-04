@@ -21,7 +21,7 @@ namespace MrPink.Health
     {
         [SerializeField] [ReadOnly] [SyncVar] private bool isPlayer = false;
         public bool IsPlayer => isPlayer;
-
+        [SerializeField] private bool addToMobsInGame = false;
         public void SetIsPlayerTrue()
         {
             isPlayer = true;
@@ -93,8 +93,8 @@ namespace MrPink.Health
             {
                 yield return null;
             }
-            if (Game.LocalPlayer.Health != this)
-                UnitsManager.Instance.AddUnit(this);
+            if (addToMobsInGame)
+                UnitsManager.Instance.AddMob(this);
             
             healthMax = health;
             enduranceMax = endurance;
@@ -385,8 +385,9 @@ namespace MrPink.Health
         [Server]
         IEnumerator DestroyOnServer()
         {
-            yield return new WaitForSeconds(10);
+            yield return new WaitForSeconds(1);
             ServerManager.Despawn(gameObject, DespawnType.Destroy);
+            Destroy(gameObject);
         }
 
         

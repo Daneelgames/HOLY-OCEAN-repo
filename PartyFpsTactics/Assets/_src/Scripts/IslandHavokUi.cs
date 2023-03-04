@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class IslandHavokUi : MonoBehaviour
 {
     public static IslandHavokUi Instance;
-    [SerializeField] private bool showBar = false;
     [SerializeField] private Image havokBar;
     [SerializeField] private Animator uiAnim;
     private void Awake()
@@ -29,8 +28,6 @@ public class IslandHavokUi : MonoBehaviour
 
     public void ShowBar()
     {
-        if (showBar == false)
-            return;
         uiAnim.gameObject.SetActive(true);
     }
     public void HideBar()
@@ -40,8 +37,6 @@ public class IslandHavokUi : MonoBehaviour
     
     public void SetHavokFill(float fill)
     {
-        if (showBar == false)
-            return;
         havokBar.fillAmount = fill;
     }
 }

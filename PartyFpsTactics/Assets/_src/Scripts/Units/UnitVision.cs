@@ -176,9 +176,9 @@ namespace MrPink.Units
                     yield return new WaitForSeconds(0.1f);
                 }
 
-                for (int i = 0; i < UnitsManager.Instance.HcInGame.Count; i++)
+                for (int i = 0; i < UnitsManager.Instance.MobsInGame.Count; i++)
                 {
-                    var unit = UnitsManager.Instance.HcInGame[i];
+                    var unit = UnitsManager.Instance.MobsInGame[i];
                     if (unit == null || unit == _selfHealth || unit.gameObject.activeInHierarchy == false)
                         continue;
                 

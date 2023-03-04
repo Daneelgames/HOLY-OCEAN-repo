@@ -29,7 +29,7 @@ public class CrimeLevel : MonoBehaviour
 
         if (setFollowIntruder)
         {
-            foreach (var healthController in UnitsManager.Instance.HcInGame)
+            foreach (var healthController in UnitsManager.Instance.MobsInGame)
             {
                 if (healthController == null || healthController.health <= 0)
                     continue;

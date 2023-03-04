@@ -19,11 +19,9 @@ namespace MrPink
         public float raycastDistance = 3;
         private InteractiveObject selectedIO;
         private Transform selectedIOTransform;
-        public Transform portableParent;
         public Rigidbody carryingPortableRb;
         private GameObject selectedPortable;
         public float throwPortableForce = 100;
-        public float carryingPortablePower = 500;
 
         public string pickUpText = "PICK UP";
         public Text uiItemNameFeedback;
@@ -58,114 +56,35 @@ namespace MrPink
             if (ePressed || qPressed)
             {
                 if (selectedPortable && !carryingPortableRb)
-                {
-                    CarryPortableObjectCoroutine = StartCoroutine(CarryPortableObject());
-                    return;
-                }
-                
-                if (carryingPortableRb)
-                {
-                    StopCoroutine(CarryPortableObjectCoroutine);
-                
-                    carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer;
-                    carryingPortableRb.interpolation = RigidbodyInterpolation.None;
-                    carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
-                    carryingPortableRb.useGravity = true;
-                    carryingPortableRb.drag = 1;
-                    //carryingPortableRb.transform.parent = null;
-                    carryingPortableRb = null;
-                    return;
-                }
-            
-                if (selectedIO)
-                {
-                    selectedIO.PlayerInteraction(qPressed, ePressed);
-                    return;
-                }
-            }
-
-            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-            {
-                if (carryingPortableRb)
-                {
-                    StopCoroutine(CarryPortableObjectCoroutine);
-                    var tileAttack = carryingPortableRb.gameObject.GetComponent<TileAttack>();
+                { 
+                    var tileAttack = selectedPortable.gameObject.GetComponent<TileAttack>();
                     if (tileAttack)
                     {
                         tileAttack.SetPlayerDamageSource();
                         tileAttack.dangerous = true;
                         tileAttack.SetTempOwnerHc(Game.LocalPlayer.Health, 10);
                     }
+
+                    Rigidbody rb = selectedPortable.gameObject.GetComponent<Rigidbody>();
+                    if (rb == null)
+                        rb = selectedPortable.AddComponent<Rigidbody>();
                     
-                    carryingPortableRb.gameObject.layer = 10;
-                    carryingPortableRb.interpolation = RigidbodyInterpolation.None;
-                    carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
-                    carryingPortableRb.useGravity = true;
-                    carryingPortableRb.drag = 1; 
-                    //carryingPortableRb.transform.parent = null;
-                    carryingPortableRb.AddForce((carryingPortableRb.transform.position - cam.transform.position) * throwPortableForce, ForceMode.VelocityChange);
+                    rb.gameObject.layer = 10;
+                    rb.AddForce((rb.transform.position - transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
                     Game.LocalPlayer.Weapon.CooldownOnAttackInput();
                 }
+                
+            
+                if (selectedIO)
+                {
+                    selectedIO.PlayerInteraction(qPressed, ePressed);
+                }
             }
         }
 
-        [ServerRpc(RequireOwnership = true)]
-        void RpcSetOwnership(NetworkObject networkObject, NetworkConnection owner)
-        {
-            networkObject.GiveOwnership(owner);
-        }
 
         private int lastCarryingPortableInitLayer;
-        private Coroutine CarryPortableObjectCoroutine;
-        IEnumerator CarryPortableObject()
-        {
-            var rb = selectedPortable.GetComponent<Rigidbody>();
-            TileAttack tileAttack = selectedPortable.GetComponent<TileAttack>();
-        
-            var networkObject = selectedPortable.gameObject.GetComponent<NetworkObject>();
-            if (networkObject)
-                RpcSetOwnership(networkObject, base.Owner);
-            
-            if (!rb)
-            {
-                rb = selectedPortable.AddComponent<Rigidbody>();
-            }
-            if (tileAttack)
-            {
-                tileAttack.rb = rb;
-            }
-
-            carryingPortableRb = rb;
-            carryingPortableRb.velocity = Vector3.zero;
-            carryingPortableRb.angularVelocity = Vector3.zero;
-            lastCarryingPortableInitLayer = carryingPortableRb.gameObject.layer; 
-            //carryingPortableRb.gameObject.layer = 9;
-            carryingPortableRb.gameObject.layer = 10;
-            carryingPortableRb.useGravity = false;
-            var dragInit = carryingPortableRb.drag; 
-            carryingPortableRb.drag = 10;
-            
-            carryingPortableRb.interpolation = RigidbodyInterpolation.Interpolate;
-            carryingPortableRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-
-            //carryingPortableRb.transform.parent = portableParent;
-            while (true)
-            {
-                Vector3 dir = (portableParent.position - carryingPortableRb.position);
-                carryingPortableRb.AddForce(dir * carryingPortablePower * Time.fixedDeltaTime, ForceMode.Acceleration);
-                if (Vector3.Distance(cam.transform.position, carryingPortableRb.transform.position) > raycastDistance)
-                {
-                    carryingPortableRb.useGravity = true;
-                    carryingPortableRb.drag = dragInit;
-                    //carryingPortableRb.transform.parent = null;
-                    carryingPortableRb.gameObject.layer = lastCarryingPortableInitLayer; 
-                    carryingPortableRb = null;
-                    yield break;
-                }
-                yield return null;
-            }
-        }
 
         IEnumerator RaycastInteractables()
         {

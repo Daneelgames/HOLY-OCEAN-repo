@@ -136,7 +136,7 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     void SpawnRedUnitAroundRandomPlayer()
     {
-        if (UnitsManager.Instance.HcInGame.Count > maxEnemiesAlive)
+        if (UnitsManager.Instance.MobsInGame.Count > maxEnemiesAlive)
             return;
         var players = Game._instance.PlayersInGame;
         var randomPlayer = players[Random.Range(0, players.Count)];
@@ -301,53 +301,47 @@ public class ContentPlacer : NetworkBehaviour
     {
         var tilesForSpawns = new List<TileHealth>();
 
-        for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
+        while (island.GetTargetHavok < 1)
         {
-            var level = building.spawnedBuildingLevels[i];
-                
-            tilesForSpawns.Clear();
-            var tilesInsideTemp = new List<TileHealth>(level.tilesInside); 
-            for (var index = tilesInsideTemp.Count - 1; index >= 0; index--)
+            yield return null;
+        }
+        Debug.LogError("SPAWN ENEMIES IN BUILDING, HAVOK IS " + island.GetHavokFill);
+        while (island.GetHavokFill < 1)
+        {
+            for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
             {
-                var tile = tilesInsideTemp[index];
-                if (tile == null)
+                var level = building.spawnedBuildingLevels[i];
+                    
+                tilesForSpawns.Clear();
+                var tilesInsideTemp = new List<TileHealth>(level.tilesInside); 
+                for (var index = tilesInsideTemp.Count - 1; index >= 0; index--)
                 {
-                    tilesInsideTemp.RemoveAt(index);
-                    continue;
+                    var tile = tilesInsideTemp[index];
+                    if (tile == null)
+                    {
+                        tilesInsideTemp.RemoveAt(index);
+                        continue;
+                    }
+                    tilesForSpawns.Add(tile);
                 }
-                tilesForSpawns.Add(tile);
+
+                for (int j = 0; j < level.unitsToSpawn.Count; j++)
+                {
+                    if (island.IsCulled)
+                        yield break;
+                    var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
+                    var unit =  Instantiate(level.unitsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                    island.AddIslandUnit(unit);
+                    ServerManager.Spawn(unit.gameObject);
+                    yield return null;
+                }
+                yield return null;
             }
 
-            for (int j = 0; j < level.unitsToSpawn.Count; j++)
+            while (UnitsManager.Instance.MobsInGame.Count > maxEnemiesAlive * 2)
             {
-                if (island.IsCulled)
-                    yield break;
-                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                var unit =  Instantiate(level.unitsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-                island.AddIslandUnit(unit);
-                ServerManager.Spawn(unit.gameObject);
                 yield return null;
             }
-            for (int j = 0; j < level.uniqueNpcToSpawn.Count; j++)
-            {
-                if (island.IsCulled)
-                    yield break;
-                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                var unit =  Instantiate(level.uniqueNpcToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-                island.AddIslandUnit(unit);
-                ServerManager.Spawn(unit.gameObject);
-                yield return null;
-            }
-            for (int j = 0; j < level.extraGameObjectsToSpawn.Count; j++)
-            {
-                if (island.IsCulled)
-                    yield break;
-                var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                var extraGo =  Instantiate(level.extraGameObjectsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-                ServerManager.Spawn(extraGo.gameObject);
-                yield return null;
-            }
-            yield return null;
         }
     }
         
