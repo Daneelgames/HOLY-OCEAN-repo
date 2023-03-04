@@ -67,7 +67,8 @@ namespace MrPink
             var health = other.gameObject.GetComponent<BasicHealth>();
             if (health == null || health.IsDead || (health.HealthController && health.HealthController.IsPlayer)) 
                 return;
-        
+            if (health.HealthController && health.HealthController.GetControlledMachine &&  health.HealthController.GetControlledMachine.controllingHc && health.HealthController.GetControlledMachine.controllingHc.IsPlayer)
+                return;
             var remainingDamage = health.Health - damage;
         
             if (remainingDamage > 0)

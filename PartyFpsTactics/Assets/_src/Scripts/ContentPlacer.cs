@@ -305,8 +305,7 @@ public class ContentPlacer : NetworkBehaviour
         {
             yield return null;
         }
-        Debug.LogError("SPAWN ENEMIES IN BUILDING, HAVOK IS " + island.GetHavokFill);
-        while (island.GetHavokFill < 1)
+        while (island && island.GetHavokFill < 1)
         {
             for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
             {
@@ -329,8 +328,14 @@ public class ContentPlacer : NetworkBehaviour
                 {
                     if (island.IsCulled)
                         yield break;
-                    var randomTile = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)];
-                    var unit =  Instantiate(level.unitsToSpawn[j], randomTile.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
+                    var randomPos = tilesForSpawns[Random.Range(0, tilesForSpawns.Count)].transform.position;
+                    if (Random.value > 0.5f)
+                    {
+                        randomPos += Random.onUnitSphere * Random.Range(1, 100);
+                        if (randomPos.y < 0)
+                            randomPos.y *= -1;
+                    }
+                    var unit =  Instantiate(level.unitsToSpawn[j], randomPos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
                     island.AddIslandUnit(unit);
                     ServerManager.Spawn(unit.gameObject);
                     yield return null;
@@ -338,7 +343,7 @@ public class ContentPlacer : NetworkBehaviour
                 yield return null;
             }
 
-            while (UnitsManager.Instance.MobsInGame.Count > maxEnemiesAlive * 2)
+            while (UnitsManager.Instance.MobsInGame.Count > maxEnemiesAlive * 1.5f)
             {
                 yield return null;
             }
