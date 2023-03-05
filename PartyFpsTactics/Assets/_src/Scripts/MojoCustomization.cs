@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityCharacterController;
 using MrPink;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class MojoCustomization : MonoBehaviour
@@ -20,6 +21,7 @@ public class MojoCustomization : MonoBehaviour
         Instance = this;
     }
 
+    [Button]
     public void OpenWindow()
     {
         isShowing = true;
