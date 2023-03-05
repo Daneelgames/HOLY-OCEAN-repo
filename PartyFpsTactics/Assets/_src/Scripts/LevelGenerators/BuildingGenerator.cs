@@ -315,6 +315,8 @@ public class BuildingGenerator : NetworkBehaviour
                 newFloorTile.floorLevelTile = true;
                 newFloorTile.gameObject.name = "Floor Tile. Coords: " + x +", " + 0 + ", " + z;
                 newFloorTile.transform.localRotation = Quaternion.identity;
+                newFloorTile.transform.localEulerAngles = new Vector3(90 * Random.Range(0, 3), 90 * Random.Range(0, 3),
+                    90 * Random.Range(0, 3));
                 newFloorTile.transform.localPosition = new Vector3(x - size.x / 2, 0, z - size.z/2);
                 newFloorTile.SetTileRoomCoordinates(new Vector3Int(x,0,z), newLevel);
                
@@ -355,6 +357,8 @@ public class BuildingGenerator : NetworkBehaviour
                         
                         var newWallTile = Instantiate(tileWallPrefab, newLevel.spawnedTransform);
                         newWallTile.transform.localRotation = Quaternion.identity;
+                        newWallTile.transform.localEulerAngles = new Vector3(90 * Random.Range(0, 3), 90 * Random.Range(0, 3),
+                            90 * Random.Range(0, 3));
                         newWallTile.gameObject.name = "Outside Wall Tile. Coords: " + x +", " + y + ", " + z;
                         newWallTile.SetTileRoomCoordinates(new Vector3Int(x,y,z), newLevel);
                         
@@ -394,6 +398,8 @@ public class BuildingGenerator : NetworkBehaviour
                         var newCeilingTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
                         newCeilingTile.gameObject.name = "CeilingTile coords: " + x + ", " + (size.y - 1) + ", " + z;
                         newCeilingTile.transform.localRotation = Quaternion.identity;
+                        newCeilingTile.transform.localEulerAngles = new Vector3(90 * Random.Range(0, 3), 90 * Random.Range(0, 3),
+                            90 * Random.Range(0, 3));
                         newCeilingTile.transform.localPosition = new Vector3(x - size.x / 2, size.y - 1, z - size.z / 2);
                         newCeilingTile.SetTileRoomCoordinates(new Vector3Int(x, size.y - 1, z), newLevel);
                         newCeilingTile.ceilingLevelTile = true;
@@ -453,6 +459,8 @@ public class BuildingGenerator : NetworkBehaviour
             {
                 var newRoomWallTile = Instantiate(thinColorPrefab, level.spawnedTransform);
                 newRoomWallTile.transform.localRotation = Quaternion.identity;
+                newRoomWallTile.transform.localEulerAngles = new Vector3(90 * Random.Range(0, 3), 90 * Random.Range(0, 3),
+                    90 * Random.Range(0, 3));
                 newRoomWallTile.transform.localPosition = new Vector3(x, y, z);
                         
                 level.allTiles.Add(newRoomWallTile);
