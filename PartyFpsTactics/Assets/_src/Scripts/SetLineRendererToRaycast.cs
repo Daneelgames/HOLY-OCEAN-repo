@@ -35,6 +35,7 @@ public class SetLineRendererToRaycast : MonoBehaviour
 
     private void OnDestroy()
     {
-        Destroy(pointVisual.gameObject);
+        if (pointVisual)
+            Destroy(pointVisual.gameObject);
     }
 }

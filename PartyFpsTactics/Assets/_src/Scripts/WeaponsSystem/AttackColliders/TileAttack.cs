@@ -53,10 +53,12 @@ namespace MrPink.WeaponsSystem
         
         private void OnCollisionEnter(Collision coll)
         {
-            if (!rb)
+            if (!dangerous)
                 return;
             
-            if (!dangerous && prop)
+            if (rb == null)
+                rb = gameObject.GetComponent<Rigidbody>();
+            if (!rb)
                 return;
             
             if (coll.gameObject.layer != 7 && coll.gameObject.layer != 6 && coll.gameObject.layer != 12 && coll.gameObject.layer != 11)

@@ -11,13 +11,14 @@ GameObject:
   - component: {fileID: 93694531}
   - component: {fileID: 93694534}
   - component: {fileID: 93694533}
+  - component: {fileID: 6081003045206567914}
   m_Layer: 0
   m_Name: CharacterSpeakingTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &93694531
 Transform:
   m_ObjectHideFlags: 0
@@ -60,6 +61,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roseInstance: 1
   triggerOnce: 1
+--- !u!114 &6081003045206567914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93694530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 150b9ec4780f3e343b8753bdff4460cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  markerText: R
+  markColor: {r: 1, g: 0.6933962, b: 0.9823983, a: 1}
+  hideOnDistanceToLocalPlayer: 1
+  distanceToLocalPlayer: 50
 --- !u!1 &32820804571614744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1768,10 +1785,10 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 5787522021735580578}
   _voxelSaveSystems:
   - {fileID: 3028627509639336201}
-  _tileBuildingGenerator: {fileID: 0}
+  _tileBuildingGenerator: {fileID: 2030970793552251409}
   _voxelBuildingGenerator: {fileID: 0}
   randomSpherePosOnNavMeshMaxRange: 100
-  spawnBoss: 0
+  spawnBoss: 1
   islandUnits: []
   culled: 1
   distanceToLocalPlayer: 0
@@ -1811,22 +1828,8 @@ MonoBehaviour:
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 13873991561756857340
   _sceneNetworkObjects:
-  - {fileID: 0}
   - {fileID: 3794070089182216025}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 5787522021735580578}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -3018,7 +3021,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: 1205634
+  instanceID: 6502682
   NoDistanceCollision: 0
   FarDistance: 0
   width: 8
@@ -3108,7 +3111,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: 1270554
+  instanceID: 6502690
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -4184,7 +4187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8829431450849796291
 Transform:
   m_ObjectHideFlags: 0
@@ -4207,7 +4210,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4412817064205133365}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e0fa639421e9344eb5ca4628f58d514, type: 3}
   m_Name: 
@@ -8945,16 +8948,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.size
-      value: 22
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3794070089182216025}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[1]
       value: 
-      objectReference: {fileID: 3794070089182216025}
+      objectReference: {fileID: 5787522021735580578}
     - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: _sceneNetworkObjects.Array.data[8]
       value: 
@@ -9079,6 +9082,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
   m_PrefabInstance: {fileID: 5084938122615609499}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2030970793552251409 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
+  m_PrefabInstance: {fileID: 5084938122615609499}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd76228898cdf6443862b974396f3d0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3794070089182216025 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}

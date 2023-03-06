@@ -57,13 +57,6 @@ namespace MrPink
             {
                 if (selectedPortable && !carryingPortableRb)
                 { 
-                    var tileAttack = selectedPortable.gameObject.GetComponent<TileAttack>();
-                    if (tileAttack)
-                    {
-                        tileAttack.SetPlayerDamageSource();
-                        tileAttack.dangerous = true;
-                        tileAttack.SetTempOwnerHc(Game.LocalPlayer.Health, 10);
-                    }
 
                     Rigidbody rb = selectedPortable.gameObject.GetComponent<Rigidbody>();
                     if (rb == null)
@@ -73,6 +66,14 @@ namespace MrPink
                     rb.AddForce((rb.transform.position - transform.position) * throwPortableForce, ForceMode.VelocityChange);
                     carryingPortableRb = null;
                     Game.LocalPlayer.Weapon.CooldownOnAttackInput();
+                    
+                    var tileAttack = selectedPortable.gameObject.GetComponent<TileAttack>();
+                    if (tileAttack)
+                    {
+                        tileAttack.SetPlayerDamageSource();
+                        tileAttack.dangerous = true;
+                        tileAttack.SetTempOwnerHc(Game.LocalPlayer.Health, 10);
+                    }
                 }
                 
             

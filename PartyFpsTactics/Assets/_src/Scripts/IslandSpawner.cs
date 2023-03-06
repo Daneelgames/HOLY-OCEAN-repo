@@ -16,6 +16,8 @@ public class IslandSpawner : NetworkBehaviour
     [SerializeField] [ReadOnly] private List<Island> spawnedIslands = new List<Island>();
     [SerializeField] private float spawnDistance = 1000;
 
+    [SerializeField] private Island startingIslandPrefab;
+    
     List<BuildingGenerator> TileBuildingsInstances = new List<BuildingGenerator>();
     
 
@@ -79,12 +81,15 @@ public class IslandSpawner : NetworkBehaviour
 
     public void RunOver()
     {
-        for (var index = spawnedIslands.Count - 1; index > 0; index--)
+        for (var index = spawnedIslands.Count - 1; index >= 0; index--)
         {
             var island = spawnedIslands[index];
             island.DestroyOnRunEnded();
             spawnedIslands.RemoveAt(index);
         }
+        
+        var newIsland = Instantiate(startingIslandPrefab, Vector3.zero, Quaternion.identity);
+        ServerManager.Spawn(newIsland.gameObject);
     }
     
     /*

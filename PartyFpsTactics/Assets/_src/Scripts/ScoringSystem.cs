@@ -24,22 +24,25 @@ namespace MrPink
         
         [BoxGroup("MOJO")][SerializeField] private List<MojoLevel> _mojoLevels = new List<MojoLevel>();
         public List<MojoLevel> MojoLevels => _mojoLevels;
-        [BoxGroup("MOJO")][SerializeField] [ReadOnly] private int currentMojoLevel = 0;
-        public int GetCurrentMojoLevel => currentMojoLevel;
+        public MojoLevel GetCurrentMojoLevel => _mojoLevels[currentMojoLevelIndex];
+        
+        [BoxGroup("MOJO")][SerializeField] [ReadOnly] private int currentMojoLevelIndex = 0;
+        public int GetCurrentMojoLevelIndex => currentMojoLevelIndex;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentDamageInCombo;
         [BoxGroup("MOJO")][SerializeField] private float comboReduceCooldown = 1;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentComboReduceCooldown;
         
-        [BoxGroup("MOJO")] [SerializeField] [ReadOnly] private int currentMojoDamageScaler = 1;
-        public int GetCurrentMojoDamageScaler => currentMojoDamageScaler;
+        [BoxGroup("MOJO")] [SerializeField] [ReadOnly] private float currentMojoDamageScaler = 1;
+        public float GetCurrentMojoDamageScaler => currentMojoDamageScaler;
         [Serializable]
         public class MojoLevel
         {
             [Header("for level up")]
             public int minDamage;
             [Header("Doesnt count cooldown")] [SerializeField] public float timeToDrainFull;
-            [ReadOnly]public float comboReduceSpeed;
-            
+            [ReadOnly] public float comboReduceSpeed;
+
+            [Range(0.01f, 10)] public float damageScaler = 1; 
             
             [Header("equipment set for the level")]
             public Tool HeadTool;
@@ -111,15 +114,15 @@ namespace MrPink
             {
                 if (currentDamageInCombo > 0)
                 {
-                    currentDamageInCombo -= Time.deltaTime * _mojoLevels[currentMojoLevel].comboReduceSpeed;
+                    currentDamageInCombo -= Time.deltaTime * _mojoLevels[currentMojoLevelIndex].comboReduceSpeed;
                 }
 
-                if (currentMojoLevel > 0)
+                if (currentMojoLevelIndex > 0)
                 {
-                    if (currentDamageInCombo <= _mojoLevels[currentMojoLevel - 1].minDamage)
+                    if (currentDamageInCombo <= _mojoLevels[currentMojoLevelIndex - 1].minDamage)
                     {
                         // dont drop levels
-                        currentDamageInCombo = _mojoLevels[currentMojoLevel - 1].minDamage + 1;
+                        currentDamageInCombo = _mojoLevels[currentMojoLevelIndex - 1].minDamage + 1;
                         //DecreaseMojoLevel();
                     }
                 }
@@ -140,57 +143,53 @@ namespace MrPink
             damageFeedbackAnimateCoroutine = StartCoroutine(DamageFeedbackAnimate(damage));
 
 
-            if (currentDamageInCombo >= _mojoLevels[currentMojoLevel].minDamage)
+            if (currentDamageInCombo >= _mojoLevels[currentMojoLevelIndex].minDamage)
                 IncreaseMojoLevel();
         }
 
         public void IncreaseMojoLevel()
         {
-            var newMojo = currentMojoLevel + 1;
+            var newMojo = currentMojoLevelIndex + 1;
             
             if (newMojo >= _mojoLevels.Count)
             {
-                currentMojoDamageScaler++;
+                currentMojoDamageScaler += 0.5f;
                 newMojo = 0;
             }
             
             //newMojo = Mathf.Clamp(newMojo, 0, _mojoLevels.Count-1);
-            if (newMojo == currentMojoLevel)
+            if (newMojo == currentMojoLevelIndex)
                 return;
 
-            currentMojoLevel = newMojo;
-            currentDamageInCombo = _mojoLevels[currentMojoLevel-1].minDamage + 1;
+            currentMojoLevelIndex = newMojo;
+            var prevIndex = currentMojoLevelIndex - 1;
+            if (prevIndex < 0) prevIndex = 0;
+            currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
             ItemFoundSound();
             UpdateMojoLevelUi();
-            Game.LocalPlayer.Health.RestoreHealth();
+            Game.LocalPlayer.Health.RestoreHealth(0.3f);
             UpdateMojoInventory();
         }
-        public void DecreaseMojoLevel()
+
+        public void ResetMojo()
         {
-            currentMojoLevel--;
-            currentMojoDamageScaler--;
-            if (currentMojoDamageScaler < 1)
-                currentMojoDamageScaler = 1;
-            currentMojoLevel = Mathf.Clamp(currentMojoLevel, 0, _mojoLevels.Count-1);
-            if (currentMojoLevel > 1)
-                currentDamageInCombo = _mojoLevels[currentMojoLevel - 1].minDamage + 1;
-            else
-                currentDamageInCombo = 0;
+            currentMojoLevelIndex = 0;
+            currentMojoDamageScaler = 1;
+            currentDamageInCombo = 0;
             
             ItemFoundSoundLowPitch();
             UpdateMojoLevelUi();
             UpdateMojoInventory();
         }
-
         public void UpdateMojoInventory()
         {
             Game.LocalPlayer.Inventory.DropAll(false, false);
             
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].HeadTool);
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].HandLTool);
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].HandRTool);
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].BodyTool);
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevel].LegsTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].HeadTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].HandLTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].HandRTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].BodyTool);
+            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].LegsTool);
         }
 
         void UpdateMojoLevelUi()
@@ -198,7 +197,7 @@ namespace MrPink
             string scalerString = String.Empty;
             if (currentMojoDamageScaler > 1)
                 scalerString = "X" + currentMojoDamageScaler + " DMG";
-            comboLevelText.text = "MOJO " + currentMojoLevel + scalerString;
+            comboLevelText.text = "MOJO " + currentMojoLevelIndex + scalerString;
         }
 
         [Button]
@@ -209,10 +208,10 @@ namespace MrPink
 
         float GetComboFillAmount()
         {
-            float max = _mojoLevels[currentMojoLevel].minDamage;
+            float max = _mojoLevels[currentMojoLevelIndex].minDamage;
             float min = 0;
-            if (currentMojoLevel > 0)
-                min = _mojoLevels[currentMojoLevel - 1].minDamage;
+            if (currentMojoLevelIndex > 0)
+                min = _mojoLevels[currentMojoLevelIndex - 1].minDamage;
             var targetMax = max - min;
             var targetCurrent = currentDamageInCombo - min;
             

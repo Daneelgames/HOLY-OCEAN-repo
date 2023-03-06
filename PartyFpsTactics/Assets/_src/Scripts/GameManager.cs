@@ -154,20 +154,6 @@ namespace MrPink
         public void RespawnPlayer()
         {
             // player died and he'll be dead until: someone pick him up, level restarted or level completed
-            
-        }
-        
-        
-
-        
-        public void StartLobbyScene()
-        {
-            _levelType = LevelType.Lobby;
-            SceneManager.LoadScene(0);
-        }
-
-        public void StartLevel(LevelType levelType)
-        {
         }
 
         public void SpawnTileNavObstacle(Transform _transform)

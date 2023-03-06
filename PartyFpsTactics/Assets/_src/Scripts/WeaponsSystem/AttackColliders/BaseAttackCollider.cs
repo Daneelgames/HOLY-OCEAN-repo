@@ -75,7 +75,7 @@ namespace MrPink.WeaponsSystem
             set => ownerHealth = value;
         }
         
-        private int currentDamageScaler = 1;
+        private float currentDamageScaler = 1;
 
         protected WeaponController ownWeaponController;
 
@@ -106,7 +106,7 @@ namespace MrPink.WeaponsSystem
             }
         }
 
-        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null, int damageScaler = 1)
+        public virtual void Init(HealthController owner, DamageSource source, Transform shotHolder, ScoringActionType action = ScoringActionType.NULL, float offsetX = 0,float offsetY = 0, WeaponController weaponController = null, float damageScaler = 1)
         {
             currentDamageScaler = damageScaler;
             ownWeaponController = weaponController;

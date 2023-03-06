@@ -67,14 +67,6 @@ public class Island : NetworkBehaviour
         IslandSpawner.Instance.IslandDestroyed(this);
     }
 
-    public void DestroyOnRunEnded()
-    {
-        culled = true;
-        DespawnIslandEnemies();
-
-        if (base.IsHost)
-            ServerManager.Despawn(gameObject, DespawnType.Destroy);
-    }
 
     public void Init(int seed, List<VoxelBuildingGenerator.VoxelFloorSettingsRaw> voxelFloorRandomSettings)
     {
@@ -274,7 +266,6 @@ public class Island : NetworkBehaviour
 
     void HealthController_OnBossKilled()
     {
-        
         UiMarkWorldObject islandMarker = gameObject.GetComponent<UiMarkWorldObject>();
         Destroy(islandMarker);
 
@@ -289,6 +280,18 @@ public class Island : NetworkBehaviour
         //Destroy(gameObject);
         StartCoroutine(SinkIsland());
     }
+    
+    public void DestroyOnRunEnded()
+    {
+        culled = true;
+        DespawnIslandEnemies();
+
+        if (base.IsHost)
+        {
+            //ServerManager.Despawn(gameObject, DespawnType.Destroy);
+            Destroy(gameObject);
+        }
+    }
 
     IEnumerator SinkIsland()
     {
@@ -301,7 +304,10 @@ public class Island : NetworkBehaviour
         */
         yield return null;
         if (base.IsHost)
-            ServerManager.Despawn(gameObject, DespawnType.Destroy);
+        {
+            //ServerManager.Despawn(gameObject, DespawnType.Destroy);
+            Destroy(gameObject);
+        }
     }
     void HealthController_OnIslandUnitKilled()
     {

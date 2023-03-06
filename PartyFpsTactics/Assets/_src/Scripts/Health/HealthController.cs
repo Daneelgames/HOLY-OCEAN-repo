@@ -30,6 +30,8 @@ namespace MrPink.Health
         public Unit selfUnit;
         [SyncVar] public int health = 100;
         public int healthMax = 100;
+        [SerializeField] private float cooldown = 0;
+        private bool onCooldown = false;
         public float GetHealthFill => (float)health / healthMax;
         public CharacterNeeds needs;
         public float endurance = 100;
@@ -184,9 +186,10 @@ namespace MrPink.Health
             endurance = enduranceMax;
         }
 
-        public void RestoreHealth()
+        public void RestoreHealth(float fill)
         {
-            AddHealth(healthMax);
+            var resultHealthToAdd = Mathf.Lerp(0, healthMax, fill);
+            AddHealth((int)resultHealthToAdd);
         }
 
         public void AddHealth(int hpToRegen)
@@ -251,6 +254,12 @@ namespace MrPink.Health
         {
             if (health <= 0)
                 return health;
+            
+            if (onCooldown)
+                return health;
+
+            if (cooldown > 0)
+                StartCoroutine(CooldownCoroutine());
 
             if (IsImmortal || Game._instance.IsLevelGenerating)
                 damage = 0;
@@ -258,6 +267,10 @@ namespace MrPink.Health
             if (Shop.Instance.IsActive)
                 return health;
                 
+            if (Game.LocalPlayer.Health == this)
+            {
+                damage = Mathf.RoundToInt(damage * ScoringSystem.Instance.GetCurrentMojoLevel.damageScaler);
+            }
             health -= damage;
             
             OnDamagedEvent?.Invoke();
@@ -291,8 +304,13 @@ namespace MrPink.Health
             
             return health;
         }
-        
-        
+
+        IEnumerator CooldownCoroutine()
+        {
+            onCooldown = true;
+            yield return new WaitForSeconds(cooldown);
+            onCooldown = false;
+        }
 
         private IEnumerator DamageShake()
         {
@@ -345,12 +363,7 @@ namespace MrPink.Health
 
             if (Game.LocalPlayer.Health == this)
             {
-                if (ScoringSystem.Instance.GetCurrentMojoLevel > 0)
-                {
-                    ScoringSystem.Instance.DecreaseMojoLevel();
-                    RestoreHealth();
-                    yield break;
-                }
+                ScoringSystem.Instance.ResetMojo();
             }
             
             if (IsHost)

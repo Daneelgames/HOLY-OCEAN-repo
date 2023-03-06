@@ -17,9 +17,8 @@ using Random = UnityEngine.Random;
 public class ContentPlacer : NetworkBehaviour
 {
     public static ContentPlacer Instance;
-
     
-    [SerializeField] private int maxEnemiesAlive = 30;
+    [SerializeField] private int maxMobsAlive = 30;
     [SerializeField] private float respawnDelay = 5;
     [SerializeField] private float minMobSpawnDistance = 20;
     [SerializeField] private AdvancedShipController defaultPlayerWaterbikerPrefab;
@@ -136,7 +135,7 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     void SpawnRedUnitAroundRandomPlayer()
     {
-        if (UnitsManager.Instance.MobsInGame.Count > maxEnemiesAlive)
+        if (UnitsManager.Instance.MobsInGame.Count > maxMobsAlive)
             return;
         var players = Game._instance.PlayersInGame;
         var randomPlayer = players[Random.Range(0, players.Count)];
@@ -186,6 +185,8 @@ public class ContentPlacer : NetworkBehaviour
     {
         StartCoroutine(SpawnEnemiesInBuildingCoroutine(building, island));
     }
+
+    #region Voxel Buildings
 
     [Server]
     public IEnumerator SpawnPropsInVoxelBuilding(List<VoxelBuildingFloor> floors)
@@ -296,6 +297,9 @@ public class ContentPlacer : NetworkBehaviour
         }
     }
     
+
+    #endregion
+    
     [Server]
     IEnumerator SpawnEnemiesInBuildingCoroutine(BuildingGenerator.Building building, Island island)
     {
@@ -343,7 +347,7 @@ public class ContentPlacer : NetworkBehaviour
                 yield return null;
             }
 
-            while (UnitsManager.Instance.MobsInGame.Count > maxEnemiesAlive * 1.5f)
+            while (UnitsManager.Instance.MobsInGame.Count > maxMobsAlive * 1.5f)
             {
                 yield return null;
             }
@@ -426,11 +430,11 @@ public class ContentPlacer : NetworkBehaviour
 
     public void SetMaxAliveMobs(int amount)
     {
-        maxEnemiesAlive = amount;
+        maxMobsAlive = amount;
     }
     public int GetMaxAliveMobs()
     {
-        return maxEnemiesAlive;
+        return maxMobsAlive;
     }
 
     public void AddContentBlocker(ContentPlacerBlocker contentPlacerBlocker)
@@ -460,5 +464,4 @@ public class ContentPlacer : NetworkBehaviour
     {
         return toolsToSpawnOnBuildingLevels[Random.Range(0, toolsToSpawnOnBuildingLevels.Count)];
     }
-
 }

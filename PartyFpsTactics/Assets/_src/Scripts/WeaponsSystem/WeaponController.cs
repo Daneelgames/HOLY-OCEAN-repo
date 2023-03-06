@@ -158,7 +158,7 @@ namespace MrPink.WeaponsSystem
         void SpawnProjectileInDirection(Vector3 targetPos, Vector3 direction, bool isPlayer, HealthController ownerHc)
         {
             DamageSource source = isPlayer ? DamageSource.Player : DamageSource.Enemy;
-            int damageScaler = 1;
+            float damageScaler = 1;
             if (isPlayer) // local player
             {
                 damageScaler = ScoringSystem.Instance.GetCurrentMojoDamageScaler;

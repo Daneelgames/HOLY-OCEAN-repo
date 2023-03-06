@@ -29,8 +29,6 @@ public class BuildingGenerator : NetworkBehaviour
     [Header("SETTINGS")]
     //public List<int> mainBuildingLevelsHeights = new List<int>();
     
-    public bool spawnGoals = true;
-    public bool spawnWalls = true;
     public LayerMask allSolidsLayerMask;
 
     public BillboardGenerator billboardGeneratorPrefab;
@@ -41,11 +39,9 @@ public class BuildingGenerator : NetworkBehaviour
     public GrindRail grindRailsPrefab;
     public List<TileHealth> propsPrefabs;
     public List<TileHealth> PropsPrefabs => propsPrefabs;
-    public List<InteractiveObject> lootToSpawnAround;
 
     public Vector2 distanceToCutCeilingUnderStairsMinMax = new Vector2(1,5);
     public Vector2Int grindRailsMinMax = new Vector2Int(1, 2);
-    public Vector2Int lootPerLevelMinMax = new Vector2Int(1, 10);
     public Vector2Int stairsDistanceMinMax = new Vector2Int(5, 10);
     
     public bool randomLevelRotation = false;
@@ -76,6 +72,10 @@ public class BuildingGenerator : NetworkBehaviour
     }
 
     private void OnDestroy()
+    {
+        IslandSpawner.Instance.RemoveTileBuilding(this);
+    }
+    private void OnDisable()
     {
         IslandSpawner.Instance.RemoveTileBuilding(this);
     }
@@ -166,12 +166,6 @@ public class BuildingGenerator : NetworkBehaviour
             yield return StartCoroutine(roomsGenerator.GenerateRooms(building.spawnedBuildingLevels, singleFrame));
         
         DestroyTilesForLadders();
-        
-        if (base.IsHost)
-        {
-            if (spawnGoals)
-                yield return StartCoroutine(SpawnGoalsOnServer(building));
-        }
 
         ownIsland.BuildingGenerated();
         generated = true;
@@ -183,10 +177,6 @@ public class BuildingGenerator : NetworkBehaviour
         }
         
         Game._instance.SetLevelGeneratingFeedback(false);
-        
-        //yield return SpawnLoot(building);
-        
-        //ContentPlacer.Instance.SpawnEnemiesInBuilding(building);
     }
 
 
@@ -329,9 +319,6 @@ public class BuildingGenerator : NetworkBehaviour
                 
                 if (x == 0 || x == size.x - 1 || z == 0 || z == size.z - 1) // OUTER WALLS
                 {
-                    if (!spawnWalls)
-                        continue;
-
                     bool windowHere = false;
 
                     if (currentSpaceBetweenWindows <= 0)
@@ -757,177 +744,7 @@ public class BuildingGenerator : NetworkBehaviour
         }
     }
 
-    IEnumerator SpawnLoot(Building building)
-    {
-        yield break;
-        for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
-        {
-            if (!building.spawnedBuildingLevels[i].spawnLoot)
-                continue;
-            
-            Random.InitState(currentSeed);
-            int amount = Random.Range(lootPerLevelMinMax.x, lootPerLevelMinMax.y);
-            
-            // get all available tiles
-            List<TileHealth> tilesForSpawn = new List<TileHealth>();
-            
-            for (int x = 0; x < building.spawnedBuildingLevels[i].size.x; x++)
-            {
-                for (int y = 0; y < building.spawnedBuildingLevels[i].size.y; y++)
-                {
-                    for (int z = 0; z < building.spawnedBuildingLevels[i].size.z; z++)
-                    {
-                        if (building.spawnedBuildingLevels[i].roomTilesMatrix[x, y, z] != null)
-                        {
-                            tilesForSpawn.Add(building.spawnedBuildingLevels[i].roomTilesMatrix[x, y, z]);
-                        }
-                    }
-                }
-            }   
-            
-            for (int j = 0; j < amount; j++)
-            {
-                // choose tile to spawn on
-                Random.InitState(currentSeed);
-                var randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
-                while (randomTile == null)
-                {
-                    for (int k = tilesForSpawn.Count - 1; k >= 0; k--)
-                    {
-                        if (k >= tilesForSpawn.Count)
-                            continue;
 
-                        if (tilesForSpawn[k] == null)
-                            tilesForSpawn.RemoveAt(k);
-                    }
-
-                    if (tilesForSpawn.Count <= 0)
-                        break;
-                    
-                    Random.InitState(currentSeed);
-                    randomTile = tilesForSpawn[Random.Range(0, tilesForSpawn.Count)];
-                    yield return null;
-                }
-
-                if (randomTile == null)
-                    break;
-                
-                Vector3 randomOffset = Vector3.forward * 0.5f;
-                Random.InitState(currentSeed);
-                float r = Random.value;
-                if (r < 0.1)
-                    randomOffset = Vector3.down * 0.5f;
-                else if (r < 0.2f)
-                    randomOffset = Vector3.left * 0.5f;
-                else if (r < 0.3f)
-                    randomOffset = Vector3.right * 0.5f;
-                else if (r < 0.4f)
-                    randomOffset = Vector3.forward * 0.5f;
-                else if (r < 0.5f)
-                    randomOffset = Vector3.back * 0.5f;
-                else
-                    randomOffset = Vector3.up * 0.5f;
-                Vector3 spawnPos = randomTile.transform.position + randomOffset; 
-                Random.InitState(currentSeed);
-                var prefab = lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)]; 
-                Random.InitState(currentSeed);
-                float xxx = Random.Range(0, 360); 
-                Random.InitState(currentSeed);
-                float yyy = Random.Range(0, 360); 
-                Random.InitState(currentSeed);
-                float zzz = Random.Range(0, 360);
-                var newLoot = Instantiate(prefab, spawnPos, Quaternion.Euler(xxx,yyy,zzz));
-            }
-            yield return null;
-        }
-    }
-
-    void SpawnBillboard(Building building)
-    {
-        // fix later
-        return;
-        
-        if (building.spawnedBuildingLevels.Count <= 3)
-            return;
-        
-        var newBillboard = Instantiate(billboardGeneratorPrefab);
-        var randomLevel = building.spawnedBuildingLevels[Random.Range(2, building.spawnedBuildingLevels.Count - 1)];
-        float yRot = 0;
-        int wallSize = 0;
-        Vector3 billboardPos = Vector3.zero;
-        
-        switch (building.localEntranceSide)
-        {
-            case 0: // LEFT
-                billboardPos = randomLevel.position + Vector3.left + Vector3.left + Vector3.left * randomLevel.size.x / 2;
-                yRot = 270;
-                wallSize = randomLevel.size.z;
-                break;
-            case 1: // FWD
-                billboardPos = randomLevel.position + Vector3.forward * randomLevel.size.z / 2;
-                yRot = 0;
-                wallSize = randomLevel.size.x;
-                break;
-            case 2: // RIGHT
-                billboardPos = randomLevel.position + Vector3.right * randomLevel.size.z / 2;
-                yRot = 90;
-                wallSize = randomLevel.size.z;
-                break;
-            case 3: // BACK
-                billboardPos = randomLevel.position + Vector3.back + Vector3.back + Vector3.back * randomLevel.size.x / 2 ;
-                yRot = 180;
-                wallSize = randomLevel.size.x;
-                break;
-        }
-        newBillboard.GenerateBillboard(wallSize, billboardPos,yRot);
-    }
-    
-    IEnumerator SpawnGrindRails(Building building) // соединять главное здание с дополнительными
-    {
-        for (int j = 0; j < Random.Range(grindRailsMinMax.x, grindRailsMinMax.y); j++)
-        {
-            var randomLevel = building.spawnedBuildingLevels[Random.Range(0,building.spawnedBuildingLevels.Count)];
-            var randomTile = randomLevel.tilesInside[Random.Range(0, randomLevel.tilesInside.Count)];
-
-            Vector3 pos = randomTile.transform.position + Vector3.up;
-            randomLevel.tilesInside.Remove(randomTile);
-            var grindRails = Instantiate(grindRailsPrefab, pos, Quaternion.identity);
-            grindRails.GenerateNodes(true);
-            yield return null;
-        }
-    }
-
-
-    [Serializable]
-    enum DolaSpawnWhere
-    {
-        TopFloor, BottomFloor, Random
-    }
-
-    [SerializeField] private DolaSpawnWhere _dolaSpawnWhere = DolaSpawnWhere.TopFloor;
-    [Server]
-    IEnumerator SpawnGoalsOnServer(Building building)
-    {
-        // spawn tools on every floor 
-        for (int index = 0; index < building.spawnedBuildingLevels.Count; index++)
-        {
-            var level = building.spawnedBuildingLevels[index];
-            var tiles = level.tilesInside;
-            Vector3 spawnPosition = tiles[Random.Range(0, tiles.Count)].transform.position + Vector3.up/2;
-            var levelGoalSpawned = Instantiate(ContentPlacer.Instance.GetToolForSpawnOnLevel().gameObject, spawnPosition, Quaternion.identity);
-            ServerManager.Spawn(levelGoalSpawned);
-        }
-        for (int i = 0; i < building.spawnedBuildingLevels.Count; i++)
-        {
-            for (int j = 0; j < building.spawnedBuildingLevels[i].spawnedRooms.Count; j++)
-            {
-                var room = building.spawnedBuildingLevels[i].spawnedRooms[j];
-
-                yield return null;                
-            }
-            yield return null;
-        }
-    }
 
     public void TileDamagedFeedback(TileHealth tile)
     {
@@ -947,42 +764,11 @@ public class BuildingGenerator : NetworkBehaviour
     public void TileDestroyed(Level level,TileHealth tile)
     {
         
-        /*
-        Debug.Log("Tile Destroyed, destroyedTileCoords: " + destroyedTileCoords);
-        Debug.Log("TileDestroyed. room.roomTilesMatrix[" + x + ", " + y + ", " + z +"]; " + room.roomTilesMatrix[x, y, z].name);*/
-        
         UnitsManager.Instance.RagdollTileExplosion(tile.transform.position);
         InteractableEventsManager.Instance.ExplosionNearInteractables(tile.transform.position);
         GameVoxelModifier.Instance.DestructionInWorld(tile.transform.position);
-        
-        /*
-        // check neighbours
-        for (int YYY = 1; YYY < level.size.y; YYY++)
-        {
-            //Debug.Log("0; x " + x + "; YYY " + YYY +"; z " + z);
-            var tile = level.roomTilesMatrix[x, YYY, z];
-            if (tile != null)
-            {
-                if (tile.ceilingLevelTile)
-                    continue;
-                //Debug.Log("1");
-                if (level.roomTilesMatrix[x, YYY - 1, z] != null)
-                {
-                        continue;
-                }
-                if (YYY + 1 < level.size.y && level.roomTilesMatrix[x, YYY + 1, z] != null)
-                {
-                        continue;
-                }
-
-                //Debug.Log("Tile Destroyed AddRigidbody");
-                tile.ActivateRigidbody(100, tilePhysicsMaterial);
-                level.roomTilesMatrix[x, YYY, z] = null;
-            }
-        }*/
     }
 
-    //IEnumerator CheckTilesToFall
     
     private List<Transform> tilesToDamage = new List<Transform>();
 

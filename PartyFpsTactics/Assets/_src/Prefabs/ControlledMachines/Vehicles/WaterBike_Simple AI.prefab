@@ -14701,9 +14701,11 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 7943338353946780412}
   _networkObjectCache: {fileID: 7943338353946780412}
   isPlayer: 0
+  addToMobsInGame: 1
   selfUnit: {fileID: 0}
   health: 1000
   healthMax: 1000
+  cooldown: 0
   needs: {fileID: 0}
   endurance: 1000
   enduranceRegenSpeed: 1000
@@ -14738,6 +14740,9 @@ MonoBehaviour:
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls: []
+  OnDamagedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3936741341696744995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14754,6 +14759,8 @@ MonoBehaviour:
   AiWaterObject: {fileID: 7943338353946780413}
   wheelVehicle: {fileID: 0}
   sleepMachine: {fileID: 0}
+  dashForce: 1000
+  dashCooldown: 0
   Visual: {fileID: 0}
   visualFollowSpeed: 10
   sitTransform: {fileID: 4714700760824073871}
@@ -14996,7 +15003,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 50
+  <PrefabId>k__BackingField: 26
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -15032,7 +15039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3286151325192577885}
-  thrustPower: 300
+  thrustPower: 600
   rotateSmooth: 2
   torquePowerPlayerControlled: 5
   resultThrust: 0
@@ -15331,6 +15338,8 @@ MonoBehaviour:
   _health: 100
   _healthController: {fileID: 1198090793777286852}
   damageScaler: 1
+  movingPlatform: 0
+  movingPlatformRb: {fileID: 0}
 --- !u!1 &7343450324364400042
 GameObject:
   m_ObjectHideFlags: 0
@@ -15407,6 +15416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8d2efc063dfab4fa0b6fad62228406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoPickUpOnStart: 0
   type: 2
   npcDialoguesList: {fileID: 0}
   interactiveObjectName: Ride
@@ -15438,6 +15448,7 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 1198090793777286852}
+  playerLootInventoryItems: []
 --- !u!136 &5614747217662944071
 CapsuleCollider:
   m_ObjectHideFlags: 0

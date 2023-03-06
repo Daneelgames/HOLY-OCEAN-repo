@@ -104,7 +104,8 @@ namespace MrPink
         {
             MusicManager.Instance.StopMusic();
             IslandSpawner.Instance.RunOver();
-            CharacterSubtitlesTrigger.RoseInstance.RestartTrigger();
+            UnitsManager.Instance.KillAllMobs();
+            //CharacterSubtitlesTrigger.RoseInstance.RestartTrigger();
             // called on server? seems not
             if (playersesInGame.Count > 0)
             {
@@ -116,7 +117,6 @@ namespace MrPink
                 }
             }
 
-            UnitsManager.Instance.HealAllUnits();
         }
         
         public void AddPlayer(Player p)

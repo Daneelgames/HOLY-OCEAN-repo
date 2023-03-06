@@ -108,21 +108,7 @@ namespace MrPink.Units
                 mobsInGame.Remove(hc);
             }
         }
-        
-        
-        public Vector3 SamplePos(Vector3 pos)
-        {
-            return pos;
-            
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(pos, out hit, 10, NavMesh.AllAreas))
-            {
-                pos = hit.position;
-            }
-
-            return pos;
-        }
-
+     
         
         public void RagdollTileExplosion(Vector3 explosionPosition, float distance = -1, float force = -1,
             float playerForce = -1, ScoringActionType action = ScoringActionType.NULL, int enduranceDamage = -1)
@@ -151,9 +137,6 @@ namespace MrPink.Units
                 
                 if (mobsInGame[i].playerMovement)
                 {
-                    continue;
-                    mobsInGame[i].playerMovement.rb.AddForce((mobsInGame[i].visibilityTrigger.transform.position - explosionPosition).normalized *
-                                                              playerForce, ForceMode.VelocityChange);
                     continue;
                 }
 
@@ -216,33 +199,6 @@ namespace MrPink.Units
                 _bodyPartsQueueToKill.Add(part);
         }
 
-        public void MoveUnitsToRespawnPoints(bool destroyDead, bool healAlive)
-        {
-            for (int i = 0; i < mobsInGame.Count; i++)
-            {
-                var unit = mobsInGame[i];
-                if (!unit)
-                    continue;
-
-                if (unit.health <= 0)
-                {
-                 if (destroyDead)
-                     Destroy(unit.gameObject);
-                
-                 continue;
-                }
-                
-                if (unit.health > 0)
-                {
-                    if (unit.health > 0 && unit.selfUnit && unit.selfUnit.UnitMovement)
-                        unit.selfUnit.UnitMovement.TeleportToRespawnPosition();
-                    
-                    if (healAlive)
-                        unit.AddHealth(unit.healthMax);
-                }
-
-            }
-        }
 
         public void HealAllUnits()
         {
@@ -298,7 +254,7 @@ namespace MrPink.Units
             for (var index = mobsInGame.Count - 1; index >= 0; index--)
             {
                 var healthController = mobsInGame[index];
-                if (!healthController || healthController.IsDead || healthController.team == Team.PlayerParty)
+                if (!healthController || healthController.IsDead)
                     continue;
 
                 healthController.Kill();

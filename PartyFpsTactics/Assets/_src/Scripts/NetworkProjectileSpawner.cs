@@ -16,7 +16,7 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         
         Instance = this;
     }
-    public void SpawnProjectileOnEveryClient(float noiseDistance, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 wtfdontuse, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, WeaponController weaponController, int damageScaler = 1)
+    public void SpawnProjectileOnEveryClient(float noiseDistance, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Transform shotHolder, Vector3 wtfdontuse, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, WeaponController weaponController, float damageScaler = 1)
     {
         if (_attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerSword ||
             _attackColliderTag == Pooling.AttackColliderPool.AttackColliderPrefabTag.PlayerFistMelee ||
@@ -31,7 +31,7 @@ public class NetworkProjectileSpawner : NetworkBehaviour
         }
     }
 
-    void SpawnMeleeProjectileLocally(Transform shotHolder, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, WeaponController weaponController, int damageScaler)
+    void SpawnMeleeProjectileLocally(Transform shotHolder, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, WeaponController weaponController, float damageScaler)
     {
         BaseAttackCollider newProjectile;
         newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, shotHolder, Vector3.zero, Quaternion.identity);
@@ -39,13 +39,13 @@ public class NetworkProjectileSpawner : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void RpcSpawnProjectileOnEveryClient_Server(float noiseDistance, Vector3 pos,Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, int damageScaler)
+    void RpcSpawnProjectileOnEveryClient_Server(float noiseDistance, Vector3 pos,Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, float damageScaler)
     {
         NoiseSystem.Instance.MakeNoise(pos, noiseDistance);
         RpcSpawnProjectileOnEveryClient_Client(pos, _attackColliderTag, direction,  ownerHc, source, offsetX, offsetY, damageScaler);
     }
     [ObserversRpc]
-    void RpcSpawnProjectileOnEveryClient_Client(Vector3 pos, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, int damageScaler)
+    void RpcSpawnProjectileOnEveryClient_Client(Vector3 pos, Pooling.AttackColliderPool.AttackColliderPrefabTag _attackColliderTag, Vector3 direction, HealthController ownerHc, DamageSource source, float offsetX, float offsetY, float damageScaler)
     {
         BaseAttackCollider newProjectile;
             newProjectile = Pooling.Instance.SpawnProjectile(_attackColliderTag, null, pos,

@@ -78,7 +78,7 @@ namespace MrPink.PlayerSystem
             
             transform.localPosition = Vector3.Lerp(transform.localPosition, 
                 new Vector3(Game.LocalPlayer.Movement.MoveVector.x, - Game.LocalPlayer.Movement.MoveVector.y - Game.LocalPlayer.Movement.rb.velocity.normalized.y * 0.3f, 0) * _weapon.gunsMoveDistanceScaler,  
-                gunMoveSpeed * Time.deltaTime);
+                gunMoveSpeed * Time.fixedUnscaledDeltaTime);
 
             var rot = transform.localRotation;
             float mouseX = Input.GetAxis("Mouse X");
