@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _src.Scripts.Data;
+using MrPink.Units;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -27,6 +28,14 @@ public class ProgressionManager : MonoBehaviour
         currentLevelIndex = Mathf.Clamp(currentLevelIndex + 1, 0, levelDatas.Count - 1);
         //CharacterSubtitlesTrigger.RoseInstance.RestartTrigger();
         CharacterSubtitles.Instance.TryToStartCharacterSubtitles(CurrentLevel.LevelStartCharacterSubtitlesData);
+    }
+
+    public void RunOver()
+    {
+        currentLevelIndex = 0;
+        MusicManager.Instance.StopMusic();
+        UnitsManager.Instance.KillAllMobs();
+        IslandSpawner.Instance.RunOver();
     }
 
     public void SetCurrentLevel(int index)

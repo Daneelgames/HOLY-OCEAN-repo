@@ -42,7 +42,7 @@ namespace MrPink
             [Header("Doesnt count cooldown")] [SerializeField] public float timeToDrainFull;
             [ReadOnly] public float comboReduceSpeed;
 
-            [Range(0.01f, 10)] public float damageScaler = 1; 
+            [Range(0.01f, 10)] public float incomingDamageScaler = 1; 
             
             [Header("equipment set for the level")]
             public Tool HeadTool;
@@ -197,6 +197,12 @@ namespace MrPink
             string scalerString = String.Empty;
             if (currentMojoDamageScaler > 1)
                 scalerString = "X" + currentMojoDamageScaler + " DMG";
+            if (currentMojoLevelIndex > 0)
+            {
+//                (1 - Mathf.Clamp(ScoringSystem.Instance.GetCurrentMojoLevelIndex, 1, 9.9f) / 10f)
+                int currentArmorPercentage = Mathf.RoundToInt(Mathf.Clamp(GetCurrentMojoLevelIndex, 1, 9.9f) * 10f);
+                scalerString += ". ARMOR " + currentArmorPercentage +"%";
+            }
             comboLevelText.text = "MOJO " + currentMojoLevelIndex + scalerString;
         }
 

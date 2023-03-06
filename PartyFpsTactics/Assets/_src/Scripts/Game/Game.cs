@@ -102,11 +102,7 @@ namespace MrPink
         
         public void RespawnAllPlayers()
         {
-            MusicManager.Instance.StopMusic();
-            IslandSpawner.Instance.RunOver();
-            UnitsManager.Instance.KillAllMobs();
-            //CharacterSubtitlesTrigger.RoseInstance.RestartTrigger();
-            // called on server? seems not
+            ProgressionManager.Instance.RunOver();
             if (playersesInGame.Count > 0)
             {
                 for (var index = playersesInGame.Count - 1; index >= 0; index--)
@@ -116,7 +112,6 @@ namespace MrPink
                         player.Respawn();
                 }
             }
-
         }
         
         public void AddPlayer(Player p)

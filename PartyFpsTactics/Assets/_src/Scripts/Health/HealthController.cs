@@ -269,7 +269,8 @@ namespace MrPink.Health
                 
             if (Game.LocalPlayer.Health == this)
             {
-                damage = Mathf.RoundToInt(damage * ScoringSystem.Instance.GetCurrentMojoLevel.damageScaler);
+                if (ScoringSystem.Instance.GetCurrentMojoLevelIndex > 0)
+                    damage = Mathf.RoundToInt(damage * (1 - Mathf.Clamp(ScoringSystem.Instance.GetCurrentMojoLevelIndex, 1, 9.9f) / 10f));
             }
             health -= damage;
             
