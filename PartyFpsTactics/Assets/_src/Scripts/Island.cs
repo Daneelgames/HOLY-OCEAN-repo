@@ -271,14 +271,6 @@ public class Island : NetworkBehaviour
 
         bossKilled = true;
         MusicManager.Instance.PlayIslandMusic();
-        
-        
-        ProgressionManager.Instance.LevelCompleted();
-        /*
-        if (base.IsHost)
-            ServerManager.Despawn(gameObject, DespawnType.Destroy);*/
-        //Destroy(gameObject);
-        StartCoroutine(SinkIsland());
     }
     
     public void DestroyOnRunEnded()
@@ -293,22 +285,15 @@ public class Island : NetworkBehaviour
         }
     }
 
-    IEnumerator SinkIsland()
+    public void ExplodeIsland()
     {
-        /*
-        while (transform.position.y > - 500)
-        {
-            yield return null;
-            transform.position += Vector3.down * sinkSpeed;
-        }
-        */
-        yield return null;
+        ProgressionManager.Instance.LevelCompleted();
         if (base.IsHost)
         {
-            //ServerManager.Despawn(gameObject, DespawnType.Destroy);
             Destroy(gameObject);
         }
     }
+
     void HealthController_OnIslandUnitKilled()
     {
         currentHavok++;

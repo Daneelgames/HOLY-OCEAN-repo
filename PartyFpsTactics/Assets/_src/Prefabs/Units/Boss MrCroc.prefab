@@ -969,9 +969,11 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 2645939790061494965}
   _networkObjectCache: {fileID: 2645939790061494965}
   isPlayer: 0
+  addToMobsInGame: 0
   selfUnit: {fileID: 2645939790061494961}
   health: 10000
   healthMax: 10000
+  cooldown: 0
   needs: {fileID: 2645939790061494963}
   endurance: 100
   enduranceRegenSpeed: 100
@@ -1101,20 +1103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selfUnit: {fileID: 2645939790061494961}
   lootToSpawn:
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
-    chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: e9d2967adb768c1468b665ae31b33e2b, type: 3}
-    chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
-    chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
-    chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
-    chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
-    chance: 0.5
-  - objectToSpawnOnDeath: {fileID: 8361261429759661543, guid: fd79a927a4722ab49b1e9d5727b66d09, type: 3}
-    chance: 0.5
+  - objectToSpawnOnDeath: {fileID: 4533318020577912468, guid: b6b9ee6cc122c534fb3cb1be316c655b, type: 3}
+    chance: 1
 --- !u!114 &7175563856581784101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,7 +1273,7 @@ MonoBehaviour:
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 33
+  <PrefabId>k__BackingField: 35
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0

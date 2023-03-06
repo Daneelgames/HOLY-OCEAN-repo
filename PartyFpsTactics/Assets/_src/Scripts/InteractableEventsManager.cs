@@ -229,6 +229,14 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.OpenMojoCustomization:
                 MojoCustomization.Instance.OpenWindow();
                 break;
+            case ScriptedEventType.ExplodeIsland:
+                var island = IslandSpawner.Instance.GetClosestIsland(Vector3.zero);
+                if (island == null) Debug.LogError("NO CLOSEST ISLAND FOUND WTF");
+                island.ExplodeIsland();
+                break;
+            case ScriptedEventType.GiveMojoUpgrade:
+                ScoringSystem.Instance.GiveMojoRewardBossChest();
+                break;
         }
         
         if (gameObjectToDestroy)

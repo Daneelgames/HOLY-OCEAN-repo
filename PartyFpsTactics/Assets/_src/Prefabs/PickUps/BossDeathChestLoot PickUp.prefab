@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 5788796259377549703}
   - component: {fileID: 3013578065446405541}
   m_Layer: 11
-  m_Name: Player DeathLoot PickUp
+  m_Name: BossDeathChestLoot PickUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,9 +136,9 @@ MonoBehaviour:
   autoPickUpOnStart: 0
   type: 0
   npcDialoguesList: {fileID: 0}
-  interactiveObjectName: LOOT
+  interactiveObjectName: NEW MOJO
   eventsOnInteraction:
-  - scriptedEventType: 22
+  - scriptedEventType: 25
     scoreToAdd: 100
     prefabToSpawn: {fileID: 0}
     spawnInsideCamera: 0
@@ -190,6 +190,7 @@ MonoBehaviour:
     spawnedQuestHcId: -1
   rb: {fileID: 0}
   hc: {fileID: 0}
+  playerLootInventoryItems: []
 --- !u!135 &2022942356190605989
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -244,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 150b9ec4780f3e343b8753bdff4460cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerText: '*'
+  markerText: NEW MOJO
   markColor: {r: 1, g: 0.82, b: 0, a: 1}
   hideOnDistanceToLocalPlayer: 0
   distanceToLocalPlayer: 300

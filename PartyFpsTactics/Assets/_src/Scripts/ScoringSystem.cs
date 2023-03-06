@@ -332,6 +332,12 @@ namespace MrPink
             currentGoldText.text = "DOLAS: " + CurrentGold;
         }
 
+
+        public void GiveMojoRewardBossChest()
+        {
+            // берем какой-то интересный уровень можо (который желательно еще и должен считывать стейт игры)
+            // и выдать игроку в новый можо лвл
+        }
     }
 }
 
