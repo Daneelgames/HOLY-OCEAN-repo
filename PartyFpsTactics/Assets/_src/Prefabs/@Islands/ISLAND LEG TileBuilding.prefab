@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 1542261323887715886}
   - component: {fileID: 1542261323887715887}
   m_Layer: 2
-  m_Name: hand skinCut
+  m_Name: Leg skinCut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1094,7 +1094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colliderToVoxel: {fileID: 1542261323887715886}
-  lastPieceIndex: 986
+  lastPieceIndex: 0
 --- !u!1 &1732215443477320221
 GameObject:
   m_ObjectHideFlags: 0
@@ -98052,7 +98052,7 @@ Transform:
   - {fileID: 2658945740649512969}
   - {fileID: 3027434992199765908}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5236109159652395326
 MonoBehaviour:
@@ -98102,8 +98102,7 @@ MonoBehaviour:
   - {fileID: 5236109159652395326}
   - {fileID: 9159851842049704235}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField:
-  - {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
@@ -98112,7 +98111,7 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 5
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2732387296
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 13292442388626040722
   _sceneNetworkObjects:
@@ -98194,8 +98193,6 @@ Transform:
   - {fileID: 4709549527241338921}
   - {fileID: 6486503395703292582}
   - {fileID: 6486503396640662760}
-  - {fileID: 6486503396391922775}
-  - {fileID: 6486503396424549481}
   - {fileID: 3477363061005781576}
   m_Father: {fileID: 4217828772899848473}
   m_RootOrder: 1
@@ -98422,88 +98419,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
---- !u!1 &6486503395333190825
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6486503395333190830}
-  - component: {fileID: 6486503395333190831}
-  m_Layer: 6
-  m_Name: HullGenerator_Marching
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6486503395333190830
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503395333190825}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6486503396424549481}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6486503395333190831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503395333190825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd29b12423eb2e408ed2b5014fbbf37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  engine: {fileID: 6486503396424549486}
-  AppliedHideflags: 3
-  Locked: 0
-  LockAfterInit: 0
-  NoCollision: 0
-  ConvexCollider: 0
-  Invisible: 0
-  Shrink: 0.001
-  OnHullGenerationStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnHullGenerationComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  VoxelMeshes: []
-  instanceID: 1761198
-  width: 8
-  Cell_Subdivision: 8
-  NumCores: 8
-  NoDistanceCollision: 0
-  FarDistance: 0
-  VoxelMaterial: {fileID: 2100000, guid: 4a144d4abc5be2e458bedd6f01fdecee, type: 2}
-  VoxelMaterialShell: {fileID: 0}
-  DetailGenerator: []
-  MinimumID: 0
-  MaximumID: 255
-  UVPower: 0.1
-  SmoothAngle: 180
-  TextureDimensionUV3: 1
-  TextureDimensionUV4: -1
-  TextureDimensionUV5: -1
-  TextureDimensionUV6: -1
-  TexturePowerUV3: 1
-  TexturePowerUV4: 1
-  TexturePowerUV5: 1
-  TexturePowerUV6: 1
-  AddTesselationColors: 1
-  UseNewCalculator: 0
 --- !u!1 &6486503395556399553
 GameObject:
   m_ObjectHideFlags: 0
@@ -99235,7 +99150,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: -139150
+  instanceID: 1198132
   NoDistanceCollision: 0
   FarDistance: 0
   width: 8
@@ -99621,225 +99536,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
---- !u!1 &6486503396391922774
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6486503396391922775}
-  - component: {fileID: 6486503396391922772}
-  m_Layer: 2
-  m_Name: MeatCut
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6486503396391922775
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503396391922774}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3004536104352370051}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6486503396391922772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503396391922774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetGenerator: {fileID: 6486503396424549486}
-  Depth: 6
-  TargetDimension: 0
-  Additive: 1
-  ClearBlock: 0
-  ErrorMessage: This setup would modify more than 500000 Voxels. You do not want
-    to freeze Unity
-  IgnoreErrors: 0
-  tolerance: 0.001
-  falloffdist: 2000
-  finalMultiplier: 1
-  colliders: []
---- !u!1 &6486503396424549480
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6486503396424549481}
-  - component: {fileID: 6486503396424549486}
-  - component: {fileID: 6486503396424549487}
-  m_Layer: 6
-  m_Name: VoxelMeat
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6486503396424549481
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503396424549480}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -65.100006, y: -5.3, z: -63.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6486503395333190830}
-  m_Father: {fileID: 3004536104352370051}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6486503396424549486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503396424549480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d677b93ca1a92264fae9ee541de0abe4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hullGenerators:
-  - {fileID: 6486503395333190831}
-  RootSize: 150
-  SubdivisionPower: 2
-  DimensionCount: 2
-  InitialValue: 0
-  RestrictDimension: 0000
-  LockHullUpdates: 0
-  savesystem: {fileID: 6486503396424549487}
-  worldgenerator: {fileID: 0}
-  LODDistance: 0
-  ChunkHash: {x: 0, y: 0, z: 0}
-  MemoryOptimized: 1
-  KeepHulls: 0
-  UseInitPoint: 0
-  Initpoint: {x: 0, y: 0, z: 0}
-  DebugMode: 0
-  instanceID: -3146906
-  IsExtension: 0
-  __export_foldout: 0
-  __export_savePath: Assets/
-  __export_meshName: ExportedMesh
-  __export_center: {x: -0.5, y: -0.5, z: -0.5}
---- !u!114 &6486503396424549487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6486503396424549480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74fc1170045fab94194de54a6fa0b5cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AutoLoad: 1
-  LoadOnStart: 1
-  __migrated: 1
-  SceneVoxelData:
-    IsValid: 0
-    SubdivisionPower: 0
-    RootSize: 0
-    VoxelCount: 0
-    VoxelData: []
-    DimensionCount: 0
-    AdditionalData: []
-  EditorSaveMode: 0
-  DynamicLoadSpeed: 100
-  _VoxelMap: {fileID: 0}
-  nativevoxelengine: {fileID: 6486503396424549486}
-  WorldFolder: 
-  WorldToSceneLocation: 1
-  WorldChunk: {x: 0, y: 0, z: 0}
-  WorldRegionSize: 32
-  WorldLoadingRule: 0
-  VoxelName: 
-  DuplicateMapOnClone: 0
-  SaveInSceneSubFolder: 1
-  RemoveVoxelmapOnDelete: 0
-  IsDirty: 1
-  ModuleScene:
-    saveSystem: {fileID: 0}
-    SceneVoxelData:
-      IsValid: 0
-      SubdivisionPower: 0
-      RootSize: 0
-      VoxelCount: 0
-      VoxelData: []
-      DimensionCount: 0
-      AdditionalData: []
-  ModuleScriptableObject:
-    saveSystem: {fileID: 6486503396424549487}
-    _VoxelMap: {fileID: 0}
-    DuplicateMapOnClone: 0
-    SaveInSceneSubFolder: 1
-    RemoveVoxelmapOnDelete: 0
-  ModulePersistent:
-    saveSystem: {fileID: 0}
-    VoxelName: 
-  ModuleWorld:
-    saveSystem: {fileID: 0}
-    VoxelName: 
-    WorldChunk: {x: 0, y: 0, z: 0}
-    WorldToSceneLocation: 1
-    WorldFolder: 
-    WorldLoadingRule: 0
-  ModuleRegion:
-    saveSystem: {fileID: 0}
-    VoxelName: 
-    WorldRegionSize: 32
-    WorldChunk: {x: 0, y: 0, z: 0}
-    WorldToSceneLocation: 1
-    WorldFolder: 
-    WorldLoadingRule: 0
-  ModulePersistent_V2:
-    saveSystem: {fileID: 0}
-    VoxelName: 
-  ModuleWorld_V2:
-    saveSystem: {fileID: 0}
-    VoxelName: 
-    WorldChunk: {x: 0, y: 0, z: 0}
-    WorldToSceneLocation: 1
-    WorldFolder: 
-    WorldLoadingRule: 0
-  ModulePath_V2:
-    saveSystem: {fileID: 0}
-    CurrentPath: 
-  ModuleByteBuffer_V2:
-    saveSystem: {fileID: 6486503396424549487}
-    Key: savedVoxelMap
-  eventsfoldout: 0
-  OnDataSaved:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDataLoaded:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &6486503396640662759
 GameObject:
   m_ObjectHideFlags: 0
@@ -99903,7 +99599,7 @@ MonoBehaviour:
   UseInitPoint: 0
   Initpoint: {x: 0, y: 0, z: 0}
   DebugMode: 0
-  instanceID: -139142
+  instanceID: 1198186
   IsExtension: 0
   __export_foldout: 0
   __export_savePath: Assets/
@@ -99945,7 +99641,7 @@ MonoBehaviour:
   DuplicateMapOnClone: 0
   SaveInSceneSubFolder: 1
   RemoveVoxelmapOnDelete: 0
-  IsDirty: 1
+  IsDirty: 0
   ModuleScene:
     saveSystem: {fileID: 0}
     SceneVoxelData:
@@ -99958,7 +99654,7 @@ MonoBehaviour:
       AdditionalData: []
   ModuleScriptableObject:
     saveSystem: {fileID: 6486503396640662756}
-    _VoxelMap: {fileID: 11400000, guid: e8cc3a657d5e54249b88d021fa587bec, type: 2}
+    _VoxelMap: {fileID: 11400000, guid: 3bb937a68284ae143aef7d57dc17358e, type: 2}
     DuplicateMapOnClone: 0
     SaveInSceneSubFolder: 1
     RemoveVoxelmapOnDelete: 0
@@ -100145,7 +99841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba29a84253cfc00458d6c5f0e4bf6a5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetGenerator: {fileID: 6486503396424549486}
+  TargetGenerator: {fileID: 0}
   Depth: 6
   TargetDimension: 0
   Additive: 1
