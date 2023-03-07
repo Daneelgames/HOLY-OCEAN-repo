@@ -21,7 +21,9 @@ namespace MrPink
             get => currentGold;
             set => currentGold = value;
         }
-        
+
+        [SerializeField] private List<Tool> allMojoTools = new List<Tool>();
+
         [BoxGroup("MOJO")][SerializeField] private List<MojoLevel> _mojoLevels = new List<MojoLevel>();
         public List<MojoLevel> MojoLevels => _mojoLevels;
         public MojoLevel GetCurrentMojoLevel => _mojoLevels[currentMojoLevelIndex];
@@ -42,14 +44,9 @@ namespace MrPink
             [Header("Doesnt count cooldown")] [SerializeField] public float timeToDrainFull;
             [ReadOnly] public float comboReduceSpeed;
 
-            [Range(0.01f, 10)] public float incomingDamageScaler = 1; 
-            
             [Header("equipment set for the level")]
-            public Tool HeadTool;
             public Tool HandLTool;
             public Tool HandRTool;
-            public Tool BodyTool;
-            public Tool LegsTool;
         }
 
         [Header("UI")] 
@@ -84,6 +81,12 @@ namespace MrPink
 
         private void OnValidate()
         {
+            ValidateMojoLevels();
+        }
+
+        void ValidateMojoLevels()
+        {
+            
             for (var index = 0; index < _mojoLevels.Count; index++)
             {
                 float localZeroMojo = 0;
@@ -147,6 +150,19 @@ namespace MrPink
                 IncreaseMojoLevel();
         }
 
+        void SetLastMojoLevel()
+        {
+            var newMojoIndex = _mojoLevels.Count - 1;
+            currentMojoLevelIndex = newMojoIndex;
+            var prevIndex = currentMojoLevelIndex - 1;
+            if (prevIndex < 0) prevIndex = 0;
+            currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
+            ItemFoundSound();
+            UpdateMojoLevelUi();
+            Game.LocalPlayer.Health.RestoreHealth(0.3f);
+            UpdateMojoInventory();
+        }
+        
         public void IncreaseMojoLevel()
         {
             var newMojo = currentMojoLevelIndex + 1;
@@ -170,6 +186,34 @@ namespace MrPink
             Game.LocalPlayer.Health.RestoreHealth(0.3f);
             UpdateMojoInventory();
         }
+        
+        public void DecreaseMojoLevel()
+        {
+            var newMojo = currentMojoLevelIndex - 1;
+            
+            if (newMojo < 1)
+            {
+                currentMojoDamageScaler = 0f;
+                newMojo = 0;
+            }
+            
+            //newMojo = Mathf.Clamp(newMojo, 0, _mojoLevels.Count-1);
+            if (newMojo == currentMojoLevelIndex)
+                return;
+
+            currentMojoLevelIndex = newMojo;
+            var prevIndex = currentMojoLevelIndex - 1;
+            if (prevIndex < 1)
+            {
+                currentDamageInCombo = 0;
+            }
+            else
+                currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
+            ItemFoundSound();
+            UpdateMojoLevelUi();
+            Game.LocalPlayer.Health.RestoreHealth(0.3f);
+            UpdateMojoInventory();
+        }
 
         public void ResetMojo()
         {
@@ -185,11 +229,8 @@ namespace MrPink
         {
             Game.LocalPlayer.Inventory.DropAll(false, false);
             
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].HeadTool);
             Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].HandLTool);
             Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].HandRTool);
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].BodyTool);
-            Game.LocalPlayer.Inventory.AddAndEquipTool(_mojoLevels[currentMojoLevelIndex].LegsTool);
         }
 
         void UpdateMojoLevelUi()
@@ -199,7 +240,6 @@ namespace MrPink
                 scalerString = "X" + currentMojoDamageScaler + " DMG";
             if (currentMojoLevelIndex > 0)
             {
-//                (1 - Mathf.Clamp(ScoringSystem.Instance.GetCurrentMojoLevelIndex, 1, 9.9f) / 10f)
                 int currentArmorPercentage = Mathf.RoundToInt(Mathf.Clamp(GetCurrentMojoLevelIndex, 1, 9.9f) * 10f);
                 scalerString += ". ARMOR " + currentArmorPercentage +"%";
             }
@@ -332,11 +372,19 @@ namespace MrPink
             currentGoldText.text = "DOLAS: " + CurrentGold;
         }
 
-
         public void GiveMojoRewardBossChest()
         {
             // берем какой-то интересный уровень можо (который желательно еще и должен считывать стейт игры)
             // и выдать игроку в новый можо лвл
+
+            MojoLevel newMojoLevel = new MojoLevel();
+            newMojoLevel.minDamage = Mathf.RoundToInt(_mojoLevels[_mojoLevels.Count - 1].minDamage * 1.5f);
+            newMojoLevel.timeToDrainFull = 20;
+            newMojoLevel.HandLTool = allMojoTools[Random.Range(0, allMojoTools.Count)];
+            newMojoLevel.HandRTool = allMojoTools[Random.Range(0, allMojoTools.Count)];
+            _mojoLevels.Add(newMojoLevel);
+            ValidateMojoLevels();
+            SetLastMojoLevel();
         }
     }
 }

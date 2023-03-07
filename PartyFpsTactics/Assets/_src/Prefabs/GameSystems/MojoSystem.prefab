@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 4158558410314725304}
   - component: {fileID: 759897479}
   m_Layer: 5
-  m_Name: ScoringSystem
+  m_Name: MojoSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -544,34 +544,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentGold: 3000
+  allMojoTools:
+  - {fileID: 11400000, guid: e02e4c6087a46844faf056da74bb9b4f, type: 2}
+  - {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
+  - {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
+  - {fileID: 11400000, guid: 1f544c73c96a4254a8896c9fafa7f9a6, type: 2}
+  - {fileID: 11400000, guid: f2bb7ecf2de5f904099d64e675fe90dd, type: 2}
   _mojoLevels:
   - minDamage: 1000
     timeToDrainFull: 25
     comboReduceSpeed: 40
-    damageScaler: 1
-    HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     HandRTool: {fileID: 11400000, guid: 1f544c73c96a4254a8896c9fafa7f9a6, type: 2}
-    BodyTool: {fileID: 0}
-    LegsTool: {fileID: 0}
   - minDamage: 2000
     timeToDrainFull: 20
     comboReduceSpeed: 50
-    damageScaler: 1
-    HeadTool: {fileID: 0}
     HandLTool: {fileID: 11400000, guid: 4e9b4fbd0f222d14185845d0c37bbfac, type: 2}
     HandRTool: {fileID: 11400000, guid: f2bb7ecf2de5f904099d64e675fe90dd, type: 2}
-    BodyTool: {fileID: 0}
-    LegsTool: {fileID: 0}
-  - minDamage: 3000
-    timeToDrainFull: 20
-    comboReduceSpeed: 50
-    damageScaler: 1
-    HeadTool: {fileID: 0}
-    HandLTool: {fileID: 11400000, guid: f2bb7ecf2de5f904099d64e675fe90dd, type: 2}
-    HandRTool: {fileID: 11400000, guid: f3ecf59f55982b3499b50e51be9a9f5a, type: 2}
-    BodyTool: {fileID: 0}
-    LegsTool: {fileID: 0}
   currentMojoLevelIndex: 0
   currentDamageInCombo: 0
   comboReduceCooldown: 1

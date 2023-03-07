@@ -290,6 +290,15 @@ namespace MrPink.Health
             
             if (health <= 0)
             {
+                if (Game.LocalPlayer.Health == this)
+                {
+                    if (ScoringSystem.Instance.GetCurrentMojoLevelIndex > 0)
+                    {
+                        ScoringSystem.Instance.DecreaseMojoLevel();
+                        health = healthMax / 20;
+                        return health;
+                    }
+                }
                 health = 0;
                 StartCoroutine(Death(action, killer));
                 

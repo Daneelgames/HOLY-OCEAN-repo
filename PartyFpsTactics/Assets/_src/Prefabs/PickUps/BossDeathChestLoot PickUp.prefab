@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3216387063165447479}
   m_LocalRotation: {x: -0, y: -0, z: -0.016613305, w: 0.999862}
-  m_LocalPosition: {x: -0.004, y: -0.105, z: -0.02}
-  m_LocalScale: {x: 0.1969842, y: 0.28432453, z: 0.18929553}
+  m_LocalPosition: {x: -0.004, y: 0.1412, z: -0.02}
+  m_LocalScale: {x: 0.36442077, y: 0.300935, z: 0.62539834}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6014212797411578965}
@@ -93,10 +93,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3864726283008883758}
   - component: {fileID: 7839804669620758937}
-  - component: {fileID: 2022942356190605989}
   - component: {fileID: 1318918479298980873}
   - component: {fileID: 5788796259377549703}
   - component: {fileID: 3013578065446405541}
+  - component: {fileID: 5643042681588723165}
   m_Layer: 11
   m_Name: BossDeathChestLoot PickUp
   m_TagString: Untagged
@@ -163,6 +163,31 @@ MonoBehaviour:
     hcToResurrect: {fileID: 0}
     actorId: -1
     spawnedQuestHcId: -1
+  - scriptedEventType: 24
+    scoreToAdd: 100
+    prefabToSpawn: {fileID: 0}
+    spawnInsideCamera: 0
+    customSpawnPoint: {fileID: 0}
+    dialogueToStart: {fileID: 0}
+    destroyInteractorAfterDialogueCompleted: {fileID: 0}
+    scoreToAddOnDialogueCompleted: 0
+    setNextLevelOnDialogueCompleted: 0
+    maxDistanceToSpeaker: 5
+    currentLevelToSet: 0
+    soundToPlay: {fileID: 0}
+    auPitchMinMax: {x: 1, y: 1}
+    controlledMachine: {fileID: 0}
+    toolToAdd: {fileID: 11400000, guid: 75bd5108465f056409e2cc172068c288, type: 2}
+    weaponToAdd: {fileID: 0}
+    ActorNpc: {fileID: 0}
+    addToStatAmount: 0
+    questMarkerTargetHcIndex: 0
+    NpcPrefabsToSpawn: []
+    minMaxDistanceToPlayer: {x: 100, y: 300}
+    spawnInPoiCell: 0
+    hcToResurrect: {fileID: 0}
+    actorId: -1
+    spawnedQuestHcId: -1
   - scriptedEventType: 2
     scoreToAdd: 0
     prefabToSpawn: {fileID: 0}
@@ -191,19 +216,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   hc: {fileID: 0}
   playerLootInventoryItems: []
---- !u!135 &2022942356190605989
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4533318020577912468}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &1318918479298980873
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -215,8 +227,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.58371735, y: 0.52322674, z: 0.55314636}
-  m_Center: {x: -0.0122795105, y: 0.011613369, z: -0.06707001}
+  m_Size: {x: 1.0982513, y: 0.6881389, z: 1.8592377}
+  m_Center: {x: -0.0056762695, y: -0.037860245, z: -0.053871155}
 --- !u!54 &5788796259377549703
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -245,10 +257,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 150b9ec4780f3e343b8753bdff4460cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerText: NEW MOJO
+  markerText: MOJO
   markColor: {r: 1, g: 0.82, b: 0, a: 1}
   hideOnDistanceToLocalPlayer: 0
   distanceToLocalPlayer: 300
+--- !u!65 &5643042681588723165
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4533318020577912468}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2960892, y: 1, z: 2.075241}
+  m_Center: {x: -0.015743256, y: 0, z: -0.042869568}
 --- !u!1 &5945154271492677297
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,8 +416,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6972773866677081119}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.54555, y: -0.245, z: 0.806}
-  m_LocalScale: {x: 1.80978, y: 1.80978, z: 1.80978}
+  m_LocalPosition: {x: 1.0127, y: -0.4123, z: 2.9927}
+  m_LocalScale: {x: 3.348093, y: 6.5811625, z: 2.9649625}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6014212797411578965}

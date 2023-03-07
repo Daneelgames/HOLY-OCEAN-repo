@@ -27,6 +27,7 @@ namespace MrPink
         public LayerMask AllSolidsMask;
         private bool cursorVisible = true;
         [SerializeField] private GameObject tileNavMeshObstaclePrefab;
+        public ExplosionController DefaultFragExplosion;
 
         public Material rockDefaultMaterial;
 

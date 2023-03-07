@@ -5,6 +5,7 @@ using FishNet.Object;
 using Fraktalia.VoxelGen;
 using Fraktalia.VoxelGen.Modify;
 using Fraktalia.VoxelGen.Modify.Procedural;
+using MrPink;
 using MrPink.Health;
 using MrPink.Units;
 using Sirenix.OdinInspector;
@@ -288,6 +289,11 @@ public class Island : NetworkBehaviour
     public void ExplodeIsland()
     {
         ProgressionManager.Instance.LevelCompleted();
+        foreach (var player in Game._instance.PlayersInGame)
+        {
+            var explosion = Instantiate(GameManager.Instance.DefaultFragExplosion, player.Position, player.transform.rotation);
+            explosion.Init(ScoringActionType.NULL);
+        }
         if (base.IsHost)
         {
             Destroy(gameObject);
