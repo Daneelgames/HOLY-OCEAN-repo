@@ -303,5 +303,6 @@ public class Island : NetworkBehaviour
     void HealthController_OnIslandUnitKilled()
     {
         currentHavok++;
+        IslandHavokUi.Instance.BlinkHavokBar();
     }
 }

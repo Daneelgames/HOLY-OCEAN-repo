@@ -18,9 +18,13 @@ namespace MrPink
         public Dictionary<HealthController, Image> markedEnemies = new Dictionary<HealthController, Image>();
         public Vector3 enemyMarkerOffset;
         public Image healthBar;
+        public Animator healthBarAnim;
         public List<Image> characterNeedsBars;
 
         public Animator shieldFeedbackAnim;
+        private static readonly int Damaged = Animator.StringToHash("Damaged");
+        private static readonly int Healed = Animator.StringToHash("Healed");
+        private static readonly int Active = Animator.StringToHash("Active");
 
         private void Awake()
         {
@@ -98,18 +102,22 @@ namespace MrPink
             }
         }
 
-        public void UpdateHealthBar()
+        public void UpdateHealthBar(int amountAdded)
         {
+            if (amountAdded > 0)
+                healthBarAnim.SetTrigger(Healed);
+            else
+                healthBarAnim.SetTrigger(Damaged);
             healthBar.fillAmount = (float)Game.LocalPlayer.Health.health / (float)Game.LocalPlayer.Health.healthMax;
         }
 
         public void AddShieldFeedback()
         {
-            shieldFeedbackAnim.SetBool("Active", true);
+            shieldFeedbackAnim.SetBool(Active, true);
         }
         public void RemoveShieldFeedback()
         {
-            shieldFeedbackAnim.SetBool("Active", false);
+            shieldFeedbackAnim.SetBool(Active, false);
         }
     
         Vector3 OnScreenPosition(Image marker, Vector3 targetPos)

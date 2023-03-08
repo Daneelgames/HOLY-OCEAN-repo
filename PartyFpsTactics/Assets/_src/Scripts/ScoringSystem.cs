@@ -31,6 +31,7 @@ namespace MrPink
         
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private int currentMojoLevelIndex = 0;
         public int GetCurrentMojoLevelIndex => currentMojoLevelIndex;
+        [SerializeField] Animator comboBarAnim;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentDamageInCombo;
         [BoxGroup("MOJO")][SerializeField] private float comboReduceCooldown = 1;
         [BoxGroup("MOJO")][SerializeField] [ReadOnly] private float currentComboReduceCooldown;
@@ -197,6 +198,8 @@ namespace MrPink
             var prevIndex = currentMojoLevelIndex - 1;
             if (prevIndex < 0) prevIndex = 0;
             currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
+
+            comboBarAnim.SetTrigger(NewLevel);
             ItemFoundSound();
             UpdateMojoLevelUi();
             Game.LocalPlayer.Health.RestoreHealth(0.3f);
@@ -360,6 +363,8 @@ namespace MrPink
         }
 
         private Coroutine animateAddedScoreFeedback;
+        private static readonly int NewLevel = Animator.StringToHash("NewLevel");
+
         IEnumerator AnimateAddedScoreFeedback()
         {
             for (int i = 0; i < 5; i++)

@@ -200,7 +200,7 @@ namespace MrPink.Health
             health = Mathf.Clamp(health + hpToRegen, 0, healthMax);
             if (Game.LocalPlayer.Health == this)
             {
-                PlayerUi.Instance.UpdateHealthBar();
+                PlayerUi.Instance.UpdateHealthBar(hpToRegen);
             }
 
             if (health <= 0)
@@ -235,7 +235,7 @@ namespace MrPink.Health
             
             if (Game.LocalPlayer.Health == this)
             {
-                PlayerUi.Instance.UpdateHealthBar();
+                PlayerUi.Instance.UpdateHealthBar(-drainAmount);
             }
 
             if (health <= 0)
@@ -278,7 +278,7 @@ namespace MrPink.Health
             
             if (Game.LocalPlayer.Health == this)
             {
-                PlayerUi.Instance.UpdateHealthBar();
+                PlayerUi.Instance.UpdateHealthBar(-damage);
             }
             
             if (controlledMachine && controlledMachine.controllingHc)

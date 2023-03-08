@@ -10,6 +10,9 @@ public class IslandHavokUi : MonoBehaviour
     public static IslandHavokUi Instance;
     [SerializeField] private Image havokBar;
     [SerializeField] private Animator uiAnim;
+    private static readonly int Active = Animator.StringToHash("Active");
+    private static readonly int Update = Animator.StringToHash("Update");
+
     private void Awake()
     {
         if (Instance != null)
@@ -28,11 +31,16 @@ public class IslandHavokUi : MonoBehaviour
 
     public void ShowBar()
     {
-        uiAnim.gameObject.SetActive(true);
+        uiAnim.SetBool(Active, true);
     }
     public void HideBar()
     {
-        uiAnim.gameObject.SetActive(false);
+        uiAnim.SetBool(Active, false);
+    }
+
+    public void BlinkHavokBar()
+    {
+        uiAnim.SetTrigger(Update);
     }
     
     public void SetHavokFill(float fill)

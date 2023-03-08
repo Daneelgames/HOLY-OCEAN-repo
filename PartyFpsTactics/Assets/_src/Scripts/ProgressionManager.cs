@@ -36,6 +36,7 @@ public class ProgressionManager : MonoBehaviour
         MusicManager.Instance.StopMusic();
         UnitsManager.Instance.KillAllMobs();
         IslandSpawner.Instance.RunOver();
+        CharacterSubtitles.Instance.PhraseOnRunOver();
     }
 
     public void SetCurrentLevel(int index)

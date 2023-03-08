@@ -5,10 +5,15 @@ using _src.Scripts.Data;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CharacterSubtitles : MonoBehaviour
 {
     public static CharacterSubtitles Instance;
+
+    [SerializeField] private List<CharacterSubtitlesData> _characterSubtitlesToPlayOnGameStart = new List<CharacterSubtitlesData>();
+    [SerializeField] private List<CharacterSubtitlesData> _characterSubtitlesToPlayOnRunOver = new List<CharacterSubtitlesData>();
+    [SerializeField] [ReadOnly] private int currentCharacterSubtitlesOnStartIndex = 0;
     
     [SerializeField] private TextMeshProUGUI subtitleText;
     [SerializeField] private Animator dialogueVisualAnimator;
@@ -24,6 +29,23 @@ public class CharacterSubtitles : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        if (PlayerPrefs.HasKey("currentCharacterSubtitlesOnStartIndex"))
+            currentCharacterSubtitlesOnStartIndex = PlayerPrefs.GetInt("currentCharacterSubtitlesOnStartIndex");
+        
+        if (currentCharacterSubtitlesOnStartIndex >= _characterSubtitlesToPlayOnGameStart.Count)
+            return;
+        
+        currentCharacterSubtitles = _characterSubtitlesToPlayOnGameStart[currentCharacterSubtitlesOnStartIndex];
+        
+        TryToStartCharacterSubtitles(currentCharacterSubtitles);
+        
+        currentCharacterSubtitlesOnStartIndex++;
+        PlayerPrefs.SetInt("currentCharacterSubtitlesOnStartIndex", currentCharacterSubtitlesOnStartIndex);
+        PlayerPrefs.Save();
     }
 
     public bool TryToStartCharacterSubtitles(CharacterSubtitlesData _characterSubtitlesData)
@@ -61,5 +83,10 @@ public class CharacterSubtitles : MonoBehaviour
         }
         
         dialogueVisualAnimator.SetBool(Active, false);
+    }
+
+    public void PhraseOnRunOver()
+    {
+        TryToStartCharacterSubtitles(_characterSubtitlesToPlayOnRunOver[Random.Range(0, _characterSubtitlesToPlayOnRunOver.Count)]);
     }
 }
