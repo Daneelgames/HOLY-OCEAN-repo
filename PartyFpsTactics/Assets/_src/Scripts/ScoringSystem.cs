@@ -76,6 +76,7 @@ namespace MrPink
 
             addedScoreFeedbackTransform.transform.localScale = new Vector3(1, 0, 1);
             UpdateMojoLevelUi();
+            defaultMojoLevels = new List<MojoLevel>(_mojoLevels);
         }
 
 
@@ -150,6 +151,20 @@ namespace MrPink
                 IncreaseMojoLevel();
         }
 
+        public void GiveMojoRewardBossChest()
+        {
+            // берем какой-то интересный уровень можо (который желательно еще и должен считывать стейт игры)
+            // и выдать игроку в новый можо лвл
+
+            MojoLevel newMojoLevel = new MojoLevel();
+            newMojoLevel.minDamage = Mathf.RoundToInt(_mojoLevels[_mojoLevels.Count - 1].minDamage * 2f);
+            newMojoLevel.timeToDrainFull = 20;
+            newMojoLevel.HandLTool = allMojoTools[Random.Range(0, allMojoTools.Count)];
+            newMojoLevel.HandRTool = allMojoTools[Random.Range(0, allMojoTools.Count)];
+            _mojoLevels.Add(newMojoLevel);
+            ValidateMojoLevels();
+            SetLastMojoLevel();
+        }
         void SetLastMojoLevel()
         {
             var newMojoIndex = _mojoLevels.Count - 1;
@@ -215,11 +230,15 @@ namespace MrPink
             UpdateMojoInventory();
         }
 
+
+        private List<MojoLevel> defaultMojoLevels;
         public void ResetMojo()
         {
             currentMojoLevelIndex = 0;
             currentMojoDamageScaler = 1;
             currentDamageInCombo = 0;
+
+            _mojoLevels = new List<MojoLevel>(defaultMojoLevels);
             
             ItemFoundSoundLowPitch();
             UpdateMojoLevelUi();
@@ -372,20 +391,6 @@ namespace MrPink
             currentGoldText.text = "DOLAS: " + CurrentGold;
         }
 
-        public void GiveMojoRewardBossChest()
-        {
-            // берем какой-то интересный уровень можо (который желательно еще и должен считывать стейт игры)
-            // и выдать игроку в новый можо лвл
-
-            MojoLevel newMojoLevel = new MojoLevel();
-            newMojoLevel.minDamage = Mathf.RoundToInt(_mojoLevels[_mojoLevels.Count - 1].minDamage * 1.5f);
-            newMojoLevel.timeToDrainFull = 20;
-            newMojoLevel.HandLTool = allMojoTools[Random.Range(0, allMojoTools.Count)];
-            newMojoLevel.HandRTool = allMojoTools[Random.Range(0, allMojoTools.Count)];
-            _mojoLevels.Add(newMojoLevel);
-            ValidateMojoLevels();
-            SetLastMojoLevel();
-        }
     }
 }
 

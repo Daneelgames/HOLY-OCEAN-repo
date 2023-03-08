@@ -20,6 +20,13 @@ public class PlayerHookshot : NetworkBehaviour
     [SerializeField] private AudioSource hookshotAu;
     [SerializeField] private List<GameObject> collidersToIgnore = new List<GameObject>();
 
+    
+    [SerializeField] float swingingMinDistance = 0.01f;
+    [SerializeField] float swingingMaxDistance = 0.1f;
+    [SerializeField] float swingingSpring = 50f;
+    [SerializeField] float swingingDamper = 7f;
+    [SerializeField] float swingingMassScale = 4.5f;
+    
     private SpringJoint joint;
     
     public override void OnOwnershipClient(NetworkConnection prevOwner)
@@ -31,6 +38,7 @@ public class PlayerHookshot : NetworkBehaviour
 
         Instance = this;
     }
+
 
     private void Update()
     {
@@ -123,12 +131,12 @@ public class PlayerHookshot : NetworkBehaviour
         joint.maxDistance = distanceFromPoint * 0.8f;
         joint.minDistance = distanceFromPoint * 0.25f;
         */
-        joint.maxDistance = 0.1f;
-        joint.minDistance = 0.5f;
+        joint.maxDistance = swingingMaxDistance;
+        joint.minDistance = swingingMinDistance;
 
-        joint.spring = 50f;
-        joint.damper = 7f;
-        joint.massScale = 4.5f;
+        joint.spring = swingingSpring;
+        joint.damper = swingingDamper;
+        joint.massScale = swingingMassScale;
         
         hookshotLineRenderer.positionCount = 2;
         swinging = true;
