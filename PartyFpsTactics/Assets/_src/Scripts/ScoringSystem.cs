@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MrPink.PlayerSystem;
 using MrPink.Tools;
 using Sirenix.OdinInspector;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +52,7 @@ namespace MrPink
 
         [Header("UI")] 
         public Text currentGoldText;
-        public Text comboLevelText;
+        public TextMeshProUGUI comboLevelText;
         public Text dmgFeedbackText;
         public Image comboBar;
         
