@@ -73,11 +73,11 @@ public class BuildingGenerator : NetworkBehaviour
 
     private void OnDestroy()
     {
-        IslandSpawner.Instance.RemoveTileBuilding(this);
+        IslandSpawner.Instance?.RemoveTileBuilding(this);
     }
     private void OnDisable()
     {
-        IslandSpawner.Instance.RemoveTileBuilding(this);
+        IslandSpawner.Instance?.RemoveTileBuilding(this);
     }
 
     private int currentSeed;

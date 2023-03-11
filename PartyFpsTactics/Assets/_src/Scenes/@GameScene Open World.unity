@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 0.750625
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
-  m_SkyboxMaterial: {fileID: 1073503988}
+  m_SkyboxMaterial: {fileID: 419109983}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.253
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.027874274, g: 0.015600791, b: 0.018256849, a: 0.253}
+  m_IndirectSpecularColor: {r: 0.027874278, g: 0.015600789, b: 0.018256849, a: 0.253}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4241,26 +4241,6 @@ PrefabInstance:
       value: -0.392
       objectReference: {fileID: 0}
     - target: {fileID: 8777543778443017791, guid: 348a35847bfe2b246af82766be29cd10, type: 3}
-      propertyPath: levelDatas.Array.size
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 8777543778443017791, guid: 348a35847bfe2b246af82766be29cd10, type: 3}
-      propertyPath: levelDatas.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 7832d02e0188a4f45ae5f9dd339b58b1, type: 2}
-    - target: {fileID: 8777543778443017791, guid: 348a35847bfe2b246af82766be29cd10, type: 3}
-      propertyPath: levelDatas.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 1a2d9b50959cb974fb971e76136934b1, type: 2}
-    - target: {fileID: 8777543778443017791, guid: 348a35847bfe2b246af82766be29cd10, type: 3}
-      propertyPath: levelDatas.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 1a2d9b50959cb974fb971e76136934b1, type: 2}
-    - target: {fileID: 8777543778443017791, guid: 348a35847bfe2b246af82766be29cd10, type: 3}
-      propertyPath: levelDatas.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: 1a2d9b50959cb974fb971e76136934b1, type: 2}
-    - target: {fileID: 8777543778443017791, guid: 348a35847bfe2b246af82766be29cd10, type: 3}
       propertyPath: levelDatas.Array.data[9]
       value: 
       objectReference: {fileID: 11400000, guid: 1a2d9b50959cb974fb971e76136934b1, type: 2}
@@ -4790,6 +4770,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &144786944
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!114 &146942353 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5499760277446218452, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
@@ -8391,6 +8408,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!21 &419109983
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Enviro/Standard/SkyboxSimple
+  m_Shader: {fileID: 4800000, guid: 8e6e0603052e7ce47b1d8c48aa9ee67e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - ENVIRO_AURORA
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Aurora_Colorshift:
+        m_Texture: {fileID: 2800000, guid: c745f38dc285f034d87b346a6f3a9519, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aurora_Layer_1:
+        m_Texture: {fileID: 2800000, guid: 0f3aa374cdd1a5247b48a8c48016eca2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Aurora_Layer_2:
+        m_Texture: {fileID: 2800000, guid: 9fbd49bae2bd427429d0e8c25e36e9e5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Galaxy:
+        m_Texture: {fileID: 8900000, guid: 902adfd0382d3214bae8d2fb673e4052, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlowTex:
+        m_Texture: {fileID: 2800000, guid: 00a0c0aaae744a04aa4bec459a082a12, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonTex:
+        m_Texture: {fileID: 2800000, guid: 66ad4c55c5a3a7045a25295e064fc7d2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stars:
+        m_Texture: {fileID: 8900000, guid: 39b57397df78c0c44a8f13e715e91a6a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StarsTwinklingNoise:
+        m_Texture: {fileID: 8900000, guid: cd6e898ed9788da48ac517f37841cea8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats: []
+    m_Colors:
+    - _HorizonBackColor: {r: 0.94976485, g: 0.60906446, b: 0.57711375, a: 1}
+    - _HorizonColor: {r: 0.18709509, g: 0.2516001, b: 0.31259885, a: 1}
+    - _SkyColor: {r: 0.18709509, g: 0.2516001, b: 0.31259885, a: 1}
+    - _SunColor: {r: 0.18709509, g: 0.2516001, b: 0.31259885, a: 1}
+  m_BuildTextureStacks: []
 --- !u!114 &421263445 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9202678363790745303, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
@@ -10989,43 +11070,6 @@ Transform:
   m_Father: {fileID: 1137197234}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &562698335
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 2048
-  m_Height: 2048
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!114 &567341002 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9202678364079338275, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
@@ -12265,45 +12309,11 @@ MonoBehaviour:
     registeredPrefabs: []
   - prefabPrototype: {fileID: 11400000, guid: c2c852f1c4874dd4c970226e1b9bac16, type: 2}
     registeredPrefabs:
-    - {fileID: 1883627608}
-    - {fileID: 1231064928}
-    - {fileID: 193239883}
-    - {fileID: 1310662682}
-    - {fileID: 294069964}
-    - {fileID: 1557154246}
-    - {fileID: 1939986381}
-    - {fileID: 1141460532}
-    - {fileID: 1813027098}
-    - {fileID: 852511498}
-    - {fileID: 1328727315}
-    - {fileID: 1095004676}
-    - {fileID: 703890210}
-    - {fileID: 424443224}
-    - {fileID: 1083121964}
-    - {fileID: 574199622}
-    - {fileID: 794301539}
-    - {fileID: 1434739214}
-    - {fileID: 1824229374}
-    - {fileID: 39229091}
-    - {fileID: 1833068961}
-    - {fileID: 463522314}
-    - {fileID: 722735834}
-    - {fileID: 499212934}
-    - {fileID: 1672607295}
-    - {fileID: 2120022210}
-    - {fileID: 1968561932}
-    - {fileID: 1670803037}
-    - {fileID: 259679237}
-    - {fileID: 377158741}
-    - {fileID: 1301074950}
-    - {fileID: 490248025}
-    - {fileID: 1103014538}
     - {fileID: 6772369}
-    - {fileID: 736147024}
-    - {fileID: 1916470851}
     - {fileID: 13681498}
     - {fileID: 26491512}
     - {fileID: 32804275}
+    - {fileID: 39229091}
     - {fileID: 51922849}
     - {fileID: 52114922}
     - {fileID: 62297961}
@@ -12325,6 +12335,7 @@ MonoBehaviour:
     - {fileID: 171422973}
     - {fileID: 181899029}
     - {fileID: 184555357}
+    - {fileID: 193239883}
     - {fileID: 198280730}
     - {fileID: 201504146}
     - {fileID: 201930764}
@@ -12337,11 +12348,13 @@ MonoBehaviour:
     - {fileID: 241030497}
     - {fileID: 242727794}
     - {fileID: 249324555}
+    - {fileID: 259679237}
     - {fileID: 281661854}
     - {fileID: 288313536}
     - {fileID: 292203061}
     - {fileID: 293125139}
     - {fileID: 293447946}
+    - {fileID: 294069964}
     - {fileID: 296866278}
     - {fileID: 301348238}
     - {fileID: 312846910}
@@ -12356,15 +12369,20 @@ MonoBehaviour:
     - {fileID: 370998932}
     - {fileID: 371070004}
     - {fileID: 376702592}
+    - {fileID: 377158741}
     - {fileID: 408188044}
     - {fileID: 421263445}
+    - {fileID: 424443224}
     - {fileID: 424815682}
     - {fileID: 439280762}
     - {fileID: 442081625}
     - {fileID: 450013157}
     - {fileID: 457115724}
+    - {fileID: 463522314}
     - {fileID: 482823082}
+    - {fileID: 490248025}
     - {fileID: 497351160}
+    - {fileID: 499212934}
     - {fileID: 499639257}
     - {fileID: 515663670}
     - {fileID: 526209496}
@@ -12373,6 +12391,7 @@ MonoBehaviour:
     - {fileID: 543121701}
     - {fileID: 551139723}
     - {fileID: 567341002}
+    - {fileID: 574199622}
     - {fileID: 595671852}
     - {fileID: 612391016}
     - {fileID: 613225658}
@@ -12390,10 +12409,13 @@ MonoBehaviour:
     - {fileID: 674187791}
     - {fileID: 681824352}
     - {fileID: 693014118}
+    - {fileID: 703890210}
     - {fileID: 704609794}
     - {fileID: 707628521}
     - {fileID: 708911196}
+    - {fileID: 722735834}
     - {fileID: 731408820}
+    - {fileID: 736147024}
     - {fileID: 741931566}
     - {fileID: 749986235}
     - {fileID: 750919738}
@@ -12405,11 +12427,13 @@ MonoBehaviour:
     - {fileID: 783888312}
     - {fileID: 787645894}
     - {fileID: 788892438}
+    - {fileID: 794301539}
     - {fileID: 822961941}
     - {fileID: 827548870}
     - {fileID: 829819049}
     - {fileID: 829919940}
     - {fileID: 843010988}
+    - {fileID: 852511498}
     - {fileID: 856624740}
     - {fileID: 862166945}
     - {fileID: 864798706}
@@ -12438,15 +12462,19 @@ MonoBehaviour:
     - {fileID: 1075915175}
     - {fileID: 1079173172}
     - {fileID: 1079518517}
+    - {fileID: 1083121964}
     - {fileID: 1086983737}
     - {fileID: 1094705261}
+    - {fileID: 1095004676}
     - {fileID: 1100283678}
     - {fileID: 1101827916}
+    - {fileID: 1103014538}
     - {fileID: 1106137264}
     - {fileID: 1107403558}
     - {fileID: 1119948701}
     - {fileID: 1136394377}
     - {fileID: 1136428802}
+    - {fileID: 1141460532}
     - {fileID: 1151786410}
     - {fileID: 1153654402}
     - {fileID: 1154592454}
@@ -12459,6 +12487,7 @@ MonoBehaviour:
     - {fileID: 1211189183}
     - {fileID: 1225199469}
     - {fileID: 1229046784}
+    - {fileID: 1231064928}
     - {fileID: 1239332264}
     - {fileID: 1239484118}
     - {fileID: 1245762209}
@@ -12467,7 +12496,10 @@ MonoBehaviour:
     - {fileID: 1256914821}
     - {fileID: 1272121081}
     - {fileID: 1298775573}
+    - {fileID: 1301074950}
+    - {fileID: 1310662682}
     - {fileID: 1327158032}
+    - {fileID: 1328727315}
     - {fileID: 1339163406}
     - {fileID: 1361445191}
     - {fileID: 1375556589}
@@ -12479,6 +12511,7 @@ MonoBehaviour:
     - {fileID: 1414394622}
     - {fileID: 1418907814}
     - {fileID: 1427970665}
+    - {fileID: 1434739214}
     - {fileID: 1440103344}
     - {fileID: 1446872630}
     - {fileID: 1452271958}
@@ -12498,6 +12531,7 @@ MonoBehaviour:
     - {fileID: 1551130352}
     - {fileID: 1555384043}
     - {fileID: 1556448443}
+    - {fileID: 1557154246}
     - {fileID: 1557253907}
     - {fileID: 1558179153}
     - {fileID: 1559203919}
@@ -12519,6 +12553,8 @@ MonoBehaviour:
     - {fileID: 1645199953}
     - {fileID: 1648834591}
     - {fileID: 1665277626}
+    - {fileID: 1670803037}
+    - {fileID: 1672607295}
     - {fileID: 1675401498}
     - {fileID: 1681002860}
     - {fileID: 1681196058}
@@ -12533,17 +12569,24 @@ MonoBehaviour:
     - {fileID: 1801515509}
     - {fileID: 1807599077}
     - {fileID: 1811037946}
+    - {fileID: 1813027098}
+    - {fileID: 1824229374}
     - {fileID: 1829663665}
+    - {fileID: 1833068961}
     - {fileID: 1847779185}
     - {fileID: 1852551139}
     - {fileID: 1862695641}
     - {fileID: 1881698873}
+    - {fileID: 1883627608}
+    - {fileID: 1916470851}
     - {fileID: 1918420996}
     - {fileID: 1925143097}
     - {fileID: 1933790008}
+    - {fileID: 1939986381}
     - {fileID: 1942053927}
     - {fileID: 1959647780}
     - {fileID: 1966898631}
+    - {fileID: 1968561932}
     - {fileID: 1992646904}
     - {fileID: 2011403512}
     - {fileID: 2019115546}
@@ -12559,6 +12602,7 @@ MonoBehaviour:
     - {fileID: 2070657337}
     - {fileID: 2075022279}
     - {fileID: 2093166933}
+    - {fileID: 2120022210}
     - {fileID: 2129149783}
     - {fileID: 2131062449}
     - {fileID: 2143583846}
@@ -15668,43 +15712,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!84 &956622657
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &963824162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16887,70 +16894,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!21 &1073503988
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Enviro/Standard/SkyboxSimple
-  m_Shader: {fileID: 4800000, guid: 8e6e0603052e7ce47b1d8c48aa9ee67e, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - ENVIRO_AURORA
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _Aurora_Colorshift:
-        m_Texture: {fileID: 2800000, guid: c745f38dc285f034d87b346a6f3a9519, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Aurora_Layer_1:
-        m_Texture: {fileID: 2800000, guid: 0f3aa374cdd1a5247b48a8c48016eca2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Aurora_Layer_2:
-        m_Texture: {fileID: 2800000, guid: 9fbd49bae2bd427429d0e8c25e36e9e5, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Galaxy:
-        m_Texture: {fileID: 8900000, guid: 902adfd0382d3214bae8d2fb673e4052, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _GlowTex:
-        m_Texture: {fileID: 2800000, guid: 00a0c0aaae744a04aa4bec459a082a12, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MoonTex:
-        m_Texture: {fileID: 2800000, guid: 66ad4c55c5a3a7045a25295e064fc7d2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Stars:
-        m_Texture: {fileID: 8900000, guid: 39b57397df78c0c44a8f13e715e91a6a, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _StarsTwinklingNoise:
-        m_Texture: {fileID: 8900000, guid: cd6e898ed9788da48ac517f37841cea8, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats: []
-    m_Colors:
-    - _HorizonBackColor: {r: 0.94976485, g: 0.60906446, b: 0.57711375, a: 1}
-    - _HorizonColor: {r: 0.18709509, g: 0.2516001, b: 0.31259885, a: 1}
-    - _SkyColor: {r: 0.18709509, g: 0.2516001, b: 0.31259885, a: 1}
-    - _SunColor: {r: 0.18709509, g: 0.2516001, b: 0.31259885, a: 1}
-  m_BuildTextureStacks: []
 --- !u!114 &1075915175 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4240360660926753617, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
@@ -20908,6 +20851,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &1408262065
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 2048
+  m_Height: 2048
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!114 &1414394622 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5725043580763582556, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
@@ -21691,6 +21671,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13f42112a552354988a63573e49f5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &1500827270
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GerstnerCascades
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 0
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 5
+  m_VolumeDepth: 16
+  m_ShadowSamplingMode: 2
 --- !u!114 &1501538938 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7865590724032850121, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
@@ -26559,43 +26576,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4899648721868771096, guid: ac1c06488425ef8459b18fb4300fad69, type: 3}
   m_PrefabInstance: {fileID: 4899648721681841741}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &2045607677
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: GerstnerCascades
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 0
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 5
-  m_VolumeDepth: 16
-  m_ShadowSamplingMode: 2
 --- !u!114 &2048340880 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4177290160645796200, guid: 79607a2861acb874ca897a09e2a84be2, type: 3}
