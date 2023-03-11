@@ -347,7 +347,7 @@ public class ContentPlacer : NetworkBehaviour
                 yield return null;
             }
 
-            while (UnitsManager.Instance.MobsInGame.Count > maxMobsAlive * 1.5f)
+            while (UnitsManager.Instance.MobsInGame.Count > maxMobsAlive)
             {
                 yield return null;
             }
