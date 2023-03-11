@@ -7,6 +7,7 @@ using Unity.Jobs;
 using UnityEngine;
 using Unity.Burst;
 using System;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -33,21 +34,21 @@ namespace Fraktalia.VoxelGen.Visualisation
 		private int Width;
 
 
-		public NativeList<Vector3> verticeArray;
-		public NativeList<int> triangleArray;
-		public NativeList<Vector2> uvArray;
-		public NativeList<Vector3> normalArray;
-		public NativeList<Vector4> tangentsArray;
-		public NativeList<Vector3> tan1;
-		public NativeList<Vector3> tan2;
+		public FNativeList<Vector3> verticeArray;
+		public FNativeList<int> triangleArray;
+		public FNativeList<Vector2> uvArray;
+		public FNativeList<Vector3> normalArray;
+		public FNativeList<Vector4> tangentsArray;
+		public FNativeList<Vector3> tan1;
+		public FNativeList<Vector3> tan2;
 
 		[ReadOnly]
 		public NativeArray<int> VertexOffset;
 
 
-		public NativeParallelMultiHashMap<Vector3, VertexEntry> dictionary;
-		public NativeList<Vector3> dictionaryKeys;
-		public NativeList<Vector3> triNormals;
+		public FNativeMultiHashMap<Vector3, VertexEntry> dictionary;
+		public FNativeList<Vector3> dictionaryKeys;
+		public FNativeList<Vector3> triNormals;
 
 		[BurstDiscard]
 		public void Init(int width)
@@ -60,21 +61,21 @@ namespace Fraktalia.VoxelGen.Visualisation
 			MaxBlocks = new NativeArray<int>(1, Allocator.Persistent);
 			MaxBlocks[0] = blocks;
 
-			verticeArray = new NativeList<Vector3>( Allocator.Persistent);
-			triangleArray = new NativeList<int>( Allocator.Persistent);
-			uvArray = new NativeList<Vector2>( Allocator.Persistent);
-			normalArray = new NativeList<Vector3>( Allocator.Persistent);
-			tangentsArray = new NativeList<Vector4>( Allocator.Persistent);
+			verticeArray = new FNativeList<Vector3>( Allocator.Persistent);
+			triangleArray = new FNativeList<int>( Allocator.Persistent);
+			uvArray = new FNativeList<Vector2>( Allocator.Persistent);
+			normalArray = new FNativeList<Vector3>( Allocator.Persistent);
+			tangentsArray = new FNativeList<Vector4>( Allocator.Persistent);
 
-			tan1 = new NativeList<Vector3>( Allocator.Persistent);
-			tan2 = new NativeList<Vector3>( Allocator.Persistent);
+			tan1 = new FNativeList<Vector3>( Allocator.Persistent);
+			tan2 = new FNativeList<Vector3>( Allocator.Persistent);
 
 			Neighbours = new NativeArray<int>(6, Allocator.Persistent);
 
 
-			dictionary = new NativeParallelMultiHashMap<Vector3, VertexEntry>(0, Allocator.Persistent);
-			dictionaryKeys = new NativeList<Vector3>( Allocator.Persistent);
-			triNormals = new NativeList<Vector3>( Allocator.Persistent);
+			dictionary = new FNativeMultiHashMap<Vector3, VertexEntry>(0, Allocator.Persistent);
+			dictionaryKeys = new FNativeList<Vector3>( Allocator.Persistent);
+			triNormals = new FNativeList<Vector3>( Allocator.Persistent);
 
 		}
 
@@ -521,7 +522,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 
 				VertexEntry entry;
-				NativeParallelMultiHashMapIterator<Vector3> iter;
+				FNativeMultiHashMapIterator<Vector3> iter;
 				Vector3 hash = verticeArray[i1];
 				if (!dictionary.TryGetFirstValue(hash, out entry, out iter))
 				{
@@ -549,8 +550,8 @@ namespace Fraktalia.VoxelGen.Visualisation
 			// Each entry in the dictionary represents a unique vertex position.
 			for (int i = 0; i < dictionaryKeys.Length; i++)
 			{
-				NativeParallelMultiHashMapIterator<Vector3> it_i;
-				NativeParallelMultiHashMapIterator<Vector3> it_j;
+				FNativeMultiHashMapIterator<Vector3> it_i;
+				FNativeMultiHashMapIterator<Vector3> it_j;
 				VertexEntry lhsEntry;
 				VertexEntry rhsEntry;
 				bool hasvalue_I = dictionary.TryGetFirstValue(dictionaryKeys[i], out lhsEntry, out it_i);

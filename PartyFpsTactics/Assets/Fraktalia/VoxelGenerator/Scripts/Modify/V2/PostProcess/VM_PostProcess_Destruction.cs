@@ -6,6 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using UnityEngine;
 using Fraktalia.Core.FraktaliaAttributes;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,7 +22,7 @@ namespace Fraktalia.VoxelGen.Modify
 	{
 		public Transform DestructionPrefab;
 
-		public override void FinalizeModification(NativeList<NativeVoxelModificationData_Inner> modifierData, NativeList<NativeVoxelModificationData_Inner> preVoxelData, NativeList<NativeVoxelModificationData_Inner> postVoxelData, VoxelGenerator generator, VoxelModifier_V2 modifier)
+		public override void FinalizeModification(FNativeList<NativeVoxelModificationData_Inner> modifierData, FNativeList<NativeVoxelModificationData_Inner> preVoxelData, FNativeList<NativeVoxelModificationData_Inner> postVoxelData, VoxelGenerator generator, VoxelModifier_V2 modifier)
 		{
 			
 			for (int i = 0; i < preVoxelData.Length; i++)

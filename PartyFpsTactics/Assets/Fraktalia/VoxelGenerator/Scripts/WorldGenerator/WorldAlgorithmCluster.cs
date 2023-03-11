@@ -24,8 +24,8 @@ namespace Fraktalia.VoxelGen.World
 			"It is important that at least one parent object (whole chain up) has at least one World Generator component. Also it is possible to use more than " +
 			"one cluster (one for each used dimension). However if the target dimension of the second cluster is the same as the first one, the second one will " +
 			"overwrite the result of the first one." +
-			"")]
-		[InfoVideo("https://www.youtube.com/watch?v=3KrPFj9hUcA&lc=UgzjAqdGrVsM77feBBN4AaABAg", false)]
+			"", "WORLDALGORITHMCLUSTER")]
+		[InfoVideo("https://www.youtube.com/watch?v=3KrPFj9hUcA&lc=UgzjAqdGrVsM77feBBN4AaABAg", false, "WORLDALGORITHMCLUSTER")]
 		[InfoText("World Algorithm Cluster:", "WORLDALGORITHMCLUSTER")]
 		public int TargetDimension;
 		public int TargetDepth;

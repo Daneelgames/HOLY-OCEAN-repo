@@ -11,7 +11,7 @@ namespace Fraktalia.Core.FraktaliaAttributes
 	public class InfoContent
 	{
 		public InfoSection Title;
-		public List<InfoSection> content;
+		public InfoSection[] content;
 		public InfoSection section;
 		public string videoURL;
 		public string videoURL2;
@@ -25,26 +25,37 @@ namespace Fraktalia.Core.FraktaliaAttributes
 	public class BeginInfoAttribute : PropertyAttribute
 	{
 		public static Dictionary<string, InfoContent> InfoContentDictionary = new Dictionary<string, InfoContent>();
-		public static InfoContent CurrentInfoContent;
-		private static string CurrentKey;
+		
 		public BeginInfoAttribute(string Key)
 		{
 			if (InfoContentDictionary == null) InfoContentDictionary = new Dictionary<string, InfoContent>();
 
-			if(CurrentKey != Key || CurrentInfoContent == null)
+			if(!InfoContentDictionary.ContainsKey(Key))
 			{
 				InfoContentDictionary[Key] = new InfoContent();
-				CurrentInfoContent = InfoContentDictionary[Key];
-				CurrentInfoContent.content = new List<InfoSection>();
+				var CurrentInfoContent = InfoContentDictionary[Key];
+				CurrentInfoContent.content = new InfoSection[5];
 				CurrentInfoContent.videoURL = "";
 				CurrentInfoContent.videoURL2 = "";
 				CurrentInfoContent.videoURL3 = "";
 				CurrentInfoContent.showvideo = false;
-
-				CurrentKey = Key;
 			}	
+
 		}
 
+		public static void CreateEntry(string key)
+        {
+			if (!InfoContentDictionary.ContainsKey(key))
+			{
+				InfoContentDictionary[key] = new InfoContent();
+				var CurrentInfoContent = InfoContentDictionary[key];
+				CurrentInfoContent.content = new InfoSection[5];
+				CurrentInfoContent.videoURL = "";
+				CurrentInfoContent.videoURL2 = "";
+				CurrentInfoContent.videoURL3 = "";
+				CurrentInfoContent.showvideo = false;
+			}
+		}
 		
 	}
 
@@ -52,101 +63,145 @@ namespace Fraktalia.Core.FraktaliaAttributes
 	{
 		
 
-		public InfoTitleAttribute(string title, string text)
+		public InfoTitleAttribute(string title, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			BeginInfoAttribute.CurrentInfoContent.Title = new InfoSection();
-			BeginInfoAttribute.CurrentInfoContent.Title.Title = title;
-			BeginInfoAttribute.CurrentInfoContent.Title.Text = text;
+			BeginInfoAttribute.CreateEntry(key);
+
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+				CurrentInfoContent.Title = new InfoSection();
+				CurrentInfoContent.Title.Title = title;
+				CurrentInfoContent.Title.Text = text;
+			}
 		}
 	}
 
 	public class InfoSection1Attribute : PropertyAttribute
 	{
-		public InfoSection1Attribute(string title, string text)
+		public InfoSection1Attribute(string title, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			InfoSection section = new InfoSection();
-			section.Title = title;
-			section.Text = text;
-			BeginInfoAttribute.CurrentInfoContent.content.Add(section);
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+
+				InfoSection section = new InfoSection();
+				section.Title = title;
+				section.Text = text;
+				CurrentInfoContent.content[0] = (section);
+			}
 		}
 	}
 	public class InfoSection2Attribute : PropertyAttribute
 	{
-		public InfoSection2Attribute(string title, string text)
+		public InfoSection2Attribute(string title, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			InfoSection section = new InfoSection();
-			section.Title = title;
-			section.Text = text;
-			BeginInfoAttribute.CurrentInfoContent.content.Add(section);
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+				InfoSection section = new InfoSection();
+				section.Title = title;
+				section.Text = text;
+				CurrentInfoContent.content[1] = (section);
+			}
 		}
 	}
 	public class InfoSection3Attribute : PropertyAttribute
 	{
-		public InfoSection3Attribute(string title, string text)
+		public InfoSection3Attribute(string title, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			InfoSection section = new InfoSection();
-			section.Title = title;
-			section.Text = text;
-			BeginInfoAttribute.CurrentInfoContent.content.Add(section);
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+				InfoSection section = new InfoSection();
+				section.Title = title;
+				section.Text = text;
+				CurrentInfoContent.content[2] = (section);
+			}
 		}
 	}
 	public class InfoSection4Attribute : PropertyAttribute
 	{
-		public InfoSection4Attribute(string title, string text)
+		public InfoSection4Attribute(string title, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			InfoSection section = new InfoSection();
-			section.Title = title;
-			section.Text = text;
-			BeginInfoAttribute.CurrentInfoContent.content.Add(section);
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+				InfoSection section = new InfoSection();
+				section.Title = title;
+				section.Text = text;
+				CurrentInfoContent.content[3] = (section);
+			}
 		}
 	}
 	public class InfoSection5Attribute : PropertyAttribute
 	{
-		public InfoSection5Attribute(string title, string text)
+		public InfoSection5Attribute(string title, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			InfoSection section = new InfoSection();
-			section.Title = title;
-			section.Text = text;
-			BeginInfoAttribute.CurrentInfoContent.content.Add(section);
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+				InfoSection section = new InfoSection();
+				section.Title = title;
+				section.Text = text;
+				CurrentInfoContent.content[4] = (section);
+			}
 		}
 	}
 
 	public class InfoVideoAttribute : PropertyAttribute
 	{
-		public InfoVideoAttribute(string url, bool showvideo)
+		public InfoVideoAttribute(string url, bool showvideo, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			BeginInfoAttribute.CurrentInfoContent.videoURL = url;
-			BeginInfoAttribute.CurrentInfoContent.showvideo = showvideo;
-			
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;
+				CurrentInfoContent.videoURL = url;
+				CurrentInfoContent.showvideo = showvideo;
+			}
 		}
 	}
 
 	public class InfoVideo2Attribute : PropertyAttribute
 	{
-		public InfoVideo2Attribute(string url, string text)
+		public InfoVideo2Attribute(string url, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			BeginInfoAttribute.CurrentInfoContent.videoURL2 = url;
-			BeginInfoAttribute.CurrentInfoContent.videoURL2Text = text;
-
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;		
+				CurrentInfoContent.videoURL2 = url;
+				CurrentInfoContent.videoURL2Text = text;
+			}
 		}
 	}
 
 	public class InfoVideo3Attribute : PropertyAttribute
 	{
-		public InfoVideo3Attribute(string url, string text)
+		public InfoVideo3Attribute(string url, string text, string key)
 		{
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
-			BeginInfoAttribute.CurrentInfoContent.videoURL3 = url;
-			BeginInfoAttribute.CurrentInfoContent.videoURL3Text = text;
-
+			BeginInfoAttribute.CreateEntry(key);
+			if (BeginInfoAttribute.InfoContentDictionary.ContainsKey(key))
+			{
+				var CurrentInfoContent = BeginInfoAttribute.InfoContentDictionary[key];
+				if (CurrentInfoContent == null) return;			
+				CurrentInfoContent.videoURL3 = url;
+				CurrentInfoContent.videoURL3Text = text;
+			}
 		}
 	}
 
@@ -174,7 +229,7 @@ namespace Fraktalia.Core.FraktaliaAttributes
 		}
 	}
 
-	public struct InfoSection
+	public class InfoSection
 	{
 		public string Title;
 		public string Text;
@@ -211,7 +266,8 @@ namespace Fraktalia.Core.FraktaliaAttributes
 			pos.yMin = position.yMin + 5;
 			pos.yMax = position.yMax - 5;
 
-			if (BeginInfoAttribute.CurrentInfoContent == null) return;
+			if (BeginInfoAttribute.InfoContentDictionary == null) return;
+			if (!BeginInfoAttribute.InfoContentDictionary.ContainsKey(labeltext.Key)) return;
 			if (GUI.Button(pos, "Info/Help"))
 			{
 				InfoContent tutorial = BeginInfoAttribute.InfoContentDictionary[labeltext.Key];

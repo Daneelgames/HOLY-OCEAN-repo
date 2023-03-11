@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -56,9 +57,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 		private int PostProcesses = 0;
 		private Material usedmaterial;
 
-		private NativeList<Vector3> NULL_VERTICES;
-		private NativeList<int> NULL_TRIANGLES;
-		private NativeList<Vector3> NULL_NORMALS;
+		private FNativeList<Vector3> NULL_VERTICES;
+		private FNativeList<int> NULL_TRIANGLES;
+		private FNativeList<Vector3> NULL_NORMALS;
 
 
 
@@ -66,9 +67,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 		{		
 			base.Initialize();
 
-			NULL_NORMALS  = new NativeList<Vector3>(0, Allocator.Persistent);
-			NULL_VERTICES = new NativeList<Vector3>(0, Allocator.Persistent);
-			NULL_TRIANGLES = new NativeList<int>(0, Allocator.Persistent);
+			NULL_NORMALS  = new FNativeList<Vector3>(0, Allocator.Persistent);
+			NULL_VERTICES = new FNativeList<Vector3>(0, Allocator.Persistent);
+			NULL_TRIANGLES = new FNativeList<int>(0, Allocator.Persistent);
 			
 			m_JobHandles = new JobHandle[NumCores];
 			m_JobFree = new bool[NumCores];
@@ -182,10 +183,6 @@ namespace Fraktalia.VoxelGen.Visualisation
 				if (WorkerQueue.Count > 0) return true;
 			}
 
-			if (PostProcesses > 0)
-			{		
-				return true;
-			}
 			return false;
 		}		
 
@@ -254,9 +251,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 				piece.Clear();
 
-				NativeList<Vector3> vertices;
-				NativeList<int> triangles;
-				NativeList<Vector3> normals;
+				FNativeList<Vector3> vertices;
+				FNativeList<int> triangles;
+				FNativeList<Vector3> normals;
 
 				finishCalculation(m, piece, out vertices, out triangles, out normals);
 
@@ -351,7 +348,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		/// <param name="vertices">Give me the final array. Required for post processing (place props and foliage)</param>
 		/// <param name="triangles">Give me the final array. Required for post processing (place props and foliage)</param>
 		/// <param name="normals">Give me the final array. Required for post processing (place props and foliage)</param>
-		protected virtual void finishCalculation(int jobIndex, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		protected virtual void finishCalculation(int jobIndex, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{	
 			vertices = NULL_VERTICES;
 			triangles = NULL_TRIANGLES;
@@ -359,7 +356,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		}
 
 
-		public override void SetRegionsDirty(VoxelRegion region)
+		protected override void setRegionsDirty(VoxelRegion region)
 		{
 			int lenght = VoxelMeshes.Count;
 			if (lenght == 1)

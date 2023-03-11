@@ -5,6 +5,7 @@ using System;
 using Unity.Collections;
 using UnityEngine.Events;
 using Fraktalia.Core.FraktaliaAttributes;
+using Fraktalia.Core.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -55,12 +56,16 @@ namespace Fraktalia.VoxelGen.Visualisation
 				{
 					if (value == true)
 					{
-						//UnityEngine.Debug.Log("Hull Completed:" + name);
+						if(engine.DebugMode)
+						  UnityEngine.Debug.Log("Debug Mode: Hull Completed:" + name);
+
 						OnHullGenerationComplete.Invoke();
                     }
                     else
                     {
-						//UnityEngine.Debug.Log("Hull Started:" + name);
+						if (engine.DebugMode)
+							UnityEngine.Debug.Log("Debug Mode: Hull Started:" + name);
+
 						OnHullGenerationStarted.Invoke();
 					}
 				}
@@ -74,6 +79,10 @@ namespace Fraktalia.VoxelGen.Visualisation
 		/// </summary>
 		public float Shrink = 0.001f;
 
+		public bool IgnoreDimensions = false;
+		public List<int> IgnoreDimensionList = new List<int>();
+
+		[Header("Events:")]
 		[Tooltip("Executed when the hull generator has work and starts updating his visual appearance.")]
 		public UnityEvent OnHullGenerationStarted;
 
@@ -157,7 +166,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 		}
 
-		public virtual void NodesChanged(ref NativeList<NativeVoxelNode> voxels)
+		public virtual void NodesChanged(ref FNativeList<NativeVoxelNode> voxels)
 		{
 			
 		}
@@ -167,7 +176,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 		}
 
-		public virtual void NodesDestroyed(ref NativeList<NativeVoxelNode> voxels)
+		public virtual void NodesDestroyed(ref FNativeList<NativeVoxelNode> voxels)
 		{
 			
 		}
@@ -557,8 +566,17 @@ namespace Fraktalia.VoxelGen.Visualisation
 #endif
 		}
 
+		public void SetRegionsDirty(VoxelRegion region)
+		{
+			if(IgnoreDimensions)
+            {
+				if (IgnoreDimensionList.Contains(region.DimensionModified)) return;
+            }
+	
+			setRegionsDirty(region);
+		}
 
-		public virtual void SetRegionsDirty(VoxelRegion region)
+		protected virtual void setRegionsDirty(VoxelRegion region)
 		{
 
 		}

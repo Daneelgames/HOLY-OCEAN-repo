@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -17,10 +18,10 @@ namespace Fraktalia.VoxelGen.Visualisation
 		public NativeVoxelTree Data;
 
 		[ReadOnly]
-		public NativeList<NativeVoxelNode> voxels;
+		public FNativeList<NativeVoxelNode> voxels;
 
 		[WriteOnly]
-		public NativeList<NativeVoxelNode> output;
+		public FNativeList<NativeVoxelNode> output;
 
 		public void Execute()
 		{

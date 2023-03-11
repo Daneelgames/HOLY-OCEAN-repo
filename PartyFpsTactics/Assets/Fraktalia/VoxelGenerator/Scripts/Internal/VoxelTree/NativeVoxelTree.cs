@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -32,13 +33,13 @@ namespace Fraktalia.VoxelGen
 		
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelNode> NodestackBuffer;
+		public FNativeList<NativeVoxelNode> NodestackBuffer;
 
 		[NativeDisableContainerSafetyRestriction]
 		public NativeArray<int> indexstack;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelNode> destroyedNodes;
+		public FNativeList<NativeVoxelNode> destroyedNodes;
 
 		[NativeDisableContainerSafetyRestriction]
 		public NativeArray<double> Errors;
@@ -102,10 +103,10 @@ namespace Fraktalia.VoxelGen
 			OctreePositionTable = (IntPtr)UnsafeUtility.Malloc(sizeof(Vector3Int) * SubdivisionPower * SubdivisionPower * SubdivisionPower, UnsafeUtility.AlignOf<Vector3Int>(), Allocator.Persistent);
 			//SizeTable = new NativeArray<float>();
 
-			NodestackBuffer = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+			NodestackBuffer = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 			indexstack = new NativeArray<int>(MaxDepth * MaxCores, Allocator.Persistent);
 			
-			destroyedNodes = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+			destroyedNodes = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 		
 			int index = 0;
 			for (int x = 0; x < SubdivisionPower; x++)
@@ -587,7 +588,7 @@ namespace Fraktalia.VoxelGen
 				{
 
 					NativeVoxelTree next = UnsafeUtility.ReadArrayElement<NativeVoxelTree>(ptr.ToPointer(), 0);
-					return next._PeekVoxelId(nfX, nfY, nfZ, depth, shrink, borderValue);
+					return next._PeekVoxelId_InnerCoordinate(nfX, nfY, nfZ, depth, shrink, borderValue);
 				}
 			}
 
@@ -637,7 +638,7 @@ namespace Fraktalia.VoxelGen
 		}
 
 
-		public void _GetAllLeafVoxel(NativeVoxelNode tree, ref NativeList<NativeVoxelNode> output)
+		public void _GetAllLeafVoxel(NativeVoxelNode tree, ref FNativeList<NativeVoxelNode> output)
 		{
 			NodestackBuffer.Clear();
 
@@ -675,10 +676,10 @@ namespace Fraktalia.VoxelGen
 			NodestackBuffer.Clear();
 		}
 
-		public void _GetAllVoxelsBelow(NativeVoxelNode Start, int Depth, ref NativeList<NativeVoxelNode> output)
+		public void _GetAllVoxelsBelow(NativeVoxelNode Start, int Depth, ref FNativeList<NativeVoxelNode> output)
 		{
 			if (output.IsCreated) output.Dispose();
-			output = new NativeList<NativeVoxelNode>(1000, Allocator.Persistent);
+			output = new FNativeList<NativeVoxelNode>(1000, Allocator.Persistent);
 
 			
 			int elementPos = 0;
@@ -728,12 +729,12 @@ namespace Fraktalia.VoxelGen
 		/// <param name="neighbours"></param>
 		/// <returns></returns>
 		public int _GetNativeVoxelsBelow(ref NativeVoxelNode Start, int Depth,
-			ref NativeList<Vector3> offsets,
-			ref NativeList<float> sizes,
-			ref NativeList<int> neighbours,
+			ref FNativeList<Vector3> offsets,
+			ref FNativeList<float> sizes,
+			ref FNativeList<int> neighbours,
 			bool IncludeNeighbour,
 			int CoreID,
-			ref NativeQueue<NativeVoxelNode> nodestack
+			ref FNativeQueue<NativeVoxelNode> nodestack
 			)
 		{
 

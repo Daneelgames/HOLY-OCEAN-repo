@@ -7,6 +7,7 @@ using Unity.Jobs;
 using UnityEngine;
 using Unity.Burst;
 using System.Collections.Specialized;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -48,20 +49,20 @@ namespace Fraktalia.VoxelGen.Visualisation
 		public NativeArray<int> MaxBlocks;
 		private int Width;
 
-		public NativeList<Vector3> mesh_verticeArray;
-		public NativeList<int> mesh_triangleArray;
-		public NativeList<Vector2> mesh_uvArray;
-		public NativeList<Vector3> mesh_normalArray;
-		public NativeList<Vector4> mesh_tangentsArray;
+		public FNativeList<Vector3> mesh_verticeArray;
+		public FNativeList<int> mesh_triangleArray;
+		public FNativeList<Vector2> mesh_uvArray;
+		public FNativeList<Vector3> mesh_normalArray;
+		public FNativeList<Vector4> mesh_tangentsArray;
 
-		public NativeList<Vector3> verticeArray;
-		public NativeList<int> triangleArray;
-		public NativeList<Vector2> uvArray;
-		public NativeList<Vector3> normalArray;
-		public NativeList<Vector4> tangentsArray;
-		public NativeList<Vector3> tan1;
-		public NativeList<Vector3> tan2;
-		public NativeList<Color32> colorArray;
+		public FNativeList<Vector3> verticeArray;
+		public FNativeList<int> triangleArray;
+		public FNativeList<Vector2> uvArray;
+		public FNativeList<Vector3> normalArray;
+		public FNativeList<Vector4> tangentsArray;
+		public FNativeList<Vector3> tan1;
+		public FNativeList<Vector3> tan2;
+		public FNativeList<Color32> colorArray;
 		
 
 		[ReadOnly]
@@ -107,22 +108,22 @@ namespace Fraktalia.VoxelGen.Visualisation
 			MaxBlocks = new NativeArray<int>(1, Allocator.Persistent);
 			MaxBlocks[0] = blocks;
 
-			verticeArray = new NativeList<Vector3>(0, Allocator.Persistent);
-			triangleArray = new NativeList<int>(0, Allocator.Persistent);
-			uvArray = new NativeList<Vector2>(0, Allocator.Persistent);
-			normalArray = new NativeList<Vector3>(0, Allocator.Persistent);
-			tangentsArray = new NativeList<Vector4>(0, Allocator.Persistent);
-			colorArray = new NativeList<Color32>(0, Allocator.Persistent);
+			verticeArray = new FNativeList<Vector3>(0, Allocator.Persistent);
+			triangleArray = new FNativeList<int>(0, Allocator.Persistent);
+			uvArray = new FNativeList<Vector2>(0, Allocator.Persistent);
+			normalArray = new FNativeList<Vector3>(0, Allocator.Persistent);
+			tangentsArray = new FNativeList<Vector4>(0, Allocator.Persistent);
+			colorArray = new FNativeList<Color32>(0, Allocator.Persistent);
 
 			int vertcount = crystal.vertices.Length;
 			int tricount = crystal.triangles.Length;
-			mesh_verticeArray = new NativeList<Vector3>(vertcount, Allocator.Persistent);
-			mesh_triangleArray = new NativeList<int>(tricount, Allocator.Persistent);
-			mesh_uvArray = new NativeList<Vector2>(vertcount, Allocator.Persistent);
-			mesh_normalArray = new NativeList<Vector3>(vertcount, Allocator.Persistent);
-			mesh_tangentsArray = new NativeList<Vector4>(vertcount, Allocator.Persistent);
-			tan1 = new NativeList<Vector3>(0, Allocator.Persistent);
-			tan2 = new NativeList<Vector3>(0, Allocator.Persistent);
+			mesh_verticeArray = new FNativeList<Vector3>(vertcount, Allocator.Persistent);
+			mesh_triangleArray = new FNativeList<int>(tricount, Allocator.Persistent);
+			mesh_uvArray = new FNativeList<Vector2>(vertcount, Allocator.Persistent);
+			mesh_normalArray = new FNativeList<Vector3>(vertcount, Allocator.Persistent);
+			mesh_tangentsArray = new FNativeList<Vector4>(vertcount, Allocator.Persistent);
+			tan1 = new FNativeList<Vector3>(0, Allocator.Persistent);
+			tan2 = new FNativeList<Vector3>(0, Allocator.Persistent);
 
 
 			for (int i = 0; i < vertcount; i++)

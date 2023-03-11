@@ -11,6 +11,7 @@ using Fraktalia.Utility;
 using Unity.Collections.LowLevel.Unsafe;
 using Fraktalia.Core.Math;
 using System.Reflection;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -30,12 +31,12 @@ namespace Fraktalia.VoxelGen.Visualisation
 		[BeginInfo("MarchingCubes_GPUv2")]
 		[InfoTitle("GPU based marching cubes", "This is the fastest hull generator currently possible. It combines the power of CPU and GPU to increase perfomance far beyond " +
 		"CPU only based hull generators. " +
-			"\n\n V2 is about 10x faster than the previous one.")]
+			"\n\n V2 is about 10x faster than the previous one.", "MarchingCubes_GPUv2")]
 		[InfoSection1("How to use:", "Functionality is same as the CPU based marching cubes. It is important to have the compute shaders (Marching Cubes and Clear Buffer) assigned. " +
-			"\n\nIt is recommended to use a triplanar shader so expensive UV, Normals and Tangents calculations can be avoided. If you cannot use triplanar shaders, you can enable them.")]
+			"\n\nIt is recommended to use a triplanar shader so expensive UV, Normals and Tangents calculations can be avoided. If you cannot use triplanar shaders, you can enable them.", "MarchingCubes_GPUv2")]
 		[InfoSection2("Compatibility:", "" +
 		"<b>Direct X 11:</b> This hull generator uses Compute Shader which may not be supported by your target system.\n" +
-		"For more information check the official statement from Unity:\n\nhttps://docs.unity3d.com/Manual/class-ComputeShader.html\n")]
+		"For more information check the official statement from Unity:\n\nhttps://docs.unity3d.com/Manual/class-ComputeShader.html\n", "MarchingCubes_GPUv2")]
 		[InfoTextKey("GPU based marching cubes:", "MarchingCubes_GPUv2")]
 
 		
@@ -267,7 +268,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		protected override IEnumerator beginCalculationasync(Queue<int> WorkerQueue, float cellSize, float voxelSize)
 		{
 			int works = 0;
-
+			
 			int lod = Mathf.Clamp(TargetLOD, 0, LODSize.Count - 1);
 			voxelSize = voxelSize * Mathf.Pow(2, lod);
 			int lodwidth = LODSize[lod];
@@ -327,10 +328,8 @@ namespace Fraktalia.VoxelGen.Visualisation
                 {
 					voxeldata[coreindex].SetData(UniformGrid[coreindex]);
 					counter[coreindex][0] = 0;
-
 					_counterBufferResult[coreindex].SetData(counter[coreindex]);
 					m_marchingCubes.SetInt("_BlockWidth", BorderedWidth);
-
 					m_marchingCubes.SetFloat("_VoxelSize", voxelSize);
 					RunCompute(voxeldata[coreindex], SurfacePoint, lodwidth, coreindex);
 				}
@@ -424,15 +423,21 @@ namespace Fraktalia.VoxelGen.Visualisation
 				int cellindex = currentWorkTable[coreindex];
 				Haschset[cellindex] = false;
 				VoxelPiece piece = VoxelMeshes[cellindex];
+				if(piece == null)
+                {
+					continue;
+				}
+
 				piece.Clear();
 
-				NativeList<Vector3> vertices;
-				NativeList<int> triangles;
-				NativeList<Vector3> normals;
+				FNativeList<Vector3> vertices;
+				FNativeList<int> triangles;
+				FNativeList<Vector3> normals;
+                           
 				finishCalculation(coreindex, piece, out vertices, out triangles, out normals);
 				if (!NoDistanceCollision || engine.CurrentLOD < FarDistance)
 					piece.EnableCollision(!NoCollision);
-
+		
 				for (int x = 0; x < DetailGenerator.Count; x++)
 				{
 					var detail = DetailGenerator[x];
@@ -476,7 +481,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 
 
-		protected override void finishCalculation(int coreindex, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		protected override void finishCalculation(int coreindex, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{	
 			if (dataconverter[coreindex].verticeArray.Length != 0)
 			{

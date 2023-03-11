@@ -1,6 +1,5 @@
 using UnityEngine;
 using Fraktalia.Core.FraktaliaAttributes;
-using Sirenix.OdinInspector;
 
 namespace Fraktalia.VoxelGen.Modify.Procedural
 {
@@ -10,15 +9,15 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 
 		[BeginInfo("COLLIDERTOVOXEL")]
 		[InfoTitle("Collider to Voxel", "This script was requested by customers and allows you to convert Unity Colliders into a Voxel representation. " +
-			"Attaching one or more mesh colliders to this game object allows you to convert a mesh into a voxel representation.")]
+			"Attaching one or more mesh colliders to this game object allows you to convert a mesh into a voxel representation.", "COLLIDERTOVOXEL")]
 		[InfoSection1("How to use:", "Attach as many colliders as you want to this component. Then either call ApplyProceduralModifier() via code or click on the Apply Procedural Modifier button" +
 			"\n\nIn order to apply this script, the attached colliders should at least be located inside the boundary of the target voxel generator." +
 			"\n\nWhen this object is selected, the dark region around the collider shows the influene to the voxel map." +
 			"\n\nThe maximum amount of voxels which can be modified is set to 5000000." +
 			"\n\nWhen using Mesh Collider, it is recommended to have Convex set to true. The internal collision check from Unity3D does not behave as it should when Convex is not flagged." +
 			" Therefore if you Mesh is concave, you have to split the mesh up into concave parts." +
-			"\n\n<b>Keep in mind that voxel modifier and game objects can collide with the applied colliders.</b>")]
-		[InfoVideo("https://youtu.be/7mYdDT3CUO4", false)]
+			"\n\n<b>Keep in mind that voxel modifier and game objects can collide with the applied colliders.</b>", "COLLIDERTOVOXEL")]
+		[InfoVideo("https://youtu.be/7mYdDT3CUO4", false, "COLLIDERTOVOXEL")]
 		[InfoText("Collider To Voxel:", "COLLIDERTOVOXEL")]
 
 		[Tooltip("Voxel will be completely solid if distance between voxel position and nearest collision contact point is smaller. Ideal value = 0.001f")]

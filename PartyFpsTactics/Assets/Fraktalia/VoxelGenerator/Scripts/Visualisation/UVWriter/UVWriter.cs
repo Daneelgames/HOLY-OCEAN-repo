@@ -48,7 +48,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 		private bool isInitialized = false;	
 		private int[] skips;
-		private int PostProcesses = 0;
+		
 
 		private static int activeHulls;
 		private Material usedmaterial;
@@ -261,7 +261,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			}
 		}
 
-		public override void SetRegionsDirty(VoxelRegion region)
+		protected override void setRegionsDirty(VoxelRegion region)
 		{
 			float cellSize = engine.RootSize / 1;
 
@@ -376,8 +376,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 			m_JobFree = new bool[0];
 			m_MeshModJobs = new UVWriter_Calculation[0];
-			PostProcesses = 0;
-
+			
 			if (isInitialized)
 			{
 				activeHulls--; 			
@@ -398,8 +397,6 @@ namespace Fraktalia.VoxelGen.Visualisation
 			{
 				if (WorkerQueue.Count > 0) return true;
 			}
-
-			if (PostProcesses > 0) return true;
 
 			return false;
 		}

@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -13,7 +14,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public bool ApplyObjectRotation;
 		
 		
-		public NativeList<NativeVoxelModificationData_Inner> ModifierTemplateData;
+		public FNativeList<NativeVoxelModificationData_Inner> ModifierTemplateData;
 
 		protected Vector3 displacement;
 		public int boundaryExtension = 1;
@@ -41,7 +42,7 @@ namespace Fraktalia.VoxelGen.Modify
 
 		public void CreateModifierTemplate(VoxelModifier_V2 modifier, VoxelGenerator target)
 		{
-			if (!ModifierTemplateData.IsCreated) ModifierTemplateData = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			if (!ModifierTemplateData.IsCreated) ModifierTemplateData = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
 			ModifierTemplateData.Clear();
 
 			calculateTemplateData(modifier, target);

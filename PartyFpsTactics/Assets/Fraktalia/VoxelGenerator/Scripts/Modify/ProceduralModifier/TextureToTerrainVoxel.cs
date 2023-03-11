@@ -13,7 +13,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		[BeginInfo("TEXTURETOTERRAIN")]
 		[InfoTitle("Texture to Voxel Terrain", "This converter works similar like the terrain to voxel converter but uses a texture instead. " +
 			"Assign a standard texture2D in RGBA format and convert it into a voxel representation. " +
-			"\n\n <b>NOTE: The assigned texture must be marked as readible otherwise an exception is thrown.</b>")]
+			"\n\n <b>NOTE: The assigned texture must be marked as readible otherwise an exception is thrown.</b>", "TEXTURETOTERRAIN")]
 		[InfoSection1("How to use:", "Assign a texture and the target generator to the converter. Then adjust top/bottom extension and size. " +
 			"The dark region shows the boundary which will be modified." +
 			"\n\n - Invert inverses the result." +
@@ -25,7 +25,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			"\n - Smoothing smoothes the result." +
 			"\n\n" +
 			"<b>Info:</b> When height falloff is 0, the result is exactly like the slice based texture to voxel converter. " +
-			"Increasing the falloff will gradually result into the terrain like relief surface.")]
+			"Increasing the falloff will gradually result into the terrain like relief surface.", "TEXTURETOTERRAIN")]
 		[InfoText("Texture to Voxel Terrain:", "TEXTURETOTERRAIN")]
 		public Texture2D TextureToConvert;
 		public TextureToVoxel.TextureChannel ChannelToRead;

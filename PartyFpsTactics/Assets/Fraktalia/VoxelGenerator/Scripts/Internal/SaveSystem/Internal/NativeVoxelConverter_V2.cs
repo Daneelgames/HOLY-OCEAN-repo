@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using System;
 using Unity.Burst;
 using Unity.Collections;
@@ -10,14 +11,14 @@ namespace Fraktalia.VoxelGen
 	public unsafe struct NativeVoxelConverter_V2 : IJob
 	{
 		public NativeVoxelTree data;
-		public NativeList<byte> output;
-		public NativeList<NativeVoxelNode> leafvoxels;
+		public FNativeList<byte> output;
+		public FNativeList<NativeVoxelNode> leafvoxels;
 		
 		public void Init()
 		{
 			
-			if(!output.IsCreated) output = new NativeList<byte>(Allocator.Persistent);
-			if(!leafvoxels.IsCreated) leafvoxels = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+			if(!output.IsCreated) output = new FNativeList<byte>(Allocator.Persistent);
+			if(!leafvoxels.IsCreated) leafvoxels = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 			
 
 

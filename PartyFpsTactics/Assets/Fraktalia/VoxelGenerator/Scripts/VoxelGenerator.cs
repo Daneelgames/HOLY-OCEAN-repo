@@ -16,6 +16,7 @@ using Fraktalia.VoxelGen.Modify.Procedural;
 using System.Reflection;
 using Fraktalia.Utility;
 using System.Runtime.CompilerServices;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -42,30 +43,30 @@ namespace Fraktalia.VoxelGen
 		"all your scripts which want to read or write voxels. Therefore I provide access to the voxel trees and functions called GetVoxel and SetVoxel to modify the dataset. " +
 		"I am not responsible for visualizing voxels as I am lazy and like to delegate work to hull generators and voxel modifiers.\n\n" +
 		"<b>Also my internal parts use Burst so add it to your project by clicking on the install buttons I even provide for you.</b>\n\n" +
-		"The prefabs contain the voxel engine, the save system and a voxel modifier. However I can work fully independent.")]
+		"The prefabs contain the voxel engine, the save system and a voxel modifier. However I can work fully independent.", "VOXELGENERATOR")]
 		[InfoSection1("How to use:", "When adding me to a game object, define the Volume I should occupy using the <b>Volume Size</b>. Then click the generate button " +
 			"or call GenerateBlock from any script. Click or call CleanUp to destroy the volume.\n\n" +
 			"In order to see any results, hull generators must be attached and set up correctly because the generator itself is not responsible for the visualisation. " +
 			"Also it is possible to apply sub systems like the save system for saving/loading and world generator for procedural world generation. " +
-			"")]
+			"", "VOXELGENERATOR")]
 		[InfoSection2("General Settings:", "" +
 			"<b>Volume Size:</b> Size of the volume.\n" +
 			"<b>Subdivision Power:</b> Defines the layout of the voxel tree structure. 2 = lowest memory requirement, 4 = faster reading/writing of voxels.\n" +
 			"<b>Dimension Count:</b> How many voxel trees the generator should have. First one is usually the density, second one can be used for texture value or other usages.\n" +
 			"<b>Initial Value:</b> Initial value of the first tree. Initial value of additional trees is always 0. \n" +
-			"")]
+			"", "VOXELGENERATOR")]
 		[InfoSection3("Other Parameters::", "" +
 			"<b>Hull Frame Skip:</b> Value will decrement itself each frame. Hull Generators are only updated when value is 0\n" +
 			"<b>Lock Hull Updates:</b> Hull generators will not be updated when voxels are modified.\n" +
 			"<b>Locked:</b> Nothing can modify voxels while it is locked. Hull Generators will not be updated.\n\n" +
 			"Applied Subsystems are set automatically and show which subsystems are attached. LOD Distance can be used by hull generators and is set automatically based on the distance. \n\n" +
 			"<b>Memory Optimize:</b> Optimizes the memory consumtion significantly but slightly lowers performance. Recommended = true\n\n" +
-			"<color=blue>The voxel generator is the main component of the whole asset. There is a youtube tutorial video for every feature included. The button below will lead to the complete playlis.</color>")]
-		[InfoVideo("https://www.youtube.com/watch?v=SmcrkAQBgTs&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=3&t=1s", false)]
+			"<color=blue>The voxel generator is the main component of the whole asset. There is a youtube tutorial video for every feature included. The button below will lead to the complete playlis.</color>", "VOXELGENERATOR")]
+		[InfoVideo("https://www.youtube.com/watch?v=SmcrkAQBgTs&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=3&t=1s", false, "VOXELGENERATOR")]
 		[InfoText("Voxel Generator "+VERSION.NUMBER, "VOXELGENERATOR")]
 
 		[Tooltip("Hull generators attached as children to this generator. Is fetched automatically when block is initialized.")]	
-		public BasicNativeVisualHull[] hullGenerators;
+		public BasicNativeVisualHull[] hullGenerators = new BasicNativeVisualHull[0];
 
 		[TitleText("General Settings:", TitleTextType.Title)]
 		[LabelText("Volume Size")] [Tooltip("Size of the volume in Unity units")]
@@ -172,11 +173,12 @@ namespace Fraktalia.VoxelGen
 		private Queue<VoxelRegion> regionstoupdate;
 		private float currentRootSize;
 		private bool currentWorking;
-      
-        /// <summary>
-        /// Returns true if all attached hull generators are valid.
-        /// </summary>
-        public bool IsValid
+		private int idlecount = 0;
+
+		/// <summary>
+		/// Returns true if all attached hull generators are valid.
+		/// </summary>
+		public bool IsValid
 		{
 			get
 			{
@@ -273,10 +275,10 @@ namespace Fraktalia.VoxelGen
 			for (int i = 0; i < hullGenerators.Length; i++)
 			{
 				hullGenerators[i].engine = this;
+				hullGenerators[i].gameObject.layer = gameObject.layer;
 				hullGenerators[i].InitVisualHull();
 
 				hullGenerators[i].transform.localPosition = new Vector3();
-				hullGenerators[i].gameObject.layer = gameObject.layer;
 				
 				if (hullGenerators[i].LockAfterInit) hullGenerators[i].Locked = true;
 			}
@@ -458,12 +460,29 @@ namespace Fraktalia.VoxelGen
 			setadditivejob[dimension].changedata_set.AddRange(rawvoxeldata);
 			VoxelTreeDirty = true;
 		}
-		public void _SetVoxels(NativeList<NativeVoxelModificationData> rawvoxeldata, int dimension = 0)
+
+		public void _SetVoxels(FNativeList<NativeVoxelModificationData> rawvoxeldata, int dimension = 0)
 		{
 			if (RestrictDimension[dimension]) return;
 			setadditivejob[dimension].changedata_set.AddRange(rawvoxeldata);
 			VoxelTreeDirty = true;
 		}
+
+#if COLLECTION_EXISTS
+        public void _SetVoxels(NativeList<NativeVoxelModificationData> rawvoxeldata, int dimension = 0)
+		{
+			if (RestrictDimension[dimension]) return;
+			setadditivejob[dimension].changedata_set.AddRange(rawvoxeldata.AsArray());
+			VoxelTreeDirty = true;
+		}
+
+		public void _SetVoxels_Inner(NativeList<NativeVoxelModificationData_Inner> rawvoxeldata, int dimension = 0)
+		{
+			if (RestrictDimension[dimension]) return;
+			setadditivejob[dimension].changedata_set_inner.AddRange(rawvoxeldata.AsArray());
+			VoxelTreeDirty = true;
+		}
+#endif
 
 		public void _SetVoxels_Inner(NativeArray<NativeVoxelModificationData_Inner> rawvoxeldata, int dimension = 0)
 		{
@@ -472,7 +491,7 @@ namespace Fraktalia.VoxelGen
 			VoxelTreeDirty = true;
 		}
 
-		public void _SetVoxels_Inner(NativeList<NativeVoxelModificationData_Inner> rawvoxeldata, int dimension = 0)
+		public void _SetVoxels_Inner(FNativeList<NativeVoxelModificationData_Inner> rawvoxeldata, int dimension = 0)
 		{
 			if (RestrictDimension[dimension]) return;
 			setadditivejob[dimension].changedata_set_inner.AddRange(rawvoxeldata);
@@ -517,7 +536,7 @@ namespace Fraktalia.VoxelGen
 			setadditivejob[dimension].changedata_additive.AddRange(rawvoxeldata);
 			VoxelTreeDirty = true;
 		}
-		public void _SetVoxelsAdditive(NativeList<NativeVoxelModificationData> rawvoxeldata, int dimension = 0)
+		public void _SetVoxelsAdditive(FNativeList<NativeVoxelModificationData> rawvoxeldata, int dimension = 0)
 		{
 			if (RestrictDimension[dimension]) return;
 			setadditivejob[dimension].changedata_additive.AddRange(rawvoxeldata);
@@ -531,7 +550,7 @@ namespace Fraktalia.VoxelGen
 			VoxelTreeDirty = true;
 		}
 
-		public void _SetVoxelsAdditive_Inner(NativeList<NativeVoxelModificationData_Inner> rawvoxeldata, int dimension = 0)
+		public void _SetVoxelsAdditive_Inner(FNativeList<NativeVoxelModificationData_Inner> rawvoxeldata, int dimension = 0)
 		{
 			if (RestrictDimension[dimension]) return;
 			setadditivejob[dimension].changedata_additive_inner.AddRange(rawvoxeldata);
@@ -607,13 +626,13 @@ namespace Fraktalia.VoxelGen
 		/// <param name="extends_min"></param>
 		/// <param name="extends_max"></param>
 		/// <param name="IgnoreNeighbor"></param>
-		public void SetRegionsDirty(Vector3 center, Vector3 extends_min, Vector3 extends_max, bool IgnoreNeighbor = false)
+		public void SetRegionsDirty(Vector3 center, Vector3 extends_min, Vector3 extends_max, int dimensionModified, bool IgnoreNeighbor = false)
 		{
 			VoxelRegion region;
 			region.RegionMin = center - extends_min * 1.2f;
 			region.RegionMax = center + extends_max * 1.2f;
 			region.IgnoreNeighbor = IgnoreNeighbor;
-
+			region.DimensionModified = dimensionModified;
 			if (DebugMode)
 			{
 				Matrix4x4 matrix = transform.localToWorldMatrix;
@@ -646,7 +665,7 @@ namespace Fraktalia.VoxelGen
 
 
 
-				SetRegionsDirty(center, inclement * i, inclement * i, true);
+				SetRegionsDirty(center, inclement * i, inclement * i, -1, true);
 				yield return null;
 				while (regionstoupdate.Count > 0)
 				{
@@ -657,19 +676,19 @@ namespace Fraktalia.VoxelGen
 
 		}
 
-		public void SetRegionsDirty(Vector3 region_min, Vector3 region_max, bool IgnoreNeighbor = false)
+		public void SetRegionsDirty(Vector3 region_min, Vector3 region_max, int dimension, bool IgnoreNeighbor = false)
 		{
 			Bounds bound = new Bounds();
 			bound.min = region_min;
 			bound.max = region_max;
 
-			SetRegionsDirty(bound.center, bound.size/2, bound.size/2, IgnoreNeighbor);
+			SetRegionsDirty(bound.center, bound.size/2, bound.size/2, dimension, IgnoreNeighbor);
 		}
 
 		public void SetAllRegionsDirty()
 		{
 			regionstoupdate.Clear();
-			SetRegionsDirty(Vector3.zero, Vector3.one * RootSize, true);
+			SetRegionsDirty(Vector3.zero, Vector3.one * RootSize,-1, true);
 		}
 		#endregion
 
@@ -823,7 +842,7 @@ namespace Fraktalia.VoxelGen
 
 		public void Update()
 		{
-			if (!IsValid && IsInitialized)
+			if (IsInitialized && !IsValid)
 			{
 				hullGenerators = GetComponentsInChildren<BasicNativeVisualHull>();
 
@@ -983,7 +1002,7 @@ namespace Fraktalia.VoxelGen
 		}
 		public IEnumerator updateVoxelTrees()
 		{
-			int idlecount = 0;
+			
 
 			while (IsInitialized)
 			{
@@ -1003,10 +1022,13 @@ namespace Fraktalia.VoxelGen
 						for (int i = 0; i < hullGenerators.Length; i++)
 						{
 							hullGenerators[i].PostProcess();
-						}
-					}
 
-					//UnityEngine.Debug.Log("After idle process");
+							if(!hullGenerators[i].IsWorking())							
+							{
+								hullGenerators[i].IsIdle = true;
+							}
+						}			
+					}
 				}
 			
 				if (IsIdle)
@@ -1101,6 +1123,7 @@ namespace Fraktalia.VoxelGen
 			{
 				yield return null;
 			}
+			idlecount = 0;
 
 			if (SupressPostProcess)
 			{
@@ -1124,6 +1147,10 @@ namespace Fraktalia.VoxelGen
 
 			for (int i = 0; i < hullGenerators.Length; i++)
 			{
+				if (hullGenerators[i].IsWorking())
+				{
+					hullGenerators[i].IsIdle = false;			
+				}
 				hullGenerators[i].PrepareWorks();
 			}
 
@@ -1159,13 +1186,9 @@ namespace Fraktalia.VoxelGen
 			{
 				if (hullGenerators[i].IsWorking())
 				{
-					hullGenerators[i].IsIdle = false;
+					
 					hullsdirty = true;
-				}
-				else
-				{
-					hullGenerators[i].IsIdle = true;
-				}
+				}			
 			}
 			HullsDirty = hullsdirty;
 
@@ -1473,6 +1496,7 @@ namespace Fraktalia.VoxelGen
 		public Vector3 RegionMin;
 		public Vector3 RegionMax;
 		public bool IgnoreNeighbor;
+		public int DimensionModified;
 	}
 
 #if UNITY_EDITOR
@@ -1604,6 +1628,20 @@ namespace Fraktalia.VoxelGen
 					}
 				}
 
+				if(myTarget.savesystem)
+                {
+					EditorGUILayout.BeginHorizontal();
+					if (GUILayout.Button(new GUIContent("Save Data")))
+					{
+						myTarget.savesystem.Save();
+					}
+					if (GUILayout.Button(new GUIContent("Load Data")))
+					{
+						myTarget.savesystem.Load();
+					}
+					EditorGUILayout.EndHorizontal();
+				}
+
 				if (GUILayout.Button(new GUIContent("Reset", "Clears the volume.")))
 				{
 					myTarget.CleanUp();
@@ -1651,21 +1689,6 @@ namespace Fraktalia.VoxelGen
 				Client.Add("com.unity.burst@1.4.7");
 			}
 #endif
-
-#if !COLLECTION_EXISTS
-
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("<color=green>Collection Package Missing:</color>", title);
-			EditorGUILayout.TextArea("Newer collection packages are faster than the default sample. Also adds burst.");
-
-			if (GUILayout.Button("Install Collection Package"))
-			{
-				Client.Add("com.unity.collections");
-			}
-#endif
-
-
-
 
 			if (myTarget.__export_foldout = EditorGUILayout.Foldout(myTarget.__export_foldout, "Export Options"))
 			{

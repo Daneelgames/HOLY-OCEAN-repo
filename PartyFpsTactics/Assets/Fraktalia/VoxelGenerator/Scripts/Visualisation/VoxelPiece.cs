@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using NativeCopyFast;
 using System;
 using System.Collections;
@@ -66,41 +67,61 @@ namespace Fraktalia.VoxelGen.Visualisation
 			voxelMesh.Clear();
 		}
 
-		public void SetVertices(NativeList<Vector3> verticeArray)
+		public void SetVertices(FNativeList<Vector3> verticeArray)
 		{
 			vertices.Clear();
 			voxelMesh.SetVertices(verticeArray.AsArray());
 			_timeOfLastChange = Time.realtimeSinceStartupAsDouble;
 		}
 
-		public void SetTriangles(NativeList<int> triangleArray)
+		public void SetVertices(NativeArray<Vector3> verticeArray)
+		{
+			vertices.Clear();
+			voxelMesh.SetVertices(verticeArray);
+			_timeOfLastChange = Time.realtimeSinceStartupAsDouble;
+		}
+
+
+		public void SetTriangles(FNativeList<int> triangleArray)
 		{
 			triangles.Clear();
 			NativeUtility.NativeListToList(triangleArray, triangles);
 			voxelMesh.SetTriangles(triangles, 0);
 		}
 
-		public void SetNormals(NativeList<Vector3> normalArray)
+		public void SetTriangles(NativeArray<int> triangleArray)
+		{
+			triangles.Clear();
+			NativeUtility.NativeListToList(triangleArray, triangles);
+			voxelMesh.SetTriangles(triangles, 0);
+		}
+
+		public void SetNormals(FNativeList<Vector3> normalArray)
 		{					
 			voxelMesh.SetNormals(normalArray.AsArray());
 		}
 
-		public void SetTangents(NativeList<Vector4> tangentsArray)
+		public void SetNormals(NativeArray<Vector3> normalArray)
+		{
+			voxelMesh.SetNormals(normalArray);
+		}
+
+		public void SetTangents(FNativeList<Vector4> tangentsArray)
 		{			
 			voxelMesh.SetTangents(tangentsArray.AsArray());
 		}
 
-		public void SetUVs(int channel, NativeList<Vector2> uvArray)
+		public void SetUVs(int channel, FNativeList<Vector2> uvArray)
 		{	
 			voxelMesh.SetUVs(channel, uvArray.AsArray());
 		}
 
-		public void SetColors(NativeList<Color> colorArray)
+		public void SetColors(FNativeList<Color> colorArray)
 		{		
 			voxelMesh.SetColors(colorArray.AsArray());
 		}
 
-		public void SetColors(NativeList<Color32> colorArray)
+		public void SetColors(FNativeList<Color32> colorArray)
 		{		
 			voxelMesh.SetColors(colorArray.AsArray());
 		}
@@ -110,19 +131,11 @@ namespace Fraktalia.VoxelGen.Visualisation
 			
 			if (enable && voxelMesh.bounds.extents.sqrMagnitude > 0 && voxelMesh.vertexCount > 0)
 			{
-				try
-				{					
-					meshcollider.sharedMesh = voxelMesh;
-				}
-				catch (Exception)
-				{
-					throw;
-				}
-				
+				meshcollider.sharedMesh = voxelMesh;
 			}
 			else
 			{
-				meshcollider.sharedMesh = null;				
+				meshcollider.sharedMesh = null;
 			}	
 		}	
 

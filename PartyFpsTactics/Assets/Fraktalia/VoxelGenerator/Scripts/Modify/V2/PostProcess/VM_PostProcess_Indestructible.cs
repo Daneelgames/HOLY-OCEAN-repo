@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
@@ -14,7 +15,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public int ShapeDefiningDimension=1;
 		public bool Inverted;
 		
-		public override void ApplyPostprocess(NativeList<NativeVoxelModificationData_Inner> modifierData, VoxelGenerator generator, VoxelModifier_V2 modifier)
+		public override void ApplyPostprocess(FNativeList<NativeVoxelModificationData_Inner> modifierData, VoxelGenerator generator, VoxelModifier_V2 modifier)
 		{
 
 
@@ -36,7 +37,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public NativeVoxelTree shapedata;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> modifierData;
+		public FNativeList<NativeVoxelModificationData_Inner> modifierData;
 		internal VoxelModifierMode mode;
 
 		public void Execute(int index)

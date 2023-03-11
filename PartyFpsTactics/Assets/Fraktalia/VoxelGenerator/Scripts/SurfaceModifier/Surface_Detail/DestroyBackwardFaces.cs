@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Burst;
 using Fraktalia.Core.Math;
 using Fraktalia.Utility;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -12,7 +13,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		[Tooltip("in world space")] public Vector3 Center;
 		[Range(0, 1)] public float Threshold;
 
-		public override void DefineSurface(VoxelPiece piece, NativeList<Vector3> surface_verticeArray, NativeList<int> surface_triangleArray, NativeList<Vector3> surface_normalArray, int slot)
+		public override void DefineSurface(VoxelPiece piece, FNativeList<Vector3> surface_verticeArray, FNativeList<int> surface_triangleArray, FNativeList<Vector3> surface_normalArray, int slot)
 		{
 			DestroyBackwardFacesJob job;
 			job.Center = transform.InverseTransformPoint(Center);
@@ -33,8 +34,8 @@ namespace Fraktalia.VoxelGen.Visualisation
 	{
 		public Vector3 Center;
 		public float Threshold;
-		[NativeDisableParallelForRestriction] public NativeList<Vector3> vertices;
-		[ReadOnly] public NativeList<Vector3> normals;
+		[NativeDisableParallelForRestriction] public FNativeList<Vector3> vertices;
+		[ReadOnly] public FNativeList<Vector3> normals;
 
 		public void Execute(int index)
 		{

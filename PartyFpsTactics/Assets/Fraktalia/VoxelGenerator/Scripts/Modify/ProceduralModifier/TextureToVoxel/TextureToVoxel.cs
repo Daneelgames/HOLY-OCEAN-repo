@@ -27,7 +27,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			"Every slice adds exactly one voxel layer and the summary will create a 3D model and is perfectly suited for converting 2D scan images into a 3D object. " +
 			"The perfect usage for this script is to convert 2D scans especially medical <b>DICOM</b> scans into a volumetric 3D object. " +
 			"Any image or texture can be used as long as it can be read by Unity and coverted into a Texture2D." +
-			"\n\n<b><color=red>Image data like medical DICOM which cannot be read must be converted to Texture2D with your own scripts due to legal reasons.</color></b>")]
+			"\n\n<b><color=red>Image data like medical DICOM which cannot be read must be converted to Texture2D with your own scripts due to legal reasons.</color></b>", "TEXTURETOVOXEL")]
 		[InfoSection1("How to use:", "Fill the Slices list with Textures either manually or automatically by third party scripts. " +
 			"Then call ApplyProceduralModifier() via code or click on the Apply Procedural Modifier button." +
 			"\n\n - The green box shows the region which will be modified and should be inside the boundary of the voxel generator." +
@@ -37,7 +37,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			"\n\nAny texture type can be used but the preferred type is <b>RGBA32</b>. Other types are converted automatically when applied which costs extra computation time. " +
 			"Therefore for real time usage, the used Textures should already be in the correct format. All textures must have the same dimensions." +
 			"\n\nThe save limit is set to 50 million voxels as the 3D reconstruction is incredible fast and accurate. " +
-			"\nIf you see no results, try to increase the resolution of the hull generator by increasing the Width or Cell Subdivision.")]
+			"\nIf you see no results, try to increase the resolution of the hull generator by increasing the Width or Cell Subdivision.", "TEXTURETOVOXEL")]
 		[InfoText("Texture To Voxel", "TEXTURETOVOXEL")]
 		public float BoundaryMultiplier = 1;
 

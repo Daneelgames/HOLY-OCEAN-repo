@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using Fraktalia.Utility.NativeNoise;
 using Unity.Burst;
 using Unity.Collections;
@@ -59,7 +60,7 @@ namespace Fraktalia.VoxelGen.World
 			calculate.Depth = (byte)Depth;
 
 			CleanUp();
-			calculate.Reliefs = new NativeList<Relief>(Allocator.Persistent);
+			calculate.Reliefs = new FNativeList<Relief>(Allocator.Persistent);
 		}
 
 		public override JobHandle Apply(Vector3 hash, VoxelGenerator targetGenerator, ref JobHandle handle)
@@ -139,7 +140,7 @@ namespace Fraktalia.VoxelGen.World
 		public FunctionPointer<WorldAlgorithm_PostProcess> PostProcessFunctionPointer;
 
 		[ReadOnly]
-        public NativeList<WorldAlgorithm_PerlinNoise_Planet_Relief.Relief> Reliefs;
+        public FNativeList<WorldAlgorithm_PerlinNoise_Planet_Relief.Relief> Reliefs;
         public float Scale;
 
         public void Execute(int index)

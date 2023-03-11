@@ -137,8 +137,32 @@ namespace Fraktalia.Core.FraktaliaAttributes
 					texturegenerator.CreateAllTextureArrays();
 				}
 
-				if (GUILayout.Button("Create Texture Atlas from Target Material"))
-				{				
+				if (GUILayout.Button("Create 3D Texture"))
+				{
+					if (!texturegenerator.AreTexturesReadable())
+					{
+						if (!EditorUtility.DisplayDialog("Some textures are not readible", "Some textures assigned are not set read/writeable in the asset database." +
+							" Enable read/write for those affected textures?", "Do It", "Cancel"))
+						{
+							return;
+						}
+					}
+
+					texturegenerator.CreateAll3DTexture();
+				}
+
+
+				if (GUILayout.Button("Create Texture Atlas"))
+				{
+					if (!texturegenerator.AreTexturesReadable())
+					{
+						if (!EditorUtility.DisplayDialog("Some textures are not readible", "Some textures assigned are not set read/writeable in the asset database." +
+							" Enable read/write for those affected textures?", "Do It", "Cancel"))
+						{
+							return;
+						}
+					}
+
 					texturegenerator.CreateAllTextureAtlases();
 				}
 

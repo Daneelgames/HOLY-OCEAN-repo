@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using Fraktalia.Utility.DataStructures;
 using Fraktalia.VoxelGen;
 using System;
@@ -28,10 +29,10 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
         public float AvgFacesPerLeaf { get { return Faces.Length / (float)LeafNodes; } }
 
         [NativeDisableContainerSafetyRestriction]
-        private NativeList<Vector3> Vertices;
+        private FNativeList<Vector3> Vertices;
 
         [NativeDisableContainerSafetyRestriction]
-        private NativeList<int> Indices;
+        private FNativeList<int> Indices;
 
         private int NumFaces;
 
@@ -40,34 +41,34 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
         private int InnerNodes;
 
         [NativeDisableContainerSafetyRestriction]
-        private NativeList<AABBNode> Nodes;
+        private FNativeList<AABBNode> Nodes;
 
         [NativeDisableContainerSafetyRestriction]
         private NativeArray<int> Faces;
 
         [NativeDisableContainerSafetyRestriction]
-        private NativeList<Box3> FaceBounds;
+        private FNativeList<Box3> FaceBounds;
 
         private int CurrentDepth;
 
         [NativeDisableContainerSafetyRestriction]
-        NativeList<int> faces;
+        FNativeList<int> faces;
 
         public void Initialize(NativeMesh mesh)
         {
-            Vertices = new NativeList<Vector3>(Allocator.Persistent);
-            Indices = new NativeList<int>(Allocator.Persistent);
+            Vertices = new FNativeList<Vector3>(Allocator.Persistent);
+            Indices = new FNativeList<int>(Allocator.Persistent);
             mesh.GetVerticeArray(true, Vertices);
             mesh.GetTriangleArray(Indices);
 
             NumFaces = Indices.Length / 3;
 
-            Nodes = new NativeList<AABBNode>((int)(NumFaces * 1.5), Allocator.Persistent);
+            Nodes = new FNativeList<AABBNode>((int)(NumFaces * 1.5), Allocator.Persistent);
             Faces = new NativeArray<int>(NumFaces, Allocator.Persistent);
-            FaceBounds = new NativeList<Box3>(Allocator.Persistent);
+            FaceBounds = new FNativeList<Box3>(Allocator.Persistent);
 
 
-            faces = new NativeList<int>(Allocator.Persistent);
+            faces = new FNativeList<int>(Allocator.Persistent);
 
             MaxDepth = 0;
             InnerNodes = 0;
@@ -210,7 +211,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
             ++CurrentDepth;
             MaxDepth = Math.Max(MaxDepth, CurrentDepth);
 
-            NativeList<int> faces = GetFaces(start, numFaces);
+            FNativeList<int> faces = GetFaces(start, numFaces);
 
             Vector3 min, max;
             CalculateFaceBounds(faces, out min, out max);
@@ -252,7 +253,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
         }
 
         // partion faces based on the surface area heuristic
-        private int PartitionSAH(NativeList<int> faces)
+        private int PartitionSAH(FNativeList<int> faces)
         {
             int numFaces = faces.Length;
             int bestAxis = 0;
@@ -319,7 +320,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
             return bestIndex + 1;
         }
 
-        private void CalculateFaceBounds(NativeList<int> faces, out Vector3 outMin, out Vector3 outMax)
+        private void CalculateFaceBounds(FNativeList<int> faces, out Vector3 outMin, out Vector3 outMax)
         {
             Vector3 min = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
             Vector3 max = new Vector3(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
@@ -396,7 +397,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
             return Nodes[index];
         }
 
-        private NativeList<int> GetFaces(int start, int num)
+        private FNativeList<int> GetFaces(int start, int num)
         {
             faces.Clear();
 

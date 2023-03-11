@@ -4,6 +4,8 @@ using System.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.IO;
+using Fraktalia.Core.FraktaliaAttributes;
+
 namespace Fraktalia.Core.LMS
 {
     [CustomEditor(typeof(NativeMeshCombiner))][CanEditMultipleObjects]
@@ -187,6 +189,24 @@ namespace Fraktalia.Core.LMS
 				{
 					PlayerSettings.stripUnusedMeshComponents = false;
 				}
+			}
+
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("UV Modifiers: " + mytarget.GetComponents<NativeUVModifier>().Length);
+			var algorithms = FraktaliaEditorUtility.GetDerivedTypesForScriptSelection(typeof(NativeUVModifier), "Add UV Modifier...");
+			int selectalgorithm = EditorGUILayout.Popup(0, algorithms.Item2);
+			if (selectalgorithm > 0)
+			{
+				mytarget.gameObject.AddComponent(algorithms.Item1[selectalgorithm]);
+			}
+
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("Attachments: " + mytarget.GetComponents<MeshPieceAttachment>().Length);
+			var attachments = FraktaliaEditorUtility.GetDerivedTypesForScriptSelection(typeof(MeshPieceAttachment), "Add Mesh Attachment...");
+			int selectedattachments = EditorGUILayout.Popup(0, attachments.Item2);
+			if (selectedattachments > 0)
+			{
+				mytarget.gameObject.AddComponent(attachments.Item1[selectedattachments]);
 			}
 
 

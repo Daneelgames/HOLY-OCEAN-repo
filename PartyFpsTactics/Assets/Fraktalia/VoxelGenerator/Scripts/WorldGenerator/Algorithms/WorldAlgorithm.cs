@@ -25,19 +25,19 @@ namespace Fraktalia.VoxelGen.World
 			"The main parameter is the <b>Apply Function</b> which defines how the generated values are mixed together. Processing the world is done in a top down fashion so the " +
 			"child order matters. Usually the first algorithm should have the Apply Function defined at Set. Then the other following algorithms can use any apply mode.\n\n" +
 			"The second parameter is the Post Process Function. The Post Process Function is applied after calculating the value. " +
-			"For example NoNegatives prevents negative values which may cause unexpected results.")]
+			"For example NoNegatives prevents negative values which may cause unexpected results.", "WORLDALGORITHM")]
 		[InfoSection1("Apply Functions:", "" +
 		"<b>Set:</b> Set the calculated value, overwrites previous values.\n" +
 		"<b>Add:</b> Adds the value to the value calucaled by the previous algorithm. Keep in mind that negative values are possible.\n" +
 		"<b>Subtract:</b> Subtracts the value to the value calucaled by the previous algorithm. Keep in mind that negative values are possible.\n" +
 		"<b>Min:</b> Overwrites the smaller value (previous vs current). Ideal for cave creation\n" +
 		"<b>Max:</b> Overwrites the higher value (previous vs current).\n" +
-		"<b>Invert Set/Add/Subtract/Min/Max:</b> Applies the inverted value. Inversion is 255 - value. Beware negative numbers can drastically change the result!\n")]
+		"<b>Invert Set/Add/Subtract/Min/Max:</b> Applies the inverted value. Inversion is 255 - value. Beware negative numbers can drastically change the result!\n", "WORLDALGORITHM")]
 
 		[InfoSection2("Post Process:", "" +
 		"<b>None:</b> Nothing is applied.\n" +
-		"<b>No Negatives:</b> Negative values are set to 0.\n")]
-		[InfoVideo("https://www.youtube.com/watch?v=3KrPFj9hUcA&lc=UgzjAqdGrVsM77feBBN4AaABAg", false)]
+		"<b>No Negatives:</b> Negative values are set to 0.\n", "WORLDALGORITHM")]
+		[InfoVideo("https://www.youtube.com/watch?v=3KrPFj9hUcA&lc=UgzjAqdGrVsM77feBBN4AaABAg", false, "WORLDALGORITHM")]
 		[InfoText("World Algorithm:", "WORLDALGORITHM")]
 		public WorldGenerator worldGenerator;
 		

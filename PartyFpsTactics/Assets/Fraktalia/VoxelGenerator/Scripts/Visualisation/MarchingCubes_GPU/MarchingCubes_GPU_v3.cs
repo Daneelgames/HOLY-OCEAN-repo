@@ -10,6 +10,7 @@ using Fraktalia.Core.FraktaliaAttributes;
 using Fraktalia.Utility;
 using Unity.Collections.LowLevel.Unsafe;
 using Fraktalia.Core.Math;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -21,12 +22,12 @@ namespace Fraktalia.VoxelGen.Visualisation
 		[BeginInfo("MarchingCubes_GPUv2")]
 		[InfoTitle("GPU based marching cubes", "This is the fastest hull generator currently possible. It combines the power of CPU and GPU to increase perfomance far beyond " +
 		"CPU only based hull generators. " +
-			"\n\n V2 is about 10x faster than the previous one.")]
+			"\n\n V2 is about 10x faster than the previous one.", "MarchingCubes_GPUv2")]
 		[InfoSection1("How to use:", "Functionality is same as the CPU based marching cubes. It is important to have the compute shaders (Marching Cubes and Clear Buffer) assigned. " +
-			"\n\nIt is recommended to use a triplanar shader so expensive UV, Normals and Tangents calculations can be avoided. If you cannot use triplanar shaders, you can enable them.")]
+			"\n\nIt is recommended to use a triplanar shader so expensive UV, Normals and Tangents calculations can be avoided. If you cannot use triplanar shaders, you can enable them.", "MarchingCubes_GPUv2")]
 		[InfoSection2("Compatibility:", "" +
 		"<b>Direct X 11:</b> This hull generator uses Compute Shader which may not be supported by your target system.\n" +
-		"For more information check the official statement from Unity:\n\nhttps://docs.unity3d.com/Manual/class-ComputeShader.html\n")]
+		"For more information check the official statement from Unity:\n\nhttps://docs.unity3d.com/Manual/class-ComputeShader.html\n", "MarchingCubes_GPUv2")]
 		[InfoText("GPU based marching cubes:", "MarchingCubes_GPUv2")]
 
 
@@ -306,7 +307,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 
 
-		protected override void finishCalculation(int m, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		protected override void finishCalculation(int m, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{
 			GPUToMesh_v2 dataconverter = dataconverters[m];
 			

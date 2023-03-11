@@ -51,20 +51,20 @@ namespace Fraktalia.VoxelGen.Modify
 		[InfoTitle("Voxel Modifier", "This is the main script to modify voxels. When this game object is selected, you can paint and modify voxels in the editor by holding CTRL/STRG button " +
 		"and Left/Right/Middle mouse click. You can define the target dimension when the voxel generator has more than one dimension.\n\n" +
 		"The main parameter is the depth value which defines the size of the voxel being modified. The Estimated Modifications shows you how many voxels will be modified when applied. " +
-		"There are various shapes possible such as sphere and box. Parameters such as Radius or Size define the properties of the shape.")]
+		"There are various shapes possible such as sphere and box. Parameters such as Radius or Size define the properties of the shape.", "VOXELMODIFIER")]
 		[InfoSection1("Targeting Settings:", "The voxel modifier is able to modify multiple voxel generators at once. " +
 		"Voxel Generators defined in the Always Modify list are always targeted when applied" +
 		"It is possible to find the voxel generator in a dynamic fashion using sphere casts at the target locationg. The fetched generators can be filtered using the whitelist. " +
-		"The Max Changes parameter limits the amount of generators fetched and modified at the same time.")]
+		"The Max Changes parameter limits the amount of generators fetched and modified at the same time.", "VOXELMODIFIER")]
 		[InfoSection2("Painting Modes:", "The editor painting has 2 modes which is 2D and 3D painting. 3D Painting uses raycast on generic Unity Colliders while 2D Painting uses a 2D plane only. " +
 		"The modifying modes Set, Additive and Subtractive use the dedicated ID value. Smooth smoothes the region by applying a average filter to the region. " +
 		"It is possible to find the voxel generator in a dynamic fashion using sphere casts at the target locationg. The fetched generators can be filtered using the whitelist. " +
-		"The Max Changes parameter limits the amount of generators fetched and modified at the same time.")]
+		"The Max Changes parameter limits the amount of generators fetched and modified at the same time.", "VOXELMODIFIER")]
 
 
 		[InfoText("Voxel Modifier", "VOXELMODIFIER")]
-		[InfoVideo("https://www.youtube.com/watch?v=CiRZoxXJ9ns&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=5&t=2s", false)]
-		[InfoVideo2("https://www.youtube.com/watch?v=7ZfE6UaEqy4&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=6", "How to use ingame")]
+		[InfoVideo("https://www.youtube.com/watch?v=CiRZoxXJ9ns&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=5&t=2s", false, "VOXELMODIFIER")]
+		[InfoVideo2("https://www.youtube.com/watch?v=7ZfE6UaEqy4&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=6", "How to use ingame", "VOXELMODIFIER")]
 		[Range(0, 5)]
 		public int TargetDimension;
 		[Range(1, NativeVoxelTree.MaxDepth)]

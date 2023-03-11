@@ -8,6 +8,7 @@ using UnityEngine;
 using Unity.Burst;
 using System;
 using System.Runtime.InteropServices;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen
 {
@@ -19,25 +20,25 @@ namespace Fraktalia.VoxelGen
 		public NativeVoxelTree data;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData> changedata_additive;
-		public NativeList<NativeVoxelModificationData> changedata_additive_confirmed;
-		public NativeList<NativeVoxelNode> result_final;
+		public FNativeList<NativeVoxelModificationData> changedata_additive;
+		public FNativeList<NativeVoxelModificationData> changedata_additive_confirmed;
+		public FNativeList<NativeVoxelNode> result_final;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData> changedata_set;
-		public NativeList<NativeVoxelModificationData> changedata_set_confirmed;
-		public NativeList<NativeVoxelNode> result_set;
+		public FNativeList<NativeVoxelModificationData> changedata_set;
+		public FNativeList<NativeVoxelModificationData> changedata_set_confirmed;
+		public FNativeList<NativeVoxelNode> result_set;
 
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> changedata_additive_inner;
-		public NativeList<NativeVoxelModificationData_Inner> changedata_additive_confirmed_inner;
-		public NativeList<NativeVoxelNode> result_final_inner;
+		public FNativeList<NativeVoxelModificationData_Inner> changedata_additive_inner;
+		public FNativeList<NativeVoxelModificationData_Inner> changedata_additive_confirmed_inner;
+		public FNativeList<NativeVoxelNode> result_final_inner;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> changedata_set_inner;
-		public NativeList<NativeVoxelModificationData_Inner> changedata_set_confirmed_inner;
-		public NativeList<NativeVoxelNode> result_set_inner;
+		public FNativeList<NativeVoxelModificationData_Inner> changedata_set_inner;
+		public FNativeList<NativeVoxelModificationData_Inner> changedata_set_confirmed_inner;
+		public FNativeList<NativeVoxelNode> result_set_inner;
 
 
 
@@ -48,21 +49,21 @@ namespace Fraktalia.VoxelGen
 		{
 			MemoryOptimized = (byte)(generator.MemoryOptimized ? 1 : 0);
 
-			changedata_additive = new NativeList<NativeVoxelModificationData>(Allocator.Persistent);
-			changedata_additive_confirmed = new NativeList<NativeVoxelModificationData>(Allocator.Persistent);
-			result_final = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+			changedata_additive = new FNativeList<NativeVoxelModificationData>(Allocator.Persistent);
+			changedata_additive_confirmed = new FNativeList<NativeVoxelModificationData>(Allocator.Persistent);
+			result_final = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 
-			changedata_set = new NativeList<NativeVoxelModificationData>(Allocator.Persistent);
-			result_set = new NativeList<NativeVoxelNode>(Allocator.Persistent);
-			changedata_set_confirmed = new NativeList<NativeVoxelModificationData>(Allocator.Persistent);
+			changedata_set = new FNativeList<NativeVoxelModificationData>(Allocator.Persistent);
+			result_set = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
+			changedata_set_confirmed = new FNativeList<NativeVoxelModificationData>(Allocator.Persistent);
 
-			changedata_additive_inner = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
-			changedata_additive_confirmed_inner = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
-			result_final_inner = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+			changedata_additive_inner = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			changedata_additive_confirmed_inner = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			result_final_inner = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 
-			changedata_set_inner = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
-			result_set_inner = new NativeList<NativeVoxelNode>(Allocator.Persistent);
-			changedata_set_confirmed_inner = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			changedata_set_inner = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			result_set_inner = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
+			changedata_set_confirmed_inner = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
 		}
 
 		public void Prepare()

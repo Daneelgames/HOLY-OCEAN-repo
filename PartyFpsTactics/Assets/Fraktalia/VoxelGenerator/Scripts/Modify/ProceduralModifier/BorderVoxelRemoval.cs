@@ -9,10 +9,10 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		[BeginInfo("BORDER")]
 		[InfoTitle("Border Removal", "This script creates a simple voxel block in specific region defined by the black outline. " +
 			"Main usage is to initialize a clean voxel block with solid measurement (Voxel Generator only has full solid or empty). " +
-			"People often asked about how to create a block with defined size. Use this script to initialize the block with your desired dimensions.")]
+			"People often asked about how to create a block with defined size. Use this script to initialize the block with your desired dimensions.", "BORDER")]
 		[InfoSection1("How to use:", "Define the size of the block which is shown by the dark region and hit the apply button. " +
 			"\n\n - The Offset Y changes the height position of the surface." +
-			"\n\n - Target texture layer defines which texture layer of the terrain should be read when mode is set to individual layer.")]
+			"\n\n - Target texture layer defines which texture layer of the terrain should be read when mode is set to individual layer.", "BORDER")]
 		[InfoText("Border Removal:", "BORDER")]
 
 		public bool UsePadding = false;

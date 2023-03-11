@@ -44,22 +44,22 @@ namespace Fraktalia.VoxelGen
 		"When attached to a generator, saving the scene will also save the voxelmap if you have modified inside the editor before.\n\n" +
 		"The save system also provides a functionality to load the voxel generator on startup during playmode and to automatically load the map during edit mode when loading the scene file. " +
 		"These two features can be activated using the <b>Auto Load in Editor/Load on start</b> toggles.\n\n" +
-		"You have the option to save directly into the scene, as scriptable object and as .Voxel file into the persistent data path.")]
+		"You have the option to save directly into the scene, as scriptable object and as .Voxel file into the persistent data path.", "VOXELSAVESYSTEM")]
 		[InfoSection1("Scene:", "This will save the voxel data directly into the unity .scene file. However it increases the scene file which reduces loading time " +
 		"Since the voxel map is a serializable container, the inspector will slow down during edit mode which reduces performance (editor only)" +
-		"Ingame sculpting is not affected by the slowdown. Saving into the scene is only possible inside the editor.")]
+		"Ingame sculpting is not affected by the slowdown. Saving into the scene is only possible inside the editor.", "VOXELSAVESYSTEM")]
 		[InfoSection2("Scriptable Object:", "Saves the voxel map as scriptable objects. Is the ideal saving mode for blocks created inside the editor." +
 		"If no scriptable object exists, a new one is automatically created and assigned to it. " +
 		"The location is either the default Assets folder or stored inside the Scene subfolder if <b>Save in Scene Subfolder</b> is set.\n\n" +
 		"If <b>Duplicate on clone</b> is set, the scriptable object is duplicated when you duplicate the voxel generator. \n\nThe duplicated object gets a new ID and is assigned to the new object. " +
-		"Deleting a voxel generator will remove the scriptable object if <b>Remove Voxelmap on Delete</b>. Also scriptable objects saving only works in editor.")]
+		"Deleting a voxel generator will remove the scriptable object if <b>Remove Voxelmap on Delete</b>. Also scriptable objects saving only works in editor.", "VOXELSAVESYSTEM")]
 		[InfoSection3("Persistent Datapath/World/Region:", "Saves the voxel map as .VOXEL file into the persistent datapath." +
 		"This is the ideal saving mode to save voxeldata ingame by the user. The .Voxel file is in binary and could be sent over your network if you make a multiplayer game.\n\n" +
 		"<color=yellow>Keep in mind that every user has his own persistent datapath. This means that the user will not have the .Voxel file you saved during edit mode.</color>\n\n" +
 		"The mode World and Region are identically to the persistent datapath and are used by infinite world systems. " +
-			"These saving modes have an additional chunk system in order to be able to know the chunk it belonged to.")]
+			"These saving modes have an additional chunk system in order to be able to know the chunk it belonged to.", "VOXELSAVESYSTEM")]
 		[InfoText("Voxel Save System", "VOXELSAVESYSTEM")]
-		[InfoVideo("https://www.youtube.com/watch?v=yWqkizPsjUs&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=8", false)]
+		[InfoVideo("https://www.youtube.com/watch?v=yWqkizPsjUs&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=8", false, "VOXELSAVESYSTEM")]
 		[Tooltip("Loads in the editor as soon as the scene is reloaded.")]
 		public bool AutoLoad = true;
 		[Tooltip("Loads when the object is first instantiated in a scene during play.")]
@@ -405,7 +405,7 @@ namespace Fraktalia.VoxelGen
 			UpdateRoutines();
 		}
 
-		public void UpdateRoutines()	
+		public void UpdateRoutines()
 		{
 			if(ActiveCoroutine != null)
 			{

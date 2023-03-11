@@ -18,6 +18,9 @@ namespace Fraktalia.VoxelGen.Samples
 
 		public float MaxDistance = 2000;
 
+		public bool ShotGunEffect = false;
+		public float ShotGunPower;
+
 		private bool hashit;
 		private void Start()
 		{
@@ -28,7 +31,13 @@ namespace Fraktalia.VoxelGen.Samples
 		{
 			if (!Modifier || !SourceCamera) return;
 
-			Ray ray = SourceCamera.ScreenPointToRay(Input.mousePosition);
+			Vector3 mousePosition = Input.mousePosition;
+            if (ShotGunEffect)
+            {
+				mousePosition += Random.insideUnitSphere * ShotGunPower;
+            }
+
+			Ray ray = SourceCamera.ScreenPointToRay(mousePosition);
 
 			RaycastHit hit;
 			if (Input.GetKey(ActivationButton) || ActivationButton == KeyCode.None)

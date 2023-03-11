@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Collections;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,8 +25,8 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		
 		[Header("General Settings:")]
 		[NonSerialized]
-		public NativeList<NativeVoxelModificationData> ProceduralVoxelData;
-		private NativeList<NativeVoxelModificationData> PostProcessedVoxelData;
+		public FNativeList<NativeVoxelModificationData> ProceduralVoxelData;
+		private FNativeList<NativeVoxelModificationData> PostProcessedVoxelData;
 
 
 		public VoxelGenerator TargetGenerator;
@@ -91,7 +92,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		{
 			if (!ProceduralVoxelData.IsCreated)
 			{
-				ProceduralVoxelData = new NativeList<NativeVoxelModificationData>(Allocator.Persistent);
+				ProceduralVoxelData = new FNativeList<NativeVoxelModificationData>(Allocator.Persistent);
 			}
 			else
 			{
@@ -100,7 +101,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 
 			if (!PostProcessedVoxelData.IsCreated)
 			{
-				PostProcessedVoxelData = new NativeList<NativeVoxelModificationData>(Allocator.Persistent);
+				PostProcessedVoxelData = new FNativeList<NativeVoxelModificationData>(Allocator.Persistent);
 			}
 			else
 			{
@@ -197,7 +198,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 				PostProcessedVoxelData.Clear();
 				PostProcessedVoxelData.Capacity = 0;
 			
-				selectedGenerator.SetRegionsDirty(boundary.center, boundary.extents, boundary.extents);
+				selectedGenerator.SetRegionsDirty(boundary.center, boundary.extents, boundary.extents, TargetDimension);
 				
 				if (selectedGenerator.savesystem) selectedGenerator.savesystem.IsDirty = true;
 			}

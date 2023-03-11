@@ -62,7 +62,7 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 			DrawDefaultInspector();
 
-			if (GUILayout.Button("Just Create it."))
+			if (GUILayout.Button("Create TextureArray."))
 			{			
 				Material[] mats = new Material[mytarget.renderers.Length];
 
@@ -79,10 +79,51 @@ namespace Fraktalia.Core.FraktaliaAttributes
 				TextureArrayGenerator.texturegenerator.OutputPath = AssetDatabase.GetAssetPath(TextureArrayGenerator.texturegenerator.TargetMaterial).Replace("/" + TextureArrayGenerator.texturegenerator.TargetMaterial.name + ".mat", "");
 				TextureArrayGenerator.texturegenerator.FinalName = TextureArrayGenerator.texturegenerator.TargetMaterial.name;
 			
-
-
 				TextureArrayGenerator.texturegenerator.ExtractMaterials();
 				TextureArrayGenerator.texturegenerator.CreateAllTextureArrays();
+			}
+
+			if (GUILayout.Button("Create 3D Texture."))
+			{
+				Material[] mats = new Material[mytarget.renderers.Length];
+
+				for (int i = 0; i < mytarget.renderers.Length; i++)
+				{
+					mats[i] = mytarget.renderers[i].sharedMaterial;
+				}
+
+				if (TextureArrayGenerator.texturegenerator == null) TextureArrayGenerator.CreateGenerator();
+
+				TextureArrayGenerator.texturegenerator.Materials = mats;
+				TextureArrayGenerator.texturegenerator.TargetMaterial = mytarget.targetmaterial;
+				TextureArrayGenerator.texturegenerator.UseMaterialPath = true;
+				TextureArrayGenerator.texturegenerator.OutputPath = AssetDatabase.GetAssetPath(TextureArrayGenerator.texturegenerator.TargetMaterial).Replace("/" + TextureArrayGenerator.texturegenerator.TargetMaterial.name + ".mat", "");
+				TextureArrayGenerator.texturegenerator.FinalName = TextureArrayGenerator.texturegenerator.TargetMaterial.name;
+
+				TextureArrayGenerator.texturegenerator.ExtractMaterials();
+				TextureArrayGenerator.texturegenerator.CreateAll3DTexture();
+			}
+
+
+			if (GUILayout.Button("Create Texture Atlas."))
+			{
+				Material[] mats = new Material[mytarget.renderers.Length];
+
+				for (int i = 0; i < mytarget.renderers.Length; i++)
+				{
+					mats[i] = mytarget.renderers[i].sharedMaterial;
+				}
+
+				if (TextureArrayGenerator.texturegenerator == null) TextureArrayGenerator.CreateGenerator();
+
+				TextureArrayGenerator.texturegenerator.Materials = mats;
+				TextureArrayGenerator.texturegenerator.TargetMaterial = mytarget.targetmaterial;
+				TextureArrayGenerator.texturegenerator.UseMaterialPath = true;
+				TextureArrayGenerator.texturegenerator.OutputPath = AssetDatabase.GetAssetPath(TextureArrayGenerator.texturegenerator.TargetMaterial).Replace("/" + TextureArrayGenerator.texturegenerator.TargetMaterial.name + ".mat", "");
+				TextureArrayGenerator.texturegenerator.FinalName = TextureArrayGenerator.texturegenerator.TargetMaterial.name;
+
+				TextureArrayGenerator.texturegenerator.ExtractMaterials();
+				TextureArrayGenerator.texturegenerator.CreateAllTextureAtlases();
 			}
 
 			if (GUILayout.Button("Open Editor"))

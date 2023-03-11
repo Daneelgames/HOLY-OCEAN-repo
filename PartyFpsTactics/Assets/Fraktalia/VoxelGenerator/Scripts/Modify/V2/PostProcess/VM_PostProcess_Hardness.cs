@@ -6,6 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using UnityEngine;
 using Fraktalia.Core.FraktaliaAttributes;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,15 +25,15 @@ namespace Fraktalia.VoxelGen.Modify
 		"The hardness itself is a multiplier, and the ID of the modification data is multiplied by the hardness. <b>This means that a hardness of 0 makes the voxel indestructible.</b> " +
 		"A value of 1 or greater makes the voxel soft and will be modified very quickly. The default value is 1.\n\n" +
 		"<b>Histogram:</b>\n\n" +
-		"In order to implement hardness, a histogram is required which contains the hardness factor for each individual ID a voxel can have and is between 0 and 255.")]
+		"In order to implement hardness, a histogram is required which contains the hardness factor for each individual ID a voxel can have and is between 0 and 255.", "HARDNESS")]
 		[InfoSection1("How to use:", "You have to define the hardness dimension first. Usually it is the texture dimension, like dimension 1. " +
 			"Then you have to define the histogram either by directly manipulating the values in the histogram array or by using the histogram designing helpers. " +
 			"The animation curve window allows you to define the hardness by changing the key points. " +
-			"You can also define the MinID and MaxID and Min Max Hardness and then click on the [Apply MinID/MaxID hardness]")]
+			"You can also define the MinID and MaxID and Min Max Hardness and then click on the [Apply MinID/MaxID hardness]", "HARDNESS")]
 		[InfoSection2("Other information:", "" +
 			"<b>Negative Hardness:</b> If the hardness value is negative, material will be added when Subtraction is applied and removed when Addition is applied. " +
 			"Negative values basically reverse the modification. Set [No Negatives] to true in order to prevent negative numbers.\n\n" +
-			"For easier manipulation of the histogram curve, the voxel ID range of [0-255] is remapped to [0-1]. The values on the Y axis represents the hardness.")]
+			"For easier manipulation of the histogram curve, the voxel ID range of [0-255] is remapped to [0-1]. The values on the Y axis represents the hardness.", "HARDNESS")]
 		[InfoText("Hardness System:", "HARDNESS")]
 		public int HardnessDimension=1;
 		
@@ -54,7 +55,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public int MaxID;
 		public float MinMaxHardness;
 
-		public override void ApplyPostprocess(NativeList<NativeVoxelModificationData_Inner> modifierData, VoxelGenerator generator, VoxelModifier_V2 modifier)
+		public override void ApplyPostprocess(FNativeList<NativeVoxelModificationData_Inner> modifierData, VoxelGenerator generator, VoxelModifier_V2 modifier)
 		{
 			var nhistogram = Fraktalia.Utility.ContainerStaticLibrary.GetArray_float(256);
 			
@@ -123,7 +124,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public NativeVoxelTree data;
 		
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> modifierData;
+		public FNativeList<NativeVoxelModificationData_Inner> modifierData;
 
 		[NativeDisableContainerSafetyRestriction]
 		public NativeArray<float> histogramm;

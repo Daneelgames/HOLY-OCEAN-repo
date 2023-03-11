@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -299,7 +300,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			}
 		}
 
-		public override void NodesChanged(ref NativeList<NativeVoxelNode> voxels)
+		public override void NodesChanged(ref FNativeList<NativeVoxelNode> voxels)
 		{
 			nodechangedjob.voxels = voxels;
 

@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -52,9 +53,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 		private int PostProcesses = 0;
 		private Material usedmaterial;
 
-		private NativeList<Vector3> NULL_VERTICES;
-		private NativeList<int> NULL_TRIANGLES;
-		private NativeList<Vector3> NULL_NORMALS;
+		private FNativeList<Vector3> NULL_VERTICES;
+		private FNativeList<int> NULL_TRIANGLES;
+		private FNativeList<Vector3> NULL_NORMALS;
 
 
 
@@ -62,9 +63,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 		{
 			base.Initialize();
 
-			NULL_NORMALS  = new NativeList<Vector3>(0, Allocator.Persistent);
-			NULL_VERTICES = new NativeList<Vector3>(0, Allocator.Persistent);
-			NULL_TRIANGLES = new NativeList<int>(0, Allocator.Persistent);
+			NULL_NORMALS  = new FNativeList<Vector3>(0, Allocator.Persistent);
+			NULL_VERTICES = new FNativeList<Vector3>(0, Allocator.Persistent);
+			NULL_TRIANGLES = new FNativeList<int>(0, Allocator.Persistent);
 
 			isInitialized = true;
 			
@@ -110,11 +111,6 @@ namespace Fraktalia.VoxelGen.Visualisation
 			{
 				WorkerQueue.Enqueue(index);
 				Haschset[index] = true;
-			}
-
-			if (PostProcesses < 3)
-			{
-				PostProcesses++;
 			}
 		}
 
@@ -183,10 +179,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 				if (WorkerQueue.Count > 0) return true;
 			}
 
-			if (PostProcesses > 0)
-			{		
-				return true;
-			}
+			
 			return false;
 		}		
 
@@ -238,37 +231,6 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 				m_JobFree[m] = false;
 			}
-
-			if(IsIdle && PostProcesses > 0)
-			{
-				for (int i = 0; i < works.Length; i++)
-				{
-					if (NoPostProcess)
-					{
-						works[i] = 0;
-					}
-					else if (works[i] > 0)
-					{						
-						if (!Haschset[i])
-						{
-							Haschset[i] = true;
-							WorkerQueue.Enqueue(i);
-							works[i]--;
-						}
-					}
-				}
-			
-				PostProcesses--;
-
-				if(NoPostProcess)
-				{
-					PostProcesses = 0;
-					NoPostProcess = false;
-				}
-				
-			}
-			
-
 		}
 
 		protected virtual void beginCalculation(int m, int index, float cellSize, float voxelSize, float startX, float startY, float startZ)
@@ -301,9 +263,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 				piece.Clear();
 
-				NativeList<Vector3> vertices;
-				NativeList<int> triangles;
-				NativeList<Vector3> normals;
+				FNativeList<Vector3> vertices;
+				FNativeList<int> triangles;
+				FNativeList<Vector3> normals;
 
 				finishCalculation(m, piece, out vertices, out triangles, out normals);
 				
@@ -346,7 +308,37 @@ namespace Fraktalia.VoxelGen.Visualisation
 			
 		}
 
-		protected virtual void finishCalculation(int m, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		public override void PostProcess()
+		{
+			if (PostProcesses > 0)
+			{
+				for (int x = 0; x < works.Length; x++)
+				{
+					if (NoPostProcess)
+					{
+						works[x] = 0;
+					}
+					else if (works[x] > 0)
+					{
+						if (!Haschset[x])
+						{
+							Haschset[x] = true;
+							WorkerQueue.Enqueue(x);
+							works[x]--;
+						}
+					}
+				}
+				PostProcesses--;
+				if (NoPostProcess)
+				{
+					PostProcesses = 0;
+					NoPostProcess = false;
+				}
+				engine.HullsDirty = true;
+			}
+		}
+
+		protected virtual void finishCalculation(int m, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{	
 			vertices = NULL_VERTICES;
 			triangles = NULL_TRIANGLES;
@@ -354,7 +346,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		}
 
 
-		public override void SetRegionsDirty(VoxelRegion region)
+		protected override void setRegionsDirty(VoxelRegion region)
 		{
 			int lenght = VoxelMeshes.Count;
 			if (lenght == 1)
@@ -402,6 +394,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 									Haschset[index] = true;
 									WorkerQueue.Enqueue(index);
 									works[index] = 3;
+									PostProcesses = 2;
 								}
 
 
@@ -410,12 +403,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 						}
 					}
 				}
-			}
-
-			if (PostProcesses < 3)
-			{
-				PostProcesses++;
-			}
+			}	
 		}
 
 		public override void UpdateLOD(int newLOD)

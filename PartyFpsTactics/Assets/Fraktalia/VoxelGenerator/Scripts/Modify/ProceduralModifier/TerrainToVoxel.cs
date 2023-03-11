@@ -20,7 +20,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		[BeginInfo("TERRAINTOVOXEL")]
 		[InfoTitle("Terrain to Voxel Converter", "This script allows the conversion of Unity terrain into voxel. " +
 			"Create and assign a conventional Unity3D terrain and convert it into a voxel representation. " +
-			"It is also possible to convert the texture layer into a voxel representation which requires a multi material setup using UV coordinates (check Obsidian sample material).")]
+			"It is also possible to convert the texture layer into a voxel representation which requires a multi material setup using UV coordinates (check Obsidian sample material).", "TERRAINTOVOXEL")]
 		[InfoSection1("How to use:", "Create a Unity3D terrain and assign it to the converter. Ideally change the size of the terrain to match the Voxel Generator or vise versa. " +
 			"The dark region shows the boundary which will be modified.\n\n" +
 			"Ideally the world position of the modifier matches the world position of the terrain. You can also simply attach the modifier as child to the terrain game object " +
@@ -34,8 +34,8 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			"and the second one should read the texture layers and modify Target Dimension 1. The parameters of both converters should be similar.</b>" +
 			"\n\n - Texture Multiplier is used for Texture reading only. It is directly multiplied into the fetched texture value. The dominant layer is the texture layer with the highest alpha value" +
 			"\nThe value is calculated with this formula: [Index of dominant Layer] X [Alpha of dominant Layer] X [Texture Multiplier]" +
-			"\n\n - Target texture layer defines which texture layer of the terrain should be read when mode is set to individual layer.")]
-		[InfoVideo("https://www.youtube.com/watch?v=18sfUuKmHwA&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=15", false)]
+			"\n\n - Target texture layer defines which texture layer of the terrain should be read when mode is set to individual layer.", "TERRAINTOVOXEL")]
+		[InfoVideo("https://www.youtube.com/watch?v=18sfUuKmHwA&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=15", false, "TERRAINTOVOXEL")]
 		[InfoText("Terrain To Voxel:", "TERRAINTOVOXEL")]
 		
 		public Terrain TerrainToConvert;
@@ -77,19 +77,21 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 
 
 				Gizmos.color = new Color32(0, 0, 0, 30);
-				Gizmos.matrix = transform.localToWorldMatrix;
-				Gizmos.DrawCube(bound.center, bound.size);
+				
+				Gizmos.DrawCube(TargetGenerator.transform.localToWorldMatrix.MultiplyPoint3x4(bound.center), bound.size);
 
-				Gizmos.matrix = Matrix4x4.identity;
 
 				float RootSize = TargetGenerator.RootSize;
 				Gizmos.color = Color.blue;
 				Gizmos.matrix = TargetGenerator.transform.localToWorldMatrix;
 				Gizmos.DrawWireCube(new Vector3(RootSize, RootSize, RootSize) / 2, new Vector3(RootSize, RootSize, RootSize));
 
-				Gizmos.matrix = transform.localToWorldMatrix;
+				Gizmos.matrix = Matrix4x4.identity;
 				Gizmos.color = Color.yellow;
-				Gizmos.DrawWireCube( new Vector3(bound.center.x, bound.center.y - OffsetY,bound.center.z), new Vector3(bound.size.x, 0, bound.size.z));
+
+				Vector3 centerpos = TargetGenerator.transform.localToWorldMatrix.MultiplyPoint3x4(bound.center) + new Vector3(0, OffsetY, 0);
+
+				Gizmos.DrawWireCube(centerpos, new Vector3(bound.size.x, 0, bound.size.z));
 
 			}
 		}
@@ -111,10 +113,10 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 					for (int z = 0; z < boundaryvoxelsize.z; z++)
 					{
 						Vector3 localPosition = start + new Vector3(voxelsize * x, voxelsize * y, voxelsize * z);
-
-
-
+						
 						Vector3 worldPosition = transform.localToWorldMatrix.MultiplyPoint3x4(localPosition);
+						worldPosition = targetgenerator_localtoworldmatrix.MultiplyPoint3x4(localPosition);
+
 						Vector3 generatorPosition = targetgenerator_worldtolocalmatrix.MultiplyPoint3x4(worldPosition);
 
 
@@ -163,6 +165,10 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			}
 
 			ProceduralVoxelData.AddRange(changedata);
+
+			
+
+			
 			changedata.Dispose();
 		}
 
@@ -295,7 +301,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			size.y += TopExtension;
 			bound.max = size;
 
-
+			bound.center += transform.localPosition;
 
 			return bound;
 		}

@@ -16,7 +16,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 
 		[BeginInfo("SUPERMESHVOXEL")]
 		[InfoTitle("Super Mesh to Voxel", "This script allows the conversion from mesh into voxel. " +
-			"Attaching one or more mesh filters to this game object allows you to convert a mesh into a voxel representation.")]
+			"Attaching one or more mesh filters to this game object allows you to convert a mesh into a voxel representation.", "SUPERMESHVOXEL")]
 		[InfoSection1("How to use:", "Attach as many mesh filter as you want to this component. Then either call ApplyProceduralModifier() via code or click on the Apply Procedural Modifier button" +
 			"\n\nIn order to apply this script, the attached mesh filters should at least be located inside the boundary of the target voxel generator." +
 			"\n\nWhen this object is selected, the dark region around the collider shows the influene to the voxel map." +
@@ -28,10 +28,10 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			"\n\nThis procedural modifier is not supposed to be applied in real time especially with complex 3D models as the computation is quite expensive on high resolutions. " +
 			"Increasing the depth increases the accuracy as more sample points are used but it may take so long that you can drink a coffee until it is finished. " +
 			"For scientific accuracy like in medical science, converting scanned Textures from Computer Tomography into Voxels is recommended. " +
-			"\n\n Low Polygonal models can be converted in real time. The Error message shows the border of realtime feasibility.")]		
+			"\n\n Low Polygonal models can be converted in real time. The Error message shows the border of realtime feasibility.", "SUPERMESHVOXEL")]		
 		[InfoText("Super Mesh To Voxel", "SUPERMESHVOXEL")]
 
-		[InfoVideo("https://youtu.be/qWQf8VmfVd8", false)]
+		[InfoVideo("https://youtu.be/qWQf8VmfVd8", false, "SUPERMESHVOXEL")]
 
 
 

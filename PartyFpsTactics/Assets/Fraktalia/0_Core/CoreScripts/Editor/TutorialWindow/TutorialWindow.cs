@@ -23,6 +23,8 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 		void OnGUI()
 		{
+			if (this.tutorialcontent == null) return;
+
 			GUIStyle titleH1 = new GUIStyle();
 			titleH1.fontSize = 18;
 			titleH1.padding = new RectOffset(3, 3, 3, 3);
@@ -55,12 +57,13 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 			InfoSection infotitle = this.tutorialcontent.Title;
-			EditorGUILayout.LabelField("<color=green>" + infotitle.Title + "</color>", titleH1);
+			if (infotitle != null)
+			{
+				EditorGUILayout.LabelField("<color=green>" + infotitle.Title + "</color>", titleH1);
+				EditorGUILayout.LabelField(infotitle.Text, text);
+			}
 
-			EditorGUILayout.LabelField(infotitle.Text, text);
-
-			List<InfoSection> tutorialcontent = this.tutorialcontent.content;
-
+			List<InfoSection> tutorialcontent = new List<InfoSection>(this.tutorialcontent.content);
 			if (tutorialcontent == null)
 			{
 				EditorGUILayout.EndScrollView();
@@ -69,6 +72,7 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 			for (int i = 0; i < tutorialcontent.Count; i++)
 			{
+				if (tutorialcontent[i] == null) continue;
 				EditorGUILayout.LabelField(tutorialcontent[i].Title,titleH2);
 
 				EditorGUILayout.LabelField(tutorialcontent[i].Text,text);

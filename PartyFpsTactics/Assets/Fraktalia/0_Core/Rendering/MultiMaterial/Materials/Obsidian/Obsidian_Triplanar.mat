@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Obsidian_Triplanar
   m_Shader: {fileID: 4800000, guid: ea054418bb16eea4086cf47d1ff70aa5, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON _EMISSION _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
+  m_ShaderKeywords: PULSATING
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -107,11 +107,14 @@ Material:
         m_Texture: {fileID: 18700000, guid: cfd42e61e4b64af41a84a8b22034ecd8, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - ENABLE_TESSELLATION: 0
     - PULSATING: 0
     - SEAMLESSTESSELATION: 0
     - SEAMLESS_TESSELLATION: 0
+    - TESSELLATION: 0
+    - USE_COLOR_FOR_SEAMLESS_TESSELLATION: 0
     - _BlendScale: 0.85
     - _BlendShift: 0.29
     - _BumpScale: 1
@@ -127,8 +130,8 @@ Material:
     - _Metallic: 1
     - _Mode: 1
     - _OcclusionStrength: 1
-    - _Parallax: 0.005
-    - _PulseAmplitude: 1
+    - _Parallax: 0.02
+    - _PulseAmplitude: 0.05
     - _PulseFrequency: 1
     - _SliceRange: 12.3
     - _SmoothnessTextureChannel: 0
@@ -141,14 +144,15 @@ Material:
     - _Tess_Y: 1
     - _Tess_Z: 1
     - _TesselationOffset: 0
-    - _TesselationPower: -0.5
+    - _TesselationPower: 0.1
     - _UV2Power: 0.01
     - _UV3Power: -0.1
     - _UVSec: 0
     - _ZWrite: 1
-    - maxDist: 429.4
-    - minDist: 88.88
+    - maxDist: 100
+    - minDist: 50
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _TransformTex: {r: 1.69, g: -1.05, b: 1, a: 1}
+  m_BuildTextureStacks: []

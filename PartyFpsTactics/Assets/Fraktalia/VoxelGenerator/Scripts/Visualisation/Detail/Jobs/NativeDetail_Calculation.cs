@@ -7,6 +7,7 @@ using Unity.Jobs;
 using UnityEngine;
 using Unity.Burst;
 using System;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -42,7 +43,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		[ReadOnly]
 		public NativeArray<DetailRequirement> DetailNeighbourRequirement;
 
-		public NativeList<Vector3> detailresultArray;
+		public FNativeList<Vector3> detailresultArray;
 
 		[BurstDiscard]
 		public void Init(int width)
@@ -55,7 +56,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 			MaxBlocks = blocks;
 
-			detailresultArray = new NativeList<Vector3>(2000, Allocator.Persistent);
+			detailresultArray = new FNativeList<Vector3>(2000, Allocator.Persistent);
 
 
 

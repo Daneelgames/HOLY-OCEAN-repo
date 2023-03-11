@@ -35,12 +35,12 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 		[InfoTitle("VOX Importer", "This script allows you to import .VOX files. " +
 			"Select the path to the .VOX file and hit the Import Vox File button. Then you can apply the result like a conventional procedural modifier. \n" +
 			"Some imports also contain multiple chunks. You can select the important chunk using the Chunk Child Index parameter.\n\n" +
-			"Note: SomeInformation like Animation, Color Data and Block Behavior data is currently ignored.")]
+			"Note: SomeInformation like Animation, Color Data and Block Behavior data is currently ignored.", "VOXIMPORTER")]
 		[InfoSection1("How to use:", "When adding me to a game object, define the Volume I should occupy using the <b>Volume Size</b>. Then click the generate button " +
 			"or call GenerateBlock from any script. Click or call CleanUp to destroy the volume.\n\n" +
 			"In order to see any results, hull generators must be attached and set up correctly because the generator itself is not responsible for the visualisation. " +
 			"Also it is possible to apply sub systems like the save system for saving/loading and world generator for procedural world generation. " +
-			"")]
+			"", "VOXIMPORTER")]
 		[InfoText("VOX Importer", "VOXIMPORTER")]
 		public float BoundaryMultiplier = 1;
 

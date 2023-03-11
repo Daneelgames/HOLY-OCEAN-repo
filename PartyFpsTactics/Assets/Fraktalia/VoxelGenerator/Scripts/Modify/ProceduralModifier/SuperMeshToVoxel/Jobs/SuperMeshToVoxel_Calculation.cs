@@ -9,6 +9,7 @@ using Unity.Burst;
 using System;
 
 using Fraktalia.Core.Math;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Modify.Procedural
 {
@@ -323,7 +324,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			return false;
 		}
 
-		public void GetVerticeArray(bool transformed, NativeList<Vector3> outputList)
+		public void GetVerticeArray(bool transformed, FNativeList<Vector3> outputList)
 		{
 			if(IsCreated != 1)
 			{
@@ -337,7 +338,7 @@ namespace Fraktalia.VoxelGen.Modify.Procedural
 			}			
 		}
 
-		public void GetTriangleArray(NativeList<int> outputList)
+		public void GetTriangleArray(FNativeList<int> outputList)
 		{
 			if (IsCreated != 1)
 			{

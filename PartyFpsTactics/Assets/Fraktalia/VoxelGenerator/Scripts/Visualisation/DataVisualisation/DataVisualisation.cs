@@ -6,6 +6,7 @@ using UnityEngine.Jobs;
 using System;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Collections;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,7 +23,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 	{
 		public const int MaxVertices = 300000;
 		public Dictionary<Vector3, VoxelPiece> VoxelDictionary;
-		public NativeQueue<NativeVoxelNode> HullGenerationQueue;
+		public FNativeQueue<NativeVoxelNode> HullGenerationQueue;
 
 		public HashSet<Vector3> Haschset;
 
@@ -137,8 +138,8 @@ namespace Fraktalia.VoxelGen.Visualisation
 						voxelmesh.triangles = m_MeshModJobs[i].m_triangles.ToArray();
 						voxelmesh.RecalculateNormals();
 						voxelmesh.RecalculateTangents();
-
-						voxelpiece.meshcollider.sharedMesh = voxelmesh;						
+						
+						voxelpiece.EnableCollision(!NoCollision);
 					}
 				}
 			}
@@ -180,7 +181,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			}
 		}
 
-		public override void NodesChanged(ref NativeList<NativeVoxelNode> voxels)
+		public override void NodesChanged(ref FNativeList<NativeVoxelNode> voxels)
 		{
 
 
@@ -203,7 +204,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 			for (int i = 0; i < nodechangedjobs.Length; i++)
 			{
-				NativeList<NativeVoxelNode> output = nodechangedjobs[i].output;
+				FNativeList<NativeVoxelNode> output = nodechangedjobs[i].output;
 				int count = output.Length;
 				for (int k = 0; k < count; k++)
 				{
@@ -240,7 +241,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 		protected override void Initialize()
 		{
-			HullGenerationQueue = new NativeQueue<NativeVoxelNode>(Allocator.Persistent);
+			HullGenerationQueue = new FNativeQueue<NativeVoxelNode>(Allocator.Persistent);
 			HullGenerationQueue.Clear();
 			Haschset = new HashSet<Vector3>();
 
@@ -263,7 +264,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 				m_MeshModJobs[i].FullCubes = FullCubes;
 				m_MeshModJobs[i].ScaleMultiplicator = ScaleMultiplicator;
 
-				nodechangedjobs[i].output = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+				nodechangedjobs[i].output = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 			}
 		}
 

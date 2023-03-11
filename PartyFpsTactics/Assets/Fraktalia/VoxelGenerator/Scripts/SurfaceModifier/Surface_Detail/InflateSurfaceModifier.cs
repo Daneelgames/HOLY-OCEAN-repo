@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Burst;
 using Fraktalia.Core.Math;
 using Fraktalia.Utility;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -11,12 +12,12 @@ namespace Fraktalia.VoxelGen.Visualisation
     {
         public float Inflation;
 
-        public override void DefineSurface(VoxelPiece piece, NativeList<Vector3> surface_verticeArray, NativeList<int> surface_triangleArray, NativeList<Vector3> surface_normalArray, int slot)
+        public override void DefineSurface(VoxelPiece piece, FNativeList<Vector3> surface_verticeArray, FNativeList<int> surface_triangleArray, FNativeList<Vector3> surface_normalArray, int slot)
         {
             InflateSurfaceJob job;
             job.Inflation = Inflation;
-            job.vertices = surface_verticeArray;
-            job.normals = surface_normalArray;
+            job.vertices = surface_verticeArray.AsArray();
+            job.normals = surface_normalArray.AsArray();
             job.Schedule(surface_verticeArray.Length, surface_verticeArray.Length / SystemInfo.processorCount).Complete();
 
             piece.SetVertices(job.vertices);
@@ -34,10 +35,10 @@ namespace Fraktalia.VoxelGen.Visualisation
         public float Inflation;
 
         [NativeDisableParallelForRestriction]
-        public NativeList<Vector3> vertices;
+        public NativeArray<Vector3> vertices;
 
         [ReadOnly]
-        public NativeList<Vector3> normals;
+        public NativeArray<Vector3> normals;
 
         public void Execute(int index)
         {

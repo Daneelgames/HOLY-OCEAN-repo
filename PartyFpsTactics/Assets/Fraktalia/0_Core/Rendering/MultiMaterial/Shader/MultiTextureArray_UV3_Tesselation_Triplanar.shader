@@ -88,6 +88,7 @@
         //#pragma shader_feature _PARALLAXMAP
         #pragma shader_feature USE_COLOR_FOR_SEAMLESS_TESSELLATION
         #pragma shader_feature TESSELLATION
+        #pragma shader_feature PULSATING
 
 
         #pragma surface surf Standard fullforwardshadows vertex:disp tessellate:tessDistance
@@ -144,6 +145,11 @@
         float _TesselationOffset;
         float minDist;
         float maxDist;
+
+#if PULSATING
+        float _PulseFrequency;
+        float _PulseAmplitude;
+#endif
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -225,6 +231,11 @@
             float4 result;
 
             float blendvalue = (tex2Dlod(_BlendMap, float4(v.texcoord.xy, 0, 0)).r) * _BlendScale;
+
+#if PULSATING
+            blendvalue += sin(_Time.y * _PulseFrequency) * _PulseAmplitude;
+#endif
+
             _SliceRange += v.texcoord2.x * _UV3Power * (blendvalue + _BlendShift);
             _SliceRange = max(0, _SliceRange);
             int textureindex = _SliceRange;
@@ -308,6 +319,10 @@
             float4 result;
             
             float blendvalue = (tex2D(_BlendMap, IN.uv_MainTex).r) * _BlendScale;
+#if PULSATING
+            blendvalue += sin(_Time.y * _PulseFrequency) * _PulseAmplitude;
+#endif
+
             _SliceRange += IN.uv3_IndexTex.x * _UV3Power * (blendvalue+ _BlendShift);
             _SliceRange = max(0, _SliceRange);
             int textureindex = _SliceRange;

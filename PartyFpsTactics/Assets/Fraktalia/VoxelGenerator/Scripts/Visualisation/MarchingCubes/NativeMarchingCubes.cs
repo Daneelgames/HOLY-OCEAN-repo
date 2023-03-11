@@ -8,6 +8,7 @@ using Unity.Burst;
 using Unity.Collections.LowLevel.Unsafe;
 using NativeCopyFast;
 using Fraktalia.Core.FraktaliaAttributes;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -15,15 +16,15 @@ namespace Fraktalia.VoxelGen.Visualisation
 	{
 		[BeginInfo("MARCHINGCUBES")]
 		[InfoTitle("Marching Cubes", "Marching cubes is the most common visualization method for voxels and is mostly used for terrain or other natural environments because the appearance is completely smooth. " +
-			"The smoothness is caused by the ID value which is between 0 and 255 so even voxel maps with low resolution have smooth surfaces")]
+			"The smoothness is caused by the ID value which is between 0 and 255 so even voxel maps with low resolution have smooth surfaces", "MARCHINGCUBES")]
 		[InfoSection1("How to use:", "This script is a hull generator which means that it is used by the voxel generator for the visualisation. " +
 			"Therefore it must be attached as child game object to the game object containing the voxel generator. " +
-			"The resolution settings define the measurement. Higher values will make the result much finer as smaller voxels are measured in a grid like fashion")]
+			"The resolution settings define the measurement. Higher values will make the result much finer as smaller voxels are measured in a grid like fashion", "MARCHINGCUBES")]
 		[InfoSection2("Resolution Settings:", "" +
 		"<b>Width:</b> Width of each chunk. Width of 8 means a chunk contains 8x8x8 voxels\n" +
 		"<b>Cell Subdivision:</b> Defines how many chunks will be generated. Value of 8 means 8x8x8 = 64 chunks.\n" +
 		"<b>Num Cores:</b> Amount of parallelisation. Value of 8 means 8 CPU cores are dedicated for hull generation\n" +
-		"")]
+		"", "MARCHINGCUBES")]
 		[InfoSection3("Appearance Settings:", "" +
 		"<b>Minimum ID:</b> The Minimum ID which is possible during generation. 0 is default.\n" +
 		"<b>Maximum ID:</b> The Maximum ID which is possible during generation. 255 is default.\n" +
@@ -31,8 +32,8 @@ namespace Fraktalia.VoxelGen.Visualisation
 		"<b>UV Power:</b> Multiplier for texture UV coordinates. \n\n" +
 		"<b>Smooth Angle:</b> Smoothes the vertex normals. Works similar to the smooth settings inside the import settings of 3D Models but is much faster. \n\n" +
 		"<color=blue>Marching cubes was one of the first hull generators and there is a variety including one supporing multi material and texture atlas. " +
-			"This algorithm is perfectly suited for terrain and will also be commonly used inside other, more advanced hull generators. </color>")]
-		[InfoVideo("https://www.youtube.com/watch?v=xYlTQ2MgfdY&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=9", false)]
+			"This algorithm is perfectly suited for terrain and will also be commonly used inside other, more advanced hull generators. </color>", "MARCHINGCUBES")]
+		[InfoVideo("https://www.youtube.com/watch?v=xYlTQ2MgfdY&list=PLAiH3Q5-qXIcXCz1AQohOtyZOeFiO5NRU&index=9", false, "MARCHINGCUBES")]
 		[InfoText("Marching Cubes:", "MARCHINGCUBES")]
 		
 		[Range(0, 255)]
@@ -81,7 +82,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			m_JobHandles[m] = calculators[m].Schedule();
 		}
 
-		protected override void finishCalculation(int m, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		protected override void finishCalculation(int m, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{
 			NativeMarchingCubes_Calculation usedcalculator = calculators[m];
 			if (usedcalculator.verticeArray.Length != 0)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.Collections;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen
 {
@@ -116,10 +117,10 @@ namespace Fraktalia.VoxelGen
 			return bounds;
 		}
 
-		public static void CreateNativeCrystalInformation(Mesh crystal, ref NativeList<Vector3> mesh_verticeArray, ref NativeList<int> mesh_triangleArray,
-		ref NativeList<Vector2> mesh_uvArray, ref NativeList<Vector2> mesh_uv3Array, ref NativeList<Vector2> mesh_uv4Array,
-		ref NativeList<Vector2> mesh_uv5Array, ref NativeList<Vector2> mesh_uv6Array, ref NativeList<Vector3> mesh_normalArray,
-		ref NativeList<Vector4> mesh_tangentsArray, ref NativeList<Color> mesh_colorArray)
+		public static void CreateNativeCrystalInformation(Mesh crystal, ref FNativeList<Vector3> mesh_verticeArray, ref FNativeList<int> mesh_triangleArray,
+		ref FNativeList<Vector2> mesh_uvArray, ref FNativeList<Vector2> mesh_uv3Array, ref FNativeList<Vector2> mesh_uv4Array,
+		ref FNativeList<Vector2> mesh_uv5Array, ref FNativeList<Vector2> mesh_uv6Array, ref FNativeList<Vector3> mesh_normalArray,
+		ref FNativeList<Vector4> mesh_tangentsArray, ref FNativeList<Color> mesh_colorArray)
 		{
 			var vertices = crystal.vertices;
 			var triangles = crystal.triangles;
@@ -135,16 +136,16 @@ namespace Fraktalia.VoxelGen
 			int vertcount = vertices.Length;
 			int tricount = triangles.Length;
 
-			mesh_verticeArray = new NativeList<Vector3>(vertcount, Allocator.Persistent);
-			mesh_triangleArray = new NativeList<int>(tricount, Allocator.Persistent);
-			mesh_uvArray = new NativeList<Vector2>(vertcount, Allocator.Persistent);
-			mesh_uv3Array = new NativeList<Vector2>(0, Allocator.Persistent);
-			mesh_uv4Array = new NativeList<Vector2>(0, Allocator.Persistent);
-			mesh_uv5Array = new NativeList<Vector2>(0, Allocator.Persistent);
-			mesh_uv6Array = new NativeList<Vector2>(0, Allocator.Persistent);
-			mesh_normalArray = new NativeList<Vector3>(vertcount, Allocator.Persistent);
-			mesh_tangentsArray = new NativeList<Vector4>(vertcount, Allocator.Persistent);
-			mesh_colorArray = new NativeList<Color>(vertcount, Allocator.Persistent);
+			mesh_verticeArray = new FNativeList<Vector3>(vertcount, Allocator.Persistent);
+			mesh_triangleArray = new FNativeList<int>(tricount, Allocator.Persistent);
+			mesh_uvArray = new FNativeList<Vector2>(vertcount, Allocator.Persistent);
+			mesh_uv3Array = new FNativeList<Vector2>(0, Allocator.Persistent);
+			mesh_uv4Array = new FNativeList<Vector2>(0, Allocator.Persistent);
+			mesh_uv5Array = new FNativeList<Vector2>(0, Allocator.Persistent);
+			mesh_uv6Array = new FNativeList<Vector2>(0, Allocator.Persistent);
+			mesh_normalArray = new FNativeList<Vector3>(vertcount, Allocator.Persistent);
+			mesh_tangentsArray = new FNativeList<Vector4>(vertcount, Allocator.Persistent);
+			mesh_colorArray = new FNativeList<Color>(vertcount, Allocator.Persistent);
 
 			for (int i = 0; i < vertcount; i++)
 			{

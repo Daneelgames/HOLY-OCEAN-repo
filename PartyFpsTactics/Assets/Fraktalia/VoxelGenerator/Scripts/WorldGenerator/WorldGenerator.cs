@@ -28,24 +28,24 @@ namespace Fraktalia.VoxelGen.World
 		[BeginInfo("WORLDGENERATOR")]
 		[InfoTitle("World Generator", "The world generator is a sub system similar to the save system and is the main tool for procedural world generator. " +
 			"This component can be directly attached to the game object containing the Voxel Generator and it is applied automatically like the save system. " +
-			"But it is also possible to directly apply it to your desired Voxel Generator by calling <color=blue>Generate(VoxelGenerator targetGenerator)</color>.")]
+			"But it is also possible to directly apply it to your desired Voxel Generator by calling <color=blue>Generate(VoxelGenerator targetGenerator)</color>.", "WORLDGENERATOR")]
 		[InfoSection1("How to use:", "The world generator is a root object of a world generation hierarchy using <b>WorldAlgorithmCluster</b>. Every cluster handles one target " +
 			"dimension and target depth. Ideally you have one cluster for each voxel dimension.\n\nEvery WorldAlgorithmCluster contains as many WorldAlgorithms as desired. " +
 			"The WorldAlgorithms itself are the main calculation scripts for procedural world generation and can be mixed together using a variety of apply modes.\n\n" +
 			"Randomness is fully deterministic using the seed value as initial parameter. Also the World Generator has a built in work system which is important for " +
 			"multi block setups. Every time <color=blue>Generate(VoxelGenerator targetGenerator)</color> is called, a generation request is added and will be processed " +
 			"asynchronly in the background.\n\n" +
-			"When generating multi block setups, the world generator uses the hash value provided by the Voxel Generator to define the position of the chunk.")]
+			"When generating multi block setups, the world generator uses the hash value provided by the Voxel Generator to define the position of the chunk.", "WORLDGENERATOR")]
 		[InfoSection2("General Settings:", "" +
 		"<b>World Seed:</b> Seed for initial randomness generation.\n" +
 		"<b>Algorithm Clusters:</b> Displays which algorithm clusters are applied.\n" +
 		"<b>Reference Generator:</b> Reference Generator used for safety system.\n" +
 		"<b>Scale Invariant:</b> When true, volume size of the Voxel Generator does not influence generated terrain. \n" +
-		"")]
+		"", "WORLDGENERATOR")]
 		[InfoSection3("Additional Information", "When the Reference Voxel Generator is initialized, the result will be updated automatically whenever algorithm parameter change. " +
 			"The security system prevents auto update if the modification count exceeds a safe amount or if algorithms and cluster contain errors. " +
-			"A detailed explaination is impossible here. <b>Therefore watching the tutorial video is highly recommended.</b>")]
-		[InfoVideo("https://www.youtube.com/watch?v=3KrPFj9hUcA&lc=UgzjAqdGrVsM77feBBN4AaABAg", false)]
+			"A detailed explaination is impossible here. <b>Therefore watching the tutorial video is highly recommended.</b>", "WORLDGENERATOR")]
+		[InfoVideo("https://www.youtube.com/watch?v=3KrPFj9hUcA&lc=UgzjAqdGrVsM77feBBN4AaABAg", false, "WORLDGENERATOR")]
 		[InfoText("World Generator:", "WORLDGENERATOR")]
 		public string WorldSeed;
 

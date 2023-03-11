@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -12,7 +13,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 	public struct NativeDetail_NodesChanged : IJobParallelFor
 	{
 		[ReadOnly]
-		public NativeList<NativeVoxelNode> voxels;
+		public FNativeList<NativeVoxelNode> voxels;
 
 
 		[NativeDisableParallelForRestriction]

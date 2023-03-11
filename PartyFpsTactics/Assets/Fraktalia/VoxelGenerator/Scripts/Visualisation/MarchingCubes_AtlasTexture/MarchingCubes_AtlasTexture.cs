@@ -5,6 +5,7 @@ using Unity.Jobs;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -72,7 +73,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			m_JobHandles[m] = calculators[m].Schedule();
 		}
 
-		protected override void finishCalculation(int m, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		protected override void finishCalculation(int m, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{
 			MarchingCubes_AtlasTexture_Calculation usedcalculator = calculators[m];
 			if (usedcalculator.verticeArray.Length != 0)

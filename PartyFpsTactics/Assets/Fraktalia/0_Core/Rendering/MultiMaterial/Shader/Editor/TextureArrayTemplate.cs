@@ -5,9 +5,16 @@ using UnityEditor;
 using Fraktalia.Core.FraktaliaAttributes;
 using System.Runtime.Serialization;
 using System.IO;
+using UnityEditor.Callbacks;
 
 namespace Fraktalia.Core.FraktaliaAttributes
 {
+	public enum SmoothnessSource
+    {
+		MetallicAlpha,
+		AlbedoAlpha
+    }
+
 	public class TextureArrayTemplate : ScriptableObject
 	{
 		[NonReorderable]
@@ -40,31 +47,183 @@ namespace Fraktalia.Core.FraktaliaAttributes
 		public Color[] MetallicMultiplier;
 		[NonReorderable]
 		public Color[] EmissionMultiplier;
+		[NonReorderable]
+		public SmoothnessSource[] SmoothnessTextureSource;
 
 
 		public string OutputPath;
 		public string FinalName;
 
 		[Header("Target Material for Material Assignment")]
-		[Tooltip("Target Material which should use texture arrays. Shader must be compatible")]
+		[Tooltip("Target Material which should use texture arrays or atlas texture. Shader must be compatible")]
 		public Material TargetMaterial;
-
-		[Header("Texture Atlas creation")]
-	
-		[Tooltip("Target Material for texture atlasses created by extracting from target material into")]
-		public Material AtlasMaterial;
 		
 		[Space]
 		public bool UseMaterialPath;
 
-
-
-
-		public Texture2DArray CreateTextureArray(Texture2D[] ordinaryTextures, Texture2D nullTexture, string FileName, Color[] _Colors = null)
+		public Texture2DArray CreateTextureArray(Texture2D[] ordinaryTextures, Texture2D nullTexture, string FileName, Color[] _Colors = null, SmoothnessSource[] _SmoothMode = null)
 		{
+			int width = 16;
+			int height = 16;
+			for (int i = 0; i < ordinaryTextures.Length; i++)
+			{
+				if (ordinaryTextures[i] != null)
+				{
+					width = Mathf.Max(width, ordinaryTextures[i].width);
+					height = Mathf.Max(height, ordinaryTextures[i].height);
+				}
+			}
+
+			Texture2DArray texture2DArray = new Texture2DArray(width, height, ordinaryTextures.Length, TextureFormat.RGBA32, true, false);
+			texture2DArray.filterMode = FilterMode.Bilinear;
+			texture2DArray.wrapMode = TextureWrapMode.Repeat;    // Loop through ordinary textures and copy pixels to the
+
+			Texture2D[] bakedTextures = new Texture2D[ordinaryTextures.Length];
+			for (int i = 0; i < ordinaryTextures.Length; i++)
+			{
+				Texture2D texture2D = ordinaryTextures[i];
+				if (texture2D == null)
+				{
+					texture2D = nullTexture;
+				}
+
+				if (!texture2D.isReadable)
+				{
+					SetTextureReadable(texture2D, true);
+				}
+
+				Texture2D smoothnessSource = null;
+				if (_SmoothMode != null)
+				{
+					if (_SmoothMode[i] == SmoothnessSource.AlbedoAlpha)
+					{
+						smoothnessSource = this.DiffuseTextures[i];
+					}
+				}
+
+				Color[] pixels = new Color[width * height];
+				
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						Color _Color = Color.white;
+						if (_Colors != null)
+						{
+							_Color = _Colors[i];
+						}
+
+						Color pixel = GetColor(x, y, _Color, texture2D, smoothnessSource);
+						pixels[x + y * width] = pixel;
+
+					}
+				}
+				texture2DArray.SetPixels(pixels, i, 0);
+			}
+		
+			texture2DArray.Apply();
 			
 
-			Texture2DArray texture2DArray = null;
+			string path = OutputPath;
+			if (!AssetDatabase.IsValidFolder(path))
+			{
+				path = "Assets";
+			}
+
+			path += "/" + FileName + ".asset";
+
+			AssetDatabase.CreateAsset(texture2DArray, path);
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			Debug.Log("Saved asset to " + path);
+
+			return texture2DArray;
+		}
+
+		public Texture3D Create3DTexture(Texture2D[] ordinaryTextures, Texture2D nullTexture, string FileName, Color[] _Colors = null, SmoothnessSource[] _SmoothMode = null)
+		{
+			int width = 16;
+			int height = 16;
+			for (int i = 0; i < ordinaryTextures.Length; i++)
+			{
+				if (ordinaryTextures[i] != null)
+				{
+					width = Mathf.Max(width, ordinaryTextures[i].width);
+					height = Mathf.Max(height, ordinaryTextures[i].height);
+				}
+			}
+
+			Texture3D texture2DArray = new Texture3D(width, height, ordinaryTextures.Length, TextureFormat.RGBA32, 10);
+			texture2DArray.filterMode = FilterMode.Bilinear;
+			texture2DArray.wrapMode = TextureWrapMode.Repeat;    // Loop through ordinary textures and copy pixels to the
+
+			Texture2D[] bakedTextures = new Texture2D[ordinaryTextures.Length];
+			for (int i = 0; i < ordinaryTextures.Length; i++)
+			{
+				Texture2D texture2D = ordinaryTextures[i];
+				if (texture2D == null)
+				{
+					texture2D = nullTexture;
+				}
+
+				if (!texture2D.isReadable)
+				{
+					SetTextureReadable(texture2D, true);
+				}
+
+				Texture2D smoothnessSource = null;
+				if (_SmoothMode != null)
+				{
+					if (_SmoothMode[i] == SmoothnessSource.AlbedoAlpha)
+					{
+						smoothnessSource = this.DiffuseTextures[i];
+					}
+				}
+
+				Color[] pixels = new Color[width * height];
+
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						Color _Color = Color.white;
+						if (_Colors != null)
+						{
+							_Color = _Colors[i];
+						}
+
+						Color pixel = GetColor(x, y, _Color, texture2D, smoothnessSource);
+						pixels[x + y * width] = pixel;
+						texture2DArray.SetPixel(x,y, i, pixel,0);
+					}
+				}
+				
+			}
+
+			texture2DArray.Apply();
+
+
+			string path = OutputPath;
+			if (!AssetDatabase.IsValidFolder(path))
+			{
+				path = "Assets";
+			}
+
+			path += "/" + FileName + "3D.asset";
+
+			AssetDatabase.CreateAsset(texture2DArray, path);
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			Debug.Log("Saved asset to " + path);
+
+			return texture2DArray;
+		}
+
+
+		public Texture2D CreateTextureAtlas(Texture2D[] ordinaryTextures, Texture2D nullTexture, string FileName, Color[] _Colors = null, SmoothnessSource[] _SmoothMode = null)
+		{
+			int requiredrows = Mathf.NextPowerOfTwo(ordinaryTextures.Length) / 2;
+
 
 			int width = 16;
 			int height = 16;
@@ -77,49 +236,48 @@ namespace Fraktalia.Core.FraktaliaAttributes
 				}
 			}
 
-			texture2DArray = new Texture2DArray(width, height, ordinaryTextures.Length, TextureFormat.RGBA32, true, false);
-			texture2DArray.filterMode = FilterMode.Bilinear;
-			texture2DArray.wrapMode = TextureWrapMode.Repeat;    // Loop through ordinary textures and copy pixels to the
+			int requiredSize = width * requiredrows;
 
+			Texture2D texture = new Texture2D(requiredSize, requiredSize);
+			texture.filterMode = FilterMode.Point;
+			texture.wrapMode = TextureWrapMode.Repeat;
 
 			for (int i = 0; i < ordinaryTextures.Length; i++)
 			{
-				Texture2D texture = ordinaryTextures[i];
-				if (texture == null)
+				int offsetX = i % requiredrows;
+				int offsetY = i / requiredrows;
+
+				Texture2D texture2D = ordinaryTextures[i];
+				if (texture2D == null)
 				{
-					texture = nullTexture;
+					texture2D = nullTexture;
 				}
 
-				if (!texture.isReadable)
+				Texture2D smoothnessSource = null;
+				if(_SmoothMode != null)
+                {
+					if(_SmoothMode[i] == SmoothnessSource.AlbedoAlpha)
+                    {
+						smoothnessSource = this.DiffuseTextures[i];
+                    }
+                }
+
+				for (int y = 0; y < height; y++)
 				{
-					SetTextureReadable(texture, true);
-				}
+					for (int x = 0; x < width; x++)
+					{											
+						Color _Color = Color.white;
+						if (_Colors != null)
+						{
+							_Color = _Colors[i];
+						}
+						
+						Color pixel = GetColor(x, y, _Color, texture2D, smoothnessSource);
 
-
-				Color[] pixels = new Color[texture2DArray.width * texture2DArray.height];
-				Color _Color = Color.white;
-				if (_Colors != null)
-				{
-					_Color = _Colors[i];
-				}
-
-				for (int y = 0; y < texture2DArray.height; y++)
-				{
-					for (int x = 0; x < texture2DArray.width; x++)
-					{
-						int x2 = x % texture.width;
-						int y2 = y % texture.height;
-
-						pixels[x + y * texture2DArray.width] = texture.GetPixel(x2, y2) * _Color;
-
+						texture.SetPixel(x + offsetX * width, y + offsetY * height, pixel);
 					}
 				}
-
-				texture2DArray.SetPixels(pixels, i, 0);
-
-
 			}
-			texture2DArray.Apply();
 
 			string path = OutputPath;
 			if (!AssetDatabase.IsValidFolder(path))
@@ -127,31 +285,46 @@ namespace Fraktalia.Core.FraktaliaAttributes
 				path = "Assets";
 			}
 
-			path += "/" + FileName + ".asset";
+			path += "/" + FileName + "Atlas.png";
+			byte[] bytes = texture.EncodeToPNG();
+			File.WriteAllBytes(path, bytes);
 
-			AssetDatabase.CreateAsset(texture2DArray, path);
 			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+			return (Texture2D)AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D));
+		}
 
-			Debug.Log("Saved asset to " + path);
+		private Color GetColor(int x, int y, Color _InitialColor, Texture2D texture2D, Texture2D smoothnessSource)
+        {
+			int x2 = x % texture2D.width;
+			int y2 = y % texture2D.height;
 
-			return texture2DArray;
+			Color _Color = _InitialColor;
+			
+			Color pixel = texture2D.GetPixel(x2, y2) * _Color;
+			if (smoothnessSource != null)
+			{
+				int sx2 = x % texture2D.width;
+				int sy2 = y % texture2D.height;
+
+				pixel.a = smoothnessSource.GetPixel(sx2, sy2).a * _Color.a;
+			}
+
+			return pixel;
 		}
 
 		public void CreateAllTextureArrays()
 		{
 			Texture2DArray[] array = new Texture2DArray[6];
 			array[0] = CreateTextureArray(OcclusionTextures, WhiteDefaultTexture, FinalName + "_OcclusionMaps");
-
-
 			array[1] = CreateTextureArray(DiffuseTextures, WhiteDefaultTexture, FinalName + "_DiffuseMaps", BaseTextureMultiplier);
-
 			array[2] = CreateTextureArray(EmmissiveTextures, BlackDefaultTexture, FinalName + "_EmissionMaps", EmissionMultiplier);
-
 			array[3] = CreateTextureArray(HeightTextures, HeightDefaultTexture, FinalName + "_HeightMaps");
-
-			array[4] = CreateTextureArray(MetallicTextures, WhiteDefaultTexture, FinalName + "_MetallicMaps", MetallicMultiplier);
-
+			array[4] = CreateTextureArray(MetallicTextures, WhiteDefaultTexture, FinalName + "_MetallicMaps", MetallicMultiplier, SmoothnessTextureSource);
 			array[5] = CreateTextureArray(NormalTextures, NormalDefaultTexture, FinalName + "_NormalMaps");
+
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
 
 			if (TargetMaterial)
 			{
@@ -164,99 +337,60 @@ namespace Fraktalia.Core.FraktaliaAttributes
 				AssignTextureArray("_BumpMap", array[5]);
 			}
 
+		
+		}
+
+		public void CreateAll3DTexture()
+		{
+			Texture3D[] array = new Texture3D[6];
+			array[0] = Create3DTexture(OcclusionTextures, WhiteDefaultTexture, FinalName + "_OcclusionMaps");
+			array[1] = Create3DTexture(DiffuseTextures, WhiteDefaultTexture, FinalName + "_DiffuseMaps", BaseTextureMultiplier);
+			array[2] = Create3DTexture(EmmissiveTextures, BlackDefaultTexture, FinalName + "_EmissionMaps", EmissionMultiplier);
+			array[3] = Create3DTexture(HeightTextures, HeightDefaultTexture, FinalName + "_HeightMaps");
+			array[4] = Create3DTexture(MetallicTextures, WhiteDefaultTexture, FinalName + "_MetallicMaps", MetallicMultiplier, SmoothnessTextureSource);
+			array[5] = Create3DTexture(NormalTextures, NormalDefaultTexture, FinalName + "_NormalMaps");
+
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+
+			if (TargetMaterial)
+			{
+
+				AssignTexture3D("_OcclusionMap", array[0]);
+				AssignTexture3D("_DiffuseMap", array[1]);
+				AssignTexture3D("_EmissionMap", array[2]);
+				AssignTexture3D("_ParallaxMap", array[3]);
+				AssignTexture3D("_MetallicGlossMap", array[4]);
+				AssignTexture3D("_BumpMap", array[5]);
+			}
+
+
 		}
 
 		public void CreateAllTextureAtlases()
         {
 			Texture2D texture;
-			if (AtlasMaterial)
+			if (TargetMaterial)
 			{
-				texture = CreateTextureAtlas("_OcclusionMap");
-				AssignTexture2D("_OcclusionMap", texture, AtlasMaterial);
+				texture = CreateTextureAtlas(OcclusionTextures, WhiteDefaultTexture, FinalName + "_OcclusionMaps");
+				AssignTexture2D("_OcclusionMap", texture, TargetMaterial);
 
-				texture = CreateTextureAtlas("_DiffuseMap");
-				AssignTexture2D("_DiffuseMap", texture, AtlasMaterial);
+				texture = CreateTextureAtlas(DiffuseTextures, WhiteDefaultTexture, FinalName + "_DiffuseMaps", BaseTextureMultiplier);
+				AssignTexture2D("_DiffuseMap", texture, TargetMaterial);
 
-				texture = CreateTextureAtlas("_EmissionMap");
-				AssignTexture2D("_EmissionMap", texture, AtlasMaterial);
+				texture = CreateTextureAtlas(EmmissiveTextures, BlackDefaultTexture, FinalName + "_EmissionMaps", EmissionMultiplier);
+				AssignTexture2D("_EmissionMap", texture, TargetMaterial);
 
-				texture = CreateTextureAtlas("_ParallaxMap");
-				AssignTexture2D("_ParallaxMap", texture, AtlasMaterial);
+				texture = CreateTextureAtlas(HeightTextures, HeightDefaultTexture, FinalName + "_HeightMaps");
+				AssignTexture2D("_ParallaxMap", texture, TargetMaterial);
 
-				texture = CreateTextureAtlas("_MetallicGlossMap");
-				AssignTexture2D("_MetallicGlossMap", texture, AtlasMaterial);
+				texture = CreateTextureAtlas(MetallicTextures, WhiteDefaultTexture, FinalName + "_MetallicMaps", MetallicMultiplier, SmoothnessTextureSource);
+				AssignTexture2D("_MetallicGlossMap", texture, TargetMaterial);
 
-				texture = CreateTextureAtlas("_BumpMap");
-				AssignTexture2D("_BumpMap", texture, AtlasMaterial);
-
-			
+				texture = CreateTextureAtlas(NormalTextures, NormalDefaultTexture, FinalName + "_NormalMaps");	
+				AssignTexture2D("_BumpMap", texture, TargetMaterial);	
 			}
 		}
-
-		public Texture2D CreateTextureAtlas(string MaterialIdentifier)
-        {
-		
-			Texture textureread = TargetMaterial.GetTexture(MaterialIdentifier);
-			Texture2DArray texture2DArray = textureread as Texture2DArray;
-			
-			
-
-			int requiredrows = Mathf.NextPowerOfTwo(texture2DArray.depth)/2;
-
-			int requiredSize = texture2DArray.width * requiredrows;
-
-
-			Texture2D texture = new Texture2D(requiredSize, requiredSize);
-			texture.filterMode = FilterMode.Bilinear;
-			texture.wrapMode = TextureWrapMode.Repeat;
-
-            for (int i = 0; i < texture2DArray.depth; i++)
-            {
-				int offsetX = i % requiredrows;
-				int offsetY = i / requiredrows;
-				Color32[] pixels = texture2DArray.GetPixels32(i, 0);
-
-				for (int y = 0; y < texture2DArray.height; y++)
-				{
-					for (int x = 0; x < texture2DArray.width; x++)
-					{
-						int x2 = x % texture.width;
-						int y2 = y % texture.height;
-
-						Color32 pixel = pixels[x + y * texture2DArray.width];
-						texture.SetPixel(x2 + offsetX * texture2DArray.width, y2 + offsetY * texture2DArray.height, pixel);
-					}
-				}
-			}
-
-			string path = OutputPath;
-			if (!AssetDatabase.IsValidFolder(path))
-			{
-				path = "Assets";
-			}
-
-			path += "/" + texture2DArray.name + "Atlas.png";
-			byte[] bytes = texture.EncodeToPNG();	
-			File.WriteAllBytes(path, bytes);
-
-			/*
-			Texture2D tex = null;
-			byte[] fileData;
-
-			if (File.Exists(path))
-			{
-				fileData = File.ReadAllBytes(path);
-				tex = new Texture2D(2, 2);
-				tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
-			}
-			*/
-			AssetDatabase.SaveAssets();
-			
-			return (Texture2D)AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D));
-		}
-
-
-
 
 		public void SaveProfile()
 		{
@@ -266,9 +400,10 @@ namespace Fraktalia.Core.FraktaliaAttributes
 				path = "Assets";
 			}
 
-			path += "/" + "Template" + ".asset";
-			
-			AssetDatabase.CreateAsset(this, path);
+			path += "/" + FinalName + ".asset";
+
+			TextureArrayTemplate duplicate = Instantiate(this);
+			AssetDatabase.CreateAsset(duplicate, path);
 			AssetDatabase.SaveAssets();
 
 		}
@@ -285,6 +420,7 @@ namespace Fraktalia.Core.FraktaliaAttributes
 			BaseTextureMultiplier = new Color[Materials.Length];
 			MetallicMultiplier = new Color[Materials.Length];
 			EmissionMultiplier = new Color[Materials.Length];
+			SmoothnessTextureSource = new SmoothnessSource[Materials.Length];
 
 			for (int i = 0; i < BaseTextureMultiplier.Length; i++)
 			{
@@ -325,9 +461,9 @@ namespace Fraktalia.Core.FraktaliaAttributes
 					{
 						float glossiness = extractfloat(Materials[i], "_GlossMapScale");
 						MetallicMultiplier[i] = new Color(1, 1, 1, glossiness);
-
 					}
 
+					SmoothnessTextureSource[i] = (SmoothnessSource)extractfloat(Materials[i], "_SmoothnessTextureChannel");
 
 				}
 
@@ -463,11 +599,19 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 		public string CheckTexture(string TextureName)
 		{
-			string output = "Correct";
+			string output = "Tex2DArray. Suitable for Texturearray";
 			MaterialProperty property = MaterialEditor.GetMaterialProperty(new UnityEngine.Object[] { TargetMaterial }, TextureName);
-			if (property.textureDimension != UnityEngine.Rendering.TextureDimension.Tex2DArray)
+			if (property.textureDimension == UnityEngine.Rendering.TextureDimension.Tex2D)
 			{
-				output = "Not a 2D array";
+				output = "Suitable for Atlas";
+			}
+			else if (property.textureDimension == UnityEngine.Rendering.TextureDimension.Tex2DArray)
+			{
+				output = "Suitable for Texture2DArray";
+			}
+			else
+            {
+				output = "Not a Tex2D or Tex2DArray";
 			}
 
 			return output;
@@ -486,6 +630,20 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 
 			return output;
+		}
+
+		[OnOpenAsset]
+		public static bool OnOpenAsset(int instanceID, int line)
+        {
+			TextureArrayTemplate project = EditorUtility.InstanceIDToObject(instanceID) as TextureArrayTemplate;
+			if (project != null)
+			{
+				TextureArrayGenerator.Init();
+				TextureArrayGenerator.texturegenerator = project;
+				
+				return true;
+			}
+			return false;
 		}
 	}
 

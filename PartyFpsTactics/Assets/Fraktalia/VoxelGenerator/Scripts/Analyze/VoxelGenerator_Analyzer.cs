@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fraktalia.VoxelGen;
 using Unity.Collections;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,7 +53,7 @@ namespace Fraktalia.VoxelGen
 
 		public void AnalyzeVolume(NativeVoxelTree data)
 		{
-			NativeList<NativeVoxelNode> voxeldata = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+			FNativeList<NativeVoxelNode> voxeldata = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 			
 			NativeVoxelNode root;
 			NativeVoxelNode.PointerToNode(data._ROOT, out root);

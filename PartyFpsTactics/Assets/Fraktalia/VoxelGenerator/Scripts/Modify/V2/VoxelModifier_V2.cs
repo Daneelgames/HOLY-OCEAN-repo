@@ -7,6 +7,7 @@ using Fraktalia.Core.FraktaliaAttributes;
 using Unity.Collections;
 using System;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -77,9 +78,9 @@ namespace Fraktalia.VoxelGen.Modify
 		public int VoxelCount { get; private set; }
 
 
-		private NativeList<NativeVoxelModificationData_Inner> modifierData;
-		private NativeList<NativeVoxelModificationData_Inner> preVoxelData;
-		private NativeList<NativeVoxelModificationData_Inner> postVoxelData;
+		private FNativeList<NativeVoxelModificationData_Inner> modifierData;
+		private FNativeList<NativeVoxelModificationData_Inner> preVoxelData;
+		private FNativeList<NativeVoxelModificationData_Inner> postVoxelData;
 
 		public Queue<IEnumerator> UpdateModificationProcess = new Queue<IEnumerator>();
 		IEnumerator CurrentModificationProcess;
@@ -171,9 +172,9 @@ namespace Fraktalia.VoxelGen.Modify
 				CurrentModificationProcess = null;
 				yield break;
 			}
-			if (!modifierData.IsCreated) modifierData = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
-			if (!preVoxelData.IsCreated) preVoxelData = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
-			if (!postVoxelData.IsCreated) postVoxelData = new NativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			if (!modifierData.IsCreated) modifierData = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			if (!preVoxelData.IsCreated) preVoxelData = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
+			if (!postVoxelData.IsCreated) postVoxelData = new FNativeList<NativeVoxelModificationData_Inner>(Allocator.Persistent);
 
 			generator.savesystem?.SetDirty();
 			if (ShapeModule.RequiresRecalculation(this, generator))
@@ -363,9 +364,22 @@ namespace Fraktalia.VoxelGen.Modify
 				{
 					ErrorMessage += "> ShapeModule is missing. Please add one as component (for example Sphere) \n\n";
 					isSave = false;
-					return isSave;
+					
 				}
 			}
+
+			if (TargetingModule == null)
+			{
+				TargetingModule = GetComponent<VoxelModifier_Target>();
+				if (!TargetingModule)
+				{
+					ErrorMessage += "> TargetingModule is missing! How should it know which voxel generator to modify? Therefore please add one as component. \n\n";
+					isSave = false;
+					
+				}
+			}
+
+			if (!isSave) return isSave;
 
 			VoxelGenerator reference = ReferenceGenerator;
 			if(reference)
@@ -414,10 +428,10 @@ namespace Fraktalia.VoxelGen.Modify
 		
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> template;
+		public FNativeList<NativeVoxelModificationData_Inner> template;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> results;
+		public FNativeList<NativeVoxelModificationData_Inner> results;
 
 
 		public void Execute(int index)
@@ -437,10 +451,10 @@ namespace Fraktalia.VoxelGen.Modify
 		public float Opacity;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> template;
+		public FNativeList<NativeVoxelModificationData_Inner> template;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> results;
+		public FNativeList<NativeVoxelModificationData_Inner> results;
 
 
 		public void Execute(int index)
@@ -468,10 +482,10 @@ namespace Fraktalia.VoxelGen.Modify
 		public float Opacity;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> template;
+		public FNativeList<NativeVoxelModificationData_Inner> template;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> results;
+		public FNativeList<NativeVoxelModificationData_Inner> results;
 
 		
 		public void Execute(int index)
@@ -529,10 +543,10 @@ namespace Fraktalia.VoxelGen.Modify
 		public NativeVoxelTree data;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> readvoxeldata;
+		public FNativeList<NativeVoxelModificationData_Inner> readvoxeldata;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> resultvoxeldata;
+		public FNativeList<NativeVoxelModificationData_Inner> resultvoxeldata;
 
 		public void Execute(int index)
 		{
@@ -604,9 +618,9 @@ namespace Fraktalia.VoxelGen.Modify
 			bold.richText = true;
 
 			GUIStyle normal = new GUIStyle();
-			bold.fontStyle = FontStyle.Normal;
-			bold.fontSize = 12;
-			bold.richText = true;
+			normal.fontStyle = FontStyle.Normal;
+			normal.fontSize = 12;
+			normal.richText = true;
 
 			VoxelModifier_V2 myTarget = target as VoxelModifier_V2;
 		
@@ -620,23 +634,27 @@ namespace Fraktalia.VoxelGen.Modify
 				EditorGUILayout.TextArea(myTarget.ErrorMessage);
 			}
 
-
-
 			if (myTarget.ShapeModule)
 			{
 				EditorGUILayout.LabelField("Voxel Count:" + myTarget.VoxelCount);
 			}
 
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("Editing Tools:", bold);
 			if (GUILayout.Button("Apply at world position"))
 			{
 				VoxelUndoSystem.CreateManifest();
 				myTarget.ApplyVoxelModifier(myTarget.transform.position);
 
 				VoxelUndoSystem.FinishManifest();
-		
-				
-
 			}
+			if (!myTarget.GetComponent<VoxelModifier_V2_Raycaster>())
+			{
+				EditorGUILayout.LabelField("Voxel Raycaster is required for editor painting:");
+				if (GUILayout.Button("Add raycaster"))
+					myTarget.gameObject.AddComponent<VoxelModifier_V2_Raycaster>();
+			}
+
 
 			VoxelGeneratorSettings.DisplaySettingsInfo("Apply Hotkey: " , VoxelGeneratorSettings.ApplyKey.ToString(), normal);
 			VoxelGeneratorSettings.DisplaySettingsInfo("Undo Hotkey: ", VoxelGeneratorSettings.UndoKey.ToString(), normal);
@@ -647,7 +665,86 @@ namespace Fraktalia.VoxelGen.Modify
 				EditorUtility.SetDirty(target);
 				serializedObject.ApplyModifiedProperties();
 			}
-	
+
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("Add modules:", bold);
+
+			string label = "Add Shape Module...";
+			if (myTarget.ShapeModule) label = "Replace Shape Module...";
+
+			var attachments = FraktaliaEditorUtility.GetDerivedTypesForScriptSelection(typeof(VoxelShape_Base), label);
+			int selectedattachments = EditorGUILayout.Popup(0, attachments.Item2);
+			if (selectedattachments > 0)
+			{
+				VoxelShape_Base current = myTarget.GetComponent<VoxelShape_Base>();
+				if(current == null)
+                {
+					myTarget.gameObject.AddComponent(attachments.Item1[selectedattachments]);
+					myTarget.ShapeModule = myTarget.GetComponent<VoxelShape_Base>();
+				}
+                else
+                {
+					SerializedObject so = new SerializedObject(myTarget.ShapeModule);
+					SerializedProperty scriptProperty = so.FindProperty("m_Script");
+					so.Update();
+
+					var tmpGO = new GameObject("tempOBJ");
+					MonoBehaviour inst = (MonoBehaviour)tmpGO.AddComponent(attachments.Item1[selectedattachments]);
+					MonoScript yourReplacementScript = MonoScript.FromMonoBehaviour(inst);
+					DestroyImmediate(tmpGO);
+					scriptProperty.objectReferenceValue = yourReplacementScript;
+					so.ApplyModifiedProperties();					
+				}
+
+				EditorUtility.SetDirty(target);
+			}
+
+		
+
+			label = "Add Targeting Module...";
+			if (myTarget.TargetingModule) label = "Replace Targeting Module...";
+
+			attachments = FraktaliaEditorUtility.GetDerivedTypesForScriptSelection(typeof(VoxelModifier_Target), label);
+			selectedattachments = EditorGUILayout.Popup(0, attachments.Item2);
+			if (selectedattachments > 0)
+			{
+				VoxelModifier_Target current = myTarget.GetComponent<VoxelModifier_Target>();
+				if (current == null)
+				{
+					myTarget.gameObject.AddComponent(attachments.Item1[selectedattachments]);
+					myTarget.TargetingModule = myTarget.GetComponent<VoxelModifier_Target>();
+				}
+				else
+				{
+					SerializedObject so = new SerializedObject(myTarget.TargetingModule);
+					SerializedProperty scriptProperty = so.FindProperty("m_Script");
+					so.Update();
+
+					var tmpGO = new GameObject("tempOBJ");
+					MonoBehaviour inst = (MonoBehaviour)tmpGO.AddComponent(attachments.Item1[selectedattachments]);
+					MonoScript yourReplacementScript = MonoScript.FromMonoBehaviour(inst);
+					DestroyImmediate(tmpGO);
+					scriptProperty.objectReferenceValue = yourReplacementScript;
+					so.ApplyModifiedProperties();
+				}
+
+				EditorUtility.SetDirty(target);
+			}
+
+			label = "Add Post process module...";		
+			attachments = FraktaliaEditorUtility.GetDerivedTypesForScriptSelection(typeof(VM_PostProcess), label);
+			selectedattachments = EditorGUILayout.Popup(0, attachments.Item2);
+			if (selectedattachments > 0)
+			{
+
+
+				myTarget.gameObject.AddComponent(attachments.Item1[selectedattachments]);
+				myTarget.PostProcessModule = new List<VM_PostProcess>(myTarget.GetComponents<VM_PostProcess>());
+				
+
+				EditorUtility.SetDirty(target);
+			}
+
 		}
 
 		

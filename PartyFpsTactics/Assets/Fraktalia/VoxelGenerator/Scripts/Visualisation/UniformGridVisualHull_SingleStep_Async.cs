@@ -6,6 +6,7 @@ using Unity.Collections;
 using System;
 using Unity.Burst;
 using Fraktalia.Core.FraktaliaAttributes;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -38,9 +39,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 		
 		private int[] works;
 		private Material usedmaterial;
-		private NativeList<Vector3> NULL_VERTICES;
-		private NativeList<int> NULL_TRIANGLES;
-		private NativeList<Vector3> NULL_NORMALS;
+		private FNativeList<Vector3> NULL_VERTICES;
+		private FNativeList<int> NULL_TRIANGLES;
+		private FNativeList<Vector3> NULL_NORMALS;
 		private int PostProcesses = 0;
 		private bool isWorking;
 
@@ -48,9 +49,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 		protected override void Initialize()
 		{
 			base.Initialize();
-			NULL_NORMALS = new NativeList<Vector3>(0, Allocator.Persistent);
-			NULL_VERTICES = new NativeList<Vector3>(0, Allocator.Persistent);
-			NULL_TRIANGLES = new NativeList<int>(0, Allocator.Persistent);
+			NULL_NORMALS = new FNativeList<Vector3>(0, Allocator.Persistent);
+			NULL_VERTICES = new FNativeList<Vector3>(0, Allocator.Persistent);
+			NULL_TRIANGLES = new FNativeList<int>(0, Allocator.Persistent);
 			isInitialized = true;		
 			int piececount = Cell_Subdivision * Cell_Subdivision * Cell_Subdivision;
 			Haschset = new bool[piececount];
@@ -151,7 +152,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			{
 				if (WorkerQueue.Count > 0) return true;
 			}
-				
+
 			return isWorking;
 		}
 
@@ -259,14 +260,14 @@ namespace Fraktalia.VoxelGen.Visualisation
 		/// <param name="vertices">Give me the final array. Required for post processing (place props and foliage)</param>
 		/// <param name="triangles">Give me the final array. Required for post processing (place props and foliage)</param>
 		/// <param name="normals">Give me the final array. Required for post processing (place props and foliage)</param>
-		protected virtual void finishCalculation(int coreindex, VoxelPiece piece, out NativeList<Vector3> vertices, out NativeList<int> triangles, out NativeList<Vector3> normals)
+		protected virtual void finishCalculation(int coreindex, VoxelPiece piece, out FNativeList<Vector3> vertices, out FNativeList<int> triangles, out FNativeList<Vector3> normals)
 		{
 			vertices = NULL_VERTICES;
 			triangles = NULL_TRIANGLES;
 			normals = NULL_NORMALS;
 		}
 
-		public override void SetRegionsDirty(VoxelRegion region)
+		protected override void setRegionsDirty(VoxelRegion region)
 		{
 			int lenght = VoxelMeshes.Count;
 			if (lenght == 1)

@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Fraktalia.VoxelGen
 		public int NodeChildrenCount;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<IntPtr> NodePool;
+		public FNativeList<IntPtr> NodePool;
 
 		[NativeDisableContainerSafetyRestriction]
 		public NativeArray<int> Information;
@@ -30,7 +31,7 @@ namespace Fraktalia.VoxelGen
 		}
 		public void Initialize(VoxelGenerator generator)
 		{
-			NodePool = new NativeList<IntPtr>(Allocator.Persistent);
+			NodePool = new FNativeList<IntPtr>(Allocator.Persistent);
 			Information = new NativeArray<int>(2, Allocator.Persistent);
 
 			NodeChildrenCount = generator.SubdivisionPower * generator.SubdivisionPower * generator.SubdivisionPower;

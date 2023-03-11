@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using Fraktalia.Core.Math;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,7 +81,7 @@ namespace Fraktalia.VoxelGen.Modify
 		{
 			float voxelsize = target.GetVoxelSize(modifier.Depth);
 
-			target.SetRegionsDirty(target.transform.worldToLocalMatrix.MultiplyPoint3x4(worldPosition), Vector3.one * (Radius + voxelsize * boundaryExtension/2), Vector3.one * (Radius + voxelsize * boundaryExtension / 2));
+			target.SetRegionsDirty(target.transform.worldToLocalMatrix.MultiplyPoint3x4(worldPosition), Vector3.one * (Radius + voxelsize * boundaryExtension/2), Vector3.one * (Radius + voxelsize * boundaryExtension / 2), modifier.TargetDimension);
 		}
 
 		public override Vector3 GetOffset(VoxelModifier_V2 modifier, VoxelGenerator target)
@@ -107,7 +108,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public int initialID;
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> template;
+		public FNativeList<NativeVoxelModificationData_Inner> template;
 		
 
 		public void Execute(int index)

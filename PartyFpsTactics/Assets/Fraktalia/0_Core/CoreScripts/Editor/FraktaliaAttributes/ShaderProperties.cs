@@ -39,7 +39,8 @@ namespace Fraktalia.Core.FraktaliaAttributes
 	public class SingleLineDrawer : MaterialPropertyDrawer
 	{
 		string extraproperty;
-		
+		string KeyWord;
+
 		public SingleLineDrawer()
 		{
 			
@@ -52,8 +53,24 @@ namespace Fraktalia.Core.FraktaliaAttributes
 			this.extraproperty = extraproperty;	
 		}
 
+		public SingleLineDrawer(string extraproperty, string keyword)
+		{
+			this.extraproperty = extraproperty;
+			this.KeyWord = keyword;
+		}
+
+
 		public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
 		{
+			Material mat = (Material)prop.targets[0];
+			if (KeyWord != null)
+			{
+				bool state = mat.IsKeywordEnabled(KeyWord);
+				if (!state)
+				{
+					return 0;
+				}
+			}
 			return base.GetPropertyHeight(prop, label, editor);
 		}
 
@@ -65,6 +82,15 @@ namespace Fraktalia.Core.FraktaliaAttributes
 
 
 			Material mat = (Material)prop.targets[0];
+			if (KeyWord != null)
+			{
+				bool state = mat.IsKeywordEnabled(KeyWord);
+				if (!state)
+				{
+					return;
+				}
+			}
+
 			Shader shader = mat.shader;
 
 			int count = ShaderUtil.GetPropertyCount(shader);
@@ -324,9 +350,17 @@ namespace Fraktalia.Core.FraktaliaAttributes
 			string labeltext = KeyWord.Replace("_", " ");
 			bool state = mat.IsKeywordEnabled(KeyWord);
 
-			if(state)
-			return base.GetPropertyHeight(prop, label, editor);
-
+			if (state)
+			{
+                if (prop.type == MaterialProperty.PropType.Texture)
+                {
+					return base.GetPropertyHeight(prop, label, editor) + 50;
+                }
+				
+				return base.GetPropertyHeight(prop, label, editor);
+			
+			
+			}
 			return 0;
 		}
 

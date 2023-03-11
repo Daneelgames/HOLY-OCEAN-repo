@@ -8,9 +8,9 @@ namespace Fraktalia.VoxelGen.Modify
 
 	public class VoxelModifier_TargetSphereCast : VoxelModifier_Target
 	{		
-		public LayerMask SphereCastLayer;
+		public LayerMask SphereCastLayer = int.MaxValue;
 		public int Maximum = 3;
-		public float Radius;
+		public float Radius = 10;
 
 		
 		public VoxelGenerator lastReference;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen
 {
@@ -154,11 +155,11 @@ namespace Fraktalia.VoxelGen
 
 		public class VoxelUndoManifestElement
 		{
-			public NativeList<NativeVoxelModificationData> PreviousData = new NativeList<NativeVoxelModificationData>();
-			public NativeList<NativeVoxelModificationData_Inner> PreviousData_Inner = new NativeList<NativeVoxelModificationData_Inner>();
+			public FNativeList<NativeVoxelModificationData> PreviousData = new FNativeList<NativeVoxelModificationData>();
+			public FNativeList<NativeVoxelModificationData_Inner> PreviousData_Inner = new FNativeList<NativeVoxelModificationData_Inner>();
 
-			public NativeList<NativeVoxelModificationData> ModificationData = new NativeList<NativeVoxelModificationData>();
-			public NativeList<NativeVoxelModificationData_Inner> ModificationData_Inner = new NativeList<NativeVoxelModificationData_Inner>();
+			public FNativeList<NativeVoxelModificationData> ModificationData = new FNativeList<NativeVoxelModificationData>();
+			public FNativeList<NativeVoxelModificationData_Inner> ModificationData_Inner = new FNativeList<NativeVoxelModificationData_Inner>();
 
 			public int Dimension;
 			public VoxelGenerator AffectedTarget;
@@ -168,10 +169,10 @@ namespace Fraktalia.VoxelGen
 
 			internal VoxelUndoManifestElement()
 			{
-				PreviousData = new NativeList<NativeVoxelModificationData>(Unity.Collections.Allocator.Persistent);
-				PreviousData_Inner = new NativeList<NativeVoxelModificationData_Inner>(Unity.Collections.Allocator.Persistent);
-				ModificationData = new NativeList<NativeVoxelModificationData>(Unity.Collections.Allocator.Persistent);
-				ModificationData_Inner = new NativeList<NativeVoxelModificationData_Inner>(Unity.Collections.Allocator.Persistent);
+				PreviousData = new FNativeList<NativeVoxelModificationData>(Unity.Collections.Allocator.Persistent);
+				PreviousData_Inner = new FNativeList<NativeVoxelModificationData_Inner>(Unity.Collections.Allocator.Persistent);
+				ModificationData = new FNativeList<NativeVoxelModificationData>(Unity.Collections.Allocator.Persistent);
+				ModificationData_Inner = new FNativeList<NativeVoxelModificationData_Inner>(Unity.Collections.Allocator.Persistent);
 			}
 
 
@@ -205,7 +206,7 @@ namespace Fraktalia.VoxelGen
 
 					Vector3 min = new Vector3(minX, minY, minZ);
 					Vector3 max = new Vector3(maxX, maxY, maxZ);
-					AffectedTarget.SetRegionsDirty(min, max);
+					AffectedTarget.SetRegionsDirty(min, max, Dimension);
 				}
 
 				if (PreviousData_Inner.Length > 0)
@@ -233,7 +234,7 @@ namespace Fraktalia.VoxelGen
 
 					Vector3 min = VoxelGenerator.ConvertInnerToLocal(new Vector3Int(minX, minY, minZ), AffectedTarget.RootSize);
 					Vector3 max = VoxelGenerator.ConvertInnerToLocal(new Vector3Int(maxX, maxY, maxZ), AffectedTarget.RootSize);
-					AffectedTarget.SetRegionsDirty(min, max);
+					AffectedTarget.SetRegionsDirty(min, max, Dimension);
 				}
 			}
 
@@ -267,7 +268,7 @@ namespace Fraktalia.VoxelGen
 
 						Vector3 min = new Vector3(minX, minY, minZ);
 						Vector3 max = new Vector3(maxX, maxY, maxZ);
-						AffectedTarget.SetRegionsDirty(min, max);
+						AffectedTarget.SetRegionsDirty(min, max, Dimension);
 					}
 
 					if (ModificationData_Inner.Length > 0)
@@ -295,7 +296,7 @@ namespace Fraktalia.VoxelGen
 						Vector3 min = VoxelGenerator.ConvertInnerToLocal(new Vector3Int(minX, minY, minZ), AffectedTarget.RootSize);
 						Vector3 max = VoxelGenerator.ConvertInnerToLocal(new Vector3Int(maxX, maxY, maxZ), AffectedTarget.RootSize);
 						AffectedTarget._SetVoxelsAdditive_Inner(ModificationData_Inner, Dimension);
-						AffectedTarget.SetRegionsDirty(min, max);
+						AffectedTarget.SetRegionsDirty(min, max, Dimension);
 
 					}
 				}

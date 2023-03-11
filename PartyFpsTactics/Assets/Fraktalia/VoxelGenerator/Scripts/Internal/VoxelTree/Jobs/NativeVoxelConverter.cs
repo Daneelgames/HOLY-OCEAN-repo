@@ -8,21 +8,23 @@ using UnityEngine;
 using Unity.Burst;
 using System;
 using Fraktalia.Utility;
+using Fraktalia.Core.Collections;
+
 namespace Fraktalia.VoxelGen
 {
 	[BurstCompile]
 	public struct NativeVoxelConverter : IJob
 	{
 		public NativeVoxelTree data;
-		public NativeList<NativeVoxelModificationData> output;
-		public NativeList<NativeVoxelNode> leafvoxels;
+		public FNativeList<NativeVoxelModificationData> output;
+		public FNativeList<NativeVoxelNode> leafvoxels;
 
 		public void Init()
 		{
 			if (!leafvoxels.IsCreated)
-				leafvoxels = new NativeList<NativeVoxelNode>(Allocator.Persistent);
+				leafvoxels = new FNativeList<NativeVoxelNode>(Allocator.Persistent);
 			if (!output.IsCreated)
-				output = new NativeList<NativeVoxelModificationData>(10000, Allocator.Persistent);
+				output = new FNativeList<NativeVoxelModificationData>(10000, Allocator.Persistent);
 		}
 
 		public void Execute()

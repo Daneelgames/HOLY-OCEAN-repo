@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Unity.Collections;
 using UnityEngineInternal;
+using Fraktalia.Core.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -135,7 +136,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 		}
 
 
-		public virtual void DefineSurface(VoxelPiece piece ,NativeList<Vector3> surface_verticeArray, NativeList<int> surface_triangleArray, NativeList<Vector3> surface_normalArray, int slot)
+		public virtual void DefineSurface(VoxelPiece piece ,FNativeList<Vector3> surface_verticeArray, FNativeList<int> surface_triangleArray, FNativeList<Vector3> surface_normalArray, int slot)
 		{
 
 		}
@@ -174,11 +175,15 @@ namespace Fraktalia.VoxelGen.Visualisation
 			}
 		}
 
-	
 		public virtual bool IsSave()
 		{
 			return true;
 		}
+
+		public virtual bool IsCompleted()
+        {
+			return true;
+        }
 
 
 		internal virtual float GetChecksum()
@@ -285,7 +290,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 		public void DestroyMeshes()
 		{
-			if (!engine.KeepHulls)
+			if (!engine || !engine.KeepHulls)
 			{
 				for (int i = 0; i < VoxelMeshes.Count; i++)
 				{

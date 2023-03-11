@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Modify
 {
@@ -216,7 +217,7 @@ namespace Fraktalia.VoxelGen.Modify
 				default:
 					break;
 			}
-			generator.SetRegionsDirty(center, Vector3.one * size, Vector3.one * size);
+			generator.SetRegionsDirty(center, Vector3.one * size, Vector3.one * size, dimension);
 			if (generator.savesystem) generator.savesystem.IsDirty = true;
 		}
 
@@ -236,7 +237,7 @@ namespace Fraktalia.VoxelGen.Modify
 			Vector3 enginepoint = engine.transform.InverseTransformPoint(center);
 			filter.CalculateFilter(engine, enginepoint,rotation, Vector3.one * radius * 2, Vector4.one * radius, depth);
 			engine._SetVoxels_Inner(filter.output, dimension);
-			engine.SetRegionsDirty(enginepoint, Vector3.one * radius, Vector3.one * radius);
+			engine.SetRegionsDirty(enginepoint, Vector3.one * radius, Vector3.one * radius, dimension);
 			if (engine.savesystem) engine.savesystem.IsDirty = true;
 		}
 
@@ -255,7 +256,7 @@ namespace Fraktalia.VoxelGen.Modify
 			Vector3 enginepoint = engine.transform.InverseTransformPoint(center);
 			filter.CalculateFilter(engine, enginepoint,rotation, Vector3.one * radius * 2, Vector4.one * radius, depth);
 			engine._SetVoxelsAdditive_Inner(filter.output, dimension);
-			engine.SetRegionsDirty(enginepoint, Vector3.one * radius, Vector3.one * radius);
+			engine.SetRegionsDirty(enginepoint, Vector3.one * radius, Vector3.one * radius, dimension);
 			if (engine.savesystem) engine.savesystem.IsDirty = true;
 		}
 
@@ -275,7 +276,7 @@ namespace Fraktalia.VoxelGen.Modify
 			engine._SetVoxels_Inner(filter.output, dimension);
 
 			Vector3 extents = VoxelMath.CalculateRotatedSize(engine, enginepoint, size, rotation);
-			engine.SetRegionsDirty(enginepoint, extents, extents);
+			engine.SetRegionsDirty(enginepoint, extents, extents, dimension);
 			if (engine.savesystem) engine.savesystem.IsDirty = true;
 		}
 
@@ -295,7 +296,7 @@ namespace Fraktalia.VoxelGen.Modify
 			engine._SetVoxelsAdditive_Inner(filter.output, dimension);
 
 			Vector3 extents = VoxelMath.CalculateRotatedSize(engine, enginepoint, size, rotation);
-			engine.SetRegionsDirty(enginepoint, extents, extents);
+			engine.SetRegionsDirty(enginepoint, extents, extents, dimension);
 			if (engine.savesystem) engine.savesystem.IsDirty = true;
 		}
 
@@ -442,7 +443,7 @@ namespace Fraktalia.VoxelGen.Modify
 			return engine.RootSize / Mathf.Pow(engine.SubdivisionPower, Depth);
 		}
 
-		public static void ApplyChunkOffset(VoxelGenerator referenceGenerator, Vector3 offset, NativeList<NativeVoxelModificationData> input, NativeList<NativeVoxelModificationData> output)
+		public static void ApplyChunkOffset(VoxelGenerator referenceGenerator, Vector3 offset, FNativeList<NativeVoxelModificationData> input, FNativeList<NativeVoxelModificationData> output)
 		{
 			if (input.Length != output.Length) return;
 
@@ -459,7 +460,7 @@ namespace Fraktalia.VoxelGen.Modify
 
 		}
 
-		public static void InvertModification(NativeList<NativeVoxelModificationData> input, NativeList<NativeVoxelModificationData> output)
+		public static void InvertModification(FNativeList<NativeVoxelModificationData> input, FNativeList<NativeVoxelModificationData> output)
 		{
 			if (input.Length != output.Length) return;
 

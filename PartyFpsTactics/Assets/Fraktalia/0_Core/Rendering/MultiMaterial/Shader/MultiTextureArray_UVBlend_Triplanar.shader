@@ -118,7 +118,7 @@
             float3 worldNormal;
             float2 uv_MainTex;
             float2 uv3_IndexTex;
-            float2 uv4_IndexTex2;       
+            float2 uv4_IndexTex2; //2 at end to match defined _IndexTex2 to prevent redefinition    
             float3 viewDir;        
             INTERNAL_DATA
         };
@@ -201,7 +201,8 @@
             float3 position = v.vertex.xyz * _MapScale;
             float3 normal = v.normal;
 
-            float3 bf = normalize(abs(normal));
+            float3 localNormal = mul(unity_WorldToObject, float4(normal, 0));
+            float3 bf = normalize(abs(localNormal));
             bf /= dot(bf, (float3)1);
 
             float2 trix = position.zy;
@@ -264,6 +265,19 @@
             float4  Emission;
         };
 
+        Result MergeResults(Result result1, Result result2)
+        {
+            Result output;
+            output.Diffuse.rgb = (result1.Diffuse.rgb + result2.Diffuse.rgb);
+            output.Normal = result1.Normal + result2.Normal;
+            output.Metallic = (result1.Metallic + result2.Metallic);
+            output.Smoothness = (result1.Smoothness + result2.Smoothness);
+            output.Occlusion = (result1.Occlusion + result2.Occlusion);
+            output.Emission = result1.Emission + result2.Emission;
+            output.Diffuse.a = (result1.Diffuse.a + result2.Diffuse.a);
+            return output;
+        }
+
         Result CalculateLayer(Input IN, float2 trix, float2 triy, float2 triz, float3 bf, float power, float textureindex)
         {
             float4 result;
@@ -273,21 +287,19 @@
             float3 yz1 = fixed3(trix, textureindex);
 
             float4 parallaxX, parallaxY, parallaxZ;
+            float3 viewDir = normalize(IN.worldPos - _WorldSpaceCameraPos);
             GET_FROMTEXTUREARRAY_TRIPLANAR_RESULTSONLY(_ParallaxMap, xy1, xz1, yz1, bf, parallaxX, parallaxY, parallaxZ);
-            xy1.xy += ParallaxOffset(parallaxZ.r * power, _Parallax, IN.viewDir);
-            xz1.xy += ParallaxOffset(parallaxY.r * power, _Parallax, IN.viewDir);
-            yz1.xy += ParallaxOffset(parallaxX.r * power, _Parallax, IN.viewDir);
-
+            xy1.xy -= ParallaxOffset((parallaxZ.w), _Parallax, viewDir) * power;
+            xz1.xy -= ParallaxOffset((parallaxY.w), _Parallax, viewDir) * power;
+            yz1.xy -= ParallaxOffset((parallaxX.w), _Parallax, viewDir) * power;
 
             GET_FROMTEXTUREARRAY_TRIPLANAR(_DiffuseMap, xy1, xz1, yz1, bf, result);
-            float4 resultfinal = result;
-            GET_FROMTEXTUREARRAY_TRIPLANAR(_DiffuseMap, xy1, xz1, yz1, bf, result);
-            output.Diffuse = result * power * _Color;
+            output.Diffuse = result * power;
 
             float4 normalX, normalY, normalZ;
             GET_FROMTEXTUREARRAY_TRIPLANAR_RESULTSONLY(_BumpMap, xy1, xz1, yz1, bf, normalX, normalY, normalZ);
-            float4 normalvalue = (normalX + normalY + normalZ) * clamp(power,0,1);
-            output.Normal = UnpackScaleNormalArray(normalvalue , _BumpScale);
+            float4 normalvalue = (normalX + normalY + normalZ);
+            output.Normal = UnpackScaleNormalArray(normalvalue , _BumpScale * 3 * power);
 
             GET_FROMTEXTUREARRAY_TRIPLANAR(_MetallicGlossMap, xy1, xz1, yz1, bf, result);
             output.Metallic = result * power;
@@ -305,11 +317,11 @@
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
             float4 result;
-                             
+
             float3 position = mul(unity_WorldToObject, float4(IN.worldPos, 1)) * _MapScale;
             float3 normal = WorldNormalVector(IN, o.Normal);
-
-            float3 bf = normalize(abs(normal));
+            float3 localNormal = mul(unity_WorldToObject, float4(normal, 0));
+            float3 bf = normalize(abs(localNormal));
             bf /= dot(bf, (float3)1);
 
             float2 trix = position.zy;
@@ -324,44 +336,35 @@
             triy *= _TransformTex.zw;
             triz *= _TransformTex.zw;
 
-            if (normal.x < 0) {
-                trix.x = -trix.x;
-            }
-            if (normal.y < 0) {
-                triy.x = -triy.x;
-            }
-            if (normal.z >= 0) {
-                triz.x = -triz.x;
-            }
+            float layer0factor = _BaseSupression;
+            float layer1factor = clamp(0, 1, IN.uv3_IndexTex.x * _UV3Power);
+            float layer2factor = clamp(0, 1, IN.uv3_IndexTex.y * _UV4Power);
+            float layer3factor = clamp(0, 1, IN.uv4_IndexTex2.x * _UV5Power);
+            float layer4factor = clamp(0, 1, IN.uv4_IndexTex2.y * _UV6Power);
 
+            float sumPower = (layer0factor + layer1factor + layer2factor + layer3factor + layer4factor);
+                 
+            layer0factor /= sumPower;        
+            layer1factor /= sumPower;
+            layer2factor /= sumPower;
+            layer3factor /= sumPower;
+            layer4factor /= sumPower;
+
+            Result layeruv3 = CalculateLayer(IN, trix, triy, triz, bf, layer1factor, _UV3Slice);
+            Result layeruv4 = CalculateLayer(IN, trix, triy, triz, bf, layer2factor, _UV4Slice);
+            Result layeruv5 = CalculateLayer(IN, trix, triy, triz, bf, layer3factor, _UV5Slice);
+            Result layeruv6 = CalculateLayer(IN, trix, triy, triz, bf, layer4factor, _UV6Slice);
             Result base = CalculateLayer(IN, trix, triy, triz, bf, 1, _BaseSlice);
-            Result layeruv3 = CalculateLayer(IN, trix, triy, triz, bf, 1, _UV3Slice);
-            Result layeruv4 = CalculateLayer(IN, trix, triy, triz, bf, 1, _UV4Slice);
-            Result layeruv5 = CalculateLayer(IN, trix, triy, triz, bf, 1, _UV5Slice);
-            Result layeruv6 = CalculateLayer(IN, trix, triy, triz, bf, 1, _UV6Slice);
 
-            float sumPower = 1 + (IN.uv3_IndexTex.x * _UV3Power + IN.uv3_IndexTex.y * _UV4Power + IN.uv4_IndexTex2.x * _UV5Power + IN.uv4_IndexTex2.y * _UV6Power)* _BaseSupression;
-            float basefactor = 1 / sumPower;
-            float layer1factor = IN.uv3_IndexTex.x * _UV3Power  * _BaseSupression  / sumPower;
-            float layer2factor = IN.uv3_IndexTex.y * _UV4Power  * _BaseSupression  / sumPower;
-            float layer3factor = IN.uv4_IndexTex2.x * _UV5Power * _BaseSupression / sumPower;
-            float layer4factor = IN.uv4_IndexTex2.y * _UV6Power * _BaseSupression / sumPower;
-            
-            float biggest = max(basefactor, max(layer1factor, max(layer2factor, max(layer3factor, layer4factor))));
-            layer1factor /= biggest;
-            layer2factor /= biggest;
-            layer3factor /= biggest;
-            layer4factor /= biggest;
-            basefactor /= biggest;
+            Result merged = MergeResults(base, MergeResults(MergeResults(MergeResults(layeruv3, layeruv4), layeruv5), layeruv6));
 
-            o.Albedo = base.Diffuse.rgb * basefactor + layeruv3.Diffuse.rgb * layer1factor + layeruv4.Diffuse.rgb * layer2factor + layeruv5.Diffuse.rgb * layer3factor + layeruv6.Diffuse.rgb * layer4factor;
-            o.Normal = base.Normal * basefactor + layeruv3.Normal * layer1factor + layeruv4.Normal * layer2factor + layeruv5.Normal * layer3factor + layeruv6.Normal * layer4factor;
-            o.Metallic = (base.Metallic + layeruv3.Metallic * layer1factor + layeruv4.Metallic * layer2factor + layeruv5.Metallic * layer3factor + layeruv6.Metallic * layer4factor) * _Metallic;
-            o.Smoothness = (base.Smoothness * basefactor + layeruv3.Smoothness * layer1factor + layeruv4.Smoothness * layer2factor + layeruv5.Smoothness * layer3factor + layeruv6.Smoothness * layer4factor) * _Glossiness;
-            o.Occlusion = base.Occlusion * basefactor + layeruv3.Occlusion * layer1factor + layeruv4.Occlusion * layer2factor + layeruv5.Occlusion * layer3factor + layeruv6.Occlusion * layer4factor;
-            o.Emission = base.Emission * basefactor + layeruv3.Emission * layer1factor + layeruv4.Emission * layer2factor + layeruv5.Emission * layer3factor + layeruv6.Emission * layer4factor;
-            o.Alpha = base.Diffuse.a * basefactor + layeruv3.Diffuse.a * layer1factor + layeruv4.Diffuse.a * layer2factor + layeruv5.Diffuse.a * layer3factor + layeruv6.Diffuse.a * layer4factor;
-
+            o.Albedo = (merged.Diffuse.rgb) * _Color.rgb;
+            o.Normal = merged.Normal;
+            o.Metallic = (merged.Metallic) * _Metallic;
+            o.Smoothness = (merged.Smoothness) * _Glossiness;
+            o.Occlusion = (merged.Occlusion) * _OcclusionStrength;
+            o.Emission = merged.Emission * _EmissionColor;
+            o.Alpha = (merged.Diffuse.a) * _Color.a;
         }
         ENDCG
     }

@@ -6,6 +6,7 @@ using Unity.Collections;
 using System;
 using Unity.Burst;
 using Fraktalia.Utility;
+using Fraktalia.Core.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -73,25 +74,25 @@ namespace Fraktalia.VoxelGen.Visualisation
 		private Stack<Transform>[] ObjectPool;
 
 		[ReadOnly]
-		public NativeList<Vector3> mesh_verticeArray;
+		public FNativeList<Vector3> mesh_verticeArray;
 		[ReadOnly]
-		public NativeList<int> mesh_triangleArray;
+		public FNativeList<int> mesh_triangleArray;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uvArray;
+		public FNativeList<Vector2> mesh_uvArray;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv3Array;
+		public FNativeList<Vector2> mesh_uv3Array;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv4Array;
+		public FNativeList<Vector2> mesh_uv4Array;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv5Array;
+		public FNativeList<Vector2> mesh_uv5Array;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv6Array;
+		public FNativeList<Vector2> mesh_uv6Array;
 		[ReadOnly]
-		public NativeList<Vector3> mesh_normalArray;
+		public FNativeList<Vector3> mesh_normalArray;
 		[ReadOnly]
-		public NativeList<Vector4> mesh_tangentsArray;
+		public FNativeList<Vector4> mesh_tangentsArray;
 		[ReadOnly]
-		public NativeList<Color> mesh_colorArray;
+		public FNativeList<Color> mesh_colorArray;
 
 		protected override void Initialize()
 		{
@@ -158,7 +159,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 
 
-		public override void DefineSurface(VoxelPiece piece,NativeList<Vector3> surface_verticeArray, NativeList<int> surface_triangleArray, NativeList<Vector3> surface_normalArray, int slot)
+		public override void DefineSurface(VoxelPiece piece,FNativeList<Vector3> surface_verticeArray, FNativeList<int> surface_triangleArray, FNativeList<Vector3> surface_normalArray, int slot)
 		{
 			m_MeshModJobs[slot].surface_verticeArray = surface_verticeArray;
 			m_MeshModJobs[slot].surface_normalArray = surface_normalArray;

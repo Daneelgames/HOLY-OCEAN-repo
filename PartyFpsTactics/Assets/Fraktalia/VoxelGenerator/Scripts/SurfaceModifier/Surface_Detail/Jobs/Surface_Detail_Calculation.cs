@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Burst;
 using Fraktalia.Core.Math;
 using Fraktalia.Utility;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -33,47 +34,48 @@ namespace Fraktalia.VoxelGen.Visualisation
 		public float cellSize;
 
 		[ReadOnly]
-		public NativeList<Vector3> surface_verticeArray;
+		public FNativeList<Vector3> surface_verticeArray;
 		[ReadOnly]
-		public NativeList<int> surface_triangleArray;
+		public FNativeList<int> surface_triangleArray;
 		[ReadOnly]
-		public NativeList<Vector3> surface_normalArray;
+		public FNativeList<Vector3> surface_normalArray;
+
 		[ReadOnly]
-		public NativeList<Vector3> mesh_verticeArray;
+		public FNativeList<Vector3> mesh_verticeArray;
+		[ReadOnly]	
+		public FNativeList<Vector3> mesh_normalArray;
 		[ReadOnly]
-		public NativeList<int> mesh_triangleArray;
+		public FNativeList<int> mesh_triangleArray;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uvArray;
+		public FNativeList<Vector4> mesh_tangentsArray;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv3Array;
+		public FNativeList<Color> mesh_colorArray;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv4Array;
+		public FNativeList<Vector2> mesh_uvArray;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv5Array;
+		public FNativeList<Vector2> mesh_uv3Array;
 		[ReadOnly]
-		public NativeList<Vector2> mesh_uv6Array;
+		public FNativeList<Vector2> mesh_uv4Array;
 		[ReadOnly]
-		public NativeList<Vector3> mesh_normalArray;
+		public FNativeList<Vector2> mesh_uv5Array;
 		[ReadOnly]
-		public NativeList<Vector4> mesh_tangentsArray;
-		[ReadOnly]
-		public NativeList<Color> mesh_colorArray;
+		public FNativeList<Vector2> mesh_uv6Array;
+		
+	
 
 
 
-		public NativeList<Vector3> verticeArray;
-		public NativeList<int> triangleArray;
-		public NativeList<Vector2> uvArray;
-		public NativeList<Vector2> uv3Array;
-		public NativeList<Vector2> uv4Array;
-		public NativeList<Vector2> uv5Array;
-		public NativeList<Vector2> uv6Array;
-		public NativeList<Vector3> normalArray;
-		public NativeList<Vector4> tangentsArray;
-		public NativeList<Vector3> tan1;
-		public NativeList<Vector3> tan2;
-		public NativeList<Color> colorArray;
-		public NativeList<Matrix4x4> objectArray;
+		public FNativeList<Vector3> verticeArray;
+		public FNativeList<int> triangleArray;
+		public FNativeList<Vector2> uvArray;
+		public FNativeList<Vector2> uv3Array;
+		public FNativeList<Vector2> uv4Array;
+		public FNativeList<Vector2> uv5Array;
+		public FNativeList<Vector2> uv6Array;
+		public FNativeList<Vector3> normalArray;
+		public FNativeList<Vector4> tangentsArray;
+		public FNativeList<Color> colorArray;
+		public FNativeList<Matrix4x4> objectArray;
 		
 		[ReadOnly]
 		public NativeArray<Vector3> Permutations;
@@ -101,19 +103,17 @@ namespace Fraktalia.VoxelGen.Visualisation
 		public void Init()
 		{
 			CleanUp();		
-			verticeArray = new NativeList<Vector3>(Allocator.Persistent);
-			triangleArray = new NativeList<int>(Allocator.Persistent);
-			uvArray = new NativeList<Vector2>(Allocator.Persistent);
-			uv3Array = new NativeList<Vector2>(Allocator.Persistent);
-			uv4Array = new NativeList<Vector2>(Allocator.Persistent);
-			uv5Array = new NativeList<Vector2>(Allocator.Persistent);
-			uv6Array = new NativeList<Vector2>(Allocator.Persistent);
-			normalArray = new NativeList<Vector3>(Allocator.Persistent);
-			tangentsArray = new NativeList<Vector4>(Allocator.Persistent);
-			colorArray = new NativeList<Color>(Allocator.Persistent);
-			objectArray = new NativeList<Matrix4x4>(Allocator.Persistent);
-			tan1 = new NativeList<Vector3>(Allocator.Persistent);
-			tan2 = new NativeList<Vector3>(Allocator.Persistent);		
+			verticeArray = new FNativeList<Vector3>(Allocator.Persistent);
+			triangleArray = new FNativeList<int>(Allocator.Persistent);
+			uvArray = new FNativeList<Vector2>(Allocator.Persistent);
+			uv3Array = new FNativeList<Vector2>(Allocator.Persistent);
+			uv4Array = new FNativeList<Vector2>(Allocator.Persistent);
+			uv5Array = new FNativeList<Vector2>(Allocator.Persistent);
+			uv6Array = new FNativeList<Vector2>(Allocator.Persistent);
+			normalArray = new FNativeList<Vector3>(Allocator.Persistent);
+			tangentsArray = new FNativeList<Vector4>(Allocator.Persistent);
+			colorArray = new FNativeList<Color>(Allocator.Persistent);
+			objectArray = new FNativeList<Matrix4x4>(Allocator.Persistent);		
 		}
 
 		public bool _IsBetweenAngle(Vector3 normal)
@@ -140,8 +140,7 @@ namespace Fraktalia.VoxelGen.Visualisation
 			uv6Array.Clear();
 
 			objectArray.Clear();
-
-
+			
 			int triangleindex = 0;
 			int crystalcount = 0;
 			int count = surface_triangleArray.Length;
@@ -211,8 +210,6 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 				
 			}
-
-			ExecuteTangents();
 		}
 
 		public Matrix4x4 GetMatrix(ref PlacementManifest manifest,  Vector3 triangleA, Vector3 triangleB, Vector3 triangleC, int randomnlockup, float normalinfluence)
@@ -283,9 +280,6 @@ namespace Fraktalia.VoxelGen.Visualisation
 				tangentsArray.Add(tangent);
 
 				normalArray.Add(matrix.MultiplyVector(mesh_normalArray[v]));
-
-				tan1.Add(new Vector3(0, 0, 0));
-				tan2.Add(new Vector3(0, 0, 0));
 			}
 
 			for (int v = 0; v < mesh_colorArray.Length; v++)
@@ -327,82 +321,9 @@ namespace Fraktalia.VoxelGen.Visualisation
 			objectArray.Add(matrix);
 		}
 
-		public void ExecuteTangents()
-		{
-
-			//variable definitions
-			int triangleCount = triangleArray.Length;
-			int vertexCount = verticeArray.Length;
-
-
-			for (int a = 0; a < triangleCount; a += 3)
-			{
-				int i1 = triangleArray[a + 0];
-				int i2 = triangleArray[a + 1];
-				int i3 = triangleArray[a + 2];
-
-				Vector3 v1 = verticeArray[i1];
-				Vector3 v2 = verticeArray[i2];
-				Vector3 v3 = verticeArray[i3];
-
-				Vector2 w1 = uvArray[i1];
-				Vector2 w2 = uvArray[i2];
-				Vector2 w3 = uvArray[i3];
-
-				float x1 = v2.x - v1.x;
-				float x2 = v3.x - v1.x;
-				float y1 = v2.y - v1.y;
-				float y2 = v3.y - v1.y;
-				float z1 = v2.z - v1.z;
-				float z2 = v3.z - v1.z;
-
-				float s1 = w2.x - w1.x;
-				float s2 = w3.x - w1.x;
-				float t1 = w2.y - w1.y;
-				float t2 = w3.y - w1.y;
-
-				float div = s1 * t2 - s2 * t1;
-				float r = div == 0.0f ? 0.0f : 1.0f / div;
-
-				Vector3 sdir = new Vector3((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
-				Vector3 tdir = new Vector3((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
-
-				tan1[i1] += sdir;
-				tan1[i2] += sdir;
-				tan1[i3] += sdir;
-
-				tan2[i1] += tdir;
-				tan2[i2] += tdir;
-				tan2[i3] += tdir;
-			}
-
-
-			for (int a = 0; a < vertexCount; ++a)
-			{
-				Vector3 n = normalArray[a];
-				Vector3 t = tan1[a];
-
-				//Vector3 tmp = (t - n * Vector3.Dot(n, t)).normalized;
-				//tangents[a] = new Vector4(tmp.x, tmp.y, tmp.z);
-				Vector3.OrthoNormalize(ref n, ref t);
-
-				Vector4 output = new Vector4();
-				output.x = t.x;
-				output.y = t.y;
-				output.z = t.z;
-
-				output.w = (Vector3.Dot(Vector3.Cross(n, t), tan2[a]) < 0.0f) ? -1.0f : 1.0f;
-				tangentsArray[a] = output;
-
-			}
-
-
-		}
-
 		[BurstDiscard]
 		public void CleanUp()
 		{
-
 			if (verticeArray.IsCreated) verticeArray.Dispose();
 			if (triangleArray.IsCreated) triangleArray.Dispose();
 			if (uvArray.IsCreated) uvArray.Dispose();
@@ -410,17 +331,10 @@ namespace Fraktalia.VoxelGen.Visualisation
 			if (uv4Array.IsCreated) uv4Array.Dispose();
 			if (uv5Array.IsCreated) uv5Array.Dispose();
 			if (uv6Array.IsCreated) uv6Array.Dispose();
-
 			if (normalArray.IsCreated) normalArray.Dispose();
 			if (tangentsArray.IsCreated) tangentsArray.Dispose();
 			if (colorArray.IsCreated) colorArray.Dispose();
 			if (objectArray.IsCreated) objectArray.Dispose();
-
-		
-
-
-			if (tan1.IsCreated) tan1.Dispose();
-			if (tan2.IsCreated) tan2.Dispose();
 		}
 	}
 }

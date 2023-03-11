@@ -74,4 +74,15 @@ namespace Fraktalia.Core.FraktaliaAttributes
 			}	
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
+	public class PropertyModuleAttribute : PropertyAttribute
+	{
+		public string type;
+
+		public PropertyModuleAttribute(string type = ""){
+			this.type = type;
+		}
+	}
+
 }

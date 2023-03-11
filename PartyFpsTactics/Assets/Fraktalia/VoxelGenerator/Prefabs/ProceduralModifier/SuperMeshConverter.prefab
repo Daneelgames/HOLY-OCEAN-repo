@@ -130,14 +130,11 @@ MonoBehaviour:
   Depth: 7
   TargetDimension: 0
   Additive: 0
-  ClearBlock: 1
-  ErrorMessage: "\n - This setup would modify more than 300000 Voxels.\n - Mesh attached
-    to Mesh is too complex. (Vertex Count > 10000)\n\n These settings are highly
-    complex and may freeze Unity for quite a while. So be careful what you do."
-  IgnoreErrors: 1
-  finalMultiplier: 4.72
-  Smoothing: 1
-  Mode: 1
-  colliders:
-  - {fileID: 7154255542948456350}
-  - {fileID: 7154255542605287595}
+  ClearBlock: 0
+  ErrorMessage: This setup would modify more than 5 Million Voxels. You do not want
+    to freeze Unity
+  IgnoreErrors: 0
+  finalMultiplier: 1
+  Smoothing: 0
+  Mode: 0
+  colliders: []

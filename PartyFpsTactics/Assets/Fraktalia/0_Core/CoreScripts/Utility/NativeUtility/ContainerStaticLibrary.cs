@@ -20,7 +20,7 @@ namespace Fraktalia.Utility
 		public static event Action OnBeforeCleanUp;
 
 		private static Dictionary<string, NativeArray<float>> staticArrays_float = new Dictionary<string, NativeArray<float>>();
-		private static Dictionary<int, NativeArray<byte>> staticArrays_byte = new Dictionary<int, NativeArray<byte>>();
+		private static Dictionary<string, NativeArray<byte>> staticArrays_byte = new Dictionary<string, NativeArray<byte>>();
 		private static Dictionary<string, NativeArray<int>> staticArrays_int = new Dictionary<string, NativeArray<int>>();
 		private static Dictionary<string, IntPtr> staticArrays_pointer = new Dictionary<string, IntPtr>();
 		private static Dictionary<string, NativeArray<GPUVertex>[]> vertexBank = new Dictionary<string, NativeArray<GPUVertex>[]>();
@@ -48,15 +48,17 @@ namespace Fraktalia.Utility
 			return array;
 		}
 
-		public static NativeArray<byte> GetArray_byte(int count)
+		public static NativeArray<byte> GetArray_byte(int count, int bank = 0)
 		{
-			if (staticArrays_byte.ContainsKey(count))
+			string key = "" + count + "_" + bank;
+
+			if (staticArrays_byte.ContainsKey(key))
 			{
-				return staticArrays_byte[count];
+				return staticArrays_byte[key];
 			}
 
 			var array = new NativeArray<byte>(count, Allocator.Persistent);
-			staticArrays_byte[count] = array;
+			staticArrays_byte[key] = array;
 			return array;
 		}
 

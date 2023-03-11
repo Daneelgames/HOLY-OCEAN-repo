@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -7,8 +9,8 @@ using UnityEngine;
 namespace Fraktalia.Core.FraktaliaAttributes
 {
     public static class FraktaliaEditorUtility
-    {
-        private const BindingFlags AllBindingFlags = (BindingFlags)(-1);
+    {		
+		private const BindingFlags AllBindingFlags = (BindingFlags)(-1);
 
         /// <summary>
         /// Returns attributes of type <typeparamref name="TAttribute"/> on <paramref name="serializedProperty"/>.
@@ -125,7 +127,34 @@ namespace Fraktalia.Core.FraktaliaAttributes
                 EditorGUILayout.EndVertical();
             }
         }
-    }
+
+		private static Dictionary<string, Tuple<List<Type>, string[]>> cachedDerivedTypes = new Dictionary<string, Tuple<List<Type>, string[]>>();
+		public static Tuple<List<Type>, string[]> GetDerivedTypesForScriptSelection(Type baseType, string DefaultName)
+		{
+			if (cachedDerivedTypes.ContainsKey(baseType.Name + DefaultName)) return cachedDerivedTypes[baseType.Name + DefaultName];
+
+			List<Type> derived_types = new List<Type>();
+			derived_types.Add(baseType);
+			foreach (var domain_assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				var assembly_types = domain_assembly.GetTypes()
+				  .Where(type => type.IsSubclassOf(baseType) && !type.IsAbstract);
+
+				derived_types.AddRange(assembly_types);
+			}
+
+			List<string> types = new List<string>();
+			for (int i = 0; i < derived_types.Count; i++)
+			{
+				types.Add(derived_types[i].Name);
+			}
+			types[0] = DefaultName;
+
+			cachedDerivedTypes[baseType.Name + DefaultName] = new Tuple<List<Type>, string[]>(derived_types, types.ToArray());
+			return cachedDerivedTypes[baseType.Name + DefaultName];
+		}
+
+	}
 }
 
 #endif

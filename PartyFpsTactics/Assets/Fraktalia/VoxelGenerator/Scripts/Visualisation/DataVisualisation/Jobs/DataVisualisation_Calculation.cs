@@ -5,6 +5,7 @@ using Unity.Jobs;
 using UnityEngine.Jobs;
 using UnityEngine;
 using Unity.Burst;
+using Fraktalia.Core.Collections;
 
 namespace Fraktalia.VoxelGen.Visualisation
 {
@@ -12,15 +13,15 @@ namespace Fraktalia.VoxelGen.Visualisation
 	struct DataVisualisation_Calculation : IJob
 	{
 
-		public NativeList<Vector3> m_Vertices;
-		public NativeList<Vector2> m_uvs;
-		public NativeList<int> m_triangles;
-		public NativeList<float> sizeIndex;
-		public NativeList<Vector3> offsetIndex;
-		public NativeList<int> Neighbours;
+		public FNativeList<Vector3> m_Vertices;
+		public FNativeList<Vector2> m_uvs;
+		public FNativeList<int> m_triangles;
+		public FNativeList<float> sizeIndex;
+		public FNativeList<Vector3> offsetIndex;
+		public FNativeList<int> Neighbours;
 
 
-		public NativeQueue<NativeVoxelNode> NodeStackBuffer;
+		public FNativeQueue<NativeVoxelNode> NodeStackBuffer;
 		public NativeVoxelTree Data;
 		public NativeVoxelNode Voxel;
 		public int MeshDepth;
@@ -36,19 +37,19 @@ namespace Fraktalia.VoxelGen.Visualisation
 
 			int MaxBlocks = 1 + (int)Mathf.Pow(subdivision * subdivision * subdivision, Depth);			
 
-			Neighbours = new NativeList<int>(2000, Allocator.Persistent);
+			Neighbours = new FNativeList<int>(2000, Allocator.Persistent);
 
 			if (m_Vertices.IsCreated) m_Vertices.Dispose();
 			if (m_uvs.IsCreated) m_uvs.Dispose();
 			if (m_triangles.IsCreated) m_triangles.Dispose();
 
-			m_Vertices = new NativeList<Vector3>(2000, Allocator.Persistent);
-			m_uvs = new NativeList<Vector2>(2000, Allocator.Persistent);
-			m_triangles = new NativeList<int>(2000, Allocator.Persistent);
-			offsetIndex = new NativeList<Vector3>(2000, Allocator.Persistent);
-			sizeIndex = new NativeList<float>(2000, Allocator.Persistent);
+			m_Vertices = new FNativeList<Vector3>(2000, Allocator.Persistent);
+			m_uvs = new FNativeList<Vector2>(2000, Allocator.Persistent);
+			m_triangles = new FNativeList<int>(2000, Allocator.Persistent);
+			offsetIndex = new FNativeList<Vector3>(2000, Allocator.Persistent);
+			sizeIndex = new FNativeList<float>(2000, Allocator.Persistent);
 			
-			NodeStackBuffer = new NativeQueue<NativeVoxelNode>(Allocator.Persistent);
+			NodeStackBuffer = new FNativeQueue<NativeVoxelNode>(Allocator.Persistent);
 		}
 
 		public void CleanUp()

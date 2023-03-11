@@ -4,6 +4,8 @@ using System.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.IO;
+using Fraktalia.Core.FraktaliaAttributes;
+
 namespace Fraktalia.Core.LMS
 {
     [CustomEditor(typeof(LargeMeshCombiner))][CanEditMultipleObjects]
@@ -157,11 +159,18 @@ namespace Fraktalia.Core.LMS
 
             }
 
+			EditorGUILayout.Space();
+			EditorGUILayout.LabelField("Attachments: " + mytarget.GetComponents<MeshPieceAttachment>().Length);
+			var attachments = FraktaliaEditorUtility.GetDerivedTypesForScriptSelection(typeof(MeshPieceAttachment), "Add Mesh Attachment...");
+			int selectedattachments = EditorGUILayout.Popup(0, attachments.Item2);
+			if (selectedattachments > 0)
+			{
+				mytarget.gameObject.AddComponent(attachments.Item1[selectedattachments]);
+			}
 
 
 
-
-            if (GUI.changed)
+			if (GUI.changed)
             {
                 EditorUtility.SetDirty(target);
             }

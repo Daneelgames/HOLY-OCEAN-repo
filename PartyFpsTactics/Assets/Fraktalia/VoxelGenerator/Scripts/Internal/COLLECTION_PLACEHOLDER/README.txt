@@ -17,7 +17,5 @@ go to Edit > Project Settings > Player > Other Setting > Change Scripting Runtim
 
 
 Note:
-This folder contains placeholder of the Burst and Collection package.
-Placeholder for collections is a sample of the collection package v 0.1.0.
-
-After installing the "Collections" package, these files are not compiled anymore.
+This folder contains placeholder of the Burst and a snapshot of the Collection package.
+The collection package is a snapshot of the collection package v 0.1.0. in order to avoid hazzles caused by Unity.

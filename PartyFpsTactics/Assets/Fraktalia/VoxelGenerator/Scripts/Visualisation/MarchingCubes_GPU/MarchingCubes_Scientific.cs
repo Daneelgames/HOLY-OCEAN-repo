@@ -15,16 +15,16 @@ namespace Fraktalia.VoxelGen.Visualisation
 	{
 		[BeginInfo("Scientific Visualisation")]
 		[InfoTitle("Scientific Visualisation", "This hull generator uses GPU based Marching Cubes and combines the power of CPU and GPU to increase perfomance far beyond " +
-		"CPU only based hull generators.")]
+		"CPU only based hull generators.", "Scientific Visualisation")]
 		[InfoSection1("How to use:", "Functionality is same as the CPU based marching cubes. It is important to have the compute shaders (Marching Cubes and Clear Buffer) assigned. " +
 			"\n\nAlso this hull generator does not generate UV coordinates so a triplanar shader is recommended. Also it is important to have the histogramm curve defined as it is used " +
 			"to manipulate the final outcome. The histogramm values go from 0-1 which is then remapped to 0-255 and multiplied into the voxel map. This allows the visualisation of specific " +
 			"voxel values.\n\n" +
 			"Also this hull generator has a visible boundary in order to see potential interior content withoug modifying the dataset. Also histogramm curves for each color can be used in order " +
-			"to colorize important voxels. The color is written into the vertex color so a material which uses vertex colors (included) is required.")]
+			"to colorize important voxels. The color is written into the vertex color so a material which uses vertex colors (included) is required.", "Scientific Visualisation")]
 		[InfoSection2("Compatibility:", "" +
 		"<b>Direct X 11:</b> This hull generator uses Compute Shader which may not be supported by your target system.\n" +
-		"For more information check the official statement from Unity:\n\nhttps://docs.unity3d.com/Manual/class-ComputeShader.html\n")]
+		"For more information check the official statement from Unity:\n\nhttps://docs.unity3d.com/Manual/class-ComputeShader.html\n", "Scientific Visualisation")]
 		[InfoText("Scientific Visualisation:", "Scientific Visualisation")]
 
 		

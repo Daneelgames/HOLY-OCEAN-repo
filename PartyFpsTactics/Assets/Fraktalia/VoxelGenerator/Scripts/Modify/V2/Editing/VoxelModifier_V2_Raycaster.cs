@@ -41,8 +41,9 @@ namespace Fraktalia.VoxelGen.Modify
 		[HideInInspector]
 		public Vector3 PaintNormal;
 		private void OnDrawGizmosSelected()
-		{		
-			if (Modifier) Modifier.DrawEditorPreview(PaintPosition, PaintNormal);			
+		{
+			if (Modifier) Modifier.DrawEditorPreview(PaintPosition, PaintNormal);
+			else Modifier = GetComponent<VoxelModifier_V2>();
 		}
 
 		private void Update()
@@ -118,6 +119,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public void ApplyModifier()
 		{
 			if (Modifier) Modifier.ApplyVoxelModifier(PaintPosition);
+			else Modifier = GetComponent<VoxelModifier_V2>();
 		}
 
 		public void ApplyModifier(VoxelModifierMode modeoverride)
@@ -129,6 +131,7 @@ namespace Fraktalia.VoxelGen.Modify
 				Modifier.ApplyVoxelModifier(PaintPosition);
 				Modifier.Mode = mode;
 			}
+			else Modifier = GetComponent<VoxelModifier_V2>();
 		}
 	}
 

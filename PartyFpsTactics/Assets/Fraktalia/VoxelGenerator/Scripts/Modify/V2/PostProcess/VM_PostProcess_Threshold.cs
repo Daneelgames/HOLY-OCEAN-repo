@@ -1,3 +1,4 @@
+using Fraktalia.Core.Collections;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
@@ -18,7 +19,7 @@ namespace Fraktalia.VoxelGen.Modify
 		public bool DiscardRight;
 
 
-		public override void ApplyPostprocess(NativeList<NativeVoxelModificationData_Inner> modifierData, VoxelGenerator generator, VoxelModifier_V2 modifier)
+		public override void ApplyPostprocess(FNativeList<NativeVoxelModificationData_Inner> modifierData, VoxelGenerator generator, VoxelModifier_V2 modifier)
 		{
 			ThresholdJob job = new ThresholdJob();	
 			job.modifierData = modifierData;
@@ -45,7 +46,7 @@ namespace Fraktalia.VoxelGen.Modify
 	
 
 		[NativeDisableContainerSafetyRestriction]
-		public NativeList<NativeVoxelModificationData_Inner> modifierData;
+		public FNativeList<NativeVoxelModificationData_Inner> modifierData;
 		internal VoxelModifierMode mode;
 
 		public void Execute(int index)
