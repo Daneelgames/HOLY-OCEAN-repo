@@ -205,5 +205,14 @@ namespace MrPink
             }
             return new string(a);
         }
+
+        public void SetLayerRecursively(Transform go, int layer)
+        {
+            go.gameObject.layer = layer;
+            foreach (Transform transform1 in go)
+            {
+                SetLayerRecursively(transform1, layer);
+            }
+        }
     }
 }
