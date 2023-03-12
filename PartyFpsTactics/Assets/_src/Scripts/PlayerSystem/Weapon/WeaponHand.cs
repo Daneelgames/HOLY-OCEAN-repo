@@ -116,14 +116,6 @@ namespace MrPink.PlayerSystem
                 return;
             }
             
-            /*
-            if (!LevelGenerator.Instance.IsLevelReady)
-            {
-                IsAiming = false;
-                CurrentPosition = WeaponPosition.Reload;
-                return;
-            }*/
-
             if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)
             {
                 IsAiming = false;
@@ -173,6 +165,8 @@ namespace MrPink.PlayerSystem
             
         private async UniTask HandleAttack()
         {
+            PlayerBuildingSystem.Instance.CancelInput();
+
             if (_isAttacking)
             {
                 return;

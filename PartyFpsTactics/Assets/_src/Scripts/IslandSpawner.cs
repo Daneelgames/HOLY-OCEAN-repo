@@ -69,13 +69,16 @@ public class IslandSpawner : NetworkBehaviour
     [Server]
     public void SpawnIslandOnServer()
     {
-        var levelPrefabs = ProgressionManager.Instance.CurrentLevel.islandPrefabs;
+        var levelPrefabs = ProgressionManager.Instance.CurrentLevel.islandsReferences;
         var randomIslandPrefab = levelPrefabs[Random.Range(0,levelPrefabs.Count)];
         var spawnDir = (Vector3.zero - new Vector3(Game.LocalPlayer.Position.x,0,Game.LocalPlayer.Position.z)).normalized;
         
         var spawnPos = spawnDir * spawnDistance;
-        var newIsland = Instantiate(randomIslandPrefab, spawnPos, Quaternion.identity);
- 
+        AddressableSpawner.Instance.Spawn(randomIslandPrefab, spawnPos);
+    }
+
+    public void AddressableIslandInstantiated(Island newIsland)
+    {
         ServerManager.Spawn(newIsland.gameObject);
     }
 

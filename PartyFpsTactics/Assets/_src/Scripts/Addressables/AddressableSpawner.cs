@@ -105,7 +105,11 @@ public class AddressableSpawner : MonoBehaviour
         }
     }
 
-    public void ProceedSpawnedObject(GameObject spawned)
+    void ProceedSpawnedObject(GameObject spawned)
     {
+        if (spawned.TryGetComponent<Island>(out var island))
+        {
+            IslandSpawner.Instance.AddressableIslandInstantiated(island);
+        }
     }
 }

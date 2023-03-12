@@ -32,6 +32,19 @@ public class PlayerBuildingSystem : NetworkBehaviour
             PlaceBuilding();
     }
 
+    public void CancelInput()
+    {
+        if (currentPlacingBuilding != null)
+        {
+            StopCoroutine(placingBuildingCoroutine);
+        }
+
+        if (currentPlacingBuilding != null)
+        {
+            Destroy(currentPlacingBuilding);
+        }
+    }
+
     void SpawnTile()
     {
         Transform camTransform = Game.LocalPlayer.MainCamera.transform;
@@ -43,6 +56,8 @@ public class PlayerBuildingSystem : NetworkBehaviour
         var spawnPos = new Vector3(Mathf.RoundToInt(hit.point.x),Mathf.RoundToInt(hit.point.y), Mathf.RoundToInt(hit.point.z));
         newTile.transform.position = spawnPos;
         newTile.transform.Rotate(new Vector3(90 * Random.Range(0,4),90 * Random.Range(0,4),90 * Random.Range(0,4)));
+        
+        IslandSpawner.Instance.GetClosestTileBuilding(transform.position)?.AddToDisconnectedTilesFolder(newTile.transform);
     }
 
     void PlaceBuilding()

@@ -371,7 +371,7 @@ public class ContentPlacer : NetworkBehaviour
         var boat = Instantiate(aiWaterBikes[Random.Range(0, aiWaterBikes.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot);
         
         var island = IslandSpawner.Instance.GetClosestIsland(pos);
-        island.AddIslandUnit(unit);
+        island?.AddIslandUnit(unit);
         
         ServerManager.Spawn(unit.gameObject);
         ServerManager.Spawn(boat.gameObject);
@@ -424,6 +424,11 @@ public class ContentPlacer : NetworkBehaviour
 
     Vector3 PosAroundPosition(Vector3 initPos, float maxDistance)
     {
+        if (Physics.Raycast(initPos, new Vector3(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f), Random.Range(-1f, 1f)), out var hit, 100, GameManager.Instance.AllSolidsMask))
+        {
+            if (Vector3.Distance(initPos, hit.point) > minMobSpawnDistance)
+                return hit.point;
+        }
         initPos += Random.onUnitSphere * Random.Range(1, maxDistance);
         return initPos;
     }
