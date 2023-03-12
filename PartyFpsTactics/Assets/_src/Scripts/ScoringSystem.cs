@@ -139,8 +139,14 @@ namespace MrPink
             comboBar.fillAmount = GetComboFillAmount();
         }
 
+        private bool onDamageRegisterCooldown = false;
+        [SerializeField] private float damageRegisterCooldown = 0.1f;
         public void RegisterDamage(int damage)
         {
+            if (onDamageRegisterCooldown)
+                return;
+            
+            StartCoroutine(DamageRegisterCooldown());
             currentDamageInCombo += damage;
             currentComboReduceCooldown = comboReduceCooldown; 
             if (damageFeedbackAnimateCoroutine != null)
@@ -148,9 +154,17 @@ namespace MrPink
             
             damageFeedbackAnimateCoroutine = StartCoroutine(DamageFeedbackAnimate(damage));
 
-
             if (currentDamageInCombo >= _mojoLevels[currentMojoLevelIndex].minDamage)
+            {
                 IncreaseMojoLevel();
+            }
+        }
+
+        IEnumerator DamageRegisterCooldown()
+        {
+            onDamageRegisterCooldown = true;
+            yield return new WaitForSeconds(damageRegisterCooldown);
+            onDamageRegisterCooldown = false;
         }
 
         public void GiveMojoRewardBossChest()
@@ -171,9 +185,6 @@ namespace MrPink
         {
             var newMojoIndex = _mojoLevels.Count - 1;
             currentMojoLevelIndex = newMojoIndex;
-            var prevIndex = currentMojoLevelIndex - 1;
-            if (prevIndex < 0) prevIndex = 0;
-            currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
             ItemFoundSound();
             UpdateMojoLevelUi();
             Game.LocalPlayer.Health.RestoreHealth(0.3f);
@@ -202,7 +213,7 @@ namespace MrPink
             comboBarAnim.SetTrigger(NewLevel);
             ItemFoundSound();
             UpdateMojoLevelUi();
-            Game.LocalPlayer.Health.RestoreHealth(0.3f);
+            Game.LocalPlayer.Health.RestoreHealth(1f);
             UpdateMojoInventory();
         }
         

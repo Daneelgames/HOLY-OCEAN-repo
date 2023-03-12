@@ -10,6 +10,7 @@ public class PlayerBuildingSystem : NetworkBehaviour
 {
     public static PlayerBuildingSystem Instance;
     [SerializeField] private float buildingDistanceMax = 100;
+    [SerializeField] private float noRaycastBuildingMediumDistance = 50;
     [SerializeField] private float buildingDistanceMin = 20;
     [SerializeField] private float buildingRotationSpeed = 10;
     [SerializeField] private float tileMaxSpawnDistance = 10;
@@ -31,6 +32,19 @@ public class PlayerBuildingSystem : NetworkBehaviour
             PlaceBuilding();
     }
 
+    public void CancelInput()
+    {
+        if (currentPlacingBuilding != null)
+        {
+            StopCoroutine(placingBuildingCoroutine);
+        }
+
+        if (currentPlacingBuilding != null)
+        {
+            Destroy(currentPlacingBuilding);
+        }
+    }
+
     void SpawnTile()
     {
         Transform camTransform = Game.LocalPlayer.MainCamera.transform;
@@ -42,6 +56,8 @@ public class PlayerBuildingSystem : NetworkBehaviour
         var spawnPos = new Vector3(Mathf.RoundToInt(hit.point.x),Mathf.RoundToInt(hit.point.y), Mathf.RoundToInt(hit.point.z));
         newTile.transform.position = spawnPos;
         newTile.transform.Rotate(new Vector3(90 * Random.Range(0,4),90 * Random.Range(0,4),90 * Random.Range(0,4)));
+        
+        IslandSpawner.Instance.GetClosestTileBuilding(transform.position)?.AddToDisconnectedTilesFolder(newTile.transform);
     }
 
     void PlaceBuilding()
@@ -85,7 +101,10 @@ public class PlayerBuildingSystem : NetworkBehaviour
             
             if (Physics.Raycast(camTransform.position, camTransform.forward, out var hit, buildingDistanceMax,
                 GameManager.Instance.AllSolidsMask) == false)
+            {
+                currentPlacingBuilding.transform.position = camTransform.position + camTransform.forward * noRaycastBuildingMediumDistance;
                 continue;
+            }
             
             if (Vector3.Distance(hit.point, camTransform.position) < buildingDistanceMin)
                 continue;

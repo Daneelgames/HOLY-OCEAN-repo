@@ -116,14 +116,6 @@ namespace MrPink.PlayerSystem
                 return;
             }
             
-            /*
-            if (!LevelGenerator.Instance.IsLevelReady)
-            {
-                IsAiming = false;
-                CurrentPosition = WeaponPosition.Reload;
-                return;
-            }*/
-
             if (!canShootIfPhoneInUse && DialogueWindowInterface.Instance.dialogueWindowActive)
             {
                 IsAiming = false;
@@ -173,13 +165,19 @@ namespace MrPink.PlayerSystem
             
         private async UniTask HandleAttack()
         {
+            PlayerBuildingSystem.Instance.CancelInput();
+
             if (_isAttacking)
             {
                 return;
             }
             
             if (Weapon.IsMelee)
-                CurrentPosition = WeaponPosition.MeleeAttack;
+            {
+                //CurrentPosition = WeaponPosition.MeleeAttack;
+                Weapon.transform.position = this[WeaponPosition.MeleeAttack].position;
+                Weapon.transform.rotation = this[WeaponPosition.MeleeAttack].rotation;
+            }
             else
             {
                 Weapon.transform.position = this[WeaponPosition.Aim].position;

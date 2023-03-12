@@ -150,7 +150,7 @@ namespace MrPink.WeaponsSystem
                 UnitsManager.Instance.RagdollTileExplosion(transform.position, ragdollExplosionDistance, ragdollExplosionForce, playerExplosionForce);
                 unitsExplosionCompleted = true;
 
-                if (owner && owner.IsPlayer || Game._instance.DistanceToClosestPlayer(transform.position).distance < 10) 
+                if (owner && owner.IsPlayer || Game._instance.DistanceToClosestPlayer(transform.position).distance < 20) 
                 {
                     if (GameVoxelModifier.Instance)
                         GameVoxelModifier.Instance.DestructionInWorld(transform.position);

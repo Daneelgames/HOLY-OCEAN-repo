@@ -6,6 +6,7 @@ using MrPink.Health;
 using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace _src.Scripts.Data
 {
@@ -21,6 +22,7 @@ namespace _src.Scripts.Data
 
         public List<LevelEvent> levelEvents;
         public List<Island> islandPrefabs;
+        public List<AssetReference> islandsReferences;
         public HealthController boss;
 
         public enum SpawnBossType
