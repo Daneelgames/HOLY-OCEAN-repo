@@ -22,6 +22,7 @@ namespace MrPink.Health
         [SerializeField] [ReadOnly] [SyncVar] private bool isPlayer = false;
         public bool IsPlayer => isPlayer;
         [SerializeField] private bool addToMobsInGame = false;
+        [SerializeField] private bool addToBossesInGame = false;
         public void SetIsPlayerTrue()
         {
             isPlayer = true;
@@ -97,6 +98,8 @@ namespace MrPink.Health
             }
             if (addToMobsInGame)
                 UnitsManager.Instance.AddMob(this);
+            if (addToBossesInGame)
+                UnitsManager.Instance.AddBoss(this);
             
             healthMax = health;
             enduranceMax = endurance;

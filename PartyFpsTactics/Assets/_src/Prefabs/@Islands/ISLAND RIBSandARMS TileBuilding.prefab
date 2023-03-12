@@ -9467,7 +9467,7 @@ MonoBehaviour:
   islandUnits: []
   culled: 1
   distanceToLocalPlayer: 0
-  showHavokMeterDistance: 500
+  showHavokMeterDistance: 400
   voxelCutterForBuildings:
   - {fileID: 5471044925439002809}
   targetHavok: 0
@@ -9490,14 +9490,15 @@ MonoBehaviour:
   - {fileID: 7745250423764588997}
   - {fileID: 6685761909259112912}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
+  <ChildNetworkObjects>k__BackingField:
+  - {fileID: 7072176338832538644}
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 5
+  <PrefabId>k__BackingField: 10
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -69745,6 +69746,14 @@ PrefabInstance:
       propertyPath: <IsNested>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <ComponentIndex>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <ParentNetworkObject>k__BackingField
+      value: 
+      objectReference: {fileID: 7941603398386265850}
     - target: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -69812,6 +69821,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6538700427162571403, guid: 8da4667c6541cc047af245d102688646, type: 3}
   m_PrefabInstance: {fileID: 1158269554547399638}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7072176338832538644 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+  m_PrefabInstance: {fileID: 1158269554547399638}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2090466668882980237
 PrefabInstance:
   m_ObjectHideFlags: 0

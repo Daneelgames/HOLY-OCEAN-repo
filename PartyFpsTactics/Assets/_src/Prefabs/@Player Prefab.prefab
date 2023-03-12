@@ -12195,6 +12195,7 @@ MonoBehaviour:
   grounded: 1
   groundedCheckSphereRadius: 2.5
   groundedRaycastOrigin: {fileID: 0}
+  culled: 0
 --- !u!1 &5431838109475776298
 GameObject:
   m_ObjectHideFlags: 0
@@ -12741,6 +12742,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 4075464650987322544}
   isPlayer: 0
   addToMobsInGame: 0
+  addToBossesInGame: 0
   selfUnit: {fileID: 0}
   health: 500
   healthMax: 500
@@ -12834,9 +12836,9 @@ MonoBehaviour:
   fallDamageThreshold: 100000
   fallDamage: 0
   currentVehicleExitVelocity: {x: 0, y: 0, z: 0}
-  walkSpeed: 5
+  walkSpeed: 8
   runSpeed: 8
-  crouchSpeed: 1
+  crouchSpeed: 8
   crouchRunSpeed: 8
   acceleration: 10
   slowDownModifier: 5
@@ -12917,7 +12919,7 @@ MonoBehaviour:
     _valueData:
     - {fileID: 372418419135895526}
     - {fileID: 5317905292704595571}
-  camFovIdle: 120
+  camFovIdle: 100
   camFovAim: 70
   fovChangeSpeed: 1.5
 --- !u!114 &8911922951318658635

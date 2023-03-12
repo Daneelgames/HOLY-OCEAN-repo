@@ -45,20 +45,23 @@ public class DynamicPathfinder : MonoBehaviour
             for (int i = unitsAmount - 1; i >= 0; i--)
             {
                 yield return null;
+                if (i >= UnitsManager.Instance.MobsInGame.Count)
+                    continue;
+                
                 var unit = UnitsManager.Instance.MobsInGame[i];
                 if (unit == null || unit.health < 1 || unit.gameObject.activeInHierarchy == false)
                     continue;
                 
-                Debug.Log("Dynamic pathfinding 0");
+                //Debug.Log("Dynamic pathfinding 0");
                 if (unit.selfUnit == null || unit.selfUnit.UnitMovement == null)
                     continue;
 
-                Debug.Log("Dynamic pathfinding 1");
+                //Debug.Log("Dynamic pathfinding 1");
                 var targetPos = unit.selfUnit.UnitMovement.GetTargetPositionToReach;
                 if (Vector3.Distance(targetPos, unit.transform.position) < dontStartPathfindingIfCloserThan)
                     continue;
 
-                Debug.Log("Dynamic pathfinding 2");
+                //Debug.Log("Dynamic pathfinding 2");
                 AskForPath(unit.selfUnit.UnitMovement, targetPos);
             }
         }

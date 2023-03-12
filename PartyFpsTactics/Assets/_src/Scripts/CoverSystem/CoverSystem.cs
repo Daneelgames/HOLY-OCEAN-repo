@@ -30,6 +30,7 @@ public class CoverSystem : MonoBehaviour
 
     IEnumerator InitializeCoverSpots()
     {
+        yield break;
         while (true)
         {
             for (int i = 0; i < covers.Count; i++)
@@ -124,6 +125,7 @@ public class CoverSystem : MonoBehaviour
     public List<CoverSpot> GetAvailableCoverPoints(Transform requester, Transform transformToCoverFrom)
     {
         List<CoverSpot> coversSpots = new List<CoverSpot>();
+        return coversSpots;
         for (int i = 0; i < covers.Count; i++)
         {
             var goodSpots = covers[i].GetGoodCoverSpots(requester, transformToCoverFrom);

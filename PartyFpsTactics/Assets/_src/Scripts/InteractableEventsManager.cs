@@ -40,6 +40,14 @@ public class InteractableEventsManager : MonoBehaviour
         Instance = this;
     }
 
+    public void PickUpAllPickups()
+    {
+        foreach (var interactivePickUp in InteractivePickUps)
+        {
+            interactivePickUp.PlayerInteraction();
+        }
+    }
+
     public void AddPropBump(PropBump propBump)
     {
         if (_propBumps.Contains(propBump))

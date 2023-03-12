@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using MrPink.Health;
 using MrPink.WeaponsSystem;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -65,17 +66,17 @@ public class Pooling : MonoBehaviour
         [Serializable]
         public enum IslandTilePrefabTag
         {
-            Deep, Water, Sand, Grass, Jungle,  Mountains, Cliffs, Snow
+            Bone
         }
 
         public IslandTilePrefabTag islandPrefabTag;
-        public List<IslandTile> pool;
+        public List<TileHealth> pool;
     }
     [Serializable]
     public class IslandTileTaggedPrefab
     {
         public IslandTilePool.IslandTilePrefabTag tag;
-        public IslandTile prefab;
+        public TileHealth prefab;
     }
     
     private void Awake()
@@ -165,10 +166,10 @@ public class Pooling : MonoBehaviour
         return pooledParticle;
     }
 
-    public IslandTile SpawnIslandTile(IslandTilePool.IslandTilePrefabTag _islandPrefabTag, Vector3 pos, Quaternion rot)
+    public TileHealth SpawnIslandTile(IslandTilePool.IslandTilePrefabTag _islandPrefabTag, Vector3 pos, Quaternion rot)
     {
         IslandTilePool poolFound = null;
-        IslandTile pooledTile = null;
+        TileHealth pooledTile = null;
         for (int i = 0; i < IslandTilesPools.Count; i++)
         {
             if (IslandTilesPools[i].islandPrefabTag == _islandPrefabTag)
@@ -182,7 +183,7 @@ public class Pooling : MonoBehaviour
         {
             var newList = new IslandTilePool();
             newList.islandPrefabTag = _islandPrefabTag;
-            newList.pool = new List<IslandTile>();
+            newList.pool = new List<TileHealth>();
             InstantiateIslandTile(newList);
             IslandTilesPools.Add(newList);
             poolFound = newList;
@@ -231,7 +232,6 @@ public class Pooling : MonoBehaviour
             if (islandTilePrefabs[i].tag == list.islandPrefabTag)
             {
                 var newTile = Instantiate(islandTilePrefabs[i].prefab);
-                newTile.IslandTilePool = list;
                 list.pool.Add(newTile);
                 break;
             }
@@ -264,9 +264,9 @@ public class Pooling : MonoBehaviour
         return coll;
     }
 
-    IslandTile GetIslandTileFromPool(IslandTilePool list)
+    TileHealth GetIslandTileFromPool(IslandTilePool list)
     {
-        IslandTile coll = null;
+        TileHealth coll = null;
         if (list.pool.Count <= 0)
         {
             InstantiateIslandTile(list);
@@ -300,9 +300,8 @@ public class Pooling : MonoBehaviour
         particle.transform.parent = transform;
         list.pool.Add(particle);
     }
-    public void ReleaseIslandTile(IslandTile tile)
+    public void ReleaseIslandTile(TileHealth tile)
     {
-        tile.IslandTilePool.pool.Add(tile);        
-        tile.gameObject.SetActive(false);
+        Debug.LogError("POOLING:    RELEASING TILES WIP");
     }
 }

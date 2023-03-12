@@ -21,6 +21,8 @@ namespace MrPink
         public static GameManager Instance;
 
         public float playerSleepTimeScale = 10;
+        [SerializeField] float aiProjectilesCullPhysicsDistance = 15;
+        public float AiProjectilesCullPhysicsDistance => aiProjectilesCullPhysicsDistance;
         public string portableObjectTag = "PortableObject";
         [Header("THIS LIST IS USED WHEN MAKING A ROAD PRE RUNTIME")]
         public List<Collider> terrainAndIslandsColliders = new List<Collider>();
@@ -142,7 +144,10 @@ namespace MrPink
                 if (Input.GetKeyDown(KeyCode.X))
                     ScoringSystem.Instance.AddGold(-ScoringSystem.Instance.CurrentGold);
                 if (Input.GetKeyDown(KeyCode.D))
+                {
                     UnitsManager.Instance.KillAllMobs();
+                    InteractableEventsManager.Instance.PickUpAllPickups();
+                }
             }
         }
 

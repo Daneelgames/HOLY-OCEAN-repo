@@ -342,9 +342,9 @@ public class ContentPlacer : NetworkBehaviour
                     var unit =  Instantiate(level.unitsToSpawn[j], randomPos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
                     island.AddIslandUnit(unit);
                     ServerManager.Spawn(unit.gameObject);
-                    yield return null;
+                    yield return new WaitForSeconds(0.5f);
                 }
-                yield return null;
+                yield return new WaitForSeconds(0.5f);
             }
 
             while (UnitsManager.Instance.MobsInGame.Count > maxMobsAlive)

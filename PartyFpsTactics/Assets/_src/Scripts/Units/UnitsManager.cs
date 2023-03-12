@@ -17,7 +17,9 @@ namespace MrPink.Units
     {
         public static UnitsManager Instance;
          List<HealthController> mobsInGame = new List<HealthController>();
+         List<HealthController> bossesInGame = new List<HealthController>();
         public List<HealthController> MobsInGame => mobsInGame;
+        public List<HealthController> BossesInGame => bossesInGame;
         public float destroyUnitsDistance = 500;
         
         [Space]
@@ -64,10 +66,16 @@ namespace MrPink.Units
         {
             mobsInGame.Add(hc);
         }
+        public void AddBoss(HealthController hc)
+        {
+            bossesInGame.Add(hc);
+        }
         public void RemoveUnit(HealthController hc)
         {
             if (mobsInGame.Contains(hc))
                 mobsInGame.Remove(hc);
+            if (bossesInGame.Contains(hc))
+                bossesInGame.Remove(hc);
         }
 
         IEnumerator StreamUnits()
@@ -81,12 +89,12 @@ namespace MrPink.Units
                 
                 for (int i = mobsInGame.Count - 1; i >= 0; i--)
                 {
-                    yield return null;
+                    yield return new WaitForSeconds(0.1f);
 
                     if (mobsInGame.Count <= i)
                         continue;
 
-                    var unit = mobsInGame[i];
+                    var unit = mobsInGame[i];   
                     if (unit.selfUnit == null || unit.selfUnit.DestroyOnDistance == false)
                         continue;
                     if (unit.health < 1)
@@ -248,6 +256,17 @@ namespace MrPink.Units
 
         public void KillAllMobs()
         {
+            if (bossesInGame.Count > 0)
+            {
+                for (var index = bossesInGame.Count - 1; index >= 0; index--)
+                {
+                    var healthController = bossesInGame[index];
+                    if (!healthController || healthController.IsDead)
+                        continue;
+
+                    healthController.Kill();
+                }
+            }
             if (mobsInGame.Count < 1)
                 return;
             

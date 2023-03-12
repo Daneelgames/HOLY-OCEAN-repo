@@ -58,8 +58,7 @@ namespace MrPink
             while (t < tt)
             {
                 t += Time.deltaTime;
-                hc.transform.position = Vector3.Lerp(initPos, 
-                    controlledMachine.sitTransformNpc.position, t/tt);
+                hc.transform.position = Vector3.Lerp(initPos, controlledMachine.sitTransformNpc.position, t/tt);
                 yield return null;
             }
             followSitCoroutine = StartCoroutine(FollowSit());   

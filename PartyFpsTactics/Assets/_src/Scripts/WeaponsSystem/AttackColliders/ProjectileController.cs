@@ -144,10 +144,15 @@ namespace MrPink.WeaponsSystem
             currentPosition  = transform.position;
             distanceBetweenPositions = Vector3.Distance(currentPosition, lastPosition);
             var target = CollisionTarget.Self;
+            
             if (ownerHealth.IsPlayer)
                 currentCastRadius = playerCastRadius;
             else
+            {
+                if (Game._instance.DistanceToClosestPlayer(transform.position).distance > GameManager.Instance.AiProjectilesCullPhysicsDistance)
+                    return;
                 currentCastRadius = aiCastRadius;
+            }
 
             if (singleSphereCast && Physics.SphereCast(currentPosition, currentCastRadius, transform.forward, out var hit, 100f, unitsMask, QueryTriggerInteraction.Ignore))
             {
@@ -169,7 +174,6 @@ namespace MrPink.WeaponsSystem
             
                 if (ownerHealth != null && hit.collider.gameObject == ownerHealth.gameObject)
                     return;
-                
             
                 target = TryDoDamage(hit.collider);
                 PlayHitUnitFeedback(hit.point);
@@ -243,7 +247,8 @@ namespace MrPink.WeaponsSystem
             if (rb) rb.isKinematic = true;
             if (visual)
                 visual.gameObject.SetActive(false);
-            DeathCoroutine().ForgetWithHandler();
+            if (flyAu != null)
+                flyAu.volume = 0;
             Release(3);
         }
 
@@ -270,19 +275,6 @@ namespace MrPink.WeaponsSystem
         
             if (toolType == ToolType.Ladder)
                 customLadderTool.ConstructLadder(ownerHealth.transform.position - Vector3.up);
-        }
-
-        private async UniTask DeathCoroutine()
-        {
-            float t = 0;
-            while (t < 0.5f)
-            {
-                if (flyAu == null)
-                    return;
-                flyAu.volume -= Time.deltaTime * 50;
-                t -= Time.deltaTime;
-                await UniTask.DelayFrame(1);
-            }
         }
     }
 }
