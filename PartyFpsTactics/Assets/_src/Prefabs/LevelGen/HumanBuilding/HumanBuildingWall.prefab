@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7548684342651844800}
   - component: {fileID: 3589950282305771897}
+  - component: {fileID: 6935601512858005319}
   m_Layer: 6
   m_Name: HumanBuildingWall
   m_TagString: Untagged
@@ -57,6 +58,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9196563, y: 7.378957, z: 5.4090557}
   m_Center: {x: -0.19757187, y: 3.1894784, z: 1.8531449}
+--- !u!114 &6935601512858005319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950070527243241306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a37c2cd8df53e4092e8f35327e3752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 1000
+  _healthController: {fileID: 0}
+  ImmuneToDamage: 0
+  prop: 0
+  colliders:
+  - {fileID: 3589950282305771897}
+  rb: {fileID: 0}
+  floorLevelTile: 0
+  ceilingLevelTile: 0
+  supporterTile: {fileID: 0}
+  supportedTile: {fileID: 0}
+  objectsToDestroyOnClash: []
+  tileAttack: {fileID: 0}
 --- !u!1001 &548583561744773502
 PrefabInstance:
   m_ObjectHideFlags: 0

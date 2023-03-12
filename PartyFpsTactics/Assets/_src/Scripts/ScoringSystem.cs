@@ -150,7 +150,10 @@ namespace MrPink
 
 
             if (currentDamageInCombo >= _mojoLevels[currentMojoLevelIndex].minDamage)
+            {
+                currentDamageInCombo = _mojoLevels[currentMojoLevelIndex].minDamage;
                 IncreaseMojoLevel();
+            }
         }
 
         public void GiveMojoRewardBossChest()

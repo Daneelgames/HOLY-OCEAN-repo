@@ -179,7 +179,11 @@ namespace MrPink.PlayerSystem
             }
             
             if (Weapon.IsMelee)
-                CurrentPosition = WeaponPosition.MeleeAttack;
+            {
+                //CurrentPosition = WeaponPosition.MeleeAttack;
+                Weapon.transform.position = this[WeaponPosition.MeleeAttack].position;
+                Weapon.transform.rotation = this[WeaponPosition.MeleeAttack].rotation;
+            }
             else
             {
                 Weapon.transform.position = this[WeaponPosition.Aim].position;

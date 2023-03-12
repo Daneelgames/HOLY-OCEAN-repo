@@ -26,6 +26,7 @@ namespace MrPink.Units
         [SerializeField]
         [Range(1, 100)]
         public float _vaultPower = 20;
+        [SerializeField] float ragdollJumpForce = 300;
         [SerializeField]
         [Range(0.1f, 5f)]
         float rotateTime = 1;
@@ -152,6 +153,18 @@ namespace MrPink.Units
             targetPositionToReach = targetPos;
         }
 
+        void RagdollJump(Vector3 targetPos)
+        {
+            if (_selfUnit.HumanVisualController)
+            {
+                _selfUnit.HumanVisualController.ActivateRagdoll();
+                _selfUnit.HumanVisualController.ExplosionRagdoll(transform.position + (transform.position - targetPos).normalized, ragdollJumpForce, 10);
+            }
+
+            if (_selfUnit.HealthController.AiMovement)
+                _selfUnit.HealthController.AiMovement.StopActivities();
+        }
+        
         public void SetNewPath(DynamicPathfinder.Path path)
         {
             currentGravityForce = 1;
@@ -181,7 +194,7 @@ namespace MrPink.Units
                     {
                         targetPos = hit.point;
                     }
-                    t = 0;
+                    t = -0.1f;
                 }
 
                 var distance = Vector3.Distance(transform.position, targetPos);
@@ -200,6 +213,10 @@ namespace MrPink.Units
                         ((targetPos - transform.position).normalized * _moveSpeed + Vector3.up * _vaultPower) *
                         Time.deltaTime, ForceMode.VelocityChange);
                     currentGravityForce = 1;
+                    if (t < 0)
+                    {
+                        RagdollJump(targetPos);
+                    }
                 }
                 else
                 {

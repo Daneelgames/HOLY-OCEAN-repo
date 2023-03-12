@@ -10,6 +10,7 @@ public class PlayerBuildingSystem : NetworkBehaviour
 {
     public static PlayerBuildingSystem Instance;
     [SerializeField] private float buildingDistanceMax = 100;
+    [SerializeField] private float noRaycastBuildingMediumDistance = 50;
     [SerializeField] private float buildingDistanceMin = 20;
     [SerializeField] private float buildingRotationSpeed = 10;
     [SerializeField] private float tileMaxSpawnDistance = 10;
@@ -85,7 +86,10 @@ public class PlayerBuildingSystem : NetworkBehaviour
             
             if (Physics.Raycast(camTransform.position, camTransform.forward, out var hit, buildingDistanceMax,
                 GameManager.Instance.AllSolidsMask) == false)
+            {
+                currentPlacingBuilding.transform.position = camTransform.position + camTransform.forward * noRaycastBuildingMediumDistance;
                 continue;
+            }
             
             if (Vector3.Distance(hit.point, camTransform.position) < buildingDistanceMin)
                 continue;

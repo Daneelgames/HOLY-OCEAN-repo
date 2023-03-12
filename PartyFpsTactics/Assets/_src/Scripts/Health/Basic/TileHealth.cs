@@ -41,13 +41,9 @@ namespace MrPink.Health
         public Rigidbody Rigidbody 
             => rb;
 
-
-
-
-        [ContextMenu("GetColliders")]
+        [Button]
         public void GetColliders()
         {
-            
             colliders.Clear();
             var _colliders = GetComponents<Collider>();
             foreach (var collider1 in _colliders)
