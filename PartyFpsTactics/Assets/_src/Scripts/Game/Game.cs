@@ -102,6 +102,7 @@ namespace MrPink
         
         public void RespawnAllPlayers()
         {
+            InteractableEventsManager.Instance.DestroyAllPickups();
             ProgressionManager.Instance.RunOver();
             IslandHavokUi.Instance.SetHavokFill(0);
             IslandHavokUi.Instance.HideBar();

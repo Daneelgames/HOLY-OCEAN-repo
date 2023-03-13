@@ -113,6 +113,9 @@ namespace MrPink.Units
         private Coroutine getGroundedAi;
         IEnumerator GetGroundedAi()
         {
+            while (OceanRenderer.Instance == null)
+                continue;
+            
             var sampleHeightHelper = OceanRenderer.Instance.SampleHeightHelper;
             while (hc.IsDead == false)
             {
@@ -567,6 +570,17 @@ namespace MrPink.Units
             //Debug.Log("ExplosionRagdoll");
             foreach (var rb in rigidbodies)
                 rb.AddExplosionForce(force, pos, distance);
+        }
+
+        [Button]
+        public void SetBodyPartsRbParams(float mass = 1, float drag = 0, float angDrag = 0)
+        {
+            foreach (var rb in rigidbodies)
+            {
+                rb.mass = mass;
+                rb.drag = drag;
+                rb.angularDrag = angDrag;
+            }
         }
     }
 }

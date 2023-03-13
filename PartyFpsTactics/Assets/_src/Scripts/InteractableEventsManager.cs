@@ -47,6 +47,14 @@ public class InteractableEventsManager : MonoBehaviour
             interactivePickUp.PlayerInteraction();
         }
     }
+    public void DestroyAllPickups()
+    {
+        foreach (var interactivePickUp in InteractivePickUps)
+        {
+            Destroy(interactivePickUp.gameObject);
+        }
+        InteractivePickUps.Clear();
+    }
 
     public void AddPropBump(PropBump propBump)
     {

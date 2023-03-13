@@ -147,7 +147,7 @@ namespace MrPink
                     ScoringSystem.Instance.AddGold(-ScoringSystem.Instance.CurrentGold);
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    UnitsManager.Instance.KillAllMobs();
+                    UnitsManager.Instance.KillAllMobs(true);
                     InteractableEventsManager.Instance.PickUpAllPickups();
                 }
             }

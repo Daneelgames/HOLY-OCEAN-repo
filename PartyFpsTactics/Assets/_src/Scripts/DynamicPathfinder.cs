@@ -67,7 +67,7 @@ public class DynamicPathfinder : MonoBehaviour
         }
     }
 
-    [Button]
+    /*[Button]
     public void DebugPathfinding()
     {
         var hunterUnitEyes = a.position + Vector3.up; 
@@ -76,9 +76,9 @@ public class DynamicPathfinder : MonoBehaviour
          if (Application.isEditor && Application.isPlaying == false)
             EditorCoroutineUtility.StartCoroutine(AskForPath(hunterUnitEyes, preyUnitEyes), this);
         else
-        */
-        StartCoroutine(AskForPath(hunterUnitEyes, preyUnitEyes));
-    }
+        #1#
+        StartCoroutine(AskForPathCoroutine(hunterUnitEyes, preyUnitEyes));
+    }*/
 
     [Serializable]
     public struct Path
@@ -92,12 +92,12 @@ public class DynamicPathfinder : MonoBehaviour
             return;
         
         _unitMovementsInQueue.Add(askingUnitMovement);
-        StartCoroutine(AskForPath(askingUnitMovement.transform.position + Vector3.up, endPos, askingUnitMovement));
+        StartCoroutine(AskForPathCoroutine(askingUnitMovement.transform.position + Vector3.up, endPos, askingUnitMovement));
     }
 
     private List<UnitMovement> _unitMovementsInQueue = new List<UnitMovement>();
 
-    IEnumerator AskForPath(Vector3 startPos, Vector3 endPos, UnitMovement askingUnitMovement = null)
+    IEnumerator AskForPathCoroutine(Vector3 startPos, Vector3 endPos, UnitMovement askingUnitMovement = null)
     {
        List<Vector3> path = new List<Vector3>();
        float distance = Vector3.Distance(startPos, endPos);

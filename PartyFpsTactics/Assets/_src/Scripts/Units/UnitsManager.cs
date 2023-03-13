@@ -254,7 +254,7 @@ namespace MrPink.Units
             return handledInFrame;
         }
 
-        public void KillAllMobs()
+        public void KillAllMobs(bool realKill = false)
         {
             if (bossesInGame.Count > 0)
             {
@@ -264,7 +264,10 @@ namespace MrPink.Units
                     if (!healthController || healthController.IsDead)
                         continue;
 
-                    healthController.Kill();
+                    if (realKill)
+                        healthController.Kill();
+                    else
+                        healthController.DestroyOnDistance();
                 }
             }
             if (mobsInGame.Count < 1)
@@ -276,7 +279,10 @@ namespace MrPink.Units
                 if (!healthController || healthController.IsDead)
                     continue;
 
-                healthController.Kill();
+                if (realKill)
+                    healthController.Kill();
+                else
+                    healthController.DestroyOnDistance();
             }
         }
     }
