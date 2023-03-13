@@ -32,9 +32,6 @@ public class BuildingGenerator : NetworkBehaviour
     public LayerMask allSolidsLayerMask;
 
     public BillboardGenerator billboardGeneratorPrefab;
-    public TileHealth tilePrefab;
-    public TileHealth tileWallPrefab;
-    public List<TileHealth> tileWallThinColorPrefabs;
     public GameObject explosiveBarrelPrefab;
     public GrindRail grindRailsPrefab;
     public List<TileHealth> propsPrefabs;
@@ -301,7 +298,7 @@ public class BuildingGenerator : NetworkBehaviour
             for (int z = 0; z < size.z; z++)
             {
                 // FLOOR
-                var newFloorTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
+                var newFloorTile = Instantiate(GameManager.Instance.bonesTilePrefab, newLevel.spawnedTransform);
                 newFloorTile.floorLevelTile = true;
                 newFloorTile.gameObject.name = "Floor Tile. Coords: " + x +", " + 0 + ", " + z;
                 newFloorTile.transform.localRotation = Quaternion.identity;
@@ -342,7 +339,7 @@ public class BuildingGenerator : NetworkBehaviour
                                 continue;
                         }
                         
-                        var newWallTile = Instantiate(tileWallPrefab, newLevel.spawnedTransform);
+                        var newWallTile = Instantiate(GameManager.Instance.bonesTilePrefab, newLevel.spawnedTransform);
                         newWallTile.transform.localRotation = Quaternion.identity;
                         newWallTile.transform.localEulerAngles = new Vector3(90 * Random.Range(0, 3), 90 * Random.Range(0, 3),
                             90 * Random.Range(0, 3));
@@ -382,7 +379,7 @@ public class BuildingGenerator : NetworkBehaviour
                     if (hasRoof)
                     {
                         // CEILING ON TOP LEVEL
-                        var newCeilingTile = Instantiate(tilePrefab, newLevel.spawnedTransform);
+                        var newCeilingTile = Instantiate(GameManager.Instance.bonesTilePrefab, newLevel.spawnedTransform);
                         newCeilingTile.gameObject.name = "CeilingTile coords: " + x + ", " + (size.y - 1) + ", " + z;
                         newCeilingTile.transform.localRotation = Quaternion.identity;
                         newCeilingTile.transform.localEulerAngles = new Vector3(90 * Random.Range(0, 3), 90 * Random.Range(0, 3),
@@ -441,7 +438,7 @@ public class BuildingGenerator : NetworkBehaviour
             tilesTemp.Remove(randomTile);
 
             Random.InitState(currentSeed + step);
-            var thinColorPrefab = tileWallThinColorPrefabs[Random.Range(0, tileWallThinColorPrefabs.Count)];
+            var thinColorPrefab = GameManager.Instance.bonesTilePrefab;
             for (int y = 1; y < buildWallUntillY; y++)
             {
                 var newRoomWallTile = Instantiate(thinColorPrefab, level.spawnedTransform);
@@ -632,7 +629,7 @@ public class BuildingGenerator : NetworkBehaviour
             rot = Quaternion.LookRotation(toPosition - fromPosition);
 
             Vector3 pos = (fromPosition + (toPosition-fromPosition).normalized * j);
-            var newStairsTile = Instantiate(tilePrefab, pos, rot);
+            var newStairsTile = Instantiate(GameManager.Instance.bonesTilePrefab, pos, rot);
             
             var transformLocalScale = newStairsTile.transform.localScale;
             transformLocalScale.x = 1.5f;
@@ -643,7 +640,7 @@ public class BuildingGenerator : NetworkBehaviour
             // ПОРУЧНИ
             for (int k = 0; k < 2; k++)
             {
-                var newStairsTileHandle = Instantiate(tilePrefab, newStairsTile.transform.position, newStairsTile.transform.rotation);
+                var newStairsTileHandle = Instantiate(GameManager.Instance.bonesTilePrefab, newStairsTile.transform.position, newStairsTile.transform.rotation);
                 newStairsTileHandle.transform.parent = newStairsTile.transform;
                 float x = 0.546f;
                 if (k == 1)

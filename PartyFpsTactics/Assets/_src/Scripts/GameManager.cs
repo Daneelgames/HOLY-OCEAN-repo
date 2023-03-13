@@ -31,6 +31,8 @@ namespace MrPink
         [SerializeField] private GameObject tileNavMeshObstaclePrefab;
         public ExplosionController DefaultFragExplosion;
 
+        public TileHealth bonesTilePrefab;
+        
         public Material rockDefaultMaterial;
 
         public float CurrentTimeScale = 1;
