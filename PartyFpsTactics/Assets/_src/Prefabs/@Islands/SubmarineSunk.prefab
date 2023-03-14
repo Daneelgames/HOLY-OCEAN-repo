@@ -7197,18 +7197,15 @@ MonoBehaviour:
   _voxelSaveSystems: []
   _tileBuildingGenerator: {fileID: 8576425091218138041}
   _voxelBuildingGenerator: {fileID: 0}
-  _navMeshSurfaceUpdate: {fileID: 0}
   randomSpherePosOnNavMeshMaxRange: 100
   spawnBoss: 1
   islandUnits: []
   culled: 1
   distanceToLocalPlayer: 0
-  mobsIslandSpawnDistance: 300
-  mobsIslandDespawnDistance: 500
+  showHavokMeterDistance: 50000
   voxelCutterForBuildings: []
   targetHavok: 0
   currentHavok: 0
-  sinkSpeed: 10
 --- !u!114 &1274181075255149504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7227,14 +7224,15 @@ MonoBehaviour:
   - {fileID: -9218924638129041948}
   - {fileID: 6855442423181985489}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
+  <ChildNetworkObjects>k__BackingField:
+  - {fileID: 6885404217525016305}
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
   _predictedSpawningType: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 6
+  <PrefabId>k__BackingField: 14
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
@@ -18974,6 +18972,10 @@ PrefabInstance:
       propertyPath: _sceneNetworkObjects.Array.data[0]
       value: 
       objectReference: {fileID: 6885404217525016305}
+    - target: {fileID: -993489102018205758, guid: 8da4667c6541cc047af245d102688646, type: 3}
+      propertyPath: <ParentNetworkObject>k__BackingField
+      value: 
+      objectReference: {fileID: 1274181075255149504}
     - target: {fileID: 6538700427162571402, guid: 8da4667c6541cc047af245d102688646, type: 3}
       propertyPath: spawnGoals
       value: 0

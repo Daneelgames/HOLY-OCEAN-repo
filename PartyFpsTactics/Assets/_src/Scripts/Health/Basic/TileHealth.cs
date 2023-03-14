@@ -141,7 +141,7 @@ namespace MrPink.Health
         private void DestroyTileParticlesAndShake(DamageSource source, bool deathParticles = true)
         {
             if (deathParticles)
-                IslandSpawner.Instance.GetClosestTileBuilding(transform.position).DebrisParticles(transform.position);
+                IslandSpawner.Instance.GetClosestTileBuilding(transform.position)?.DebrisParticles(transform.position);
             
             if (source != DamageSource.Player)
                 return;
@@ -171,7 +171,7 @@ namespace MrPink.Health
             if (IsAlive)
             {
                 if (!rb)
-                    IslandSpawner.Instance.GetClosestTileBuilding(transform.position).TileDamagedFeedback(this);
+                    IslandSpawner.Instance.GetClosestTileBuilding(transform.position)?.TileDamagedFeedback(this);
             }
             else
                 Death(source);

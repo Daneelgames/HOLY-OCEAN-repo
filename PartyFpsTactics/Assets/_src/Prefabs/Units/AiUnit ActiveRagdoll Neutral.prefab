@@ -6425,7 +6425,6 @@ GameObject:
   - component: {fileID: 7380722583892912433}
   - component: {fileID: -2920836169782800529}
   - component: {fileID: 8509212130762963468}
-  - component: {fileID: 4932448563630511150}
   m_Layer: 7
   m_Name: AiUnit ActiveRagdoll Neutral
   m_TagString: Untagged
@@ -6492,9 +6491,12 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: -2920836169782800529}
   _networkObjectCache: {fileID: -2920836169782800529}
   isPlayer: 0
+  addToMobsInGame: 0
+  addToBossesInGame: 0
   selfUnit: {fileID: 834634797964359098}
   health: 150
   healthMax: 150
+  cooldown: 0
   needs: {fileID: -1517983677754019025}
   endurance: 100
   enduranceRegenSpeed: 100
@@ -6650,6 +6652,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: -2920836169782800529}
   _moveSpeed: 20
   _vaultPower: 20
+  ragdollJumpForce: 300
   rotateTime: 1
   _turnSpeed: 4
   gravityForce: 13
@@ -6906,6 +6909,7 @@ MonoBehaviour:
   grounded: 1
   groundedCheckSphereRadius: 1
   groundedRaycastOrigin: {fileID: 35257284}
+  culled: 0
 --- !u!114 &-1517983677754019025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7027,7 +7031,7 @@ MonoBehaviour:
   - {fileID: 7767769086912786514}
   - {fileID: 5371681404181358584}
   - {fileID: 8509212130762963468}
-  - {fileID: 4932448563630511150}
+  - {fileID: 0}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -7131,48 +7135,6 @@ MonoBehaviour:
     _gpuInstancerPrefabRuntimeHandler: {fileID: 7160942221590748236}
   - _gpuInstancerPrefab: {fileID: 6837439630090331093}
     _gpuInstancerPrefabRuntimeHandler: {fileID: 5052158131161146278}
---- !u!114 &4932448563630511150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6002119186621381548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 5
-  _addedNetworkObject: {fileID: -2920836169782800529}
-  _networkObjectCache: {fileID: -2920836169782800529}
-  _synchronizeParent: 0
-  _packing:
-    Position: 1
-    Rotation: 1
-    Scale: 0
-  _interpolation: 2
-  _extrapolation: 2
-  _enableTeleport: 0
-  _teleportThreshold: 1
-  _clientAuthoritative: 0
-  _sendToOwner: 1
-  _interval: 1
-  _synchronizePosition: 1
-  _positionSnapping:
-    X: 0
-    Y: 0
-    Z: 0
-  _synchronizeRotation: 0
-  _rotationSnapping:
-    X: 0
-    Y: 0
-    Z: 0
-  _synchronizeScale: 0
-  _scaleSnapping:
-    X: 0
-    Y: 0
-    Z: 0
 --- !u!1 &6145433872234779007
 GameObject:
   m_ObjectHideFlags: 0

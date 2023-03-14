@@ -149,7 +149,7 @@ namespace MrPink.Units
                     if (i > Game._instance.PlayersInGame.Count - 1 || Game._instance.PlayersInGame[i] == null)
                         continue;
                     
-                    CheckUnit(Game._instance.PlayersInGame[i].Health);
+                    StartCoroutine(CheckUnit(Game._instance.PlayersInGame[i].Health));
                     yield return new WaitForSeconds(0.1f);
                 }
                 //CheckUnit(Game.LocalPlayer.Health);
@@ -172,7 +172,7 @@ namespace MrPink.Units
                     if (unit == null || unit.gameObject.activeInHierarchy == false)
                         continue;
 
-                    CheckUnit(unit, true);
+                    StartCoroutine(CheckUnit(unit, true));
                     yield return new WaitForSeconds(0.1f);
                 }
 
@@ -182,7 +182,7 @@ namespace MrPink.Units
                     if (unit == null || unit == _selfHealth || unit.gameObject.activeInHierarchy == false)
                         continue;
                 
-                    CheckUnit(unit);
+                    StartCoroutine(CheckUnit(unit));
                     yield return new WaitForSeconds(0.1f);
                 }
 
@@ -191,15 +191,37 @@ namespace MrPink.Units
             visibleEnemies.Clear();
         }
 
-        private void CheckUnit(HealthController unit, bool addVisibleAsEnemy = false)
+        private IEnumerator CheckUnit(HealthController unit, bool addVisibleAsEnemy = false)
         {
             if (unit.health <= 0)
             {
                 RemoveFromVisible(unit);
-                return;
+                yield break;
             }
 
-            if (IsInLineOfSight(unit.visibilityTrigger.transform))
+            bool isInLineOfSight = false;
+            if (Vector3.Distance(unit.visibilityTrigger.transform.position, raycastOrigin.position) < visionDistance)
+            {
+                if (Vector3.Angle((unit.visibilityTrigger.transform.position + Vector3.one * 1.25f) - raycastOrigin.position,
+                    transform.forward) <= fov)
+                {
+                    yield return null;
+                    if (Physics.Linecast(unit.visibilityTrigger.transform.position, raycastOrigin.position, out _hit,
+                        GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
+                    {
+                        lastRaycastedPoint = _hit.point;
+
+                        // collided with solid, can't see shit
+                    }
+                    else
+                    {
+                        isInLineOfSight = true;                        
+                    }
+                }
+            }
+            
+
+            if (isInLineOfSight)
             {
                 if (unit == Game.LocalPlayer.Health)
                 {
@@ -219,7 +241,7 @@ namespace MrPink.Units
                         }
                     }
                     AddVisibleEnemy(unit);
-                    return;
+                    yield break;
                 }
                 
                 if (unit == Game.LocalPlayer.Health)
@@ -227,7 +249,7 @@ namespace MrPink.Units
                     //Debug.Log("UnitVision UNIT " + gameObject.name + " ADDS PLAYER TO VISIBLE UNITS");
                 }
                 AddVisibleUnit(unit);
-                return;
+                yield break;
             }
             
             if (unit == Game.LocalPlayer.Health)
@@ -291,26 +313,6 @@ namespace MrPink.Units
             unit.RemoveFromVisibleByUnits(_selfHealth);
         }
 
-        private bool IsInLineOfSight(Transform target)
-        {
-            if (Vector3.Distance(target.position, raycastOrigin.position) > visionDistance)
-                return false;
-            if (Vector3.Angle((target.position + Vector3.one * 1.25f) - raycastOrigin.position, transform.forward) <= fov)
-            {
-                if (Physics.Linecast(target.position,  raycastOrigin.position, out _hit, GameManager.Instance.AllSolidsMask, QueryTriggerInteraction.Ignore))
-                {
-                    lastRaycastedPoint = _hit.point;
-                    
-                    // collided with solid, can't see shit
-
-                    return false;
-                }
-
-                return true;
-            }
-            
-            return false;
-        }
 
         private Vector3 lastRaycastedPoint = Vector3.zero;
 

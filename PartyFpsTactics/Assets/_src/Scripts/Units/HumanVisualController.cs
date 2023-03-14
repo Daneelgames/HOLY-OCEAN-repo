@@ -77,7 +77,7 @@ namespace MrPink.Units
 
             IgnoreOwnCollision();
         }
-        
+
         private void OnEnable()
         {
             if (getMovementAnimCoroutine != null)
@@ -90,13 +90,33 @@ namespace MrPink.Units
                 if (getGroundedAi != null)
                     StopCoroutine(getGroundedAi);
                 getGroundedAi = StartCoroutine(GetGroundedAi());
+                if (getCulledCoroutine != null)
+                {
+                    StopCoroutine(getCulledCoroutine);
+                }
+                getCulledCoroutine = StartCoroutine(GetCulledCoroutine());
             }
             getMovementAnimCoroutine = StartCoroutine(GetMovementAnim());
+        }
+
+        [SerializeField][ReadOnly]private bool culled = false;
+        private Coroutine getCulledCoroutine;
+        IEnumerator GetCulledCoroutine()
+        {
+            while (hc.IsDead == false)
+            {
+                yield return new WaitForSeconds(0.5f);
+                culled = Game._instance.DistanceToClosestPlayer(transform.position).distance > 50;
+            }
         }
 
         private Coroutine getGroundedAi;
         IEnumerator GetGroundedAi()
         {
+            while (OceanRenderer.Instance == null)
+                continue;
+            
+            var sampleHeightHelper = OceanRenderer.Instance.SampleHeightHelper;
             while (hc.IsDead == false)
             {
                 yield return new WaitForSeconds(getGroundedCooldown);
@@ -113,9 +133,9 @@ namespace MrPink.Units
                 {
                     if (hc.health > 0)
                     {
-                        OceanRenderer.Instance.SampleHeightHelper.Init(transform.position, 1);
+                        sampleHeightHelper.Init(transform.position, 1);
 
-                        if (OceanRenderer.Instance.SampleHeightHelper.Sample(out var height))
+                        if (sampleHeightHelper.Sample(out var height))
                         {
                             var distance = transform.position.y - height;
                             var isAboveSurface = distance > 0;
@@ -215,13 +235,13 @@ namespace MrPink.Units
         {
             if (noRagdoll)
                 return;
-            
             if (hc.health <= 0)
                 return;
-        
             if (ragdoll)
                 return;
-        
+            if (culled)
+                return;
+            
             for (int i = 0; i < joints.Count; i++)
             {
                 if (!inVehicle && rigidbodies[i].isKinematic == false)
@@ -458,11 +478,11 @@ namespace MrPink.Units
                     rigidbodies[i].useGravity = false;
                     continue;
                 }
-                rigidbodies[i].isKinematic = true;
                 //rigidbodies[i].isKinematic = false;
                 rigidbodies[i].useGravity = false;
                 rigidbodies[i].velocity = Vector3.zero;
                 rigidbodies[i].angularVelocity = Vector3.zero;
+                rigidbodies[i].isKinematic = true;
             }
         
             foreach (var col in colliders)
@@ -550,6 +570,17 @@ namespace MrPink.Units
             //Debug.Log("ExplosionRagdoll");
             foreach (var rb in rigidbodies)
                 rb.AddExplosionForce(force, pos, distance);
+        }
+
+        [Button]
+        public void SetBodyPartsRbParams(float mass = 1, float drag = 0, float angDrag = 0)
+        {
+            foreach (var rb in rigidbodies)
+            {
+                rb.mass = mass;
+                rb.drag = drag;
+                rb.angularDrag = angDrag;
+            }
         }
     }
 }

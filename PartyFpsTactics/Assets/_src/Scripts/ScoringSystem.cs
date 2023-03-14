@@ -207,8 +207,10 @@ namespace MrPink
 
             currentMojoLevelIndex = newMojo;
             var prevIndex = currentMojoLevelIndex - 1;
-            if (prevIndex < 0) prevIndex = 0;
-            currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
+            if (prevIndex < 1)
+                currentDamageInCombo = 0;
+            else
+                currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
 
             comboBarAnim.SetTrigger(NewLevel);
             ItemFoundSound();
@@ -234,9 +236,7 @@ namespace MrPink
             currentMojoLevelIndex = newMojo;
             var prevIndex = currentMojoLevelIndex - 1;
             if (prevIndex < 1)
-            {
                 currentDamageInCombo = 0;
-            }
             else
                 currentDamageInCombo = _mojoLevels[prevIndex].minDamage + 1;
             ItemFoundSound();

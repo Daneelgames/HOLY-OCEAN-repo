@@ -33,6 +33,7 @@ public class OceanVisualManager : MonoBehaviour
 
     private void Start()
     {
+        return;
         oceanMaterial = _oceanRenderer.OceanMaterial;
         
         StartCoroutine(SetWorldColorsOverTime());
@@ -51,7 +52,7 @@ public class OceanVisualManager : MonoBehaviour
             
             yield break;
             yield return new WaitForSeconds(30);
-            
+                
             
             /*
             int randomNextColorsIndex = Random.Range(0, _oceanVisuals.Count);
@@ -108,6 +109,7 @@ public class OceanVisualManager : MonoBehaviour
     
     public void SetSkyVisual()
     {
+        return;
         //_enviroSky.skySettings
         _enviroSky.skySettings.simpleSkyColor = _oceanVisuals[currentOceanVisual].SkySimpleColor;
         _enviroSky.skySettings.simpleHorizonColor = _oceanVisuals[currentOceanVisual].SkySimpleHorizonColor;
@@ -120,6 +122,7 @@ public class OceanVisualManager : MonoBehaviour
     [Button]
     public void SetOceanVisual(int index)
     {
+        return;
         currentOceanVisual = index;
         if (currentOceanVisual >= _oceanVisuals.Count || currentOceanVisual < 0)
             currentOceanVisual = 0;
@@ -130,6 +133,7 @@ public class OceanVisualManager : MonoBehaviour
 
     public void SetOceanVisual()
     {
+        return;
         _oceanRenderer.OceanMaterial.SetColor("_Diffuse", _oceanVisuals[currentOceanVisual]._Diffuse);
         _oceanRenderer.OceanMaterial.SetColor("_DiffuseGrazing", _oceanVisuals[currentOceanVisual]._DiffuseGrazing);
         _oceanRenderer.OceanMaterial.SetColor("_FoamBubbleColor", _oceanVisuals[currentOceanVisual]._FoamBubbleColor);

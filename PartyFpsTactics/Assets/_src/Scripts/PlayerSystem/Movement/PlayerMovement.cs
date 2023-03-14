@@ -433,7 +433,8 @@ namespace MrPink.PlayerSystem
         void Jump(Vector3 dashDir, Vector3 additionalVelocity)
         {
             SetGrindRail(null);
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            //rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            rb.velocity = Vector3.zero;
             //rb.AddRelativeForce(Vector3.up * jumpForce + additionalForce, ForceMode.Impulse);
 
             StartCoroutine(CoyoteTimeCooldown());
