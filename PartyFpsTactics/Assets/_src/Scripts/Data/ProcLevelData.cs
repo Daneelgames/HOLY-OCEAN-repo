@@ -7,6 +7,7 @@ using MrPink.Tools;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Random = UnityEngine.Random;
 
 namespace _src.Scripts.Data
 {
@@ -21,9 +22,13 @@ namespace _src.Scripts.Data
         public List<Tool> toolsInShop;
 
         public List<LevelEvent> levelEvents;
-        public List<Island> islandPrefabs;
         public List<AssetReference> islandsReferences;
+        public List<AssetReference> mobsReferences;
+        [SerializeField] private int killsForLevelComplete = 10;
+        public int GetTargetHavok => killsForLevelComplete;
         public HealthController boss;
+
+        public AssetReference GetRandomMobReference => mobsReferences[Random.Range(0, mobsReferences.Count)];
 
         public enum SpawnBossType
         {

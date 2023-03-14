@@ -401,12 +401,7 @@ public class BuildingGenerator : NetworkBehaviour
                 yield return null;   
         }
 
-        /*
-        Debug.LogError("SPAWN INSIDE WALLS IS TURNED OFF FOR NOW");
-        yield break;
-        */
-        if (buildingSettings.spawnRooms)
-            yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof, levelIndexInBuilding));
+        yield return StartCoroutine(SpawnInsideWallsOnLevel(availableStarPositionsForThinWalls, newLevel, hasRoof, levelIndexInBuilding));
     }
     
     IEnumerator SpawnInsideWallsOnLevel(List<Vector3Int> availableStarPositionsForThinWalls, Level level, bool hasRoof, int levelIndex)
@@ -864,65 +859,13 @@ public class BuildingSettings
     public Vector2Int levelsScaleMinMaxX = new Vector2Int(3, 10);
     public Vector2Int levelsScaleMinMaxZ = new Vector2Int(3, 10);
 
-    public bool spawnLoot = true;
     public bool spawnLadders = true;
-    public bool spawnRooms = true;
-    public bool updateClash = false;
-    public bool spawnSupports = false;
     public int explosiveBarrelsAmount = 2;
     [Serializable]
     public class LevelSetting
     {
         public int levelHeight = 5;
         public List<HealthController> uniqueNpcsToSpawn = new List<HealthController>();
-        public List<HealthController> unitsToSpawn = new List<HealthController>();
         public List<ControlledMachine> controlledMachinesToSpawn = new List<ControlledMachine>();
-        [Header("NETWORKED")]public List<GameObject> extraGameObjectsToSpawn = new List<GameObject>();
     }
-    
-}
-
-public static class LevelgenTransforms
-{
-    public static TileHealth SetSupporterTile(List<Level> levels, TileHealth tile)
-    {
-        if (tile == null)
-            return null;
-
-        if (Physics.Raycast(tile.transform.position, Vector3.down, out var hit, 1,  GameManager.Instance.AllSolidsMask,QueryTriggerInteraction.Ignore))
-        {
-            TileHealth supporter = hit.transform.gameObject.GetComponent<TileHealth>();
-            if (supporter && supporter != tile)
-            {
-                tile.supporterTile = supporter;
-                supporter.supportedTile = tile;
-            }
-        }
-        
-        return null;
-    }
-
-    
-    // OBSOLETE
-    public static Vector3Int ConvertTilePositionToLocalLevelCoords(Level levelTop, Level levelBottom)
-    {
-        int tileSize = 1;
-        
-        // найти дистанции по отдельным осям между нулевыми тайлами обоих этажей
-        var topTilePosition = GetZeroPosition(levelTop, tileSize);
-        var bottomTilePosition = GetZeroPosition(levelBottom, tileSize);
-        
-        int x = GetOffsetOfTiles(topTilePosition.x, bottomTilePosition.x, 1);
-        int y = levelBottom.size.y;
-        int z = GetOffsetOfTiles(topTilePosition.z, bottomTilePosition.z, 1);
-
-        return new Vector3Int(x, y, z);
-    }
-
-    private static Vector3 GetZeroPosition(Level level, int tileSize)
-        => level.position - level.size/2*tileSize;
-    
-    private static int GetOffsetOfTiles(float positionA, float positionB, float size)
-        => Mathf.RoundToInt(Mathf.Abs(positionB - positionA) / size);
-
 }

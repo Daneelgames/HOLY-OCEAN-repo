@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MrPink.Units;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -110,6 +111,14 @@ public class AddressableSpawner : MonoBehaviour
         if (spawned.TryGetComponent<Island>(out var island))
         {
             IslandSpawner.Instance.AddressableIslandInstantiated(island);
+            return;
         }
+        if (spawned.TryGetComponent<Unit>(out var unit))
+        {
+            spawned.transform.parent = UnitsManager.Instance.SpawnRoot;
+            ContentPlacer.Instance.ServerManager.Spawn(unit.gameObject);
+            return;
+        }
+        
     }
 }

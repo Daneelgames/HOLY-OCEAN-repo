@@ -14702,6 +14702,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 7943338353946780412}
   isPlayer: 0
   addToMobsInGame: 1
+  addToBossesInGame: 0
   selfUnit: {fileID: 0}
   health: 1000
   healthMax: 1000
@@ -15040,10 +15041,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3286151325192577885}
   thrustPower: 600
-  rotateSmooth: 2
-  torquePowerPlayerControlled: 5
+  Kp: 8
+  Ki: 0
+  Kd: 0.05
+  _desiredOrientation: {x: 0, y: 0, z: 0, w: 0}
   resultThrust: 0
-  targetRotation: {x: 0, y: 0, z: 0, w: 0}
   driverHc: {fileID: 0}
 --- !u!1 &4356649521589757688
 GameObject:
