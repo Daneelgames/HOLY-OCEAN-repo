@@ -74,8 +74,11 @@ namespace MrPink.WeaponsSystem
             
             //Debug.Log("TileAttack tryToDamage; rb.velocity.magnitude " + rb.velocity.magnitude);
             float scaler = rb.velocity.magnitude;
+
             if (coll.collider.gameObject == Game.LocalPlayer.Movement.gameObject)
                 scaler *= 0.5f;
+            else if (coll.collider.gameObject.layer == 6) // solids
+                scaler = 0.1f;
             
             if (unitMinimalDamageTime > 0)
                 scaler = 0.01f;
