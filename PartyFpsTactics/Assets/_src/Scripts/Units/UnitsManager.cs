@@ -32,12 +32,6 @@ namespace MrPink.Units
         public float tileExplosionForcePlayer = 100;
 
         public PhysicMaterial corpsesMaterial;
-        
-        [BoxGroup("UNITS PREFABS")] public List<HealthController> bossUnitPrefabs;
-        [BoxGroup("UNITS PREFABS")] public List<HealthController> redTeamUnitPrefabs;
-        [BoxGroup("UNITS PREFABS")] public List<HealthController> blueTeamUnitPrefabs;
-        [BoxGroup("UNITS PREFABS")] public List<HealthController> neutralUnitPrefabs;
-        [BoxGroup("UNITS PREFABS")] public List<HealthController> desertBeastsPrefabs;
     
         // TODO use real queue
         private readonly List<BasicHealth> _bodyPartsQueueToKill = new List<BasicHealth>();
@@ -46,9 +40,6 @@ namespace MrPink.Units
         private Transform _spawnRoot;
         public Transform SpawnRoot => _spawnRoot;
 
-        public HealthController GetRandomRedUnit => redTeamUnitPrefabs[Random.Range(0, redTeamUnitPrefabs.Count)];
-        public HealthController GetRandomBossUnit => bossUnitPrefabs[Random.Range(0, bossUnitPrefabs.Count)];
-    
         private void Awake()
         {
             Instance = this;

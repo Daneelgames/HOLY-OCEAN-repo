@@ -125,7 +125,8 @@ public class Island : NetworkBehaviour
     {
         if (_voxelBuildingGenerator)
         {
-            StartCoroutine(ContentPlacer.Instance.SpawnEnemiesInVoxelBuilding(_voxelBuildingGenerator.Floors, this));
+            Debug.LogError("WE DONT USE VOXEL BUILDING FFS");
+            //StartCoroutine(ContentPlacer.Instance.SpawnEnemiesInVoxelBuilding(_voxelBuildingGenerator.Floors, this));
         }
         if (_tileBuildingGenerator)
         {
@@ -143,17 +144,8 @@ public class Island : NetworkBehaviour
 
     void InitTargetHavok()
     {
-        targetHavok = 0;
+        targetHavok = ProgressionManager.Instance.CurrentLevel.GetTargetHavok;
         currentHavok = 0;
-        foreach (var level in _tileBuildingGenerator.spawnedBuildings[0].spawnedBuildingLevels)
-        {
-            for (var index = 0; index < level.unitsToSpawn.Count; index++)
-            {
-                targetHavok++;
-            }
-        }
-
-        targetHavok = Mathf.RoundToInt(targetHavok * 0.8f); // kill most mobs to spawn boss
     }
 
     
@@ -215,13 +207,6 @@ public class Island : NetworkBehaviour
             unit.OnDeathEvent.AddListener(HealthController_OnBossKilled);
         else
             unit.OnDeathEvent.AddListener(HealthController_OnIslandUnitKilled);
-    }
-    void SpawnPropsInBuilding()
-    {
-        if (_voxelBuildingGenerator)
-        {
-            StartCoroutine(ContentPlacer.Instance.SpawnPropsInVoxelBuilding(_voxelBuildingGenerator.Floors));
-        }
     }
 
     public void AddRoomCutter(GameObject cutDummy)

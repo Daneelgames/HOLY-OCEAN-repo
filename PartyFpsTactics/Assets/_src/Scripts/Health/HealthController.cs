@@ -97,7 +97,10 @@ namespace MrPink.Health
                 yield return null;
             }
             if (addToMobsInGame)
+            {
+                IslandSpawner.Instance.GetClosestIsland(transform.position)?.AddIslandUnit(this);
                 UnitsManager.Instance.AddMob(this);
+            }
             if (addToBossesInGame)
                 UnitsManager.Instance.AddBoss(this);
             

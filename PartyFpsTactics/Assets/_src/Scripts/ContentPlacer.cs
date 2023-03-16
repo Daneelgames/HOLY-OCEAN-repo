@@ -147,15 +147,12 @@ public class ContentPlacer : NetworkBehaviour
             pos = PosAroundPosition(randomPlayer.MainCamera.transform.position, islandDistanceSpawn);   
             if (Vector3.Distance(pos, randomPlayer.MainCamera.transform.position) < minMobSpawnDistance)
                 return;
-
-            SpawnRedUnit(pos);
         }
         else // spawn in sea
         {
             pos = randomPlayer.MainCamera.transform.position + Random.onUnitSphere * 50;   
-
-            SpawnRedUnitInBoat(pos);
         }
+        SpawnRedUnit(pos);
     }
 
     [Server]
@@ -241,63 +238,6 @@ public class ContentPlacer : NetworkBehaviour
         }
     }
     
-    [Server]
-    public IEnumerator SpawnEnemiesInVoxelBuilding(List<VoxelBuildingFloor> floors, Island island)
-    {
-        yield return new WaitForSeconds(5);
-        for (int i = 0; i < floors.Count; i++)
-        {
-            bool noPlaceOnFloor = false;
-            var floor = floors[i];
-            var size = floor.LevelSize;
-            int mobsAmount = ((size.x * size.z) / 50) / 3;
-            //int mobsAmount = 0;
-            for (int j = 0; j < mobsAmount; j++)
-            {
-                Vector3 pos = floor.transform.position;
-
-                int attempts = 0;
-                while (true)
-                {
-                    yield return null;
-                    
-                    pos = floor.GetRandomWorldPosOnFloor();
-
-                    if (NavMesh.SamplePosition(pos, out var hit, Mathf.Infinity, NavMesh.AllAreas) == false)
-                    {
-                        continue;
-                    }
-                    if (hit.hit)
-                    {
-                        pos = hit.position;
-                        break;
-                    }
-
-                    attempts++;
-                    if (attempts > 60)
-                    {
-                        noPlaceOnFloor = true;
-                        break;
-                    }
-                }
-
-                if (noPlaceOnFloor)
-                {
-                    break;
-                }
-                
-                if (island.IsCulled)
-                    yield break;
-                
-                var unit =  Instantiate(UnitsManager.Instance.GetRandomRedUnit, pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-                island.AddIslandUnit(unit);
-                ServerManager.Spawn(unit.gameObject);
-                yield return null;
-            }
-        }
-    }
-    
-
     #endregion
     
     [Server]
@@ -328,7 +268,9 @@ public class ContentPlacer : NetworkBehaviour
                     tilesForSpawns.Add(tile);
                 }
 
-                for (int j = 0; j < level.unitsToSpawn.Count; j++)
+                int unitsOnLevel = Mathf.RoundToInt(level.tilesInside.Count / 10 * Random.Range(0.1f, 1f)); 
+
+                for (int j = 0; j < unitsOnLevel; j++)
                 {
                     if (island.IsCulled)
                         yield break;
@@ -339,9 +281,7 @@ public class ContentPlacer : NetworkBehaviour
                         if (randomPos.y < 0)
                             randomPos.y *= -1;
                     }
-                    var unit =  Instantiate(level.unitsToSpawn[j], randomPos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-                    island.AddIslandUnit(unit);
-                    ServerManager.Spawn(unit.gameObject);
+                    AddressableSpawner.Instance.Spawn(ProgressionManager.Instance.CurrentLevel.GetRandomMobReference, randomPos); // spawn only easy one for now
                     yield return new WaitForSeconds(0.5f);
                 }
                 yield return new WaitForSeconds(0.5f);
@@ -357,27 +297,9 @@ public class ContentPlacer : NetworkBehaviour
     [Server]
     void SpawnRedUnit(Vector3 pos)
     {
-        var island = IslandSpawner.Instance.GetClosestIsland(pos);
-        //pos = UnitsManager.Instance.SamplePos(pos);
-        var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-        island.AddIslandUnit(unit);
-        ServerManager.Spawn(unit.gameObject);
+        AddressableSpawner.Instance.Spawn(ProgressionManager.Instance.CurrentLevel.GetRandomMobReference, pos);
     }
     
-    [Server]
-    void SpawnRedUnitInBoat(Vector3 pos)
-    {
-        var unit =  Instantiate(UnitsManager.Instance.redTeamUnitPrefabs[Random.Range(0, UnitsManager.Instance.redTeamUnitPrefabs.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot); // spawn only easy one for now
-        var boat = Instantiate(aiWaterBikes[Random.Range(0, aiWaterBikes.Count)], pos, Quaternion.identity, UnitsManager.Instance.SpawnRoot);
-        
-        var island = IslandSpawner.Instance.GetClosestIsland(pos);
-        island?.AddIslandUnit(unit);
-        
-        ServerManager.Spawn(unit.gameObject);
-        ServerManager.Spawn(boat.gameObject);
-        
-        unit.aiVehicleControls.DriverSitOnServer(boat);
-    }
 
     [Server]
     public void SpawnBoatForUnit(Unit unit)
@@ -385,41 +307,6 @@ public class ContentPlacer : NetworkBehaviour
         var boat = Instantiate(aiWaterBikes[Random.Range(0, aiWaterBikes.Count)], unit.transform.position, Quaternion.identity, UnitsManager.Instance.SpawnRoot);
         ServerManager.Spawn(boat.gameObject);
         unit.HealthController.aiVehicleControls.DriverSitOnServer(boat);
-    }
-    void SpawnLootAroundLocalPlayer()
-    {
-        float distanceToClosestPickup = InteractableEventsManager.Instance.GetDistanceFromClosestPickUpToPosition(Game.LocalPlayer.transform.position);
-
-        if (distanceToClosestPickup < 50)
-            return;
-
-        var distance = IslandSpawner.Instance.GetDistanceToClosestIsland(Game.LocalPlayer.transform.position);
-        Vector3 pos;
-        if (distance <= islandDistanceSpawn)
-        {
-            pos = PosAroundPosition(Game.LocalPlayer.MainCamera.transform.position, islandDistanceSpawn);
-        }
-        else // spawn in sea
-        {
-            pos = Game.LocalPlayer.MainCamera.transform.position + Random.onUnitSphere * 50;
-            pos.y = Game.LocalPlayer.MainCamera.transform.position.y;
-        }   
-        if (Vector3.Distance(pos, Game.LocalPlayer.MainCamera.transform.position) < 10)
-            return;
-
-        SpawnRandomLoot(pos);
-    }
-
-    public void SpawnRandomLoot(Vector3 pos)
-    {
-        var loot = Instantiate(lootToSpawnAround[Random.Range(0, lootToSpawnAround.Count)], pos,
-            Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
-        if (loot.rb)
-        {
-            loot.rb.useGravity = false;
-            loot.rb.constraints = RigidbodyConstraints.FreezeAll;
-            loot.rb.isKinematic = false;
-        }
     }
 
     Vector3 PosAroundPosition(Vector3 initPos, float maxDistance)
@@ -431,15 +318,6 @@ public class ContentPlacer : NetworkBehaviour
         }
         initPos += Random.onUnitSphere * Random.Range(1, maxDistance);
         return initPos;
-    }
-
-    public void SetMaxAliveMobs(int amount)
-    {
-        maxMobsAlive = amount;
-    }
-    public int GetMaxAliveMobs()
-    {
-        return maxMobsAlive;
     }
 
     public void AddContentBlocker(ContentPlacerBlocker contentPlacerBlocker)
@@ -463,10 +341,5 @@ public class ContentPlacer : NetworkBehaviour
         }
 
         return false;
-    }
-    
-    public InteractiveObject GetToolForSpawnOnLevel()
-    {
-        return toolsToSpawnOnBuildingLevels[Random.Range(0, toolsToSpawnOnBuildingLevels.Count)];
     }
 }

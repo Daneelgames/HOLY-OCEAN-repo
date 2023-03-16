@@ -75,7 +75,15 @@ namespace _src.Scripts.Data
                 "(scriptedEventType) == ScriptedEventType.AddToFood || (scriptedEventType) == ScriptedEventType.AddWater|| " +
                 "(scriptedEventType) == ScriptedEventType.AddSleep")]
         public int addToStatAmount = 0;
+        
+        
 
+        [ShowIf("@(scriptedEventType) == ScriptedEventType.AddResource || (scriptedEventType) == ScriptedEventType.RemoveResource")]
+        public BuildingResources.Resource resourceType;
+        [ShowIf("@(scriptedEventType) == ScriptedEventType.AddResource || (scriptedEventType) == ScriptedEventType.RemoveResource")]
+        public int resourceAmount;
+        
+        
         [ShowIf("@(scriptedEventType) == ScriptedEventType.AddQuestMarker || (scriptedEventType) == ScriptedEventType.RemoveQuestMarker")]
         public int questMarkerTargetHcIndex;
 
@@ -105,6 +113,6 @@ namespace _src.Scripts.Data
     {
         StartDialogue, SpawnObject, DestroyOnInteraction, StartProcScene, StartFlatScene, SetCurrentLevel, AddScore, PlaySound, RideVehicle, AddTool, AddWeapon,
         AddHealth, AddToFood, AddWater, AddSleep, AddQuestMarker, RemoveQuestMarker, SpawnQuestNpc, StartRandomQuest, Resurrect, SpawnNewIsland, OpenShop,
-        ReturnInventoryLoot, OpenMojoCustomization, ExplodeIsland, GiveMojoUpgrade
+        ReturnInventoryLoot, OpenMojoCustomization, ExplodeIsland, GiveMojoUpgrade, AddResource, RemoveResource
     }
 }

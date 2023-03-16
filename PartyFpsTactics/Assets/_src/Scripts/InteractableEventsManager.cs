@@ -200,6 +200,12 @@ public class InteractableEventsManager : MonoBehaviour
             case ScriptedEventType.AddTool:
                 Game.LocalPlayer.Inventory.AddTool(IOevent.toolToAdd);
                 break;
+            case ScriptedEventType.AddResource:
+                BuildingResources.Instance.AddResource(IOevent.resourceType, IOevent.resourceAmount);
+                break;
+            case ScriptedEventType.RemoveResource:
+                BuildingResources.Instance.RemoveResource(IOevent.resourceType, IOevent.resourceAmount);
+                break;
             case ScriptedEventType.AddWeapon:
                 if (qPressed)
                     Game.LocalPlayer.Inventory.AddTool(IOevent.weaponToAdd.GetTool);
