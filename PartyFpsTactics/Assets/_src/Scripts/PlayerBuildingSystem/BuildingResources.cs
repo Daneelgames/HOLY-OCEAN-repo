@@ -39,7 +39,9 @@ public class BuildingResources : MonoBehaviour
         {
             if (buildingResource.resource == rsc)
             {
-                buildingResource.amount += amount;
+                buildingResource.amount = buildingResource.amount + amount;
+                buildingResource.resourcePlayerUi.SetAmount(buildingResource.amount);
+                buildingResource.resourcePlayerUi.UpdateResource();
                 return;
             }
         }
@@ -57,8 +59,25 @@ public class BuildingResources : MonoBehaviour
             if (buildingResource.resource == rsc)
             {
                 buildingResource.amount = Mathf.Clamp(buildingResource.amount - amount, 0, buildingResource.amount);
+                buildingResource.resourcePlayerUi.SetAmount(buildingResource.amount);
+                buildingResource.resourcePlayerUi.UpdateResource();
                 return;
             }
+        }
+    }
+
+    public void EnterBuildingMode()
+    {
+        foreach (var buildingResource in _playerBuildingResources)
+        {
+            buildingResource.resourcePlayerUi.Show();
+        }
+    }
+    public void ExitBuildingMode()
+    {
+        foreach (var buildingResource in _playerBuildingResources)
+        {
+            buildingResource.resourcePlayerUi.Hide();
         }
     }
 }

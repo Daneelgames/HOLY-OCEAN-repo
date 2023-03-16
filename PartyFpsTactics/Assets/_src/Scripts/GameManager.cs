@@ -94,7 +94,7 @@ namespace MrPink
             if (Game._instance == null || Game.LocalPlayer == null)
             {
                 cursorVisible = true;
-                Cursor.lockState = CursorLockMode.None;
+                Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
                 return;
             }
@@ -102,7 +102,7 @@ namespace MrPink
             if (PlayerInventoryUI.Instance.IsActive || MojoCustomization.Instance.IsShowing || Shop.Instance.IsActive || SettingsGameWrapper.Instance.IsOpened)
             {
                 cursorVisible = true;
-                Cursor.lockState = CursorLockMode.None;
+                Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
             }
             else
@@ -112,23 +112,24 @@ namespace MrPink
                 Cursor.visible = false;
             }
                 
-            
-            
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
+                if (PlayerBuildingSystem.Instance.InBuildingMode)
+                    PlayerBuildingSystem.Instance.ToggleBuildingMode();
+                
                 if (SettingsGameWrapper.Instance.IsOpened)
                 {
                     SettingsGameWrapper.Instance.CloseMenu();
-                    PlayerInventoryUI.Instance.HideInventory();
+                    //PlayerInventoryUI.Instance.HideInventory();
                 }
                 else
                 {
                     SettingsGameWrapper.Instance.OpenMenu();
-                    PlayerInventoryUI.Instance.ShowInventory();
+                    //PlayerInventoryUI.Instance.ShowInventory();
                 }
             }
         
-            if (Game.LocalPlayer.Health.IsDead /*&& Input.GetKeyDown(KeyCode.R)*/)
+            if (Game.LocalPlayer.Health.IsDead)
             {
                 // player died
                 // restart at different place

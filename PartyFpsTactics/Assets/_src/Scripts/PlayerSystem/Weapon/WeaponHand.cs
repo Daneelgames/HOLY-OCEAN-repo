@@ -91,6 +91,14 @@ namespace MrPink.PlayerSystem
 
         public void UpdateState(bool isDead)
         {
+            if (PlayerBuildingSystem.Instance.InBuildingMode)
+            {
+                IsAiming = false;
+                _isAttacking = false;
+                CurrentPosition = WeaponPosition.Reload;
+                return;
+            }
+            
             if (_isAttacking)
             {
                 IsAiming = false;

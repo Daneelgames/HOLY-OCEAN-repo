@@ -43,6 +43,8 @@ namespace MrPink
         {
             if (Game._instance == null || Game.LocalPlayer == null || Game.LocalPlayer.Health.health <= 0)
                 return;
+            if (PlayerBuildingSystem.Instance.InBuildingMode)
+                return;
 
             if (selectedIOTransform)
             {
@@ -76,7 +78,6 @@ namespace MrPink
                     }
                 }
                 
-            
                 if (selectedIO)
                 {
                     selectedIO.PlayerInteraction(qPressed, ePressed);

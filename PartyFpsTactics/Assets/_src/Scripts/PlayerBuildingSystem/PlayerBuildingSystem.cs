@@ -3,33 +3,90 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using MrPink;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class PlayerBuildingSystem : NetworkBehaviour
 {
     public static PlayerBuildingSystem Instance;
-    [SerializeField] private float buildingDistanceMax = 100;
-    [SerializeField] private float noRaycastBuildingMediumDistance = 50;
-    [SerializeField] private float buildingDistanceMin = 20;
-    [SerializeField] private float buildingRotationSpeed = 10;
-    [SerializeField] private float tileMaxSpawnDistance = 10;
+
+    [SerializeField] private List<RitualStep> ritualSteps;
     public GameObject testBuildingPrefab;
     public GameObject testTilePrefab;
+
+    [ReadOnly] [SerializeField] private List<BuildingData> newUnlockedBuildingsList = new List<BuildingData>();
+    [ReadOnly] [SerializeField] private List<BuildingData> allUnlockedBuildingsList = new List<BuildingData>();
+    
+    [BoxGroup("PLACING OPTIONS")][SerializeField] private float buildingDistanceMax = 100;
+    [BoxGroup("PLACING OPTIONS")][SerializeField] private float noRaycastBuildingMediumDistance = 50;
+    [BoxGroup("PLACING OPTIONS")][SerializeField] private float buildingDistanceMin = 20;
+    [BoxGroup("PLACING OPTIONS")][SerializeField] private float buildingRotationSpeed = 10;
+    [BoxGroup("PLACING OPTIONS")][SerializeField] private float tileMaxSpawnDistance = 10;
+    
     private GameObject currentPlacingBuilding;
+    private bool inBuildingMode = false;
+    
+    [Header("UI")] 
+    [SerializeField] private Transform buildingSystemCanvas;
+    // есть список всех построек
+    // в каждой постройке указано какие постройки она анлочит
+    // анлок == получить "рецепт" постройки
+    // игрок видит анлокнутые постройки в окошке
+    // в том же окошке особо отмечены постройки, которые игрок еще не возвел 
+
+    [Serializable]
+    class RitualStep
+    {
+        public List<BuildingData> BuildingsRecipe;
+    }
+    
+    public bool InBuildingMode => inBuildingMode;
     public override void OnStartClient()
     {
         base.OnStartClient();
 
         Instance = this;
+        UpdateBuildingWindow();
     }
 
     private void Update()
     {
+        if (Game._instance == null || Game.LocalPlayer == null || Game.LocalPlayer.Health.health < 1 || SettingsGameWrapper.Instance.IsOpened)
+            return;
+        
+        if (Input.GetKeyDown(KeyCode.Tab))
+            ToggleBuildingMode();
+        
+        if (inBuildingMode == false)
+            return;
+        
+        if (Input.GetMouseButtonDown(0))
+            SpawnTile();
+        if (Input.GetMouseButtonDown(1))
+            PlaceBuilding();
+        
+        /*
         if (Input.GetKeyDown(KeyCode.T))
             SpawnTile();
         if (Input.GetKeyDown(KeyCode.B))
             PlaceBuilding();
+            */
+    }
+
+    public void ToggleBuildingMode()
+    {
+        inBuildingMode = !inBuildingMode;
+        UpdateBuildingWindow();   
+    }
+
+    void UpdateBuildingWindow()
+    {
+        buildingSystemCanvas.gameObject.SetActive(inBuildingMode);
+        if (inBuildingMode)
+            BuildingResources.Instance.EnterBuildingMode();
+        else
+            BuildingResources.Instance.ExitBuildingMode();
     }
 
     public void CancelInput()
@@ -52,6 +109,7 @@ public class PlayerBuildingSystem : NetworkBehaviour
             GameManager.Instance.AllSolidsMask) == false)
             return;
         
+
         var newTile = Instantiate(testTilePrefab);
         var spawnPos = new Vector3(Mathf.RoundToInt(hit.point.x),Mathf.RoundToInt(hit.point.y), Mathf.RoundToInt(hit.point.z));
         newTile.transform.position = spawnPos;
