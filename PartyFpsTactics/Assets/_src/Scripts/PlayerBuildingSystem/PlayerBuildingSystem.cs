@@ -11,13 +11,12 @@ public class PlayerBuildingSystem : NetworkBehaviour
 {
     public static PlayerBuildingSystem Instance;
 
+    [SerializeField] [ReadOnly] private int selectedRitualStepIndex;
+    [SerializeField] [ReadOnly] private int selectedBuildingIndex;
     [SerializeField] private List<RitualStep> ritualSteps;
     public GameObject testBuildingPrefab;
     public GameObject testTilePrefab;
 
-    [ReadOnly] [SerializeField] private List<BuildingData> newUnlockedBuildingsList = new List<BuildingData>();
-    [ReadOnly] [SerializeField] private List<BuildingData> allUnlockedBuildingsList = new List<BuildingData>();
-    
     [BoxGroup("PLACING OPTIONS")][SerializeField] private float buildingDistanceMax = 100;
     [BoxGroup("PLACING OPTIONS")][SerializeField] private float noRaycastBuildingMediumDistance = 50;
     [BoxGroup("PLACING OPTIONS")][SerializeField] private float buildingDistanceMin = 20;
@@ -29,6 +28,9 @@ public class PlayerBuildingSystem : NetworkBehaviour
     
     [Header("UI")] 
     [SerializeField] private Transform buildingSystemCanvas;
+
+    [SerializeField] private List<RitualPageUi> _ritualPageUis;
+    [SerializeField] private List<BuildingInStepUi> buildingInStepUis;
     // есть список всех построек
     // в каждой постройке указано какие постройки она анлочит
     // анлок == получить "рецепт" постройки
@@ -60,20 +62,17 @@ public class PlayerBuildingSystem : NetworkBehaviour
         
         if (inBuildingMode == false)
             return;
-        
-        if (Input.GetMouseButtonDown(0))
-            SpawnTile();
-        if (Input.GetMouseButtonDown(1))
-            PlaceBuilding();
-        
-        /*
-        if (Input.GetKeyDown(KeyCode.T))
-            SpawnTile();
-        if (Input.GetKeyDown(KeyCode.B))
-            PlaceBuilding();
-            */
-    }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+            SelectPreviousRitualStep();
+        if (Input.GetKeyDown(KeyCode.E))
+            SelectNextRitualStep();
+        if (Input.mouseScrollDelta.y > 0)
+            SelectPreviousBuildingInRitualStep();
+        if (Input.mouseScrollDelta.y < 0)
+            SelectNextBuildingInRitualStep();
+
+    }
     public void ToggleBuildingMode()
     {
         inBuildingMode = !inBuildingMode;
@@ -84,9 +83,73 @@ public class PlayerBuildingSystem : NetworkBehaviour
     {
         buildingSystemCanvas.gameObject.SetActive(inBuildingMode);
         if (inBuildingMode)
+        {
             BuildingResources.Instance.EnterBuildingMode();
+            UpdateBuildingWindowContent();
+        }
         else
             BuildingResources.Instance.ExitBuildingMode();
+    }
+
+    void SelectPreviousRitualStep()
+    {
+        selectedRitualStepIndex--;
+        if (selectedRitualStepIndex < 0)
+            selectedRitualStepIndex = 0;
+
+        selectedBuildingIndex = 0;
+        
+        UpdateBuildingWindowContent();
+    }
+    void SelectNextRitualStep()
+    {
+        selectedRitualStepIndex++;
+        if (selectedRitualStepIndex >= ritualSteps.Count)
+            selectedRitualStepIndex = ritualSteps.Count - 1;
+         
+        selectedBuildingIndex = 0;
+        
+        UpdateBuildingWindowContent();
+    }
+
+    void SelectPreviousBuildingInRitualStep()
+    {
+        selectedBuildingIndex--;
+
+        if (selectedBuildingIndex < 0)
+            selectedBuildingIndex = 0;
+        
+        UpdateBuildingWindowContent();
+    }
+    void SelectNextBuildingInRitualStep()
+    {
+        selectedBuildingIndex++;
+
+        if (selectedBuildingIndex >= ritualSteps[selectedRitualStepIndex].BuildingsRecipe.Count)
+            selectedBuildingIndex = ritualSteps[selectedRitualStepIndex].BuildingsRecipe.Count - 1;
+
+        UpdateBuildingWindowContent();
+    }
+
+    void UpdateBuildingWindowContent()
+    {
+        for (int i = 0; i < _ritualPageUis.Count; i++)
+        {
+            _ritualPageUis[i].SetSelected(i == selectedRitualStepIndex);
+        }
+
+        for (int i = 0; i < buildingInStepUis.Count; i++)
+        {
+            if (i >= ritualSteps[selectedRitualStepIndex].BuildingsRecipe.Count)
+            {
+                buildingInStepUis[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            buildingInStepUis[i].gameObject.SetActive(true);
+            buildingInStepUis[i].SetBuilding(ritualSteps[selectedRitualStepIndex].BuildingsRecipe[i]);
+            buildingInStepUis[i].SetSelected(i == selectedBuildingIndex);
+        }
     }
 
     public void CancelInput()
