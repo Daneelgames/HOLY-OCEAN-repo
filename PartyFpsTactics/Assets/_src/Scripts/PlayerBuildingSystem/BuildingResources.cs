@@ -11,7 +11,8 @@ public class BuildingResources : MonoBehaviour
     {
         Bones, Blood, Skin, Meat, Metal
     }
-
+    public static Sprite GetResourceSprite(Resource resource) => Instance.GetSpriteByResource(resource);
+    
     [Serializable]
     private class PlayerBuildingResource
     {
@@ -33,6 +34,18 @@ public class BuildingResources : MonoBehaviour
         }
     }
 
+    public Sprite GetSpriteByResource(Resource resource)
+    {
+        foreach (var buildingResource in _playerBuildingResources)
+        {
+            if (buildingResource.resource != resource)
+                continue;
+            return buildingResource.resourceSprite;
+        }
+
+        return null;
+    }
+    
     public void AddResource(Resource rsc, int amount)
     {
         foreach (var buildingResource in _playerBuildingResources)

@@ -130,6 +130,8 @@ namespace MrPink.WeaponsSystem
         {
             if (dead)
                 return;
+            if (ownerHealth == null)
+                return;
             if (ricochetCooldown > 0)
                 ricochetCooldown -= Time.deltaTime;
 

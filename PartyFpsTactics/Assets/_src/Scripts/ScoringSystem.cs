@@ -70,11 +70,6 @@ namespace MrPink
             }
             Instance = this;
         
-            if (PlayerPrefs.HasKey("currentScore"))
-            {
-                CurrentGold = PlayerPrefs.GetInt("currentScore");
-                currentGoldText.text = "DOLAS: " + CurrentGold;
-            }
 
             addedScoreFeedbackTransform.transform.localScale = new Vector3(1, 0, 1);
             UpdateMojoLevelUi();
@@ -358,9 +353,6 @@ namespace MrPink
             
             CustomTextMessage(text);
         
-            PlayerPrefs.SetInt("currentScore", CurrentGold);
-            currentGoldText.text = "DOLAS: " + CurrentGold;
-            PlayerPrefs.Save();
         }
 
         public void CustomTextMessage(string text)
@@ -399,9 +391,6 @@ namespace MrPink
         {
             CurrentGold -= amount;
         
-            PlayerPrefs.SetInt("currentScore", CurrentGold);
-            currentGoldText.text = "DOLAS: " + CurrentGold;
-            PlayerPrefs.Save();
         }
         public void UpdateGold()
         {

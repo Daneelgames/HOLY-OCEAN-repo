@@ -11,6 +11,8 @@ public class ProgressionManager : MonoBehaviour
     public List<ProcLevelData> levelDatas;
     
     public int currentLevelIndex = 0;
+    private int currentActiveRitualStep = 0;
+    public int CurrentActiveRitualStep => currentActiveRitualStep;
     
     public ProcLevelData CurrentLevel => levelDatas[currentLevelIndex];
     public ProcLevelData RandomLevel => levelDatas[Random.Range(0, levelDatas.Count)];
@@ -20,6 +22,11 @@ public class ProgressionManager : MonoBehaviour
             return;
         
         Instance = this;
+        
+        if (PlayerPrefs.HasKey("currentActiveRitualStep"))
+        {
+            currentActiveRitualStep = PlayerPrefs.GetInt("currentActiveRitualStep");
+        }
     }
 
     [Button]
@@ -42,5 +49,11 @@ public class ProgressionManager : MonoBehaviour
     public void SetCurrentLevel(int index)
     {
         currentLevelIndex = Mathf.Clamp(index, 0, levelDatas.Count - 1);
+    }
+
+    public void RitualStepCompleted(int maxRitualSteps)
+    {
+        currentActiveRitualStep = Mathf.Clamp(currentActiveRitualStep + 1, 0, maxRitualSteps);
+        
     }
 }

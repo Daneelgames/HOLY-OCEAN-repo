@@ -23,7 +23,8 @@ public class PlayerBuildingSystem : NetworkBehaviour
     [BoxGroup("PLACING OPTIONS")][SerializeField] private float buildingRotationSpeed = 10;
     [BoxGroup("PLACING OPTIONS")][SerializeField] private float tileMaxSpawnDistance = 10;
     
-    private GameObject currentPlacingBuilding;
+    private BuildingData currentPlacingBuildingData;
+    private GameObject currentPlacingBuildingGo;
     private bool inBuildingMode = false;
     
     [Header("UI")] 
@@ -31,6 +32,7 @@ public class PlayerBuildingSystem : NetworkBehaviour
 
     [SerializeField] private List<RitualPageUi> _ritualPageUis;
     [SerializeField] private List<BuildingInStepUi> buildingInStepUis;
+    [SerializeField] private List<ResourcePlayerUi> resourceCostIcons;
     // есть список всех построек
     // в каждой постройке указано какие постройки она анлочит
     // анлок == получить "рецепт" постройки
@@ -42,12 +44,31 @@ public class PlayerBuildingSystem : NetworkBehaviour
     {
         public List<BuildingData> BuildingsRecipe;
     }
-    
+
+    [SerializeField]
+    [ReadOnly] private List<RitualStepBuiltIndexes> ritualStepBuiltIndexesList;
+
+
+    [Serializable]
+    class RitualStepBuiltIndexes
+    {
+        public List<int> BuiltIndexes = new List<int>();
+        public List<Vector3> BuiltPositions = new List<Vector3>();
+    }
+
     public bool InBuildingMode => inBuildingMode;
     public override void OnStartClient()
     {
         base.OnStartClient();
 
+        // TODO: REPLACE WITH SAVING SYSTEM
+        ritualStepBuiltIndexesList = new List<RitualStepBuiltIndexes>(ritualSteps.Count);
+        foreach (var builtData in ritualStepBuiltIndexesList)
+        {
+            builtData.BuiltIndexes = new List<int>();
+            builtData.BuiltPositions = new List<Vector3>();
+        }
+        
         Instance = this;
         UpdateBuildingWindow();
     }
@@ -71,6 +92,11 @@ public class PlayerBuildingSystem : NetworkBehaviour
             SelectPreviousBuildingInRitualStep();
         if (Input.mouseScrollDelta.y < 0)
             SelectNextBuildingInRitualStep();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            PlaceBuilding();
+        }
 
     }
     public void ToggleBuildingMode()
@@ -140,7 +166,7 @@ public class PlayerBuildingSystem : NetworkBehaviour
 
         for (int i = 0; i < buildingInStepUis.Count; i++)
         {
-            if (i >= ritualSteps[selectedRitualStepIndex].BuildingsRecipe.Count)
+            if (selectedRitualStepIndex > ProgressionManager.Instance.CurrentActiveRitualStep || i >= ritualSteps[selectedRitualStepIndex].BuildingsRecipe.Count)
             {
                 buildingInStepUis[i].gameObject.SetActive(false);
                 continue;
@@ -150,21 +176,38 @@ public class PlayerBuildingSystem : NetworkBehaviour
             buildingInStepUis[i].SetBuilding(ritualSteps[selectedRitualStepIndex].BuildingsRecipe[i]);
             buildingInStepUis[i].SetSelected(i == selectedBuildingIndex);
         }
+
+        var buildingData = ritualSteps[selectedRitualStepIndex].BuildingsRecipe[selectedBuildingIndex];
+        
+        for (int i = 0; i < resourceCostIcons.Count; i++)
+        {
+            if (i >= buildingData.Recipe.Count)
+            {
+                resourceCostIcons[i].gameObject.SetActive(false);
+                continue;
+            }
+            
+            resourceCostIcons[i].gameObject.SetActive(true);
+            resourceCostIcons[i].SetResourceIcon(BuildingResources.GetResourceSprite(buildingData.Recipe[i].Resource));
+            resourceCostIcons[i].SetAmount(buildingData.Recipe[i].Amount);
+            resourceCostIcons[i].Show();
+        }
     }
 
     public void CancelInput()
     {
-        if (currentPlacingBuilding != null)
+        if (currentPlacingBuildingGo != null)
         {
             StopCoroutine(placingBuildingCoroutine);
         }
 
-        if (currentPlacingBuilding != null)
+        if (currentPlacingBuildingGo != null)
         {
-            Destroy(currentPlacingBuilding);
+            Destroy(currentPlacingBuildingGo);
         }
     }
 
+    /*
     void SpawnTile()
     {
         Transform camTransform = Game.LocalPlayer.MainCamera.transform;
@@ -180,22 +223,31 @@ public class PlayerBuildingSystem : NetworkBehaviour
         
         IslandSpawner.Instance.GetClosestTileBuilding(transform.position)?.AddToDisconnectedTilesFolder(newTile.transform);
     }
+    */
 
     void PlaceBuilding()
     {
-        if (placingBuildingCoroutine != null && currentPlacingBuilding != null)
+        if (placingBuildingCoroutine != null && currentPlacingBuildingGo != null)
         {
             // place building;
             StopCoroutine(placingBuildingCoroutine);
-            GameManager.Instance.SetLayerRecursively(currentPlacingBuilding.transform, 6); // solids
-            currentPlacingBuilding.SetActive(true);
-            currentPlacingBuilding = null;
+            GameManager.Instance.SetLayerRecursively(currentPlacingBuildingGo.transform, 6); // solids
+            
+            Debug.LogError("При постройке нужно сохранять инфу о том индекс какого здания на каком шаге ритуала построен на какой позиции");
+            
+            ritualStepBuiltIndexesList[selectedRitualStepIndex].BuiltIndexes.Add(selectedBuildingIndex);
+            ritualStepBuiltIndexesList[selectedRitualStepIndex].BuiltPositions.Add(currentPlacingBuildingGo.transform.position);
+            // ^^^ NEED TO SAVE THIS LIST ^^^
+            // SaveBuilt();
+            currentPlacingBuildingGo.SetActive(true);
+            currentPlacingBuildingGo = null;
             return;
         }
         
         // spawn new building
-        currentPlacingBuilding = Instantiate(testBuildingPrefab);
-        GameManager.Instance.SetLayerRecursively(currentPlacingBuilding.transform, 31); // ignore collision
+        currentPlacingBuildingData = ritualSteps[selectedRitualStepIndex].BuildingsRecipe[selectedBuildingIndex];
+        currentPlacingBuildingGo = Instantiate(testBuildingPrefab);
+        GameManager.Instance.SetLayerRecursively(currentPlacingBuildingGo.transform, 31); // ignore collision
         
         placingBuildingCoroutine = StartCoroutine(PlacingBuilding());
     }
@@ -214,23 +266,23 @@ public class PlayerBuildingSystem : NetworkBehaviour
             if (t < 0)
             {
                 t = 0.3f;
-                currentPlacingBuilding.SetActive(!currentPlacingBuilding.activeInHierarchy);
+                currentPlacingBuildingGo.SetActive(!currentPlacingBuildingGo.activeInHierarchy);
             }
             
             if (Input.GetKey(KeyCode.R))
-                currentPlacingBuilding.transform.Rotate(0,buildingRotationSpeed * Time.deltaTime, 0);
+                currentPlacingBuildingGo.transform.Rotate(0,buildingRotationSpeed * Time.deltaTime, 0);
             
             if (Physics.Raycast(camTransform.position, camTransform.forward, out var hit, buildingDistanceMax,
                 GameManager.Instance.AllSolidsMask) == false)
             {
-                currentPlacingBuilding.transform.position = camTransform.position + camTransform.forward * noRaycastBuildingMediumDistance;
+                currentPlacingBuildingGo.transform.position = camTransform.position + camTransform.forward * noRaycastBuildingMediumDistance;
                 continue;
             }
             
             if (Vector3.Distance(hit.point, camTransform.position) < buildingDistanceMin)
                 continue;
             
-            currentPlacingBuilding.transform.position = hit.point + Vector3.up;
+            currentPlacingBuildingGo.transform.position = hit.point + Vector3.up;
             
             
         }
